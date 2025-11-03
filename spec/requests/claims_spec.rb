@@ -22,11 +22,11 @@ RSpec.describe "Claims", type: :request do
     context "switching claim policies" do
       before { create(:journey_configuration, :targeted_retention_incentive_payments) }
 
-      it "redirects to the existing claim interruption page if a claim for another policy is already in progress" do
+      it "doesn't redirects to the existing claim interruption page if a claim for another policy is already in progress" do
         start_student_loans_claim
         get new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
 
-        expect(response).to redirect_to(existing_session_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME))
+        expect(response).not_to redirect_to(existing_session_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME))
       end
     end
   end

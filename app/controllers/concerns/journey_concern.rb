@@ -26,12 +26,7 @@ module JourneyConcern
   end
 
   def eligible_claim_in_progress?
-    journey_sessions.any? && journey_sessions.none? { |js| claim_ineligible?(js) }
-  end
-
-  def claim_ineligible?(journey_session)
-    journey = Journeys.for_routing_name(journey_session.journey)
-    journey::EligibilityChecker.new(journey_session: journey_session).ineligible?
+    journey_session.present? && !journey::EligibilityChecker.new(journey_session: journey_session).ineligible?
   end
 
   def clear_journey_sessions!
