@@ -11,7 +11,7 @@ RSpec.feature "Further education payments" do
     when_further_education_payments_journey_configuration_exists
     and_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -265,7 +265,7 @@ RSpec.feature "Further education payments" do
     when_further_education_payments_journey_configuration_exists
     and_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -428,7 +428,7 @@ RSpec.feature "Further education payments" do
     when_further_education_payments_journey_configuration_exists
     and_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 

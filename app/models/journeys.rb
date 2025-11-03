@@ -25,7 +25,7 @@ module Journeys
   end
 
   def for_routing_name(routing_name)
-    all.find { |journey| routing_name == journey::ROUTING_NAME }
+    all.find { |journey| routing_name == journey.routing_name }
   end
 
   def for_policy(policy)

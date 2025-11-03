@@ -4,7 +4,7 @@ RSpec.feature "Further education payments" do
   scenario "when searching for college that could not be found" do
     when_further_education_payments_journey_configuration_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -34,7 +34,7 @@ RSpec.feature "Further education payments" do
   scenario "when searching for college that could not be found with js", js: true, flaky: true do
     when_further_education_payments_journey_configuration_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 

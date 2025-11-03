@@ -11,7 +11,7 @@ RSpec.feature "Further education payments" do
     when_further_education_payments_journey_configuration_exists
     and_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -128,7 +128,7 @@ RSpec.feature "Further education payments" do
 
     expect(page).to have_content("Sign in with GOV.UK One Login")
 
-    visit claim_path(Journeys::FurtherEducationPayments::ROUTING_NAME, "information-provided")
+    visit claim_path(Journeys::FurtherEducationPayments.routing_name, "information-provided")
 
     expect(page).to have_content("Sign in with GOV.UK One Login")
   end
@@ -138,7 +138,7 @@ RSpec.feature "Further education payments" do
     when_further_education_payments_journey_configuration_exists
     and_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -257,7 +257,7 @@ RSpec.feature "Further education payments" do
 
     mock_one_login_auth
 
-    visit claim_path(Journeys::FurtherEducationPayments::ROUTING_NAME, "information-provided")
+    visit claim_path(Journeys::FurtherEducationPayments.routing_name, "information-provided")
     expect(page).to have_content("Sign in with GOV.UK One Login")
     click_button "Continue"
 
@@ -265,11 +265,11 @@ RSpec.feature "Further education payments" do
 
     mock_one_login_idv
 
-    visit claim_path(Journeys::FurtherEducationPayments::ROUTING_NAME, "information-provided")
+    visit claim_path(Journeys::FurtherEducationPayments.routing_name, "information-provided")
     expect(page).to have_content("Identity verification")
     click_button "Continue"
 
-    visit claim_path(Journeys::FurtherEducationPayments::ROUTING_NAME, "information-provided")
+    visit claim_path(Journeys::FurtherEducationPayments.routing_name, "information-provided")
     expect(page).to have_content("How we will use your information")
   end
 

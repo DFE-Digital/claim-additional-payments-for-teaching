@@ -13,7 +13,7 @@ RSpec.describe "Journey session expiry" do
   scenario "after session expiry starts new session" do
     when_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     click_link "Start now"
 
     expect(page).to have_text "Do you have a GOV.UK One Login account?"
@@ -55,7 +55,7 @@ RSpec.describe "Journey session expiry" do
   scenario "when on the completion page and session is lost it doesn't error" do
     when_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     click_link "Start now"
 
     expect(page).to have_text "Do you have a GOV.UK One Login account?"

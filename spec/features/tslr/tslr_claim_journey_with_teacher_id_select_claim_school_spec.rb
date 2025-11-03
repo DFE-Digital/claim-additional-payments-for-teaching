@@ -68,7 +68,7 @@ RSpec.feature "TSLR journey with Teacher ID school playback" do
     expect(page).to have_text("You're not eligible for this payment")
 
     # - Go back one
-    visit claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "ineligible")
+    visit claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name, "ineligible")
 
     # - Try another school
     click_on "Enter another school"
@@ -91,7 +91,7 @@ RSpec.feature "TSLR journey with Teacher ID school playback" do
       create(:teachers_pensions_service, teacher_reference_number: trn, start_date: before_beginning_of_month, end_date: before_end_of_month, school_urn: school.establishment_number, la_urn: school.local_authority.code)
     end
 
-    visit landing_page_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
+    visit landing_page_path(Journeys::TeacherStudentLoanReimbursement.routing_name)
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("student_loans.landing_page"))

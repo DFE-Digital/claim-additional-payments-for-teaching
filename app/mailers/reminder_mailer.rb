@@ -71,7 +71,7 @@ class ReminderMailer < ApplicationMailer
   private
 
   def unsubscribe_url(reminder:)
-    "https://#{ENV["CANONICAL_HOSTNAME"]}/#{reminder.journey::ROUTING_NAME}/unsubscribe/reminders/#{reminder.id}"
+    "https://#{ENV["CANONICAL_HOSTNAME"]}/#{reminder.journey.routing_name}/unsubscribe/reminders/#{reminder.id}"
   end
 
   def extract_first_name(fullname)

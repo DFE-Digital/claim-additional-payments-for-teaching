@@ -28,7 +28,7 @@ module Journeys
     }.freeze
 
     def configuration
-      Configuration.find(self::ROUTING_NAME)
+      Configuration.find(self.routing_name)
     end
 
     def start_page_url
@@ -91,7 +91,11 @@ module Journeys
     end
 
     def routing_name
-      self::ROUTING_NAME
+      if defined?(self::ROUTING_NAME)
+        self::ROUTING_NAME
+      else
+        self.name.demodulize.underscore.dasherize
+      end
     end
 
     def policies

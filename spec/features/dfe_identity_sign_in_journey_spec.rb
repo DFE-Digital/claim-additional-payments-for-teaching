@@ -21,7 +21,7 @@ RSpec.feature "Teacher Identity Sign in", js: true, flaky: true do
 
   scenario "Teacher makes claim for 'Targeted Retention Incentive' by logging in with teacher_id" do
     # - Teacher selects yes to details confirm
-    visit landing_page_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::TargetedRetentionIncentivePayments.routing_name)
 
     # - Landing (start)
     expect(page).to have_text("Find out if you are eligible for a targeted retention incentive payment")
@@ -90,7 +90,7 @@ RSpec.feature "Teacher Identity Sign in", js: true, flaky: true do
   scenario "Teacher makes claim for 'Targeted Retention Incentive' by logging in with teacher_id and selects yes to details confirm but trn missing" do
     set_mock_auth("1234567", {returned_trn: nil})
 
-    visit landing_page_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::TargetedRetentionIncentivePayments.routing_name)
     click_on "Start now"
 
     # - Check eligibility intro

@@ -20,7 +20,7 @@ class DeauthController < ApplicationController
   def onelogin_redirect_uri
     host = ENV["ONELOGIN_SIGN_IN_ISSUER"].split("://")[1].delete("/")
     path = "/logout"
-    state = journey::ROUTING_NAME
+    state = journey.routing_name
 
     query = [
       "id_token_hint=#{id_token_hint}",

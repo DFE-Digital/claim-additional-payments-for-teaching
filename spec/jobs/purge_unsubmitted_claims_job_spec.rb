@@ -14,18 +14,18 @@ RSpec.describe PurgeUnsubmittedClaimsJob do
         .excluding(Journeys::FurtherEducationPayments)
         .each do |journey|
         submitted_journeys << journey::Session.create!(
-          journey: journey::ROUTING_NAME,
+          journey: journey.routing_name,
           claim: create(:claim),
           updated_at: over_24_hours_ago
         )
 
         unsubmitted_fresh_journeys << journey::Session.create!(
-          journey: journey::ROUTING_NAME,
+          journey: journey.routing_name,
           updated_at: four_hours_ago
         )
 
         unsubmitted_expired_journeys << journey::Session.create!(
-          journey: journey::ROUTING_NAME,
+          journey: journey.routing_name,
           updated_at: over_24_hours_ago
         )
       end
@@ -44,7 +44,7 @@ RSpec.describe PurgeUnsubmittedClaimsJob do
     context "FE sessions" do
       it "deletes unsubmitted sessions over a year old" do
         Journeys::FurtherEducationPayments::Session.create!(
-          journey: Journeys::FurtherEducationPayments::ROUTING_NAME,
+          journey: Journeys::FurtherEducationPayments.routing_name,
           updated_at: 11.months.ago
         )
 
@@ -53,7 +53,7 @@ RSpec.describe PurgeUnsubmittedClaimsJob do
         }.not_to change(Journeys::FurtherEducationPayments::Session, :count)
 
         Journeys::FurtherEducationPayments::Session.create!(
-          journey: Journeys::FurtherEducationPayments::ROUTING_NAME,
+          journey: Journeys::FurtherEducationPayments.routing_name,
           updated_at: 13.months.ago
         )
 

@@ -330,7 +330,7 @@ RSpec.feature "Combined journey with Teacher ID" do
 
   def navigate_until_performance_related_questions
     # - Landing (start)
-    visit landing_page_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::TargetedRetentionIncentivePayments.routing_name)
     click_on "Start now"
 
     # - Check eligibility intro

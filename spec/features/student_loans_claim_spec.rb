@@ -8,16 +8,16 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
   let(:imported_slc_data) { create(:student_loans_data, nino: "PX321499A", date_of_birth: "28/2/1988", plan_type_of_deduction: 1, amount: 1_100) }
 
   def answer_eligibility_questions_and_fill_in_personal_details
-    visit new_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
+    visit new_claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name)
 
     skip_tid
 
     # Check we can't skip ahead pages in the journey
-    visit claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "still-teaching")
-    expect(page).to have_current_path("/#{Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME}/qts-year")
+    visit claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name, "still-teaching")
+    expect(page).to have_current_path("/#{Journeys::TeacherStudentLoanReimbursement.routing_name}/qts-year")
 
-    visit claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "leadership-position")
-    expect(page).to have_current_path("/#{Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME}/qts-year")
+    visit claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name, "leadership-position")
+    expect(page).to have_current_path("/#{Journeys::TeacherStudentLoanReimbursement.routing_name}/qts-year")
 
     expect(page).to have_text(I18n.t("student_loans.forms.qts_year.questions.qts_award_year"))
     expect(page).to have_link(href: "mailto:#{I18n.t("student_loans.feedback_email")}")
@@ -93,8 +93,8 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(page).to have_text(I18n.t("questions.address.home.title"))
 
     # Check we can't skip to pages if address not entered
-    visit claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "email-address")
-    expect(page).to have_current_path("/#{Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME}/postcode-search")
+    visit claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name, "email-address")
+    expect(page).to have_current_path("/#{Journeys::TeacherStudentLoanReimbursement.routing_name}/postcode-search")
 
     click_button(I18n.t("questions.address.home.link_to_manual_address"))
 
@@ -186,8 +186,8 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     end
 
     # Check we can't skip to pages in middle of page sequence after claim is submitted
-    visit claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "still-teaching")
-    expect(page).to have_current_path("/#{Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME}/sign-in-or-continue")
+    visit claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name, "still-teaching")
+    expect(page).to have_current_path("/#{Journeys::TeacherStudentLoanReimbursement.routing_name}/sign-in-or-continue")
   end
 
   [
@@ -244,7 +244,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       let!(:journey_configuration) { create(:journey_configuration, :student_loans, current_academic_year: AcademicYear.new(academic_year)) }
 
       scenario "Teacher claims back student loan repayments" do
-        visit new_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
+        visit new_claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name)
         skip_tid
         expect(page).to have_text(I18n.t("student_loans.forms.qts_year.questions.qts_award_year"))
         expect(page).to have_link(href: "mailto:#{I18n.t("student_loans.feedback_email")}")

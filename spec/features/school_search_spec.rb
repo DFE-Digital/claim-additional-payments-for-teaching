@@ -54,7 +54,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
       click_button "Continue" unless /claim-school\?_method=patch/.match?(current_url)
 
       # Backlink is to the same slug as current (claim-school)
-      expect(page).to have_link("Back", href: claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"))
+      expect(page).to have_link("Back", href: claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name, "claim-school"))
 
       choose school.name
 
@@ -79,7 +79,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
       click_button "Continue"
 
       # Backlink is to the same slug as current (current-school)
-      expect(page).to have_link("Back", href: claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "current-school"))
+      expect(page).to have_link("Back", href: claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name, "current-school"))
 
       choose school.name
       click_button "Continue"
@@ -186,7 +186,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     let!(:closed_school) { create(:school, :targeted_retention_incentive_payments_eligible, :closed) }
 
     scenario "doesn't select a school from the search results the first time around" do
-      visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
+      visit new_claim_path(Journeys::TargetedRetentionIncentivePayments.routing_name)
 
       # - Check eligibility intro
       expect(page).to have_text("Check you’re eligible for a targeted retention incentive payment")
@@ -204,7 +204,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
       click_on "Continue"
 
       # Backlink is to the same slug as current (current-school)
-      expect(page).to have_link("Back", href: claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME, "current-school"))
+      expect(page).to have_link("Back", href: claim_path(Journeys::TargetedRetentionIncentivePayments.routing_name, "current-school"))
 
       click_on "Continue"
 

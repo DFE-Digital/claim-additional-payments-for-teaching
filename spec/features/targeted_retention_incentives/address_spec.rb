@@ -137,7 +137,7 @@ RSpec.feature "TargetedRetentionIncentivePayments addres", slow: true do
     end
 
     let(:journey_session) do
-      visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
+      visit new_claim_path(Journeys::TargetedRetentionIncentivePayments.routing_name)
       session = Journeys::TargetedRetentionIncentivePayments::Session.last
       session.answers.assign_attributes(
         attributes_for(

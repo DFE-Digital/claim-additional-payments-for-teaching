@@ -4,7 +4,7 @@ RSpec.feature "TSLR journey" do
   let!(:journey_configuration) { create(:journey_configuration, :student_loans, teacher_id_enabled: false) }
 
   scenario "Teacher ID is disabled on the policy configuration" do
-    visit landing_page_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
+    visit landing_page_path(Journeys::TeacherStudentLoanReimbursement.routing_name)
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("student_loans.landing_page"))

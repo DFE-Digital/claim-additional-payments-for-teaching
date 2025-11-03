@@ -330,7 +330,7 @@ RSpec.describe "Admin EY tasks" do
     )
 
     visit landing_page_path(
-      Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME
+      Journeys::EarlyYearsPayment::Provider::Start.routing_name
     )
 
     click_link "Start now"

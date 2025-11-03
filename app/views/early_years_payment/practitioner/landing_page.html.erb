@@ -62,7 +62,7 @@
     <div class="govuk-body">
       Read more about the
       <%= govuk_link_to "early years incentive payment for new and returning educators",
-        guidance_path(Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME) %>.
+        guidance_path(Journeys::EarlyYearsPayment::Provider::Start.routing_name) %>.
     </div>
 
     <%= govuk_start_button(text: "Start now", href: claim_path(current_journey_routing_name, "claim")) %>

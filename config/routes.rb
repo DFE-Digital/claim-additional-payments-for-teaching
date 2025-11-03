@@ -31,7 +31,7 @@ Rails.application.routes.draw do
     end
 
     def matches?(request)
-      request.path_parameters[:journey] == journey::ROUTING_NAME && journey.slug_sequence::SLUGS.include?(request.path_parameters[:slug])
+      request.path_parameters[:journey] == journey.routing_name && journey.slug_sequence::SLUGS.include?(request.path_parameters[:slug])
     end
   }
 

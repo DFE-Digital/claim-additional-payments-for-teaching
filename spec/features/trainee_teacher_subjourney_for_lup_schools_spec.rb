@@ -8,7 +8,7 @@ RSpec.feature "Trainee teacher subjourney for Targeted Retention Incentive schoo
     non_targeted_retention_incentive_school = create(:school, :targeted_retention_incentive_payments_ineligible)
     expect(Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(non_targeted_retention_incentive_school)).not_to be_eligible
 
-    visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
+    visit new_claim_path(Journeys::TargetedRetentionIncentivePayments.routing_name)
 
     # - Check eligibility intro
     expect(page).to have_text("Check you’re eligible for a targeted retention incentive payment")
@@ -111,7 +111,7 @@ RSpec.feature "Trainee teacher subjourney for Targeted Retention Incentive schoo
     targeted_retention_incentive_school = create(:school, :targeted_retention_incentive_payments_eligible)
     expect(Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(targeted_retention_incentive_school)).to be_eligible
 
-    visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
+    visit new_claim_path(Journeys::TargetedRetentionIncentivePayments.routing_name)
 
     # - Check eligibility intro
     expect(page).to have_text("Check you’re eligible for a targeted retention incentive payment")

@@ -5,7 +5,7 @@ class ExpireJourneySessionsJob < ApplicationJob
     Journeys::JOURNEYS.each do |journey|
       Rails.logger.info "Expiring #{journey::Session.purgeable.count} #{journey::Session} journeys from the database"
       journey::Session
-        .where(journey: journey::ROUTING_NAME)
+        .where(journey: journey.routing_name)
         .expirable
         .update_all(expired: true)
     end

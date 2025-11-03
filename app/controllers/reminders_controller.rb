@@ -5,7 +5,7 @@ class RemindersController < BasePublicController
     @form = form_from_slug
 
     if @form.set_reminder_from_claim
-      redirect_to reminder_path(journey: journey::ROUTING_NAME, slug: "confirmation")
+      redirect_to reminder_path(journey: journey.routing_name, slug: "confirmation")
     elsif params[:slug] == "confirmation" && @form.reminder.nil?
       redirect_to journey_session.journey_class.start_page_url
     else
@@ -18,7 +18,7 @@ class RemindersController < BasePublicController
 
     if @form.valid?
       redirect_to reminder_path(
-        journey: journey::ROUTING_NAME,
+        journey: journey.routing_name,
         slug: navigator.next_slug
       )
 
@@ -45,7 +45,7 @@ class RemindersController < BasePublicController
   end
 
   def journey_session_key
-    :"#{journey::ROUTING_NAME}_journeys_session_id"
+    :"#{journey.routing_name}_journeys_session_id"
   end
 
   def view_file

@@ -1,6 +1,6 @@
 module FeatureHelpers
   def start_student_loans_claim
-    visit new_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
+    visit new_claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name)
     skip_tid
     choose_qts_year
     Claim.by_policy(Policies::StudentLoans).order(:created_at).last
@@ -98,7 +98,7 @@ module FeatureHelpers
   end
 
   def start_targeted_retention_incentive_payments_claim
-    visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
+    visit new_claim_path(Journeys::TargetedRetentionIncentivePayments.routing_name)
   end
 
   def get_otp_from_email
@@ -132,7 +132,7 @@ module FeatureHelpers
   # TODO: refactor all old feature specs which use this method
   def jump_to_claim_journey_page(journey_session:, slug:)
     journey = Journeys.for_routing_name(journey_session.journey)
-    visit claim_path(journey::ROUTING_NAME, slug)
+    visit claim_path(journey.routing_name, slug)
   end
 
   def sign_in_with_one_login

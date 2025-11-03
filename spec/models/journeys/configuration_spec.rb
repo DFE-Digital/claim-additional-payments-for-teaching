@@ -26,8 +26,8 @@ RSpec.describe Journeys::Configuration do
   end
 
   it "validates academic years are formated like '2020/2021'" do
-    expect(described_class.new(routing_name: Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)).not_to be_valid
-    expect(described_class.new(routing_name: Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, current_academic_year: "2020-2021")).not_to be_valid
-    expect(described_class.new(routing_name: Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, current_academic_year: "2020/2021")).to be_valid
+    expect(described_class.new(routing_name: Journeys::TeacherStudentLoanReimbursement.routing_name)).not_to be_valid
+    expect(described_class.new(routing_name: Journeys::TeacherStudentLoanReimbursement.routing_name, current_academic_year: "2020-2021")).not_to be_valid
+    expect(described_class.new(routing_name: Journeys::TeacherStudentLoanReimbursement.routing_name, current_academic_year: "2020/2021")).to be_valid
   end
 end

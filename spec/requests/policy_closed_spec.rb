@@ -5,13 +5,13 @@ RSpec.describe "Maintenance Mode", type: :request do
     let!(:journey_configuration) { create(:journey_configuration, :student_loans, :closed) }
 
     it "shows the policy closed page for GET requests" do
-      get new_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
+      get new_claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name)
       expect(response).to have_http_status(:service_unavailable)
       expect(response.body).to include("service is unavailable")
     end
 
     it "shows the policy closed page for POST requests" do
-      post claims_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
+      post claims_path(Journeys::TeacherStudentLoanReimbursement.routing_name)
       expect(response).to have_http_status(:service_unavailable)
       expect(response.body).to include("service is unavailable")
     end
@@ -28,13 +28,13 @@ RSpec.describe "Maintenance Mode", type: :request do
     it "still allows access to a different policy" do
       create(:journey_configuration, :targeted_retention_incentive_payments)
 
-      get new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
+      get new_claim_path(Journeys::TargetedRetentionIncentivePayments.routing_name)
       follow_redirect!
       expect(response).to have_http_status(:ok)
     end
 
     it "still allows access to the static pages" do
-      get terms_conditions_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
+      get terms_conditions_path(Journeys::TeacherStudentLoanReimbursement.routing_name)
       expect(response).to have_http_status(:ok)
     end
 
@@ -43,7 +43,7 @@ RSpec.describe "Maintenance Mode", type: :request do
       before { journey_configuration.update(availability_message: availability_message) }
 
       it "shows the time it will be available from" do
-        get new_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
+        get new_claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name)
         expect(response.body).to include(availability_message)
       end
     end

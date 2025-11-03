@@ -59,7 +59,7 @@ class OmniauthCallbacksController < ApplicationController
     else
       # If for some reason the session is empty, redirect the user to the first
       # available user journey
-      Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME
+      Journeys::TeacherStudentLoanReimbursement.routing_name
     end
   end
 

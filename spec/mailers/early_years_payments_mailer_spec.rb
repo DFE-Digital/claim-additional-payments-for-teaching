@@ -37,7 +37,7 @@ RSpec.describe EarlyYearsPaymentsMailer, type: :mailer do
       expect(personalisation[:ref_number]).to eql(claim.reference)
 
       # Check that URL points to landing page, not claims endpoint
-      expected_url = "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Practitioner::ROUTING_NAME}/landing-page"
+      expected_url = "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Practitioner.routing_name}/landing-page"
       expect(personalisation[:complete_claim_url]).to eql(expected_url)
     end
   end

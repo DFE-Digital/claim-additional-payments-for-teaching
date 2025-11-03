@@ -128,7 +128,7 @@ module Journeys
 
           def change_path(slug)
             Rails.application.routes.url_helpers.claim_path(
-              journey::ROUTING_NAME,
+              journey.routing_name,
               slug,
               change: "check-answers"
             )

@@ -133,7 +133,7 @@ class EarlyYearsPaymentsMailer < ApplicationMailer
   def practitioner_claim_reminder
     claim = params[:claim]
 
-    complete_claim_url = "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Practitioner::ROUTING_NAME}/landing-page"
+    complete_claim_url = "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Practitioner.routing_name}/landing-page"
 
     template_mail(
       EARLY_YEARS_PAYMENTS[:PRACTITIONER_CLAIM_REMINDER_TEMPLATE_ID],

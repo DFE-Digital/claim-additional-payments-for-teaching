@@ -21,7 +21,7 @@ RSpec.feature "Teacher Identity Sign in" do
   end
 
   scenario "Teacher makes claim for 'Targeted Retention Incentive Payments' claim and select continue without signing in" do
-    visit landing_page_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::TargetedRetentionIncentivePayments.routing_name)
     expect(page).to have_link("Claim a targeted retention incentive payment", href: "/targeted-retention-incentive-payments/landing-page")
     expect(page).to have_link(href: "mailto:additionalteachingpayment@digital.education.gov.uk")
 
@@ -43,7 +43,7 @@ RSpec.feature "Teacher Identity Sign in" do
   end
 
   scenario "Teacher makes claim for 'Targeted Retention Incentive Payments' claim and select Continue with DfE Identity" do
-    visit landing_page_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::TargetedRetentionIncentivePayments.routing_name)
     expect(page).to have_link("Claim a targeted retention incentive payment", href: "/targeted-retention-incentive-payments/landing-page")
     expect(page).to have_link(href: "mailto:additionalteachingpayment@digital.education.gov.uk")
 

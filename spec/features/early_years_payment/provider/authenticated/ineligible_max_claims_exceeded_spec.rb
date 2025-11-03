@@ -22,7 +22,7 @@ RSpec.feature "Early years payment provider" do
       }
     )
 
-    visit landing_page_path(Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME)
+    visit landing_page_path(Journeys::EarlyYearsPayment::Provider::Start.routing_name)
     click_link "Start now"
     fill_in "Enter your email address", with: "seymor.skinner@springfield-elementary.edu"
     click_on "Submit"

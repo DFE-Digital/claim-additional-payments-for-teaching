@@ -101,7 +101,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
       create(:teachers_pensions_service, teacher_reference_number: trn, end_date: (recent_tps_full_months + 2.months).ago, school_urn: school.establishment_number, la_urn: school.local_authority.code)
     end
 
-    visit landing_page_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::TargetedRetentionIncentivePayments.routing_name)
 
     # - Landing (start)
     expect(page).to have_text("Find out if you are eligible for a targeted retention incentive payment")

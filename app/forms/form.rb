@@ -80,9 +80,9 @@ class Form
 
   def url
     if params[:change].present?
-      claim_path(journey::ROUTING_NAME, params[:slug], change: params[:change])
+      claim_path(journey.routing_name, params[:slug], change: params[:change])
     else
-      claim_path(journey::ROUTING_NAME, params[:slug])
+      claim_path(journey.routing_name, params[:slug])
     end
   end
 

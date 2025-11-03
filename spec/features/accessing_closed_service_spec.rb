@@ -12,14 +12,14 @@ RSpec.describe "Accessing a closed service" do
 
   context "without a service access link" do
     it "doesn't allow access to the start of the journey" do
-      visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+      visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
 
       expect(page).not_to have_content("Start now")
     end
 
     it "doesn't allow access to pages in the journey" do
       visit claim_path(
-        Journeys::FurtherEducationPayments::ROUTING_NAME,
+        Journeys::FurtherEducationPayments.routing_name,
         "teaching-responsibilities"
       )
 
@@ -35,7 +35,7 @@ RSpec.describe "Accessing a closed service" do
       )
 
       visit landing_page_path(
-        Journeys::FurtherEducationPayments::ROUTING_NAME,
+        Journeys::FurtherEducationPayments.routing_name,
         service_access_code: service_access_code.code
       )
 
@@ -49,7 +49,7 @@ RSpec.describe "Accessing a closed service" do
 
       # Check we don't permit code reused
       visit landing_page_path(
-        Journeys::FurtherEducationPayments::ROUTING_NAME,
+        Journeys::FurtherEducationPayments.routing_name,
         service_access_code: service_access_code.code
       )
 
@@ -65,7 +65,7 @@ RSpec.describe "Accessing a closed service" do
       )
 
       visit landing_page_path(
-        Journeys::FurtherEducationPayments::ROUTING_NAME,
+        Journeys::FurtherEducationPayments.routing_name,
         service_access_code: service_access_code.code
       )
 

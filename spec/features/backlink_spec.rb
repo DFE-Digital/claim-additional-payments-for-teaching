@@ -5,7 +5,7 @@ RSpec.feature "Backlinking during a claim" do
     create(:journey_configuration, :targeted_retention_incentive_payments)
     targeted_retention_incentive_school = create(:school, :targeted_retention_incentive_payments_eligible)
 
-    visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
+    visit new_claim_path(Journeys::TargetedRetentionIncentivePayments.routing_name)
     # - Check eligibility intro
     expect(page).to have_text("Check you’re eligible for a targeted retention incentive payment")
     expect(page).not_to have_link("Back")
@@ -71,7 +71,7 @@ RSpec.feature "Backlinking during a claim" do
 
     school = create(:school, :student_loans_eligible)
 
-    visit new_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
+    visit new_claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name)
     skip_tid
 
     expect(page).to have_link("Back")
@@ -110,7 +110,7 @@ RSpec.feature "Backlinking during a claim" do
       :targeted_retention_incentive_payments_eligible
     )
 
-    visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
+    visit new_claim_path(Journeys::TargetedRetentionIncentivePayments.routing_name)
     # - Check eligibility intro
     expect(page).to have_text("Check you’re eligible for a targeted retention incentive payment")
     expect(page).not_to have_link("Back")
@@ -147,7 +147,7 @@ RSpec.feature "Backlinking during a claim" do
       :targeted_retention_incentive_payments_eligible
     )
 
-    visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
+    visit new_claim_path(Journeys::TargetedRetentionIncentivePayments.routing_name)
 
     # - Check eligibility intro
     expect(page).to have_text("Check you’re eligible for a targeted retention incentive payment")

@@ -1,6 +1,6 @@
 module RequestHelpers
   def start_student_loans_claim
-    start_claim(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
+    start_claim(Journeys::TeacherStudentLoanReimbursement.routing_name)
   end
 
   def start_claim(routing_name)

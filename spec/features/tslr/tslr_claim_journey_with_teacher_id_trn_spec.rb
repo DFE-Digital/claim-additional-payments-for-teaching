@@ -28,7 +28,7 @@ RSpec.feature "TSLR journey with Teacher ID teacher reference number page remova
   end
 
   def navigate_to_teacher_reference_number_page(school:)
-    visit landing_page_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
+    visit landing_page_path(Journeys::TeacherStudentLoanReimbursement.routing_name)
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("student_loans.landing_page"))
