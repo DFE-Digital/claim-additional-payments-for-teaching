@@ -24,10 +24,6 @@ class ClaimsController < BasePublicController
   # moving them elsewhere will likely cause issues
   include FormSubmittable
 
-  def existing_session
-    @existing_session = journey_sessions.first
-  end
-
   def start_new
     return redirect_to existing_session_path, alert: t("session.errors.select_continue_or_start_a_new_eligibility_check") unless params[:start_new_claim].present?
 
@@ -185,7 +181,7 @@ class ClaimsController < BasePublicController
     return false if %w[new create signed_out].include?(action_name)
     return false if navigator.current_slug == "confirmation"
 
-    !skip_landing_page? && journey_sessions.none?
+    !skip_landing_page? && journey_session.nil?
   end
 
   def set_cache_headers
