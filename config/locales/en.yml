@@ -1282,8 +1282,8 @@ en:
           options:
             more_than_20: "20 hours or more per week"
             more_than_12: "12 or more hours per week, but fewer than 20"
-            2_and_a_half_to_12_hours_per_week: "2.5 or more hours per week, but fewer than 12"
-            fewer_than_2_and_a_half_hours_per_week: "Fewer than 2.5 hours each week"
+            between_2_5_and_12: "2.5 or more hours per week, but fewer than 12"
+            less_than_2_5: "Fewer than 2.5 hours each week"
       claims:
         verification:
           forms:

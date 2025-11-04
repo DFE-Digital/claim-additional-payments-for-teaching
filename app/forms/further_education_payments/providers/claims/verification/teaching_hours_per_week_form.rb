@@ -13,11 +13,11 @@ module FurtherEducationPayments
               name: "12 or more hours per week, but fewer than 20"
             ),
             Form::Option.new(
-              id: "2_and_a_half_to_12_hours_per_week",
+              id: "between_2_5_and_12",
               name: "2.5 or more hours per week, but fewer than 12"
             ),
             Form::Option.new(
-              id: "fewer_than_2_and_a_half_hours_per_week",
+              id: "less_than_2_5",
               name: "Fewer than 2.5 hours each week"
             )
           ]
