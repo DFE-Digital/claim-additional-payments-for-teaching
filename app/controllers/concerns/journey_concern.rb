@@ -2,7 +2,7 @@ module JourneyConcern
   extend ActiveSupport::Concern
 
   included do
-    helper_method :current_journey_routing_name, :journey, :journey_configuration, :journey_session, :answers, :claim_in_progress?
+    helper_method :current_journey_routing_name, :journey, :journey_configuration, :journey_session, :answers
   end
 
   def current_journey_routing_name
@@ -25,17 +25,8 @@ module JourneyConcern
     journey_session&.answers
   end
 
-  def claim_in_progress?
-    session[journey_session_key].present?
-  end
-
   def eligible_claim_in_progress?
-    journey_sessions.any? && journey_sessions.none? { |js| claim_ineligible?(js) }
-  end
-
-  def claim_ineligible?(journey_session)
-    journey = Journeys.for_routing_name(journey_session.journey)
-    journey::EligibilityChecker.new(journey_session: journey_session).ineligible?
+    journey_session.present? && !journey::EligibilityChecker.new(journey_session: journey_session).ineligible?
   end
 
   def clear_journey_sessions!

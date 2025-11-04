@@ -35,7 +35,9 @@ class ClaimsController < BasePublicController
       clear_claim_session
       redirect_to(new_claim_path(current_journey_routing_name))
     else
-      redirect_to_existing_claim_journey
+      redirect_to(
+        claim_path(current_journey_routing_name, navigator.furthest_permissible_slug)
+      )
     end
   end
 
@@ -69,23 +71,6 @@ class ClaimsController < BasePublicController
 
   def current_slug
     params[:slug]
-  end
-
-  def redirect_to_existing_claim_journey
-    # If other journey sessions is empty, then the claimant has hit the landing
-    # page for the journey they're already on, so we need to look at the
-    # existing session.
-    other_journey_session = other_journey_sessions.first || journey_session
-    new_journey = Journeys.for_routing_name(other_journey_session.journey)
-
-    temp_navigator = Journeys::Navigator.new(
-      current_slug: nil,
-      journey_session: other_journey_session,
-      params:,
-      session:
-    )
-
-    redirect_to(claim_path(new_journey::ROUTING_NAME, slug: temp_navigator.furthest_permissible_slug)) && return
   end
 
   def set_backlink_path
