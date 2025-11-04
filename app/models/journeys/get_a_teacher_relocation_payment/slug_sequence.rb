@@ -36,6 +36,7 @@ module Journeys
       ].freeze
 
       DEAD_END_SLUGS = [
+        "confirmation",
         "ineligible"
       ].freeze
 

@@ -1,10 +1,10 @@
 module Journeys
   class Navigator
-    attr_reader :current_slug, :slug_sequence, :params, :session
+    attr_reader :current_slug, :journey_session, :params, :session
 
-    def initialize(current_slug:, slug_sequence:, params:, session:)
+    def initialize(current_slug:, journey_session:, params:, session:)
       @current_slug = current_slug
-      @slug_sequence = slug_sequence
+      @journey_session = journey_session
       @params = params
       @session = session
     end
@@ -195,6 +195,12 @@ module Journeys
       params[:change].present?
     end
 
+    def set_backlink?
+      return false if slug_sequence.class::DEAD_END_SLUGS.include?(current_slug)
+      return false if previous_slug.nil?
+      true
+    end
+
     private
 
     def impermissible_forms
@@ -248,11 +254,7 @@ module Journeys
     end
 
     def journey
-      slug_sequence.journey
-    end
-
-    def journey_session
-      slug_sequence.journey_session
+      journey_session.journey_class
     end
 
     def eligibility_checker
@@ -263,6 +265,10 @@ module Journeys
       params.fetch(form_class.model_name.param_key, {}).slice(
         *form_class.attribute_names.map(&:to_sym)
       )
+    end
+
+    def slug_sequence
+      @slug_sequence ||= journey::SlugSequence.new(journey_session)
     end
 
     def auth_checker
