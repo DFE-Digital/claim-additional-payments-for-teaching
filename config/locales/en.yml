@@ -1280,8 +1280,8 @@ en:
       forms:
         teaching_hours_per_week:
           options:
-            20_or_more_hours_per_week: "20 hours or more per week"
-            12_to_20_hours_per_week: "12 or more hours per week, but fewer than 20"
+            more_than_20: "20 hours or more per week"
+            more_than_12: "12 or more hours per week, but fewer than 20"
             2_and_a_half_to_12_hours_per_week: "2.5 or more hours per week, but fewer than 12"
             fewer_than_2_and_a_half_hours_per_week: "Fewer than 2.5 hours each week"
       claims:
