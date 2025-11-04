@@ -16,7 +16,7 @@ RSpec.describe SelectHomeAddressForm, type: :model do
     let(:journey_session) { build(:student_loans_session, answers:) }
     let(:answers) do
       attributes_for(
-        :"#{journey::I18N_NAMESPACE}_answers",
+        :"#{journey.i18n_namespace}_answers",
         skip_postcode_search: false
       )
     end

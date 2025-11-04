@@ -35,7 +35,7 @@ FactoryBot.define do
       begin
         raise ActiveRecord::RecordNotFound unless journey&.configuration.present?
       rescue ActiveRecord::RecordNotFound
-        create(:journey_configuration, journey::I18N_NAMESPACE)
+        create(:journey_configuration, journey.i18n_namespace)
       end
 
       claim.eligibility = build(evaluator.eligibility_factory, *Array.wrap(evaluator.eligibility_trait), **evaluator.eligibility_attributes || {}) unless claim.eligibility

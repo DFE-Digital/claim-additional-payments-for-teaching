@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.shared_examples_for "a journey session" do |journey|
-  let(:factory_name) { :"#{journey::I18N_NAMESPACE}_session" }
+  let(:factory_name) { :"#{journey.i18n_namespace}_session" }
 
   describe "validations" do
     describe "journey" do

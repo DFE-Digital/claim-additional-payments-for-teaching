@@ -74,7 +74,7 @@ module Journeys
     end
 
     def journey_name
-      I18n.t(:journey_name, scope: self::I18N_NAMESPACE)
+      I18n.t(:journey_name, scope: self.i18n_namespace)
     end
 
     def pii_attributes
@@ -106,14 +106,22 @@ module Journeys
       end
     end
 
+    def i18n_namespace
+      if defined?(self::I18N_NAMESPACE)
+        self::I18N_NAMESPACE
+      else
+        self.name.demodulize.underscore
+      end
+    end
+
     def policies
       self::POLICIES
     end
 
     def full_name
       [
-        I18n.t(:journey_name, scope: self::I18N_NAMESPACE),
-        I18n.t(:journey_description, scope: self::I18N_NAMESPACE, default: "")
+        I18n.t(:journey_name, scope: self.i18n_namespace),
+        I18n.t(:journey_description, scope: self.i18n_namespace, default: "")
       ].reject(&:blank?).join(" - ")
     end
 

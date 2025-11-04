@@ -11,9 +11,9 @@ RSpec.describe BankDetailsForm do
 
     let(:journey_session) do
       create(
-        :"#{journey::I18N_NAMESPACE}_session",
+        :"#{journey.i18n_namespace}_session",
         answers: attributes_for(
-          :"#{journey::I18N_NAMESPACE}_answers",
+          :"#{journey.i18n_namespace}_answers",
           hmrc_validation_attempt_count:
         )
       )

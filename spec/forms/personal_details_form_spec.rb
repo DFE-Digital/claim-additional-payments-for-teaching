@@ -9,7 +9,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
 
     let(:journey_session) do
       build(
-        :"#{journey::I18N_NAMESPACE}_session",
+        :"#{journey.i18n_namespace}_session",
         answers: {
           logged_in_with_tid: logged_in_with_tid,
           teacher_id_user_info: teacher_id_user_info,
@@ -55,7 +55,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
 
           let(:journey_session) do
             build(
-              :"#{journey::I18N_NAMESPACE}_session",
+              :"#{journey.i18n_namespace}_session",
               answers: {
                 first_name: "Different",
                 surname: "Doe",
@@ -73,7 +73,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
         context "when the name is the same as TID" do
           let(:journey_session) do
             create(
-              :"#{journey::I18N_NAMESPACE}_session",
+              :"#{journey.i18n_namespace}_session",
               answers: {
                 first_name: given_name,
                 surname: family_name,
@@ -136,7 +136,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
 
           let(:journey_session) do
             create(
-              :"#{journey::I18N_NAMESPACE}_session",
+              :"#{journey.i18n_namespace}_session",
               answers: {
                 date_of_birth: Date.new(1990, 2, 2),
                 logged_in_with_tid: logged_in_with_tid,
@@ -153,7 +153,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
         context "when the date_of_birth is the same as TID" do
           let(:journey_session) do
             create(
-              :"#{journey::I18N_NAMESPACE}_session",
+              :"#{journey.i18n_namespace}_session",
               answers: {
                 date_of_birth: date_of_birth,
                 logged_in_with_tid: logged_in_with_tid,
@@ -206,7 +206,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
 
           let(:journey_session) do
             create(
-              :"#{journey::I18N_NAMESPACE}_session",
+              :"#{journey.i18n_namespace}_session",
               answers: {
                 national_insurance_number: "AB123456D",
                 logged_in_with_tid: logged_in_with_tid,
@@ -223,7 +223,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
         context "when the national_insurance_number is the same as TID" do
           let(:journey_session) do
             create(
-              :"#{journey::I18N_NAMESPACE}_session",
+              :"#{journey.i18n_namespace}_session",
               answers: {
                 national_insurance_number: national_insurance_number,
                 logged_in_with_tid: logged_in_with_tid,

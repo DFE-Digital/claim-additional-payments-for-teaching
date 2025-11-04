@@ -218,7 +218,7 @@ RSpec.shared_examples "a claim personal data scrubber" do |policy|
 
   it "removes personal details from the journey session too" do
     journey = Journeys.for_policy(policy)
-    session_name = journey::I18N_NAMESPACE
+    session_name = journey.i18n_namespace
 
     session_for_approved_claim = create(
       "#{session_name}_session",

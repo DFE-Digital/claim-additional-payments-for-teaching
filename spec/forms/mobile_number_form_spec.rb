@@ -4,9 +4,9 @@ RSpec.describe MobileNumberForm do
   shared_examples "mobile_number_form" do |journey|
     let(:journey_session) do
       create(
-        :"#{journey::I18N_NAMESPACE}_session",
+        :"#{journey.i18n_namespace}_session",
         answers: attributes_for(
-          :"#{journey::I18N_NAMESPACE}_answers",
+          :"#{journey.i18n_namespace}_answers",
           :with_details_from_dfe_identity,
           mobile_verified: true
         )
@@ -92,9 +92,9 @@ RSpec.describe MobileNumberForm do
       context "when the mobile number has not changed" do
         let(:journey_session) do
           create(
-            :"#{journey::I18N_NAMESPACE}_session",
+            :"#{journey.i18n_namespace}_session",
             answers: attributes_for(
-              :"#{journey::I18N_NAMESPACE}_answers",
+              :"#{journey.i18n_namespace}_answers",
               :with_details_from_dfe_identity,
               mobile_number: mobile_number,
               mobile_verified: true

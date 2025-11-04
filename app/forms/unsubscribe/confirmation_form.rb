@@ -23,8 +23,8 @@ module Unsubscribe
     end
 
     def journey_name
-      default = I18n.t("journey_name", scope: reminder.journey::I18N_NAMESPACE).downcase
-      I18n.t("policy_short_name", scope: reminder.journey::I18N_NAMESPACE, default:).downcase
+      default = I18n.t("journey_name", scope: reminder.journey.i18n_namespace).downcase
+      I18n.t("policy_short_name", scope: reminder.journey.i18n_namespace, default:).downcase
     end
   end
 end

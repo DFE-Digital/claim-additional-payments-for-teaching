@@ -14,7 +14,7 @@ RSpec.describe EmailVerificationForm do
 
     let(:journey_session) do
       create(
-        :"#{journey::I18N_NAMESPACE}_session",
+        :"#{journey.i18n_namespace}_session",
         answers: {
           email_verification_secret: secret,
           sent_one_time_password_at: sent_one_time_password_at

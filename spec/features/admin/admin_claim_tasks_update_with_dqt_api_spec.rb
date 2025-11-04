@@ -13,7 +13,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
       journey_session.answers.assign_attributes(
         attributes_for(
-          :"#{journey::I18N_NAMESPACE}_answers",
+          :"#{journey.i18n_namespace}_answers",
           :submittable
         ).merge(answers)
       )

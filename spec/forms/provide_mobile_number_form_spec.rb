@@ -13,7 +13,7 @@ RSpec.describe ProvideMobileNumberForm, type: :model do
 
     let(:journey_session) do
       create(
-        :"#{journey::I18N_NAMESPACE}_session",
+        :"#{journey.i18n_namespace}_session",
         answers: {
           provide_mobile_number: provide_mobile_number,
           mobile_verified: true
@@ -106,7 +106,7 @@ RSpec.describe ProvideMobileNumberForm, type: :model do
         let(:mobile_number) { "07700900001" }
         let(:journey_session) do
           create(
-            :"#{journey::I18N_NAMESPACE}_session",
+            :"#{journey.i18n_namespace}_session",
             answers: {
               provide_mobile_number: true,
               mobile_number: mobile_number,

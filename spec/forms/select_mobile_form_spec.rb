@@ -4,9 +4,9 @@ RSpec.describe SelectMobileForm do
   shared_examples "select_mobile_form" do |journey|
     let(:journey_session) do
       create(
-        :"#{journey::I18N_NAMESPACE}_session",
+        :"#{journey.i18n_namespace}_session",
         answers: attributes_for(
-          :"#{journey::I18N_NAMESPACE}_answers",
+          :"#{journey.i18n_namespace}_answers",
           :with_personal_details,
           teacher_id_user_info: {
             phone_number: "07123456789"

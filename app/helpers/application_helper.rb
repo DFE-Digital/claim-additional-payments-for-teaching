@@ -25,19 +25,19 @@ module ApplicationHelper
   def support_email_address(routing_name = nil)
     return t("support_email_address") unless routing_name
 
-    namespace = Journeys.for_routing_name(routing_name)::I18N_NAMESPACE
+    namespace = Journeys.for_routing_name(routing_name).i18n_namespace
     t("#{namespace}.support_email_address")
   end
 
   def journey_service_name(routing_name = nil)
     return t("service_name") unless routing_name
 
-    namespace = Journeys.for_routing_name(routing_name)::I18N_NAMESPACE
+    namespace = Journeys.for_routing_name(routing_name).i18n_namespace
     t("#{namespace}.journey_name")
   end
 
   def feedback_email(routing_name)
-    namespace = Journeys.for_routing_name(routing_name)::I18N_NAMESPACE
+    namespace = Journeys.for_routing_name(routing_name).i18n_namespace
     t("#{namespace}.feedback_email")
   end
 

@@ -6,7 +6,7 @@ RSpec.describe ResetClaimForm, type: :model do
 
     let(:journey) { Journeys::TeacherStudentLoanReimbursement }
     let(:params) { nil }
-    let(:journey_session) { build(:"#{journey::I18N_NAMESPACE}_session") }
+    let(:journey_session) { build(:"#{journey.i18n_namespace}_session") }
 
     it { is_expected.to be_truthy }
   end

@@ -3,7 +3,6 @@ module Journeys
     extend Base
     extend self
 
-    I18N_NAMESPACE = "targeted_retention_incentive_payments"
     POLICIES = [Policies::TargetedRetentionIncentivePayments]
     FORMS = {
       "claims" => {

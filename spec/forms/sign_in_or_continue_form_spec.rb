@@ -4,9 +4,9 @@ RSpec.describe SignInOrContinueForm do
   shared_examples "sign_in_or_continue_form" do |journey|
     let(:journey_session) do
       build(
-        :"#{journey::I18N_NAMESPACE}_session",
+        :"#{journey.i18n_namespace}_session",
         answers: attributes_for(
-          :"#{journey::I18N_NAMESPACE}_answers",
+          :"#{journey.i18n_namespace}_answers",
           :with_details_from_dfe_identity
         )
       )

@@ -8,7 +8,7 @@ class ReminderMailer < ApplicationMailer
     @one_time_password = one_time_password
     @display_name = reminder.full_name
     @subject = "Please verify your reminder email"
-    support_email_address = translate(:support_email_address, scope: reminder.journey::I18N_NAMESPACE)
+    support_email_address = translate(:support_email_address, scope: reminder.journey.i18n_namespace)
     personalisation = {
       email_subject: @subject,
       first_name: @display_name,
@@ -29,7 +29,7 @@ class ReminderMailer < ApplicationMailer
 
   def reminder_set(reminder)
     @reminder = reminder
-    support_email_address = translate(:support_email_address, scope: reminder.journey::I18N_NAMESPACE)
+    support_email_address = translate(:support_email_address, scope: reminder.journey.i18n_namespace)
 
     personalisation = {
       first_name: extract_first_name(@reminder.full_name),
