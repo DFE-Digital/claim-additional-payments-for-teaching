@@ -53,10 +53,6 @@ module Journeys
       all_forms["claims"].invert[form.class]
     end
 
-    def forms
-      defined?(self::FORMS) ? self::FORMS : {}
-    end
-
     def answers_presenter
       self::AnswersPresenter
     end
@@ -129,6 +125,10 @@ module Journeys
 
     def all_forms
       SHARED_FORMS.deep_merge(forms)
+    end
+
+    def forms
+      defined?(self::FORMS) ? self::FORMS : {}
     end
   end
 end
