@@ -7,7 +7,6 @@ module Journeys
 
         START_WITH_MAGIC_LINK = true
         ROUTING_NAME = "early-years-payment-provider-alternative-idv"
-        I18N_NAMESPACE = "early_years_payment_provider_alternative_idv"
         POLICIES = [Policies::EarlyYearsPayments]
         FORMS = {
           "claims" => {

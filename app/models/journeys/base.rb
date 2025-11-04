@@ -106,7 +106,7 @@ module Journeys
       if defined?(self::I18N_NAMESPACE)
         self::I18N_NAMESPACE
       else
-        self.name.demodulize.underscore
+        self.name.gsub(/Journeys::/, "").gsub("::", "_").underscore
       end
     end
 

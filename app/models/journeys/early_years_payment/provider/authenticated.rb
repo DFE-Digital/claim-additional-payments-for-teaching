@@ -6,7 +6,6 @@ module Journeys
         extend self
 
         ROUTING_NAME = "early-years-payment-provider"
-        I18N_NAMESPACE = "early_years_payment_provider_authenticated"
         POLICIES = [Policies::EarlyYearsPayments]
         FORMS = {
           "claims" => {
