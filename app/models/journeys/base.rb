@@ -90,7 +90,7 @@ module Journeys
       if defined?(self::VIEW_PATH)
         self::VIEW_PATH
       else
-        self.name.demodulize.underscore
+        self.name.gsub(/^Journeys::/, "").gsub("::", "/").underscore
       end
     end
 
