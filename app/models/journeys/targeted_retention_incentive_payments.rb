@@ -5,30 +5,28 @@ module Journeys
 
     POLICIES = [Policies::TargetedRetentionIncentivePayments]
     FORMS = {
-      "claims" => {
-        "check-eligibility-intro" => CheckEligibilityIntroForm,
-        "current-school" => CurrentSchoolForm,
-        "select-current-school" => SelectCurrentSchoolForm,
-        "correct-school" => CorrectSchoolForm,
-        "nqt-in-academic-year-after-itt" => NqtInAcademicYearAfterIttForm,
-        "supply-teacher" => SupplyTeacherForm,
-        "entire-term-contract" => EntireTermContractForm,
-        "employed-directly" => EmployedDirectlyForm,
-        "poor-performance" => PoorPerformanceForm,
-        "qualification-details" => QualificationDetailsForm,
-        "qualification" => QualificationForm,
-        "itt-year" => IttYearForm,
-        "eligible-itt-subject" => EligibleIttSubjectForm,
-        "eligible-degree-subject" => EligibleDegreeSubjectForm,
-        "teaching-subject-now" => TeachingSubjectNowForm,
-        "check-your-answers-part-one" => CheckYourAnswersPartOneForm,
-        "check-your-answers" => CheckYourAnswersForm,
-        "confirmation" => ConfirmationForm,
-        "eligibility-confirmed" => EligibilityConfirmedForm,
-        "future-eligibility" => FutureEligibilityForm,
-        "ineligible" => IneligibleForm,
-        "reset-claim" => ResetClaimForm
-      }
+      "check-eligibility-intro" => CheckEligibilityIntroForm,
+      "current-school" => CurrentSchoolForm,
+      "select-current-school" => SelectCurrentSchoolForm,
+      "correct-school" => CorrectSchoolForm,
+      "nqt-in-academic-year-after-itt" => NqtInAcademicYearAfterIttForm,
+      "supply-teacher" => SupplyTeacherForm,
+      "entire-term-contract" => EntireTermContractForm,
+      "employed-directly" => EmployedDirectlyForm,
+      "poor-performance" => PoorPerformanceForm,
+      "qualification-details" => QualificationDetailsForm,
+      "qualification" => QualificationForm,
+      "itt-year" => IttYearForm,
+      "eligible-itt-subject" => EligibleIttSubjectForm,
+      "eligible-degree-subject" => EligibleDegreeSubjectForm,
+      "teaching-subject-now" => TeachingSubjectNowForm,
+      "check-your-answers-part-one" => CheckYourAnswersPartOneForm,
+      "check-your-answers" => CheckYourAnswersForm,
+      "confirmation" => ConfirmationForm,
+      "eligibility-confirmed" => EligibilityConfirmedForm,
+      "future-eligibility" => FutureEligibilityForm,
+      "ineligible" => IneligibleForm,
+      "reset-claim" => ResetClaimForm
     }
 
     NONE_OF_THE_ABOVE_ACADEMIC_YEAR = "itt_academic_year_none"

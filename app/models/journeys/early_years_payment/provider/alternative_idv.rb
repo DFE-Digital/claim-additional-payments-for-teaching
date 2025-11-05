@@ -9,15 +9,13 @@ module Journeys
         ROUTING_NAME = "early-years-payment-provider-alternative-idv"
         POLICIES = [Policies::EarlyYearsPayments]
         FORMS = {
-          "claims" => {
-            "email-verification" => EmailVerificationForm,
-            "claimant-employed-by-nursery" => ClaimantEmployedByNurseryForm,
-            "claimant-personal-details" => ClaimantPersonalDetailsForm,
-            "check-answers" => CheckAnswersForm,
-            "confirmation" => ConfirmationForm,
-            "claimant-not-employed-by-nursery" => ClaimantNotEmployedByNurseryForm,
-            "ineligible" => IneligibleForm
-          }
+          "email-verification" => EmailVerificationForm,
+          "claimant-employed-by-nursery" => ClaimantEmployedByNurseryForm,
+          "claimant-personal-details" => ClaimantPersonalDetailsForm,
+          "check-answers" => CheckAnswersForm,
+          "confirmation" => ConfirmationForm,
+          "claimant-not-employed-by-nursery" => ClaimantNotEmployedByNurseryForm,
+          "ineligible" => IneligibleForm
         }
 
         def self.verification_url(claim)

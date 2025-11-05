@@ -11,25 +11,23 @@ module Journeys
     POLICIES = [Policies::StudentLoans]
 
     FORMS = {
-      "claims" => {
-        "claim-school" => ClaimSchoolForm,
-        "claim-school-results" => ClaimSchoolResultsForm,
-        "qualification-details" => QualificationDetailsForm,
-        "qts-year" => QtsYearForm,
-        "subjects-taught" => SubjectsTaughtForm,
-        "still-teaching" => StillTeachingForm,
-        "still-teaching-tps" => StillTeachingTpsForm,
-        "leadership-position" => LeadershipPositionForm,
-        "mostly-performed-leadership-duties" => MostlyPerformedLeadershipDutiesForm,
-        "reset-claim" => ResetClaimForm,
-        "select-claim-school" => SelectClaimSchoolForm,
-        "select-home-address" => SelectHomeAddressForm,
-        "eligibility-confirmed" => EligibilityConfirmedForm,
-        "student-loan-amount" => StudentLoanAmountForm,
-        "check-your-answers" => CheckYourAnswersForm,
-        "confirmation" => ConfirmationForm,
-        "ineligible" => IneligibleForm
-      }
+      "claim-school" => ClaimSchoolForm,
+      "claim-school-results" => ClaimSchoolResultsForm,
+      "qualification-details" => QualificationDetailsForm,
+      "qts-year" => QtsYearForm,
+      "subjects-taught" => SubjectsTaughtForm,
+      "still-teaching" => StillTeachingForm,
+      "still-teaching-tps" => StillTeachingTpsForm,
+      "leadership-position" => LeadershipPositionForm,
+      "mostly-performed-leadership-duties" => MostlyPerformedLeadershipDutiesForm,
+      "reset-claim" => ResetClaimForm,
+      "select-claim-school" => SelectClaimSchoolForm,
+      "select-home-address" => SelectHomeAddressForm,
+      "eligibility-confirmed" => EligibilityConfirmedForm,
+      "student-loan-amount" => StudentLoanAmountForm,
+      "check-your-answers" => CheckYourAnswersForm,
+      "confirmation" => ConfirmationForm,
+      "ineligible" => IneligibleForm
     }.freeze
 
     def requires_student_loan_details?

@@ -1,30 +1,28 @@
 module Journeys
   module Base
     SHARED_FORMS = {
-      "claims" => {
-        "sign-in-or-continue" => TeacherId.bypass? ? SignInOrContinueTestingForm : SignInOrContinueForm,
-        "current-school" => CurrentSchoolForm,
-        "select-current-school" => SelectCurrentSchoolForm,
-        "information-provided" => InformationProvidedForm,
-        "gender" => GenderForm,
-        "full-name" => FullNameForm,
-        "date-of-birth" => DateOfBirthForm,
-        "national-insurance-number" => NationalInsuranceNumberForm,
-        "personal-details" => PersonalDetailsForm,
-        "select-email" => SelectEmailForm,
-        "provide-mobile-number" => ProvideMobileNumberForm,
-        "select-mobile" => SelectMobileForm,
-        "email-address" => EmailAddressForm,
-        "email-verification" => EmailVerificationForm,
-        "mobile-number" => MobileNumberForm,
-        "mobile-verification" => MobileVerificationForm,
-        "personal-bank-account" => PersonalBankAccountForm,
-        "teacher-reference-number" => TeacherReferenceNumberForm,
-        "address" => AddressForm,
-        "postcode-search" => PostcodeSearchForm,
-        "select-home-address" => SelectHomeAddressForm,
-        "check-your-answers" => CheckYourAnswersForm
-      }
+      "sign-in-or-continue" => SignInOrContinueForm,
+      "current-school" => CurrentSchoolForm,
+      "select-current-school" => SelectCurrentSchoolForm,
+      "information-provided" => InformationProvidedForm,
+      "gender" => GenderForm,
+      "full-name" => FullNameForm,
+      "date-of-birth" => DateOfBirthForm,
+      "national-insurance-number" => NationalInsuranceNumberForm,
+      "personal-details" => PersonalDetailsForm,
+      "select-email" => SelectEmailForm,
+      "provide-mobile-number" => ProvideMobileNumberForm,
+      "select-mobile" => SelectMobileForm,
+      "email-address" => EmailAddressForm,
+      "email-verification" => EmailVerificationForm,
+      "mobile-number" => MobileNumberForm,
+      "mobile-verification" => MobileVerificationForm,
+      "personal-bank-account" => PersonalBankAccountForm,
+      "teacher-reference-number" => TeacherReferenceNumberForm,
+      "address" => AddressForm,
+      "postcode-search" => PostcodeSearchForm,
+      "select-home-address" => SelectHomeAddressForm,
+      "check-your-answers" => CheckYourAnswersForm
     }.freeze
 
     def configuration
@@ -40,17 +38,17 @@ module Journeys
     end
 
     def form(journey_session:, params:, session:)
-      form = all_forms.dig(params[:controller].split("/").last, params[:slug])
+      form = all_forms.dig(params[:slug])
 
       form&.new(journey: self, journey_session:, params:, session:)
     end
 
     def form_class_for_slug(slug:)
-      all_forms.dig("claims", slug)
+      all_forms.dig(slug)
     end
 
     def slug_for_form(form:)
-      all_forms["claims"].invert[form.class]
+      all_forms.invert[form.class]
     end
 
     def answers_presenter
