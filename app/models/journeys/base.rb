@@ -1,29 +1,29 @@
 module Journeys
   module Base
-    SHARED_FORMS = {
-      "sign-in-or-continue" => SignInOrContinueForm,
-      "current-school" => CurrentSchoolForm,
-      "select-current-school" => SelectCurrentSchoolForm,
-      "information-provided" => InformationProvidedForm,
-      "gender" => GenderForm,
-      "full-name" => FullNameForm,
-      "date-of-birth" => DateOfBirthForm,
-      "national-insurance-number" => NationalInsuranceNumberForm,
-      "personal-details" => PersonalDetailsForm,
-      "select-email" => SelectEmailForm,
-      "provide-mobile-number" => ProvideMobileNumberForm,
-      "select-mobile" => SelectMobileForm,
-      "email-address" => EmailAddressForm,
-      "email-verification" => EmailVerificationForm,
-      "mobile-number" => MobileNumberForm,
-      "mobile-verification" => MobileVerificationForm,
-      "personal-bank-account" => PersonalBankAccountForm,
-      "teacher-reference-number" => TeacherReferenceNumberForm,
-      "address" => AddressForm,
-      "postcode-search" => PostcodeSearchForm,
-      "select-home-address" => SelectHomeAddressForm,
-      "check-your-answers" => CheckYourAnswersForm
-    }.freeze
+    SHARED_FORMS = [
+      SignInOrContinueForm,
+      CurrentSchoolForm,
+      SelectCurrentSchoolForm,
+      InformationProvidedForm,
+      GenderForm,
+      FullNameForm,
+      DateOfBirthForm,
+      NationalInsuranceNumberForm,
+      PersonalDetailsForm,
+      SelectEmailForm,
+      ProvideMobileNumberForm,
+      SelectMobileForm,
+      EmailAddressForm,
+      EmailVerificationForm,
+      MobileNumberForm,
+      MobileVerificationForm,
+      PersonalBankAccountForm,
+      TeacherReferenceNumberForm,
+      AddressForm,
+      PostcodeSearchForm,
+      SelectHomeAddressForm,
+      CheckYourAnswersForm
+    ].freeze
 
     def configuration
       Configuration.find(self.routing_name)
@@ -38,17 +38,13 @@ module Journeys
     end
 
     def form(journey_session:, params:, session:)
-      form = all_forms.dig(params[:slug])
+      form_class = form_class_for_slug(slug: params[:slug])
 
-      form&.new(journey: self, journey_session:, params:, session:)
-    end
-
-    def form_class_for_slug(slug:)
-      all_forms.dig(slug)
+      form_class&.new(journey: self, journey_session:, params:, session:)
     end
 
     def slug_for_form(form:)
-      all_forms.invert[form.class]
+      all_forms_mapping.invert[form.class]
     end
 
     def answers_presenter
@@ -119,14 +115,44 @@ module Journeys
       ].reject(&:blank?).join(" - ")
     end
 
+    def form_class_for_slug(slug:)
+      all_forms_mapping[slug]
+    end
+
     private
 
-    def all_forms
-      SHARED_FORMS.deep_merge(forms)
+    def all_forms_mapping
+      shared_forms_mapping.merge(forms_mapping)
+    end
+
+    def shared_forms
+      SHARED_FORMS
+    end
+
+    def shared_forms_mapping
+      mapping = {}
+
+      shared_forms.map do |form|
+        key = form.name.demodulize.underscore.downcase.dasherize.gsub(/-form$/, "")
+        mapping[key] = form
+      end
+
+      mapping
     end
 
     def forms
       defined?(self::FORMS) ? self::FORMS : {}
+    end
+
+    def forms_mapping
+      mapping = {}
+
+      forms.map do |form|
+        key = form.name.demodulize.underscore.downcase.dasherize.gsub(/-form$/, "")
+        mapping[key] = form
+      end
+
+      mapping
     end
   end
 end

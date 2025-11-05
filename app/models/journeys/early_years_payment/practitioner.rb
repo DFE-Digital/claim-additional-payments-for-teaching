@@ -6,15 +6,15 @@ module Journeys
 
       ROUTING_NAME = "early-years-payment-practitioner"
       POLICIES = [Policies::EarlyYearsPayments]
-      FORMS = {
-        "sign-in" => SignInForm,
-        "find-reference" => FindReferenceForm,
-        "personal-bank-account" => PersonalBankAccountForm,
-        "how-we-use-your-information" => HowWeUseYourInformationForm,
-        "check-your-answers" => CheckYourAnswersForm,
-        "confirmation" => ConfirmationForm,
-        "ineligible" => IneligibleForm
-      }
+      FORMS = [
+        SignInForm,
+        FindReferenceForm,
+        PersonalBankAccountForm,
+        HowWeUseYourInformationForm,
+        CheckYourAnswersForm,
+        ConfirmationForm,
+        IneligibleForm
+      ]
 
       def requires_student_loan_details?
         true

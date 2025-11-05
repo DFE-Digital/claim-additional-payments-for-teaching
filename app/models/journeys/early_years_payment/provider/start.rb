@@ -8,11 +8,11 @@ module Journeys
         ROUTING_NAME = "early-years-payment"
         POLICIES = [Policies::EarlyYearsPayments]
 
-        FORMS = {
-          "email-address" => EmailAddressForm,
-          "check-your-email" => CheckYourEmailForm,
-          "ineligible" => IneligibleForm
-        }
+        FORMS = [
+          EmailAddressForm,
+          CheckYourEmailForm,
+          IneligibleForm
+        ]
       end
     end
   end

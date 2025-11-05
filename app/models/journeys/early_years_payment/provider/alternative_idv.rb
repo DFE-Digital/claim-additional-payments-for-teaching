@@ -8,15 +8,15 @@ module Journeys
         START_WITH_MAGIC_LINK = true
         ROUTING_NAME = "early-years-payment-provider-alternative-idv"
         POLICIES = [Policies::EarlyYearsPayments]
-        FORMS = {
-          "email-verification" => EmailVerificationForm,
-          "claimant-employed-by-nursery" => ClaimantEmployedByNurseryForm,
-          "claimant-personal-details" => ClaimantPersonalDetailsForm,
-          "check-answers" => CheckAnswersForm,
-          "confirmation" => ConfirmationForm,
-          "claimant-not-employed-by-nursery" => ClaimantNotEmployedByNurseryForm,
-          "ineligible" => IneligibleForm
-        }
+        FORMS = [
+          EmailVerificationForm,
+          ClaimantEmployedByNurseryForm,
+          ClaimantPersonalDetailsForm,
+          CheckAnswersForm,
+          ConfirmationForm,
+          ClaimantNotEmployedByNurseryForm,
+          IneligibleForm
+        ]
 
         def self.verification_url(claim)
           "https://#{ENV["CANONICAL_HOSTNAME"]}#{verification_path(claim)}"
