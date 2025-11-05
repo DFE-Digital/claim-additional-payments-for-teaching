@@ -34,8 +34,8 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Teachi
             %w[
               more_than_20
               more_than_12
-              2_and_a_half_to_12_hours_per_week
-              fewer_than_2_and_a_half_hours_per_week
+              between_2_5_and_12
+              less_than_2_5
             ]
           )
           .with_message(
@@ -57,8 +57,8 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Teachi
           .in_array([
             "more_than_20",
             "more_than_12",
-            "2_and_a_half_to_12_hours_per_week",
-            "fewer_than_2_and_a_half_hours_per_week",
+            "between_2_5_and_12",
+            "less_than_2_5",
             nil
           ])
           .with_message(
