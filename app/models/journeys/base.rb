@@ -26,7 +26,7 @@ module Journeys
     ].freeze
 
     def configuration
-      Configuration.find(self.routing_name)
+      Configuration.find(routing_name)
     end
 
     def start_page_url
@@ -64,7 +64,7 @@ module Journeys
     end
 
     def journey_name
-      I18n.t(:journey_name, scope: self.i18n_namespace)
+      I18n.t(:journey_name, scope: i18n_namespace)
     end
 
     def pii_attributes
@@ -84,7 +84,7 @@ module Journeys
       if defined?(self::VIEW_PATH)
         self::VIEW_PATH
       else
-        self.name.gsub(/^Journeys::/, "").gsub("::", "/").underscore
+        name.gsub(/^Journeys::/, "").gsub("::", "/").underscore
       end
     end
 
@@ -92,7 +92,7 @@ module Journeys
       if defined?(self::ROUTING_NAME)
         self::ROUTING_NAME
       else
-        self.name.demodulize.underscore.dasherize
+        name.demodulize.underscore.dasherize
       end
     end
 
@@ -100,7 +100,7 @@ module Journeys
       if defined?(self::I18N_NAMESPACE)
         self::I18N_NAMESPACE
       else
-        self.name.gsub(/Journeys::/, "").gsub("::", "_").underscore
+        name.gsub("Journeys::", "").gsub("::", "_").underscore
       end
     end
 
@@ -110,8 +110,8 @@ module Journeys
 
     def full_name
       [
-        I18n.t(:journey_name, scope: self.i18n_namespace),
-        I18n.t(:journey_description, scope: self.i18n_namespace, default: "")
+        I18n.t(:journey_name, scope: i18n_namespace),
+        I18n.t(:journey_description, scope: i18n_namespace, default: "")
       ].reject(&:blank?).join(" - ")
     end
 
