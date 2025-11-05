@@ -88,11 +88,11 @@ if Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")
   file_upload = FileUpload.create(
     uploaded_by: DfeSignIn::User.first,
     body: File.read(file),
-    target_data_model: EligibleFeProvider.to_s,
+    target_data_model: Policies::FurtherEducationPayments::EligibleFeProvider.to_s,
     academic_year: AcademicYear.current.to_s
   )
 
-  EligibleFeProvidersImporter.new(file, AcademicYear.current).run(file_upload.id)
+  Policies::FurtherEducationPayments::EligibleFeProvidersImporter.new(file, AcademicYear.current).run(file_upload.id)
   file_upload.completed_processing!
 end
 

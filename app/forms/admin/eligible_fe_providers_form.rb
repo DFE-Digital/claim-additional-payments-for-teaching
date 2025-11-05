@@ -26,7 +26,7 @@ class Admin::EligibleFeProvidersForm
   end
 
   def importer
-    @importer ||= EligibleFeProvidersImporter.new(
+    @importer ||= Policies::FurtherEducationPayments::EligibleFeProvidersImporter.new(
       file,
       academic_year
     )
@@ -36,7 +36,7 @@ class Admin::EligibleFeProvidersForm
     @file_upload ||= FileUpload.new(
       uploaded_by: admin_user,
       body: File.read(file),
-      target_data_model: EligibleFeProvider.to_s,
+      target_data_model: Policies::FurtherEducationPayments::EligibleFeProvider.to_s,
       academic_year: academic_year.to_s
     )
   end

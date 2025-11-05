@@ -35,7 +35,7 @@ module Admin
     def show
       @download_form = EligibleFeProvidersForm.new(download_params, admin_user)
 
-      send_data EligibleFeProvider.csv_for_academic_year(@download_form.academic_year),
+      send_data Policies::FurtherEducationPayments::EligibleFeProvider.csv_for_academic_year(@download_form.academic_year),
         type: "text/csv",
         filename: "eligible_further_education_providers_#{@download_form.academic_year}.csv"
     end

@@ -162,7 +162,7 @@ class School < ApplicationRecord
   end
 
   def eligible_fe_provider(academic_year: AcademicYear.current)
-    EligibleFeProvider
+    Policies::FurtherEducationPayments::EligibleFeProvider
       .by_academic_year(academic_year)
       .where(ukprn:)
       .first

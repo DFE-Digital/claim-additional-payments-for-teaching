@@ -1,12 +1,12 @@
 require "rails_helper"
 
-RSpec.describe EligibleFeProvidersImporter do
+RSpec.describe Policies::FurtherEducationPayments::EligibleFeProvidersImporter do
   subject { described_class.new(file, academic_year) }
 
   let(:academic_year) { AcademicYear.current }
   let(:file) { Tempfile.new }
   let(:correct_headers) { described_class.mandatory_headers.join(",") + "\n" }
-  let(:file_upload) { create(:file_upload, :not_completed_processing, target_data_model: EligibleFeProvider.to_s, academic_year: AcademicYear.current.to_s) }
+  let(:file_upload) { create(:file_upload, :not_completed_processing, target_data_model: Policies::FurtherEducationPayments::EligibleFeProvider.to_s, academic_year: AcademicYear.current.to_s) }
 
   def to_row(hash)
     [
@@ -44,7 +44,7 @@ RSpec.describe EligibleFeProvidersImporter do
       end
 
       it "does not add any any records" do
-        expect { subject.run(file_upload.id) }.not_to change { EligibleFeProvider.count }
+        expect { subject.run(file_upload.id) }.not_to change { Policies::FurtherEducationPayments::EligibleFeProvider.count }
       end
 
       context "when there are existing records" do
@@ -54,7 +54,7 @@ RSpec.describe EligibleFeProvidersImporter do
         end
 
         it "does not purge any records" do
-          expect { subject.run(file_upload.id) }.not_to change { EligibleFeProvider.count }
+          expect { subject.run(file_upload.id) }.not_to change { Policies::FurtherEducationPayments::EligibleFeProvider.count }
         end
       end
     end
@@ -75,7 +75,7 @@ RSpec.describe EligibleFeProvidersImporter do
       end
 
       it "ignores empty rows" do
-        expect { subject.run(file_upload.id) }.to change { EligibleFeProvider.count }.by(3)
+        expect { subject.run(file_upload.id) }.to change { Policies::FurtherEducationPayments::EligibleFeProvider.count }.by(3)
       end
 
       it "does not raise errors" do
@@ -101,7 +101,7 @@ RSpec.describe EligibleFeProvidersImporter do
       end
 
       it "imports new records" do
-        expect { subject.run(file_upload.id) }.to change { EligibleFeProvider.count }.by(3)
+        expect { subject.run(file_upload.id) }.to change { Policies::FurtherEducationPayments::EligibleFeProvider.count }.by(3)
       end
 
       context "when there are existing records" do
@@ -111,11 +111,11 @@ RSpec.describe EligibleFeProvidersImporter do
         end
 
         it "imports new records, keeps existing and returns the latest" do
-          expect { subject.run(file_upload.id) }.to change { EligibleFeProvider.count }.from(2).to(5)
+          expect { subject.run(file_upload.id) }.to change { Policies::FurtherEducationPayments::EligibleFeProvider.count }.from(2).to(5)
 
-          expect(EligibleFeProvider.by_academic_year(academic_year).count).to eq(1)
+          expect(Policies::FurtherEducationPayments::EligibleFeProvider.by_academic_year(academic_year).count).to eq(1)
           file_upload.completed_processing!
-          expect(EligibleFeProvider.by_academic_year(academic_year).count).to eq(3)
+          expect(Policies::FurtherEducationPayments::EligibleFeProvider.by_academic_year(academic_year).count).to eq(3)
         end
       end
     end
@@ -132,9 +132,9 @@ RSpec.describe EligibleFeProvidersImporter do
       end
 
       it "ignores superfluous characters and imports new records" do
-        expect { subject.run(file_upload.id) }.to change { EligibleFeProvider.count }.by(3)
-        expect(EligibleFeProvider.pluck(:max_award_amount).uniq).to eql([6_000])
-        expect(EligibleFeProvider.pluck(:lower_award_amount).uniq).to eql([3_000])
+        expect { subject.run(file_upload.id) }.to change { Policies::FurtherEducationPayments::EligibleFeProvider.count }.by(3)
+        expect(Policies::FurtherEducationPayments::EligibleFeProvider.pluck(:max_award_amount).uniq).to eql([6_000])
+        expect(Policies::FurtherEducationPayments::EligibleFeProvider.pluck(:lower_award_amount).uniq).to eql([3_000])
       end
 
       context "when there are existing records" do
@@ -144,16 +144,16 @@ RSpec.describe EligibleFeProvidersImporter do
         end
 
         it "imports new records, keeps existing and returns the latest" do
-          expect { subject.run(file_upload.id) }.to change { EligibleFeProvider.count }.from(2).to(5)
+          expect { subject.run(file_upload.id) }.to change { Policies::FurtherEducationPayments::EligibleFeProvider.count }.from(2).to(5)
 
-          expect(EligibleFeProvider.by_academic_year(academic_year).count).to eq(1)
-          expect(EligibleFeProvider.by_academic_year(academic_year).pluck(:max_award_amount).uniq.sort).to eql([5_000])
-          expect(EligibleFeProvider.by_academic_year(academic_year).pluck(:lower_award_amount).uniq.sort).to eql([2_000])
+          expect(Policies::FurtherEducationPayments::EligibleFeProvider.by_academic_year(academic_year).count).to eq(1)
+          expect(Policies::FurtherEducationPayments::EligibleFeProvider.by_academic_year(academic_year).pluck(:max_award_amount).uniq.sort).to eql([5_000])
+          expect(Policies::FurtherEducationPayments::EligibleFeProvider.by_academic_year(academic_year).pluck(:lower_award_amount).uniq.sort).to eql([2_000])
 
           file_upload.completed_processing!
-          expect(EligibleFeProvider.by_academic_year(academic_year).count).to eq(3)
-          expect(EligibleFeProvider.by_academic_year(academic_year).pluck(:max_award_amount).uniq.sort).to eql([6_000])
-          expect(EligibleFeProvider.by_academic_year(academic_year).pluck(:lower_award_amount).uniq.sort).to eql([3_000])
+          expect(Policies::FurtherEducationPayments::EligibleFeProvider.by_academic_year(academic_year).count).to eq(3)
+          expect(Policies::FurtherEducationPayments::EligibleFeProvider.by_academic_year(academic_year).pluck(:max_award_amount).uniq.sort).to eql([6_000])
+          expect(Policies::FurtherEducationPayments::EligibleFeProvider.by_academic_year(academic_year).pluck(:lower_award_amount).uniq.sort).to eql([3_000])
         end
       end
     end
@@ -162,9 +162,9 @@ RSpec.describe EligibleFeProvidersImporter do
       let(:file) { File.open(file_fixture("eligible_fe_providers_illegal_encoding.csv")) }
 
       it "ignores superfluous characters and imports new records" do
-        expect { subject.run(file_upload.id) }.to change { EligibleFeProvider.count }.by(10)
-        expect(EligibleFeProvider.pluck(:max_award_amount).uniq.sort).to eql([4_000, 5_000, 6_000])
-        expect(EligibleFeProvider.pluck(:lower_award_amount).uniq.sort).to eql([2_000, 2_500, 3_000])
+        expect { subject.run(file_upload.id) }.to change { Policies::FurtherEducationPayments::EligibleFeProvider.count }.by(10)
+        expect(Policies::FurtherEducationPayments::EligibleFeProvider.pluck(:max_award_amount).uniq.sort).to eql([4_000, 5_000, 6_000])
+        expect(Policies::FurtherEducationPayments::EligibleFeProvider.pluck(:lower_award_amount).uniq.sort).to eql([2_000, 2_500, 3_000])
       end
     end
   end
