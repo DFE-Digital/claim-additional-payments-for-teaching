@@ -1,6 +1,6 @@
 module Journeys
   module TargetedRetentionIncentivePayments
-    class IttAcademicYearForm < Form
+    class IttYearForm < Form
       attribute :itt_academic_year, :string
 
       validates :itt_academic_year, inclusion: {

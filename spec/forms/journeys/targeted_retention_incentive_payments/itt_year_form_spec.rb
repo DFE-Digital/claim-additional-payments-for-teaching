@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Journeys::TargetedRetentionIncentivePayments::IttAcademicYearForm, type: :model do
+RSpec.describe Journeys::TargetedRetentionIncentivePayments::IttYearForm, type: :model do
   let(:current_academic_year) { AcademicYear.new(2024) }
 
   before do

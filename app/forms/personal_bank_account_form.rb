@@ -1,4 +1,4 @@
-class BankDetailsForm < Form
+class PersonalBankAccountForm < Form
   # Only validate against HMRC API if number of attempts is below threshold
   MAX_HMRC_API_VALIDATION_ATTEMPTS = 3
   BANKING_NAME_REGEX_FILTER = /\A[0-9A-Za-z .\/&-]*\z/

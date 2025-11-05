@@ -10,7 +10,7 @@ module Journeys
         "claims" => {
           "sign-in" => SignInForm,
           "find-reference" => FindReferenceForm,
-          "personal-bank-account" => BankDetailsForm,
+          "personal-bank-account" => PersonalBankAccountForm,
           "how-we-use-your-information" => HowWeUseYourInformationForm,
           "check-your-answers" => CheckYourAnswersForm,
           "confirmation" => ConfirmationForm,

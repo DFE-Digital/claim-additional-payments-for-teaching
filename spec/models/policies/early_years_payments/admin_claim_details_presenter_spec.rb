@@ -118,7 +118,7 @@ RSpec.describe Policies::EarlyYearsPayments::AdminClaimDetailsPresenter do
         [I18n.t("early_years_payments.admin.provider_email_address"), "provider@example.com"],
         [I18n.t("early_years_payments.admin.provider_name"), "John Doe"],
         [I18n.t("early_years_payments.admin.consent_given"), "Confirmed"],
-        [I18n.t("early_years_payments.admin.provider_entered_contract_type"), "Permanent"],
+        [I18n.t("early_years_payments.admin.contract_type"), "Permanent"],
         [I18n.t("early_years_payments.admin.child_facing_confirmation_given"), "Yes"],
         [I18n.t("early_years_payments.admin.returning_within_6_months"), "Yes"],
         [I18n.t("early_years_payments.admin.returner_worked_with_children"), "No"],

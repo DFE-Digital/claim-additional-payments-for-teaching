@@ -182,7 +182,7 @@ en:
           undergraduate_itt: "Bachelor of Arts (BA) or Bachelor of Science (BSc) degrees."
         errors:
           inclusion: Select the route you took into teaching
-      itt_academic_year:
+      itt_year:
         question:
           undergraduate_itt: In which academic year did you complete your undergraduate initial teacher training (ITT)?
           postgraduate_itt: In which academic year did you start your postgraduate initial teacher training (ITT)?

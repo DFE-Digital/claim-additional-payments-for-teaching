@@ -14,7 +14,7 @@ module Journeys
             "paye-reference" => PayeReferenceForm,
             "claimant-name" => ClaimantNameForm,
             "start-date" => StartDateForm,
-            "contract-type" => ProviderEnteredContractTypeForm,
+            "contract-type" => ContractTypeForm,
             "child-facing" => ChildFacingForm,
             "returner" => ReturnerForm,
             "returner-worked-with-children" => ReturnerWorkedWithChildrenForm,

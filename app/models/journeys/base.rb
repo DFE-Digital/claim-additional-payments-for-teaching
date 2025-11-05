@@ -18,7 +18,7 @@ module Journeys
         "email-verification" => EmailVerificationForm,
         "mobile-number" => MobileNumberForm,
         "mobile-verification" => MobileVerificationForm,
-        "personal-bank-account" => BankDetailsForm,
+        "personal-bank-account" => PersonalBankAccountForm,
         "teacher-reference-number" => TeacherReferenceNumberForm,
         "address" => AddressForm,
         "postcode-search" => PostcodeSearchForm,

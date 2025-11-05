@@ -17,7 +17,7 @@ module Journeys
         "poor-performance" => PoorPerformanceForm,
         "qualification-details" => QualificationDetailsForm,
         "qualification" => QualificationForm,
-        "itt-year" => IttAcademicYearForm,
+        "itt-year" => IttYearForm,
         "eligible-itt-subject" => EligibleIttSubjectForm,
         "eligible-degree-subject" => EligibleDegreeSubjectForm,
         "teaching-subject-now" => TeachingSubjectNowForm,

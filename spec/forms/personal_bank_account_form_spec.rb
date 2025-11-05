@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe BankDetailsForm do
+RSpec.describe PersonalBankAccountForm do
   shared_examples "bank_details_form" do |journey|
     before {
       create(:journey_configuration, :student_loans)
