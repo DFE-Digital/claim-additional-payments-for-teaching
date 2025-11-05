@@ -1,30 +1,5 @@
 module Journeys
   module Base
-    SHARED_FORMS = [
-      SignInOrContinueForm,
-      CurrentSchoolForm,
-      SelectCurrentSchoolForm,
-      InformationProvidedForm,
-      GenderForm,
-      FullNameForm,
-      DateOfBirthForm,
-      NationalInsuranceNumberForm,
-      PersonalDetailsForm,
-      SelectEmailForm,
-      ProvideMobileNumberForm,
-      SelectMobileForm,
-      EmailAddressForm,
-      EmailVerificationForm,
-      MobileNumberForm,
-      MobileVerificationForm,
-      PersonalBankAccountForm,
-      TeacherReferenceNumberForm,
-      AddressForm,
-      PostcodeSearchForm,
-      SelectHomeAddressForm,
-      CheckYourAnswersForm
-    ].freeze
-
     def configuration
       Configuration.find(routing_name)
     end
@@ -126,7 +101,39 @@ module Journeys
     end
 
     def shared_forms
-      SHARED_FORMS
+      array = []
+
+      array << if TeacherId.bypass?
+        Debug::SignInOrContinueForm
+      else
+        SignInOrContinueForm
+      end
+
+      array += [
+        CurrentSchoolForm,
+        SelectCurrentSchoolForm,
+        InformationProvidedForm,
+        GenderForm,
+        FullNameForm,
+        DateOfBirthForm,
+        NationalInsuranceNumberForm,
+        PersonalDetailsForm,
+        SelectEmailForm,
+        ProvideMobileNumberForm,
+        SelectMobileForm,
+        EmailAddressForm,
+        EmailVerificationForm,
+        MobileNumberForm,
+        MobileVerificationForm,
+        PersonalBankAccountForm,
+        TeacherReferenceNumberForm,
+        AddressForm,
+        PostcodeSearchForm,
+        SelectHomeAddressForm,
+        CheckYourAnswersForm
+      ]
+
+      array
     end
 
     def shared_forms_mapping
