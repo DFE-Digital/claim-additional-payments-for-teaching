@@ -29,10 +29,9 @@ module JourneyConcern
     journey_session.present? && !journey::EligibilityChecker.new(journey_session: journey_session).ineligible?
   end
 
-  def clear_journey_sessions!
-    journey_session_keys.each { |key| session.delete(key) }
+  def clear_journey_session!
+    session.delete(journey_session_key)
     @journey_session = nil
-    @journey_sessions = []
   end
 
   def create_journey_session!
@@ -52,19 +51,5 @@ module JourneyConcern
 
   def journey_session_key
     :"#{current_journey_routing_name}_journeys_session_id"
-  end
-
-  def journey_sessions
-    @journey_sessions ||= Journeys::JOURNEYS.map do |journey|
-      journey::Session.not_expired.find_by(id: session[:"#{journey::ROUTING_NAME}_journeys_session_id"])
-    end.compact
-  end
-
-  def other_journey_sessions
-    journey_sessions.reject { |js| js.journey == current_journey_routing_name }
-  end
-
-  def journey_session_keys
-    Journeys::JOURNEYS.map { |journey| :"#{journey::ROUTING_NAME}_journeys_session_id" }
   end
 end

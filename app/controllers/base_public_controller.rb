@@ -9,7 +9,7 @@ class BasePublicController < ApplicationController
   private
 
   def clear_claim_session
-    clear_journey_sessions!
+    clear_journey_session!
   end
 
   def update_last_seen_at
