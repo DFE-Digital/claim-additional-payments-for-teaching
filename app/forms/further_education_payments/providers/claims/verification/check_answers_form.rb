@@ -174,6 +174,8 @@ module FurtherEducationPayments
               Policies::FurtherEducationPayments.alternative_idv_completed!(claim)
             end
 
+            # Provider verification completed (runs for all Year 2+ claims)
+            # The verifier will determine if it should process based on academic year
             Policies::FurtherEducationPayments.provider_verification_completed!(claim)
 
             true

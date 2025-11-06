@@ -23,20 +23,36 @@ module Policies
       def provider_verification_rows
         return [] unless provider_verification_submitted?
 
-        [
+        rows = [
           teaching_responsibilities,
           first_five_years_of_teaching,
           teaching_qualification,
           reason_for_not_enrolling,
           contract_of_employment,
-          timetabled_teaching_hours,
-          age_range_taught,
-          subject,
-          course,
           performance_measure,
           disciplinary_action,
-          continued_employment
-        ].compact_blank
+          timetabled_teaching_hours
+        ]
+
+        # Conditional: Contract covers full year (fixed term only)
+        if eligibility.provider_verification_contract_type == "fixed_term"
+          rows << contract_covers_full_academic_year
+        end
+
+        rows += [
+          age_range_taught,
+          subject,
+          course
+        ]
+
+        # Conditional: Taught at least one term (variable hours only)
+        if eligibility.provider_verification_contract_type == "variable_hours"
+          rows << taught_at_least_one_academic_term
+        end
+
+        rows << continued_employment
+
+        rows.compact_blank
       end
 
       def student_loan_plan
@@ -88,6 +104,39 @@ module Policies
         ]
       end
 
+      def teaching_qualification
+        claimant_value = if eligibility.teaching_qualification.present?
+          I18n.t(
+            eligibility.teaching_qualification,
+            scope: "further_education_payments.forms.teaching_qualification.options"
+          )
+        else
+          "Not provided"
+        end
+
+        [
+          "Teaching qualification",
+          claimant_value,
+          provider_answers.teaching_qualification
+        ]
+      end
+
+      def contract_covers_full_academic_year
+        [
+          "Contract covers full academic year",
+          I18n.t(eligibility.fixed_term_full_year, scope: :boolean),
+          provider_answers.contract_covers_full_academic_year
+        ]
+      end
+
+      def taught_at_least_one_academic_term
+        [
+          "Taught at least one academic term",
+          I18n.t(eligibility.taught_at_least_one_term, scope: :boolean),
+          provider_answers.taught_at_least_one_academic_term
+        ]
+      end
+
       def teaching_responsibilities
         [
           "Teaching responsibilities",
@@ -97,21 +146,13 @@ module Policies
       end
 
       def first_five_years_of_teaching
+        start_year = eligibility.further_education_teaching_start_year.to_i
+        formatted_date = "#{start_year}/#{start_year + 1}"
+
         [
           "First 5 years of teaching",
-          AcademicYear.new(eligibility.further_education_teaching_start_year),
+          formatted_date,
           provider_answers.in_first_five_years
-        ]
-      end
-
-      def teaching_qualification
-        [
-          "Teaching qualification",
-          I18n.t(
-            eligibility.teaching_qualification,
-            scope: "further_education_payments.forms.teaching_qualification.options"
-          ),
-          provider_answers.teaching_qualification
         ]
       end
 
@@ -132,12 +173,23 @@ module Policies
       end
 
       def timetabled_teaching_hours
-        [
-          "Timetabled teaching hours",
+        claimant_mapped = case eligibility.teaching_hours_per_week
+        when "more_than_12"
+          "12 hours or more each week"
+        when "between_2_5_and_12"
+          "2.5 to 12 hours each week"
+        when "less_than_2_5"
+          "Fewer than 2.5 hours each week"
+        else
           I18n.t(
             eligibility.teaching_hours_per_week,
-            scope: "further_education_payments.forms.teaching_hours_per_week.options"
-          ),
+            scope: "further_education_payments.providers.forms.teaching_hours_per_week.options"
+          )
+        end
+
+        [
+          "Timetabled teaching hours",
+          claimant_mapped,
           provider_answers.teaching_hours_per_week
         ]
       end
@@ -168,7 +220,7 @@ module Policies
 
       def performance_measure
         [
-          "Performance measures",
+          "Subject to performance measures",
           I18n.t(eligibility.subject_to_formal_performance_action, scope: :boolean),
           provider_answers.performance_measures
         ]
@@ -176,7 +228,7 @@ module Policies
 
       def disciplinary_action
         [
-          "Disciplinary action",
+          "Subject to disciplinary action",
           I18n.t(eligibility.subject_to_disciplinary_action, scope: :boolean),
           provider_answers.disciplinary_action
         ]
