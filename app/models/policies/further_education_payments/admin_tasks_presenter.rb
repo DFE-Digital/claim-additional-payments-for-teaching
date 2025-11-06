@@ -132,7 +132,7 @@ module Policies
       end
 
       def timetabled_teaching_hours
-        # Map the option the provider selected to the equivalent claimant option
+        # The max we want to show admins is "12 or more hours"
         provider_teaching_hours_per_week =
           case eligibility.provider_verification_teaching_hours_per_week
           when "more_than_20" then "more_than_12"
