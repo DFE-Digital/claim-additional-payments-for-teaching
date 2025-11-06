@@ -7,7 +7,7 @@ module Admin
     FILE_UPLOAD_TARGET_DATA_MODELS = {
       "targeted-retention-incentive-payments" => Policies::TargetedRetentionIncentivePayments::Award,
       "early-years-payment-provider" => EligibleEyProvider,
-      "further-education-payments" => EligibleFeProvider
+      "further-education-payments" => Policies::FurtherEducationPayments::EligibleFeProvider
     }
 
     def index

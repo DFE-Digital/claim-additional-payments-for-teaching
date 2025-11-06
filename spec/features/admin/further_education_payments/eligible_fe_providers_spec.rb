@@ -31,7 +31,7 @@ RSpec.feature "Admin of eligible FE providers" do
     return @eligible_fe_providers_csv_file if @eligible_fe_providers_csv_file
 
     @eligible_fe_providers_csv_file = Tempfile.new
-    @eligible_fe_providers_csv_file.write EligibleFeProvidersImporter.mandatory_headers.join(",") + "\n"
+    @eligible_fe_providers_csv_file.write Policies::FurtherEducationPayments::EligibleFeProvidersImporter.mandatory_headers.join(",") + "\n"
 
     3.times do
       hash = attributes_for(:eligible_fe_provider)
@@ -45,7 +45,7 @@ RSpec.feature "Admin of eligible FE providers" do
 
   def last_file_upload_completed_process_at_string
     FileUpload
-      .latest_version_for(EligibleFeProvider, AcademicYear.current)
+      .latest_version_for(Policies::FurtherEducationPayments::EligibleFeProvider, AcademicYear.current)
       .first
       .completed_processing_at
       .strftime("%-d %B %Y %-l:%M%P")
