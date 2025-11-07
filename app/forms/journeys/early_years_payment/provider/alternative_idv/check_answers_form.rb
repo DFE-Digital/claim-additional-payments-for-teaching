@@ -121,6 +121,10 @@ module Journeys
 
             journey_session.answers.alternative_idv_completed!
 
+            session[:submitted_claim_id] = journey_session.answers.claim.id
+
+            clear_claim_session
+
             true
           end
 
@@ -132,6 +136,11 @@ module Journeys
               slug,
               change: "check-answers"
             )
+          end
+
+          def clear_claim_session
+            key = "#{Journeys::EarlyYearsPayment::Provider::AlternativeIdv.routing_name}_journeys_session_id"
+            session.delete(key)
           end
         end
       end
