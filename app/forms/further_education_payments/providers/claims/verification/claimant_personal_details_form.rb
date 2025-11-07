@@ -13,7 +13,7 @@ module FurtherEducationPayments
 
           attribute :provider_verification_claimant_date_of_birth, :date
           attribute :provider_verification_claimant_postcode, :string
-          attribute :provider_verification_claimant_national_insurance_number, :string
+          attribute :provider_verification_claimant_national_insurance_number, :string, strip_all_whitespace: true
           attribute :provider_verification_claimant_bank_details_match, :boolean
           attribute :provider_verification_claimant_email, :string
 

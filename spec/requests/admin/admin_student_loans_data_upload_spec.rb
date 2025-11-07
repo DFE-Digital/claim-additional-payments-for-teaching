@@ -60,7 +60,7 @@ RSpec.describe "SLC (Student Loans Company) data upload " do
         [
           {
             claim_reference: "TESTREF01",
-            nino: "QQ123456A",
+            nino: "AB123456A",
             full_name: "John Doe",
             date_of_birth: "1/12/1989",
             policy_name: "EarlyCareerPayments",
@@ -70,7 +70,7 @@ RSpec.describe "SLC (Student Loans Company) data upload " do
           },
           {
             claim_reference: "TESTREF02",
-            nino: "QQ123456B",
+            nino: "AB123456B",
             full_name: "Agata Christie",
             date_of_birth: "20/03/1977",
             policy_name: "TargetedRetentionIncentivePayments",
@@ -80,7 +80,7 @@ RSpec.describe "SLC (Student Loans Company) data upload " do
           },
           {
             claim_reference: "TESTREF03",
-            nino: "QQ234567B",
+            nino: "AB234567B",
             full_name: "Guybrush Threepwood",
             date_of_birth: "1/12/1980",
             policy_name: "EarlyCareerPayments",
@@ -113,17 +113,17 @@ RSpec.describe "SLC (Student Loans Company) data upload " do
       it "parses the rows with data and saves them as student loans data records" do
         aggregate_failures do
           expect { perform_enqueued_jobs { upload } }.to change(StudentLoansData, :count).by(3)
-          expect(StudentLoansData.where(nino: "QQ123456A").first).to have_attributes(expected_records[0])
-          expect(StudentLoansData.where(nino: "QQ123456B").first).to have_attributes(expected_records[1])
+          expect(StudentLoansData.where(nino: "AB123456A").first).to have_attributes(expected_records[0])
+          expect(StudentLoansData.where(nino: "AB123456B").first).to have_attributes(expected_records[1])
         end
       end
 
       it "parses the rows with no data and saves them as student loans data records" do
         perform_enqueued_jobs { upload }
-        expect(StudentLoansData.where(nino: "QQ234567B").first).to have_attributes(
+        expect(StudentLoansData.where(nino: "AB234567B").first).to have_attributes(
           {
             claim_reference: "TESTREF03",
-            nino: "QQ234567B",
+            nino: "AB234567B",
             full_name: "Guybrush Threepwood",
             date_of_birth: Date.strptime("1/12/1980", "%d/%m/%Y"),
             policy_name: "EarlyCareerPayments",

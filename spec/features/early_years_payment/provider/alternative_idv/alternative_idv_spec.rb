@@ -181,7 +181,7 @@ RSpec.describe "Early years payment provider - Alternative IDV" do
 
     fill_in "Enter their postcode", with: "TE57 1NG"
 
-    fill_in "Enter their National Insurance number", with: "QQ123456C"
+    fill_in "Enter their National Insurance number", with: "AB123456C"
 
     within_fieldset "Do these bank details match what you have for Edna Krabappel" do
       expect(table_row("Name on the account")).to have_content "Edna Krabappel"
@@ -198,7 +198,7 @@ RSpec.describe "Early years payment provider - Alternative IDV" do
 
     expect(summary_row("Date of birth")).to have_content("1 January 1970")
     expect(summary_row("Postcode")).to have_content("TE57 1NG")
-    expect(summary_row("National Insurance number")).to have_content("QQ123456C")
+    expect(summary_row("National Insurance number")).to have_content("AB123456C")
     expect(summary_row("Bank details match")).to have_content("Yes")
     expect(summary_row("Email address")).to have_content("edna.k@gmail.com")
 
@@ -225,7 +225,7 @@ RSpec.describe "Early years payment provider - Alternative IDV" do
 
     expect(
       eligibility.alternative_idv_claimant_national_insurance_number
-    ).to eq "QQ123456C"
+    ).to eq "AB123456C"
 
     expect(
       eligibility.alternative_idv_claimant_bank_details_match

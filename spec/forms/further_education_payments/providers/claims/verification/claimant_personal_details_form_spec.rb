@@ -210,14 +210,14 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Claima
 
       it do
         is_expected.to(
-          allow_value("QQ123456C")
+          allow_value("AB123456C")
           .for(:provider_verification_claimant_national_insurance_number)
         )
       end
 
       it do
         is_expected.to(
-          allow_value("QQ 34 56 78 C")
+          allow_value("AB 34 56 78 C")
           .for(:provider_verification_claimant_national_insurance_number)
         )
       end
@@ -231,7 +231,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Claima
 
       it do
         is_expected.not_to(
-          allow_value("QQ 11 56 78 DE")
+          allow_value("AB 11 56 78 DE")
           .for(:provider_verification_claimant_national_insurance_number)
         )
       end
@@ -320,7 +320,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Claima
           "provider_verification_claimant_date_of_birth(3i)": "21",
           "provider_verification_claimant_date_of_birth(2i)": "1",
           "provider_verification_claimant_date_of_birth(1i)": "1990",
-          provider_verification_claimant_national_insurance_number: "QQ123456C",
+          provider_verification_claimant_national_insurance_number: "AB123456C",
           provider_verification_claimant_postcode: "NE1 6EE",
           provider_verification_claimant_bank_details_match: true,
           provider_verification_claimant_email: "test@example.com"
@@ -338,7 +338,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Claima
 
         expect(
           eligibility.provider_verification_claimant_national_insurance_number
-        ).to eq("QQ123456C")
+        ).to eq("AB123456C")
 
         expect(
           eligibility.provider_verification_claimant_postcode

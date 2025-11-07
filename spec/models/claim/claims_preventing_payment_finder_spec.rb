@@ -11,7 +11,7 @@ RSpec.describe Claim::ClaimsPreventingPaymentFinder do
         bank_account_number: "32828838",
         bank_sort_code: "183828",
         first_name: "Boris",
-        national_insurance_number: "QQ123456C",
+        national_insurance_number: "AB123456C",
         eligibility_attributes: {teacher_reference_number: generate(:teacher_reference_number)}
       }
     end

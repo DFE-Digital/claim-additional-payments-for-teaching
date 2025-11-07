@@ -71,7 +71,7 @@ RSpec.feature "Admin views claim details for EarlyYearsPayments" do
         reference: "AB234567",
         first_name: "Bruce",
         surname: "Wayne",
-        national_insurance_number: "QQ123456C",
+        national_insurance_number: "AB123456C",
         email_address: "test@example.com",
         mobile_number: "07700900000",
         practitioner_email_address: "practitioner@example.com",
@@ -103,7 +103,7 @@ RSpec.feature "Admin views claim details for EarlyYearsPayments" do
     it "shows the claim details" do
       expect(summary_row("Applicant name")).to have_content("Bruce Wayne")
       expect(summary_row("Date of birth")).to have_content("1 January 1901")
-      expect(summary_row("National Insurance number")).to have_content("QQ123456C")
+      expect(summary_row("National Insurance number")).to have_content("AB123456C")
       expect(summary_row("Address")).to have_content("Flat 1")
       expect(summary_row("Address")).to have_content("1 Test Road")
       expect(summary_row("Address")).to have_content("Test Town")

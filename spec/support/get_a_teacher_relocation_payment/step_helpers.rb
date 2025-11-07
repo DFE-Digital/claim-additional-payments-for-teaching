@@ -155,7 +155,7 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
-    def and_i_complete_the_personal_details_step(national_insurance_number: "QQ123456C")
+    def and_i_complete_the_personal_details_step(national_insurance_number: "AB123456C")
       assert_on_personal_details_page!
 
       fill_in("First name", with: "Walter")

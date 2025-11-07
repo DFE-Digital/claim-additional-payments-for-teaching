@@ -22,7 +22,7 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimPersonalDataScrubber do
       address_line_3: "Evergreen Terrace",
       address_line_4: "Springfield",
       postcode: "AB12 3CD",
-      national_insurance_number: "QQ123456C",
+      national_insurance_number: "AB123456C",
       mobile_number: "07123456789",
       hmrc_bank_validation_responses: [{code: 200, body: "Test response"}],
       payroll_gender: "female",

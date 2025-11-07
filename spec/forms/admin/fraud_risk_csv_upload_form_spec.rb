@@ -80,7 +80,7 @@ RSpec.describe Admin::FraudRiskCsvUploadForm, type: :model do
 
       expect(
         RiskIndicator.where(field: "national_insurance_number").first.value
-      ).to eq("qq123456c")
+      ).to eq("ab123456c")
     end
 
     it "doesn't duplicate existing risk indicator records" do
@@ -91,7 +91,7 @@ RSpec.describe Admin::FraudRiskCsvUploadForm, type: :model do
 
       RiskIndicator.create!(
         field: "national_insurance_number",
-        value: "qq123456c"
+        value: "ab123456c"
       )
 
       expect { form.save }.not_to change(RiskIndicator, :count)
@@ -105,12 +105,12 @@ RSpec.describe Admin::FraudRiskCsvUploadForm, type: :model do
 
       RiskIndicator.create!(
         field: "national_insurance_number",
-        value: "qq111111c"
+        value: "ab111111c"
       )
 
       _unchanged_risk_indicator = RiskIndicator.create!(
         field: "national_insurance_number",
-        value: "qq123456c"
+        value: "ab123456c"
       )
 
       expect(form.save).to be true
@@ -125,20 +125,20 @@ RSpec.describe Admin::FraudRiskCsvUploadForm, type: :model do
       expect(
         RiskIndicator.where(
           field: "national_insurance_number",
-          value: "qq111111c"
+          value: "ab111111c"
         )
       ).to be_empty
 
       expect(
         RiskIndicator.where(
           field: "national_insurance_number",
-          value: "qq123456c"
+          value: "ab123456c"
         )
       ).to exist
     end
 
     it "adds a note to claims that are flagged" do
-      claim_1 = create(:claim, national_insurance_number: "qq123456c")
+      claim_1 = create(:claim, national_insurance_number: "ab123456c")
 
       claim_2 = create(
         :claim,
@@ -147,7 +147,7 @@ RSpec.describe Admin::FraudRiskCsvUploadForm, type: :model do
 
       claim_3 = create(
         :claim,
-        national_insurance_number: "qq123456c",
+        national_insurance_number: "ab123456c",
         eligibility_attributes: {teacher_reference_number: "1234567"}
       )
 
@@ -172,7 +172,7 @@ RSpec.describe Admin::FraudRiskCsvUploadForm, type: :model do
     it "doesn't add a note to claims that aren't flagged" do
       claim = create(
         :claim,
-        national_insurance_number: "qq123456d",
+        national_insurance_number: "ab123456d",
         eligibility_attributes: {teacher_reference_number: "1234568"}
       )
 

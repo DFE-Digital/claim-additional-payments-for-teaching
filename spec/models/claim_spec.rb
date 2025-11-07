@@ -82,10 +82,10 @@ RSpec.describe Claim, type: :model do
       end
 
       it "strips spaces from and upcases the National Insurance number" do
-        claim = build(:claim, national_insurance_number: "qq 34 56 78 c")
+        claim = build(:claim, national_insurance_number: "ab 34 56 78 c")
         claim.save!
 
-        expect(claim.national_insurance_number).to eq("QQ345678C")
+        expect(claim.national_insurance_number).to eq("AB345678C")
       end
     end
   end
@@ -148,9 +148,9 @@ RSpec.describe Claim, type: :model do
 
   describe "#national_insurance_number" do
     it "saves with white space stripped out" do
-      claim = create(:claim, national_insurance_number: "QQ 12 34 56 C")
+      claim = create(:claim, national_insurance_number: "AB 12 34 56 C")
 
-      expect(claim.national_insurance_number).to eql("QQ123456C")
+      expect(claim.national_insurance_number).to eql("AB123456C")
     end
   end
 
@@ -366,8 +366,8 @@ RSpec.describe Claim, type: :model do
     end
 
     it "returns false if the claim is flagged by a fraud check" do
-      claim = create(:claim, :submitted, national_insurance_number: "QQ123456C")
-      create(:risk_indicator, field: "national_insurance_number", value: "QQ123456C")
+      claim = create(:claim, :submitted, national_insurance_number: "AB123456C")
+      create(:risk_indicator, field: "national_insurance_number", value: "AB123456C")
 
       expect(claim.approvable?).to eq false
     end

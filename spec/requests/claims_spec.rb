@@ -169,7 +169,7 @@ RSpec.describe "Claims", type: :request do
               first_name: "John",
               surname: "Doe",
               "date_of_birth(3i)": "1", "date_of_birth(2i)": "1", "date_of_birth(1i)": "1990",
-              national_insurance_number: "QQ123456C"
+              national_insurance_number: "AB123456C"
             }
           }
         end
@@ -182,7 +182,7 @@ RSpec.describe "Claims", type: :request do
         end
 
         context "when there is student loan data showing the claimant has a student loan" do
-          before { create(:student_loans_data, nino: "QQ123456C", date_of_birth: Date.new(1990, 1, 1)) }
+          before { create(:student_loans_data, nino: "AB123456C", date_of_birth: Date.new(1990, 1, 1)) }
 
           it "updates the student loan details" do
             expect { request }.to change { journey_session.reload.answers.has_student_loan }.to(true)
@@ -191,7 +191,7 @@ RSpec.describe "Claims", type: :request do
         end
 
         context "when there is student loan data showing the claimant does not have student loan" do
-          before { create(:student_loans_data, :no_student_loan, nino: "QQ123456C", date_of_birth: Date.new(1990, 1, 1)) }
+          before { create(:student_loans_data, :no_student_loan, nino: "AB123456C", date_of_birth: Date.new(1990, 1, 1)) }
 
           it "updates the student loan details" do
             expect { request }.to change { journey_session.reload.answers.has_student_loan }.to(false)
@@ -228,12 +228,12 @@ RSpec.describe "Claims", type: :request do
                 first_name: "John",
                 surname: "Doe",
                 date_of_birth: "1/1/1990",
-                national_insurance_number: "QQ123456C",
+                national_insurance_number: "AB123456C",
                 teacher_id_user_info: {
                   "given_name" => "John",
                   "family_name" => "Doe",
                   "birthdate" => "1990-01-01",
-                  "ni_number" => "QQ123456C"
+                  "ni_number" => "AB123456C"
                 }
               )
 
@@ -247,7 +247,7 @@ RSpec.describe "Claims", type: :request do
             end
 
             context "when there is student loan data showing the claimant has a student loan" do
-              before { create(:student_loans_data, nino: "QQ123456C", date_of_birth: Date.new(1990, 1, 1)) }
+              before { create(:student_loans_data, nino: "AB123456C", date_of_birth: Date.new(1990, 1, 1)) }
 
               it "updates the student loan details" do
                 expect { request }.to change { journey_session.reload.answers.has_student_loan }.to(true)
@@ -256,7 +256,7 @@ RSpec.describe "Claims", type: :request do
             end
 
             context "when there is student loan data showing the claimant does not have student loan" do
-              before { create(:student_loans_data, :no_student_loan, nino: "QQ123456C", date_of_birth: Date.new(1990, 1, 1)) }
+              before { create(:student_loans_data, :no_student_loan, nino: "AB123456C", date_of_birth: Date.new(1990, 1, 1)) }
 
               it "updates the student loan details" do
                 expect { request }.to change { journey_session.reload.answers.has_student_loan }.to(false)
@@ -271,12 +271,12 @@ RSpec.describe "Claims", type: :request do
                 first_name: "John",
                 surname: "Doe",
                 date_of_birth: "1/1/1990",
-                national_insurance_number: "QQ123456C",
+                national_insurance_number: "AB123456C",
                 teacher_id_user_info: {
                   "given_name" => "Not John",
                   "family_name" => "Doe",
                   "birthdate" => "1990-01-01",
-                  "ni_number" => "QQ123456C"
+                  "ni_number" => "AB123456C"
                 }
               )
 

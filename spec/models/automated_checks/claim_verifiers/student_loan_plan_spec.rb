@@ -102,7 +102,7 @@ module AutomatedChecks
         [Policies::TargetedRetentionIncentivePayments, Policies::EarlyCareerPayments, Policies::FurtherEducationPayments].each do |policy|
           context "when the policy is #{policy}" do
             let(:policy) { policy }
-            let(:claim) { create(:claim, :submitted, policy:, national_insurance_number: "QQ123456A", has_student_loan: true, student_loan_plan: claim_student_loan_plan, submitted_using_slc_data:) }
+            let(:claim) { create(:claim, :submitted, policy:, national_insurance_number: "AB123456A", has_student_loan: true, student_loan_plan: claim_student_loan_plan, submitted_using_slc_data:) }
             let(:claim_student_loan_plan) { StudentLoan::PLAN_1 }
 
             context "when there is already a student_loan_plan task" do

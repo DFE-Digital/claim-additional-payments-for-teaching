@@ -591,7 +591,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
               first_name: "Seymour",
               surname: "Skinner",
               date_of_birth: Date.new(1953, 10, 23),
-              national_insurance_number: "QQ123456C"
+              national_insurance_number: "AB123456C"
             )
 
             journey_session.save!

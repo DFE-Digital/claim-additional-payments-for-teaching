@@ -35,7 +35,7 @@ RSpec.describe Policies::EarlyYearsPayments::AdminClaimDetailsPresenter do
       reference: "AB234567",
       first_name: "Bruce",
       surname: "Wayne",
-      national_insurance_number: "QQ123456C",
+      national_insurance_number: "AB123456C",
       email_address: "test@example.com",
       mobile_number: "07700900000",
       practitioner_email_address: "practitioner@example.com",
@@ -93,7 +93,7 @@ RSpec.describe Policies::EarlyYearsPayments::AdminClaimDetailsPresenter do
         expected_answers = [
           ["Applicant name", "Bruce Wayne"],
           ["Date of birth", "1 January 1901"],
-          [I18n.t("admin.national_insurance_number"), "QQ123456C"],
+          [I18n.t("admin.national_insurance_number"), "AB123456C"],
           ["Address", "Flat 1<br>1 Test Road<br>Test Town<br>AB1 2CD"],
           [I18n.t("early_years_payments.admin.email_address"), "test@example.com"],
           [I18n.t("early_years_payments.admin.practitioner_email_address"), "practitioner@example.com"],

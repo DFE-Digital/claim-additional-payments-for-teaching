@@ -40,7 +40,7 @@ module AutomatedChecks
             :submitted,
             date_of_birth: Date.new(1990, 8, 23),
             first_name: "Fred",
-            national_insurance_number: "QQ100000C",
+            national_insurance_number: "AB100000C",
             reference: "AB123456",
             surname: "ELIGIBLE",
             policy: Policies::TargetedRetentionIncentivePayments
@@ -346,7 +346,7 @@ module AutomatedChecks
                 policy: Policies::TargetedRetentionIncentivePayments,
                 date_of_birth: Date.new(1990, 8, 23),
                 first_name: "Fred",
-                national_insurance_number: "QQ100000C",
+                national_insurance_number: "AB100000C",
                 reference: "AB123456",
                 surname: "ELIGIBLE",
                 tasks: [build(:task, name: :qualifications)],

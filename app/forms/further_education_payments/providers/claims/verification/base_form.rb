@@ -6,6 +6,7 @@ module FurtherEducationPayments
           include ActiveModel::Model
           include ActiveModel::Attributes
           include ActiveModel::Validations::Callbacks
+          include WhitespaceAttributes
 
           before_validation do
             attributes.each do |k, v|

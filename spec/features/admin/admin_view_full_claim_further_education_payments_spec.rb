@@ -42,7 +42,7 @@ RSpec.feature "Admin views claim details for FurtherEducationPayments" do
         surname: "Krabappel",
         date_of_birth: Date.new(1945, 7, 3),
         reference: "AB123456",
-        national_insurance_number: "QQ123456C",
+        national_insurance_number: "AB123456C",
         address_line_1: "82 Evergreen Terrace",
         address_line_2: "Springfield",
         address_line_4: "Oregon",
@@ -66,7 +66,7 @@ RSpec.feature "Admin views claim details for FurtherEducationPayments" do
       expect(summary_row("Date of birth")).to have_content("3 July 1945")
 
       expect(summary_row("National Insurance number")).to have_content(
-        "QQ123456C"
+        "AB123456C"
       )
 
       expect(summary_row("Address")).to have_content("82 Evergreen Terrace")

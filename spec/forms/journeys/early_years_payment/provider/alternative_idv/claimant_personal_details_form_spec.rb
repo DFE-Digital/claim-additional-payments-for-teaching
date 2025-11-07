@@ -226,14 +226,14 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ClaimantPe
 
       it do
         is_expected.to(
-          allow_value("QQ123456C")
+          allow_value("AB123456C")
           .for(:claimant_national_insurance_number)
         )
       end
 
       it do
         is_expected.to(
-          allow_value("QQ 34 56 78 C")
+          allow_value("AB 34 56 78 C")
           .for(:claimant_national_insurance_number)
         )
       end
@@ -247,7 +247,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ClaimantPe
 
       it do
         is_expected.not_to(
-          allow_value("QQ 11 56 78 DE")
+          allow_value("AB 11 56 78 DE")
           .for(:claimant_national_insurance_number)
         )
       end

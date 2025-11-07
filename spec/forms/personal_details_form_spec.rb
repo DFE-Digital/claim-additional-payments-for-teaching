@@ -274,10 +274,10 @@ RSpec.describe PersonalDetailsForm, type: :model do
       it { should_not allow_value(".").for(:surname) }
 
       it { should validate_presence_of(:national_insurance_number).with_message("Enter a National Insurance number in the correct format") }
-      it { should allow_value("QQ123456C").for(:national_insurance_number) }
-      it { should allow_value("QQ 34 56 78 C").for(:national_insurance_number) }
+      it { should allow_value("AB123456C").for(:national_insurance_number) }
+      it { should allow_value("AB 34 56 78 C").for(:national_insurance_number) }
       it { should_not allow_value("12 34 56 78 C").for(:national_insurance_number) }
-      it { should_not allow_value("QQ 11 56 78 DE").for(:national_insurance_number) }
+      it { should_not allow_value("AB 11 56 78 DE").for(:national_insurance_number) }
 
       describe "#date_of_birth" do
         before do
@@ -346,7 +346,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
             day: 1,
             month: 1,
             year: 1990,
-            national_insurance_number: "QQ123456C"
+            national_insurance_number: "AB123456C"
           }
         end
 
@@ -359,7 +359,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
           expect(answers.middle_name).to eq "Bob"
           expect(answers.surname).to eq "Loblaw"
           expect(answers.date_of_birth).to eq Date.new(1990, 1, 1)
-          expect(answers.national_insurance_number).to eq "QQ123456C"
+          expect(answers.national_insurance_number).to eq "AB123456C"
         end
 
         it "resets depenent answers" do
@@ -381,13 +381,13 @@ RSpec.describe PersonalDetailsForm, type: :model do
             day: 1,
             month: 1,
             year: 1990,
-            national_insurance_number: "QQ 123456 C "
+            national_insurance_number: "AB 123456 C "
           }
         end
 
         it "strips spaces" do
           form.save
-          expect(journey_session.answers.national_insurance_number).to eq "QQ123456C"
+          expect(journey_session.answers.national_insurance_number).to eq "AB123456C"
         end
       end
     end
@@ -408,7 +408,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
           day: 1,
           month: 1,
           year: 1990,
-          national_insurance_number: "QQ123456C"
+          national_insurance_number: "AB123456C"
         }
       end
 

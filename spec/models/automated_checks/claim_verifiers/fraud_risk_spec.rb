@@ -4,12 +4,12 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FraudRisk do
   describe "#perform" do
     context "with a claim that has flagged attributes" do
       it "creates a note" do
-        claim = create(:claim, national_insurance_number: "QQ123456C")
+        claim = create(:claim, national_insurance_number: "AB123456C")
 
         create(
           :risk_indicator,
           field: "national_insurance_number",
-          value: "QQ123456C"
+          value: "AB123456C"
         )
 
         described_class.new(claim: claim).perform
@@ -27,12 +27,12 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FraudRisk do
 
     context "with a claim that has no flagged attributes" do
       it "doesn't create a note" do
-        claim = create(:claim, national_insurance_number: "QQ123456B")
+        claim = create(:claim, national_insurance_number: "AB123456B")
 
         create(
           :risk_indicator,
           field: "national_insurance_number",
-          value: "QQ123456C"
+          value: "AB123456C"
         )
 
         expect { described_class.new(claim: claim).perform }.not_to(

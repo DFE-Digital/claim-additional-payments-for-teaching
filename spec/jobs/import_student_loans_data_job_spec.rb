@@ -7,7 +7,7 @@ RSpec.describe ImportStudentLoansDataJob do
     let(:csv) do
       <<~CSV
         Claim reference,NINO,Full name,Date of birth,Policy name,No of Plans Currently Repaying,Plan Type of Deduction,Amount
-        TESTREF01,QQ123456A,,20/12/1999,,,,
+        TESTREF01,AB123456A,,20/12/1999,,,,
       CSV
     end
 
