@@ -1,6 +1,6 @@
 module FormHelpers
   def i18n_namespace
-    journey::I18N_NAMESPACE
+    journey.i18n_namespace
   end
 
   def i18n_errors_path(key, args = {})

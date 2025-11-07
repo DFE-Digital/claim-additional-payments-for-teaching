@@ -1,6 +1,6 @@
 class StaticPagesController < BasePublicController
   def accessibility_statement
-    journey_accessibility_statement = "#{journey::VIEW_PATH}/accessibility_statement"
+    journey_accessibility_statement = "#{journey.view_path}/accessibility_statement"
 
     if lookup_context.template_exists?(journey_accessibility_statement, [], false)
       render journey_accessibility_statement
@@ -23,7 +23,7 @@ class StaticPagesController < BasePublicController
 
     @journey_open = journey.accessible?(params[:service_access_code])
 
-    render "#{journey::VIEW_PATH}/landing_page"
+    render "#{journey.view_path}/landing_page"
   end
 
   private

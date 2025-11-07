@@ -11,7 +11,7 @@ module Admin
       with: -> do
         redirect_to(
           edit_admin_journey_configuration_path(
-            Journeys::FurtherEducationPayments::ROUTING_NAME
+            Journeys::FurtherEducationPayments.routing_name
           ),
           alert: "Too many requests"
         )
@@ -28,7 +28,7 @@ module Admin
         @upload_form.run_import!
         flash[:notice] = @upload_form.importer.results_message
 
-        redirect_to edit_admin_journey_configuration_path(Journeys::FurtherEducationPayments::ROUTING_NAME, eligible_fe_providers_upload: {academic_year: @upload_form.academic_year})
+        redirect_to edit_admin_journey_configuration_path(Journeys::FurtherEducationPayments.routing_name, eligible_fe_providers_upload: {academic_year: @upload_form.academic_year})
       end
     end
 
@@ -44,7 +44,7 @@ module Admin
 
     def journey_configuration
       @journey_configuration ||= Journeys::Configuration.find_by(
-        routing_name: Journeys::FurtherEducationPayments::ROUTING_NAME
+        routing_name: Journeys::FurtherEducationPayments.routing_name
       )
     end
 

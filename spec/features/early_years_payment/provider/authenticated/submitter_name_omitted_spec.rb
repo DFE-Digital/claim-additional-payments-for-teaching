@@ -18,6 +18,6 @@ RSpec.feature "Early years payment provider" do
     fill_in "claim-provider-contact-name-field-error", with: "John Doe"
     click_button "Accept and send"
 
-    expect(page.current_path).to eq claim_path(Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME, slug: "confirmation")
+    expect(page.current_path).to eq claim_path(Journeys::EarlyYearsPayment::Provider::Authenticated.routing_name, slug: "confirmation")
   end
 end

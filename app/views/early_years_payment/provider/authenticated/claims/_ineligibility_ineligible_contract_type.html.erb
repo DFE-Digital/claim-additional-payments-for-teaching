@@ -16,7 +16,7 @@
       <%= govuk_link_to(
         "full eligibility criteria",
         claim_path(
-          Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME,
+          Journeys::EarlyYearsPayment::Provider::Start.routing_name,
           "landing-page"
         )
       ) %>
@@ -37,7 +37,7 @@
     <%= govuk_button_link_to(
       "Start a new claim",
       claim_path(
-        Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME,
+        Journeys::EarlyYearsPayment::Provider::Start.routing_name,
         "landing-page"
       )
     ) %>

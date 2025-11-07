@@ -32,12 +32,12 @@
         <% end %>
 
       <div class="govuk-body govuk-!-margin-bottom-6">
-        <%= govuk_link_to "Resend passcode (you will be sent back to the email address page)", reminder_path(journey: journey::ROUTING_NAME, slug: "personal-details"), no_visited_state: true %>
+        <%= govuk_link_to "Resend passcode (you will be sent back to the email address page)", reminder_path(journey: journey.routing_name, slug: "personal-details"), no_visited_state: true %>
       </div>
 
       <div class="govuk-button-group">
         <%= f.govuk_submit "Confirm" %>
-        <%= govuk_button_link_to "Change email address", reminder_path(journey: journey::ROUTING_NAME, slug: "personal-details"), secondary: true %>
+        <%= govuk_button_link_to "Change email address", reminder_path(journey: journey.routing_name, slug: "personal-details"), secondary: true %>
       </div>
     <% end %>
   </div>

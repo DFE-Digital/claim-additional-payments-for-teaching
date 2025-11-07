@@ -88,7 +88,7 @@ module Journeys
 
       def itt_academic_year
         [
-          t("itt_academic_year.question.#{answers.qualification}"),
+          t("itt_year.question.#{answers.qualification}"),
           answers.itt_academic_year.to_s(:long),
           "itt-year"
         ]

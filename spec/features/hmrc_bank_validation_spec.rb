@@ -11,7 +11,7 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
   let(:account_number) { "87654321" }
 
   def get_to_bank_details_page
-    visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
+    visit new_claim_path(Journeys::TargetedRetentionIncentivePayments.routing_name)
 
     # - Check eligibility intro
     expect(page).to have_text("Check you’re eligible for a targeted retention incentive payment")

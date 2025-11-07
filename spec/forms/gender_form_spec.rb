@@ -6,7 +6,7 @@ RSpec.describe GenderForm do
 
     let(:journey_session) do
       create(
-        :"#{journey::I18N_NAMESPACE}_session",
+        :"#{journey.i18n_namespace}_session",
         answers: {
           payroll_gender: gender
         }

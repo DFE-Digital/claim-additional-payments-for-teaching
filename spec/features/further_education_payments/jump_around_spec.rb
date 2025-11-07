@@ -10,7 +10,7 @@ RSpec.feature "Further education payments" do
   scenario "visiting impermissible slug redirects back to last permissible slug" do
     when_further_education_payments_journey_configuration_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     click_link "Start now"
 
     expect(page).to have_content("Do you have a")
@@ -26,7 +26,7 @@ RSpec.feature "Further education payments" do
 
     expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
 
-    visit claim_path(Journeys::FurtherEducationPayments::ROUTING_NAME, slug: "address")
+    visit claim_path(Journeys::FurtherEducationPayments.routing_name, slug: "address")
 
     expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
   end
@@ -41,7 +41,7 @@ RSpec.feature "Further education payments" do
   scenario "changing answer on a previous page that maintains pathway" do
     when_further_education_payments_journey_configuration_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     click_link "Start now"
 
     expect(page).to have_content("Do you have a")
@@ -85,7 +85,7 @@ RSpec.feature "Further education payments" do
 
     expect(page).to have_content("You are not eligible")
 
-    visit claim_path(Journeys::FurtherEducationPayments::ROUTING_NAME, "contract-type")
+    visit claim_path(Journeys::FurtherEducationPayments.routing_name, "contract-type")
     expect(page).to have_content("What type of contract do you have")
     choose "Fixed-term"
     click_button "Continue"
@@ -96,7 +96,7 @@ RSpec.feature "Further education payments" do
   scenario "changing subjects" do
     when_further_education_payments_journey_configuration_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     click_link "Start now"
 
     expect(page).to have_content("Do you have a")
@@ -159,7 +159,7 @@ RSpec.feature "Further education payments" do
     check "T Level in digital support services"
     click_button "Continue"
 
-    visit claim_path(Journeys::FurtherEducationPayments::ROUTING_NAME, slug: "subjects-taught")
+    visit claim_path(Journeys::FurtherEducationPayments.routing_name, slug: "subjects-taught")
     uncheck "Chemistry"
     click_button "Continue"
 
@@ -173,7 +173,7 @@ RSpec.feature "Further education payments" do
     when_further_education_payments_journey_configuration_exists
     and_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -282,7 +282,7 @@ RSpec.feature "Further education payments" do
     when_further_education_payments_journey_configuration_exists
     and_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 

@@ -2,7 +2,7 @@ module Journeys
   module EarlyYearsPayment
     module Provider
       module Authenticated
-        class ProviderEnteredContractTypeForm < Form
+        class ContractTypeForm < Form
           attribute :provider_entered_contract_type, :string
 
           validates(

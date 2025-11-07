@@ -16,7 +16,7 @@
 
     <p class="govuk-body">
       For further guidance, you should refer to the
-      <%= govuk_link_to "full eligibility criteria", claim_path(Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME, "landing-page") %>
+      <%= govuk_link_to "full eligibility criteria", claim_path(Journeys::EarlyYearsPayment::Provider::Start.routing_name, "landing-page") %>
       at the start of this service.
     </p>
 
@@ -26,6 +26,6 @@
       Contact us for help at
       <%= govuk_mail_to support_email_address(current_journey_routing_name), support_email_address(current_journey_routing_name) %>
     </p>
-    <%= govuk_button_link_to "Start again", claim_path(Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME, "landing-page") %>
+    <%= govuk_button_link_to "Start again", claim_path(Journeys::EarlyYearsPayment::Provider::Start.routing_name, "landing-page") %>
   </div>
 </div>

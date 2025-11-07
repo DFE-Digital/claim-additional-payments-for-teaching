@@ -4,9 +4,9 @@ RSpec.describe EmailAddressForm do
   shared_examples "email_address_form" do |journey|
     let(:journey_session) do
       create(
-        :"#{journey::I18N_NAMESPACE}_session",
+        :"#{journey.i18n_namespace}_session",
         answers: attributes_for(
-          :"#{journey::I18N_NAMESPACE}_answers",
+          :"#{journey.i18n_namespace}_answers",
           :with_personal_details,
           email_verified: true,
           first_name: "Jo"
@@ -125,9 +125,9 @@ RSpec.describe EmailAddressForm do
       context "when the email address has not changed" do
         let(:journey_session) do
           create(
-            :"#{journey::I18N_NAMESPACE}_session",
+            :"#{journey.i18n_namespace}_session",
             answers: attributes_for(
-              :"#{journey::I18N_NAMESPACE}_answers",
+              :"#{journey.i18n_namespace}_answers",
               :with_personal_details,
               email_address: email_address,
               email_verified: true,

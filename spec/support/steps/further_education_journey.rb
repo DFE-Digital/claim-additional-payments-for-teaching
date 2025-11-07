@@ -3,7 +3,7 @@ def when_further_education_journey_ready_to_submit
   when_further_education_payments_journey_configuration_exists
   college
 
-  visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+  visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
   click_link "Start now"
 
   expect(page).to have_content("Do you have a")

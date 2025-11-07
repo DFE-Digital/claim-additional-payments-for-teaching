@@ -58,7 +58,9 @@ module FurtherEducationPayments
       helper_method :current_journey_routing_name
 
       class Journey
-        VIEW_PATH = "further_education_payments/providers"
+        def self.view_path
+          "further_education_payments/providers"
+        end
       end
 
       def journey

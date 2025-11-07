@@ -10,14 +10,14 @@ require "faker"
 Faker::Config.locale = "en-GB"
 
 if Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")
-  Journeys::Configuration.create!(routing_name: Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, current_academic_year: AcademicYear.current)
-  Journeys::Configuration.create!(routing_name: Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME, current_academic_year: AcademicYear.current)
-  Journeys::Configuration.create!(routing_name: Journeys::GetATeacherRelocationPayment::ROUTING_NAME, current_academic_year: AcademicYear.current)
-  Journeys::Configuration.create!(routing_name: Journeys::FurtherEducationPayments::ROUTING_NAME, current_academic_year: AcademicYear.current)
-  Journeys::Configuration.create!(routing_name: Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME, current_academic_year: AcademicYear.current)
-  Journeys::Configuration.create!(routing_name: Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME, current_academic_year: AcademicYear.current)
-  Journeys::Configuration.create!(routing_name: Journeys::EarlyYearsPayment::Practitioner::ROUTING_NAME, current_academic_year: AcademicYear.current)
-  Journeys::Configuration.create!(routing_name: Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ROUTING_NAME, current_academic_year: AcademicYear.current)
+  Journeys::Configuration.create!(routing_name: Journeys::TeacherStudentLoanReimbursement.routing_name, current_academic_year: AcademicYear.current)
+  Journeys::Configuration.create!(routing_name: Journeys::TargetedRetentionIncentivePayments.routing_name, current_academic_year: AcademicYear.current)
+  Journeys::Configuration.create!(routing_name: Journeys::GetATeacherRelocationPayment.routing_name, current_academic_year: AcademicYear.current)
+  Journeys::Configuration.create!(routing_name: Journeys::FurtherEducationPayments.routing_name, current_academic_year: AcademicYear.current)
+  Journeys::Configuration.create!(routing_name: Journeys::EarlyYearsPayment::Provider::Start.routing_name, current_academic_year: AcademicYear.current)
+  Journeys::Configuration.create!(routing_name: Journeys::EarlyYearsPayment::Provider::Authenticated.routing_name, current_academic_year: AcademicYear.current)
+  Journeys::Configuration.create!(routing_name: Journeys::EarlyYearsPayment::Practitioner.routing_name, current_academic_year: AcademicYear.current)
+  Journeys::Configuration.create!(routing_name: Journeys::EarlyYearsPayment::Provider::AlternativeIdv.routing_name, current_academic_year: AcademicYear.current)
 
   ENV["FIXTURES_PATH"] = "spec/fixtures"
   ENV["FIXTURES"] = "local_authorities,local_authority_districts,schools"

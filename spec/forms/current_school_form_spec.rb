@@ -7,7 +7,7 @@ RSpec.describe CurrentSchoolForm do
       create(:journey_configuration, :targeted_retention_incentive_payments)
     }
 
-    let(:journey_session) { create(:"#{journey::I18N_NAMESPACE}_session") }
+    let(:journey_session) { create(:"#{journey.i18n_namespace}_session") }
 
     let(:slug) { "current-school" }
 

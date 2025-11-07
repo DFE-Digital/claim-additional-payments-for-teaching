@@ -1,7 +1,7 @@
 module Journeys
   module EarlyYearsPayment
     module Practitioner
-      class BankDetailsForm < BankDetailsForm
+      class PersonalBankAccountForm < PersonalBankAccountForm
         def show_warning?
           false
         end

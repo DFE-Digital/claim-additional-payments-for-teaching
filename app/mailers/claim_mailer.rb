@@ -190,11 +190,11 @@ class ClaimMailer < ApplicationMailer
   end
 
   def early_years_payment_provider_magic_link(one_time_password, email)
-    "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME}/claim?code=#{one_time_password}&email=#{email}"
+    "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Provider::Authenticated.routing_name}/claim?code=#{one_time_password}&email=#{email}"
   end
 
   def early_years_practitioner_invite_link(claim:)
-    "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Practitioner::ROUTING_NAME}/landing-page"
+    "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Practitioner.routing_name}/landing-page"
   end
 
   def policy_check!(claim, policy)

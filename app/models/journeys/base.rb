@@ -1,34 +1,7 @@
 module Journeys
   module Base
-    SHARED_FORMS = {
-      "claims" => {
-        "sign-in-or-continue" => TeacherId.bypass? ? SignInOrContinueTestingForm : SignInOrContinueForm,
-        "current-school" => CurrentSchoolForm,
-        "select-current-school" => SelectCurrentSchoolForm,
-        "information-provided" => InformationProvidedForm,
-        "gender" => GenderForm,
-        "full-name" => FullNameForm,
-        "date-of-birth" => DateOfBirthForm,
-        "national-insurance-number" => NationalInsuranceNumberForm,
-        "personal-details" => PersonalDetailsForm,
-        "select-email" => SelectEmailForm,
-        "provide-mobile-number" => ProvideMobileNumberForm,
-        "select-mobile" => SelectMobileForm,
-        "email-address" => EmailAddressForm,
-        "email-verification" => EmailVerificationForm,
-        "mobile-number" => MobileNumberForm,
-        "mobile-verification" => MobileVerificationForm,
-        "personal-bank-account" => BankDetailsForm,
-        "teacher-reference-number" => TeacherReferenceNumberForm,
-        "address" => AddressForm,
-        "postcode-search" => PostcodeSearchForm,
-        "select-home-address" => SelectHomeAddressForm,
-        "check-your-answers" => CheckYourAnswersForm
-      }
-    }.freeze
-
     def configuration
-      Configuration.find(self::ROUTING_NAME)
+      Configuration.find(routing_name)
     end
 
     def start_page_url
@@ -40,21 +13,13 @@ module Journeys
     end
 
     def form(journey_session:, params:, session:)
-      form = all_forms.dig(params[:controller].split("/").last, params[:slug])
+      form_class = form_class_for_slug(slug: params[:slug])
 
-      form&.new(journey: self, journey_session:, params:, session:)
-    end
-
-    def form_class_for_slug(slug:)
-      all_forms.dig("claims", slug)
+      form_class&.new(journey: self, journey_session:, params:, session:)
     end
 
     def slug_for_form(form:)
-      all_forms["claims"].invert[form.class]
-    end
-
-    def forms
-      defined?(self::FORMS) ? self::FORMS : {}
+      all_forms_mapping.invert[form.class]
     end
 
     def answers_presenter
@@ -74,7 +39,7 @@ module Journeys
     end
 
     def journey_name
-      I18n.t(:journey_name, scope: self::I18N_NAMESPACE)
+      I18n.t(:journey_name, scope: i18n_namespace)
     end
 
     def pii_attributes
@@ -90,8 +55,28 @@ module Journeys
       false
     end
 
+    def view_path
+      if defined?(self::VIEW_PATH)
+        self::VIEW_PATH
+      else
+        name.gsub(/^Journeys::/, "").gsub("::", "/").underscore
+      end
+    end
+
     def routing_name
-      self::ROUTING_NAME
+      if defined?(self::ROUTING_NAME)
+        self::ROUTING_NAME
+      else
+        name.demodulize.underscore.dasherize
+      end
+    end
+
+    def i18n_namespace
+      if defined?(self::I18N_NAMESPACE)
+        self::I18N_NAMESPACE
+      else
+        name.gsub("Journeys::", "").gsub("::", "_").underscore
+      end
     end
 
     def policies
@@ -100,15 +85,81 @@ module Journeys
 
     def full_name
       [
-        I18n.t(:journey_name, scope: self::I18N_NAMESPACE),
-        I18n.t(:journey_description, scope: self::I18N_NAMESPACE, default: "")
+        I18n.t(:journey_name, scope: i18n_namespace),
+        I18n.t(:journey_description, scope: i18n_namespace, default: "")
       ].reject(&:blank?).join(" - ")
+    end
+
+    def form_class_for_slug(slug:)
+      all_forms_mapping[slug]
     end
 
     private
 
-    def all_forms
-      SHARED_FORMS.deep_merge(forms)
+    def all_forms_mapping
+      shared_forms_mapping.merge(forms_mapping)
+    end
+
+    def shared_forms
+      array = []
+
+      array << if TeacherId.bypass?
+        Debug::SignInOrContinueForm
+      else
+        SignInOrContinueForm
+      end
+
+      array += [
+        CurrentSchoolForm,
+        SelectCurrentSchoolForm,
+        InformationProvidedForm,
+        GenderForm,
+        FullNameForm,
+        DateOfBirthForm,
+        NationalInsuranceNumberForm,
+        PersonalDetailsForm,
+        SelectEmailForm,
+        ProvideMobileNumberForm,
+        SelectMobileForm,
+        EmailAddressForm,
+        EmailVerificationForm,
+        MobileNumberForm,
+        MobileVerificationForm,
+        PersonalBankAccountForm,
+        TeacherReferenceNumberForm,
+        AddressForm,
+        PostcodeSearchForm,
+        SelectHomeAddressForm,
+        CheckYourAnswersForm
+      ]
+
+      array
+    end
+
+    def shared_forms_mapping
+      mapping = {}
+
+      shared_forms.map do |form|
+        key = form.name.demodulize.underscore.downcase.dasherize.gsub(/-form$/, "")
+        mapping[key] = form
+      end
+
+      mapping
+    end
+
+    def forms
+      defined?(self::FORMS) ? self::FORMS : {}
+    end
+
+    def forms_mapping
+      mapping = {}
+
+      forms.map do |form|
+        key = form.name.demodulize.underscore.downcase.dasherize.gsub(/-form$/, "")
+        mapping[key] = form
+      end
+
+      mapping
     end
   end
 end

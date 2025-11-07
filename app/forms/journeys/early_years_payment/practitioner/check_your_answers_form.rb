@@ -72,7 +72,7 @@ module Journeys
         end
 
         def clear_claim_session
-          key = "#{Journeys::EarlyYearsPayment::Practitioner::ROUTING_NAME}_journeys_session_id"
+          key = "#{Journeys::EarlyYearsPayment::Practitioner.routing_name}_journeys_session_id"
           session.delete(key)
         end
 

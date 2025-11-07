@@ -67,7 +67,7 @@ RSpec.describe "Claims" do
 
       let(:journey) { Journeys::FurtherEducationPayments }
 
-      subject { get reminder_path(journey: journey::ROUTING_NAME.to_sym, slug: "confirmation") }
+      subject { get reminder_path(journey: journey.routing_name.to_sym, slug: "confirmation") }
 
       it { is_expected.to redirect_to(journey.start_page_url) }
     end
@@ -79,7 +79,7 @@ RSpec.describe "Claims" do
 
       let(:journey) { Journeys::TargetedRetentionIncentivePayments }
 
-      subject { get reminder_path(journey: journey::ROUTING_NAME.to_sym, slug: "confirmation") }
+      subject { get reminder_path(journey: journey.routing_name.to_sym, slug: "confirmation") }
 
       it { is_expected.to redirect_to(journey.start_page_url) }
     end

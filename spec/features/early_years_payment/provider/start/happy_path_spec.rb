@@ -12,7 +12,7 @@ RSpec.feature "Early years payment provider" do
     when_early_years_payment_provider_start_journey_configuration_exists
     when_eligible_ey_provider_exists
 
-    visit landing_page_path(Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME)
+    visit landing_page_path(Journeys::EarlyYearsPayment::Provider::Start.routing_name)
     expect(page).to have_text("Claim an early years financial incentive payment on behalf of your employee")
     click_link "Start now"
 
@@ -34,7 +34,7 @@ RSpec.feature "Early years payment provider" do
     when_early_years_payment_provider_start_journey_configuration_exists
     when_eligible_ey_provider_exists
 
-    visit landing_page_path(Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME)
+    visit landing_page_path(Journeys::EarlyYearsPayment::Provider::Start.routing_name)
     click_link "Start now"
 
     fill_in "Enter your email address", with: "johndoe@example.com"
@@ -53,7 +53,7 @@ RSpec.feature "Early years payment provider" do
     when_early_years_payment_provider_start_journey_configuration_exists
     when_eligible_ey_provider_exists
 
-    visit landing_page_path(Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME)
+    visit landing_page_path(Journeys::EarlyYearsPayment::Provider::Start.routing_name)
     click_link "Start now"
 
     fill_in "Enter your email address", with: "johndoe@example.com"
@@ -73,7 +73,7 @@ RSpec.feature "Early years payment provider" do
     end
     expect(number_of_emails_sent).to eq 3
 
-    visit claim_path(Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME, :claim)
+    visit claim_path(Journeys::EarlyYearsPayment::Provider::Start.routing_name, :claim)
     choose "Continue with the eligibility check that you have already started"
     click_on "Continue"
 

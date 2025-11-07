@@ -9,7 +9,7 @@ RSpec.feature "Further education payments ineligible paths" do
   scenario "when no teaching responsibilities" do
     when_further_education_payments_journey_configuration_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -37,7 +37,7 @@ RSpec.feature "Further education payments ineligible paths" do
     and_ineligible_college_exists
     and_eligible_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -83,7 +83,7 @@ RSpec.feature "Further education payments ineligible paths" do
     and_ineligible_college_exists
     and_eligible_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -136,7 +136,7 @@ RSpec.feature "Further education payments ineligible paths" do
     when_further_education_payments_journey_configuration_exists
     and_closed_eligible_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -181,7 +181,7 @@ RSpec.feature "Further education payments ineligible paths" do
     when_further_education_payments_journey_configuration_exists
     and_eligible_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -237,7 +237,7 @@ RSpec.feature "Further education payments ineligible paths" do
     when_further_education_payments_journey_configuration_exists
     and_eligible_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -295,7 +295,7 @@ RSpec.feature "Further education payments ineligible paths" do
     when_further_education_payments_journey_configuration_exists
     and_eligible_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -344,7 +344,7 @@ RSpec.feature "Further education payments ineligible paths" do
     when_further_education_payments_journey_configuration_exists
     and_eligible_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -403,7 +403,7 @@ RSpec.feature "Further education payments ineligible paths" do
     when_further_education_payments_journey_configuration_exists
     and_eligible_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -453,7 +453,7 @@ RSpec.feature "Further education payments ineligible paths" do
     when_further_education_payments_journey_configuration_exists
     and_eligible_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -516,7 +516,7 @@ RSpec.feature "Further education payments ineligible paths" do
     when_further_education_payments_journey_configuration_exists
     and_eligible_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -583,7 +583,7 @@ RSpec.feature "Further education payments ineligible paths" do
     when_further_education_payments_journey_configuration_exists
     and_eligible_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -622,7 +622,7 @@ RSpec.feature "Further education payments ineligible paths" do
     when_further_education_payments_journey_configuration_exists
     and_eligible_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -699,7 +699,7 @@ RSpec.feature "Further education payments ineligible paths" do
     when_further_education_payments_journey_configuration_exists
     and_eligible_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -776,7 +776,7 @@ RSpec.feature "Further education payments ineligible paths" do
     when_further_education_payments_journey_configuration_exists
     and_eligible_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -818,7 +818,7 @@ RSpec.feature "Further education payments ineligible paths" do
     when_further_education_payments_journey_configuration_exists
     and_eligible_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -868,7 +868,7 @@ RSpec.feature "Further education payments ineligible paths" do
     when_further_education_payments_journey_configuration_exists
     and_eligible_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -923,7 +923,7 @@ RSpec.feature "Further education payments ineligible paths" do
     when_further_education_payments_journey_configuration_exists
     and_eligible_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -978,7 +978,7 @@ RSpec.feature "Further education payments ineligible paths" do
     when_further_education_payments_journey_configuration_exists
     and_eligible_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
     click_link "Start now"
 
@@ -1036,7 +1036,7 @@ RSpec.feature "Further education payments ineligible paths" do
       onelogin_uid: "12345"
     )
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
 
     click_link "Start now"
 

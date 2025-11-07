@@ -11,9 +11,9 @@ class OneLogin::FailureHandler
     if answers.blank?
       "session_missing_failure"
     elsif !answers.logged_in_with_onelogin
-      "#{journey::VIEW_PATH}_auth_failure"
+      "#{journey.view_path}_auth_failure"
     elsif answers.logged_in_with_onelogin
-      "#{journey::VIEW_PATH}_idv_failure"
+      "#{journey.view_path}_idv_failure"
     end
   end
 

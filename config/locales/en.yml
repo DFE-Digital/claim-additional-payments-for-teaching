@@ -78,7 +78,7 @@ en:
     mobile_number: "Mobile number"
     personal_details: "Personal details"
     national_insurance_number: "What is your National Insurance number?"
-    bank_details: "Enter bank account details"
+    personal_bank_account: "Enter bank account details"
     account_details: Enter your personal bank account details
     account_hint: "For example: your name as it appears on your bank statement or bank card."
     check_your_account_details: Incorrect details will cause a delay to your payment.
@@ -284,7 +284,7 @@ en:
         payroll_gender: "How is your gender recorded on your school’s payroll system?"
       errors:
         select_gender: "Select the gender recorded on your school’s payroll system or select whether you do not know"
-    bank_details:
+    personal_bank_account:
       errors:
         enter_account_number: Enter an account number
         enter_banking_name: Enter a name on the account
@@ -1493,7 +1493,7 @@ en:
           presence: Provide a date in the format 27 3 2024
           date_not_in_future: Start date cannot be in the future
           year_must_have_4_digits: Year must include 4 numbers
-      provider_entered_contract_type:
+      contract_type:
         question: Select the contract type for %{practitioner_first_name}’s current role at %{nursery_name}
         options:
           permanent: Permanent
@@ -1609,7 +1609,7 @@ en:
       provider_email_address: Provider email address
       provider_name: Provider name
       consent_given: Declaration of collected consent
-      provider_entered_contract_type: What is the employee’s current job contract type?
+      contract_type: What is the employee’s current job contract type?
       child_facing_confirmation_given: Does the employee spend more than 70% in the job working with children?
       returning_within_6_months: Did the employee work in an early years setting in the previous 6 months?
       returner_worked_with_children: Did the employee’s previous job involve working directly with children?
@@ -1700,7 +1700,7 @@ en:
           <p class="govuk-body govuk-!-margin-top-0">
             We’ll check the number by sending a text message with a passcode.
           </p>
-      bank_details:
+      personal_bank_account:
         legend: Your personal bank account details
         banking_name:
           label: "Name on the account"

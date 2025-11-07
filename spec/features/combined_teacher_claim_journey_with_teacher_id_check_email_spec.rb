@@ -63,7 +63,7 @@ RSpec.feature "Combined journey with Teacher ID email check" do
   end
 
   def navigate_to_check_email_page(school:)
-    visit landing_page_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::TargetedRetentionIncentivePayments.routing_name)
 
     # - Landing (start)
     expect(page).to have_text("Find out if you are eligible for a targeted retention incentive payment")

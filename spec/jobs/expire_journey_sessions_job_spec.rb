@@ -12,18 +12,18 @@ RSpec.describe ExpireJourneySessionsJob do
 
       Journeys::JOURNEYS.each do |journey|
         submitted_journeys << journey::Session.create!(
-          journey: journey::ROUTING_NAME,
+          journey: journey.routing_name,
           claim: create(:claim),
           updated_at: over_24_hours_ago
         )
 
         unsubmitted_fresh_journeys << journey::Session.create!(
-          journey: journey::ROUTING_NAME,
+          journey: journey.routing_name,
           updated_at: four_hours_ago
         )
 
         unsubmitted_expired_journeys << journey::Session.create!(
-          journey: journey::ROUTING_NAME,
+          journey: journey.routing_name,
           updated_at: over_24_hours_ago
         )
       end

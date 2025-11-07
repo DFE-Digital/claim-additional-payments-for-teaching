@@ -62,7 +62,7 @@ module Journeys
                 scope: %w[
                   early_years_payment_provider_authenticated
                   forms
-                  provider_entered_contract_type
+                  contract_type
                   options
                 ].join(".")
               ),

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::ProviderEnteredContractTypeForm, type: :model do
+RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::ContractTypeForm, type: :model do
   let(:journey) { Journeys::EarlyYearsPayment::Provider::Authenticated }
 
   let(:journey_session) do

@@ -17,6 +17,6 @@ class BasePublicController < ApplicationController
   end
 
   def add_view_paths
-    prepend_view_path(Rails.root.join("app", "views", journey::VIEW_PATH))
+    prepend_view_path(Rails.root.join("app", "views", journey.view_path))
   end
 end

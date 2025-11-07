@@ -25,7 +25,7 @@ module Payroll
     end
 
     # Just remove anything that isn't allowed by Payroll
-    # BankDetailsForm::BANKING_NAME_REGEX_FILTER is actually stricter than what is allowed here
+    # PersonalBankAccountForm::BANKING_NAME_REGEX_FILTER is actually stricter than what is allowed here
     # So there is no need to worry about UTF-8 issues
     def final_cleanup(name)
       name.gsub(/[^A-Za-z0-9 &'()*,-.\/]/, "")

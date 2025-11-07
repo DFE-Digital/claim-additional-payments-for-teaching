@@ -152,7 +152,7 @@ RSpec.feature "Admin fraud prevention" do
 
     school = create(:school, :targeted_retention_incentive_payments_eligible)
 
-    visit landing_page_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::TargetedRetentionIncentivePayments.routing_name)
     # - Landing (start)
     click_on "Start now"
 

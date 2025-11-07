@@ -35,7 +35,7 @@ RSpec.describe EarlyYearsPayments::PractitionerReminderEmailJob, type: :job do
         it "sends first reminder email after 1 week" do
           perform_enqueued_jobs { perform_job }
 
-          complete_claim_url = "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Practitioner::ROUTING_NAME}/landing-page"
+          complete_claim_url = "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Practitioner.routing_name}/landing-page"
 
           expect(practitioner_email).to have_received_email(
             "cf03a3c7-587a-48c4-83b9-0cd762d103f6",
@@ -102,7 +102,7 @@ RSpec.describe EarlyYearsPayments::PractitionerReminderEmailJob, type: :job do
           claim_needing_second_reminder.update!(practitioner_email_address: practitioner_email)
           perform_enqueued_jobs { perform_job }
 
-          complete_claim_url = "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Practitioner::ROUTING_NAME}/landing-page"
+          complete_claim_url = "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Practitioner.routing_name}/landing-page"
 
           expect(practitioner_email).to have_received_email(
             "cf03a3c7-587a-48c4-83b9-0cd762d103f6",
@@ -149,7 +149,7 @@ RSpec.describe EarlyYearsPayments::PractitionerReminderEmailJob, type: :job do
         it "sends third reminder email after 4 weeks from second reminder" do
           perform_enqueued_jobs { perform_job }
 
-          complete_claim_url = "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Practitioner::ROUTING_NAME}/landing-page"
+          complete_claim_url = "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Practitioner.routing_name}/landing-page"
 
           expect(practitioner_email).to have_received_email(
             "cf03a3c7-587a-48c4-83b9-0cd762d103f6",

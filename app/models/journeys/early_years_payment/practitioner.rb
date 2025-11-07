@@ -5,20 +5,16 @@ module Journeys
       extend self
 
       ROUTING_NAME = "early-years-payment-practitioner"
-      VIEW_PATH = "early_years_payment/practitioner"
-      I18N_NAMESPACE = "early_years_payment_practitioner"
       POLICIES = [Policies::EarlyYearsPayments]
-      FORMS = {
-        "claims" => {
-          "sign-in" => SignInForm,
-          "find-reference" => FindReferenceForm,
-          "personal-bank-account" => BankDetailsForm,
-          "how-we-use-your-information" => HowWeUseYourInformationForm,
-          "check-your-answers" => CheckYourAnswersForm,
-          "confirmation" => ConfirmationForm,
-          "ineligible" => IneligibleForm
-        }
-      }
+      FORMS = [
+        SignInForm,
+        FindReferenceForm,
+        PersonalBankAccountForm,
+        HowWeUseYourInformationForm,
+        CheckYourAnswersForm,
+        ConfirmationForm,
+        IneligibleForm
+      ]
 
       def requires_student_loan_details?
         true

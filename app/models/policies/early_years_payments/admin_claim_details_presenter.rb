@@ -33,7 +33,7 @@ module Policies
           [translate("#{claim.policy.locale_key}.admin.provider_email_address"), claim.eligibility.provider_email_address],
           [translate("#{claim.policy.locale_key}.admin.provider_name"), claim.provider_contact_name],
           [translate("#{claim.policy.locale_key}.admin.consent_given"), "Confirmed"],
-          [translate("#{claim.policy.locale_key}.admin.provider_entered_contract_type"), I18n.t(claim.eligibility.provider_entered_contract_type, scope: %w[early_years_payment_provider_authenticated.forms.provider_entered_contract_type.options])],
+          [translate("#{claim.policy.locale_key}.admin.contract_type"), I18n.t(claim.eligibility.provider_entered_contract_type, scope: %w[early_years_payment_provider_authenticated.forms.contract_type.options])],
           [translate("#{claim.policy.locale_key}.admin.child_facing_confirmation_given"), display_boolean(claim.eligibility.child_facing_confirmation_given)],
           [translate("#{claim.policy.locale_key}.admin.returning_within_6_months"), display_boolean(claim.eligibility.returning_within_6_months)],
           [translate("#{claim.policy.locale_key}.admin.returner_worked_with_children"), display_boolean(claim.eligibility.returner_worked_with_children)],

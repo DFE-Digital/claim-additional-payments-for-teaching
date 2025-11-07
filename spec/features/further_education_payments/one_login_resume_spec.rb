@@ -12,7 +12,7 @@ RSpec.feature "Further education payments" do
     when_further_education_payments_journey_configuration_exists
     and_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     click_link "Start now"
 
     expect(page).to have_content("Do you have a")
@@ -34,7 +34,7 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     click_button "Sign out"
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     click_link "Start now"
 
     expect(page).to have_content("Do you have a")
@@ -62,7 +62,7 @@ RSpec.feature "Further education payments" do
     when_further_education_payments_journey_configuration_exists
     and_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     click_link "Start now"
 
     expect(page).to have_content("Do you have a")
@@ -84,7 +84,7 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     click_button "Sign out"
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     click_link "Start now"
 
     expect(page).to have_content("Do you have a")
@@ -115,7 +115,7 @@ RSpec.feature "Further education payments" do
     when_further_education_payments_journey_configuration_exists
     and_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     click_link "Start now"
 
     expect(page).to have_content("Do you have a")
@@ -141,7 +141,7 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("You are not eligible")
     click_button "Sign out"
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     click_link "Start now"
 
     expect(page).to have_content("Do you have a")
@@ -168,7 +168,7 @@ RSpec.feature "Further education payments" do
     when_further_education_payments_journey_configuration_exists
     and_college_exists
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     click_link "Start now"
 
     expect(page).to have_content("Do you have a")
@@ -300,7 +300,7 @@ RSpec.feature "Further education payments" do
 
     # resume attempt 1
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     click_link "Start now"
 
     expect(page).to have_content("Do you have a")
@@ -328,7 +328,7 @@ RSpec.feature "Further education payments" do
 
     # resume attempt 2
 
-    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     click_link "Start now"
 
     expect(page).to have_content("Do you have a")

@@ -407,7 +407,7 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
 
       # - Select your home address
       expect(page).to have_text("What is your home address?")
-      expect(page).to have_link("Back", href: claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME, "postcode-search"))
+      expect(page).to have_link("Back", href: claim_path(Journeys::TargetedRetentionIncentivePayments.routing_name, "postcode-search"))
       expect(page).to have_text("4, Wearside Road, London, SE13 7UN")
       expect(page).to have_text("5, Wearside Road, London, SE13 7UN")
       expect(page).to have_text("6, Wearside Road, London, SE13 7UN")

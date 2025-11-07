@@ -95,13 +95,13 @@
     <h2 class="govuk-heading-l">How we tested this website</h2>
 
     <p class="govuk-body">
-      This website was last tested on <%= I18n.t("#{journey::I18N_NAMESPACE}.accessibility_statement.test_date") %>. The test was carried out by the Department for Education.
+      This website was last tested on <%= I18n.t("#{journey.i18n_namespace}.accessibility_statement.test_date") %>. The test was carried out by the Department for Education.
     </p>
 
     <p class="govuk-body">
-      This statement was prepared on <%= I18n.t("#{journey::I18N_NAMESPACE}.accessibility_statement.prepared_date") %>.
-      <% if I18n.exists?("#{journey::I18N_NAMESPACE}.accessibility_statement.updated_date") %>
-        It was last updated on <%= I18n.t("#{journey::I18N_NAMESPACE}.accessibility_statement.updated_date") %>
+      This statement was prepared on <%= I18n.t("#{journey.i18n_namespace}.accessibility_statement.prepared_date") %>.
+      <% if I18n.exists?("#{journey.i18n_namespace}.accessibility_statement.updated_date") %>
+        It was last updated on <%= I18n.t("#{journey.i18n_namespace}.accessibility_statement.updated_date") %>
       <% end %>
     </p>
 

@@ -10,27 +10,25 @@ module Journeys
     I18N_NAMESPACE = "student_loans"
     POLICIES = [Policies::StudentLoans]
 
-    FORMS = {
-      "claims" => {
-        "claim-school" => ClaimSchoolForm,
-        "claim-school-results" => ClaimSchoolResultsForm,
-        "qualification-details" => QualificationDetailsForm,
-        "qts-year" => QtsYearForm,
-        "subjects-taught" => SubjectsTaughtForm,
-        "still-teaching" => StillTeachingForm,
-        "still-teaching-tps" => StillTeachingTpsForm,
-        "leadership-position" => LeadershipPositionForm,
-        "mostly-performed-leadership-duties" => MostlyPerformedLeadershipDutiesForm,
-        "reset-claim" => ResetClaimForm,
-        "select-claim-school" => SelectClaimSchoolForm,
-        "select-home-address" => SelectHomeAddressForm,
-        "eligibility-confirmed" => EligibilityConfirmedForm,
-        "student-loan-amount" => StudentLoanAmountForm,
-        "check-your-answers" => CheckYourAnswersForm,
-        "confirmation" => ConfirmationForm,
-        "ineligible" => IneligibleForm
-      }
-    }.freeze
+    FORMS = [
+      ClaimSchoolForm,
+      ClaimSchoolResultsForm,
+      QualificationDetailsForm,
+      QtsYearForm,
+      SubjectsTaughtForm,
+      StillTeachingForm,
+      StillTeachingTpsForm,
+      LeadershipPositionForm,
+      MostlyPerformedLeadershipDutiesForm,
+      ResetClaimForm,
+      SelectClaimSchoolForm,
+      SelectHomeAddressForm,
+      EligibilityConfirmedForm,
+      StudentLoanAmountForm,
+      CheckYourAnswersForm,
+      ConfirmationForm,
+      IneligibleForm
+    ].freeze
 
     def requires_student_loan_details?
       true

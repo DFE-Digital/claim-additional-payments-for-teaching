@@ -34,7 +34,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     check "Biology"
     click_on "Continue"
 
-    expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "check-your-answers"))
+    expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name, "check-your-answers"))
     expect(page).to have_text("Biology and Physics")
     expect(page).not_to have_text("Chemistry")
     expect(page).not_to have_text("Computing")
@@ -100,7 +100,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     expect(session.answers.employment_status).to be_nil
     expect(session.answers.current_school).to be_nil
 
-    expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "subjects-taught"))
+    expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name, "subjects-taught"))
 
     check "Biology", visible: false
     check "Chemistry", visible: false
@@ -110,14 +110,14 @@ RSpec.feature "Changing the answers on a submittable claim" do
     expect(session.answers.biology_taught).to eq(true)
     expect(session.answers.chemistry_taught).to eq(true)
 
-    expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "still-teaching"))
+    expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name, "still-teaching"))
 
     choose_still_teaching "Yes, at Claim School"
 
     expect(session.reload.answers.employment_status).to eql("claim_school")
     expect(session.answers.current_school).to eql new_claim_school
 
-    expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "check-your-answers"))
+    expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name, "check-your-answers"))
   end
 
   scenario "Teacher changes an answer which is a dependency of some of the subsequent answers they've given, making them ineligible" do
@@ -180,7 +180,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     expect(page).to have_checked_field("Physics", visible: false)
     click_on "Continue"
 
-    expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "check-your-answers"))
+    expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name, "check-your-answers"))
     expect(page).to have_text("Physics")
     expect(page).not_to have_text("Biology")
     expect(page).not_to have_text("Chemistry")
@@ -288,7 +288,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
       # - student-loan-amount is re-displayed for TSLR
       click_on "Continue"
 
-      expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "check-your-answers"))
+      expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name, "check-your-answers"))
       expect(journey_session.reload.answers.first_name).to eq("Bobby")
     end
   end

@@ -4,7 +4,7 @@ RSpec.feature "Combined journey" do
   let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments, teacher_id_enabled: false) }
 
   scenario "Teacher ID is disabled on the policy configuration" do
-    visit landing_page_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
+    visit landing_page_path(Journeys::TargetedRetentionIncentivePayments.routing_name)
 
     # - Landing (start)
     expect(page).to have_text(

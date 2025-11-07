@@ -9,7 +9,7 @@ RSpec.feature "unsubscribe from reminders" do
   end
 
   scenario "happy path" do
-    visit "/#{reminder.journey::ROUTING_NAME}/unsubscribe/reminders/#{reminder.id}"
+    visit "/#{reminder.journey.routing_name}/unsubscribe/reminders/#{reminder.id}"
     expect(page).to have_content "Are you sure you wish to unsub"
 
     click_button("Unsubscribe")
@@ -20,7 +20,7 @@ RSpec.feature "unsubscribe from reminders" do
   end
 
   scenario "when reminder does not exist" do
-    visit "/#{reminder.journey::ROUTING_NAME}/unsubscribe/reminders/idonotexist"
+    visit "/#{reminder.journey.routing_name}/unsubscribe/reminders/idonotexist"
     expect(page).to have_content "We can’t find your subscription"
   end
 
@@ -34,7 +34,7 @@ RSpec.feature "unsubscribe from reminders" do
     end
 
     scenario "cannot find subscription" do
-      visit "/#{reminder.journey::ROUTING_NAME}/unsubscribe/reminders/#{reminder.id}"
+      visit "/#{reminder.journey.routing_name}/unsubscribe/reminders/#{reminder.id}"
       expect(page).to have_content "We can’t find your subscription"
     end
   end

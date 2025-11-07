@@ -17,7 +17,7 @@ module Journeys
 
     def save!
       @journey_session = journey::Session.create!(
-        journey: journey::ROUTING_NAME,
+        journey: journey.routing_name,
         answers: answers.reverse_merge(
           academic_year: journey.configuration.current_academic_year
         )
