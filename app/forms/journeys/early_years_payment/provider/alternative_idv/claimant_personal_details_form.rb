@@ -8,7 +8,7 @@ module Journeys
           self.date_of_birth_field = :claimant_date_of_birth
 
           attribute :claimant_postcode, :string
-          attribute :claimant_national_insurance_number
+          attribute :claimant_national_insurance_number, :string, strip_all_whitespace: true
           attribute :claimant_bank_details_match, :boolean
           attribute :claimant_email, :string
 

@@ -1,7 +1,7 @@
 class NationalInsuranceNumberForm < Form
   NINO_REGEX_FILTER = /\A[A-Z]{2}[0-9]{6}[A-D]{1}\Z/
 
-  attribute :national_insurance_number
+  attribute :national_insurance_number, :string, strip_all_whitespace: true
 
   validates :national_insurance_number, presence: {message: "Enter a National Insurance number in the correct format"}
   validates(

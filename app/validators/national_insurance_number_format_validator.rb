@@ -2,12 +2,10 @@ class NationalInsuranceNumberFormatValidator < ActiveModel::EachValidator
   NINO_REGEX_FILTER = /\A[A-Z]{2}[0-9]{6}[A-D]{1}\Z/
 
   def validate_each(record, attribute, value)
-    normalised_value = value.gsub(/\s/, "").upcase
-
-    validate_regex(record, attribute, normalised_value)
-    validate_first_character(record, attribute, normalised_value)
-    validate_second_character(record, attribute, normalised_value)
-    validate_prefixes(record, attribute, normalised_value)
+    validate_regex(record, attribute, value)
+    validate_first_character(record, attribute, value)
+    validate_second_character(record, attribute, value)
+    validate_prefixes(record, attribute, value)
   end
 
   private
