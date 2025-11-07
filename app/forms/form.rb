@@ -24,6 +24,7 @@ class Form
   include ActiveModel::Validations::Callbacks
   include FormHelpers
   include Rails.application.routes.url_helpers
+  include WhitespaceAttributes
 
   attr_accessor :journey
   attr_accessor :journey_session
