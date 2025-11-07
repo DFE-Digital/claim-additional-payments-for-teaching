@@ -32,7 +32,7 @@ module Admin
     end
 
     def show
-      send_data EligibleEyProvider.csv,
+      send_data Policies::EarlyYearsPayments::EligibleEyProvider.csv,
         type: "text/csv",
         filename: "eligible_early_years_providers.csv"
     end

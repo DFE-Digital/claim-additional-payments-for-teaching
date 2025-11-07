@@ -28,7 +28,7 @@ module Journeys
           end
 
           def eligible_ey_provider
-            EligibleEyProvider
+            Policies::EarlyYearsPayments::EligibleEyProvider
               .unscoped
               .order(created_at: :desc)
               .find_by(urn: nursery_urn)

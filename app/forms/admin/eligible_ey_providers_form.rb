@@ -18,14 +18,14 @@ class Admin::EligibleEyProvidersForm
   end
 
   def importer
-    @importer ||= EligibleEyProvidersImporter.new(file)
+    @importer ||= Policies::EarlyYearsPayments::EligibleEyProvidersImporter.new(file)
   end
 
   def file_upload
     @file_upload ||= FileUpload.new(
       uploaded_by: admin_user,
       body: File.read(file),
-      target_data_model: EligibleEyProvider.to_s
+      target_data_model: Policies::EarlyYearsPayments::EligibleEyProvider.to_s
     )
   end
 

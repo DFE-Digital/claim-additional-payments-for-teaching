@@ -6,7 +6,7 @@ module Journeys
           attribute :email_address, :string
 
           def save
-            if EligibleEyProvider.eligible_email?(email_address)
+            if Policies::EarlyYearsPayments::EligibleEyProvider.eligible_email?(email_address)
               journey_session.answers.assign_attributes(
                 email_address: email_address,
                 email_verified: email_verified

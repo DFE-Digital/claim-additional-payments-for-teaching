@@ -23,7 +23,11 @@ RSpec.feature "Early years payment provider" do
     when_early_years_payment_provider_authenticated_journey_configuration_exists
     when_early_years_payment_provider_start_journey_completed
 
-    nursery = EligibleEyProvider.last || create(:eligible_ey_provider, primary_key_contact_email_address: "johndoe@example.com")
+    nursery = Policies::EarlyYearsPayments::EligibleEyProvider.last ||
+      create(
+        :eligible_ey_provider,
+        primary_key_contact_email_address: "johndoe@example.com"
+      )
 
     visit magic_link
     check "I confirm that I’ve obtained consent from my employee and have provided them with the relevant privacy notice."

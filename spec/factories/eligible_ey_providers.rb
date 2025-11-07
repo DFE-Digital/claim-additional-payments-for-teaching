@@ -1,10 +1,10 @@
 FactoryBot.define do
-  factory :eligible_ey_provider do
+  factory :eligible_ey_provider, class: "Policies::EarlyYearsPayments::EligibleEyProvider" do
     association :local_authority
 
     file_upload {
-      FileUpload.latest_version_for(EligibleEyProvider).first ||
-        create(:file_upload, target_data_model: EligibleEyProvider.to_s)
+      FileUpload.latest_version_for(Policies::EarlyYearsPayments::EligibleEyProvider).first ||
+        create(:file_upload, target_data_model: Policies::EarlyYearsPayments::EligibleEyProvider.to_s)
     }
 
     nursery_name { Faker::Company.name }

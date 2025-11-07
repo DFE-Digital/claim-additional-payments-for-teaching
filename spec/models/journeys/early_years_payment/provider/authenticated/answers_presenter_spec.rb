@@ -16,7 +16,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::AnswersPres
       is_expected.to include(
         [
           "Employee’s workplace",
-          EligibleEyProvider.first.nursery_name,
+          Policies::EarlyYearsPayments::EligibleEyProvider.first.nursery_name,
           "current-nursery"
         ],
         [

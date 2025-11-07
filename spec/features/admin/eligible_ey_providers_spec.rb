@@ -75,7 +75,7 @@ RSpec.feature "Admin of eligible ey providers" do
 
   def last_file_upload_completed_process_at_string
     FileUpload
-      .latest_version_for(EligibleEyProvider)
+      .latest_version_for(Policies::EarlyYearsPayments::EligibleEyProvider)
       .first
       .completed_processing_at
       .strftime("%-d %B %Y %-l:%M%P")
