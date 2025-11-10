@@ -24,6 +24,10 @@ module Journeys
     all.map(&:routing_name)
   end
 
+  def legacy_routing_names
+    ["additional-payments"]
+  end
+
   def for_routing_name(routing_name)
     all.find { |journey| routing_name == journey.routing_name }
   end
