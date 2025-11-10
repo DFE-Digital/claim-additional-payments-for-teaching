@@ -21,7 +21,7 @@ module Journeys
 
     validates :journey,
       presence: true,
-      inclusion: {in: Journeys.all_routing_names}
+      inclusion: {in: Journeys.all_routing_names + Journeys.legacy_routing_names}
 
     scope :unsubmitted, -> { where.missing(:claim) }
     scope :submitted, -> { joins(:claim) }
