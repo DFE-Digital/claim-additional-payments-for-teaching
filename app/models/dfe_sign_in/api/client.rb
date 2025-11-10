@@ -80,7 +80,7 @@ module DfeSignIn
       def get(uri)
         response = dfe_sign_in_request(uri)
 
-        raise ExternalServerError, "#{response.code}: #{response.body}" unless response.code.eql?("200")
+        raise ExternalServerError, "Code: #{response.code}, Client: #{client_id}, URI: #{uri}, Body: #{response.body}" unless response.code.eql?("200")
 
         JSON.parse(response.body)
       end
