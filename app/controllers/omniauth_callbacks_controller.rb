@@ -245,7 +245,7 @@ class OmniauthCallbacksController < ApplicationController
 
     redirect_to further_education_payments_providers_claims_path
   rescue DfeSignIn::ExternalServerError => e
-    code = e.message.split(":").first
+    code = e.message.match(/Code: (\d+),/)[1]
 
     if code == "404"
       redirect_to further_education_payments_providers_authorisation_failure_path(

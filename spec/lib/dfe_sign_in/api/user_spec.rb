@@ -70,10 +70,12 @@ RSpec.describe DfeSignIn::Api::User do
     end
 
     it "raises an error" do
+      expected_error = 'Code: 500, Client: teacherpaymentsadmin, URI: https://example.com/services/teacherpaymentsadmin/organisations/456/users/999, Body: {"error":"An error occurred"}'
+
       expect {
         user.has_role?("my_role")
       }.to raise_error(
-        DfeSignIn::ExternalServerError, "500: {\"error\":\"An error occurred\"}"
+        DfeSignIn::ExternalServerError, expected_error
       )
     end
   end
