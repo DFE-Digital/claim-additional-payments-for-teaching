@@ -91,8 +91,8 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
 
         expect(rows).to include([
           "Timetabled teaching hours",
-          "12 or more hours per week, but fewer than 20",
-          "20 hours or more per week"
+          "12 or more hours per week",
+          "12 or more hours per week"
         ])
 
         expect(rows).to include(["Age range taught", "Yes", "Yes"])
@@ -133,6 +133,67 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
           "N/A",
           "No valid reason"
         ])
+      end
+    end
+
+    describe "timetabled_teaching_hours" do
+      let(:claim) do
+        create(
+          :claim,
+          :submitted,
+          policy: Policies::FurtherEducationPayments,
+          eligibility_trait: %i[eligible provider_verification_completed],
+          eligibility_attributes: eligibility_attributes
+        )
+      end
+
+      describe "provider answers" do
+        subject do
+          described_class
+            .new(claim)
+            .provider_verification_rows[4]
+            .last
+        end
+
+        context "when provider answers 'more_than_20" do
+          let(:eligibility_attributes) do
+            {
+              provider_verification_teaching_hours_per_week: "more_than_20"
+            }
+          end
+
+          it { is_expected.to eq("12 or more hours per week") }
+        end
+
+        context "when provider answers 'more_than_12" do
+          let(:eligibility_attributes) do
+            {
+              provider_verification_teaching_hours_per_week: "more_than_12"
+            }
+          end
+
+          it { is_expected.to eq("12 or more hours per week") }
+        end
+
+        context "when provider answers 'between_2_5_and_12'" do
+          let(:eligibility_attributes) do
+            {
+              provider_verification_teaching_hours_per_week: "between_2_5_and_12"
+            }
+          end
+
+          it { is_expected.to eq("2.5 or more hours per week, but fewer than 12") }
+        end
+
+        context "when provider answers 'less_than_2_5'" do
+          let(:eligibility_attributes) do
+            {
+              provider_verification_teaching_hours_per_week: "less_than_2_5"
+            }
+          end
+
+          it { is_expected.to eq("Fewer than 2.5 hours each week") }
+        end
       end
     end
   end

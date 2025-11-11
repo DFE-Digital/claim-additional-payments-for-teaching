@@ -928,6 +928,10 @@ en:
         fe_provider_verification_v2:
           name: Alternative verification
           title: Do the details provided by the claimant match the provider’s responses?
+          timetabled_teaching_hours:
+            more_than_12: 12 or more hours per week
+            between_2_5_and_12: 2.5 or more hours per week, but fewer than 12
+            less_than_2_5: Fewer than 2.5 hours each week
         employment:
           title: Does the claimant’s place of work match the above information on their claim?
         provider_details:
