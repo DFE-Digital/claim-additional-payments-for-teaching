@@ -48,8 +48,6 @@ Rails.application.routes.draw do
   scope path: ":journey", constraints: {journey: %r{#{Journeys.all_routing_names.join("|")}}} do
     get "claim", as: :new_claim, to: "claims#new"
     post "claim", as: :claims, to: "claims#create"
-    post "claim/submit", as: :claim_submission, to: "submissions#create"
-    get "claims/confirmation", as: :claim_confirmation, to: "submissions#show"
     get "existing-session", as: :existing_session, to: "claims#existing_session"
     post "start-new", to: "claims#start_new", as: :start_new
     get "signed-out", to: "claims#signed_out"
