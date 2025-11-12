@@ -196,5 +196,103 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
         end
       end
     end
+
+    describe "fixed_term_full_year" do
+      let(:claim) do
+        create(
+          :claim,
+          :submitted,
+          policy: Policies::FurtherEducationPayments,
+          eligibility_trait: %i[eligible provider_verification_completed],
+          eligibility_attributes: eligibility_attributes
+        )
+      end
+
+      subject do
+        described_class
+          .new(claim)
+          .provider_verification_rows
+          .detect { it.first == "Full academic year" }
+      end
+
+      # Only asked for fixed-term contracts
+      context "when the claimant hasn't answered that question" do
+        let(:eligibility_attributes) do
+          {
+            contract_type: "permanent"
+          }
+        end
+
+        it { is_expected.to be_nil }
+      end
+
+      context "when the claimant has answered that question" do
+        let(:eligibility_attributes) do
+          {
+            contract_type: "fixed_term",
+            fixed_term_full_year: false,
+            provider_verification_contract_covers_full_academic_year: false
+          }
+        end
+
+        it do
+          is_expected.to eq([
+            "Full academic year",
+            "No",
+            "No"
+          ])
+        end
+      end
+    end
+
+    describe "taught_at_least_one_term" do
+      let(:claim) do
+        create(
+          :claim,
+          :submitted,
+          policy: Policies::FurtherEducationPayments,
+          eligibility_trait: %i[eligible provider_verification_completed],
+          eligibility_attributes: eligibility_attributes
+        )
+      end
+
+      subject do
+        described_class
+          .new(claim)
+          .provider_verification_rows
+          .detect { it.first == "Taught at least one term" }
+      end
+
+      # Only asked for fixed-term contracts that don't cover full year
+      context "when the claimant hasn't answered that question" do
+        let(:eligibility_attributes) do
+          {
+            contract_type: "fixed_term",
+            fixed_term_full_year: true
+          }
+        end
+
+        it { is_expected.to be_nil }
+      end
+
+      context "when the claimant has answered that question" do
+        let(:eligibility_attributes) do
+          {
+            contract_type: "fixed_term",
+            fixed_term_full_year: false,
+            taught_at_least_one_term: true,
+            provider_verification_taught_at_least_one_academic_term: true
+          }
+        end
+
+        it do
+          is_expected.to eq([
+            "Taught at least one term",
+            "Yes",
+            "Yes"
+          ])
+        end
+      end
+    end
   end
 end
