@@ -96,6 +96,14 @@ module AutomatedChecks
           @failed_checks << "contract_of_employment_mismatch"
         end
 
+        if eligibility.provider_verification_contract_type == "no_direct_contract"
+          @failed_checks << "no_direct_contract_of_employment"
+        end
+
+        if eligibility.provider_verification_taught_at_least_one_academic_term == false
+          @failed_checks << "did_not_teach_full_academic_term"
+        end
+
         if eligibility.provider_verification_teaching_qualification == "no_not_planned"
           @failed_checks << "no_plans_for_teaching_qualification"
         end
