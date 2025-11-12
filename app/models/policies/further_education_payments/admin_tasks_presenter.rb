@@ -104,14 +104,18 @@ module Policies
       end
 
       def taught_at_least_one_term
-        return if eligibility.taught_at_least_one_term.nil?
+        return if eligibility.taught_at_least_one_term.nil? && eligibility.provider_verification_taught_at_least_one_academic_term.nil?
+
+        claimant_answer =
+          if eligibility.taught_at_least_one_term.nil?
+            "Not answered"
+          else
+            I18n.t(eligibility.taught_at_least_one_term, scope: :boolean)
+          end
 
         [
           "Taught at least one term",
-          I18n.t(
-            eligibility.taught_at_least_one_term,
-            scope: :boolean
-          ),
+          claimant_answer,
           provider_answers.taught_at_least_one_academic_term
         ]
       end
