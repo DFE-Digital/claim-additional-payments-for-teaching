@@ -34,20 +34,20 @@
         <ul class="rebranded-one-login-header__nav__list">
           <li class="rebranded-one-login-header__nav__list-item">
             <a class="rebranded-one-login-header__nav__link" href="<%= one_login_home_url %>">
-              <span class="rebranded-one-login-header__nav__link-content">
-
-                <svg focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" width="15" height="30" viewBox="150 150 250 250" fill="currentcolor" class="rebranded-cross-service-header__logo rebranded-cross-service-header__logo--nav">
-                  <path d="M300.002 312.261C249.445 312.261 208.346 271.165 208.346 220.608C208.346 170.051 249.445 128.954 300.002 128.954C350.559 128.954 391.655 170.051 391.655 220.608C391.655 271.165 350.559 312.261 300.002 312.261ZM300.002 170.892C272.673 170.892 250.389 193.175 250.389 220.504C250.389 247.83 272.673 270.113 300.002 270.113C327.33 270.113 349.611 247.83 349.611 220.504C349.611 193.175 327.33 170.892 300.002 170.892Z"></path>
-                  <path d="M221.275 471.046H179.231V365.202H420.769V407.246H221.275V471.046Z"></path>
-                </svg>
+              <span class="rebranded-one-login-header__nav__text">
+  <svg focusable="false" xmlns="http://www.w3.org/2000/svg" width="15" height="30" viewBox="150 150 250 250" fill="currentcolor" class="rebranded-cross-service-header__logo rebranded-cross-service-header__logo--nav" aria-hidden="true">
+    <path d="M300.002 312.261C249.445 312.261 208.346 271.165 208.346 220.608C208.346 170.051 249.445 128.954 300.002 128.954C350.559 128.954 391.655 170.051 391.655 220.608C391.655 271.165 350.559 312.261 300.002 312.261ZM300.002 170.892C272.673 170.892 250.389 193.175 250.389 220.504C250.389 247.83 272.673 270.113 300.002 270.113C327.33 270.113 349.611 247.83 349.611 220.504C349.611 193.175 327.33 170.892 300.002 170.892Z"></path>
+    <path d="M221.275 471.046H179.231V365.202H420.769V407.246H221.275V471.046Z"></path>
+  </svg>
                 GOV.UK One Login
               </span>
             </a>
           </li>
+
           <li class="rebranded-one-login-header__nav__list-item">
-            <div class="rebranded-one-login-header__nav__link-content rebranded-one-login-header__nav__link-content--sign-out">
-              <%= button_to "Sign out", deauth_onelogin_path, method: :delete, class: "rebranded-one-login-header__nav__link button-to-as-link" %>
-            </div>
+            <%= button_to deauth_onelogin_path, method: :delete, form_class: "rebranded-one-login-header__nav__form", class: "rebranded-one-login-header__nav__button" do %>
+              <span class="rebranded-one-login-header__nav__text rebranded-one-login-header__nav__text--sign-out">Sign out</span>
+            <% end %>
           </li>
         </ul>
       </nav>
