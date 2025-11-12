@@ -179,7 +179,7 @@ class ClaimsController < BasePublicController
 
   def send_to_start?
     return false if %w[new create signed_out].include?(action_name)
-    return false if navigator.current_slug == "confirmation"
+    return false if navigator.current_slug == "confirmation" && session[:submitted_claim_id].present?
 
     !skip_landing_page? && journey_session.nil?
   end

@@ -2,13 +2,13 @@ module Journeys
   module EarlyYearsPayment
     module Provider
       module AlternativeIdv
-        class ConfirmationForm < Form
+        class ConfirmationForm < Journeys::ConfirmationForm
           def completed?
             false
           end
 
           def claimant_name
-            answers.claim.full_name
+            submitted_claim.full_name
           end
         end
       end
