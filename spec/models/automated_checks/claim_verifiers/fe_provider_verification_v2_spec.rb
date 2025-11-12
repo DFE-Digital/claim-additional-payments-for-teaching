@@ -369,6 +369,52 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
           end
         end
       end
+
+      context "when the provider states the claimant has not worked the full term" do
+        let(:eligibility) do
+          build(
+            :further_education_payments_eligibility,
+            :eligible,
+            :provider_verification_completed,
+            provider_verification_taught_at_least_one_academic_term: false
+          )
+        end
+
+        it "creates a failed task" do
+          subject.perform
+
+          task = claim.tasks.find_by!(name: "fe_provider_verification_v2")
+
+          expect(task.failed?).to be true
+          expect(task.manual?).to be false
+          expect(task.data["failed_checks"]).to include(
+            "did_not_teach_full_academic_term"
+          )
+        end
+      end
+
+      context "when the provider states the claimant doens't have a direct contract of employment" do
+        let(:eligibility) do
+          build(
+            :further_education_payments_eligibility,
+            :eligible,
+            :provider_verification_completed,
+            provider_verification_contract_type: "no_direct_contract"
+          )
+        end
+
+        it "creates a failed task" do
+          subject.perform
+
+          task = claim.tasks.find_by!(name: "fe_provider_verification_v2")
+
+          expect(task.failed?).to be true
+          expect(task.manual?).to be false
+          expect(task.data["failed_checks"]).to include(
+            "no_direct_contract_of_employment"
+          )
+        end
+      end
     end
 
     context "automatically passing the task" do
