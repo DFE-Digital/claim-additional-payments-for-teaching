@@ -4,7 +4,10 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
   describe "#provider_verification_rows" do
     context "continued_employment" do
       subject do
-        described_class.new(claim)
+        described_class
+          .new(claim)
+          .provider_verification_rows
+          .detect { |row| row[0] == "Continued employment" }
       end
 
       let(:claim) do
@@ -24,9 +27,8 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
         end
 
         it "returns Yes" do
-          expect(subject.provider_verification_rows[10][0]).to eql("Continued employment")
-          expect(subject.provider_verification_rows[10][1]).to eql("N/A")
-          expect(subject.provider_verification_rows[10][2]).to eql("Yes")
+          expect(subject[1]).to eql("N/A")
+          expect(subject[2]).to eql("Yes")
         end
       end
 
@@ -40,9 +42,8 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
         end
 
         it "returns No" do
-          expect(subject.provider_verification_rows[10][0]).to eql("Continued employment")
-          expect(subject.provider_verification_rows[10][1]).to eql("N/A")
-          expect(subject.provider_verification_rows[10][2]).to eql("No")
+          expect(subject[1]).to eql("N/A")
+          expect(subject[2]).to eql("No")
         end
       end
     end
@@ -151,7 +152,8 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
         subject do
           described_class
             .new(claim)
-            .provider_verification_rows[6]
+            .provider_verification_rows
+            .detect { it.first == "Timetabled teaching hours" }
             .last
         end
 
@@ -264,7 +266,7 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
       end
 
       # Only asked for fixed-term contracts that don't cover full year
-      context "when the claimant hasn't answered that question" do
+      context "when the claimant nor provider have answered that question" do
         let(:eligibility_attributes) do
           {
             contract_type: "fixed_term",
@@ -275,7 +277,7 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
         it { is_expected.to be_nil }
       end
 
-      context "when the claimant has answered that question" do
+      context "when the claimant and provider have answered that question" do
         let(:eligibility_attributes) do
           {
             contract_type: "fixed_term",
@@ -290,6 +292,25 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
             "Taught at least one term",
             "Yes",
             "Yes"
+          ])
+        end
+      end
+
+      context "when only the provider has answered that question" do
+        let(:eligibility_attributes) do
+          {
+            contract_type: "fixed_term",
+            fixed_term_full_year: false,
+            taught_at_least_one_term: nil,
+            provider_verification_taught_at_least_one_academic_term: false
+          }
+        end
+
+        it do
+          is_expected.to eq([
+            "Taught at least one term",
+            "Not answered",
+            "No"
           ])
         end
       end
