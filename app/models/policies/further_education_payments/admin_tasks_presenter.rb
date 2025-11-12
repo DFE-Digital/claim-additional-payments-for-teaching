@@ -29,6 +29,8 @@ module Policies
           teaching_qualification,
           reason_for_not_enrolling,
           contract_of_employment,
+          fixed_term_full_year,
+          taught_at_least_one_term,
           performance_measure,
           disciplinary_action,
           timetabled_teaching_hours,
@@ -85,6 +87,32 @@ module Policies
             scope: "further_education_payments.forms.contract_type.options"
           ),
           provider_answers.contract_type
+        ]
+      end
+
+      def fixed_term_full_year
+        return unless eligibility.contract_type == "fixed_term"
+
+        [
+          "Full academic year",
+          I18n.t(
+            eligibility.fixed_term_full_year,
+            scope: :boolean
+          ),
+          provider_answers.contract_covers_full_academic_year
+        ]
+      end
+
+      def taught_at_least_one_term
+        return if eligibility.taught_at_least_one_term.nil?
+
+        [
+          "Taught at least one term",
+          I18n.t(
+            eligibility.taught_at_least_one_term,
+            scope: :boolean
+          ),
+          provider_answers.taught_at_least_one_academic_term
         ]
       end
 
