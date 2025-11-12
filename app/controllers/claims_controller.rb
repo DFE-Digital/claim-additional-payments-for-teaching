@@ -189,4 +189,10 @@ class ClaimsController < BasePublicController
     response.headers["Pragma"] = "no-cache"
     response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
   end
+
+  private
+
+  def eligible_claim_in_progress?
+    journey_session.present? && !journey::EligibilityChecker.new(journey_session: journey_session).ineligible?
+  end
 end
