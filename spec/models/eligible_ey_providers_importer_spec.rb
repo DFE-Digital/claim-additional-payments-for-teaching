@@ -1,12 +1,18 @@
 require "rails_helper"
 
-RSpec.describe EligibleEyProvidersImporter do
+RSpec.describe Policies::EarlyYearsPayments::EligibleEyProvidersImporter do
   subject { described_class.new(file) }
 
   let(:file) { Tempfile.new }
   let(:correct_headers) { described_class.mandatory_headers.join(",") + "\n" }
   let(:local_authority) { create(:local_authority) }
-  let(:file_upload) { create(:file_upload, :not_completed_processing, target_data_model: EligibleEyProvider.to_s) }
+  let(:file_upload) do
+    create(
+      :file_upload,
+      :not_completed_processing,
+      target_data_model: Policies::EarlyYearsPayments::EligibleEyProvider.to_s
+    )
+  end
 
   def to_row(hash)
     [
@@ -48,7 +54,8 @@ RSpec.describe EligibleEyProvidersImporter do
       end
 
       it "does not add any any records" do
-        expect { subject.run(file_upload.id) }.not_to change { EligibleEyProvider.count }
+        expect { subject.run(file_upload.id) }
+          .not_to change { Policies::EarlyYearsPayments::EligibleEyProvider.count }
       end
 
       context "when there are existing records" do
@@ -58,7 +65,8 @@ RSpec.describe EligibleEyProvidersImporter do
         end
 
         it "does not purge any records" do
-          expect { subject.run(file_upload.id) }.not_to change { EligibleEyProvider.count }
+          expect { subject.run(file_upload.id) }
+            .not_to change { Policies::EarlyYearsPayments::EligibleEyProvider.count }
         end
       end
     end
@@ -75,11 +83,13 @@ RSpec.describe EligibleEyProvidersImporter do
       end
 
       it "imports new records" do
-        expect { subject.run(file_upload.id) }.to change { EligibleEyProvider.unscoped.count }.from(0).to(3)
+        expect { subject.run(file_upload.id) }
+          .to change { Policies::EarlyYearsPayments::EligibleEyProvider.unscoped.count }
+          .from(0).to(3)
 
-        expect(EligibleEyProvider.count).to eq(0)
+        expect(Policies::EarlyYearsPayments::EligibleEyProvider.count).to eq(0)
         file_upload.completed_processing!
-        expect(EligibleEyProvider.count).to eq(3)
+        expect(Policies::EarlyYearsPayments::EligibleEyProvider.count).to eq(3)
       end
 
       context "when there are existing records" do
@@ -87,17 +97,23 @@ RSpec.describe EligibleEyProvidersImporter do
         let!(:eligible_ey_provider2) { create(:eligible_ey_provider, :with_secondary_contact_email_address, local_authority:) }
 
         it "adds the new records with a new file_upload_id" do
-          expect { subject.run(file_upload.id) }.to change { EligibleEyProvider.unscoped.count }.from(2).to(5)
+          expect { subject.run(file_upload.id) }
+            .to change { Policies::EarlyYearsPayments::EligibleEyProvider.unscoped.count }
+            .from(2).to(5)
 
           # Still returns the current providers
-          expect(EligibleEyProvider.count).to eq(2)
+          expect(Policies::EarlyYearsPayments::EligibleEyProvider.count).to eq(2)
 
           # FileUpload marked as processed, returns the 3 new providers
           file_upload.completed_processing!
-          expect(EligibleEyProvider.count).to eq(3)
+          expect(Policies::EarlyYearsPayments::EligibleEyProvider.count).to eq(3)
 
           # Can still get the previous providers
-          expect(EligibleEyProvider.unscoped.where(file_upload: eligible_ey_provider1.file_upload)).to contain_exactly(eligible_ey_provider1, eligible_ey_provider2)
+          expect(
+            Policies::EarlyYearsPayments::EligibleEyProvider
+            .unscoped
+            .where(file_upload: eligible_ey_provider1.file_upload)
+          ).to contain_exactly(eligible_ey_provider1, eligible_ey_provider2)
         end
       end
     end
@@ -123,7 +139,7 @@ RSpec.describe EligibleEyProvidersImporter do
         subject.run(file_upload.id)
         file_upload.completed_processing!
 
-        provider = EligibleEyProvider.first
+        provider = Policies::EarlyYearsPayments::EligibleEyProvider.first
 
         expect(provider.nursery_name).to eq("Springfield Nursery")
         expect(provider.urn).to eq("123456")

@@ -25,7 +25,9 @@ module Journeys
           def nursery
             [
               "Employee’s workplace",
-              EligibleEyProvider.find_by(urn: answers.nursery_urn).nursery_name,
+              Policies::EarlyYearsPayments::EligibleEyProvider
+                .find_by(urn: answers.nursery_urn)
+                .nursery_name,
               "current-nursery"
             ]
           end

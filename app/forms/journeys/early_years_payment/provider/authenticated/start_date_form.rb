@@ -37,7 +37,9 @@ module Journeys
           end
 
           def nursery_name
-            EligibleEyProvider.find_by(urn: answers.nursery_urn)&.nursery_name
+            Policies::EarlyYearsPayments::EligibleEyProvider
+              .find_by(urn: answers.nursery_urn)
+              &.nursery_name
           end
 
           private

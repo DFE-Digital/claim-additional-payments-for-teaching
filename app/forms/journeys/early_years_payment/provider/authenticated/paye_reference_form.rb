@@ -11,7 +11,8 @@ module Journeys
             format: {with: PAYE_REFERENCE_REGEX_FILTER, message: i18n_error_message(:valid)}
 
           def nursery_name
-            @nursery_name ||= EligibleEyProvider.find_by(urn: answers.nursery_urn)&.nursery_name
+            @nursery_name ||= Policies::EarlyYearsPayments::EligibleEyProvider
+              .find_by(urn: answers.nursery_urn)&.nursery_name
           end
 
           def save

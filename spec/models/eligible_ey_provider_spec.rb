@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe EligibleEyProvider do
+RSpec.describe Policies::EarlyYearsPayments::EligibleEyProvider do
   describe ".eligible_email?" do
     subject { described_class.eligible_email?(email) }
 
