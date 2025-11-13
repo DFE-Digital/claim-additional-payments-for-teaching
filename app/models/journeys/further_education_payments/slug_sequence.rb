@@ -142,12 +142,8 @@ module Journeys
         when "variable_hours"
           array << SLUGS_HASH["taught-at-least-one-term"]
 
-          select_provision_form = form_for_slug(SLUGS_HASH["select-provision"])
-
-          if select_provision_form.completed_or_valid? && answers.taught_at_least_one_term == true
-            array << SLUGS_HASH["teaching-hours-per-week"]
-            array << SLUGS_HASH["half-teaching-hours"]
-          end
+          array << SLUGS_HASH["teaching-hours-per-week"]
+          array << SLUGS_HASH["half-teaching-hours"]
         end
 
         array << SLUGS_HASH["subjects-taught"]
