@@ -935,6 +935,7 @@ DEPENDENCIES
   govuk-components (~> 5.13)
   govuk_design_system_formbuilder (~> 5.11.0)
   govuk_publishing_components
+  herb
   httpclient
   jbuilder (~> 2.13)
   jwt

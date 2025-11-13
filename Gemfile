@@ -124,6 +124,7 @@ group :test do
   # Return null object for active record connection rather than raising error
   gem "activerecord-nulldb-adapter", github: "simpl1g/nulldb", ref: "3986f43f1680ee098ec51af1dc763bfe2d579efe"
   gem "cuprite"
+  gem "herb"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
