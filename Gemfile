@@ -99,6 +99,7 @@ group :development, :test do
   gem "shoulda-matchers"
   gem "factory_bot_rails"
   gem "dotenv-rails"
+  gem "herb", require: false
 end
 
 group :development do
