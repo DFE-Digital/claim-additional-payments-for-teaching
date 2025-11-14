@@ -20,6 +20,9 @@ production: &production
   practitioner_reminder_emails:
     class: EarlyYearsPayments::PractitionerReminderEmailJob
     schedule: "0 8 * * *" # Daily at 8am
+  fe_provider_overdue_chser_emails:
+    class: FurtherEducationPayments::Providers::OverdueChaserEmailJob
+    schedule: "0 9 * * *" # Dails at 9am
   heartbeat:
     class: HeartbeatJob
     schedule: "* * * * *"
