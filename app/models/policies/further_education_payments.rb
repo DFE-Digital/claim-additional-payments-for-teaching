@@ -96,6 +96,10 @@ module Policies
       (claim.created_at + 2.weeks).to_date
     end
 
+    def verification_expiry_date_for_claim(claim)
+      verification_due_date_for_claim(claim) + 3.weeks
+    end
+
     def verification_chase_due_date_for_claim(claim)
       (claim.eligibility.provider_verification_email_last_sent_at + 2.weeks).to_date
     end
