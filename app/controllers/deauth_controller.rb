@@ -20,6 +20,11 @@ class DeauthController < ApplicationController
     active_sessions.each(&:expire!)
 
     head :ok
+  rescue => e
+    Rollbar.error(e)
+    Sentry.capture_exception(e)
+
+    head :bad_request
   end
 
   private
