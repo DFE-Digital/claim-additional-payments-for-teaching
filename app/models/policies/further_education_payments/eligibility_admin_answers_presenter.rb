@@ -16,6 +16,10 @@ module Policies
         end
       end
 
+      def year_1_claim?
+        eligibility.year_1_claim?
+      end
+
       def provider_details
         [
           teaching_responsibilities,
