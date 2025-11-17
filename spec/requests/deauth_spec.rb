@@ -174,5 +174,104 @@ RSpec.describe "logging out", type: :request do
         expect(response).to be_ok
       end
     end
+
+    context "when logout token has expired" do
+      let(:jwk_hash) do
+        {
+          kty: "EC",
+          d: "ujsXByc2TFEpiUihtQW-XTTvib5gSVEguSNZ03zjRPo",
+          crv: "P-256",
+          kid: "kDfCkfr98AodHydaj2L9cFtncwBcr4DLVzwA8-yzOeg",
+          x: "NNR2vWlDx3iwJopx3HoETkGTefmEIxuDSC5w35fbsAs",
+          y: "qcnqxul4WVuYpuplZA7iNhKO3qBF9S9NTWqEg6N7Lrs",
+          alg: "ES256"
+        }
+      end
+
+      let(:jwk) { JWT::JWK.import(jwk_hash) }
+      let(:token) { JWT::Token.new(payload:, header:) }
+
+      let(:header) { { kid: "kDfCkfr98AodHydaj2L9cFtncwBcr4DLVzwA8-yzOeg" } }
+      let(:payload) do
+        {
+          iss: "https://oidc.integration.account.gov.uk/",
+          sub: journey_session.answers.onelogin_uid,
+          aud: "YOUR_CLIENT_ID",
+          iat: iat.to_i,
+          exp: exp.to_i,
+          jti: "30642c87-6167-413f-8ace-f1643c59e398",
+          events: {
+            "http://schemas.openid.net/event/backchannel-logout": {}
+          }
+        }
+      end
+
+      let!(:journey_session) do
+        create(
+          :further_education_payments_session,
+          answers:
+        )
+      end
+
+      let(:answers) do
+        build(
+          :further_education_payments_answers,
+          :signed_in_with_one_login
+        )
+      end
+
+      let(:iat) { 3.hours.ago }
+      let(:exp) { 2.hours.ago }
+
+      let(:body_hash) do
+        {
+          "@context": [
+            "https://www.w3.org/ns/did/v1",
+            "https://w3id.org/security/jwk/v1"
+          ],
+          "id": "did:web:identity.integration.account.gov.uk",
+          "assertionMethod": [
+            {
+              "type": "JsonWebKey",
+              "id": "kDfCkfr98AodHydaj2L9cFtncwBcr4DLVzwA8-yzOeg",
+              "controller": "did:web:identity.integration.account.gov.uk",
+              "publicKeyJwk": {
+                "kty": "EC",
+                "crv": "P-256",
+                "x": "NNR2vWlDx3iwJopx3HoETkGTefmEIxuDSC5w35fbsAs",
+                "y": "qcnqxul4WVuYpuplZA7iNhKO3qBF9S9NTWqEg6N7Lrs",
+                "alg": "ES256"
+              }
+            }
+          ]
+        }
+      end
+
+      before do
+        stub_request(:get, "https://identity.integration.account.gov.uk/.well-known/did.json").
+         with(
+           headers: {
+          'Accept'=>'*/*',
+          'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+          'Host'=>'identity.integration.account.gov.uk',
+          'User-Agent'=>'Ruby'
+           }).
+           to_return(status: 200, body: body_hash.to_json, headers: {})
+      end
+
+      it "returns 400" do
+        token.sign!(key: jwk, algorithm: "ES256")
+
+        post "/deauth/onelogin/back-channel",
+          headers: {
+            "Content-Type" => "application/x-www-form-urlencoded"
+          },
+          params: {
+            "logout_token" => token
+          }
+
+        expect(response).to be_bad_request
+      end
+    end
   end
 end
