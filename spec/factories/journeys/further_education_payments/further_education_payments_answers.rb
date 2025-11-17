@@ -124,5 +124,10 @@ FactoryBot.define do
       with_bank_details_validated
       with_payroll_gender
     end
+
+    trait :signed_in_with_one_login do
+      logged_in_with_onelogin { true }
+      onelogin_uid { SecureRandom.uuid }
+    end
   end
 end

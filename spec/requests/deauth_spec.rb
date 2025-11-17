@@ -57,4 +57,124 @@ RSpec.describe "logging out", type: :request do
       expect(response).to redirect_to("/further-education-payments/landing-page")
     end
   end
+
+  context "onelogin back channel" do
+    context "when no such session is found" do
+      let(:jwt_logout_token) { "FAKE_TOKEN" }
+
+      let(:iat) { 2.hours.ago }
+      let(:exp) { 2.hours.from_now }
+
+      let(:decoded_jwt) do
+        [
+          { # payload
+            iss: "https://oidc.integration.account.gov.uk/",
+            sub: "some-uid",
+            aud: "YOUR_CLIENT_ID",
+            iat: iat.to_i,
+            exp: exp.to_i,
+            jti: "30642c87-6167-413f-8ace-f1643c59e398",
+            events: {
+              "http://schemas.openid.net/event/backchannel-logout": {}
+            }
+          },
+          { # headers
+            kid: "644af598b780f54106c2465489765230c4f8373f35f32e18e3e40cc7acff6",
+            alg: "ES256"
+          }
+        ]
+      end
+
+      let(:token_double) do
+        OneLogin::LogoutToken.new(jwt: "FAKE_TOKEN")
+      end
+
+      before do
+        allow(OneLogin::LogoutToken).to receive(:new).and_return(token_double)
+
+        allow(token_double).to receive(:decoded_jwt).and_return(decoded_jwt)
+        allow(token_double).to receive(:user_uid).and_call_original
+      end
+
+      it "returns 200" do
+        post "/deauth/onelogin/back-channel",
+          headers: {
+            "Content-Type" => "application/x-www-form-urlencoded"
+          },
+          params: {
+            "logout_token" => jwt_logout_token
+          }
+
+        expect(response).to be_ok
+      end
+    end
+
+    context "when session exists" do
+      let(:jwt_logout_token) { "FAKE_TOKEN" }
+
+      let!(:journey_session) do
+        create(
+          :further_education_payments_session,
+          answers:
+        )
+      end
+
+      let(:answers) do
+        build(
+          :further_education_payments_answers,
+          :signed_in_with_one_login
+        )
+      end
+
+      let(:iat) { 2.hours.ago }
+      let(:exp) { 2.hours.from_now }
+
+      let(:decoded_jwt) do
+        [
+          { # payload
+            iss: "https://oidc.integration.account.gov.uk/",
+            sub: journey_session.answers.onelogin_uid,
+            aud: "YOUR_CLIENT_ID",
+            iat: iat.to_i,
+            exp: exp.to_i,
+            jti: "30642c87-6167-413f-8ace-f1643c59e398",
+            events: {
+              "http://schemas.openid.net/event/backchannel-logout": {}
+            }
+          },
+          { # headers
+            kid: "644af598b780f54106c2465489765230c4f8373f35f32e18e3e40cc7acff6",
+            alg: "ES256"
+          }
+        ]
+      end
+
+      let(:token_double) do
+        OneLogin::LogoutToken.new(jwt: "FAKE_TOKEN")
+      end
+
+      before do
+        allow(OneLogin::LogoutToken).to receive(:new).and_return(token_double)
+
+        allow(token_double).to receive(:decoded_jwt).and_return(decoded_jwt)
+        allow(token_double).to receive(:user_uid).and_call_original
+      end
+
+      it "return 200 and revokes existing session" do
+        expect {
+          post "/deauth/onelogin/back-channel",
+            headers: {
+              "Content-Type" => "application/x-www-form-urlencoded"
+            },
+            params: {
+              "logout_token" => jwt_logout_token
+            }
+        }.to change { journey_session.reload.expired? }.from(false).to(true)
+
+        expect(response).to be_ok
+      end
+    end
+
+    # need to add index, otherwise full table scan
+  end
 end
