@@ -174,7 +174,5 @@ RSpec.describe "logging out", type: :request do
         expect(response).to be_ok
       end
     end
-
-    # need to add index, otherwise full table scan
   end
 end
