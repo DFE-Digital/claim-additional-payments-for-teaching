@@ -40,6 +40,7 @@ module FurtherEducationPayments
             Journeys::FurtherEducationPayments.configuration.current_academic_year
           )
           .where(eligibility_id: eligibilities.select(:id))
+          .where(academic_year: journey_configuration.current_academic_year)
       end
 
       def current_user
@@ -49,6 +50,12 @@ module FurtherEducationPayments
           DfeSignIn::NullUser.new
       end
       helper_method :current_user
+
+      def current_school
+        return if current_user.current_organisation.ukprn.nil?
+
+        School.find_by(ukprn: current_user.current_organisation.ukprn)
+      end
 
       # FIXME RL: decide if this is the right approach
       # Required to get application layout to render
@@ -67,6 +74,10 @@ module FurtherEducationPayments
         Journey
       end
       helper_method :journey
+
+      def journey_configuration
+        @journey_configuration ||= Journeys::Configuration.find(current_journey_routing_name)
+      end
     end
   end
 end
