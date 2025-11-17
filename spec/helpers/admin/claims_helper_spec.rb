@@ -145,14 +145,14 @@ RSpec.describe Admin::ClaimsHelper do
     after { travel_back }
 
     context "when a claim is approaching its deadline" do
-      let(:claim) { build(:claim, :submitted, submitted_at: 11.weeks.ago) }
+      let(:claim) { build(:claim, :submitted, submitted_at: 17.weeks.ago) }
 
       it { is_expected.to have_content("14 days") }
       it { is_expected.to have_selector(".tag--information") }
     end
 
     context "when a claim has passed its deadline" do
-      let(:claim) { build(:claim, :submitted, submitted_at: 16.weeks.ago) }
+      let(:claim) { build(:claim, :submitted, submitted_at: 22.weeks.ago) }
 
       it { is_expected.to have_content("-21 days") }
       it { is_expected.to have_selector(".tag--alert") }

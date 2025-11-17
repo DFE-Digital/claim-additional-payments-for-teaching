@@ -18,7 +18,7 @@ class Claim < ApplicationRecord
     address_line_4
     postcode
   ].freeze
-  DECISION_DEADLINE = 13.weeks
+  DECISION_DEADLINE = 19.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
   CLAIMANT_MATCHING_ATTRIBUTES = %i[
     national_insurance_number
