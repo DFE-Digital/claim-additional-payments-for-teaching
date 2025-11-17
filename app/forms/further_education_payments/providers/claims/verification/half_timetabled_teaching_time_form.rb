@@ -3,7 +3,6 @@ module FurtherEducationPayments
     module Claims
       module Verification
         class HalfTimetabledTeachingTimeForm < BaseForm
-          include FormHelpers
           include Journeys::FurtherEducationPayments::CoursesHelper
 
           attribute :provider_verification_half_timetabled_teaching_time, :boolean
@@ -29,7 +28,10 @@ module FurtherEducationPayments
 
           def course_descriptions
             claimant_selected_courses.map do |subject_area, course|
-              course_option_description(course, i18n_form_namespace: "#{subject_area}_courses").html_safe
+              I18n.t(
+                "further_education_payments.forms.#{subject_area}_courses.options.#{course}",
+                link: link_for_course("#{subject_area}_courses", course)
+              ).html_safe
             end
           end
 
