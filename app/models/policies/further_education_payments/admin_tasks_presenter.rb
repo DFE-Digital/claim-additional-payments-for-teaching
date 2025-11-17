@@ -108,7 +108,7 @@ module Policies
 
         claimant_answer =
           if eligibility.taught_at_least_one_term.nil?
-            "Not answered"
+            "N/A"
           else
             I18n.t(eligibility.taught_at_least_one_term, scope: :boolean)
           end
