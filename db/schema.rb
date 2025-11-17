@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_14_131856) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_17_144448) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -412,6 +412,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_14_131856) do
     t.string "journey", null: false
     t.jsonb "steps", default: []
     t.datetime "updated_at", null: false
+    t.index "((answers ->> 'onelogin_uid'::text))", name: "sessions_one_login_uid_index"
   end
 
   create_table "local_authorities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
