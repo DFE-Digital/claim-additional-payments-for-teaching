@@ -88,7 +88,7 @@ module FurtherEducationPayments
 
         def journey_configuration
           @journey_configuration ||= Journeys::Configuration
-            .find(Journeys::FurtherEducationPayments::ROUTING_NAME)
+            .find(Journeys::FurtherEducationPayments.routing_name)
         end
       end
     end
