@@ -245,6 +245,37 @@ module Policies
           .first
       end
 
+      def previous_claim_year
+        Claim
+          .by_policy(Policies::FurtherEducationPayments)
+          .where(onelogin_uid: claim.onelogin_uid)
+          .where("academic_year <= ?", (claim.academic_year - 1).to_s)
+          .order(created_at: :desc)
+          .first
+          &.academic_year
+      end
+
+      def approved_claims_for_academic_year(academic_year)
+        Claim
+          .by_policy(Policies::FurtherEducationPayments)
+          .where(onelogin_uid: claim.onelogin_uid)
+          .where(academic_year:)
+          .approved
+      end
+
+      def rejected_claims_for_academic_year_with_start_year_matches_claim_false(academic_year)
+        Claim
+          .by_policy(Policies::FurtherEducationPayments)
+          .where(onelogin_uid: claim.onelogin_uid)
+          .where(academic_year:)
+          .rejected
+          .where(
+            eligibility_id: Policies::FurtherEducationPayments::Eligibility
+              .where(provider_verification_teaching_start_year_matches_claim: false)
+              .select(:id)
+          )
+      end
+
       private
 
       def year_1_claim?
