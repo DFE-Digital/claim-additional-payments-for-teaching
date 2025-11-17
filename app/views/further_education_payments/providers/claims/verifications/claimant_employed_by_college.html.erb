@@ -27,7 +27,11 @@
         :id,
         :name,
         legend: {
-          text: "Does #{@form.provider_name} employ #{@form.claimant_name}?",
+          text: f.object.t(
+            "provider_verification_claimant_employed_by_college.question",
+            provider_name: @form.provider_name,
+            claimant_name: @form.claimant_name
+          ),
           tag: "h1",
           size: "l"
         }

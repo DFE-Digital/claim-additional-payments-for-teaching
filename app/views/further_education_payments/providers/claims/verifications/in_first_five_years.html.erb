@@ -33,9 +33,11 @@
         :id,
         :name,
         legend: {
-          text: "Did #{f.object.claimant_name} start their further " \
-                "education (FE) teaching career in England during " \
-                "#{f.object.claimant_further_education_teaching_start_year}?",
+          text: f.object.t(
+            "provider_verification_teaching_start_year_matches_claim.question",
+            claimant_name: f.object.claimant_name,
+            claimant_further_education_teaching_start_year: f.object.claimant_further_education_teaching_start_year
+          ),
           size: "s",
         }
       ) %>

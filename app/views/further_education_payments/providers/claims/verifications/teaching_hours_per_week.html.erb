@@ -32,9 +32,11 @@
         :id,
         :name,
         legend: {
-          text: "On average, how many hours per week was " \
-          "#{f.object.claimant_name} timetabled to teach at " \
-          "#{f.object.school.name} during the spring term?",
+          text: f.object.t(
+            "provider_verification_teaching_hours_per_week.question",
+            claimant_name: f.object.claimant_name,
+            provider_name: f.object.provider_name
+          ),
           size: "s",
         }
       ) %>

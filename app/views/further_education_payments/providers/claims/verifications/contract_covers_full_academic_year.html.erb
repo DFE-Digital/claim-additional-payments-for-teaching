@@ -34,9 +34,11 @@
         :id,
         :name,
         legend: {
-          text: "Does #{f.object.claimant_name} have a fixed-term contract " \
-                "for the full #{f.object.academic_year.to_s(:long)} " \
-                "academic year?",
+          text: f.object.t(
+            "provider_verification_contract_covers_full_academic_year.question",
+            claimant_name: f.object.claimant_name,
+            academic_year: f.object.academic_year.to_s(:long)
+          ),
           size: "s",
         }
       ) %>

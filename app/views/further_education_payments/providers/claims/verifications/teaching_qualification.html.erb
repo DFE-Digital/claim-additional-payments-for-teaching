@@ -34,7 +34,10 @@
         :id,
         :name,
         legend: {
-          text: "Does #{f.object.claimant_name} have a teaching qualification?",
+          text: f.object.t(
+            "provider_verification_teaching_qualification.question",
+            claimant_name: f.object.claimant_name
+          ),
           size: "s",
         }
       ) %>

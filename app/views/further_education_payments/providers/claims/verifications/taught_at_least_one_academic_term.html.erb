@@ -34,8 +34,11 @@
         :id,
         :name,
         legend: {
-          text: "Has #{f.object.claim.full_name} worked at "\
-                "#{f.object.provider.name} for the full spring term?",
+          text: f.object.t(
+            "provider_verification_taught_at_least_one_academic_term.question",
+            claimant_name: f.object.claimant_name,
+            provider_name: f.object.provider_name
+          ),
           size: "s",
         }
       ) %>

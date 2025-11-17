@@ -34,9 +34,10 @@
         :id,
         :name,
         legend: {
-          text: "Is #{f.object.claimant_name} currently subject to any " \
-                "formal performance measures as a result of continuous poor " \
-                "teaching standards?",
+          text: f.object.t(
+            "provider_verification_performance_measures.question",
+            claimant_name: f.object.claimant_name
+          ),
           size: "s",
         }
       ) %>
@@ -47,8 +48,10 @@
         :id,
         :name,
         legend: {
-          text: "Is #{f.object.claimant_name} currently subject to any " \
-                "disciplinary action?",
+          text: f.object.t(
+            "provider_verification_disciplinary_action.question",
+            claimant_name: f.object.claimant_name
+          ),
           size: "s",
         }
       ) %>
