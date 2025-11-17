@@ -56,7 +56,7 @@ module FurtherEducationPayments
 
         def claims
           @claims ||= Claim
-            .where(eligibility_id: eligibilities.pluck(:id))
+            .where(eligibility_id: eligibilities.select(:id))
             .fe_provider_verified
             .by_academic_year(academic_year)
         end
