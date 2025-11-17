@@ -37,15 +37,6 @@ module FurtherEducationPayments
           approved_eligibilities.sum(:award_amount)
         end
 
-        # not used
-        def amount_paid
-          Payment
-            .confirmed
-            .joins(:claims)
-            .where(claims: claims)
-            .sum(:award_amount)
-        end
-
         def topups
           Topup
             .joins(:claim, :payment)
