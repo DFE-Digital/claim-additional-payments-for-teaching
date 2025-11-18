@@ -86,7 +86,7 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
 
         expect(rows).to include([
           "Contract of employment",
-          "Permanent",
+          "N/A",
           "Fixed-term"
         ])
 
@@ -240,7 +240,7 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
         it do
           is_expected.to eq([
             "Full academic year",
-            "No",
+            "N/A",
             "No"
           ])
         end
@@ -290,7 +290,7 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
         it do
           is_expected.to eq([
             "Taught at least one term",
-            "Yes",
+            "N/A",
             "Yes"
           ])
         end
@@ -309,7 +309,7 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
         it do
           is_expected.to eq([
             "Taught at least one term",
-            "Not answered",
+            "N/A",
             "No"
           ])
         end
