@@ -197,6 +197,20 @@ if Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")
     eligibility = Policies::FurtherEducationPayments::Eligibility.create!(eligibility_attrs)
     Claim.create! claim_attrs.merge(eligibility: eligibility)
   end
+
+  # Year 1 claim with further_education_teaching_start_year=2020
+  eligibility = Policies::FurtherEducationPayments::Eligibility.create!(
+    eligibility_attrs.merge(further_education_teaching_start_year: "2020")
+  )
+  claim = Claim.create! claim_attrs.merge(eligibility: eligibility, academic_year: AcademicYear.current - 1)
+  claim.decisions.create!(approved: true, notes: "Approved from seed file")
+
+  # Year 1 claim with further_education_teaching_start_year=2021
+  eligibility = Policies::FurtherEducationPayments::Eligibility.create!(
+    eligibility_attrs.merge(further_education_teaching_start_year: "2021")
+  )
+  claim = Claim.create! claim_attrs.merge(eligibility: eligibility, academic_year: AcademicYear.current - 1)
+  claim.decisions.create!(approved: true, notes: "Approved from seed file")
 end
 
 if ENV["ENVIRONMENT_NAME"].start_with?("review")

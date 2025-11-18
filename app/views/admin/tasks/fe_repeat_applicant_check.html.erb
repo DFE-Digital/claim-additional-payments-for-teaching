@@ -1,0 +1,25 @@
+<% content_for(:page_title) { page_title("Claim #{@claim.reference} repeat applicant check for #{@claim.policy.short_name}") } %>
+
+<% content_for :back_link do %>
+  <%= govuk_back_link href: admin_claim_tasks_path(@claim) %>
+<% end %>
+
+<%= form_with model: @form, scope: :form, url: root_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+  <%= f.govuk_error_summary %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-l">Repeat applicant check</h2>
+  </div>
+
+  <div class="govuk-grid-column-two-thirds">
+    <% if @form.task.persisted? %>
+      <%= render "task_outcome", task: @form.task %>
+    <% else %>
+      <%= render "form", task_name: "fe_repeat_applicant_check", claim: @claim %>
+    <% end %>
+
+    <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>
+  </div>
+</div>

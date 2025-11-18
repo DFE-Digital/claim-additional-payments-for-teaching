@@ -185,6 +185,7 @@ class Claim < ApplicationRecord
     unverified_eligibilities =
       Policies::FurtherEducationPayments::Eligibility
         .where(provider_verification_completed_at: nil)
+        .where(repeat_applicant_check_passed: true)
 
     where(eligibility_id: unverified_eligibilities.select(:id))
   end

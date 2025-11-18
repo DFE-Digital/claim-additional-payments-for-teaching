@@ -239,6 +239,9 @@ en:
       continuous_employment:
         name: Continuous employment
         title: Check for breaks in employment
+      fe_repeat_applicant_check:
+        name: Repeat applicant check
+        title: Confirm teaching start year matches previous claims
     undo_decision:
       approved: "Undo approval"
       rejected: "Undo rejection"
@@ -859,6 +862,7 @@ en:
           duplicate_claim: "Duplicate claim"
           no_response: "No response"
           no_response_from_employer: "No response from employer"
+          information_mismatch_against_year_1_application: "Information mismatch against year 1 application"
           other: "Other"
       task_questions:
         fe_alternative_verification:
@@ -938,6 +942,8 @@ en:
           title: "Is the claim still valid even though the claimant and provider have matching details?"
         student_loan_plan:
           title: "Does the claimant’s student loan plan match the information we hold about their loan?"
+        fe_repeat_applicant_check:
+          title: "Has a repeat check been performed for this claimant?"
     forms:
       ineligible:
         courses:

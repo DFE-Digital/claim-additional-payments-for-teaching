@@ -25,63 +25,153 @@ RSpec.describe Admin::ClaimsFilterForm, type: :model do
     end
 
     context "when the status is awaiting_provider_verification" do
-      it "returns the expected claims" do
-        claim_awaiting_provider_verification_1 = build(
-          :claim,
-          :submitted,
-          :further_education
-        )
+      context "when FE year 1" do
+        let(:academic_year) { AcademicYear.new(2024) }
 
-        create(
-          :further_education_payments_eligibility,
-          claim: claim_awaiting_provider_verification_1,
-          flagged_as_duplicate: false
-        )
+        it "returns the expected claims" do
+          # Claim 1 - expected
+          claim_awaiting_provider_verification_1 = build(
+            :claim,
+            :submitted,
+            :further_education,
+            academic_year:
+          )
 
-        claim_awaiting_provider_verification_2 = build(
-          :claim,
-          :submitted,
-          :further_education
-        )
+          create(
+            :further_education_payments_eligibility,
+            claim: claim_awaiting_provider_verification_1,
+            flagged_as_duplicate: false
+          )
 
-        create(
-          :further_education_payments_eligibility,
-          claim: claim_awaiting_provider_verification_2,
-          flagged_as_duplicate: true
-        )
+          # Claim 2 - expected - provider form manually sent, so has a note
+          claim_awaiting_provider_verification_2 = build(
+            :claim,
+            :submitted,
+            :further_education,
+            academic_year:
+          )
 
-        create(
-          :note,
-          claim: claim_awaiting_provider_verification_2,
-          label: "provider_verification"
-        )
+          create(
+            :further_education_payments_eligibility,
+            claim: claim_awaiting_provider_verification_2,
+            flagged_as_duplicate: true
+          )
 
-        create(
-          :note,
-          claim: claim_awaiting_provider_verification_2,
-          label: "provider_verification"
-        )
+          create(
+            :note,
+            claim: claim_awaiting_provider_verification_2,
+            label: "provider_verification"
+          )
 
-        _claim_not_awating_provider_verification = build(:claim, :submitted)
+          # Claim 3 - not expected - already verified
+          claim_not_awaiting_provider_verification = build(
+            :claim,
+            :submitted,
+            :further_education,
+            academic_year:
+          )
 
-        create(
-          :further_education_payments_eligibility,
-          :provider_verification_completed
-        )
+          create(
+            :further_education_payments_eligibility,
+            :year_one_verified,
+            claim: claim_not_awaiting_provider_verification,
+            flagged_as_duplicate: false
+          )
 
-        form = described_class.new(
-          session: {},
-          filters: {
-            status: "awaiting_provider_verification"
-          }
-        )
+          form = described_class.new(
+            session: {},
+            filters: {
+              status: "awaiting_provider_verification"
+            }
+          )
 
-        expect(form.claims).to match_array(
-          [
-            claim_awaiting_provider_verification_1,
-            claim_awaiting_provider_verification_2
-          ]
-        )
+          expect(form.claims).to match_array(
+            [
+              claim_awaiting_provider_verification_1,
+              claim_awaiting_provider_verification_2
+            ]
+          )
+        end
+      end
+
+      context "when FE year 2 or onwards" do
+        let(:academic_year) { AcademicYear.current }
+
+        it "returns the expected claims" do
+          # Claim 1 - expected
+          claim_awaiting_provider_verification_1 = build(
+            :claim,
+            :submitted,
+            :further_education,
+            academic_year:
+          )
+
+          create(
+            :further_education_payments_eligibility,
+            claim: claim_awaiting_provider_verification_1,
+            flagged_as_duplicate: false,
+            repeat_applicant_check_passed: true
+          )
+
+          # Claim 2 - not expected, a duplicate
+          claim_awaiting_provider_verification_2 = build(
+            :claim,
+            :submitted,
+            :further_education,
+            academic_year:
+          )
+
+          create(
+            :further_education_payments_eligibility,
+            claim: claim_awaiting_provider_verification_2,
+            flagged_as_duplicate: true,
+            repeat_applicant_check_passed: true
+          )
+
+          # Claim 3 - not expected - repeat_applicant_check_passed failed
+          claim_awaiting_provider_verification_3 = build(
+            :claim,
+            :submitted,
+            :further_education,
+            academic_year:
+          )
+
+          create(
+            :further_education_payments_eligibility,
+            claim: claim_awaiting_provider_verification_3,
+            flagged_as_duplicate: false,
+            repeat_applicant_check_passed: false
+          )
+
+          # Claim 4 - not expected - verified
+          claim_awaiting_provider_verification_3 = build(
+            :claim,
+            :submitted,
+            :further_education,
+            academic_year:
+          )
+
+          create(
+            :further_education_payments_eligibility,
+            :provider_verification_completed,
+            claim: claim_awaiting_provider_verification_3,
+            flagged_as_duplicate: false,
+            repeat_applicant_check_passed: true
+          )
+
+          form = described_class.new(
+            session: {},
+            filters: {
+              status: "awaiting_provider_verification"
+            }
+          )
+
+          expect(form.claims).to match_array(
+            [
+              claim_awaiting_provider_verification_1
+            ]
+          )
+        end
       end
     end
 
