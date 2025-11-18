@@ -82,10 +82,7 @@ module Policies
       def contract_of_employment
         [
           "Contract of employment",
-          I18n.t(
-            eligibility.contract_type,
-            scope: "further_education_payments.forms.contract_type.options"
-          ),
+          "N/A",
           provider_answers.contract_type
         ]
       end
@@ -95,10 +92,7 @@ module Policies
 
         [
           "Full academic year",
-          I18n.t(
-            eligibility.fixed_term_full_year,
-            scope: :boolean
-          ),
+          "N/A",
           provider_answers.contract_covers_full_academic_year
         ]
       end
@@ -106,16 +100,9 @@ module Policies
       def taught_at_least_one_term
         return if eligibility.taught_at_least_one_term.nil? && eligibility.provider_verification_taught_at_least_one_academic_term.nil?
 
-        claimant_answer =
-          if eligibility.taught_at_least_one_term.nil?
-            "N/A"
-          else
-            I18n.t(eligibility.taught_at_least_one_term, scope: :boolean)
-          end
-
         [
           "Taught at least one term",
-          claimant_answer,
+          "N/A",
           provider_answers.taught_at_least_one_academic_term
         ]
       end

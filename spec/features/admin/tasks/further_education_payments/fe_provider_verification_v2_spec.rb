@@ -69,7 +69,7 @@ RSpec.feature "Viewing the FE provider verification year 2 task" do
       )
 
       within_table_row("Contract of employment") do |claimant_answer, provider_answer|
-        expect(claimant_answer).to have_content("Fixed-term")
+        expect(claimant_answer).to have_content("N/A")
         expect(provider_answer).to have_content("Fixed-term")
       end
 
