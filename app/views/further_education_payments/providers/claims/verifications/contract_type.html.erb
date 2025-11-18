@@ -34,7 +34,11 @@
         :name,
         :hint,
         legend: {
-          text: "What type of contract does #{f.object.claimant_name} have directly with #{f.object.provider_name}?",
+          text: f.object.t(
+            "provider_verification_contract_type.question",
+            claimant_name: f.object.claimant_name,
+            provider_name: f.object.provider_name
+          ),
           size: "s",
         }
       ) %>

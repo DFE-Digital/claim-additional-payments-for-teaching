@@ -19,12 +19,46 @@ module FurtherEducationPayments
 
           def contract_type_options
             [
-              Form::Option.new(id: "permanent", name: "Permanent"),
-              Form::Option.new(id: "fixed_term", name: "Fixed-term"),
-              Form::Option.new(id: "variable_hours", name: "Variable hours"),
+              Form::Option.new(
+                id: "permanent",
+                name: t(
+                  %w[
+                    provider_verification_contract_type
+                    options
+                    permanent
+                  ].join(".")
+                )
+              ),
+              Form::Option.new(
+                id: "fixed_term",
+                name: t(
+                  %w[
+                    provider_verification_contract_type
+                    options
+                    fixed_term
+                  ].join(".")
+                )
+              ),
+              Form::Option.new(
+                id: "variable_hours",
+                name: t(
+                  %w[
+                    provider_verification_contract_type
+                    options
+                    variable_hours
+                  ].join(".")
+                )
+              ),
               Form::Option.new(
                 id: "no_direct_contract",
-                name: "Does not currently have a direct contract of employment with #{provider_name}",
+                name: t(
+                  %w[
+                    provider_verification_contract_type
+                    options
+                    no_direct_contract
+                  ].join("."),
+                  provider_name: provider_name
+                ),
                 hint: "For example, they have left #{provider_name} or they are employed through an agency, as a contractor, or through a subsidiary of #{provider_name}."
               )
             ]

@@ -33,34 +33,34 @@
         :provider_verification_claimant_date_of_birth,
         date_of_birth: true,
         legend: {
-          text: "Enter their date of birth",
+          text: f.object.t("provider_verification_claimant_date_of_birth.question"),
           tag: "h2",
           size: "m"
         },
         hint: {
-          text: "For example, 27 3 2007"
+          text: f.object.t("provider_verification_claimant_date_of_birth.hint")
         }
       ) %>
 
       <%= f.govuk_text_field(
         :provider_verification_claimant_postcode,
         label: {
-          text: "Enter their postcode",
+          text: f.object.t("provider_verification_claimant_postcode.question"),
           size: "m"
         },
         hint: {
-          text: "For example ’AA1 2BC’."
+          text: f.object.t("provider_verification_claimant_postcode.hint")
         }
       ) %>
 
       <%= f.govuk_text_field(
         :provider_verification_claimant_national_insurance_number,
         label: {
-          text: "Enter their National Insurance number",
+          text: f.object.t("provider_verification_claimant_national_insurance_number.question"),
           size: "m"
         },
         hint: {
-          text: "For example, AB123456C"
+          text: f.object.t("provider_verification_claimant_national_insurance_number.hint")
         },
         extra_letter_spacing: true
       ) %>
@@ -71,7 +71,10 @@
         :id,
         :name,
         legend: {
-          text: "Do these bank details match what you have for #{f.object.claimant_name}?",
+          text: f.object.t(
+            "provider_verification_claimant_bank_details_match.question",
+            claimant_name: f.object.claimant_name
+          ),
           size: "m"
         }
       ) do %>
@@ -107,7 +110,7 @@
       <%= f.govuk_email_field(
         :provider_verification_claimant_email,
         label: {
-          text: "Email address",
+          text: f.object.t("provider_verification_claimant_email.question"),
         }
       ) %>
 

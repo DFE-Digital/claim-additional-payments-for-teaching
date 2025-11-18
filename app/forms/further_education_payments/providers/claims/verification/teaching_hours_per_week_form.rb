@@ -6,19 +6,55 @@ module FurtherEducationPayments
           TEACHING_HOURS_PER_WEEK_OPTIONS = [
             Form::Option.new(
               id: "more_than_20",
-              name: "20 hours or more per week"
+              name: I18n.t(
+                %w[
+                  further_education_payments_provider
+                  forms
+                  verification
+                  provider_verification_teaching_hours_per_week
+                  options
+                  more_than_20
+                ].join(".")
+              )
             ),
             Form::Option.new(
               id: "more_than_12",
-              name: "12 or more hours per week, but fewer than 20"
+              name: I18n.t(
+                %w[
+                  further_education_payments_provider
+                  forms
+                  verification
+                  provider_verification_teaching_hours_per_week
+                  options
+                  more_than_12
+                ].join(".")
+              )
             ),
             Form::Option.new(
               id: "between_2_5_and_12",
-              name: "2.5 or more hours per week, but fewer than 12"
+              name: I18n.t(
+                %w[
+                  further_education_payments_provider
+                  forms
+                  verification
+                  provider_verification_teaching_hours_per_week
+                  options
+                  between_2_5_and_12
+                ].join(".")
+              )
             ),
             Form::Option.new(
               id: "less_than_2_5",
-              name: "Fewer than 2.5 hours each week"
+              name: I18n.t(
+                %w[
+                  further_education_payments_provider
+                  forms
+                  verification
+                  provider_verification_teaching_hours_per_week
+                  options
+                  less_than_2_5
+                ].join(".")
+              )
             )
           ]
 

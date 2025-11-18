@@ -33,8 +33,11 @@
         :id,
         :name,
         legend: {
-          text: "Is #{f.object.claimant_name} expected to work at " \
-                "#{f.object.provider_name} until the end of the academic year?",
+          text: f.object.t(
+            "provider_verification_continued_employment.question",
+            provider_name: f.object.provider_name,
+            claimant_name: f.object.claimant_name
+          ),
           size: "s",
         }
       ) %>

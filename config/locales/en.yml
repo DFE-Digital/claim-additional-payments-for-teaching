@@ -1315,6 +1315,66 @@ en:
     feedback_email: "FE-targeted.retention-incentive@education.gov.uk"
     support_email_address: "FE-targeted.retention-incentive@education.gov.uk"
     forms:
+      verification:
+        provider_verification_claimant_employed_by_college:
+          question: "Does %{provider_name} employ %{claimant_name}?"
+        provider_verification_claimant_employment_check_declaration:
+          declaration: "To the best of my knowledge, I confirm that the information provided in this form is correct."
+        provider_verification_claimant_date_of_birth:
+          question: "Enter their date of birth"
+          hint: "For example, 27 3 2007"
+        provider_verification_claimant_postcode:
+          question: "Enter their postcode"
+          hint: "For example ’AA1 2BC’."
+        provider_verification_claimant_national_insurance_number:
+          question: "Enter their National Insurance number"
+          hint: "For example, AB123456C"
+        provider_verification_claimant_bank_details_match:
+          question: "Do these bank details match what you have for %{claimant_name}?"
+        provider_verification_claimant_email:
+          question: "Email address"
+        provider_verification_continued_employment:
+          question: "Is %{claimant_name} expected to work at %{provider_name} until the end of the academic year?"
+        provider_verification_contract_covers_full_academic_year:
+          question: "Does %{claimant_name} have a fixed-term contract for the full %{academic_year} academic year?"
+        provider_verification_contract_type:
+          question: "What type of contract does %{claimant_name} have directly with %{provider_name}?"
+          options:
+            permanent: "Permanent"
+            fixed_term: "Fixed-term"
+            variable_hours: "Variable hours"
+            no_direct_contract: "Does not currently have a direct contract of employment with %{provider_name}"
+        provider_verification_half_teaching_hours:
+          question: "Did %{claimant_name} spend at least half of their timetabled teaching hours teaching students on 16 to 19 study programmes, T Levels or 16 to 19 apprenticeships?"
+        provider_verification_half_timetabled_teaching_time:
+          question: "During the spring term, did %{claimant_name} spend at least half of their timetabled teaching hours teaching these courses?"
+        provider_verification_teaching_start_year_matches_claim:
+          question: "Did %{claimant_name} start their further education (FE) teaching career in England during %{claimant_further_education_teaching_start_year}?"
+        provider_verification_not_started_qualification_reasons:
+          question: "%{claimant_name} said last year that they planned to start a teaching qualification within 12 months. They’ve confirmed the same intention in their application this year. Tell us why they have not yet started or finished a teaching qualification"
+        provider_verification_performance_measures:
+          question: "Is %{claimant_name} currently subject to any formal performance measures as a result of continuous poor teaching standards?"
+        provider_verification_disciplinary_action:
+          question: "Is %{claimant_name} currently subject to any disciplinary action?"
+        provider_verification_taught_at_least_one_academic_term:
+          question: "Has %{claimant_name} worked at %{provider_name} for the full spring term?"
+        provider_verification_teaching_hours_per_week:
+          question: "On average, how many hours per week was %{claimant_name} timetabled to teach at %{provider_name} during the spring term?"
+          options:
+            more_than_20: "20 hours or more per week"
+            more_than_12: "12 or more hours per week, but fewer than 20"
+            between_2_5_and_12: "2.5 or more hours per week, but fewer than 12"
+            less_than_2_5: "Fewer than 2.5 hours each week"
+        provider_verification_teaching_qualification:
+          question: "Does %{claimant_name} have a teaching qualification?"
+          options:
+            "yes": "Yes"
+            not_yet: "Not yet, but is enrolled on one"
+            no_but_planned: "No, but is planning to enrol on one"
+            no_not_planned: "No, and has no plan to enrol on one in the next 12 months"
+        provider_verification_teaching_responsibilities:
+          question: "Is %{claimant_name} a member of staff with the responsibilities of a teacher?"
+
       verify_claim:
         title: "Review a targeted retention incentive payment claim"
         declaration_title: "Declaration"

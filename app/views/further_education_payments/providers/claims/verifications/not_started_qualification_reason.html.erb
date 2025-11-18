@@ -8,10 +8,10 @@
   <div class="govuk-grid-column-two-thirds">
     <%= render("verification_header", claim: @form.claim) do %>
       <%= govuk_inset_text(
-        text: "#{@form.claim.full_name} said last year that they planned to " \
-              "start a teaching qualification within 12 months. They’ve " \
-              "confirmed the same intention in their application this year. Tell " \
-              "us why they have not yet started or finished a teaching qualification"
+       text: @form.t(
+         "provider_verification_not_started_qualification_reasons.question",
+         claimant_name: @form.claimant_name
+       )
       ) %>
     <% end %>
 

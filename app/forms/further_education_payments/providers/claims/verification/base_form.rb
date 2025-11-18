@@ -109,6 +109,13 @@ module FurtherEducationPayments
             )
           end
 
+          def t(key, **options)
+            I18n.t(
+              "further_education_payments_provider.forms.verification.#{key}",
+              **options
+            )
+          end
+
           private
 
           def attributes_to_clear

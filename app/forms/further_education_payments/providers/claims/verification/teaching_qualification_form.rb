@@ -6,19 +6,55 @@ module FurtherEducationPayments
           TEACHING_QUALIFICATION_OPTIONS = [
             Form::Option.new(
               id: "yes",
-              name: "Yes"
+              name: I18n.t(
+                %w[
+                  further_education_payments_provider
+                  forms
+                  verification
+                  provider_verification_teaching_qualification
+                  options
+                  yes
+                ].join(".")
+              )
             ),
             Form::Option.new(
               id: "not_yet",
-              name: "Not yet, but is enrolled on one"
+              name: I18n.t(
+                %w[
+                  further_education_payments_provider
+                  forms
+                  verification
+                  provider_verification_teaching_qualification
+                  options
+                  not_yet
+                ].join(".")
+              )
             ),
             Form::Option.new(
               id: "no_but_planned",
-              name: "No, but is planning to enrol on one"
+              name: I18n.t(
+                %w[
+                  further_education_payments_provider
+                  forms
+                  verification
+                  provider_verification_teaching_qualification
+                  options
+                  no_but_planned
+                ].join(".")
+              )
             ),
             Form::Option.new(
               id: "no_not_planned",
-              name: "No, and has no plan to enrol on one in the next 12 months"
+              name: I18n.t(
+                %w[
+                  further_education_payments_provider
+                  forms
+                  verification
+                  provider_verification_teaching_qualification
+                  options
+                  no_not_planned
+                ].join(".")
+              )
             )
           ]
 

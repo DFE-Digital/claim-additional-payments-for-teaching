@@ -31,9 +31,10 @@
         :id,
         :name,
         legend: {
-          text: "Did #{f.object.claimant_name} spend at least half of their " \
-          "timetabled teaching hours teaching students on 16 to 19 study " \
-          "programmes, T Levels or 16 to 19 apprenticeships?",
+          text: f.object.t(
+            "provider_verification_half_teaching_hours.question",
+            claimant_name: f.object.claimant_name
+          ),
           size: "s",
         },
         hint: -> do %>
