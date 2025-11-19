@@ -9,7 +9,46 @@ class OneLogin::LogoutToken
     payload[:sub]
   end
 
+  def valid?
+    encoded_token.verify_claims!(
+      iss:,
+      aud:,
+      iat: true
+    )
+
+    encoded_token.verify!(
+      signature: {
+        algorithm: ["ES256"],
+        key: jwks
+      }
+    )
+
+    true
+  rescue JWT::InvalidIssuerError,
+    JWT::InvalidAudError,
+    JWT::VerificationError,
+    JWT::ExpiredSignature,
+    JWT::InvalidIatError
+    false
+  end
+
+  def invalid?
+    !valid?
+  end
+
   private
+
+  def encoded_token
+    @encoded_token ||= JWT::EncodedToken.new(jwt)
+  end
+
+  def iss
+    ENV["ONELOGIN_SIGN_IN_ISSUER"]
+  end
+
+  def aud
+    ENV["ONELOGIN_SIGN_IN_CLIENT_ID"]
+  end
 
   def payload
     decoded_jwt[0]

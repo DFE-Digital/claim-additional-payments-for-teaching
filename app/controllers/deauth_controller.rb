@@ -16,6 +16,8 @@ class DeauthController < ApplicationController
   end
 
   def onelogin_back_channel
+    return head :bad_request if logout_token.invalid?
+
     active_sessions = Journeys::Session.where("answers->>'onelogin_uid' = ?", logout_token.user_uid).not_expired
     active_sessions.each(&:expire!)
 
@@ -30,7 +32,7 @@ class DeauthController < ApplicationController
   private
 
   def logout_token
-    OneLogin::LogoutToken.new(jwt: logout_jwt)
+    @logout_token ||= OneLogin::LogoutToken.new(jwt: logout_jwt)
   end
 
   def logout_jwt
