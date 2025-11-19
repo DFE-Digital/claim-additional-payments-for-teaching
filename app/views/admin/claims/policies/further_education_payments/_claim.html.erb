@@ -65,14 +65,38 @@
       }
     ) %>
 
-    <% if admin_answers_presenter.provider_verification.present? %>
-      <%= render(
-        "admin/claims/answer_section",
-        {
-          heading: "Provider verification",
-          answers: admin_answers_presenter.provider_verification
-        }
-      ) %>
+    <% if admin_answers_presenter.year_1_claim? %>
+      <% if admin_answers_presenter.provider_verification.present? %>
+        <%= render(
+          "admin/claims/answer_section",
+          {
+            heading: "Provider verification",
+            answers: admin_answers_presenter.provider_verification
+          }
+        ) %>
+      <% end %>
+    <% else %>
+      <% presenter = Policies::FurtherEducationPayments::EligibilityAdminProviderAnswersPresenter.new(@claim.eligibility) %>
+
+      <% if presenter.provider_employment_check.present? %>
+        <%= render(
+          "admin/claims/answer_section",
+          {
+            heading: "Provider employment check",
+            answers: presenter.provider_employment_check
+          }
+        ) %>
+      <% end %>
+
+      <% if presenter.provider_details.present? %>
+        <%= render(
+          "admin/claims/answer_section",
+          {
+            heading: "Provider verification",
+            answers: presenter.provider_details
+          }
+        ) %>
+      <% end %>
     <% end %>
 
     <%= render(
