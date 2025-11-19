@@ -92,10 +92,6 @@ module AutomatedChecks
           @failed_checks << "disciplinary_action"
         end
 
-        if eligibility.provider_verification_contract_type != eligibility.contract_type
-          @failed_checks << "contract_of_employment_mismatch"
-        end
-
         if eligibility.provider_verification_contract_type == "no_direct_contract"
           @failed_checks << "no_direct_contract_of_employment"
         end

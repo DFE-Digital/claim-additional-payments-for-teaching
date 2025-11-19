@@ -121,25 +121,6 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
         end
       end
 
-      context "when the provider and claimant contracted of employments don't match" do
-        let(:eligibility) do
-          build(
-            :further_education_payments_eligibility,
-            provider_verification_contract_type: "fixed_term",
-            contract_type: "permanent"
-          )
-        end
-
-        it "persists task as failed" do
-          expect {
-            subject.perform
-          }.to change(Task, :count).by(1)
-
-          expect(Task.last.passed?).to be_falsey
-          expect(Task.last.data).to eq({"failed_checks" => ["contract_of_employment_mismatch"]})
-        end
-      end
-
       context "when the provider says the claimant does not plan to enroll on a qualification" do
         let(:eligibility) do
           build(
