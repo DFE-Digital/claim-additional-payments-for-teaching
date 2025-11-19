@@ -39,9 +39,8 @@ module FurtherEducationPayments
 
         def topups
           Topup
-            .joins(:claim, :payment)
+            .joins(:claim)
             .where(claim: claims)
-            .where("payments.confirmation_id IS NOT NULL")
             .sum(:award_amount)
         end
 
