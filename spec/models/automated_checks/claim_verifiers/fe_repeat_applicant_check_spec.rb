@@ -84,11 +84,48 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeRepeatApplicantCheck do
       end
     end
 
+    context "when previously_start_year_matches_claim_false is flagged" do
+      let(:eligibility) do
+        build(
+          :further_education_payments_eligibility,
+          flagged_as_mismatch_on_teaching_start_year: false,
+          flagged_as_previously_start_year_matches_claim_false: true
+        )
+      end
+
+      let!(:previous_ay_claim) do
+        create(
+          :claim,
+          :further_education,
+          :rejected,
+          academic_year: academic_year - 1,
+          onelogin_uid: claim.onelogin_uid,
+          eligibility: create(
+            :further_education_payments_eligibility,
+            provider_verification_teaching_start_year_matches_claim: false
+          )
+        )
+      end
+
+      it "persists task with passed=nil and creates a note" do
+        expect {
+          subject.perform
+        }.to change(Note, :count).by(1)
+          .and not_change(Task, :count)
+
+        expect(last_note.body).to include("Claimant was previously rejected in 2024/2025")
+        expect(last_note.body).to include("over 5 years of employment in Further Education")
+        expect(last_note.body).to include("claim reference(s): #{previous_ay_claim.reference}")
+        expect(claim.reload.eligibility.repeat_applicant_check_passed).to be_nil
+      end
+    end
+
     context "when teaching start year mismatch is not flagged" do
       let(:eligibility) do
         build(
           :further_education_payments_eligibility,
-          flagged_as_mismatch_on_teaching_start_year: false
+          flagged_as_mismatch_on_teaching_start_year: false,
+          flagged_as_previously_start_year_matches_claim_false: false
         )
       end
 
