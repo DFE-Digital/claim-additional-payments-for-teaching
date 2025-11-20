@@ -39,12 +39,6 @@ module FurtherEducationPayments
       end
       helper_method :current_user
 
-      def current_school
-        return if current_user.current_organisation.ukprn.nil?
-
-        School.find_by(ukprn: current_user.current_organisation.ukprn)
-      end
-
       def current_provider
         @current_provider ||= Policies::FurtherEducationPayments::EligibleFeProvider.find_by(
           ukprn: current_user.current_organisation.ukprn
