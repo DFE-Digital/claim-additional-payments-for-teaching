@@ -37,9 +37,7 @@ module Policies
         where(file_upload: FileUpload.latest_version_for(EligibleFeProvider, academic_year))
       }
 
-      has_one :school, ->(eligible_fe_provider) do
-        where("schools.ukprn::integer = ?", eligible_fe_provider.ukprn.to_i)
-      end,
+      has_one :school,
         primary_key: :ukprn,
         foreign_key: :ukprn,
         class_name: "School"
