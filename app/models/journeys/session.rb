@@ -51,6 +51,10 @@ module Journeys
       !expired?
     end
 
+    def expire!
+      update(expired: true)
+    end
+
     def journey_class
       Journeys.for_routing_name(journey)
     end
