@@ -5,6 +5,9 @@ production: &production
   daily_entity_table_check:
     class: DailyEntityTableCheckJob
     schedule: "30 0 * * *" # Every day at 00:30
+  delete_pii_from_old_claims:
+    class: DeletePersonalDataFromOldClaimsJob
+    schedule: "30 0 * * 0"
   user_data_importer:
     class: DfeSignIn::UserDataImporterJob
     schedule: "0 2 * * *"
