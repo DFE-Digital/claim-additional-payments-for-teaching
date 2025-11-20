@@ -173,14 +173,6 @@ class Claim < ApplicationRecord
     by_policies(Policies.all.select { |p| p.require_in_progress_update_emails? })
   }
 
-  scope :fe_provider_verified, -> do
-    verified_eligibilities =
-      Policies::FurtherEducationPayments::Eligibility
-        .where.not(provider_verification_completed_at: nil)
-
-    where(eligibility_id: verified_eligibilities.select(:id))
-  end
-
   def hold!(reason:, user:)
     if holdable? && !held?
       self.class.transaction do
