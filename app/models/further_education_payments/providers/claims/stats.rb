@@ -2,10 +2,10 @@ module FurtherEducationPayments
   module Providers
     module Claims
       class Stats
-        attr_reader :school
+        attr_reader :provider
 
-        def initialize(school:)
-          @school = school
+        def initialize(provider:)
+          @provider = provider
         end
 
         def rejected_count
@@ -45,15 +45,9 @@ module FurtherEducationPayments
         end
 
         def claims
-          @claims ||= Claim
-            .where(eligibility_id: eligibilities.select(:id))
-            .fe_provider_verified
-            .by_academic_year(academic_year)
-        end
-
-        def eligibilities
-          @eligibilities ||= Policies::FurtherEducationPayments::Eligibility
-            .where(school:)
+          @claims ||= provider
+            .claims.by_academic_year(academic_year)
+            .verified
         end
 
         def pending_decision

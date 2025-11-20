@@ -8,7 +8,7 @@ module FurtherEducationPayments
         @all_claims = scope.includes(:eligibility)
         @pagy, @claims = pagy(scope)
         @stats = FurtherEducationPayments::Providers::Claims::Stats
-          .new(school: current_school)
+          .new(provider: current_provider)
       end
 
       def show
