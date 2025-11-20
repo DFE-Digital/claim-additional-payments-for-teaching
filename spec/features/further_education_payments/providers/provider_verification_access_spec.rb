@@ -9,6 +9,7 @@ RSpec.feature "Provider verification access control" do
     create(
       :school,
       :further_education,
+      :fe_eligible,
       name: "Springfield College",
       ukprn: "12345678"
     )
@@ -18,6 +19,7 @@ RSpec.feature "Provider verification access control" do
     create(
       :school,
       :further_education,
+      :fe_eligible,
       name: "Shelbyville College",
       ukprn: "87654321"
     )
@@ -167,10 +169,7 @@ RSpec.feature "Provider verification access control" do
       )
 
       expect(page).to(
-        have_content(
-          "The organisation you have used to log in to DfE Sign-in does not " \
-          "match the organisation in the claim."
-        )
+        have_content("You do not have access to this service")
       )
     end
   end

@@ -23,24 +23,18 @@ module FurtherEducationPayments
             reason: :incorrect_role
           )
         end
+
+        unless current_provider
+          redirect_to further_education_payments_providers_authorisation_failure_path(
+            reason: :no_service_access
+          )
+        end
       end
 
       def claim_scope
-        eligibilities = Policies::FurtherEducationPayments::Eligibility
-          .joins(:school)
-          .merge(
-            School
-              .where.not(ukprn: nil)
-              .where(ukprn: current_user.current_organisation.ukprn)
-          )
-
-        Claim
-          .by_policy(Policies::FurtherEducationPayments)
-          .by_academic_year(
-            Journeys::FurtherEducationPayments.configuration.current_academic_year
-          )
-          .where(eligibility_id: eligibilities.select(:id))
-          .where(academic_year: journey_configuration.current_academic_year)
+        current_provider.claims.by_academic_year(
+          Journeys::FurtherEducationPayments.configuration.current_academic_year
+        )
       end
 
       def current_user
@@ -55,6 +49,12 @@ module FurtherEducationPayments
         return if current_user.current_organisation.ukprn.nil?
 
         School.find_by(ukprn: current_user.current_organisation.ukprn)
+      end
+
+      def current_provider
+        @current_provider ||= Policies::FurtherEducationPayments::EligibleFeProvider.find_by(
+          ukprn: current_user.current_organisation.ukprn
+        )
       end
 
       # FIXME RL: decide if this is the right approach

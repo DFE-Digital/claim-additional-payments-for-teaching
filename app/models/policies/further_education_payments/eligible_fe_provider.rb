@@ -24,6 +24,51 @@ module Policies
           end
         end
       end
+
+      def claims
+        Claim
+          .joins(
+            <<~SQL
+              INNER JOIN further_education_payments_eligibilities
+              ON further_education_payments_eligibilities.id = claims.eligibility_id
+            SQL
+          )
+          .merge(Eligibility.where(school_id: school.id))
+      end
+
+      def claims_overdue_verification
+        unverified_claims.where(claims: {created_at: ..2.weeks.ago})
+      end
+
+      def claims_not_started_verification
+        unverified_claims.merge(Eligibility.where(provider_verification_started_at: nil))
+      end
+
+      def claims_not_started_and_overdue_verification
+        claims_not_started_verification.where(claims: {created_at: ..2.weeks.ago})
+      end
+
+      def claims_in_progress
+        unverified_claims.merge(Eligibility.where.not(provider_verification_started_at: nil))
+      end
+
+      def claims_in_progress_and_overdue_verification
+        claims_in_progress.where(claims: {created_at: ..2.weeks.ago})
+      end
+
+      def unverified_claims
+        claims.fe_provider_unverified
+      end
+
+      def name
+        school.name
+      end
+
+      private
+
+      def school
+        School.where("schools.ukprn::integer = ?", ukprn.to_i).first
+      end
     end
   end
 end

@@ -108,7 +108,7 @@ class Claim < ApplicationRecord
   scope :by_policies_for_journey, ->(journey) { by_policies(journey.policies) }
   scope :by_academic_year, ->(academic_year) { where(academic_year: academic_year) }
   scope :after_academic_year, ->(academic_year) do
-    where("academic_year > ?", academic_year.to_s)
+    where("claims.academic_year > ?", academic_year.to_s)
   end
   scope :assigned_to_team_member, ->(service_operator_id) { where(assigned_to_id: service_operator_id) }
   scope :by_claims_team_member, ->(service_operator_id, status) do
