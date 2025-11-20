@@ -3,7 +3,7 @@ module FurtherEducationPayments
     module Claims
       class InformationController < BaseController
         def show
-          @claim = claim_scope.find(params[:claim_id])
+          @claim = current_provider.claims.find(params[:claim_id])
 
           case params[:information]
           when "progress_saved"

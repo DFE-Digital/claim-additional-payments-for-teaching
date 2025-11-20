@@ -123,9 +123,9 @@ module FurtherEducationPayments
         end
 
         def claim
-          @claim ||= claim_scope
-            .includes(:eligibility)
-            .find(params[:claim_id])
+          @claim ||= current_provider.claims.by_academic_year(
+            Journeys::FurtherEducationPayments.configuration.current_academic_year
+          ).includes(:eligibility).find(params[:claim_id])
         end
       end
     end

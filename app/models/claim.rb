@@ -108,7 +108,7 @@ class Claim < ApplicationRecord
   scope :by_policies_for_journey, ->(journey) { by_policies(journey.policies) }
   scope :by_academic_year, ->(academic_year) { where(academic_year: academic_year) }
   scope :after_academic_year, ->(academic_year) do
-    where("claims.academic_year > ?", academic_year.to_s)
+    where("academic_year > ?", academic_year.to_s)
   end
   scope :assigned_to_team_member, ->(service_operator_id) { where(assigned_to_id: service_operator_id) }
   scope :by_claims_team_member, ->(service_operator_id, status) do
@@ -179,15 +179,6 @@ class Claim < ApplicationRecord
         .where.not(provider_verification_completed_at: nil)
 
     where(eligibility_id: verified_eligibilities.select(:id))
-  end
-
-  scope :fe_provider_unverified, -> do
-    unverified_eligibilities =
-      Policies::FurtherEducationPayments::Eligibility
-        .where(provider_verification_completed_at: nil)
-        .where(repeat_applicant_check_passed: true)
-
-    where(eligibility_id: unverified_eligibilities.select(:id))
   end
 
   def hold!(reason:, user:)
