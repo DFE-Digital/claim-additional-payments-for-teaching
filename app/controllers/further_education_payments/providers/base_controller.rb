@@ -31,12 +31,6 @@ module FurtherEducationPayments
         end
       end
 
-      def claim_scope
-        current_provider.claims.by_academic_year(
-          Journeys::FurtherEducationPayments.configuration.current_academic_year
-        )
-      end
-
       def current_user
         @current_user ||= DfeSignIn::User
           .not_deleted

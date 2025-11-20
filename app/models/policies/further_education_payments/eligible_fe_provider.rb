@@ -10,6 +10,13 @@ module Policies
           )
         end
 
+        def verified
+          merge(
+            Policies::FurtherEducationPayments::Eligibility
+              .where.not(provider_verification_completed_at: nil)
+          )
+        end
+
         def verification_overdue
           where(claims: {created_at: ..2.weeks.ago})
         end
