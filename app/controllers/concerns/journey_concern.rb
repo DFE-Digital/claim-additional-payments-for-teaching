@@ -25,10 +25,6 @@ module JourneyConcern
     journey_session&.answers
   end
 
-  def eligible_claim_in_progress?
-    journey_session.present? && !journey::EligibilityChecker.new(journey_session: journey_session).ineligible?
-  end
-
   def clear_journey_session!
     session.delete(journey_session_key)
     @journey_session = nil
