@@ -9,6 +9,12 @@ class School < ApplicationRecord
   belongs_to :local_authority_district
   has_many :targeted_retention_incentive_payments_awards, primary_key: :urn, foreign_key: :school_urn, dependent: :destroy, inverse_of: :school, class_name: "Policies::TargetedRetentionIncentivePayments::Award"
 
+  has_many :further_education_payments_eligibilities,
+    foreign_key: :school_id,
+    dependent: :nullify,
+    inverse_of: :school,
+    class_name: "Policies::FurtherEducationPayments::Eligibility"
+
   validates :urn, presence: true
   validates :name, presence: true
   validates :phase, presence: true

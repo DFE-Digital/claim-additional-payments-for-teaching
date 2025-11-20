@@ -1,12 +1,51 @@
 module Policies
   module FurtherEducationPayments
     class EligibleFeProvider < ApplicationRecord
+      module ClaimScopes
+        def unverified
+          merge(
+            Policies::FurtherEducationPayments::Eligibility
+              .where(provider_verification_completed_at: nil)
+              .where(repeat_applicant_check_passed: true)
+          )
+        end
+
+        def verification_overdue
+          where(claims: {created_at: ..2.weeks.ago})
+        end
+
+        def verification_not_started
+          merge(Eligibility.where(provider_verification_started_at: nil))
+        end
+
+        def verification_in_progress
+          merge(Eligibility.where.not(provider_verification_started_at: nil))
+        end
+      end
+
       attribute :academic_year, AcademicYear::Type.new
       belongs_to :file_upload
 
       scope :by_academic_year, ->(academic_year) {
         where(file_upload: FileUpload.latest_version_for(EligibleFeProvider, academic_year))
       }
+
+      has_one :school, ->(eligible_fe_provider) do
+        where("schools.ukprn::integer = ?", eligible_fe_provider.ukprn.to_i)
+      end,
+        primary_key: :ukprn,
+        foreign_key: :ukprn,
+        class_name: "School"
+
+      has_many :eligibilities,
+        class_name: "Policies::FurtherEducationPayments::Eligibility",
+        through: :school,
+        source: :further_education_payments_eligibilities
+
+      has_many :claims,
+        -> { extending ClaimScopes },
+        through: :eligibilities,
+        source: :claim
 
       validates :primary_key_contact_email_address,
         presence: true,
@@ -25,49 +64,8 @@ module Policies
         end
       end
 
-      def claims
-        Claim
-          .joins(
-            <<~SQL
-              INNER JOIN further_education_payments_eligibilities
-              ON further_education_payments_eligibilities.id = claims.eligibility_id
-            SQL
-          )
-          .merge(Eligibility.where(school_id: school.id))
-      end
-
-      def claims_overdue_verification
-        unverified_claims.where(claims: {created_at: ..2.weeks.ago})
-      end
-
-      def claims_not_started_verification
-        unverified_claims.merge(Eligibility.where(provider_verification_started_at: nil))
-      end
-
-      def claims_not_started_and_overdue_verification
-        claims_not_started_verification.where(claims: {created_at: ..2.weeks.ago})
-      end
-
-      def claims_in_progress
-        unverified_claims.merge(Eligibility.where.not(provider_verification_started_at: nil))
-      end
-
-      def claims_in_progress_and_overdue_verification
-        claims_in_progress.where(claims: {created_at: ..2.weeks.ago})
-      end
-
-      def unverified_claims
-        claims.fe_provider_unverified
-      end
-
       def name
         school.name
-      end
-
-      private
-
-      def school
-        School.where("schools.ukprn::integer = ?", ukprn.to_i).first
       end
     end
   end

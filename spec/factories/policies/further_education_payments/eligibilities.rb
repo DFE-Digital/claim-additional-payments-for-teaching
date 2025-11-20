@@ -153,6 +153,10 @@ FactoryBot.define do
       provider_verification_continued_employment { true }
     end
 
+    trait :provider_verification_started do
+      provider_verification_started_at { Time.zone.now }
+    end
+
     trait :provider_verification_completed do
       provider_verifiable
       provider_verification_completed_at { Time.zone.now }
