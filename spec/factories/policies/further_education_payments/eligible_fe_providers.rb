@@ -10,5 +10,15 @@ FactoryBot.define do
       FileUpload.latest_version_for(Policies::FurtherEducationPayments::EligibleFeProvider, academic_year).first ||
         create(:file_upload, target_data_model: Policies::FurtherEducationPayments::EligibleFeProvider.to_s, academic_year: academic_year.to_s)
     }
+
+    trait :with_dsi_bypass_ukprn do
+      ukprn { 10000952 }
+    end
+
+    trait :with_school do
+      after(:create) do |eligible_fe_provider|
+        create(:school, ukprn: eligible_fe_provider.ukprn)
+      end
+    end
   end
 end

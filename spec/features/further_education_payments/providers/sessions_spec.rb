@@ -5,6 +5,7 @@ RSpec.describe "Provider session and authentication" do
     allow(DfESignIn).to receive(:bypass?).and_return(true)
 
     create(:journey_configuration, :further_education_payments)
+    create(:eligible_fe_provider, :with_school, :with_dsi_bypass_ukprn)
   end
 
   scenario "when authed can visit auth walled areas", js: true do
