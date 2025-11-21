@@ -83,7 +83,7 @@ module DfeSignIn
 
     def self.options_for_select
       not_deleted
-        .where(role_codes: ["teacher_payments_access"])
+        .where("role_codes @> ?", "{teacher_payments_access}")
         .where(user_type: "admin")
         .order(email: :asc)
         .collect do |user|
