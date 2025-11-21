@@ -17,7 +17,7 @@
 
     <%= form.govuk_select(
       :allocate_claim_count,
-      options_for_select([5, 10, 25], params[:allocate_claim_count] || 25),
+      options_for_select([1, 5, 10, 25], params[:allocate_claim_count] || 25),
       label: { text: "Number of claims:" }
     ) %>
 
