@@ -22,7 +22,10 @@ production: &production
     schedule: "0 8 * * *" # Daily at 8am
   fe_provider_overdue_chser_emails:
     class: FurtherEducationPayments::Providers::OverdueChaserEmailJob
-    schedule: "0 9 * * *" # Dails at 9am
+    schedule: "0 9 * * *" # Daily at 9am
+  fe_provider_weekly_summary_emails:
+    class: FurtherEducationPayments::Providers::WeeklyUpdateEmailJob
+    schedule: "0 9 * * 1" # Weekly on Mondays at 9am
   heartbeat:
     class: HeartbeatJob
     schedule: "* * * * *"
