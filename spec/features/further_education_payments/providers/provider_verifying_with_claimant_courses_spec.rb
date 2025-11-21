@@ -9,6 +9,7 @@ RSpec.feature "Provider verifying claims" do
     fe_provider = create(
       :school,
       :further_education,
+      :fe_eligible,
       name: "Springfield College"
     )
 
@@ -191,6 +192,7 @@ RSpec.feature "Provider verifying claims" do
     fe_provider = create(
       :school,
       :further_education,
+      :fe_eligible,
       name: "Springfield College"
     )
 

@@ -1,10 +1,10 @@
 require "rails_helper"
 
 RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
-  let(:school) { create(:school) }
-  let(:other_school) { create(:school) }
+  let(:provider) { create(:eligible_fe_provider, :with_school) }
+  let(:other_provider) { create(:eligible_fe_provider, :with_school) }
 
-  subject { described_class.new(school:) }
+  subject { described_class.new(provider: provider) }
 
   let!(:journey_configuration) do
     create(:journey_configuration, :further_education_payments)
@@ -15,7 +15,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
       eligibility = create(
         :further_education_payments_eligibility,
         :provider_verification_completed,
-        school:
+        school: provider.school
       )
 
       create(
@@ -34,7 +34,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
       eligibility = create(
         :further_education_payments_eligibility,
         :provider_verification_completed,
-        school:
+        school: provider.school
       )
 
       create(
@@ -53,7 +53,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
       eligibility = create(
         :further_education_payments_eligibility,
         :provider_verification_completed,
-        school:
+        school: provider.school
       )
 
       create(
@@ -72,7 +72,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
       eligibility = create(
         :further_education_payments_eligibility,
         :provider_verification_completed,
-        school: other_school
+        school: other_provider.school
       )
 
       create(
@@ -90,7 +90,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
       eligibility = create(
         :further_education_payments_eligibility,
         :provider_verification_completed,
-        school:
+        school: provider.school
       )
 
       create(
@@ -110,7 +110,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
       eligibility = create(
         :further_education_payments_eligibility,
         :provider_verification_completed,
-        school:
+        school: provider.school
       )
 
       create(
@@ -129,7 +129,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
       eligibility = create(
         :further_education_payments_eligibility,
         :provider_verification_completed,
-        school:
+        school: provider.school
       )
 
       create(
@@ -148,7 +148,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
       eligibility = create(
         :further_education_payments_eligibility,
         :provider_verification_completed,
-        school:
+        school: provider.school
       )
 
       create(
@@ -167,7 +167,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
       eligibility = create(
         :further_education_payments_eligibility,
         :provider_verification_completed,
-        school: other_school
+        school: other_provider.school
       )
 
       create(
@@ -185,7 +185,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
       eligibility = create(
         :further_education_payments_eligibility,
         :provider_verification_completed,
-        school:
+        school: provider.school
       )
 
       create(
@@ -205,7 +205,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
       eligibility = create(
         :further_education_payments_eligibility,
         :provider_verification_completed,
-        school:
+        school: provider.school
       )
 
       create(
@@ -222,7 +222,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
       eligibility = create(
         :further_education_payments_eligibility,
         :provider_verification_completed,
-        school: other_school
+        school: other_provider.school
       )
 
       create(
@@ -239,7 +239,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
       eligibility = create(
         :further_education_payments_eligibility,
         :provider_verification_completed,
-        school:
+        school: provider.school
       )
 
       create(
@@ -253,7 +253,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
       eligibility = create(
         :further_education_payments_eligibility,
         :provider_verification_completed,
-        school:
+        school: provider.school
       )
 
       create(
@@ -270,7 +270,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
     it "excludes unverified claims" do
       eligibility = create(
         :further_education_payments_eligibility,
-        school:
+        school: provider.school
       )
 
       create(
@@ -297,7 +297,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
           :further_education_payments_eligibility,
           :provider_verification_completed,
           :with_award_amount,
-          school:
+          school: provider.school
         )
 
         create(
@@ -318,7 +318,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
           :further_education_payments_eligibility,
           :provider_verification_completed,
           :with_award_amount,
-          school:
+          school: provider.school
         )
 
         claim = create(

@@ -185,6 +185,14 @@ module Policies
         Policies::FurtherEducationPayments.verification_overdue?(claim)
       end
 
+      def verification_due_date
+        Policies::FurtherEducationPayments.verification_due_date_for_claim(claim)
+      end
+
+      def verification_expiry_date
+        Policies::FurtherEducationPayments.verification_expiry_date_for_claim(claim)
+      end
+
       def provider_verification_selected_at_least_one_eligible_course?
         [
           provider_verification_building_construction_courses,
