@@ -1,6 +1,7 @@
 module FeatureHelpers
   def start_student_loans_claim
-    visit new_claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name)
+    visit Journeys::TeacherStudentLoanReimbursement.start_page_url
+    click_on "Start now"
     skip_tid
     choose_qts_year
     Claim.by_policy(Policies::StudentLoans).order(:created_at).last

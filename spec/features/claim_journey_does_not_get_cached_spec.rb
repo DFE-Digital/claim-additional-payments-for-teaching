@@ -26,6 +26,6 @@ RSpec.feature "Claim journey does not get cached" do
     )
 
     expect(page).to_not have_text(journey_session.answers.first_name)
-    expect(page).to have_text("Use DfE Identity to sign in")
+    expect(page).to have_text("Claim back student loan repayments if you’re a teacher")
   end
 end

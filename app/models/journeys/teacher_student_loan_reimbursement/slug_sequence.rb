@@ -75,7 +75,7 @@ module Journeys
         if Rails.env.production?
           "https://www.gov.uk/guidance/teachers-claim-back-your-student-loan-repayments"
         else
-          "/student-loans/claim"
+          Rails.application.routes.url_helpers.landing_page_path("student-loans")
         end
       end
 

@@ -187,7 +187,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     # Check we can't skip to pages in middle of page sequence after claim is submitted
     visit claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name, "still-teaching")
-    expect(page).to have_current_path("/#{Journeys::TeacherStudentLoanReimbursement.routing_name}/sign-in-or-continue")
+    expect(page).to have_current_path("/#{Journeys::TeacherStudentLoanReimbursement.routing_name}/landing-page")
   end
 
   [
