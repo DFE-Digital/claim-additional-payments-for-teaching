@@ -91,7 +91,8 @@ RSpec.describe FurtherEducationPayments::Providers::WeeklyUpdateEmailJob, type: 
       number_overdue: 3,
       number_in_progress: 5,
       number_not_started: 10,
-      number_overall: 15
+      number_overall: 15,
+      link_to_provider_dashboard: "http://www.example.com/further-education-payments/providers/claims"
     )
   end
 
