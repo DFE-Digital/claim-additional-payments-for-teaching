@@ -16,7 +16,10 @@ class FurtherEducationPaymentsMailer < ApplicationMailer
         provider_name: provider_name,
         claimant_name: claimant_name,
         claim_reference: claim_reference,
-        expiry_date: expiry_date
+        expiry_date: expiry_date,
+        link_to_provider_dashboard: further_education_payments_providers_claims_url(
+          host: ENV.fetch("CANONICAL_HOSTNAME")
+        )
       }
     )
   end
@@ -46,7 +49,10 @@ class FurtherEducationPaymentsMailer < ApplicationMailer
         number_overdue: number_overdue,
         number_in_progress: number_in_progress,
         number_not_started: number_not_started,
-        number_overall: number_overall
+        number_overall: number_overall,
+        link_to_provider_dashboard: further_education_payments_providers_claims_url(
+          host: ENV.fetch("CANONICAL_HOSTNAME")
+        )
       }
     )
   end

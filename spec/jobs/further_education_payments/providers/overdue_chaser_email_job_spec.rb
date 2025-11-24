@@ -120,7 +120,8 @@ RSpec.describe FurtherEducationPayments::Providers::OverdueChaserEmailJob, type:
     described_class.new.perform
 
     expect(provider.primary_key_contact_email_address).to have_received_email(
-      "ad2d4486-4099-414b-a3c4-c0653510bc6e"
+      "ad2d4486-4099-414b-a3c4-c0653510bc6e",
+      link_to_provider_dashboard: "http://www.example.com/further-education-payments/providers/claims"
     )
   end
 end
