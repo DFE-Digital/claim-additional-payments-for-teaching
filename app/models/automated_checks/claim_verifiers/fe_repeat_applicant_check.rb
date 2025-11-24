@@ -19,6 +19,11 @@ module AutomatedChecks
             create_start_year_mismatch_note
           end
 
+          if previously_start_year_matches_claim_false?
+            passed = nil
+            create_start_year_matches_claim_false_note
+          end
+
           if passed
             create_task(passed:)
             claim.eligibility.update!(repeat_applicant_check_passed: true)
@@ -67,8 +72,31 @@ module AutomatedChecks
         )
       end
 
+      def create_start_year_matches_claim_false_note
+        eligibility = claim.eligibility
+        previous_claim_year = eligibility.previous_claim_year
+
+        claims = eligibility.rejected_claims_for_academic_year_with_start_year_matches_claim_false(
+          previous_claim_year
+        )
+
+        body = "Claimant was previously rejected in #{claims.first.academic_year} following provider verification indicating " \
+          "over 5 years of employment in Further Education with claim reference(s): #{claims.pluck(:reference).join(", ")}"
+
+        claim.notes.create!(
+          {
+            body: body,
+            label: TASK_NAME
+          }
+        )
+      end
+
       def teaching_start_year_mismatch?
         !!claim.eligibility.flagged_as_mismatch_on_teaching_start_year
+      end
+
+      def previously_start_year_matches_claim_false?
+        !!claim.eligibility.flagged_as_previously_start_year_matches_claim_false
       end
     end
   end
