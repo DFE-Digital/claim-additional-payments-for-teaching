@@ -15,7 +15,29 @@ class DeauthController < ApplicationController
     redirect_to Journeys.for_routing_name(params[:state])::SlugSequence.signed_out_path
   end
 
+  def onelogin_back_channel
+    return head :bad_request if logout_token.invalid?
+
+    active_sessions = Journeys::Session.where("answers->>'onelogin_uid' = ?", logout_token.user_uid).not_expired
+    active_sessions.each(&:expire!)
+
+    head :ok
+  rescue => e
+    Rollbar.error(e)
+    Sentry.capture_exception(e)
+
+    head :bad_request
+  end
+
   private
+
+  def logout_token
+    @logout_token ||= OneLogin::LogoutToken.new(jwt: logout_jwt)
+  end
+
+  def logout_jwt
+    params[:logout_token]
+  end
 
   def onelogin_redirect_uri
     host = ENV["ONELOGIN_SIGN_IN_ISSUER"].split("://")[1].delete("/")
