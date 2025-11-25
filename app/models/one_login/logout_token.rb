@@ -18,7 +18,7 @@ class OneLogin::LogoutToken
 
     encoded_token.verify!(
       signature: {
-        algorithm: ["ES256"],
+        algorithm: algorithms,
         key_finder:
       }
     )
