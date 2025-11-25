@@ -67,10 +67,10 @@ class OneLogin::LogoutToken
   end
 
   def algorithms
-    OneLogin::DidCache.document.algorithms
+    OneLogin::JwksCache.document.algorithms
   end
 
   def jwks
-    OneLogin::DidCache.document.jwks
+    OneLogin::JwksCache.document.jwks
   end
 end
