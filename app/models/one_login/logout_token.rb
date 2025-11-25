@@ -28,7 +28,11 @@ class OneLogin::LogoutToken
     JWT::InvalidAudError,
     JWT::VerificationError,
     JWT::ExpiredSignature,
-    JWT::InvalidIatError
+    JWT::InvalidIatError => e
+
+    Rollbar.error(e)
+    Sentry.capture_exception(e)
+
     false
   end
 
