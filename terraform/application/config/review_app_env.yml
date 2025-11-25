@@ -2,6 +2,7 @@
 BYPASS_DFE_SIGN_IN: true
 BYPASS_ONELOGIN_SIGN_IN: true
 ONELOGIN_DID_URL: https://identity.integration.account.gov.uk/.well-known/did.json
+ONELOGIN_JWKS_URL: https://oidc.integration.account.gov.uk/.well-known/jwks.json
 
 DFE_SIGN_IN_API_CLIENT_ID: teacherpayments
 DFE_SIGN_IN_API_ENDPOINT: https://pp-api.signin.education.gov.uk
