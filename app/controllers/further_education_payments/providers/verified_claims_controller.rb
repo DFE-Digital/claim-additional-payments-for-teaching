@@ -2,27 +2,24 @@ module FurtherEducationPayments
   module Providers
     class VerifiedClaimsController < BaseController
       def index
-        @all_claims = claim_scope.includes(:eligibility)
-        @pagy, @claims = pagy(claim_scope)
+        scope = current_provider.claims.by_academic_year(
+          Journeys::FurtherEducationPayments.configuration.current_academic_year
+        ).verified.order(:first_name, :surname)
+        @all_claims = scope.includes(:eligibility)
+        @pagy, @claims = pagy(scope)
         @stats = FurtherEducationPayments::Providers::Claims::Stats
-          .new(school: current_school)
+          .new(provider: current_provider)
       end
 
       def show
-        @claim = claim_scope.find(params[:id])
+        @claim = current_provider.claims.by_academic_year(
+          Journeys::FurtherEducationPayments.configuration.current_academic_year
+        ).verified.find(params[:id])
         @answers_presenter =
           FurtherEducationPayments::
           Providers::
           Claims::
           AnswersPresenter.new(claim: @claim)
-      end
-
-      private
-
-      def claim_scope
-        super
-          .where(id: Claim.fe_provider_verified.select(:id))
-          .order(:first_name, :surname)
       end
     end
   end

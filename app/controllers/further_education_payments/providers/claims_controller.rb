@@ -2,46 +2,19 @@ module FurtherEducationPayments
   module Providers
     class ClaimsController < BaseController
       def index
-        @claims = claim_scope.order(:created_at)
+        @claims = current_provider.claims.unverified.by_academic_year(
+          Journeys::FurtherEducationPayments.configuration.current_academic_year
+        ).order(:created_at)
 
-        @unverified_count = claim_scope.count
+        @unverified_count = @claims.count
 
-        @not_started_count = not_started.count
-        @not_started_overdue_count = not_started.count do |claim|
-          Policies::FurtherEducationPayments.verification_overdue?(claim)
-        end
+        @not_started_count = @claims.verification_not_started.count
 
-        @in_progress_count = in_progress.count
-        @in_progress_overdue_count = in_progress.count do |claim|
-          Policies::FurtherEducationPayments.verification_overdue?(claim)
-        end
-      end
+        @not_started_overdue_count = @claims.verification_not_started.verification_overdue.count
 
-      private
+        @in_progress_count = @claims.verification_in_progress.count
 
-      def claim_scope
-        super
-          .where(id: Claim.fe_provider_unverified.select(:id))
-          .joins(
-            <<~SQL
-              INNER JOIN further_education_payments_eligibilities
-              ON further_education_payments_eligibilities.id = claims.eligibility_id
-            SQL
-          )
-      end
-
-      def not_started
-        @not_started ||= claim_scope
-          .select(:created_at)
-          .where(further_education_payments_eligibilities: {provider_verification_started_at: nil})
-          .to_a
-      end
-
-      def in_progress
-        @in_progress ||= claim_scope
-          .select(:created_at)
-          .where.not(further_education_payments_eligibilities: {provider_verification_started_at: nil})
-          .to_a
+        @in_progress_overdue_count = @claims.verification_in_progress.verification_overdue.count
       end
     end
   end

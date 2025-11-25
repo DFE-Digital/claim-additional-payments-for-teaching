@@ -7,6 +7,7 @@ RSpec.describe "Provider unverified claims dashboard" do
   end
 
   scenario "when no claims" do
+    create(:eligible_fe_provider, :with_school, ukprn: "12345678")
     visit "/further-education-payments/providers/claims"
     expect(page).to have_text "Sign in"
     fill_in "UKPRN", with: "12345678"
