@@ -1,6 +1,8 @@
 class DeauthController < ApplicationController
   include JourneyConcern
 
+  skip_forgery_protection only: [:onelogin_back_channel]
+
   def onelogin
     if ENV["BYPASS_ONELOGIN_SIGN_IN"] == "true"
       redirect_to journey_session.journey_class::SlugSequence.signed_out_path
