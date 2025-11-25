@@ -1,7 +1,3 @@
-require "claim_allocator"
-require "claim_deallocator"
-
-# Allows team members to assign/unassign themselves (or other team members) to/from claim(s)
 class Admin::AllocationsController < Admin::BaseAdminController
   before_action :ensure_service_operator
   before_action :load_target_claim, only: %i[allocate deallocate]
@@ -9,13 +5,13 @@ class Admin::AllocationsController < Admin::BaseAdminController
   before_action :ensure_user_confirmed, only: :bulk_deallocate
 
   def allocate
-    ClaimAllocator.new(claim_ids: @claim.id, admin_user_id: admin_user.id).call
+    Admin::ClaimAllocator.new(claim_ids: @claim.id, admin_user_id: admin_user.id).call
 
     redirect_to request.referrer
   end
 
   def deallocate
-    ClaimDeallocator.new(claim_ids: @claim.id, admin_user_id: @claim.assigned_to_id).call
+    Admin::ClaimDeallocator.new(claim_ids: @claim.id, admin_user_id: @claim.assigned_to_id).call
 
     redirect_to request.referrer
   end
@@ -38,7 +34,7 @@ class Admin::AllocationsController < Admin::BaseAdminController
         ) and return
     end
 
-    ClaimAllocator.new(
+    Admin::ClaimAllocator.new(
       claim_ids: claims.map(&:id),
       admin_user_id: params[:allocate_to_team_member]
     ).call
@@ -66,7 +62,7 @@ class Admin::AllocationsController < Admin::BaseAdminController
         ) and return
     end
 
-    ClaimDeallocator.new(
+    Admin::ClaimDeallocator.new(
       claim_ids: claims.ids,
       admin_user_id: @team_member.id
     ).call
