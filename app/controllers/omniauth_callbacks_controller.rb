@@ -211,10 +211,10 @@ class OmniauthCallbacksController < ApplicationController
       auth = params
 
       dfe_sign_in_session = DfeSignIn::AuthenticatedSession.new(
-        user_id: auth["uid"],
-        organisation_id: auth.dig("extra", "raw_info", "organisation", "id"),
-        organisation_ukprn: auth.dig("extra", "raw_info", "organisation", "ukprn"),
-        role_codes: auth["roles"]&.values
+        user_id: auth["uid"].strip,
+        organisation_id: auth.dig("extra", "raw_info", "organisation", "id").strip,
+        organisation_ukprn: auth.dig("extra", "raw_info", "organisation", "ukprn").strip,
+        role_codes: auth["roles"]&.values&.map(&:strip)
       )
     else
       dfe_sign_in_session = DfeSignIn::AuthenticatedSession.from_auth_hash(auth, user_type: "provider")
@@ -232,9 +232,9 @@ class OmniauthCallbacksController < ApplicationController
 
     if DfESignIn.bypass?
       # Set user info from the bypass form
-      dfe_sign_in_user.given_name = auth.dig("info", "first_name") if auth.dig("info", "first_name").present?
-      dfe_sign_in_user.family_name = auth.dig("info", "last_name") if auth.dig("info", "last_name").present?
-      dfe_sign_in_user.email = auth.dig("info", "email") if auth.dig("info", "email").present?
+      dfe_sign_in_user.given_name = auth.dig("info", "first_name").strip if auth.dig("info", "first_name").present?
+      dfe_sign_in_user.family_name = auth.dig("info", "last_name").strip if auth.dig("info", "last_name").present?
+      dfe_sign_in_user.email = auth.dig("info", "email").strip if auth.dig("info", "email").present?
     end
 
     dfe_sign_in_user.regenerate_session_token
