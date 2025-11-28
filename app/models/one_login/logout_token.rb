@@ -18,8 +18,8 @@ class OneLogin::LogoutToken
 
     encoded_token.verify!(
       signature: {
-        algorithm: ["ES256"],
-        key: jwks
+        algorithm: algorithms,
+        key_finder:
       }
     )
 
@@ -42,6 +42,10 @@ class OneLogin::LogoutToken
 
   private
 
+  def key_finder
+    JWT::JWK::KeyFinder.new(jwks:)
+  end
+
   def encoded_token
     @encoded_token ||= JWT::EncodedToken.new(jwt)
   end
@@ -63,10 +67,10 @@ class OneLogin::LogoutToken
   end
 
   def algorithms
-    OneLogin::DidCache.document.algorithms
+    OneLogin::JwksCache.document.algorithms
   end
 
   def jwks
-    OneLogin::DidCache.document.jwks
+    OneLogin::JwksCache.document.jwks
   end
 end
