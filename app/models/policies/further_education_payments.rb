@@ -16,7 +16,6 @@ module Policies
 
     VERIFIERS = [
       AutomatedChecks::ClaimVerifiers::OneLoginIdentity,
-      AutomatedChecks::ClaimVerifiers::AlternativeIdentityVerification,
       AutomatedChecks::ClaimVerifiers::Employment,
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
       AutomatedChecks::ClaimVerifiers::FraudRisk,
