@@ -4,7 +4,10 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
   describe "#provider_verification_rows" do
     context "continued_employment" do
       subject do
-        described_class.new(claim)
+        described_class
+          .new(claim)
+          .provider_verification_rows
+          .detect { |row| row[0] == "Continued employment" }
       end
 
       let(:claim) do
@@ -24,9 +27,8 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
         end
 
         it "returns Yes" do
-          expect(subject.provider_verification_rows[10][0]).to eql("Continued employment")
-          expect(subject.provider_verification_rows[10][1]).to eql("N/A")
-          expect(subject.provider_verification_rows[10][2]).to eql("Yes")
+          expect(subject[1]).to eql("N/A")
+          expect(subject[2]).to eql("Yes")
         end
       end
 
@@ -40,9 +42,8 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
         end
 
         it "returns No" do
-          expect(subject.provider_verification_rows[10][0]).to eql("Continued employment")
-          expect(subject.provider_verification_rows[10][1]).to eql("N/A")
-          expect(subject.provider_verification_rows[10][2]).to eql("No")
+          expect(subject[1]).to eql("N/A")
+          expect(subject[2]).to eql("No")
         end
       end
     end
@@ -77,7 +78,7 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
 
         expect(rows).to include([
           "First 5 years of teaching",
-          AcademicYear.new(2023),
+          "September 2023 to 2024",
           "Yes"
         ])
 
@@ -85,7 +86,7 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
 
         expect(rows).to include([
           "Contract of employment",
-          "Permanent",
+          "N/A",
           "Fixed-term"
         ])
 
@@ -109,9 +110,9 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
           "Yes"
         ])
 
-        expect(rows).to include(["Performance measures", "No", "No"])
+        expect(rows).to include(["Subject to performance measures", "No", "No"])
 
-        expect(rows).to include(["Disciplinary action", "No", "No"])
+        expect(rows).to include(["Subject to disciplinary action", "No", "No"])
       end
 
       it "returns the reason for not enrolling if applicable" do
@@ -151,7 +152,8 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
         subject do
           described_class
             .new(claim)
-            .provider_verification_rows[4]
+            .provider_verification_rows
+            .detect { it.first == "Timetabled teaching hours" }
             .last
         end
 
@@ -193,6 +195,123 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
           end
 
           it { is_expected.to eq("Fewer than 2.5 hours each week") }
+        end
+      end
+    end
+
+    describe "fixed_term_full_year" do
+      let(:claim) do
+        create(
+          :claim,
+          :submitted,
+          policy: Policies::FurtherEducationPayments,
+          eligibility_trait: %i[eligible provider_verification_completed],
+          eligibility_attributes: eligibility_attributes
+        )
+      end
+
+      subject do
+        described_class
+          .new(claim)
+          .provider_verification_rows
+          .detect { it.first == "Full academic year" }
+      end
+
+      # Only asked for fixed-term contracts
+      context "when the claimant hasn't answered that question" do
+        let(:eligibility_attributes) do
+          {
+            contract_type: "permanent"
+          }
+        end
+
+        it { is_expected.to be_nil }
+      end
+
+      context "when the claimant has answered that question" do
+        let(:eligibility_attributes) do
+          {
+            contract_type: "fixed_term",
+            fixed_term_full_year: false,
+            provider_verification_contract_covers_full_academic_year: false
+          }
+        end
+
+        it do
+          is_expected.to eq([
+            "Full academic year",
+            "N/A",
+            "No"
+          ])
+        end
+      end
+    end
+
+    describe "taught_at_least_one_term" do
+      let(:claim) do
+        create(
+          :claim,
+          :submitted,
+          policy: Policies::FurtherEducationPayments,
+          eligibility_trait: %i[eligible provider_verification_completed],
+          eligibility_attributes: eligibility_attributes
+        )
+      end
+
+      subject do
+        described_class
+          .new(claim)
+          .provider_verification_rows
+          .detect { it.first == "Taught at least one term" }
+      end
+
+      # Only asked for fixed-term contracts that don't cover full year
+      context "when the claimant nor provider have answered that question" do
+        let(:eligibility_attributes) do
+          {
+            contract_type: "fixed_term",
+            fixed_term_full_year: true
+          }
+        end
+
+        it { is_expected.to be_nil }
+      end
+
+      context "when the claimant and provider have answered that question" do
+        let(:eligibility_attributes) do
+          {
+            contract_type: "fixed_term",
+            fixed_term_full_year: false,
+            taught_at_least_one_term: true,
+            provider_verification_taught_at_least_one_academic_term: true
+          }
+        end
+
+        it do
+          is_expected.to eq([
+            "Taught at least one term",
+            "N/A",
+            "Yes"
+          ])
+        end
+      end
+
+      context "when only the provider has answered that question" do
+        let(:eligibility_attributes) do
+          {
+            contract_type: "fixed_term",
+            fixed_term_full_year: false,
+            taught_at_least_one_term: nil,
+            provider_verification_taught_at_least_one_academic_term: false
+          }
+        end
+
+        it do
+          is_expected.to eq([
+            "Taught at least one term",
+            "N/A",
+            "No"
+          ])
         end
       end
     end

@@ -29,12 +29,14 @@ module Policies
           teaching_qualification,
           reason_for_not_enrolling,
           contract_of_employment,
+          fixed_term_full_year,
+          taught_at_least_one_term,
+          performance_measure,
+          disciplinary_action,
           timetabled_teaching_hours,
           age_range_taught,
           subject,
           course,
-          performance_measure,
-          disciplinary_action,
           continued_employment
         ].compact_blank
       end
@@ -80,11 +82,28 @@ module Policies
       def contract_of_employment
         [
           "Contract of employment",
-          I18n.t(
-            eligibility.contract_type,
-            scope: "further_education_payments.forms.contract_type.options"
-          ),
+          "N/A",
           provider_answers.contract_type
+        ]
+      end
+
+      def fixed_term_full_year
+        return unless eligibility.contract_type == "fixed_term"
+
+        [
+          "Full academic year",
+          "N/A",
+          provider_answers.contract_covers_full_academic_year
+        ]
+      end
+
+      def taught_at_least_one_term
+        return if eligibility.taught_at_least_one_term.nil? && eligibility.provider_verification_taught_at_least_one_academic_term.nil?
+
+        [
+          "Taught at least one term",
+          "N/A",
+          provider_answers.taught_at_least_one_academic_term
         ]
       end
 
@@ -99,7 +118,7 @@ module Policies
       def first_five_years_of_teaching
         [
           "First 5 years of teaching",
-          AcademicYear.new(eligibility.further_education_teaching_start_year),
+          "September " + AcademicYear.new(eligibility.further_education_teaching_start_year).to_s(:long),
           provider_answers.in_first_five_years
         ]
       end
@@ -187,7 +206,7 @@ module Policies
 
       def performance_measure
         [
-          "Performance measures",
+          "Subject to performance measures",
           I18n.t(eligibility.subject_to_formal_performance_action, scope: :boolean),
           provider_answers.performance_measures
         ]
@@ -195,7 +214,7 @@ module Policies
 
       def disciplinary_action
         [
-          "Disciplinary action",
+          "Subject to disciplinary action",
           I18n.t(eligibility.subject_to_disciplinary_action, scope: :boolean),
           provider_answers.disciplinary_action
         ]
