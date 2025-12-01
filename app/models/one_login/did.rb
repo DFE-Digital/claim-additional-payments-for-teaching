@@ -20,7 +20,7 @@ class OneLogin::Did
   def algorithms
     @algorithms ||= assertion_methods.map do |assertion|
       assertion.dig("publicKeyJwk", "alg")
-    end
+    end.uniq
   end
 
   def jwks

@@ -25,23 +25,32 @@ RSpec.describe OneLogin::LogoutToken do
 
     let(:body_hash) do
       {
-        "@context": [
-          "https://www.w3.org/ns/did/v1",
-          "https://w3id.org/security/jwk/v1"
-        ],
-        id: "did:web:identity.integration.account.gov.uk",
-        assertionMethod: [
+        keys: [
           {
-            type: "JsonWebKey",
-            id: "QmVx6Z4hnj3YcBL-psgDabBzj1SooPTGaJZ7_F5bymo",
-            controller: "did:web:identity.integration.account.gov.uk",
-            publicKeyJwk: {
-              kty: "EC",
-              crv: "P-256",
-              x: "lIETndhvhFXuDTZxayyLDxx793hiEM0NFCIpC33SWnM",
-              y: "kACuMsxQHsGPcGmsLSaYLTpPZNqv_4onf6LDIjlv-fQ",
-              alg: "ES256"
-            }
+            kty: "EC",
+            use: "sig",
+            crv: "P-256",
+            kid: "644af598b780f54106ca0f3c017341bc230c4f8373f35f32e18e3e40cc7acff6",
+            x: "5URVCgH4HQgkg37kiipfOGjyVft0R5CdjFJahRoJjEw",
+            y: "QzrvsnDy3oY1yuz55voaAq9B1M5tfhgW3FBjh_n_F0U",
+            alg: "ES256"
+          },
+          {
+            kty: "EC",
+            use: "sig",
+            crv: "P-256",
+            kid: "QmVx6Z4hnj3YcBL-psgDabBzj1SooPTGaJZ7_F5bymo",
+            x: "BJnIZvnzJ9D_YRu5YL8a3CXjBaa5AxlX1xSeWDLAn9k",
+            y: "x4FU3lRtkeDukSWVJmDuw2nHVFVIZ8_69n4bJ6ik4bQ",
+            alg: "ES256"
+          },
+          {
+            kty: "RSA",
+            e: "AQAB",
+            use: "sig",
+            kid: "76e79bfc350137593e5bd992b202e248fc97e7a20988a5d4fbe9a0273e54844e",
+            alg: "RS256",
+            n: "lGac-hw2cW5_amtNiDI-Nq2dEXt1x0nwOEIEFd8NwtYz7ha1GzNwO2LyFEoOvqIAcG0NFCAxgjkKD5QwcsThGijvMOLG3dPRMjhyB2S4bCmlkwLpW8vY4sJjc4bItdfuBtUxDA0SWqepr5h95RAsg9UP1LToJecJJR_duMzN-Nutu9qwbpIJph8tFjOFp_T37bVFk4vYkWfX-d4-TOImOOD75G0kgYoAJLS2SRovQAkbJwC1bdn_N8yw7RL9WIqZCwzqMqANdo3dEgSb04XD_CUzL0Y2zU3onewH9PhaMfb11JhsuijH3zRA0dwignDHp7pBw8uMxYSqhoeVO6V0jz8vYo27LyySR1ZLMg13bPNrtMnEC-LlRtZpxkcDLm7bkO-mPjYLrhGpDy7fSdr-6b2rsHzE_YerkZA_RgX_Qv-dZueX5tq2VRZu66QJAgdprZrUx34QBitSAvHL4zcI_Qn2aNl93DR-bT8lrkwB6UBz7EghmQivrwK84BjPircDWdivT4GcEzRdP0ed6PmpAmerHaalyWpLUNoIgVXLa_Px07SweNzyb13QFbiEaJ8p1UFT05KzIRxO8p18g7gWpH8-6jfkZtTOtJJKseNRSyKHgUK5eO9kgvy9sRXmmflV6pl4AMOEwMf4gZpbKtnLh4NETdGg5oSXEuTiF2MjmXE"
           }
         ]
       }
@@ -62,12 +71,12 @@ RSpec.describe OneLogin::LogoutToken do
     end
 
     before do
-      stub_request(:get, "https://identity.integration.account.gov.uk/.well-known/did.json")
+      stub_request(:get, "https://oidc.integration.account.gov.uk/.well-known/jwks.json")
         .with(
          headers: {
            "Accept" => "*/*",
            "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
-           "Host" => "identity.integration.account.gov.uk",
+           "Host" => "oidc.integration.account.gov.uk",
            "User-Agent" => "Ruby"
          }
        )
