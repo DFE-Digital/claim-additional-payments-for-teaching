@@ -55,11 +55,6 @@ class OneLogin::DidCache
     URI(ENV["ONELOGIN_DID_URL"])
   end
 
-  # explicitly read the cached document
-  def cached_document
-    @document_object
-  end
-
   def refresh_document
     response = Net::HTTP.get_response(did_uri)
 

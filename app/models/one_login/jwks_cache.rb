@@ -55,11 +55,6 @@ class OneLogin::JwksCache
     URI(ENV["ONELOGIN_JWKS_URL"])
   end
 
-  # explicitly read the cached document
-  def cached_document
-    @document_object
-  end
-
   def refresh_document
     response = Net::HTTP.get_response(jwks_uri)
 
