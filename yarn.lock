@@ -41,8 +41,8 @@ govuk-frontend@^5.11.1, govuk-frontend@^5.13.0:
 
 "govuk-one-login-service-header@https://github.com/govuk-one-login/service-header.git":
   version "4.1.0"
-  uid e5bacd4a5084b267afa5079e2f4f3df64d1d9219
-  resolved "https://github.com/govuk-one-login/service-header.git#e5bacd4a5084b267afa5079e2f4f3df64d1d9219"
+  uid "91f32daa0fed3b83916f645d0e4fbed075d513b6"
+  resolved "https://github.com/govuk-one-login/service-header.git#91f32daa0fed3b83916f645d0e4fbed075d513b6"
   dependencies:
     govuk-frontend "^5.11.1"
     nunjucks "^3.2.4"
