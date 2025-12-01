@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_17_144448) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_18_232115) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -307,6 +307,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_17_144448) do
     t.boolean "fixed_term_full_year"
     t.boolean "flagged_as_duplicate", default: false
     t.boolean "flagged_as_mismatch_on_teaching_start_year", default: false
+    t.boolean "flagged_as_previously_start_year_matches_claim_false", default: false
     t.text "further_education_teaching_start_year"
     t.boolean "half_teaching_hours"
     t.boolean "hours_teaching_eligible_subjects"

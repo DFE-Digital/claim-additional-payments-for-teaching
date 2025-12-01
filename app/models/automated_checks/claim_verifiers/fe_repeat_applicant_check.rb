@@ -1,5 +1,17 @@
 module AutomatedChecks
   module ClaimVerifiers
+    # This task is automatically passed if none of the conditions detected:
+    #   * teaching_start_year_mismatch?
+    #     * Year 2 if a year 1 claim start_year was 2020 so NOT eligible in Year 2 (more than 5 years)
+    #     * Year 3+ claims, check most recent approved claim in previous years
+    #       and if the start_year is different to the answer they gave this year
+    #
+    #   * previous_claim_rejected_due_to_start_year_mismatch?
+    #     * Year 2 check Year 1 (or Year 3+ check most recent claimed year) had rejected claim
+    #       where the provider verified false they starting teaching within the last 5 years
+    #
+    # If detected the Task is incomplete and needs a manual check.
+
     class FeRepeatApplicantCheck
       TASK_NAME = "fe_repeat_applicant_check".freeze
       private_constant :TASK_NAME
@@ -17,6 +29,11 @@ module AutomatedChecks
           if teaching_start_year_mismatch?
             passed = nil
             create_start_year_mismatch_note
+          end
+
+          if previous_claim_rejected_due_to_start_year_mismatch?
+            passed = nil
+            create_start_year_matches_claim_false_note
           end
 
           if passed
@@ -67,8 +84,31 @@ module AutomatedChecks
         )
       end
 
+      def create_start_year_matches_claim_false_note
+        eligibility = claim.eligibility
+        previous_claim_year = eligibility.previous_claim_year
+
+        claims = eligibility.rejected_claims_for_academic_year_with_start_year_matches_claim_false(
+          previous_claim_year
+        )
+
+        body = "Claimant was previously rejected in #{claims.first.academic_year} following provider verification indicating " \
+          "over 5 years of employment in Further Education with claim reference(s): #{claims.pluck(:reference).join(", ")}"
+
+        claim.notes.create!(
+          {
+            body: body,
+            label: TASK_NAME
+          }
+        )
+      end
+
       def teaching_start_year_mismatch?
         !!claim.eligibility.flagged_as_mismatch_on_teaching_start_year
+      end
+
+      def previous_claim_rejected_due_to_start_year_mismatch?
+        !!claim.eligibility.flagged_as_previously_start_year_matches_claim_false
       end
     end
   end
