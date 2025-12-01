@@ -56,6 +56,24 @@
         </tbody>
       </table>
     <% else %>
+      <% if @tasks_presenter.provider_verification_chase_email_last_sent_at.present? %>
+        <div class="govuk-inset-text">
+          <p>
+            A reminder to complete the provider verification check was last sent on
+            <strong>
+              <%= l(@tasks_presenter.provider_verification_chase_email_last_sent_at) %>
+            </strong>
+          </p>
+        </div>
+      <% end %>
+
+      <% if @tasks_presenter.provider_verification_overdue? %>
+        <%= govuk_button_to(
+          "Send provider verification chaser email",
+          admin_claim_further_education_payments_provider_verification_emails_path(@claim),
+        ) %>
+      <% end %>
+
       <p class="govuk-body">
         The provider has not completed this check yet.
       </p>

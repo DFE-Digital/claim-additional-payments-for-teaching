@@ -207,6 +207,120 @@ RSpec.feature "Admin claim further education payments" do
           end
         end
       end
+
+      context "when the provider has not yet verified the claim" do
+        context "when the verification is overdue" do
+          it "shows when the verification chaser email was last sent" do
+            eligibility = create(
+              :further_education_payments_eligibility,
+              :eligible,
+              provider_verification_chase_email_last_sent_at: 8.days.ago
+            )
+
+            claim = create(
+              :claim,
+              :further_education,
+              :submitted,
+              eligibility: eligibility,
+              created_at: 3.weeks.ago
+            )
+
+            visit admin_claim_task_path(claim, "fe_provider_verification_v2")
+
+            expect(page).to have_content(
+              "A reminder to complete the provider verification check was " \
+              "last sent on 1 September 2025 11:00am"
+            )
+          end
+
+          it "has a button for ops to send another chaser email" do
+            provider = create(:eligible_fe_provider, :with_school)
+
+            eligibility = create(
+              :further_education_payments_eligibility,
+              :eligible,
+              school: provider.school
+            )
+
+            claim = create(
+              :claim,
+              :further_education,
+              :submitted,
+              eligibility: eligibility,
+              created_at: 3.weeks.ago
+            )
+
+            visit admin_claim_task_path(claim, "fe_provider_verification_v2")
+
+            perform_enqueued_jobs do
+              click_on "Send provider verification chaser email"
+            end
+
+            expect(page).to have_content(
+              "Verification email sent to #{provider.school.name}"
+            )
+
+            expect(provider.primary_key_contact_email_address).to have_received_email(
+              ApplicationMailer::FURTHER_EDUCATION_PAYMENTS[:PROVIDER_OVERDUE_VERIFICATION_CHASER_TEMPLATE_ID]
+            )
+
+            # view claim notes, expect to see note about chaser email being sent
+            visit admin_claim_notes_path(claim)
+
+            expect(page).to have_content(
+              "Verification email sent to #{provider.school.name}\nby Aaron Admin"
+            )
+          end
+        end
+
+        context "when the verification is not overdue" do
+          context "when the claim is less that 2 weeks old" do
+            it "doesn't show send chaser email button" do
+              provider = create(:eligible_fe_provider, :with_school)
+
+              eligibility = create(
+                :further_education_payments_eligibility,
+                :eligible,
+                school: provider.school
+              )
+
+              claim = create(
+                :claim,
+                :further_education,
+                :submitted,
+                eligibility: eligibility,
+                created_at: 1.weeks.ago
+              )
+
+              visit admin_claim_task_path(claim, "fe_provider_verification_v2")
+
+              expect(page).not_to have_content("Send chaser email")
+            end
+          end
+
+          context "when the claim has already been verified" do
+            it "doesn't show send chaser email button" do
+              eligibility = create(
+                :further_education_payments_eligibility,
+                :eligible,
+                :provider_verification_completed
+              )
+
+              claim = create(
+                :claim,
+                :further_education,
+                :submitted,
+                eligibility: eligibility,
+                created_at: 3.weeks.ago
+              )
+
+              visit admin_claim_task_path(claim, "fe_provider_verification_v2")
+
+              expect(page).not_to have_content("Send chaser email")
+            end
+          end
+        end
+      end
     end
 
     describe "provider identity verification task" do
