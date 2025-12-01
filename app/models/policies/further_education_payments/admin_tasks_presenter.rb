@@ -12,6 +12,14 @@ module Policies
         eligibility.provider_verification_completed_at.present?
       end
 
+      def provider_verification_overdue?
+        eligibility.provider_verification_overdue?
+      end
+
+      def provider_verification_chase_email_last_sent_at
+        eligibility.provider_verification_chase_email_last_sent_at
+      end
+
       def provider_name
         eligibility.provider_assigned_to&.full_name || "Not assigned"
       end

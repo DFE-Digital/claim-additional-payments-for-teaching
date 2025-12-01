@@ -5,7 +5,6 @@ module Policies
     # verification before it is considered overdue
     POST_SUBMISSION_VERIFICATION_DEADLINE = 2.weeks
 
-
     include BasePolicy
     extend self
 
