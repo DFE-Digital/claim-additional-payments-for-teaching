@@ -9,7 +9,7 @@ class PersonalDetailsForm < Form
   attribute :first_name
   attribute :middle_name
   attribute :surname
-  attribute :national_insurance_number
+  attribute :national_insurance_number, :string, strip_all_whitespace: true
 
   validates :first_name, presence: {message: "Enter your first name"}
   validates :first_name, length: {maximum: 100, message: "First name must be less than 100 characters"}, if: -> { first_name.present? }
