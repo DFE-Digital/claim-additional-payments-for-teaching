@@ -9,7 +9,7 @@ module FurtherEducationPayments
         scope = scope.where(provider_verification_completed_at: nil)
 
         # Verification is due 2 weeks after claim creation
-        overdue_date = 2.weeks.ago
+        overdue_date = Policies::FurtherEducationPayments::POST_SUBMISSION_VERIFICATION_DEADLINE.ago
 
         # Claims after this date will have received 3 chaser emails
         received_3_chasers_date = 5.weeks.ago + 1.day
