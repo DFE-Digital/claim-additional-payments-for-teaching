@@ -238,13 +238,12 @@ module Admin
     end
 
     INDEX_STATUS_FILTER_MESSAGE = {
+      "awaiting_decision" => "awaiting a decision",
       "approved_awaiting_qa" => "approved awaiting QA",
       "rejected_awaiting_qa" => "rejected awaiting QA"
     }
 
     def index_status_filter(status)
-      return "awaiting a decision" unless status.present?
-
       INDEX_STATUS_FILTER_MESSAGE[status] || status.humanize.downcase
     end
 

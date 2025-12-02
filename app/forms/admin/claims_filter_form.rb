@@ -3,34 +3,52 @@ class Admin::ClaimsFilterForm
   include ActiveModel::Attributes
 
   attribute :filters
+  attribute :selected_page
   attribute :session
 
   def initialize(args)
     super
 
     session[:filter] ||= {}
+    session[:page] = nil if filters_changed?
+  end
+
+  def filters_changed?
+    if filters[:team_member].blank? ||
+        filters[:policy].blank? ||
+        filters[:status].blank?
+      return false
+    end
+
+    session_filters = session[:filter]
+
+    (filters[:team_member] != session_filters["team_member"]) ||
+      (filters[:policy] != session_filters["policy"]) ||
+      (filters[:status] != session_filters["status"])
   end
 
   def team_member
-    return if reset?
+    return "all" if reset?
 
-    @team_member ||= filters[:team_member] || session[:filter]["team_member"]
+    @team_member ||= filters[:team_member] || session[:filter]["team_member"] || "all"
   end
 
   def policy
-    return if reset?
+    return "all" if reset?
 
-    @policy ||= filters[:policy] || session[:filter]["policy"]
+    @policy ||= filters[:policy] || session[:filter]["policy"] || "all"
   end
 
   def status
-    return if reset?
+    return "awaiting_decision" if reset?
 
-    @status ||= filters[:status] || session[:filter]["status"]
+    @status ||= filters[:status] || session[:filter]["status"] || "awaiting_decision"
   end
 
-  def filters_applied?
-    team_member.present? || policy.present? || status.present?
+  def page
+    return 1 if reset?
+
+    @page ||= selected_page || session[:page] || 1
   end
 
   def reset?
@@ -108,12 +126,14 @@ class Admin::ClaimsFilterForm
           .where.not(submitted_at: nil)
           .awaiting_decision
           .where("early_years_payment_eligibilities.start_date < ?", Policies::EarlyYearsPayments::RETENTION_PERIOD.ago)
-      else
+      when "awaiting_decision"
         Claim
           .includes(:decisions)
           .not_held
           .awaiting_decision
           .not_awaiting_further_education_provider_verification
+      else
+        raise "Unknown status passed to Admin::ClaimsFilterForm"
       end
 
     @claims = @claims.by_policy(selected_policy) if selected_policy
@@ -133,7 +153,7 @@ class Admin::ClaimsFilterForm
   end
 
   def policy_select_options
-    array = [OpenStruct.new(id: nil, name: "All")]
+    array = [OpenStruct.new(id: "all", name: "All")]
 
     array + Policies.all.map do |policy|
       OpenStruct.new(id: policy.policy_type, name: policy.short_name)
@@ -143,7 +163,7 @@ class Admin::ClaimsFilterForm
   def status_grouped_select_options
     {
       "Awaiting" => {
-        "Awaiting decision - not on hold" => nil,
+        "Awaiting decision - not on hold" => "awaiting_decision",
         "Awaiting provider verification" => "awaiting_provider_verification",
         "Awaiting claimant data" => "awaiting_claimant_data",
         "Awaiting retention period completion" => "awaiting_retention_period_completion",
@@ -171,7 +191,7 @@ class Admin::ClaimsFilterForm
   end
 
   def team_member_select_options
-    array = [["All", nil], ["Unassigned", "unassigned"]]
+    array = [["All", "all"], ["Unassigned", "unassigned"]]
     array += DfeSignIn::User.options_for_select
 
     array.map do |name, id|
@@ -181,10 +201,12 @@ class Admin::ClaimsFilterForm
 
   def save_to_session!
     session[:filter] = {
-      team_member:,
-      policy:,
-      status:
+      "team_member" => team_member,
+      "policy" => policy,
+      "status" => status
     }
+
+    session[:page] = page
   end
 
   private
@@ -196,13 +218,23 @@ class Admin::ClaimsFilterForm
   end
 
   def selected_policy
+    return if all_policies?
+
     Policies[policy]
   end
 
+  def all_policies?
+    policy == "all"
+  end
+
   def selected_team_member
-    return if team_member.blank? || unassigned?
+    return if all_team_members? || unassigned?
 
     DfeSignIn::User.admin.not_deleted.find(team_member)
+  end
+
+  def all_team_members?
+    team_member == "all"
   end
 
   def unassigned?
