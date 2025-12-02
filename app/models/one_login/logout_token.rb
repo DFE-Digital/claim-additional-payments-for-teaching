@@ -6,7 +6,7 @@ class OneLogin::LogoutToken
   end
 
   def user_uid
-    payload[:sub]
+    payload["sub"]
   end
 
   def valid?
