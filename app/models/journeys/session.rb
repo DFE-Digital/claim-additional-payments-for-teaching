@@ -52,6 +52,7 @@ module Journeys
     end
 
     def expire!
+      Rails.logger.info "Expiring journey session id: #{id}"
       update(expired: true)
     end
 
