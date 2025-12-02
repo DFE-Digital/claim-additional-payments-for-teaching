@@ -846,8 +846,8 @@ RSpec.describe Admin::ClaimsHelper do
   describe "#index_status_filter" do
     subject { helper.index_status_filter(status) }
 
-    context "when status is blank" do
-      let(:status) { "" }
+    context "when status is awaiting_decision" do
+      let(:status) { "awaiting_decision" }
 
       it { is_expected.to eq("awaiting a decision") }
     end
