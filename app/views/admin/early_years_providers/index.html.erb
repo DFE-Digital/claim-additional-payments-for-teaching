@@ -1,0 +1,63 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-l">Early years providers</h1>
+
+    <%= form_with(
+      url: admin_early_years_providers_path,
+      method: :get,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_text_field(
+        :query,
+        label: {
+          text: "Search by nursery name or primary contact email address"
+        },
+        value: params[:query],
+      ) %>
+
+      <%= f.govuk_submit "Search" %>
+      <% if params[:query].present? %>
+        <%= govuk_button_link_to(
+          "Clear search",
+          admin_early_years_providers_path,
+          secondary: true
+        ) %>
+      <% end %>
+    <% end %>
+
+    <%= govuk_table do |table| %>
+      <%= table.with_head do |head| %>
+        <%= head.with_row do |row| %>
+          <%= row.with_cell(text: "Nursery name", width: "one-third") %>
+          <%= row.with_cell(text: "Primary contact email address", width: "one-third") %>
+          <%= row.with_cell(text: "Claim allowance") %>
+          <%= row.with_cell(text: "Claims submitted") %>
+          <%= row.with_cell(text: "Claims") %>
+        <% end %>
+      <% end %>
+
+      <%= table.with_body do |body| %>
+        <% @provider_results.each do |provider| %>
+          <%= body.with_row do |row| %>
+            <%= row.with_cell(text: provider.nursery_name) %>
+            <%= row.with_cell(text: provider.primary_key_contact_email_address) %>
+            <%= row.with_cell(text: provider.max_claims) %>
+            <%= row.with_cell(text: provider.claims_submitted) %>
+            <%= row.with_cell do %>
+              <ul class="govuk-list govuk-!-margin-bottom-0">
+                <% provider.claims_data.select { it["id"].present? }.each do |data| %>
+                  <li>
+                    <%= govuk_link_to(
+                      data["reference"],
+                      admin_claim_tasks_path(data["id"])
+                    ) %>
+                  </li>
+                <% end %>
+              </ul>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
