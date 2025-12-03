@@ -86,6 +86,10 @@ RSpec.describe OneLogin::LogoutToken do
     token.sign!(key: jwk, algorithm: "ES256")
   end
 
+  after :each do
+    OneLogin::JwksCache.clear_cache!
+  end
+
   describe "#valid?" do
     context "when iss claim is invalid" do
       let(:payload) do
