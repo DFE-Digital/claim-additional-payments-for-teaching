@@ -1,0 +1,106 @@
+<%= form_with(
+  model: form,
+  scope: :form,
+  url: admin_claim_tasks_path(claim),
+  builder: GOVUKDesignSystemFormBuilder::FormBuilder
+) do |f| %>
+
+  <%= f.hidden_field :name, value: f.object.task.name %>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h2 class="govuk-heading-xl"><%= I18n.t(:name, scope: form.translation) %></h2>
+
+      <%= f.govuk_error_summary %>
+
+      <section id="personal-details">
+        <h3 class="govuk-heading-l">Personal Details</h3>
+
+        <%= govuk_inset_text(text: form.employed_by_provider_text) %>
+
+        <%= govuk_table(
+          head: form.personal_details_data_table_head,
+          rows: form.personal_details_data_table_rows,
+          first_cell_is_header: true
+        ) %>
+
+        <div class="govuk-!-width-one-half">
+          <% if f.object.task_completed? || f.object.personal_details_task_completed_automatically? %>
+            <p class="govuk-body">
+              <span class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                Do the personal details provided by the claimant match the 
+                details from the provider?
+              </span>
+
+              <%= f.object.personal_details_result %>
+            </p>
+          <% else %>
+            <%= f.govuk_collection_radio_buttons(
+              :personal_details_match,
+              f.object.personal_details_match_options,
+              :id,
+              :name,
+              inline: true,
+              legend: {
+                text: "Do the personal details provided by the claimant match the details from the provider?",
+                size: "s",
+              }
+            ) %>
+          <% end %>
+        </div>
+      </section>
+
+      <section id="bank-details">
+        <h3 class="govuk-heading-l">Bank Account Details</h3>
+
+        <div class="govuk-!-width-two-thirds">
+          <%= govuk_inset_text(text: form.bank_details_text) %>
+        </div>
+
+        <%= govuk_table(
+          head: form.bank_details_data_table_head,
+          rows: form.bank_details_data_table_rows,
+          first_cell_is_header: true
+        ) %>
+
+        <div class="govuk-!-width-one-half">
+          <% if f.object.task_completed? || f.object.bank_details_task_completed_automatically? %>
+            <p class="govuk-body">
+              <span class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                Has <%= f.object.claimant_name %> provided their own bank
+                account details?
+              </span>
+
+              <%= f.object.bank_details_result %>
+            </p>
+          <% else %>
+            <%= f.govuk_collection_radio_buttons(
+              :bank_details_match,
+              f.object.bank_details_match_options,
+              :id,
+              :name,
+              inline: true,
+              legend: {
+                text: "Has #{f.object.claimant_name} provided their own bank account details?",
+                size: "s",
+              }
+            ) %>
+          <% end %>
+        </div>
+      </section>
+
+      <section id="task-outcome">
+        <% if form.task_completed? %>
+          <%= render "admin/tasks/task_outcome" %>
+        <% else %>
+          <%= f.govuk_submit "Save and continue" %>
+        <% end %>
+      </section>
+
+      <%= render(
+        partial: "admin/task_pagination",
+        locals: { task_pagination: task_pagination }
+      ) %>
+    </div>
+  </div>
+<% end %>
