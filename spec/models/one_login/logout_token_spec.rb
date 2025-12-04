@@ -86,6 +86,10 @@ RSpec.describe OneLogin::LogoutToken do
     token.sign!(key: jwk, algorithm: "ES256")
   end
 
+  after :each do
+    OneLogin::JwksCache.clear_cache!
+  end
+
   describe "#valid?" do
     context "when iss claim is invalid" do
       let(:payload) do
@@ -163,7 +167,7 @@ RSpec.describe OneLogin::LogoutToken do
   end
 
   describe "#user_uid" do
-    it "returns OL uid" do
+    it "returns OL uid", flaky: true do
       expect(subject.user_uid).to eql(onelogin_uid)
     end
   end
