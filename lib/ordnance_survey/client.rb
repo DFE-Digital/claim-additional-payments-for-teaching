@@ -18,7 +18,7 @@ module OrdnanceSurvey
 
     private
 
-    attr_accessor :api_key, :base_url, :headers, :params
+    attr_accessor :base_url, :params
 
     def request(method:, path: "/", params: {}, body: {})
       headers = {
