@@ -13,23 +13,15 @@ module OrdnanceSurvey
     end
 
     def get(path: "/", params: {})
-      request(method: :get, path: path, params: params)
-    end
-
-    private
-
-    attr_accessor :base_url, :params
-
-    def request(method:, path: "/", params: {}, body: {})
       params = params.merge(self.params)
 
       response = Response.new(
         response: Typhoeus.public_send(
-          method,
+          :get,
           url(path),
           headers:,
           params:,
-          body:
+          body: {}
         )
       )
 
@@ -39,6 +31,10 @@ module OrdnanceSurvey
 
       response.body
     end
+
+    private
+
+    attr_accessor :base_url, :params
 
     def headers
       {
