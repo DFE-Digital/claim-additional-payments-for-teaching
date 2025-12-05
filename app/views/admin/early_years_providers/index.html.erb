@@ -23,6 +23,11 @@
           secondary: true
         ) %>
       <% end %>
+      <%= govuk_button_link_to(
+        "Export CSV",
+        admin_early_years_providers_path(format: :csv, query: params[:query]),
+        secondary: true
+      ) %>
     <% end %>
 
     <%= govuk_table do |table| %>

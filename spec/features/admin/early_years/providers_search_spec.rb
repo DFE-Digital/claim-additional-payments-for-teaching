@@ -14,14 +14,15 @@ RSpec.describe "Providers Search" do
       max_claims: 5
     )
 
-    2.times do
+    2.times do |i|
       create(
         :claim,
         policy: Policies::EarlyYearsPayments,
         eligibility_attributes: {
           nursery_urn: provider_1.urn
         },
-        academic_year: journey_config.current_academic_year
+        academic_year: journey_config.current_academic_year,
+        reference: "CLAIM#{i + 1}"
       )
     end
 
@@ -83,5 +84,18 @@ RSpec.describe "Providers Search" do
 
     expect(page).to have_content("Sunny Days Nursery")
     expect(page).not_to have_content("Happy Kids Nursery")
+  end
+
+  it "allows exporting the provider list as CSV" do
+    sign_in_as_service_operator
+
+    visit admin_early_years_providers_path
+
+    click_link "Export CSV"
+
+    expect(page.response_headers["Content-Type"]).to include("text/csv")
+    expect(page).to have_content("Nursery Name,Primary Contact Email,Max Claims,Claims Submitted,Claim References")
+    expect(page).to have_content("Happy Kids Nursery,hkn@example.com,5,2,CLAIM1 CLAIM2")
+    expect(page).to have_content("Sunny Days Nursery,sdn@example.com,10,0,")
   end
 end
