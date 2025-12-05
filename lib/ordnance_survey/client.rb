@@ -21,19 +21,15 @@ module OrdnanceSurvey
     attr_accessor :base_url, :params
 
     def request(method:, path: "/", params: {}, body: {})
-      headers = {
-        "Content-Type": "application/json"
-      }
-
       params = params.merge(self.params)
 
       response = Response.new(
         response: Typhoeus.public_send(
           method,
           url(path),
-          headers: headers,
-          params: params,
-          body: body
+          headers:,
+          params:,
+          body:
         )
       )
 
@@ -42,6 +38,12 @@ module OrdnanceSurvey
       raise ResponseError.new(response) if [*0..199, *300..403, *405..599].include? response.code
 
       response.body
+    end
+
+    def headers
+      {
+        "Content-Type": "application/json"
+      }
     end
 
     def url(path)
