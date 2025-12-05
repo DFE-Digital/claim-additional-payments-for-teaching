@@ -46,10 +46,11 @@ module Admin
     end
 
     def personal_data(claim, attribute, *args, &block)
-      if claim.personal_data_removed?
+      value = claim.public_send(attribute, *args)
+
+      if claim.personal_data_removed? && value.blank?
         personal_data_removed_text
       else
-        value = claim.public_send(attribute, *args)
         block_given? ? block.call(value) : value
       end
     end
