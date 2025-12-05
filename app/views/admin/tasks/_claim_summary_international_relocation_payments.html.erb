@@ -29,17 +29,17 @@
 
       <% summary_list.with_row do |row| %>
         <% row.with_key { "NI number" } %>
-        <% row.with_value { claim.personal_data_removed? ? personal_data_removed_text : claim.national_insurance_number } %>
+        <% row.with_value { personal_data(claim, :national_insurance_number) } %>
       <% end %>
 
       <% summary_list.with_row do |row| %>
         <% row.with_key { "Full name" } %>
-        <% row.with_value { claim.personal_data_removed? ? personal_data_removed_text : claim.full_name } %>
+        <% row.with_value { personal_data(claim, :full_name) } %>
       <% end %>
 
       <% summary_list.with_row do |row| %>
         <% row.with_key { "Date of birth" } %>
-        <% row.with_value { claim.personal_data_removed? ? personal_data_removed_text : l(claim.date_of_birth) } %>
+        <% row.with_value { personal_data(claim, :date_of_birth) { |date| l(date) } } %>
       <% end %>
 
       <% summary_list.with_row do |row| %>
