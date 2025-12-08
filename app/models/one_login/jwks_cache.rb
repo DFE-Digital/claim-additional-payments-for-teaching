@@ -1,7 +1,7 @@
 require "json"
 require "net/http"
 
-class OneLogin::DidCache
+class OneLogin::JwksCache
   # public api to use document
   # if document not present it will fetch
   # if it determines document has expired it will first refresh the document
@@ -51,15 +51,15 @@ class OneLogin::DidCache
 
   private
 
-  def did_uri
-    URI(ENV["ONELOGIN_DID_URL"])
+  def jwks_uri
+    URI(ENV["ONELOGIN_JWKS_URL"])
   end
 
   def refresh_document
-    response = Net::HTTP.get_response(did_uri)
+    response = Net::HTTP.get_response(jwks_uri)
 
     if response.is_a?(Net::HTTPSuccess)
-      new_doc = OneLogin::Did.new(document_hash: JSON.parse(response.body))
+      new_doc = OneLogin::Jwks.new(document_hash: JSON.parse(response.body))
       set_expiry_from_response(response)
       @document_object = new_doc
     else

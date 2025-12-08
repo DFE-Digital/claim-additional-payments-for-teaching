@@ -97,7 +97,7 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
       expect(eligibility.half_teaching_hours).to eq(answers.half_teaching_hours)
     end
 
-    context "when in year 2" do
+    context "when in year 2 - further_education_teaching_start_year" do
       let(:previous_year_1_claim) do
         create(
           :claim,
@@ -139,7 +139,7 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
       end
     end
 
-    context "when in year 3 (or later)" do
+    context "when in year 3 (or later) - further_education_teaching_start_year" do
       let(:current_academic_year) { AcademicYear.new(2026) }
 
       let(:previous_year_2_claim) do
@@ -222,6 +222,142 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
           eligibility = form.claim.eligibility
 
           expect(eligibility.flagged_as_mismatch_on_teaching_start_year).to be true
+        end
+      end
+    end
+
+    context "when in year 2 - flagged_as_previously_start_year_matches_claim_false" do
+      let(:previous_year_1_claim_approved) do
+        create(
+          :claim,
+          :further_education,
+          :approved,
+          academic_year: AcademicYear.new(2024),
+          onelogin_uid: answers.onelogin_uid
+        )
+      end
+
+      let(:previous_year_1_claim_rejected) do
+        create(
+          :claim,
+          :further_education,
+          :rejected,
+          academic_year: AcademicYear.new(2024),
+          onelogin_uid: answers.onelogin_uid,
+          eligibility_trait: :year_one_verified_teaching_start_year_false
+        )
+      end
+
+      context "when a year 1 approved claim exists" do
+        before do
+          previous_year_1_claim_approved
+        end
+
+        it "DOES NOT flag as previously start year matches claim" do
+          subject
+
+          eligibility = form.claim.eligibility
+
+          expect(eligibility.flagged_as_previously_start_year_matches_claim_false).to be false
+        end
+      end
+
+      context "when a year 1 rejected claim exists with provider_verification_teaching_start_year_matches_claim false" do
+        before do
+          previous_year_1_claim_rejected
+        end
+
+        it "flags as previously the start year matches claim was false by provider" do
+          subject
+
+          eligibility = form.claim.eligibility
+
+          expect(eligibility.flagged_as_previously_start_year_matches_claim_false).to be true
+        end
+      end
+
+      context "when an approved and rejected claim exist in the same year" do
+        before do
+          previous_year_1_claim_approved
+          previous_year_1_claim_rejected
+        end
+
+        it "ignore the rejected claim and DOES NOT flag" do
+          subject
+
+          eligibility = form.claim.eligibility
+
+          expect(eligibility.flagged_as_previously_start_year_matches_claim_false).to be false
+        end
+      end
+    end
+
+    context "when in year 3 - flagged_as_previously_start_year_matches_claim_false" do
+      let(:current_academic_year) { AcademicYear.new(2026) }
+
+      let(:previous_year_2_claim_approved) do
+        create(
+          :claim,
+          :further_education,
+          :approved,
+          academic_year: AcademicYear.new(2025),
+          onelogin_uid: answers.onelogin_uid
+        )
+      end
+
+      let(:previous_year_2_claim_rejected) do
+        create(
+          :claim,
+          :further_education,
+          :rejected,
+          academic_year: AcademicYear.new(2025),
+          onelogin_uid: answers.onelogin_uid,
+          eligibility_attributes: {
+            provider_verification_teaching_start_year_matches_claim: false
+          }
+        )
+      end
+
+      context "when a year 2 approved claim exists" do
+        before do
+          previous_year_2_claim_approved
+        end
+
+        it "DOES NOT flag as previously start year matches claim" do
+          subject
+
+          eligibility = form.claim.eligibility
+
+          expect(eligibility.flagged_as_previously_start_year_matches_claim_false).to be false
+        end
+      end
+
+      context "when a year 2 rejected claim exists with provider_verification_teaching_start_year_matches_claim false" do
+        before do
+          previous_year_2_claim_rejected
+        end
+
+        it "flags as previously the start year matches claim was false by provider" do
+          subject
+
+          eligibility = form.claim.eligibility
+
+          expect(eligibility.flagged_as_previously_start_year_matches_claim_false).to be true
+        end
+      end
+
+      context "when an approved and rejected claim exist in the same year" do
+        before do
+          previous_year_2_claim_approved
+          previous_year_2_claim_rejected
+        end
+
+        it "ignore the rejected claim and DOES NOT flag" do
+          subject
+
+          eligibility = form.claim.eligibility
+
+          expect(eligibility.flagged_as_previously_start_year_matches_claim_false).to be false
         end
       end
     end

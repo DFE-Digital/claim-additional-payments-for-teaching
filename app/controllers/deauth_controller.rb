@@ -1,6 +1,8 @@
 class DeauthController < ApplicationController
   include JourneyConcern
 
+  skip_forgery_protection only: [:onelogin_back_channel]
+
   def onelogin
     if ENV["BYPASS_ONELOGIN_SIGN_IN"] == "true"
       redirect_to journey_session.journey_class::SlugSequence.signed_out_path
@@ -17,6 +19,8 @@ class DeauthController < ApplicationController
 
   def onelogin_back_channel
     return head :bad_request if logout_token.invalid?
+
+    Rails.logger.info "OL back channel deauth requested for uid: #{logout_token.user_uid}"
 
     active_sessions = Journeys::Session.where("answers->>'onelogin_uid' = ?", logout_token.user_uid).not_expired
     active_sessions.each(&:expire!)

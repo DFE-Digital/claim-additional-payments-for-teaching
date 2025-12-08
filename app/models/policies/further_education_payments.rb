@@ -121,6 +121,17 @@ module Policies
       end
     end
 
+    def previous_claim_rejected_due_to_start_year_mismatch?(claim)
+      eligibility = claim.eligibility
+      previous_claim_year = eligibility.previous_claim_year
+
+      return false if eligibility.approved_claims_for_academic_year(previous_claim_year).exists?
+
+      eligibility.rejected_claims_for_academic_year_with_start_year_matches_claim_false(
+        previous_claim_year
+      ).exists?
+    end
+
     def auto_check_student_loan_plan_task?
       true
     end

@@ -245,6 +245,50 @@ module Policies
           .first
       end
 
+      def previous_claim_year
+        Claim
+          .by_policy(Policies::FurtherEducationPayments)
+          .where(onelogin_uid: claim.onelogin_uid)
+          .where("academic_year <= ?", (claim.academic_year - 1).to_s)
+          .order(created_at: :desc)
+          .first
+          &.academic_year
+      end
+
+      def approved_claims_for_academic_year(academic_year)
+        Claim
+          .by_policy(Policies::FurtherEducationPayments)
+          .where(onelogin_uid: claim.onelogin_uid)
+          .where(academic_year:)
+          .approved
+      end
+
+      def rejected_claims_for_academic_year_with_start_year_matches_claim_false(academic_year)
+        # For year 2+ rejections we store the provider verification on the eligibility
+        eligibility_ids_for_provider_verification_false =
+          Policies::FurtherEducationPayments::Eligibility
+            .where(provider_verification_teaching_start_year_matches_claim: false)
+
+        # For year 1 rejections the verification assertions are stored as JSON on the eligibility
+        year_one_assertion = [{"name" => "further_education_teaching_start_year", "outcome" => false}].to_json
+        eligibility_ids_for_year_one_verification_false =
+          Policies::FurtherEducationPayments::Eligibility
+            .where("verification->'assertions' @> ?", year_one_assertion)
+
+        combined_eligibility_ids =
+          eligibility_ids_for_provider_verification_false
+            .or(eligibility_ids_for_year_one_verification_false)
+
+        Claim
+          .by_policy(Policies::FurtherEducationPayments)
+          .where(onelogin_uid: claim.onelogin_uid)
+          .where(academic_year:)
+          .rejected
+          .where(
+            eligibility_id: combined_eligibility_ids.select(:id)
+          )
+      end
+
       private
 
       def year_1_claim?
