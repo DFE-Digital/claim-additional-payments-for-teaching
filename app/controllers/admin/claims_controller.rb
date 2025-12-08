@@ -6,11 +6,18 @@ class Admin::ClaimsController < Admin::BaseAdminController
   def index
     @filter_form = Admin::ClaimsFilterForm.new(
       filters: filter_params,
+      selected_page: params[:page],
       session:
     )
+
     @filter_form.save_to_session!
 
-    @pagy, @claims = pagy(@filter_form.claims)
+    if @filter_form.reset?
+      redirect_to admin_claims_path
+      return
+    end
+
+    @pagy, @claims = pagy(@filter_form.claims, page: @filter_form.page)
 
     respond_to do |format|
       format.html

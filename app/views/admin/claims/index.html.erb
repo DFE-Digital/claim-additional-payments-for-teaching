@@ -45,12 +45,7 @@
 
         <div>
           <%= f.govuk_submit "Apply filters", secondary: true, class: "admin-filter-group__button" %>
-
-          <% if @filter_form.filters_applied? %>
-            <%= govuk_link_to "Clear filters", admin_claims_path(filter: {reset: true}, anchor: "filter"), class: "button-link admin-filter-group__button" %>
-          <% else %>
-            <%= f.submit "Clear filters", type: "reset", class: "button-link admin-filter-group__button" %>
-          <% end %>
+          <%= govuk_link_to "Clear filters", admin_claims_path(filter: {reset: true}, anchor: "filter"), class: "button-link admin-filter-group__button" %>
         </div>
       </div>
     <% end %>
