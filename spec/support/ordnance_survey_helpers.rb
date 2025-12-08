@@ -281,8 +281,7 @@ module OrdnanceSurveyHelpers
       .with(
         headers: {
           "Content-Type" => "application/json",
-          "Expect" => "",
-          "User-Agent" => "Typhoeus - https://github.com/typhoeus/typhoeus"
+          "User-Agent" => "Ruby"
         }
       )
       .to_return(
@@ -315,8 +314,7 @@ module OrdnanceSurveyHelpers
       .with(
         headers: {
           "Content-Type" => "application/json",
-          "Expect" => "",
-          "User-Agent" => "Typhoeus - https://github.com/typhoeus/typhoeus"
+          "User-Agent" => "Ruby"
         }
       )
       .to_return(

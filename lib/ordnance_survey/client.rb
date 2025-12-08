@@ -1,3 +1,5 @@
+require "net/http"
+
 module OrdnanceSurvey
   class Client
     def initialize(
@@ -15,35 +17,39 @@ module OrdnanceSurvey
     def get(path: "/", params: {})
       params = params.merge(self.params)
 
-      response = Response.new(
-        response: Typhoeus.public_send(
-          :get,
-          url(path),
-          headers:,
-          params:,
-          body: {}
-        )
+      uri = calculate_uri(path, params)
+
+      request = Net::HTTP::Get.new(uri)
+      request["Content-Type"] = "application/json"
+
+      response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == "https") do |http|
+        http.request(request)
+      end
+
+      wrapped_response = Response.new(
+        response:
       )
 
-      return nil if response.code == 404
+      return nil if wrapped_response.code == 404
 
-      raise ResponseError.new(response) if [*0..199, *300..403, *405..599].include? response.code
+      raise ResponseError.new(wrapped_response) if [*0..199, *300..403, *405..599].include? wrapped_response.code.to_i
 
-      response.body
+      wrapped_response.body
     end
 
     private
 
     attr_accessor :base_url, :params
 
-    def headers
-      {
-        "Content-Type": "application/json"
-      }
-    end
+    def calculate_uri(path, params)
+      string = "#{base_url}#{path}"
+      query_string = params.map { |k, v| "#{k}=#{v}" }.join("&")
 
-    def url(path)
-      "#{base_url}#{path}"
+      if params.any?
+        string += "?#{query_string}"
+      end
+
+      URI(string)
     end
   end
 end

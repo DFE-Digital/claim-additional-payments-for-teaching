@@ -61,8 +61,9 @@ module OrdnanceSurvey
       end
 
       context "with invalid response status" do
-        before { stub_request(method, %r{test}).to_return(status: response_status) }
         let(:response_status) { [*0..199, *300..403, *405..599].sample }
+
+        before { stub_request(method, "https://www.example.com/test/").to_return(status: response_status) }
 
         it "raises an error" do
           expect { client.public_send(method) }.to raise_error(Client::ResponseError)
@@ -100,7 +101,7 @@ module OrdnanceSurvey
 
     let(:client_args) do
       {
-        base_url: "test",
+        base_url: "https://www.example.com/test",
         params: {}
       }
     end
@@ -119,7 +120,7 @@ module OrdnanceSurvey
       it_behaves_like "a request", :get
 
       it "adds params to URL" do
-        stub = stub_request(:get, "test").with(
+        stub = stub_request(:get, "https://www.example.com/test/").with(
           query: hash_including({
             test: "value"
           })
