@@ -5,7 +5,7 @@ module Tasks
     case task_name
     when "alternative_identity_verification"
       _alternative_identity_verification(task: task, claim: claim)
-    when "ey_alternative_verification"
+    when "ey_alternative_verification", "fe_alternative_verification"
       _ey_alternative_verification(task: task, claim: claim)
     else
       _generic(task)
