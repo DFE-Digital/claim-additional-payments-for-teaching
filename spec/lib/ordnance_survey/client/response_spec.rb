@@ -38,9 +38,5 @@ module OrdnanceSurvey
         end
       end
     end
-
-    describe "#code" do
-      it { is_expected.to delegate_method(:code).to(:response) }
-    end
   end
 end

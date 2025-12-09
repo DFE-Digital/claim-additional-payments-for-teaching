@@ -281,7 +281,7 @@ module OrdnanceSurveyHelpers
       .with(
         headers: {
           "Content-Type" => "application/json",
-          "User-Agent" => "Ruby"
+          "User-Agent" => "Faraday v#{Faraday::VERSION}"
         }
       )
       .to_return(
@@ -314,7 +314,7 @@ module OrdnanceSurveyHelpers
       .with(
         headers: {
           "Content-Type" => "application/json",
-          "User-Agent" => "Ruby"
+          "User-Agent" => "Faraday v#{Faraday::VERSION}"
         }
       )
       .to_return(

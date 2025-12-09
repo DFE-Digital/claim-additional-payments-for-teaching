@@ -124,7 +124,7 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       .with(
         headers: {
           "Content-Type" => "application/json",
-          "User-Agent" => "Ruby"
+          "User-Agent" => "Faraday v#{Faraday::VERSION}"
         }
       ).to_return(status: 200, body: body_results_for_postcode_so16_9fx, headers: {})
 
@@ -241,7 +241,7 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       .with(
         headers: {
           "Content-Type" => "application/json",
-          "User-Agent" => "Ruby"
+          "User-Agent" => "Faraday v#{Faraday::VERSION}"
         }
       ).to_return(status: 200, body: body_results_for_postcode_se13_7un, headers: {})
 
@@ -249,7 +249,7 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       .with(
         headers: {
           "Content-Type" => "application/json",
-          "User-Agent" => "Ruby"
+          "User-Agent" => "Faraday v#{Faraday::VERSION}"
         }
       ).to_return(status: 500, headers: {})
   end

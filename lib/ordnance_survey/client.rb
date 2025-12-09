@@ -1,5 +1,3 @@
-require "net/http"
-
 module OrdnanceSurvey
   class Client
     def initialize(
@@ -15,15 +13,12 @@ module OrdnanceSurvey
     end
 
     def get(path: "/", params: {})
-      params = params.merge(self.params)
-
       uri = calculate_uri(path, params)
 
-      request = Net::HTTP::Get.new(uri)
-      request["Content-Type"] = "application/json"
-
-      response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == "https") do |http|
-        http.request(request)
+      response = connection.get(uri) do |request|
+        params.each do |k, v|
+          request.params[k] = v
+        end
       end
 
       wrapped_response = Response.new(
@@ -40,6 +35,15 @@ module OrdnanceSurvey
     private
 
     attr_accessor :base_url, :params
+
+    def connection
+      @connection ||= Faraday.new(
+        params:,
+        headers: {
+          "Content-Type" => "application/json"
+        }
+      )
+    end
 
     def calculate_uri(path, params)
       string = "#{base_url}#{path}"

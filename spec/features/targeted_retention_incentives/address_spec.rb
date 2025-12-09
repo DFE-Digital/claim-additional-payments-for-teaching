@@ -130,7 +130,7 @@ RSpec.feature "TargetedRetentionIncentivePayments addres", slow: true do
         .with(
           headers: {
             "Content-Type" => "application/json",
-            "User-Agent" => "Ruby"
+            "User-Agent" => "Faraday v#{Faraday::VERSION}"
           }
         ).to_return(status: 200, body: body, headers: {})
     end
