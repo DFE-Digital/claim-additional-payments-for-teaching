@@ -59,10 +59,6 @@ gem "govuk-components", "~> 5.13"
 
 gem "govuk_publishing_components"
 
-# See https://github.com/typhoeus/ethon/issues/185
-gem "ethon", "~> 0.16.0"
-gem "typhoeus", "~> 1.4.1"
-
 # ROTP requried for Early Career Payments one-time password
 gem "rotp"
 
