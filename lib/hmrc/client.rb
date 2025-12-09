@@ -72,12 +72,12 @@ module Hmrc
     def post_request(path, payload, headers = nil)
       response = http_client.post(
         "#{base_url}#{path}",
-        headers: headers,
-        body: payload
+        payload,
+        headers
       )
 
       if !response.success?
-        logger.info("HMRC API error: response code #{response.code}")
+        logger.info("HMRC API error: response code #{response.status}")
         raise ResponseError.new(response)
       end
 
