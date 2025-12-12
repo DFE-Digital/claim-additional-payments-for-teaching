@@ -207,6 +207,120 @@ RSpec.feature "Admin claim further education payments" do
           end
         end
       end
+
+      context "when the provider has not yet verified the claim" do
+        context "when the verification is overdue" do
+          it "shows when the verification chaser email was last sent" do
+            eligibility = create(
+              :further_education_payments_eligibility,
+              :eligible,
+              provider_verification_chase_email_last_sent_at: 8.days.ago
+            )
+
+            claim = create(
+              :claim,
+              :further_education,
+              :submitted,
+              eligibility: eligibility,
+              created_at: 3.weeks.ago
+            )
+
+            visit admin_claim_task_path(claim, "fe_provider_verification_v2")
+
+            expect(page).to have_content(
+              "A reminder to complete the provider verification check was " \
+              "last sent on 1 September 2025 11:00am"
+            )
+          end
+
+          it "has a button for ops to send another chaser email" do
+            provider = create(:eligible_fe_provider, :with_school)
+
+            eligibility = create(
+              :further_education_payments_eligibility,
+              :eligible,
+              school: provider.school
+            )
+
+            claim = create(
+              :claim,
+              :further_education,
+              :submitted,
+              eligibility: eligibility,
+              created_at: 3.weeks.ago
+            )
+
+            visit admin_claim_task_path(claim, "fe_provider_verification_v2")
+
+            perform_enqueued_jobs do
+              click_on "Send provider verification chaser email"
+            end
+
+            expect(page).to have_content(
+              "Verification email sent to #{provider.school.name}"
+            )
+
+            expect(provider.primary_key_contact_email_address).to have_received_email(
+              ApplicationMailer::FURTHER_EDUCATION_PAYMENTS[:PROVIDER_OVERDUE_VERIFICATION_CHASER_TEMPLATE_ID]
+            )
+
+            # view claim notes, expect to see note about chaser email being sent
+            visit admin_claim_notes_path(claim)
+
+            expect(page).to have_content(
+              "Verification email sent to #{provider.school.name}\nby Aaron Admin"
+            )
+          end
+        end
+
+        context "when the verification is not overdue" do
+          context "when the claim is less that 2 weeks old" do
+            it "doesn't show send chaser email button" do
+              provider = create(:eligible_fe_provider, :with_school)
+
+              eligibility = create(
+                :further_education_payments_eligibility,
+                :eligible,
+                school: provider.school
+              )
+
+              claim = create(
+                :claim,
+                :further_education,
+                :submitted,
+                eligibility: eligibility,
+                created_at: 1.weeks.ago
+              )
+
+              visit admin_claim_task_path(claim, "fe_provider_verification_v2")
+
+              expect(page).not_to have_content("Send chaser email")
+            end
+          end
+
+          context "when the claim has already been verified" do
+            it "doesn't show send chaser email button" do
+              eligibility = create(
+                :further_education_payments_eligibility,
+                :eligible,
+                :provider_verification_completed
+              )
+
+              claim = create(
+                :claim,
+                :further_education,
+                :submitted,
+                eligibility: eligibility,
+                created_at: 3.weeks.ago
+              )
+
+              visit admin_claim_task_path(claim, "fe_provider_verification_v2")
+
+              expect(page).not_to have_content("Send chaser email")
+            end
+          end
+        end
+      end
     end
 
     describe "provider identity verification task" do
@@ -244,13 +358,17 @@ RSpec.feature "Admin claim further education payments" do
             claim = create(
               :claim,
               :submitted,
+              first_name: "Edna",
+              surname: "Krabappel",
               policy: Policies::FurtherEducationPayments,
               onelogin_idv_at: 1.day.ago,
               identity_confirmed_with_onelogin: false,
               national_insurance_number: "AB123456B",
               postcode: "TE57 2NG",
               date_of_birth: Date.new(1990, 2, 1),
-              academic_year: AcademicYear.new("2025/2026")
+              academic_year: AcademicYear.new("2025/2026"),
+              email_address: "claimant@example.com",
+              banking_name: "Edna Krabappel - banking name"
             )
 
             create(
@@ -265,16 +383,16 @@ RSpec.feature "Admin claim further education payments" do
               provider_verification_claimant_email: "claimant@example.com"
             )
 
-            AutomatedChecks::ClaimVerifiers::AlternativeIdentityVerification
+            AutomatedChecks::ClaimVerifiers::FeAlternativeVerification
               .new(claim: claim).perform
 
             visit admin_claim_tasks_path(claim)
             click_on "Confirm the provider has verified the claimant’s identity"
 
-            within_table_row("Does #{claim.school.name} employ Jo Bloggs?") do |claimant, provider|
-              expect(claimant).to have_text("Jo Bloggs")
-              expect(provider).to have_text("Yes")
-            end
+            expect(page).to have_content(
+              "Do the personal details provided by the claimant match the " \
+              "details from the provider?"
+            )
 
             within_table_row("Date of birth") do |claimant, provider|
               expect(claimant).to have_text("1 February 1990")
@@ -291,16 +409,19 @@ RSpec.feature "Admin claim further education payments" do
               expect(provider).to have_text("AB123456C")
             end
 
-            within_table_row("Do claimant’s bank details match provider’s records?") do |claimant, provider|
-              expect(claimant).to have_text(claim.banking_name)
-              expect(claimant).to have_text(claim.bank_sort_code)
-              expect(claimant).to have_text(claim.bank_account_number)
-              expect(provider).to have_text("Yes")
-            end
-
             within_table_row("Email") do |claimant, provider|
               expect(claimant).to have_text("claimant@example.com")
               expect(provider).to have_text("claimant@example.com")
+            end
+
+            expect(page).to have_content(
+              "Has Edna Krabappel provided their own bank account details?"
+            )
+
+            within "#bank-details" do
+              expect(page).to have_text("Edna Krabappel - banking name")
+              expect(page).to have_text("Edna Krabappel")
+              expect(page).to have_text("No value from HMRC")
             end
           end
 
@@ -310,19 +431,22 @@ RSpec.feature "Admin claim further education payments" do
                 :claim,
                 :submitted,
                 policy: Policies::FurtherEducationPayments,
+                first_name: "Edna",
+                surname: "Krabappel",
                 email_address: "claimant@example.com",
                 onelogin_idv_at: 1.day.ago,
                 identity_confirmed_with_onelogin: false,
                 national_insurance_number: "AB123456B",
                 postcode: "TE57 1NG",
                 date_of_birth: Date.new(1990, 1, 1),
-                academic_year: AcademicYear.new("2025/2026")
+                academic_year: AcademicYear.new("2025/2026"),
+                banking_name: "Edna Krabappel",
+                hmrc_bank_validation_responses: [{"body" => {"nameMatches" => "yes"}}]
               )
 
               create(
                 :further_education_payments_eligibility,
                 claim: claim,
-                flagged_as_duplicate: true,
                 work_email: "claimant@example.com",
                 provider_verification_claimant_employed_by_college: true,
                 provider_verification_claimant_date_of_birth: Date.new(1990, 1, 1),
@@ -346,9 +470,13 @@ RSpec.feature "Admin claim further education payments" do
                 "Confirm the provider has verified the claimant’s identity"
               )
 
-              expect(page).not_to have_content(
-                "Do the details entered by the claimant match the personal " \
-                "details entered by the provider?"
+              expect(page).to have_content(
+                "Do the personal details provided by the claimant match the " \
+                "details from the provider? Yes"
+              )
+
+              expect(page).to have_content(
+                "Has Edna Krabappel provided their own bank account details? Yes"
               )
 
               expect(find(".govuk-tag")).to have_text("Passed")
@@ -366,6 +494,8 @@ RSpec.feature "Admin claim further education payments" do
                 :claim,
                 :submitted,
                 policy: Policies::FurtherEducationPayments,
+                first_name: "Edna",
+                surname: "Krabappel",
                 email_address: "claimant@example.com",
                 onelogin_idv_at: 1.day.ago,
                 identity_confirmed_with_onelogin: false,
@@ -392,33 +522,31 @@ RSpec.feature "Admin claim further education payments" do
               end
 
               visit admin_claim_tasks_path(claim)
+
               click_on(
                 "Confirm the provider has verified the claimant’s identity"
               )
 
-              expect(page).to have_content(
-                "Do the details provided by the claimant match the " \
-                "provider’s responses?"
-              )
-              choose "No"
+              within_fieldset(
+                "Do the personal details provided by the claimant match the details from the provider?"
+              ) { choose("Yes") }
+
+              within_fieldset(
+                "Has Edna Krabappel provided their own bank account details?"
+              ) { choose("No") }
+
               click_on "Save and continue"
 
               visit admin_claim_tasks_path(claim)
-              expect(
-                task_status("Alternative verification")
-              ).to eq("Failed")
+
               click_on(
                 "Confirm the provider has verified the claimant’s identity"
               )
 
-              expect(page).not_to have_content(
-                "Do the details provided by the claimant match the " \
-                "provider’s responses?"
-              )
               expect(find(".govuk-tag")).to have_text("Failed")
+
               expect(page).to have_content(
-                "This task was performed by Aaron Admin on 9 September " \
-                "#{AcademicYear.current.start_year} 11:00am"
+                "This task was performed by Aaron Admin"
               )
             end
           end

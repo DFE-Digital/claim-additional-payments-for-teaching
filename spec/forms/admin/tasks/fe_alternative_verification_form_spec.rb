@@ -1,78 +1,112 @@
 require "rails_helper"
 
-RSpec.describe Admin::Tasks::FeAlternativeVerificationForm do
-  subject { described_class.new claim: }
+RSpec.describe Admin::Tasks::EyAlternativeVerificationForm, type: :model do
+  let(:claim) do
+    create(
+      :claim,
+      :submitted,
+      policy: Policies::FurtherEducationPayments
+    )
+  end
 
-  describe "#data_table_rows" do
-    context "when provider has not completed verification" do
-      let(:claim) do
-        create(
-          :claim,
-          :submitted,
-          :further_education
+  let(:admin) { create(:dfe_signin_user) }
+
+  let(:form) do
+    described_class.new(claim: claim, admin_user: admin)
+  end
+
+  describe "validations" do
+    subject { form }
+
+    it do
+      is_expected.not_to(
+        allow_value(nil)
+        .for(:personal_details_match)
+        .with_message("You must select ‘Yes’ or ‘No’")
+      )
+    end
+
+    it do
+      is_expected.not_to(
+        allow_value(nil)
+        .for(:bank_details_match)
+        .with_message("You must select ‘Yes’ or ‘No’")
+      )
+    end
+  end
+
+  describe "#initialise" do
+    context "when the task exists" do
+      it "sets the attributes from the task data" do
+        task = create(
+          :task,
+          :failed,
+          name: "ey_alternative_verification",
+          claim: claim,
+          data: {
+            "personal_details_match" => false,
+            "bank_details_match" => true
+          }
         )
-      end
 
-      it "returns awaiting response" do
-        values = subject.data_table_rows.map { |row| row[2] }.uniq
-        expect(values).to eql(["Awaiting provider response"])
+        form = described_class.new(claim: claim, admin_user: admin)
+
+        expect(form.task).to eq task
+        expect(form.personal_details_match).to be false
+        expect(form.bank_details_match).to be true
+      end
+    end
+  end
+
+  describe "#save" do
+    context "when both fields are true" do
+      it "passes the task" do
+        form.personal_details_match = true
+        form.bank_details_match = true
+
+        expect(form.save).to be true
+
+        expect(form.task.passed).to be true
+        expect(form.task.manual).to be true
+        expect(form.task.created_by).to eq admin
+        expect(form.task.data).to eq(
+          "personal_details_match" => true,
+          "bank_details_match" => true
+        )
       end
     end
 
-    context "when provider has completed verification" do
-      let(:claim) do
-        create(
-          :claim,
-          :submitted,
-          :further_education,
-          eligibility_attributes: {
-            provider_verification_claimant_employed_by_college: true,
-            provider_verification_claimant_date_of_birth: Date.new(1987, 2, 25),
-            provider_verification_claimant_postcode: "EC1N 2TD",
-            provider_verification_claimant_national_insurance_number: "AB123456C",
-            provider_verification_claimant_bank_details_match: true,
-            provider_verification_claimant_email: "work.email@example.com"
-          }
-        )
-      end
+    context "when personal details match is false" do
+      it "fails the task" do
+        form.personal_details_match = false
+        form.bank_details_match = true
 
-      it "returns providers responses" do
-        values = subject.data_table_rows.map { |row| row[2] }
-        expected = [
-          "Yes",
-          "25 February 1987",
-          "EC1N 2TD",
-          "AB123456C",
-          "Yes",
-          "work.email@example.com"
-        ]
-        expect(values).to eql(expected)
+        expect(form.save).to be true
+
+        expect(form.task.passed).to be false
+        expect(form.task.manual).to be true
+        expect(form.task.created_by).to eq admin
+        expect(form.task.data).to eq(
+          "personal_details_match" => false,
+          "bank_details_match" => true
+        )
       end
     end
 
-    context "when claimant not employed by FE provider" do
-      let(:claim) do
-        create(
-          :claim,
-          :submitted,
-          :further_education,
-          eligibility_attributes: {
-            provider_verification_claimant_employed_by_college: false
-          }
-        )
-      end
+    context "when bank details match is false" do
+      it "fails the task" do
+        form.personal_details_match = true
+        form.bank_details_match = false
 
-      it "returns mostly N/A answers" do
-        values = subject.data_table_rows.map { |row| row[2] }
-        expected = [
-          "No",
-          "N/A",
-          "N/A",
-          "N/A",
-          "N/A",
-          "N/A"
-        ]
-        expect(values).to eql(expected)
+        expect(form.save).to be true
+
+        expect(form.task.passed).to be false
+        expect(form.task.manual).to be true
+        expect(form.task.created_by).to eq admin
+        expect(form.task.data).to eq(
+          "personal_details_match" => true,
+          "bank_details_match" => false
+        )
       end
     end
   end

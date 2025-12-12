@@ -11,7 +11,7 @@ ENV RAILS_ENV=production
 
 RUN apk update
 RUN apk add icu=~76.1-r1 # force vulnerability fix
-RUN apk add pcre2=~10.46-r0 # force vulnerability fix
+RUN apk add pcre2=~10.47-r0 # force vulnerability fix
 RUN apk add postgresql16=~16.11-r0
 RUN apk add bash postgresql-dev tzdata nodejs curl libc6-compat shared-mime-info
 

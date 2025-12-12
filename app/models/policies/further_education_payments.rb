@@ -1,6 +1,9 @@
 module Policies
   module FurtherEducationPayments
     DECISION_DEADLINE = 25.weeks.freeze
+    # How long after claim submission the provider has to complete
+    # verification before it is considered overdue
+    POST_SUBMISSION_VERIFICATION_DEADLINE = 2.weeks
 
     include BasePolicy
     extend self
@@ -16,7 +19,6 @@ module Policies
 
     VERIFIERS = [
       AutomatedChecks::ClaimVerifiers::OneLoginIdentity,
-      AutomatedChecks::ClaimVerifiers::AlternativeIdentityVerification,
       AutomatedChecks::ClaimVerifiers::Employment,
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
       AutomatedChecks::ClaimVerifiers::FraudRisk,
@@ -93,7 +95,11 @@ module Policies
     end
 
     def verification_due_date_for_claim(claim)
-      (claim.created_at + 2.weeks).to_date
+      (claim.created_at + POST_SUBMISSION_VERIFICATION_DEADLINE).to_date
+    end
+
+    def verification_expiry_date_for_claim(claim)
+      verification_due_date_for_claim(claim) + 3.weeks
     end
 
     def verification_chase_due_date_for_claim(claim)
