@@ -260,6 +260,8 @@ if Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")
       rejected_reasons: {Policies::FurtherEducationPayments::ADMIN_DECISION_REJECTED_REASONS.first => "1"}
     )
   end
+
+  Policies::TargetedRetentionIncentivePayments::Test::SchoolImporter.run
 end
 
 if ENV["ENVIRONMENT_NAME"].start_with?("review")
