@@ -22,6 +22,8 @@ if Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")
   ENV["FIXTURES_PATH"] = "spec/fixtures"
   ENV["FIXTURES"] = "local_authorities,local_authority_districts,schools"
   Rake::Task["db:fixtures:load"].invoke
+
+  Policies::TargetedRetentionIncentivePayments::Test::SchoolImporter.run
 end
 
 if Rails.env.development?
