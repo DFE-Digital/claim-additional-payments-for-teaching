@@ -13,9 +13,7 @@ module OrdnanceSurvey
     end
 
     def get(path: "/", params: {})
-      uri = calculate_uri(path, params)
-
-      response = connection.get(uri) do |request|
+      response = connection.get(path) do |request|
         params.each do |k, v|
           request.params[k] = v
         end
@@ -38,22 +36,12 @@ module OrdnanceSurvey
 
     def connection
       @connection ||= Faraday.new(
+        base_url,
         params:,
         headers: {
           "Content-Type" => "application/json"
         }
       )
-    end
-
-    def calculate_uri(path, params)
-      string = "#{base_url}#{path}"
-      query_string = params.map { |k, v| "#{k}=#{v}" }.join("&")
-
-      if params.any?
-        string += "?#{query_string}"
-      end
-
-      URI(string)
     end
   end
 end

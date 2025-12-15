@@ -4,14 +4,14 @@ module OrdnanceSurvey
   RSpec.describe Client do
     shared_examples "a request" do |method|
       it "makes a request to a host" do
-        stub = stub_request(method, %r{test})
+        stub = stub_request(method, "https://www.example.com")
         client.public_send(method)
 
         expect(stub).to have_been_requested
       end
 
       it "adds content type header" do
-        stub = stub_request(method, %r{test}).with(
+        stub = stub_request(method, "https://www.example.com").with(
           headers: {
             "Content-Type": "application/json"
           }
@@ -24,7 +24,7 @@ module OrdnanceSurvey
 
       context "with JSON body" do
         before do
-          stub_request(method, %r{test}).to_return(
+          stub_request(method, "https://www.example.com").to_return(
             body: body_args.to_json
           )
         end
@@ -45,7 +45,7 @@ module OrdnanceSurvey
       end
 
       context "with empty body" do
-        before { stub_request(method, %r{test}).to_return(body: "") }
+        before { stub_request(method, "https://www.example.com").to_return(body: "") }
 
         it "translates response into Ruby" do
           expect(client.public_send(method)).to eq(nil)
@@ -53,7 +53,7 @@ module OrdnanceSurvey
       end
 
       context "with not found status" do
-        before { stub_request(method, %r{test}).to_return(status: 404) }
+        before { stub_request(method, "https://www.example.com").to_return(status: 404) }
 
         it "returns nil" do
           expect(client.public_send(method)).to eq(nil)
@@ -63,7 +63,7 @@ module OrdnanceSurvey
       context "with invalid response status" do
         let(:response_status) { [*0..199, *300..403, *405..599].sample }
 
-        before { stub_request(method, "https://www.example.com/test/").to_return(status: response_status) }
+        before { stub_request(method, "https://www.example.com").to_return(status: response_status) }
 
         it "raises an error" do
           expect { client.public_send(method) }.to raise_error(Client::ResponseError)
@@ -74,7 +74,7 @@ module OrdnanceSurvey
         before { client_args[:params] = {some_param: "somevalue"} }
 
         it "makes a request with those params" do
-          stub = stub_request(method, %r{test}).with(
+          stub = stub_request(method, "https://www.example.com").with(
             query: hash_including({some_param: "somevalue"})
           )
 
@@ -88,7 +88,7 @@ module OrdnanceSurvey
         before { client_args[:params] = nil }
 
         it "makes a request without those params" do
-          stub = stub_request(method, %r{test}).with(query: nil)
+          stub = stub_request(method, "https://www.example.com").with(query: nil)
 
           client.public_send(method)
 
@@ -120,7 +120,7 @@ module OrdnanceSurvey
       it_behaves_like "a request", :get
 
       it "adds params to URL" do
-        stub = stub_request(:get, "https://www.example.com/test/").with(
+        stub = stub_request(:get, "https://www.example.com").with(
           query: hash_including({
             test: "value"
           })
@@ -132,7 +132,7 @@ module OrdnanceSurvey
       end
 
       it "should not send body" do
-        stub = stub_request(:get, %r{test}).with(
+        stub = stub_request(:get, "https://www.example.com").with(
           body: nil
         )
 
