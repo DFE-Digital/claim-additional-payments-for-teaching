@@ -44,7 +44,46 @@ module Admin
 
       scope = scope.order("eligible_ey_providers.nursery_name ASC")
 
-      @provider_results = scope
+      respond_to do |format|
+        format.html do
+          @provider_results = scope
+        end
+
+        format.csv do
+          send_data(
+            generate_csv(scope),
+            filename: "early_years_providers_#{Time.zone.now.strftime("%Y%m%d_%H%M%S")}.csv"
+          )
+        end
+      end
+    end
+
+    private
+
+    def generate_csv(provider_results)
+      CSV.generate(headers: true) do |csv|
+        csv << [
+          "Nursery Name",
+          "Primary Contact Email",
+          "Max Claims",
+          "Claims Submitted",
+          "Claim References"
+        ]
+
+        provider_results.each do |provider|
+          claim_references = provider.claims_data.map do |claims_data|
+            Array.wrap(claims_data["reference"])
+          end.join(" ")
+
+          csv << [
+            provider.nursery_name,
+            provider.primary_key_contact_email_address,
+            provider.max_claims,
+            provider.claims_submitted,
+            claim_references
+          ]
+        end
+      end
     end
   end
 end

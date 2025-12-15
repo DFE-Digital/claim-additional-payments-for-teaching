@@ -10,12 +10,12 @@ RSpec.describe Hmrc::Client do
   let(:token_expiry) { 99999 }
 
   before do
-    allow(http_client).to receive(:post).with("#{base_url}/oauth/token", headers: nil, body: {
+    allow(http_client).to receive(:post).with("#{base_url}/oauth/token", {
       grant_type: "client_credentials",
       client_id: client_id,
       client_secret: client_secret
-    }) do
-      double(success?: true, code: 200, body: {
+    }, nil) do
+      double(success?: true, status: 200, body: {
         "access_token" => token,
         "expires_in" => token_expiry
       }.to_json)
@@ -46,7 +46,7 @@ RSpec.describe Hmrc::Client do
         expect(client.instance_variable_get(:@base_url)).to eq(ENV["HMRC_API_BASE_URL"])
         expect(client.instance_variable_get(:@client_id)).to eq(ENV["HMRC_API_CLIENT_ID"])
         expect(client.instance_variable_get(:@client_secret)).to eq(ENV["HMRC_API_CLIENT_SECRET"])
-        expect(client.instance_variable_get(:@http_client)).to eq(Typhoeus)
+        expect(client.instance_variable_get(:@http_client)).to eq(Faraday)
         expect(client.instance_variable_get(:@logger)).to eq(Rails.logger)
       end
     end
@@ -87,8 +87,8 @@ RSpec.describe Hmrc::Client do
     end
 
     before do
-      allow(http_client).to receive(:post).with("#{base_url}/misc/bank-account/verify/personal", headers: expected_headers, body: expected_payload) do
-        double(body: response_to_return, success?: response_success, code: response_code)
+      allow(http_client).to receive(:post).with("#{base_url}/misc/bank-account/verify/personal", expected_payload, expected_headers) do
+        double(body: response_to_return, success?: response_success, status: response_code)
       end
     end
 
@@ -105,7 +105,7 @@ RSpec.describe Hmrc::Client do
 
       it "sends a well-formed request to the HMRC API" do
         response
-        expect(http_client).to have_received(:post).with("#{base_url}/misc/bank-account/verify/personal", headers: expected_headers, body: expected_payload)
+        expect(http_client).to have_received(:post).with("#{base_url}/misc/bank-account/verify/personal", expected_payload, expected_headers)
       end
 
       it "returns the expected object" do
@@ -121,7 +121,7 @@ RSpec.describe Hmrc::Client do
 
       it "does not request a new token" do
         response
-        expect(http_client).not_to have_received(:post).with("#{base_url}/oauth/token", headers: nil, body: an_instance_of(Hash))
+        expect(http_client).not_to have_received(:post).with("#{base_url}/oauth/token", an_instance_of(Hash), nil)
       end
     end
 

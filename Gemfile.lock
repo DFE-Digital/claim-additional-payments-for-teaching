@@ -148,8 +148,6 @@ GEM
     erubi (1.13.1)
     et-orbi (1.4.0)
       tzinfo
-    ethon (0.16.0)
-      ffi (>= 1.15.0)
     execjs (2.10.0)
     factory_bot (6.5.6)
       activesupport (>= 6.1.0)
@@ -867,8 +865,6 @@ GEM
     turbo_tests (2.2.5)
       parallel_tests (>= 3.3.0, < 5)
       rspec (>= 3.10)
-    typhoeus (1.4.1)
-      ethon (>= 0.9.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
@@ -928,7 +924,6 @@ DEPENDENCIES
   cuprite
   dfe-analytics!
   dotenv-rails
-  ethon (~> 0.16.0)
   factory_bot_rails
   faker (~> 3.5)
   faraday_middleware
@@ -974,7 +969,6 @@ DEPENDENCIES
   standard
   terser
   turbo_tests
-  typhoeus (~> 1.4.1)
   tzinfo-data
   uk_postcode
   web-console (>= 3.3.0)

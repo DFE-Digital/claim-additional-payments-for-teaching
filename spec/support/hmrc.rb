@@ -1,5 +1,15 @@
 RSpec.shared_context "with stubbed HMRC client", shared_context: :metadata do
-  let(:hmrc_response) { double(name_match?: name_match, sort_code_correct?: sort_code_correct, account_exists?: account_exists, code: 200, success?: name_match && account_exists && sort_code_correct, body: "Test response") }
+  let(:hmrc_response) do
+    double(
+      name_match?: name_match,
+      sort_code_correct?: sort_code_correct,
+      account_exists?: account_exists,
+      code: 200,
+      success?: name_match && account_exists && sort_code_correct,
+      body: "Test response"
+    )
+  end
+
   let(:hmrc_client) { double(verify_personal_bank_account: hmrc_response) }
   let(:name_match) { true }
   let(:account_exists) { true }
@@ -26,12 +36,12 @@ end
 RSpec.shared_context "with failing HMRC bank validation API request", shared_context: :metadata do
   before do
     @old_hmrc_client = Hmrc.client
-    Hmrc.configure { |config| config.http_client = double(post: double(success?: false, code: 429, body: "Test failure")) }
+    Hmrc.configure { |config| config.http_client = double(post: double(success?: false, status: 429, body: "Test failure", code: 429)) }
     Hmrc.client = Hmrc::Client.new
   end
 
   after do
-    Hmrc.configure { |config| config.http_client = Typhoeus }
+    Hmrc.configure { |config| config.http_client = Faraday }
     Hmrc.client = @old_hmrc_client
   end
 end

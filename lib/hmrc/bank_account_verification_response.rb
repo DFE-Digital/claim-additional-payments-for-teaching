@@ -2,14 +2,20 @@ module Hmrc
   class BankAccountVerificationResponse
     attr_reader :payload
 
-    delegate :code, to: :payload
-
     def initialize(payload)
       @payload = payload
     end
 
     def body
       @body ||= JSON.parse(payload.body)
+    end
+
+    def code
+      if payload.respond_to?(:status)
+        payload.status.to_i
+      else
+        payload.code
+      end
     end
 
     def success?

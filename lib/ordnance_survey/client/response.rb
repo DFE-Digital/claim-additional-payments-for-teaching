@@ -1,7 +1,5 @@
 module OrdnanceSurvey
   class Client::Response
-    delegate :code, to: :response
-
     def initialize(response:)
       @body = nil
       self.response = response
@@ -11,6 +9,10 @@ module OrdnanceSurvey
       return @body if !@body.nil? || (@body.nil? && @response.body.empty?)
 
       @body = JSON.parse(response.body, symbolize_names: true)
+    end
+
+    def code
+      response.status.to_i
     end
 
     private

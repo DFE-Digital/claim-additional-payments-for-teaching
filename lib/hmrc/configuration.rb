@@ -8,7 +8,7 @@ module Hmrc
       self.client_secret = nil
       self.enabled = false
       self.logger = Rails.logger
-      self.http_client = Typhoeus
+      self.http_client = Faraday
     end
 
     def enabled?
