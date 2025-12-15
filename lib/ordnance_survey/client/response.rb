@@ -12,7 +12,7 @@ module OrdnanceSurvey
     end
 
     def code
-      response.status
+      response.status.to_i
     end
 
     private

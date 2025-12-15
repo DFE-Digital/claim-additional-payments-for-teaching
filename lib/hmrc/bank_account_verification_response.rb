@@ -12,7 +12,7 @@ module Hmrc
 
     def code
       if payload.respond_to?(:status)
-        payload.status
+        payload.status.to_i
       else
         payload.code
       end
