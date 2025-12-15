@@ -168,6 +168,8 @@ Rails.application.routes.draw do
     resource :eligible_fe_providers, only: [:create, :show], path: "eligible-further-education-providers"
     resources :reports, only: [:index, :show]
 
+    resources :early_years_providers, only: [:index]
+
     get "refresh-session", to: "sessions#refresh", as: :refresh_session
 
     patch "allocate/:id", to: "allocations#allocate", as: :allocate
