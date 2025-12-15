@@ -13,39 +13,35 @@ module OrdnanceSurvey
     end
 
     def get(path: "/", params: {})
-      request(method: :get, path: path, params: params)
+      response = connection.get(path) do |request|
+        params.each do |k, v|
+          request.params[k] = v
+        end
+      end
+
+      wrapped_response = Response.new(
+        response:
+      )
+
+      return nil if wrapped_response.code == 404
+
+      raise ResponseError.new(wrapped_response) if [*0..199, *300..403, *405..599].include? wrapped_response.code.to_i
+
+      wrapped_response.body
     end
 
     private
 
-    attr_accessor :api_key, :base_url, :headers, :params
+    attr_accessor :base_url, :params
 
-    def request(method:, path: "/", params: {}, body: {})
-      headers = {
-        "Content-Type": "application/json"
-      }
-
-      params = params.merge(self.params)
-
-      response = Response.new(
-        response: Typhoeus.public_send(
-          method,
-          url(path),
-          headers: headers,
-          params: params,
-          body: body
-        )
+    def connection
+      @connection ||= Faraday.new(
+        base_url,
+        params:,
+        headers: {
+          "Content-Type" => "application/json"
+        }
       )
-
-      return nil if response.code == 404
-
-      raise ResponseError.new(response) if [*0..199, *300..403, *405..599].include? response.code
-
-      response.body
-    end
-
-    def url(path)
-      "#{base_url}#{path}"
     end
   end
 end

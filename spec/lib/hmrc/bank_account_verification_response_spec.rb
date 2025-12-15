@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Hmrc::BankAccountVerificationResponse do
   let(:payload) do
     double(
-      code: 200,
+      status: "200",
       body: {
         "sortCodeIsPresentOnEISCD" => sort_code_present_response,
         "nameMatches" => name_matches_response,
@@ -106,6 +106,12 @@ RSpec.describe Hmrc::BankAccountVerificationResponse do
       let(:account_exists_response) { "no" }
 
       it { is_expected.not_to be_success }
+    end
+  end
+
+  describe "#code" do
+    it "returns an int" do
+      expect(subject.code).to eql 200
     end
   end
 end

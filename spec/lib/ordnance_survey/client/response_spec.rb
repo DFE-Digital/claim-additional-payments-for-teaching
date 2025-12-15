@@ -2,9 +2,9 @@ require "rails_helper"
 
 module OrdnanceSurvey
   RSpec.describe Client::Response do
-    subject(:response) { described_class.new(response: response_args) }
+    subject { described_class.new(response:) }
 
-    let(:body_args) do
+    let(:body_hash) do
       {
         response: {
           reason_code: "ACODE",
@@ -14,33 +14,32 @@ module OrdnanceSurvey
       }
     end
 
-    let(:response_args) do
+    let(:response) do
       instance_double(
-        Net::HTTPResponse,
-        body: body_args.to_json
+        Faraday::Response,
+        body: body_hash.to_json,
+        status: "200"
       )
     end
 
     describe "#body" do
       it "returns parsed JSON" do
-        expect(response.body).to eq(body_args)
-      end
-
-      it "memoizes parsed JSON" do
-        expect(response.body).to be(response.body)
+        expect(subject.body).to eq(body_hash)
       end
 
       context "with empty body" do
-        let(:response_args) { instance_double(Net::HTTPResponse, body: "") }
+        let(:response) { instance_double(Faraday::Response, body: "") }
 
         it "returns nil" do
-          expect(response.body).to eq(nil)
+          expect(subject.body).to be_nil
         end
       end
     end
 
     describe "#code" do
-      it { is_expected.to delegate_method(:code).to(:response) }
+      it "returns int" do
+        expect(subject.code).to eql 200
+      end
     end
   end
 end
