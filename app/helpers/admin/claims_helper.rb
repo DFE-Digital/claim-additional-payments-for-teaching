@@ -45,13 +45,23 @@ module Admin
       content_tag(:span, "Removed", class: "capt-text-quiet")
     end
 
+    def personal_data(claim, attribute, *args, &block)
+      value = claim.public_send(attribute, *args)
+
+      if claim.personal_data_removed? && value.blank?
+        personal_data_removed_text
+      else
+        block_given? ? block.call(value) : value
+      end
+    end
+
     def admin_personal_details(claim)
       [
         [translate("admin.teacher_reference_number"), claim.eligibility.teacher_reference_number.presence || "Not provided"],
-        ["Full name", claim.personal_data_removed? ? personal_data_removed_text : claim.full_name],
-        ["Date of birth", claim.personal_data_removed? ? personal_data_removed_text : l(claim.date_of_birth)],
-        [translate("admin.national_insurance_number"), claim.personal_data_removed? ? personal_data_removed_text : claim.national_insurance_number],
-        ["Address", claim.personal_data_removed? ? personal_data_removed_text : sanitize(claim.address("<br>").html_safe, tags: %w[br])],
+        ["Full name", personal_data(claim, :full_name)],
+        ["Date of birth", personal_data(claim, :date_of_birth) { |date| l(date) }],
+        [translate("admin.national_insurance_number"), personal_data(claim, :national_insurance_number)],
+        ["Address", personal_data(claim, :address, "<br>") { |address| sanitize(address.html_safe, tags: %w[br]) }],
         [translate("#{claim.policy.locale_key}.admin.email_address", default: :"admin.email_address"), claim.email_address]
       ]
     end
