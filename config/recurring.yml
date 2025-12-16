@@ -42,7 +42,7 @@ production: &production
     class: ReportsJob
     schedule: "0 6 * * *" # 6AM daily
   delete_file_uploads_and_downloads:
-    class: DeletePersonalDataFromOldClaimsJob
+    class: DeleteFileUploadsAndDownloadsJob
     schedule: "0 22 31 8 *" # At 10:00 PM, 31st of August every year
   purge_old_jobs:
     class: PurgeOldJobsJob
