@@ -208,5 +208,27 @@ FactoryBot.define do
     trait :with_award_amount do
       award_amount { [2_000, 2_500, 3_000, 4_000, 5_000, 6_000].sample }
     end
+
+    trait :provider_verification_employment_checked do
+      provider_verification_claimant_employed_by_college { true }
+      provider_verification_claimant_date_of_birth { Date.new(1990, 1, 1) }
+      provider_verification_claimant_national_insurance_number { "AB123456C" }
+      provider_verification_claimant_postcode { "TE57 1NG" }
+      provider_verification_claimant_bank_details_match { true }
+      provider_verification_claimant_email { "test@example.com" }
+      provider_verification_claimant_employment_check_declaration { true }
+    end
+
+    trait :provider_verification_employment_checked_claimant_not_employed_by_college do
+      provider_verification_claimant_employed_by_college { false }
+      provider_verification_claimant_date_of_birth { nil }
+      provider_verification_claimant_national_insurance_number { nil }
+      provider_verification_claimant_postcode { nil }
+      provider_verification_claimant_bank_details_match { nil }
+      provider_verification_claimant_email { nil }
+      provider_verification_claimant_employment_check_declaration { nil }
+      provider_verification_completed_at { Time.zone.now }
+      provider_verification_verified_by_id { create(:dfe_signin_user).id }
+    end
   end
 end

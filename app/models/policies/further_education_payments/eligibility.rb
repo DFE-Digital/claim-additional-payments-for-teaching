@@ -209,6 +209,10 @@ module Policies
         employment_check_required?
       end
 
+      def employment_checked?
+        !!provider_verification_claimant_employment_check_declaration?
+      end
+
       def claimant_not_employed_by_college?
         provider_verification_claimant_employed_by_college == false
       end
@@ -293,11 +297,11 @@ module Policies
           )
       end
 
-      private
-
       def year_1_claim?
         claim.academic_year == AcademicYear.new(2024)
       end
+
+      private
 
       def provider_user
         if year_1_claim?
