@@ -1,0 +1,80 @@
+<% content_for(:page_title) { page_title("Service overview") } %>
+
+<% content_for(:back_link) { govuk_back_link(href: admin_claims_path) } %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-xl">
+      Service overview
+    </h1>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-half">
+    <h2 class="govuk-heading-l">
+      Active session step
+    </h2>
+
+    <% @journeys.each do |journey| %>
+      <%= govuk_table(
+        html_attributes: {
+          data: {
+            test_id: journey.name
+          }
+        }
+      ) do |table| %>
+        <% table.with_caption(size: "m", text: journey.name) %>
+
+        <% table.with_head do |head| %>
+          <% head.with_row do |row| %>
+            <% row.with_cell(text: "Step") %>
+            <% row.with_cell(text: "Count") %>
+          <% end %>
+        <% end %>
+
+        <% table.with_body do |body| %>
+          <% journey.step_counts.each do |step, count| %>
+            <% body.with_row do |row| %>
+              <% row.with_cell(text: step) %>
+              <% row.with_cell(text: count) %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="govuk-grid-column-one-half">
+    <h2 class="govuk-heading-l">
+      Claims submitted
+    </h2>
+
+    <% @submitted_claims_by_date.each do |submitted_claims| %>
+      <%= govuk_table(
+        html_attributes: {
+          data: {
+            test_id: "claims-#{submitted_claims.submission_date}"
+          }
+        }
+      ) do |table| %>
+        <% table.with_caption(size: "m", text: submitted_claims.submission_date) %>
+
+        <% table.with_head do |head| %>
+          <% head.with_row do |row| %>
+            <% row.with_cell(text: "Policy") %>
+            <% row.with_cell(text: "Claims") %>
+          <% end %>
+        <% end %>
+
+        <% table.with_body do |body| %>
+          <% submitted_claims.policy_counts.each do |policy_name, count| %>
+            <% body.with_row do |row| %>
+              <% row.with_cell(text: policy_name.remove('Policies::')) %>
+              <% row.with_cell(text: count) %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
