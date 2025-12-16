@@ -1802,6 +1802,17 @@ en:
         errors:
           presence: "Enter your favourite colour"
 
+  early_years_teachers_practitioner:
+    journey_name: "Early years teachers - practitioner"
+    feedback_email: "EY.Financial-Incentives@education.gov.uk"
+    landing_page:
+      title: "Early years teachers - Prototype"
+    forms:
+      favourite_colour:
+        question: "What is your favourite colour?"
+        errors:
+          presence: "Enter your favourite colour"
+
   activerecord:
     errors:
       models:

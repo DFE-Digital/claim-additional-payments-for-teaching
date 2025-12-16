@@ -14,7 +14,8 @@ module Journeys
     EarlyYearsPayment::Provider::Authenticated,
     EarlyYearsPayment::Provider::AlternativeIdv,
     EarlyYearsPayment::Practitioner,
-    EarlyYearsTeachers::Provider
+    EarlyYearsTeachers::Provider,
+    EarlyYearsTeachers::Practitioner
   ].freeze
 
   def all

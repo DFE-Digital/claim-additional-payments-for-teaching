@@ -15,6 +15,7 @@ RSpec.describe Journeys do
         Journeys::EarlyYearsPayment::Provider::AlternativeIdv,
         Journeys::EarlyYearsPayment::Practitioner,
         Journeys::EarlyYearsTeachers::Provider,
+        Journeys::EarlyYearsTeachers::Practitioner
       ])
     end
   end
@@ -31,6 +32,7 @@ RSpec.describe Journeys do
         Journeys::EarlyYearsPayment::Provider::AlternativeIdv.routing_name,
         Journeys::EarlyYearsPayment::Practitioner.routing_name,
         Journeys::EarlyYearsTeachers::Provider.routing_name,
+        Journeys::EarlyYearsTeachers::Practitioner.routing_name
       ])
     end
   end
