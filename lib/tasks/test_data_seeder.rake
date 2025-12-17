@@ -50,4 +50,9 @@ namespace :test_data_seeder do
     DataImporter.new(policies: policies, test_type: :volume, quantities: quantities).run
     logger.info "Seeding data import complete!"
   end
+
+  desc "generate STRI awards CSV from personas"
+  task "generate_stri_awards" => :environment do
+    puts Policies::TargetedRetentionIncentivePayments::Test::StriAwardsGenerator.to_csv
+  end
 end
