@@ -2,6 +2,11 @@ require "rails_helper"
 
 RSpec.describe Policies::TargetedRetentionIncentivePayments::Test::StriAwardsGenerator do
   before do
+    stub_const(
+      "Policies::TargetedRetentionIncentivePayments::Test::UserPersona::FILE",
+      file_fixture("targeted_retention_incentive_payments_personas.csv")
+    )
+
     create(
       :school,
       name: "Eligible school"
