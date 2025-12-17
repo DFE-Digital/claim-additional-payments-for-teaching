@@ -144,6 +144,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :task_lists, only: [:index]
+
     resources :qualification_report_uploads, only: [:new, :create]
     resources :dqt_higher_education_qualification_uploads, only: [:new, :create]
     resources :school_workforce_census_data_uploads, only: [:new, :create]
