@@ -154,7 +154,7 @@ module Admin
     end
 
     def claims
-      claim_scope.map do |claim|
+      @claims ||= claim_scope.map do |claim|
         ClaimPresenter.new(claim: claim, available_tasks: policy_tasks)
       end.select do |presenter|
         statuses.any? do |task_name, statuses|
