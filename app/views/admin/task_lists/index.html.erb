@@ -40,6 +40,14 @@
       <% end %>
     </section>
 
+    <section id="csv-export">
+      <%= govuk_button_link_to(
+        "Export CSV",
+        admin_task_lists_path(@presenter.applied_params.merge(format: :csv)),
+        secondary: true,
+      ) %>
+    </section>
+
     <section id="filter-controls" class="<%= class_names("govuk-visually-hidden": !@presenter.show_filter_controls?) %>">
       <%= form_with(
         url: admin_task_lists_path,
