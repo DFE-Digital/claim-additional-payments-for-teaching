@@ -2,15 +2,7 @@
 
 module Policies
   module EarlyYearsPayments
-    class ClaimCheckingTasks
-      attr_reader :claim
-
-      def initialize(claim)
-        @claim = claim
-      end
-
-      delegate :policy, to: :claim
-
+    class ClaimCheckingTasks < Policies::ClaimCheckingTasks
       def applicable_task_names
         tasks = []
         tasks << "ey_eoi_cross_reference" unless year_1_of_ey?
@@ -44,20 +36,10 @@ module Policies
         tasks
       end
 
-      def applicable_task_objects
-        applicable_task_names.map do |name|
-          OpenStruct.new(name:, locale_key: name)
-        end
-      end
-
       private
 
       def year_1_of_ey?
         claim.academic_year == AcademicYear.new("2024/2025")
-      end
-
-      def matching_claims
-        @matching_claims ||= Claim::MatchingAttributeFinder.new(claim).matching_claims
       end
 
       def task_exists?(name)

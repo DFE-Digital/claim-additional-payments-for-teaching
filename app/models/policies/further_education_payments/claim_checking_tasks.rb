@@ -2,15 +2,7 @@
 
 module Policies
   module FurtherEducationPayments
-    class ClaimCheckingTasks
-      attr_reader :claim
-
-      def initialize(claim)
-        @claim = claim
-      end
-
-      delegate :policy, to: :claim
-
+    class ClaimCheckingTasks < Policies::ClaimCheckingTasks
       def applicable_task_names
         tasks = []
 
@@ -49,10 +41,6 @@ module Policies
 
       def y1_fe_claim?
         claim.academic_year == AcademicYear.new("2024/2025")
-      end
-
-      def matching_claims
-        @matching_claims ||= Claim::MatchingAttributeFinder.new(claim).matching_claims
       end
 
       def task_names_for_claim
