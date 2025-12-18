@@ -52,7 +52,10 @@ module Admin
       private
 
       def claim_tasks
-        @claim_tasks ||= claim.policy::ClaimCheckingTasks.new(claim).applicable_task_names
+        @claim_tasks ||= claim.policy::ClaimCheckingTasks.new(
+          claim,
+          skip_matching_claims_check: true
+        ).applicable_task_names
       end
     end
 
@@ -153,7 +156,7 @@ module Admin
     end
 
     def policy_tasks
-      TASKS.fetch(policy)
+      TASKS.fetch(policy).excluding("matching_details")
     end
 
     def selected_statuses_for(task_key)
