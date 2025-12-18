@@ -28,5 +28,13 @@ module Policies
 
       @matching_claims = Claim::MatchingAttributeFinder.new(claim).matching_claims
     end
+
+    def task_exists?(name)
+      if claim.tasks.loaded?
+        claim.tasks.any? { |task| task.name == name }
+      else
+        claim.tasks.exists?(name: name)
+      end
+    end
   end
 end
