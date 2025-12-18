@@ -187,6 +187,14 @@ module Admin
       policy_tasks.to_h { |task_name| [task_name, task_statuses(task_name)] }
     end
 
+    def to_csv
+      CSV.generate(headers: true) do |csv|
+        as_csv.each do |row|
+          csv << row
+        end
+      end
+    end
+
     private
 
     attr_reader :params
@@ -197,6 +205,16 @@ module Admin
         .awaiting_decision
         .by_policy(policy)
         .includes(:tasks, :eligibility)
+    end
+
+    def as_csv
+      head = ["Claim Reference"] + task_names
+
+      body = claims.map do |presenter|
+        [presenter.reference] + presenter.tasks.map(&:display_status)
+      end
+
+      body.unshift(head)
     end
   end
 end
