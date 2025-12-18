@@ -48,14 +48,19 @@
       ) %>
     </section>
 
-    <section id="filter-controls" class="<%= class_names("govuk-visually-hidden": !@presenter.show_filter_controls?) %>">
+    <section id="filter-controls" class="<%= class_names(
+      "govuk-visually-hidden": !@presenter.show_filter_controls?
+    ) %>">
       <%= form_with(
         url: admin_task_lists_path,
         method: :get,
         builder: GOVUKDesignSystemFormBuilder::FormBuilder
       ) do |f| %>
         <%= f.hidden_field :policy_name, value: @presenter.policy.locale_key %>
-        <%= f.hidden_field :show_filter_controls, value: @presenter.show_filter_controls? %>
+        <%= f.hidden_field(
+          :show_filter_controls,
+          value: @presenter.show_filter_controls?
+        ) %>
 
         <% @presenter.policy_tasks.each_slice(3) do |task_keys| %>
           <div class="govuk-grid-row">
@@ -92,7 +97,10 @@
           ) %>
           <%= govuk_button_link_to(
             "Uncheck all",
-            admin_task_lists_path(@presenter.applied_params.merge(statuses: {}, clear_statuses: true)),
+            admin_task_lists_path(@presenter.applied_params.merge(
+              statuses: {},
+              clear_statuses: true
+            )),
             secondary: true,
           ) %>
         </div>
