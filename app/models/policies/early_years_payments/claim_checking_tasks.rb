@@ -41,14 +41,6 @@ module Policies
       def year_1_of_ey?
         claim.academic_year == AcademicYear.new("2024/2025")
       end
-
-      def task_exists?(name)
-        if claim.tasks.loaded?
-          claim.tasks.any? { |task| task.name == name }
-        else
-          claim.tasks.exists?(name: name)
-        end
-      end
     end
   end
 end
