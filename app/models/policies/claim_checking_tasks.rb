@@ -2,8 +2,9 @@ module Policies
   class ClaimCheckingTasks
     attr_reader :claim
 
-    def initialize(claim)
+    def initialize(claim, skip_matching_claims_check: false)
       @claim = claim
+      @skip_matching_claims_check = skip_matching_claims_check
     end
 
     delegate :policy, to: :claim
@@ -16,8 +17,16 @@ module Policies
 
     private
 
+    def skip_matching_claims_check?
+      !!@skip_matching_claims_check
+    end
+
     def matching_claims
-      @matching_claims ||= Claim::MatchingAttributeFinder.new(claim).matching_claims
+      return @matching_claims if defined?(@matching_claims)
+
+      return Claim.none if skip_matching_claims_check?
+
+      @matching_claims = Claim::MatchingAttributeFinder.new(claim).matching_claims
     end
   end
 end
