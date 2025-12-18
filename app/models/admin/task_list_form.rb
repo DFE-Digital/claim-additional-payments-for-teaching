@@ -17,6 +17,14 @@ module Admin
             status.humanize
           end
         end
+
+        def filter_status
+          if status == "no data"
+            "incomplete"
+          else
+            status
+          end
+        end
       end
 
       attr_reader :claim, :available_tasks
@@ -150,7 +158,7 @@ module Admin
         ClaimPresenter.new(claim: claim, available_tasks: policy_tasks)
       end.select do |presenter|
         statuses.any? do |task_name, statuses|
-          statuses.include?(presenter.task(task_name).status)
+          statuses.include?(presenter.task(task_name).filter_status)
         end
       end
     end
