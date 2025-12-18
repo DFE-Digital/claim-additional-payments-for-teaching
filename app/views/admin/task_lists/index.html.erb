@@ -40,14 +40,6 @@
       <% end %>
     </section>
 
-    <section id="csv-export">
-      <%= govuk_button_link_to(
-        "Export CSV",
-        admin_task_lists_path(@presenter.applied_params.merge(format: :csv)),
-        secondary: true,
-      ) %>
-    </section>
-
     <section id="filter-controls" class="<%= class_names(
       "govuk-visually-hidden": !@presenter.show_filter_controls?
     ) %>">
@@ -61,6 +53,24 @@
           :show_filter_controls,
           value: @presenter.show_filter_controls?
         ) %>
+
+        <div class="govuk-button-group">
+          <%= govuk_button_link_to(
+            "Check all",
+            admin_task_lists_path(
+              @presenter.applied_params.merge(statuses: @presenter.all_statuses)
+            ),
+            secondary: true,
+          ) %>
+          <%= govuk_button_link_to(
+            "Uncheck all",
+            admin_task_lists_path(@presenter.applied_params.merge(
+              statuses: {},
+              clear_statuses: true
+            )),
+            secondary: true,
+          ) %>
+        </div>
 
         <% @presenter.policy_tasks.each_slice(3) do |task_keys| %>
           <div class="govuk-grid-row">
@@ -87,26 +97,16 @@
           </div>
         <% end %>
 
-        <div class="govuk-button-group">
-          <%= govuk_button_link_to(
-            "Check all",
-            admin_task_lists_path(
-              @presenter.applied_params.merge(statuses: @presenter.all_statuses)
-            ),
-            secondary: true,
-          ) %>
-          <%= govuk_button_link_to(
-            "Uncheck all",
-            admin_task_lists_path(@presenter.applied_params.merge(
-              statuses: {},
-              clear_statuses: true
-            )),
-            secondary: true,
-          ) %>
-        </div>
-
         <%= f.govuk_submit("Apply") %>
       <% end %>
+    </section>
+
+    <section id="csv-export">
+      <%= govuk_button_link_to(
+        "Export CSV",
+        admin_task_lists_path(@presenter.applied_params.merge(format: :csv)),
+        secondary: true,
+      ) %>
     </section>
 
     <div class="overflow-x-auto">
