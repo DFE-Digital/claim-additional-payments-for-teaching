@@ -208,7 +208,7 @@ module Admin
         .by_academic_year(AcademicYear.current)
         .awaiting_decision
         .by_policy(policy)
-        .includes(:tasks, :eligibility)
+        .includes(:tasks, eligibility: :verified_by)
     end
 
     def as_csv
