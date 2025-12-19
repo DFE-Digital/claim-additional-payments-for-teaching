@@ -42,6 +42,10 @@ module Admin
         @claim.reference
       end
 
+      def held?
+        @claim.held?
+      end
+
       def tasks
         @tasks ||= available_tasks.map do |task_name|
           if claim_tasks.include?(task_name)
@@ -208,10 +212,12 @@ module Admin
     end
 
     def as_csv
-      head = ["Claim Reference"] + task_names
+      head = ["Claim Reference"] + task_names + ["Held Status"]
 
       body = claims.map do |presenter|
-        [presenter.reference] + presenter.tasks.map(&:display_status)
+        [presenter.reference] +
+          presenter.tasks.map(&:display_status) +
+          [presenter.held? ? "Held" : "No"]
       end
 
       body.unshift(head)
