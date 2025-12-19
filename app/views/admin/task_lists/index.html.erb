@@ -122,6 +122,7 @@
             <% @presenter.task_names.each do |task_name| %>
               <% row.with_cell(text: task_name) %>
             <% end %>
+            <% row.with_cell(text: "Held") %>
           <% end %>
         <% end %>
 
@@ -138,6 +139,16 @@
                     status: task.display_status,
                   )
                 ) %>
+              <% end %>
+              <% if claim.held? %>
+                <% row.with_cell(
+                  text: task_status_content_tag(
+                    status_colour: "red",
+                    status: "Held",
+                  )
+                ) %>
+              <% else %>
+                <% row.with_cell(text: "No") %>
               <% end %>
             <% end %>
           <% end %>
