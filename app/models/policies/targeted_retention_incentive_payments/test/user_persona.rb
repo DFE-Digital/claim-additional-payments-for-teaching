@@ -4,7 +4,7 @@ module Policies
       class UserPersona
         FILE = Rails.root.join("spec/personas/targeted_retention_incentive_payments.csv")
 
-        attr_reader :school_name, :trn, :teaching_subject, :expected_result
+        attr_reader :school_name, :trn, :teaching_subject, :expected_result, :national_insurance_number
 
         def self.all
           collection = []
@@ -21,6 +21,7 @@ module Policies
           @trn = csv_row["TRN"]
           @teaching_subject = csv_row["Teaching subject"]
           @expected_result = csv_row["Expected result"]
+          @national_insurance_number = csv_row["NINO"]
         end
 
         def eligible?
