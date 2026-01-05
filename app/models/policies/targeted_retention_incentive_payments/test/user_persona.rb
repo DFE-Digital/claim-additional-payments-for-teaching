@@ -28,7 +28,7 @@ module Policies
         end
 
         def school
-          @school ||= School.find_by(name: school_name)
+          @school ||= School.find_by!(name: school_name)
         end
       end
     end
