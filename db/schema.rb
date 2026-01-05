@@ -87,6 +87,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_16_122045) do
     t.uuid "journeys_session_id"
     t.boolean "logged_in_with_onelogin"
     t.boolean "logged_in_with_tid"
+    t.datetime "matching_attributes_last_checked_at", precision: nil
     t.string "middle_name", limit: 100
     t.string "mobile_check"
     t.string "mobile_number"
@@ -140,6 +141,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_16_122045) do
     t.index ["qa_required", "qa_completed_at"], name: "index_claims_on_qa_required_and_qa_completed_at", where: "qa_required"
     t.index ["reference"], name: "index_claims_on_reference", unique: true
     t.index ["submitted_at"], name: "index_claims_on_submitted_at"
+  end
+
+  create_table "claims_matches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.uuid "left_claim_id", null: false
+    t.jsonb "matching_attributes", default: [], null: false
+    t.datetime "resolved_at", precision: nil
+    t.uuid "right_claim_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["left_claim_id", "right_claim_id"], name: "index_claims_matches_on_left_and_right_claim_id", unique: true
+    t.index ["left_claim_id"], name: "index_claims_matches_on_left_claim_id"
+    t.index ["right_claim_id"], name: "index_claims_matches_on_right_claim_id"
   end
 
   create_table "decisions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -857,6 +870,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_16_122045) do
   add_foreign_key "claim_payments", "claims"
   add_foreign_key "claim_payments", "payments"
   add_foreign_key "claims", "journeys_sessions"
+  add_foreign_key "claims_matches", "claims", column: "left_claim_id"
+  add_foreign_key "claims_matches", "claims", column: "right_claim_id"
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "early_career_payments_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "eligible_ey_providers", "file_uploads"

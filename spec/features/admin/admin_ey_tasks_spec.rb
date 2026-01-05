@@ -266,21 +266,23 @@ RSpec.describe "Admin EY tasks" do
     context "when the practitioner has completed their half of the claim" do
       context "when the claim has matching details" do
         it "allows the admin to pass / fail the task" do
+          existing_claim = create(
+            :claim,
+            :submitted,
+            :current_academic_year,
+            email_address: "johndoe@example.com",
+            created_at: 1.day.ago
+          )
+
           claim = complete_provider_journey
 
           complete_practitioner_journey(
             claim: claim,
+            email_address: existing_claim.email_address,
             one_login_first_name: "Robby",
             one_login_last_name: "Bobberson",
             one_login_date_of_birth: Date.new(1986, 1, 1),
             date_of_birth: Date.new(1986, 1, 1)
-          )
-
-          create(
-            :claim,
-            :submitted,
-            :current_academic_year,
-            email_address: claim.reload.email_address
           )
 
           sign_in_as_service_operator
@@ -407,7 +409,8 @@ RSpec.describe "Admin EY tasks" do
     one_login_last_name:,
     one_login_date_of_birth:,
     payroll_gender: "Male",
-    fail_idv: false
+    fail_idv: false,
+    email_address: "johndoe@example.com"
   )
     allow(OmniauthCallbacksController::OneLoginTestUser).to(
       receive(:new).and_return(
@@ -475,7 +478,7 @@ RSpec.describe "Admin EY tasks" do
     click_on "Continue"
 
     expect(page).to have_content("What is your personal email address?")
-    fill_in "claim-email-address-field", with: "johndoe@example.com"
+    fill_in "claim-email-address-field", with: email_address
     click_on "Continue"
 
     expect(page).to have_content("Enter the 6-digit passcode")
