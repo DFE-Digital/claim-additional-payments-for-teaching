@@ -9,7 +9,10 @@ RSpec.feature "Admin checks a claim" do
 
     scenario "User can approve a claim" do
       freeze_time do
-        submitted_claims = create_list(:claim, 2, :submitted)
+        submitted_claims = 2.times.map do |i|
+          create(:claim, :submitted, created_at: i.days.ago)
+        end
+
         claim_to_approve = submitted_claims.first
 
         click_on "Claims"

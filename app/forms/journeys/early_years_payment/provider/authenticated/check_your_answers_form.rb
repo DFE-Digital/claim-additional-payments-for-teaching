@@ -23,6 +23,8 @@ module Journeys
               mark_service_access_code_as_used!
             end
 
+            Claims::Match.update_matching_claims!(claim)
+
             claim.policy.mailer.submitted(claim).deliver_later
 
             ClaimMailer.early_years_payment_practitioner_email(claim).deliver_later

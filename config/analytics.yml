@@ -89,6 +89,15 @@ shared:
     - onelogin_idv_return_codes # string, array of return codes from OL
     - policy # string, which policy this claim is for
     - claimant_declaration # boolean, did claimant agree to declaration
+    - matching_attributes_last_checked_at # datetime, when matching claims were last checked for
+  :claims_matches:
+    - id # uuid, identifies the claims match record
+    - created_at # datetime, when the match was created
+    - updated_at # datetime, when the match was last updated
+    - left_claim_id # uuid, references the elder claim in the match pair
+    - matching_attributes # jsonb, array of attributes that matched between the claims
+    - resolved_at # datetime, when the claims stopped being considered a match, null if the claims still match
+    - right_claim_id # uuid, references the newer claim in the match pair
   :decisions:
     - id # uuid, identifies the decision
     - claim_id # uuid, references the associated claim

@@ -111,7 +111,7 @@ module Policies
     end
 
     def duplicate_claim?(claim)
-      Claim::MatchingAttributeFinder.new(claim).matching_claims.exists?
+      Claims::Match.matching_claims_shim(claim).exists?
     end
 
     def teaching_start_year_mismatch?(claim)
