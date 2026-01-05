@@ -33,6 +33,8 @@ module Journeys
           Event.create(claim:, name: "claim_submitted")
         end
 
+        Claims::Match.update_matching_claims!(claim)
+
         claim.policy.mailer.submitted(claim).deliver_later
         ClaimVerifierJob.perform_later(claim)
 
