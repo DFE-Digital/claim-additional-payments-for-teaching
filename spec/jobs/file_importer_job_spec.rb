@@ -56,7 +56,7 @@ RSpec.describe FileImporterJob do
     before do
       allow(importer_class).to receive(:new).and_return(importer_mock)
       allow(rescue_with_lambda).to receive(:call)
-      allow(Rollbar).to receive(:error)
+      allow(Sentry).to receive(:capture_exception)
     end
 
     before do
@@ -79,8 +79,8 @@ RSpec.describe FileImporterJob do
         expect(post_import_mock).not_to have_received(:call)
       end
 
-      it "sends the exception to Rollbar" do
-        expect(Rollbar).to have_received(:error).with(ActiveRecord::RecordNotFound)
+      it "sends the exception to Sentry" do
+        expect(Sentry).to have_received(:capture_exception).with(ActiveRecord::RecordNotFound)
       end
     end
 

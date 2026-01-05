@@ -13,7 +13,6 @@ class StudentLoanPlanCheckJob < ApplicationJob
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan.new(claim:).perform
     rescue => e
       # If something goes wrong, log the error and continue
-      Rollbar.error(e)
       Sentry.capture_exception(e)
     end
   end

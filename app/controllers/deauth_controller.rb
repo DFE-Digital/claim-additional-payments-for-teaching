@@ -27,7 +27,6 @@ class DeauthController < ApplicationController
 
     head :ok
   rescue => e
-    Rollbar.error(e)
     Sentry.capture_exception(e)
 
     head :bad_request

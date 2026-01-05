@@ -47,7 +47,7 @@ Then, follow these steps to complete your onboarding:
    - Slack
    - GitHub
    - logit.io – the Viewers team is sufficient for support needs
-   - Rollbar
+   - Sentry
 
 ## How to set up two-factor auth for your `@digital.education.gov.uk` Google account
 

@@ -71,15 +71,12 @@ If you want to do one of these tasks and you don’t have what you need, see the
 
 - access to the production Logit.io stack for the service, to view the web and
   worker logs
-- access to the
-  [`dxw/dfe-claim` project in Rollbar](https://rollbar.com/dxw/dfe-claim/), to
-  view details of exceptions
+- access [Sentry](https://dfe-teacher-services.sentry.io/issues), to view details of exceptions
 
 #### How to do it
 
 - To view logs (web, worker, container), see [`logging.md`](logging.md).
-- To view details of exceptions, see the
-  [`dxw/dfe-claim` project in Rollbar](https://rollbar.com/dxw/dfe-claim/).
+- To view details of exceptions, see the [Sentry](https://dfe-teacher-services.sentry.io/issues)
 
 ### I want to export data for the “school check email”
 

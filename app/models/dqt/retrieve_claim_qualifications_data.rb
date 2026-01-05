@@ -16,7 +16,6 @@ module Dqt
         @session.answers.dqt_teacher_status = response || {}
       rescue => e
         # Something went wrong with the DQT call, just assume no result returned and continue
-        Rollbar.error(e)
         Sentry.capture_exception(e)
 
         @session.answers.dqt_teacher_status = {}

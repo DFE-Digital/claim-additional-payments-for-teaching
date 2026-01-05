@@ -16,7 +16,7 @@ class ClaimsController < BasePublicController
   before_action :prepend_view_path_for_journey
   before_action :persist_claim, only: [:new, :create]
   before_action :handle_magic_link, only: [:new], if: -> { journey.start_with_magic_link? }
-  before_action :add_answers_to_rollbar_context, only: [:show, :update]
+  before_action :add_answers_to_sentry_context, only: [:show, :update]
 
   before_action :sign_out, only: [:signed_out]
 
@@ -129,13 +129,8 @@ class ClaimsController < BasePublicController
     redirect_to claim_path(current_journey_routing_name, navigator.furthest_permissible_slug)
   end
 
-  def add_answers_to_rollbar_context
+  def add_answers_to_sentry_context
     return unless journey_session
-
-    Rollbar.scope!(
-      answers: journey_session.answers.attributes_with_pii_redacted,
-      steps: journey_session.steps
-    )
 
     Sentry.configure_scope do |scope|
       scope.set_context(

@@ -29,7 +29,6 @@ module Dqt
         begin
           Time.at(Integer(value), in: "UTC").to_date
         rescue ArgumentError => e
-          Rollbar.error(e)
           Sentry.capture_exception(e)
 
           nil
@@ -49,7 +48,6 @@ module Dqt
       begin
         Integer(value)
       rescue ArgumentError => e
-        Rollbar.error(e)
         Sentry.capture_exception(e)
 
         nil

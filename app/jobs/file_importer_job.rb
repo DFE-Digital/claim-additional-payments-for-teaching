@@ -41,7 +41,6 @@ class FileImporterJob < ApplicationJob
     send_success_email if uploaded_by_email
     post_import_block&.call(uploaded_by)
   rescue => e
-    Rollbar.error(e)
     Sentry.capture_exception(e)
 
     rescue_with_lambda&.call

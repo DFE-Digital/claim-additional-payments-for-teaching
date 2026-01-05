@@ -138,7 +138,7 @@ RSpec.describe StudentLoanPlanCheckJob do
           plan_type_of_deduction: 2
         )
         allow_any_instance_of(Claim).to receive(:save) { raise(exception) }
-        allow(Rollbar).to receive(:error)
+        allow(Sentry).to receive(:capture_exception)
       end
 
       it "suppresses the exception" do
@@ -148,7 +148,7 @@ RSpec.describe StudentLoanPlanCheckJob do
       it "logs the exception" do
         perform_job
 
-        expect(Rollbar).to have_received(:error).with(exception)
+        expect(Sentry).to have_received(:capture_exception).with(exception)
       end
 
       it "does not update the student loan details or create a task or note" do
