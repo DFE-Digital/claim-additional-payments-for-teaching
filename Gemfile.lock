@@ -637,7 +637,7 @@ GEM
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
-    prism (1.6.0)
+    prism (1.7.0)
     prometheus_exporter (2.3.0)
       webrick
     pry (0.15.2)
@@ -800,8 +800,8 @@ GEM
     sentry-ruby (5.28.1)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
-    shoulda-matchers (6.5.0)
-      activesupport (>= 5.2.0)
+    shoulda-matchers (7.0.1)
+      activesupport (>= 7.1)
     signet (0.21.0)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.a)
