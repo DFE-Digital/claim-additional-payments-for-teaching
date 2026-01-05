@@ -1,7 +1,7 @@
 <table id="claims-with-matches" class="govuk-table govuk-!-margin-bottom-9">
   <% if show_caption %>
     <caption class="govuk-table__caption govuk-heading-l">
-      <%= @claim.policy.short_name %> <%= "claim".pluralize(@matching_claims.count) %> with matching details
+      <%= @claim.policy.short_name %> <%= "claim".pluralize(matches.count) %> with matching details
     </caption>
   <% end %>
 
@@ -12,12 +12,13 @@
     </tr>
   </thead>
   <tbody class="govuk-table__body">
-    <% matching_claims.each do |matching_claim| %>
+    <% matches.each do |match| %>
+      <% matching_claim = match.other(@claim) %>
       <tr class="govuk-table__row">
         <th scope="row" class="govuk-table__header"><%= link_to matching_claim.reference, [:admin, matching_claim], class: "govuk-link" %></th>
         <td class="govuk-table__cell">
           <ul class="govuk-list">
-            <% Claim::MatchingAttributeFinder.new(claim).matching_attributes(matching_claim).map(&:humanize).sort.each do |attribute| %>
+            <% match.matching_attributes.map(&:humanize).sort.each do |attribute| %>
               <li><%= attribute %></li>
             <% end %>
           </ul>

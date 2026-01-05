@@ -33,7 +33,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
   def show
     @claim = Claim.find(params[:id])
     @decision = @claim.latest_decision || Decision.new
-    @matching_claims = Claim::MatchingAttributeFinder.new(@claim).matching_claims
+    @matches = Claims::Match.matches_shim(@claim)
     @claims_preventing_payment = Claim::ClaimsPreventingPaymentFinder.new(@claim).claims_preventing_payment
   end
 

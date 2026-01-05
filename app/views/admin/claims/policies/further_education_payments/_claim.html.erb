@@ -126,11 +126,11 @@
     <%= render(
       "claims_with_matching_details",
       {
-        matching_claims: @matching_claims,
+        matches: @matches,
         claim: @claim,
         show_caption: true
       }
-    ) if @matching_claims.any? %>
+    ) if @matches.any? %>
 
     <% (decisions = @claim.decisions.order(created_at: :asc)).each do |decision| %>
       <% heading = (decisions.first == decision ? "Claim decision details" : nil) %>
