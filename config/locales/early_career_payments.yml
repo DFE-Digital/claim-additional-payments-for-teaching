@@ -1,0 +1,65 @@
+en:
+  early_career_payments:
+    purpose: "For early career teachers who teach certain subjects."
+    policy_short_name: "Early-Career Payments"
+    policy_acronym: "ECP"
+    payment_name: "Early-career payment"
+    claim_subject: "Early-career payment"
+    claim_amount_description: "Additional payment for teaching"
+    support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
+    information_provided_further_details_link_text: early-career payment (opens in new tab)
+    forms:
+      correct_school:
+        questions:
+          which_school: "Which school do you teach at?"
+      current_school:
+        question: Which school do you teach at?
+        errors:
+          blank: Enter a school or postcode
+          min_length: Enter a school name or postcode that is at least 3 characters long
+      select_current_school:
+        heading: Which school do you teach at?
+        errors:
+          blank: Select the school you teach at
+      eligible_itt_subject:
+        questions:
+          which_subject: "Which subject did you do your %{qualification} in?"
+          single_subject: "Did you do your %{qualification} in %{subject}?"
+          which_subject_trainee_teacher: "Which subject are you currently doing your initial teacher training (ITT) in?"
+        answers:
+          chemistry: "Chemistry"
+          computing: "Computing"
+          mathematics: "Mathematics"
+          foreign_languages: "Languages"
+          physics: "Physics"
+          none_of_the_above: "None of the above"
+      eligible_degree_subject:
+        questions:
+          eligible_degree_subject: Do you have a degree in an eligible subject?
+      employed_directly:
+        questions:
+          employed_directly: Are you employed directly by your school?
+      entire_term_contract:
+        questions:
+          has_entire_term_contract: Do you have a contract to teach at the same school for an entire term or longer?
+      poor_performance:
+        heading: Tell us if you are currently under any performance measures or disciplinary action
+        questions:
+          performance:
+            question: "Are you subject to any formal performance measures as a result of continuous poor teaching standards?"
+          disciplinary:
+            question: "Are you currently subject to disciplinary action?"
+      qualification:
+        questions:
+          which_route: "Which route into teaching did you take?"
+        answers:
+          postgraduate_itt: "Postgraduate initial teacher training (ITT)"
+          undergraduate_itt: "Undergraduate initial teacher training (ITT)"
+          assessment_only: "Assessment only"
+          overseas_recognition: "Overseas recognition"
+      supply_teacher:
+        questions:
+          employed_as_supply_teacher: Are you currently employed as a supply teacher?
+      teaching_subject_now:
+        questions:
+          teaching_subject_now: "Do you spend at least half of your contracted hours teaching eligible subjects?"
