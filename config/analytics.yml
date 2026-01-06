@@ -421,3 +421,12 @@ shared:
     - created_at # datetime, when this datapoint was recorded
     - updated_at # datetime, when this datapoint was last updated
     - type # string, type of datapoint
+  :events:
+  - id # uuid, identifies this event occurrence
+  - name # string, describes what this event is
+  - claim_id # uuid, references the associated claim
+  - actor_id # uuid, admin that created triggered this event
+  - entity_type # string, used to identify the entity type this event relates to
+  - entity_id # uuid, references associated entity
+  - created_at # datetime, when the event was created
+  - updated_at # datetime, when the event was last updated

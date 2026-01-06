@@ -105,6 +105,12 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Contra
           }.from(nil).to(be_present)
         end
 
+        it "creates an event" do
+          expect { form.save }.to change {
+            Event.where(name: "claim_fe_provider_verification_started").count
+          }.by(1)
+        end
+
         it "sets provider_assigned_to_id to the current user" do
           expect { form.save }.to change {
             claim.eligibility.reload.provider_assigned_to_id

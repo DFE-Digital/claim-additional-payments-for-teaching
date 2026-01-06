@@ -14,6 +14,7 @@ module Admin
       @note = Note.new(note_params)
 
       if @note.save(context: :create_note)
+        Event.create(claim: @claim, name: "note_created", actor: admin_user, entity: @note)
         redirect_to after_create_path
       elsif task_note?
         redirect_to admin_claim_task_path(@claim, name: task_name), alert: @note.errors.messages[:body].join(", ")

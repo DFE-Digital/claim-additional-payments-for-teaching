@@ -109,6 +109,10 @@ RSpec.feature "Admin decisions" do
             expect(claim.latest_decision.created_by).to eq(@signed_in_user)
             expect(claim.latest_decision).to be_approved
             expect(claim.reload.qa_completed_at).not_to be_nil
+
+            visit admin_claim_tasks_path(claim)
+            click_link "Claim timeline"
+            expect(page).to have_text("Claim approved")
           end
 
           it "can undo the previous decision and reject a claim", :aggregate_failures do
@@ -127,6 +131,10 @@ RSpec.feature "Admin decisions" do
             expect(claim.latest_decision.created_by).to eq(@signed_in_user)
             expect(claim.latest_decision).to be_rejected
             expect(claim.reload.qa_completed_at).not_to be_nil
+
+            visit admin_claim_tasks_path(claim)
+            click_link "Claim timeline"
+            expect(page).to have_text("Claim rejected")
           end
         end
       end
@@ -145,6 +153,10 @@ RSpec.feature "Admin decisions" do
           expect(ClaimMailer).to have_received(:approved).with(claim)
           expect(claim.latest_decision.created_by).to eq(@signed_in_user)
           expect(claim.latest_decision).to be_approved
+
+          visit admin_claim_tasks_path(claim)
+          click_link "Claim timeline"
+          expect(page).to have_text("Claim approved")
         end
 
         it "can reject the claim", :aggregate_failures do
@@ -159,6 +171,10 @@ RSpec.feature "Admin decisions" do
           expect(ClaimMailer).to have_received(:rejected).with(claim)
           expect(claim.latest_decision.created_by).to eq(@signed_in_user)
           expect(claim.latest_decision).to be_rejected
+
+          visit admin_claim_tasks_path(claim)
+          click_link "Claim timeline"
+          expect(page).to have_text("Claim rejected")
         end
       end
 

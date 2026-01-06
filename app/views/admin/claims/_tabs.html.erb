@@ -13,6 +13,10 @@
     <%= "(#{claim.amendments.count})" if claim.amendments.any? %>
   </li>
 
+  <li class="<%= class_names("govuk-tabs__list-item", { "govuk-tabs__list-item--selected" => current_page?({controller: "events"}) }) %>" role="presentation">
+    <%= link_to_unless_current "Claim timeline", admin_claim_events_path(@claim), class: "govuk-tabs__tab" %>
+  </li>
+
   <% if @claim.payrolled? || @claim.topups.present? %>
     <li class="<%= class_names("govuk-tabs__list-item", { "govuk-tabs__list-item--selected" => current_page?({controller: "payments"}) }) %>" role="presentation">
       <%= link_to_unless_current "Claim payments", admin_claim_payments_path(@claim), class: "govuk-tabs__tab" %>

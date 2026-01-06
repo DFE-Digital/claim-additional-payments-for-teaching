@@ -361,5 +361,11 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
         end
       end
     end
+
+    it "create a claim_submitted Event" do
+      expect { subject }.to(
+        change { Event.where(name: "claim_submitted").count }.by(1)
+      )
+    end
   end
 end

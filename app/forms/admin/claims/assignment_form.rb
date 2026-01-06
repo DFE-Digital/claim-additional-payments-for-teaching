@@ -32,6 +32,8 @@ module Admin::Claims
             created_by: current_admin
           )
 
+          Event.create(claim:, name: "claim_unassigned", actor: current_admin, entity: claim.assigned_to)
+
           @flash_message = "This claim has now been successfully unassigned from #{claim.assigned_to.full_name}"
 
           claim.update! assigned_to: nil
@@ -43,6 +45,8 @@ module Admin::Claims
             created_by: current_admin
           )
 
+          Event.create(claim:, name: "claim_assigned", actor: current_admin, entity: current_admin)
+
           @flash_message = "This claim has now been successfully assigned to #{current_admin.full_name}"
 
           claim.update! assigned_to: current_admin
@@ -53,6 +57,8 @@ module Admin::Claims
             body: "This claim was assigned to #{colleague.full_name}",
             created_by: current_admin
           )
+
+          Event.create(claim:, name: "claim_assigned", actor: current_admin, entity: colleague)
 
           @flash_message = "This claim has now been successfully assigned to #{colleague.full_name}"
 

@@ -44,9 +44,17 @@ module Admin
         if qa?
           claim.previous_decision.update!(undone: true)
           claim.update!(qa_completed_at: Time.zone.now)
+          Event.create(claim:, name: "task_qa_completed", actor: current_admin, entity: decision)
         elsif claim.flaggable_for_qa?
           claim.update!(qa_required: true)
           claim.notes.create!(body: "This claim has been marked for a quality assurance review")
+          Event.create(claim:, name: "task_qa_required", entity: decision)
+        end
+
+        if decision.approved?
+          Event.create(claim:, name: "claim_approved", actor: current_admin, entity: decision)
+        elsif decision.rejected?
+          Event.create(claim:, name: "claim_rejected", actor: current_admin, entity: decision)
         end
 
         send_claim_result_email
@@ -143,14 +151,18 @@ module Admin
     def send_claim_result_email
       return if claim.awaiting_qa?
 
-      claim.policy.mailer.approved(claim).deliver_later if claim.latest_decision.approved?
+      latest_decision = claim.latest_decision
 
-      if claim.latest_decision.rejected? && claim.email_address.present?
+      claim.policy.mailer.approved(claim).deliver_later if latest_decision.approved?
+
+      if latest_decision.rejected? && claim.email_address.present?
         ClaimMailer.rejected(claim).deliver_later
+        Event.create(claim:, name: "email_rejected_sent", actor: current_admin, entity: latest_decision)
       end
 
-      if claim.latest_decision.rejected? && claim.has_early_years_policy?
+      if latest_decision.rejected? && claim.has_early_years_policy?
         ClaimMailer.rejected_provider_notification(claim).deliver_later
+        Event.create(claim:, name: "email_ey_rejected_provider_sent", actor: current_admin, entity: latest_decision)
       end
     end
 

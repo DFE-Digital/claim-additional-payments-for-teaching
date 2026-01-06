@@ -176,6 +176,12 @@ module FurtherEducationPayments
 
             Policies::FurtherEducationPayments.provider_verification_completed!(claim)
 
+            Event.create(
+              claim:,
+              name: "claim_fe_provider_verification_completed",
+              actor: user
+            )
+
             true
           end
 

@@ -21,11 +21,13 @@ module Journeys
               set_attributes_for_claim_submission
               claim.save!
               mark_service_access_code_as_used!
+              Event.create(claim:, name: "claim_submitted")
             end
 
             claim.policy.mailer.submitted(claim).deliver_later
 
             ClaimMailer.early_years_payment_practitioner_email(claim).deliver_later
+            Event.create(claim:, name: "email_ey_practitioner_sent")
 
             send_provider_completed_emails
 

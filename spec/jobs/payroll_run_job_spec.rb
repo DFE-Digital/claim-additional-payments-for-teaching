@@ -9,15 +9,23 @@ RSpec.describe PayrollRunJob, type: :job do
       let(:claims) { Policies.all.map { |policy| create(:claim, :approved, policy: policy) } }
       let(:topups) { [] }
 
-      before do
+      let(:run_payroll) do
         described_class.perform_now(payroll_run, claims.map(&:id), topups.map(&:id))
       end
 
       it "creates a payroll run with payments and populates the award_amount" do
+        run_payroll
+
         expect(payroll_run.reload.created_by.id).to eq(user.id)
         expect(payroll_run.claims).to match_array(claims)
         expect(claims[0].payments.first.award_amount).to eq(claims[0].award_amount)
         expect(claims[1].payments.first.award_amount).to eq(claims[1].award_amount)
+      end
+
+      it "creates events" do
+        expect { run_payroll }.to change {
+          Event.where(name: "claim_payrolled").count
+        }.by(claims.count)
       end
 
       context "with multiple claims from the same teacher reference number" do
@@ -42,8 +50,16 @@ RSpec.describe PayrollRunJob, type: :job do
         let(:claims) { matching_claims + [other_claim] }
 
         it "groups them into a single payment and populates the award_amount" do
+          run_payroll
+
           expect(payroll_run.payments.map(&:claims)).to match_array([match_array(matching_claims), [other_claim]])
           expect(matching_claims[0].reload.payments.first.award_amount).to eq(matching_claims.sum(&:award_amount))
+        end
+
+        it "creates events" do
+          expect { run_payroll }.to change {
+            Event.where(name: "claim_payrolled").count
+          }.by(claims.count)
         end
       end
     end

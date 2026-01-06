@@ -1304,6 +1304,10 @@ RSpec.describe Claim, type: :model do
       it "does not add a note" do
         expect(claim.notes).to be_empty
       end
+
+      it "does not create an event" do
+        expect(claim.events).to be_empty
+      end
     end
 
     context "when the claim cannot be held" do
@@ -1321,6 +1325,10 @@ RSpec.describe Claim, type: :model do
         expect(claim.notes.first.body).to eq "Claim put on hold: #{reason}"
         expect(claim.notes.first.created_by).to eq user
       end
+
+      it "creates an event" do
+        expect(claim.events.order(created_at: :desc).first.name).to eq "claim_hold"
+      end
     end
   end
 
@@ -1337,6 +1345,10 @@ RSpec.describe Claim, type: :model do
       it "adds a note" do
         expect(claim.notes.first.body).to eq "Claim hold removed"
         expect(claim.notes.first.created_by).to eq user
+      end
+
+      it "creates an event" do
+        expect(claim.events.order(created_at: :desc).first.name).to eq "claim_unhold"
       end
     end
 
