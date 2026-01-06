@@ -13,6 +13,10 @@ class PayrollRunJob < ApplicationJob
 
         award_amount = grouped_items.map(&:award_amount).compact.sum(0)
         Payment.create!(payroll_run: payroll_run, claims: grouped_claims, topups: group_topups, award_amount: award_amount)
+
+        grouped_claims.each do |claim|
+          Event.create(claim:, name: "claim_payrolled")
+        end
       end
 
       payroll_run.complete!

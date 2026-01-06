@@ -42,6 +42,7 @@ class Claim < ApplicationRecord
   has_many :amendments, dependent: :destroy
   has_many :topups, dependent: :destroy
   has_many :notes, dependent: :destroy
+  has_many :events, dependent: :destroy
   has_one :support_ticket, dependent: :destroy
 
   belongs_to :eligibility, polymorphic: true, inverse_of: :claim, dependent: :destroy
@@ -90,6 +91,8 @@ class Claim < ApplicationRecord
   before_save :normalise_bank_sort_code, if: %i[bank_sort_code bank_sort_code_changed?]
   before_save :normalise_first_name, if: %i[first_name first_name_changed?]
   before_save :normalise_surname, if: %i[surname surname_changed?]
+
+  after_create :event_claim_created
 
   scope :held, -> { where(held: true) }
   scope :not_held, -> { where(held: false) }
@@ -519,5 +522,9 @@ class Claim < ApplicationRecord
 
   def submittable_email_details?
     email_address.present? && email_verified == true
+  end
+
+  def event_claim_created
+    Event.create(claim: self, name: "claim_created")
   end
 end

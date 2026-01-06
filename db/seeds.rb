@@ -199,7 +199,8 @@ end
 if Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")
   20.times do
     eligibility = Policies::FurtherEducationPayments::Eligibility.create!(eligibility_attrs)
-    Claim.create! claim_attrs.merge(eligibility: eligibility)
+    claim = Claim.create! claim_attrs.merge(eligibility: eligibility)
+    Event.create(claim:, name: "claim_submitted")
   end
 
   # Year 1 claim with further_education_teaching_start_year=2020

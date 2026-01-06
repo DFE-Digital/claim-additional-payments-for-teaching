@@ -7,4 +7,10 @@ class Note < ApplicationRecord
 
   scope :automated, -> { where(created_by_id: nil) }
   scope :by_label, ->(label) { order(created_at: :desc).where(label: label) }
+
+  after_create :event_note_created
+
+  def event_note_created
+    Event.create(claim:, name: "note_created", actor: created_by, entity: self)
+  end
 end

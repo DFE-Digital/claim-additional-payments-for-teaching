@@ -233,3 +233,12 @@
   - description
   - created_at
   - updated_at
+  :events:
+  - id
+  - name
+  - claim_id
+  - actor_id
+  - entity_type
+  - entity_id
+  - created_at
+  - updated_at

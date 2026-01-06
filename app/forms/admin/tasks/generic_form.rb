@@ -28,6 +28,10 @@ class Admin::Tasks::GenericForm
       created_by: admin_user,
       manual: true
     )
+
+    Event.create(claim:, name: "task_#{name}_#{passed}", actor: admin_user)
+
+    task
   end
 
   def radio_options
