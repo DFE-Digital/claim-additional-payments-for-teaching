@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   get "/claim/auth/tid/callback", to: "omniauth_callbacks#callback"
   get "/auth/failure", to: "omniauth_callbacks#failure"
   get "/auth/onelogin", to: "omniauth_callbacks#onelogin"
-  if OneLoginSignIn.bypass?
+  if OneLogin::Config.instance.bypass?
     post "/auth/onelogin", to: "omniauth_callbacks#onelogin"
     post "/auth/onelogin_identity", to: "omniauth_callbacks#onelogin"
   end
