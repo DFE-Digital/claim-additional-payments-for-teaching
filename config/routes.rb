@@ -119,7 +119,7 @@ Rails.application.routes.draw do
     get "/auth/callback", to: "auth#callback"
     get "/auth/failure", to: "auth#failure"
 
-    if DfESignIn.bypass?
+    if DfeSignIn::Config.instance.bypass?
       post "/auth/developer/callback", to: "auth#bypass_callback", as: :dfe_sign_in_bypass_callback
     end
 
