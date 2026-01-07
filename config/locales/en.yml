@@ -102,6 +102,18 @@ en:
     radio_yes: "Yes"
     radio_no: "No"
   admin:
+    timeline:
+      claim_created: "[Status] Claim created"
+      claim_submitted: "[Status] Claim submitted"
+      claim_approved: "[Status] Claim approved"
+      claim_rejected: "[Status] Claim rejected"
+      claim_payrolled: "[Status] Claim payrolled"
+      note_created: "Note added"
+      task_qa_required: "[Task] Quality assurance decision required"
+      task_qa_completed: "[Task] Quality assurance completed"
+      task_payroll_details_true: "[Task] Claim payroll details passed"
+      task_payroll_details_false: "[Task] Claim payroll details failed"
+      email_rejected_sent: "[Email] Rejection email sent"
     qts_award_year: "Award year"
     current_school: "Current school"
     address: "Address"

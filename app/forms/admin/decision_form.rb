@@ -44,9 +44,17 @@ module Admin
         if qa?
           claim.previous_decision.update!(undone: true)
           claim.update!(qa_completed_at: Time.zone.now)
+          Event.create(claim:, name: "claim_qa_completed", actor: current_admin, entity: decision)
         elsif claim.flaggable_for_qa?
           claim.update!(qa_required: true)
           claim.notes.create!(body: "This claim has been marked for a quality assurance review")
+          Event.create(claim:, name: "task_qa_required", entity: decision)
+        end
+
+        if decision.approved?
+          Event.create(claim:, name: "claim_approved", actor: current_admin, entity: decision)
+        elsif decision.rejected?
+          Event.create(claim:, name: "claim_rejected", actor: current_admin, entity: decision)
         end
 
         send_claim_result_email
@@ -147,6 +155,7 @@ module Admin
 
       if claim.latest_decision.rejected? && claim.email_address.present?
         ClaimMailer.rejected(claim).deliver_later
+        Event.create(claim:, name: "email_rejected_sent", entity: decision)
       end
 
       if claim.latest_decision.rejected? && claim.has_early_years_policy?
