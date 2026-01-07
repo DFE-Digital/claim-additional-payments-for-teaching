@@ -9,13 +9,6 @@ OmniAuth.config.on_failure = proc { |env|
   OmniAuth::FailureEndpoint.new(env).redirect_to_failure
 }
 
-dfe_sign_in_fe_provider_callback_path = "/further-education-payments-provider/auth/callback"
-
-if ENV["DFE_SIGN_IN_REDIRECT_BASE_URL"].present?
-  dfe_sign_in_redirect_uri = URI.join(ENV["DFE_SIGN_IN_REDIRECT_BASE_URL"], "/admin/auth/callback")
-  dfe_sign_in_fe_provider_redirect_uri = URI.join(ENV["DFE_SIGN_IN_REDIRECT_BASE_URL"], dfe_sign_in_fe_provider_callback_path)
-end
-
 onelogin_sign_in_issuer_uri = ENV["ONELOGIN_SIGN_IN_ISSUER"].present? ? URI(ENV["ONELOGIN_SIGN_IN_ISSUER"]) : nil
 if ENV["ONELOGIN_REDIRECT_BASE_URL"].present?
   onelogin_sign_in_redirect_uri = URI.join(ENV["ONELOGIN_REDIRECT_BASE_URL"], "/auth/onelogin")
@@ -41,7 +34,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
         host: DfeSignIn::Config.instance.issuer_uri&.host,
         identifier: ENV["DFE_SIGN_IN_INTERNAL_CLIENT_ID"],
         secret: ENV["DFE_SIGN_IN_INTERNAL_CLIENT_SECRET"],
-        redirect_uri: dfe_sign_in_redirect_uri&.to_s
+        redirect_uri: DfeSignIn::Config.instance.redirect_uri&.to_s
       },
       issuer:
         ("#{DfeSignIn::Config.instance.issuer_uri}:#{DfeSignIn::Config.instance.issuer_uri.port}" if DfeSignIn::Config.instance.issuer_uri.present?)
@@ -52,7 +45,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
       discovery: true,
       response_type: :code,
       scope: %i[openid email organisation first_name last_name],
-      callback_path: dfe_sign_in_fe_provider_callback_path,
+      callback_path: DfeSignIn::Config.instance.fe_provider_callback_path,
       path_prefix: "/further-education-payments-provider/auth",
       client_options: {
         port: DfeSignIn::Config.instance.issuer_uri&.port,
@@ -60,7 +53,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
         host: DfeSignIn::Config.instance.issuer_uri&.host,
         identifier: ENV["DFE_SIGN_IN_IDENTIFIER"],
         secret: ENV["DFE_SIGN_IN_SECRET"],
-        redirect_uri: dfe_sign_in_fe_provider_redirect_uri&.to_s
+        redirect_uri: DfeSignIn::Config.instance.fe_provider_redirect_uri&.to_s
       },
       issuer:
         ("#{DfeSignIn::Config.instance.issuer_uri}:#{DfeSignIn::Config.instance.issuer_uri.port}" if DfeSignIn::Config.instance.issuer_uri.present?)
