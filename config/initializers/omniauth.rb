@@ -16,17 +16,6 @@ if ENV["DFE_SIGN_IN_REDIRECT_BASE_URL"].present?
   dfe_sign_in_fe_provider_redirect_uri = URI.join(ENV["DFE_SIGN_IN_REDIRECT_BASE_URL"], dfe_sign_in_fe_provider_callback_path)
 end
 
-tid_sign_in_endpoint_uri = ENV["TID_SIGN_IN_API_ENDPOINT"].present? ? URI(ENV["TID_SIGN_IN_API_ENDPOINT"]) : nil
-
-if ENV["TID_BASE_URL"].present?
-  tid_sign_in_redirect_uri = URI.parse(ENV["TID_BASE_URL"])
-  tid_sign_in_redirect_uri.path = "/claim/auth/tid/callback"
-
-  if ENV["ENVIRONMENT_NAME"].start_with?("review")
-    tid_sign_in_redirect_uri.host = ENV["CANONICAL_HOSTNAME"]
-  end
-end
-
 onelogin_sign_in_issuer_uri = ENV["ONELOGIN_SIGN_IN_ISSUER"].present? ? URI(ENV["ONELOGIN_SIGN_IN_ISSUER"]) : nil
 if ENV["ONELOGIN_REDIRECT_BASE_URL"].present?
   onelogin_sign_in_redirect_uri = URI.join(ENV["ONELOGIN_REDIRECT_BASE_URL"], "/auth/onelogin")
@@ -82,11 +71,11 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     name: :tid,
     callback_path: "/claim/auth/tid/callback",
     client_options: {
-      host: tid_sign_in_endpoint_uri&.host,
+      host: TeacherId::Config.instance.sign_in_endpoint_uri&.host,
       identifier: ENV["TID_SIGN_IN_CLIENT_ID"],
-      port: tid_sign_in_endpoint_uri&.port,
-      redirect_uri: tid_sign_in_redirect_uri&.to_s,
-      scheme: tid_sign_in_endpoint_uri&.scheme || "https",
+      port: TeacherId::Config.instance.sign_in_endpoint_uri&.port,
+      redirect_uri: TeacherId::Config.instance.sign_in_redirect_uri&.to_s,
+      scheme: TeacherId::Config.instance.sign_in_endpoint_uri&.scheme || "https",
       secret: ENV["TID_SIGN_IN_SECRET"]
     },
     discovery: true,
