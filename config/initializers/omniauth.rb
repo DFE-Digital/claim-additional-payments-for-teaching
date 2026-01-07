@@ -9,14 +9,6 @@ OmniAuth.config.on_failure = proc { |env|
   OmniAuth::FailureEndpoint.new(env).redirect_to_failure
 }
 
-onelogin_sign_in_issuer_uri = ENV["ONELOGIN_SIGN_IN_ISSUER"].present? ? URI(ENV["ONELOGIN_SIGN_IN_ISSUER"]) : nil
-if ENV["ONELOGIN_REDIRECT_BASE_URL"].present?
-  onelogin_sign_in_redirect_uri = URI.join(ENV["ONELOGIN_REDIRECT_BASE_URL"], "/auth/onelogin")
-end
-if ENV["ONELOGIN_SIGN_IN_SECRET_BASE64"].present?
-  onelogin_sign_in_secret_key = OpenSSL::PKey::RSA.new(Base64.decode64(ENV["ONELOGIN_SIGN_IN_SECRET_BASE64"] + "\n"))
-end
-
 Rails.application.config.middleware.use OmniAuth::Builder do
   if DfeSignIn::Config.instance.bypass?
     provider :developer
@@ -86,12 +78,12 @@ Rails.application.config.middleware.use OmniAuth::Builder do
       callback_path: "/auth/onelogin",
       client_auth_method: "jwt_bearer",
       client_options: {
-        host: onelogin_sign_in_issuer_uri&.host,
+        host: OneLogin::Config.instance.issuer_uri&.host,
         identifier: ENV["ONELOGIN_SIGN_IN_CLIENT_ID"],
-        port: onelogin_sign_in_issuer_uri&.port,
-        redirect_uri: onelogin_sign_in_redirect_uri&.to_s,
-        scheme: onelogin_sign_in_issuer_uri&.scheme,
-        secret: onelogin_sign_in_secret_key
+        port: OneLogin::Config.instance.issuer_uri&.port,
+        redirect_uri: OneLogin::Config.instance.redirect_uri&.to_s,
+        scheme: OneLogin::Config.instance.issuer_uri&.scheme,
+        secret: OneLogin::Config.instance.secret_key
       },
       discovery: true,
       issuer: ENV["ONELOGIN_SIGN_IN_ISSUER"],
@@ -104,11 +96,11 @@ Rails.application.config.middleware.use OmniAuth::Builder do
       name: :onelogin_identity,
       callback_path: "/auth/onelogin_identity",
       client_options: {
-        host: onelogin_sign_in_issuer_uri&.host,
+        host: OneLogin::Config.instance.issuer_uri&.host,
         identifier: ENV["ONELOGIN_SIGN_IN_CLIENT_ID"],
-        port: onelogin_sign_in_issuer_uri&.port,
-        redirect_uri: onelogin_sign_in_redirect_uri&.to_s,
-        scheme: onelogin_sign_in_issuer_uri&.scheme
+        port: OneLogin::Config.instance.issuer_uri&.port,
+        redirect_uri: OneLogin::Config.instance.redirect_uri&.to_s,
+        scheme: OneLogin::Config.instance.issuer_uri&.scheme
       },
       discovery: true,
       extra_authorize_params: {
