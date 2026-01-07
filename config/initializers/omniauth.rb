@@ -37,12 +37,6 @@ if ENV["ONELOGIN_SIGN_IN_SECRET_BASE64"].present?
   onelogin_sign_in_secret_key = OpenSSL::PKey::RSA.new(Base64.decode64(ENV["ONELOGIN_SIGN_IN_SECRET_BASE64"] + "\n"))
 end
 
-module ::TeacherId
-  def self.bypass?
-    (Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")) && ENV["BYPASS_DFE_SIGN_IN"] == "true"
-  end
-end
-
 Rails.application.config.middleware.use OmniAuth::Builder do
   if DfeSignIn::Config.instance.bypass?
     provider :developer

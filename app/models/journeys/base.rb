@@ -103,7 +103,7 @@ module Journeys
     def shared_forms
       array = []
 
-      array << if TeacherId.bypass?
+      array << if TeacherId::Config.instance.bypass?
         Debug::SignInOrContinueForm
       else
         SignInOrContinueForm
