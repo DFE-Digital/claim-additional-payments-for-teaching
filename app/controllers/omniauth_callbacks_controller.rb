@@ -145,7 +145,7 @@ class OmniauthCallbacksController < ApplicationController
   class OneLoginTestUser < PersonalDetailsForm; end
 
   def extract_data_from_jwt(jwt)
-    if OneLoginSignIn.bypass?
+    if OneLogin::Config.instance.bypass?
       form = OneLoginTestUser.new(
         journey_session: journey_session,
         journey: nil,
@@ -198,7 +198,7 @@ class OmniauthCallbacksController < ApplicationController
   end
 
   def omniauth_hash
-    @omniauth_hash ||= if OneLoginSignIn.bypass?
+    @omniauth_hash ||= if OneLogin::Config.instance.bypass?
       OmniAuth.config.mock_auth[:onelogin] || test_user_auth_hash
     else
       request.env["omniauth.auth"]

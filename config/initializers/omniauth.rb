@@ -43,12 +43,6 @@ module ::DfESignIn
   end
 end
 
-module ::OneLoginSignIn
-  def self.bypass?
-    (!Rails.env.production? || ENV["ENVIRONMENT_NAME"].start_with?("review")) && ENV["BYPASS_ONELOGIN_SIGN_IN"] == "true"
-  end
-end
-
 module ::TeacherId
   def self.bypass?
     (Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")) && ENV["BYPASS_DFE_SIGN_IN"] == "true"
@@ -116,7 +110,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     send_scope_to_token_endpoint: false
   }
 
-  if OneLoginSignIn.bypass?
+  if OneLogin::Config.instance.bypass?
     provider :developer
   else
     provider :openid_connect, {
