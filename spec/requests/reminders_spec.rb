@@ -58,7 +58,6 @@ RSpec.describe "Claims" do
     end
   end
 
-  # Rollbar error - confirmation page loaded without reminder that can be loaded from the session information
   describe "#show" do
     describe "for FurtherEducationPayments journey" do
       before do

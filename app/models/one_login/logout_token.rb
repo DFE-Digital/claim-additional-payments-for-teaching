@@ -30,7 +30,6 @@ class OneLogin::LogoutToken
     JWT::ExpiredSignature,
     JWT::InvalidIatError => e
 
-    Rollbar.error(e)
     Sentry.capture_exception(e)
 
     false

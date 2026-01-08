@@ -48,7 +48,7 @@ RSpec.describe "Routes", type: :routing do
     end
   end
 
-  describe "Silence unwanted request from causing a Rollbar error and render a 404" do
+  describe "Silence unwanted request and render a 404" do
     context "unwanted extensions" do
       it "returns a 404" do
         %w[axd asp aspx cgi htm html php php7 pl txt xml].each do |extension|

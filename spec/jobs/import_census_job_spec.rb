@@ -27,7 +27,7 @@ RSpec.describe ImportCensusJob do
 
       before do
         allow(SchoolWorkforceCensus).to receive(:insert_all).and_raise(ActiveRecord::RecordInvalid)
-        allow(Rollbar).to receive(:error)
+        allow(Sentry).to receive(:capture_exception)
       end
 
       it "does not import census data, sends error email and keeps the file upload" do
@@ -40,8 +40,7 @@ RSpec.describe ImportCensusJob do
         expect(ActionMailer::Base.deliveries.count).to eq(1)
         expect(mail.template_id).to eq "873170c9-4535-441f-b929-4670f022ecc9"
 
-        # Rollbar error report
-        expect(Rollbar).to have_received(:error)
+        expect(Sentry).to have_received(:capture_exception)
 
         # keeps the file upload for debugging
         expect(FileUpload.find_by_id(file_upload.id)).to be_present

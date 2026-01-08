@@ -24,9 +24,6 @@ gem "jbuilder", "~> 2.13"
 # Generate human-readable reference numbers
 gem "nanoid"
 
-# Use Rollbar
-gem "rollbar"
-
 # Use OmniAuth with OpenIDConnect
 gem "omniauth"
 gem "omniauth_openid_connect"

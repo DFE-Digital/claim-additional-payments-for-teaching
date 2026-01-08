@@ -209,12 +209,12 @@ RSpec.describe Dqt::Teacher do
     context "when response value non Date as String" do
       before { qualified_teaching_status_response.replace_at_path(response_keys, "x") }
 
-      it "reports error to Rollbar" do
-        allow(Rollbar).to receive(:error)
+      it "reports error to Sentry" do
+        allow(Sentry).to receive(:capture_exception)
 
         subject
 
-        expect(Rollbar).to have_received(:error)
+        expect(Sentry).to have_received(:capture_exception)
       end
 
       it "returns nil" do

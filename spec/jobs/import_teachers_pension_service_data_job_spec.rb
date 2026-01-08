@@ -41,7 +41,7 @@ RSpec.describe ImportTeachersPensionServiceDataJob do
 
       before do
         allow(TeachersPensionsService).to receive(:insert_all).and_raise(ActiveRecord::RecordInvalid)
-        allow(Rollbar).to receive(:error)
+        allow(Sentry).to receive(:capture_exception)
       end
 
       it "sends error email and keeps the file upload" do
@@ -51,8 +51,7 @@ RSpec.describe ImportTeachersPensionServiceDataJob do
         expect(ActionMailer::Base.deliveries.count).to eq(1)
         expect(mail.template_id).to eq "f29753a1-5b9c-4e37-8b5a-43150b3bca64"
 
-        # Rollbar error report
-        expect(Rollbar).to have_received(:error)
+        expect(Sentry).to have_received(:capture_exception)
 
         # keeps the file upload for debugging
         expect(FileUpload.find_by_id(file_upload.id)).to be_present

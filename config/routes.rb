@@ -203,7 +203,7 @@ Rails.application.routes.draw do
     end
   end
 
-  # We still want to know about 404s in case of missing a route, but silence a whitelist instead to reduce the noise in Rollbar
+  # We still want to know about 404s in case of missing a route, but silence a whitelist instead to reduce error noise
   # This is not exhastive, so add more if there are obvious requests to ignore
 
   # 404 - extensions we don't expect
