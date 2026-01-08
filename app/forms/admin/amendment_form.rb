@@ -129,6 +129,8 @@ class Admin::AmendmentForm
       claim.assign_attributes(claim_attributes)
       claim.save!
 
+      Claims::Match.update_matching_claims!(claim)
+
       amendment.persisted?
     end
   end

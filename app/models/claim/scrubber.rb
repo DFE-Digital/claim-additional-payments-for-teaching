@@ -38,6 +38,7 @@ class Claim
         personal_data_removed_at: Time.zone.now
       )
       claim.update!(attributes_to_set)
+      Claims::Match.update_matching_claims!(claim)
     end
 
     def scrub_eligibility!
