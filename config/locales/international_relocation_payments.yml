@@ -1,0 +1,140 @@
+en:
+  get_a_teacher_relocation_payment: &get_a_teacher_relocation_payment
+    accessibility_statement:
+      test_date: "28 July 2022"
+      prepared_date: "31 July 2019"
+      updated_date: "28 July 2022"
+    journey_name: "Get a teacher relocation payment"
+    feedback_email: "international.RELOCATIONPAYMENT@education.gov.uk"
+    claim_description: "for a get a teacher relocation payment"
+    claim_subject: "International relocation payment"
+    support_email_address: "international.RELOCATIONPAYMENT@education.gov.uk"
+    forms:
+      previous_payment_received:
+        question: "Have you previously received an international relocation payment?"
+        answers:
+          true:
+            answer: "Yes"
+          false:
+            answer: "No"
+        errors:
+          inclusion: "Select Yes if you have previously received an international relocation payment"
+      application_route:
+        question: "What is your employment status?"
+        hint: "Select one of the following options"
+        answers:
+          teacher:
+            answer: "I am employed as a teacher in a school in England"
+          salaried_trainee:
+            answer: "I am enrolled on a salaried teacher training course in England"
+            hint: "‘Salaried’ means a course where you are paid a wage to work while you train."
+          other:
+            answer: "Other"
+        errors:
+          inclusion: "Select the option that applies to you"
+      state_funded_secondary_school:
+        question: "Are you employed by an English state secondary school?"
+        hint:
+          "State schools receive funding from the UK government. Secondary schools teach children aged 11 to 16, or 11
+          to 18."
+        answers:
+          true:
+            answer: "Yes"
+          false:
+            answer: "No"
+        errors:
+          inclusion: "Select the option that applies to you"
+      contract_details:
+        question: "Are you employed on a contract lasting at least one year?"
+        hint: "Your contract can also be ongoing or permanent."
+        answers:
+          true:
+            answer: "Yes"
+          false:
+            answer: "No"
+        errors:
+          inclusion: "Select the option that applies to you"
+      start_date:
+        question: "Enter the start date of your contract"
+        errors:
+          presence: "Enter your contract start date"
+          date_not_in_future: "Start date cannot be in the future"
+      subject:
+        question: "What subject are you employed to teach at your school?"
+        hint:
+          "Physics, general or combined science including physics, and languages can be combined with other subjects but
+          must make up at least 50% of your time in the classroom."
+        answers:
+          physics: "Physics"
+          combined_with_physics: "General or combined science, including physics"
+          languages: "Languages"
+          other: "Other"
+        errors:
+          inclusion: "Choose a subject"
+      changed_workplace_or_new_contract:
+        question: "Have you changed where you work or started a new contract since you last applied?"
+        hint: "This includes any changes since your last application"
+        answers:
+          true:
+            answer: "Yes"
+          false:
+            answer: "No"
+        errors:
+          inclusion: "Select yes if you have changed where you work or started a new contract since you last applied"
+      breaks_in_employment:
+        question: Have you had any breaks in employment during the last 3 academic terms?
+        hint: Include any breaks during term time when you were not working
+        errors:
+          inclusion: Select yes if you have had any breaks in employment during the last 3 academic terms
+        answers:
+          true:
+            answer: "Yes"
+          false:
+            answer: "No"
+      visa:
+        question: "Select the visa you currently have to live in England"
+        errors:
+          inclusion: "You must select the visa you currently have to live in England"
+      entry_date:
+        question: "Enter the date you moved to England to start your teaching job"
+        errors:
+          presence: "Enter your entry date"
+          date_not_in_future: "Date of entry cannot be in the future"
+      nationality:
+        question: "Select your nationality"
+        errors:
+          inclusion: "Choose your nationality"
+      passport_number:
+        question: "Enter your passport number, as it appears on your passport"
+        errors:
+          presence: "Enter your passport number"
+          invalid: "Invalid passport number"
+      current_school:
+        question: Which school are you currently employed to teach at?
+        errors:
+          blank: No results match that search term. Try again.
+          min_length: Enter a school name or postcode that is at least 3 characters long
+      select_current_school:
+        heading: Which school are you currently employed to teach at?
+        errors:
+          blank: Select the school you teach at
+      headteacher_details:
+        questions:
+          school_headteacher_name: "Enter the name of the headteacher of the school where you are employed as a teacher"
+        errors:
+          school_headteacher_name: "Enter the headteacher's name"
+      personal_details:
+        errors:
+          over_max_age: Age must be below 80
+          below_min_age: Age must be above 21
+    check_your_answers:
+      part_one:
+        primary_heading: "Check your answers"
+        eligibility_details: "Eligibility details"
+        confirmation_notice:
+          "By selecting continue you are confirming that, to the best of your knowledge, the details you are providing
+          are correct."
+  international_relocation_payments:
+    <<: *get_a_teacher_relocation_payment
+    policy_short_name: "International Relocation Payments"
+    policy_acronym: "IRP"

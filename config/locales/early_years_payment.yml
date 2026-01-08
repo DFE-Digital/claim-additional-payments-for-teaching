@@ -1,0 +1,238 @@
+en:
+  early_years_payment:
+    claim_description: for an early years financial incentive payment
+  early_years_payment_provider_start:
+    accessibility_statement:
+      test_date: "28 July 2022"
+      prepared_date: "31 July 2019"
+      updated_date: "28 July 2022"
+    claim_description: for an early years financial incentive payment
+    journey_name: Early years financial incentive payment service
+    journey_description: Provider start journey
+    landing_page:
+      title: Claim an early years financial incentive payment on behalf of your employee
+    feedback_email: "EY.Financial-Incentives@education.gov.uk"
+    check_your_email_page:
+      title: Check your email
+    forms:
+      email_address:
+        question: Enter your email address
+  early_years_payment_provider_authenticated: &early_years_payment_provider_authenticated
+    accessibility_statement:
+      test_date: "28 July 2022"
+      prepared_date: "31 July 2019"
+      updated_date: "28 July 2022"
+    claim_description: for an early years financial incentive payment
+    journey_name: Early years financial incentive payment service
+    journey_description: Provider authenticated journey
+    feedback_email: "EY.Financial-Incentives@education.gov.uk"
+    support_email_address: "EY.Financial-Incentives@education.gov.uk"
+    forms:
+      consent:
+        question: Before you continue with your claim
+        option:
+          I confirm that I’ve obtained consent from my employee and have provided them with the relevant privacy notice.
+        errors:
+          presence: You must be able to confirm this information to continue
+      current_nursery:
+        question: Select the name of the nursery where your employee works
+        errors:
+          presence: Select the nursery where your employee works
+      paye_reference:
+        question: "What is %{nursery_name}’s employer PAYE reference?"
+        errors:
+          valid: Enter a valid PAYE reference
+      claimant_name:
+        question: Who are you making this claim for?
+        hint:
+          Enter the employee’s full legal name as it appears on their official identity documents, for example their passport or driving licence.
+        errors:
+          first_name:
+            presence: Enter employee’s first name
+            length: Employee’s first name must be less than 100 characters
+            format: Employee’s first name cannot contain special characters
+          last_name:
+            presence: Enter employee’s last name
+            length: Employee’s last name must be less than 100 characters
+            format: Employee’s last name cannot contain special characters
+      start_date:
+        question: When did %{first_name} start at %{current_nursery}?
+        hint: For example, 27 3 2024.
+        errors:
+          presence: Provide a date in the format 27 3 2024
+          date_not_in_future: Start date cannot be in the future
+          year_must_have_4_digits: Year must include 4 numbers
+      contract_type:
+        question: Select the contract type for %{practitioner_first_name}’s current role at %{nursery_name}
+        options:
+          permanent: Permanent
+          casual_or_temporary: Casual or temporary
+          voluntary_or_unpaid: Voluntary or unpaid
+          agency_work_and_apprenticeship_roles: Agency work and apprenticeship roles
+        errors:
+          inclusion: You must select an option below to continue
+      child_facing:
+        question: Does %{first_name} spend most of their time in their job working directly with children?
+        hint:
+          "%{first_name}’s job must involve spending most of their contracted hours (approximately 70% or more) directly working
+          with children."
+        errors:
+          inclusion: Select yes if %{claimant_full_name} spends most of their time in their job working directly with children
+      returner:
+        question:
+          Did %{first_name} work in early years between %{six_months_before_start_date} and %{start_date}?
+        errors:
+          inclusion: Select yes if %{claimant_full_name} worked in early years between %{six_months_before_start_date} and %{start_date}
+      returner_worked_with_children:
+        question:
+          Did %{first_name}’s previous role in an early years setting involve mostly working directly with children?
+        errors:
+          inclusion: Select yes if %{claimant_full_name}’s previous role in an early years setting involved mostly working directly with children
+      returner_contract_type:
+        question: Select the contract type for %{first_name}’s previous role in an early years setting
+        options:
+          permanent: Permanent
+          casual_or_temporary: Casual or temporary
+          voluntary_or_unpaid: Voluntary or unpaid
+          agency_work_and_apprenticeships: Agency work and apprenticeship roles
+        errors:
+          inclusion: Select the type of contract %{claimant_full_name} had in their previous role
+      employee_email:
+        question: What is %{first_name}’s email address?
+        hint: We’ll use this to ask your employee to provide their payment details.
+        errors:
+          valid: Enter a valid email address
+      check_your_answers:
+        errors:
+          valid: You cannot submit this claim without providing your full name
+    check_your_answers:
+      title: Check your answers before submitting this claim
+      heading_send_application: Before submitting this claim
+      statement:
+        By submitting this claim you’re confirming that, to the best of your knowledge, the details you’re providing are correct.
+      btn_text: Accept and send
+  early_years_payment_provider_alternative_idv:
+    journey_name: Early years financial incentive payment service
+    journey_description: Provider alternative IDV journey
+    feedback_email: "earlycareerteacherpayments@digital.education.gov.uk"
+    support_email_address: "EY.Financial-Incentives@education.gov.uk"
+    forms:
+      claimant_employed_by_nursery:
+        question: "Does %{nursery_name} employ %{claimant_name}?"
+        errors:
+          claimant_employed_by_nursery:
+            inclusion: "Select yes if %{nursery_name} employs %{claimant_name}"
+      claimant_personal_details:
+        title: "About %{claimant_name}"
+        claimant_date_of_birth:
+          question: "Enter their date of birth"
+          hint: "For example, 27 3 2007"
+        claimant_postcode:
+          question: "Enter their postcode"
+          hint: "For example ’AA1 2BC’."
+        claimant_national_insurance_number:
+          question: "Enter their National Insurance number"
+          hint: "For example, QQ123456C"
+        claimant_bank_details_match:
+          question: "Do these bank details match what you have for %{claimant_name}?"
+        claimant_email:
+          question: "Enter their personal email address"
+        errors:
+          claimant_date_of_birth:
+            blank: "Enter the applicant’s date of birth"
+            format: "Enter the applicant’s date of birth in the correct format"
+          claimant_postcode:
+            blank: "Enter the applicant’s postcode"
+            length: "Postcode must be 11 characters or less"
+            format: "Enter the applicant’s postcode in the correct format"
+          claimant_national_insurance_number:
+            blank: "Enter the applicant’s National Insurance number"
+            invalid: "Enter the applicant’s National Insurance number in the correct format"
+          claimant_bank_details_match:
+            inclusion: "Select yes if these bank details match what you have for %{claimant_name}"
+          claimant_email:
+            blank: "Enter the applicant’s personal email address"
+            invalid: "Enter the applicant’s email address in the correct format"
+            length: "Email address must be %{max_length} characters or less"
+
+      check_answers:
+        title: "Employment check"
+        claimant_employment_check_declaration:
+          question: "To the best of my knowledge, I confirm that the information provided in this form is correct."
+        errors:
+          claimant_employment_check_declaration:
+            acceptance: "Tick the box to declare that the information provided in this form is correct"
+  early_years_payments:
+    claim_subject: "Early Years Payment"
+    policy_acronym: EY
+    policy_short_name: Early Years Financial Incentive Payments
+    policy_full_name: Early years financial incentive payment
+    support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
+    claim_description: for an early years financial incentive payment
+  early_years_payment_practitioner:
+    journey_name: Early years financial incentive payment service
+    journey_description: Practitioner journey
+    feedback_email: "EY.Financial-Incentives@education.gov.uk"
+    support_email: "EY.Financial-Incentives@education.gov.uk"
+    support_email_address: "EY.Financial-Incentives@education.gov.uk"
+    claim_description: for early years financial incentive payment
+    forms:
+      landing_page:
+        title: Complete a claim for an early years financial incentive payment
+      find_reference:
+        question: Enter your claim reference
+        hint: Your claim reference is in the claim invite email from your employer. It’s a series of letters and numbers, like ABC1234E.
+        errors:
+          presence: Enter your claim reference number
+      email_address:
+        label: What is your personal email address?
+        hint_html: |
+          <p class="govuk-body">
+            This should match the email address your employer has on file for you.
+          </p>
+
+          <p class="govuk-body">
+            We need it so that we can still contact you if your circumstances change while we process your payment.
+          </p>
+
+          <p class="govuk-body">
+            To verify your email address, we will send you an email with a 6-digit passcode. You can enter the passcode on the next screen.
+          </p>
+      personal_details:
+        date_of_birth:
+          hint: "For example, 31 03 1990"
+      provide_mobile_number:
+        question: "Can we use your mobile number to contact you?"
+        hint_html: |
+          <p class="govuk-body govuk-!-margin-top-0">
+            We’ll send you a text message if we cannot contact you by email. We will not call you.
+          </p>
+          <p class="govuk-body">
+            It might slow down your claim if we cannot contact you.
+          </p>
+      mobile_number:
+        question: "Your mobile number"
+        hint_html: |
+          <p class="govuk-body govuk-!-margin-top-0">
+            We’ll check the number by sending a text message with a passcode.
+          </p>
+      personal_bank_account:
+        legend: Your personal bank account details
+        banking_name:
+          label: "Name on the account"
+          hint: "The name as it appears on your bank card or bank statements"
+        bank_sort_code:
+          hint: "Must be 6 digits long"
+        bank_account_number:
+          hint: "Must be 8 digits long"
+      gender:
+        questions:
+          payroll_gender: "How is your gender recorded on your employer’s payroll system?"
+        hint_html: |
+          <p class="govuk-body govuk-!-margin-top-0">
+            We’re asking this so that we can match HMRC’s records and pay tax on your payment for you. You should contact your payroll team if you’re not sure how your gender is recorded.
+          </p>
+
+    check_your_answers:
+      title: Check your answers before submitting this claim
+      btn_text: Accept and send
