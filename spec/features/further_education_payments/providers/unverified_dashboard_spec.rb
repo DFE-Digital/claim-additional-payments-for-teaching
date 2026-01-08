@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Provider unverified claims dashboard" do
   before do
-    allow(DfESignIn).to receive(:bypass?).and_return(true)
+    allow(DfeSignIn::Config).to receive(:instance).and_return(OpenStruct.new(bypass?: true))
     create(:journey_configuration, :further_education_payments)
   end
 

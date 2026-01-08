@@ -4,7 +4,7 @@
       Sign in with DfE Sign In
     </h1>
 
-    <% if DfESignIn.bypass? %>
+    <% if DfeSignIn::Config.instance.bypass? %>
       <%= govuk_button_to 'Sign in as service operator (bypass DfE Sign-in)', admin_dfe_sign_in_bypass_callback_path, params: { roles: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE] } %>
       <%= govuk_button_to 'Sign in as service admin (bypass DfE Sign-in)', admin_dfe_sign_in_bypass_callback_path, params: { roles: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::SERVICE_ADMIN_DFE_SIGN_IN_ROLE_CODE] } %>
     <% else %>

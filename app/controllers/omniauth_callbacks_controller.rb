@@ -145,7 +145,7 @@ class OmniauthCallbacksController < ApplicationController
   class OneLoginTestUser < PersonalDetailsForm; end
 
   def extract_data_from_jwt(jwt)
-    if OneLoginSignIn.bypass?
+    if OneLogin::Config.instance.bypass?
       form = OneLoginTestUser.new(
         journey_session: journey_session,
         journey: nil,
@@ -198,7 +198,7 @@ class OmniauthCallbacksController < ApplicationController
   end
 
   def omniauth_hash
-    @omniauth_hash ||= if OneLoginSignIn.bypass?
+    @omniauth_hash ||= if OneLogin::Config.instance.bypass?
       OmniAuth.config.mock_auth[:onelogin] || test_user_auth_hash
     else
       request.env["omniauth.auth"]
@@ -207,7 +207,7 @@ class OmniauthCallbacksController < ApplicationController
 
   # FIXME RL - probably want to move this to ProviderSessionsController#callback
   def further_education_payments_provider_callback(auth)
-    if DfESignIn.bypass?
+    if DfeSignIn::Config.instance.bypass?
       auth = params
 
       dfe_sign_in_session = DfeSignIn::AuthenticatedSession.new(
@@ -230,7 +230,7 @@ class OmniauthCallbacksController < ApplicationController
       )
     end
 
-    if DfESignIn.bypass?
+    if DfeSignIn::Config.instance.bypass?
       # Set user info from the bypass form
       dfe_sign_in_user.given_name = auth.dig("info", "first_name").strip if auth.dig("info", "first_name").present?
       dfe_sign_in_user.family_name = auth.dig("info", "last_name").strip if auth.dig("info", "last_name").present?
