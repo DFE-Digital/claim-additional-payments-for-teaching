@@ -1,0 +1,47 @@
+<% content_for(:phase) { "Alpha" } %>
+
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:title),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      method: :patch,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        You have added <%= pluralize(f.object.teacher_count, "teacher") %>
+      </h1>
+
+      <div class="govuk-!-margin-bottom-6">
+        <% f.object.teachers.each do |teacher| %>
+          <%= render(
+            partial: "teacher_card",
+            locals: { teacher: teacher, answers: f.object.answers }
+          ) %>
+        <% end %>
+      </div>
+
+      <%= f.govuk_collection_radio_buttons(
+        :add_another_teacher,
+        f.object.radio_options,
+        :id,
+        :name,
+        legend: { text: f.object.t([:add_another_teacher, :label]) },
+        inline: true,
+      ) %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>
