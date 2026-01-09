@@ -1,14 +1,21 @@
 <div class="govuk-grid-column-full">
-  <div class="govuk-inset-text">
+  <%= govuk_inset_text do %>
     <% if claim.assigned_to == @admin_user %>
-      <p class="govuk-body"><%= I18n.t("admin.assigned_user_banner.assigned_to_self") %></p>
-      <%= link_to I18n.t("admin.assigned_user_banner.unassign"), admin_deallocate_path(id: claim.id), method: :delete, class: "govuk-button", data: { module: "govuk-button", "prevent-double-click": true } %>
+      <p class="govuk-body">
+        <%= I18n.t("admin.assigned_user_banner.assigned_to_self") %>
+      </p>
+
+      <%= govuk_button_to I18n.t("admin.assigned_user_banner.unassign"), admin_deallocate_path(id: claim.id), method: :delete %>
     <% elsif claim.assigned_to.present? %>
       <p class="govuk-body"><%= I18n.t("admin.assigned_user_banner.assigned_to_other", dfe_user: claim.assigned_to.full_name.titleize) %></p>
-      <%= link_to I18n.t("admin.assigned_user_banner.unassign"), admin_deallocate_path(id: claim.id), method: :delete, class: "govuk-button", data: { module: "govuk-button", "prevent-double-click": true } %>
+
+      <%= govuk_button_to I18n.t("admin.assigned_user_banner.unassign"), admin_deallocate_path(id: claim.id), method: :delete %>
     <% else %>
-      <p class="govuk-body"><%= I18n.t("admin.assigned_user_banner.unassigned") %></p>
-      <%= link_to I18n.t("admin.assigned_user_banner.assign_to_self"), admin_allocate_path(claim), method: :patch, class: "govuk-button", data: { module: "govuk-button", "prevent-double-click": true } %>
+      <p class="govuk-body">
+        <%= I18n.t("admin.assigned_user_banner.unassigned") %>
+      </p>
+
+      <%= govuk_button_to I18n.t("admin.assigned_user_banner.assign_to_self"), admin_allocate_path(claim), method: :patch %>
     <% end %>
-  </div>
+  <% end %>
 </div>
