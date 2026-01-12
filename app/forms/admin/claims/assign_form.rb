@@ -8,6 +8,14 @@ module Admin::Claims
     attribute :assign, :string
     attribute :colleague_id, :string
 
+    validates :assign,
+      inclusion: {
+        in: %w[unassign myself colleague],
+        message: "Select who to assign claim to"
+      }
+
+    validate :validate_colleague_selected
+
     def colleagues
       DfeSignIn::User.service_operators - [current_admin, claim.assigned_to].compact
     end
@@ -36,7 +44,15 @@ module Admin::Claims
     def colleague
       @colleague ||= DfeSignIn::User
         .service_operators
-        .find(colleague_id)
+        .find_by(id: colleague_id)
+    end
+
+    def validate_colleague_selected
+      return unless assign == "colleague"
+
+      if colleague.nil?
+        errors.add(:colleague_id, "Select a colleague")
+      end
     end
   end
 end

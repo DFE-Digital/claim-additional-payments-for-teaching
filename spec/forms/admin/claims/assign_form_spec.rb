@@ -16,6 +16,27 @@ RSpec.describe Admin::Claims::AssignForm do
     described_class.new(current_admin:, claim:)
   end
 
+  describe "validations" do
+    it "is not valid when no assigment is chosen" do
+      expect(subject).to be_invalid
+    end
+
+    context "when assign to colleague but no colleague selected" do
+      subject do
+        described_class.new(
+          current_admin:,
+          claim:,
+          assign: "colleague",
+          colleague_id: nil
+        )
+      end
+
+      it "is not valid" do
+        expect(subject).to be_invalid
+      end
+    end
+  end
+
   describe "#colleagues" do
     it "returns other service operators" do
       expect(subject.colleagues).not_to include current_admin
