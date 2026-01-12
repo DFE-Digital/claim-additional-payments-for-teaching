@@ -29,7 +29,7 @@ module Policies
         def data
           personas.map do |persona|
             SchoolWorkforceCensus.new(
-              teacher_reference_number: persona.trn,
+              teacher_reference_number: persona.teacher_reference_number,
               school_urn: persona.school.urn,
               contract_agreement_type: nil, # not used
               totfte: nil, # not used

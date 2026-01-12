@@ -27,11 +27,11 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::Test::SchoolWorkfor
   describe "#to_csv" do
     it "returns correct output" do
       expected = <<STRING.delete(" ")
-       ,1,,,Computing,,
-       ,1,,,Computing,,
-       ,1,,,Computing,,
-       ,1,,,Computing,,
-       ,1,,,Computing,,
+       3013047,1,,,Computing,,
+       3013048,1,,,Computing,,
+       3013050,1,,,Computing,,
+       3013053,1,,,Computing,,
+       3013059,1,,,Computing,,
 STRING
 
       expect(subject.to_csv.to_s(write_headers: false)).to eql expected
@@ -41,11 +41,11 @@ STRING
   describe "#to_file" do
     it "writes csv to disk" do
       expected = <<STRING.delete(" ")
-       ,1,,,Computing,,
-       ,1,,,Computing,,
-       ,1,,,Computing,,
-       ,1,,,Computing,,
-       ,1,,,Computing,,
+       3013047,1,,,Computing,,
+       3013048,1,,,Computing,,
+       3013050,1,,,Computing,,
+       3013053,1,,,Computing,,
+       3013059,1,,,Computing,,
 STRING
 
       file = described_class.to_file
