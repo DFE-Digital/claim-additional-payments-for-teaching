@@ -6,7 +6,7 @@
       </p>
     <% elsif claim.assigned_to.present? %>
       <p class="govuk-body">
-        <%= I18n.t("admin.assigned_user_banner.assigned_to_other", dfe_user: claim.assigned_to.full_name.titleize) %>
+        <%= I18n.t("admin.assigned_user_banner.assigned_to_other", dfe_user: claim.assigned_to.full_name) %>
       </p>
     <% else %>
       <p class="govuk-body">
