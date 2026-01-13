@@ -23,11 +23,32 @@ module Admin::Claims
     def save
       case assign
       when "unassign"
-        claim.update assigned_to: nil
+        ApplicationRecord.transaction do
+          claim.notes.create!(
+            body: "This claim was unassigned from #{claim.assigned_to.full_name}",
+            created_by: current_admin
+          )
+
+          claim.update assigned_to: nil
+        end
       when "myself"
-        claim.update assigned_to: current_admin
+        ApplicationRecord.transaction do
+          claim.notes.create!(
+            body: "This claim was assigned to #{current_admin.full_name}",
+            created_by: current_admin
+          )
+
+          claim.update assigned_to: current_admin
+        end
       when "colleague"
-        claim.update assigned_to: colleague
+        ApplicationRecord.transaction do
+          claim.notes.create!(
+            body: "This claim was assigned to #{colleague.full_name}",
+            created_by: current_admin
+          )
+
+          claim.update assigned_to: colleague
+        end
       end
     end
 
