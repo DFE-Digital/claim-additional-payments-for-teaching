@@ -1,6 +1,6 @@
 Claim year,Expected result,Notes,School name,Supply teacher?,Full term contract?,Employed directly by school?,Subject to poor performance measures?,ITT year,More than 50% of hours teaching eligible subjects?,Teaching subject,ITT subject claimed,Degree subject,Trainee?,First name,Last name,TRN,Date of birth,NINO
 2025/26,Eligible,Teaching eligible subject with ITT in same subject,Eligible school,N,,,N,2024/2025,Y,Computing,Computing,,N,Kenneth,Decerqueira,,08/07/1965,AB400011A
-2025/26,Eligible,Teaching eligible subject with ITT in different eligible subject,Eligible school,N,,,N,2024/2025,Y,Computing,Computing,,N,Kenneth,Decerqueira,,08/07/1965,AB400011A
+2025/26,Eligible,Teaching eligible subject with ITT in different eligible subject,Eligible school,N,,,N,2024/2025,Y,Computing,Mathematics,,N,Kenneth,Decerqueira,,08/07/1965,AB400011A
 2025/26,Ineligible,Teaching eligible subject with ITT in ineligible subject,Eligible school,N,,,N,2024/2025,Y,Computing,English,,N,Kenneth,Decerqueira,,08/07/1965,AB400011A
 2025/26,Eligible,No eligible ITT but degree in eligible subject,Eligible school,N,,,N,2024/2025,Y,Computing,English,Mathematics,N,Kenneth,Decerqueira,,08/07/1965,AB400011A
 2025/26,Ineligible,Degree in ineligible subject,Eligible school,N,,,N,2024/2025,Y,Computing,English,English,N,Kenneth,Decerqueira,,08/07/1965,AB400011A
