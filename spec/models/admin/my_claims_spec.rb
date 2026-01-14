@@ -33,7 +33,7 @@ RSpec.describe Admin::MyClaims do
       create(
         :claim,
         :submitted,
-        assigned_to: current_admin,
+        assigned_to: current_admin
       )
     end
 
@@ -73,7 +73,7 @@ RSpec.describe Admin::MyClaims do
       create(
         :claim,
         :submitted,
-        assigned_to: current_admin,
+        assigned_to: current_admin
       )
     end
 
@@ -112,7 +112,7 @@ RSpec.describe Admin::MyClaims do
       create(
         :claim,
         :submitted,
-        assigned_to: current_admin,
+        assigned_to: current_admin
       )
     end
 
@@ -137,7 +137,7 @@ RSpec.describe Admin::MyClaims do
       create(
         :claim,
         :submitted,
-        assigned_to: current_admin,
+        assigned_to: current_admin
       )
     end
 
@@ -147,7 +147,7 @@ RSpec.describe Admin::MyClaims do
     end
   end
 
-  describe "#all_claims" do
+  describe "#active_claims" do
     let!(:my_claim) do
       create(
         :claim,
@@ -164,9 +164,29 @@ RSpec.describe Admin::MyClaims do
       )
     end
 
-    it "returns all my claims" do
-      expect(subject.all_claims).to include(my_claim)
-      expect(subject.all_claims).not_to include(not_my_claim)
+    let!(:my_approved_claim) do
+      create(
+        :claim,
+        :submitted,
+        :approved,
+        assigned_to: current_admin
+      )
+    end
+
+    let!(:my_rejected_claim) do
+      create(
+        :claim,
+        :submitted,
+        :rejected,
+        assigned_to: current_admin
+      )
+    end
+
+    it "returns all my active claims" do
+      expect(subject.active_claims).to include(my_claim)
+      expect(subject.active_claims).not_to include(not_my_claim)
+      expect(subject.active_claims).not_to include(my_approved_claim)
+      expect(subject.active_claims).not_to include(my_rejected_claim)
     end
   end
 end

@@ -65,7 +65,7 @@
     </div>
 
     <div class="train__carriage__body">
-      <%= @my_claims.all_claims.count %>
+      <%= @my_claims.active_claims.count %>
     </div>
   </div>
 </div>
@@ -83,7 +83,7 @@
   <% end %>
 
   <% table.with_body do |body| %>
-    <% @my_claims.all_claims.each do |claim| %>
+    <% @my_claims.active_claims.each do |claim| %>
       <% body.with_row do |row| %>
         <% row.with_cell(text: govuk_link_to(claim.reference, admin_claim_tasks_path(claim))) %>
         <% row.with_cell(text: claim.full_name) %>

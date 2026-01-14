@@ -7,16 +7,14 @@ module Admin
     end
 
     def overdue
-      current_admin
-        .assigned_claims
+      active_scope
         .filter do |claim|
           claim.decision_deadline_date < Date.today
         end
     end
 
     def due_today
-      current_admin
-        .assigned_claims
+      active_scope
         .filter do |claim|
           claim.decision_deadline_date == Date.today
         end
@@ -25,8 +23,7 @@ module Admin
     def due_in_7_days
       range = Date.today..7.days.from_now
 
-      current_admin
-        .assigned_claims
+      active_scope
         .filter do |claim|
           range.include?(claim.decision_deadline_date)
         end
@@ -38,12 +35,22 @@ module Admin
         .held
     end
 
-    def all_claims
-      @all_claims ||= current_admin
-        .assigned_claims
+    def active_claims
+      @active_claims ||= active_scope
         .sort_by do |claim|
           [claim.decision_deadline_date, claim.submitted_at]
         end
+    end
+
+    private
+
+    def active_scope
+      exclusion_scope = current_admin.assigned_claims.approved.or(current_admin.assigned_claims.rejected)
+      exclusion_ids = exclusion_scope.pluck(:id)
+
+      current_admin
+        .assigned_claims
+        .where.not(id: exclusion_ids)
     end
   end
 end
