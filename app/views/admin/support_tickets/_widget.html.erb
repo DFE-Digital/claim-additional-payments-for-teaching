@@ -4,8 +4,9 @@
   <ul class="govuk-body">
     <%# EY journey without a practitioner will not have an email address yet %>
     <% if @claim.email_address %>
-      <li><%= govuk_link_to "View all support tickets in Zendesk", zendesk_email_search_url(@claim.email_address), new_tab: "" %></li>
+      <li><%= govuk_link_to "View all support tickets in Zendesk by email", zendesk_email_search_url(@claim.email_address), new_tab: "" %></li>
     <% end %>
+    <li><%= govuk_link_to "View all support tickets in Zendesk by claim reference", zendesk_claim_search_url(@claim.reference), new_tab: "" %></li>
     <li><%= govuk_link_to claim.support_ticket.url, claim.support_ticket.url, new_tab: ""  %></li>
   </ul>
 <% else %>
@@ -19,7 +20,10 @@
       hint: -> do %>
         <% if @claim.email_address %>
           <p class="govuk-body-m">
-            <%= govuk_link_to "View all support tickets in Zendesk", zendesk_email_search_url(@claim.email_address) , new_tab: "" %>
+            <%= govuk_link_to "View all support tickets in Zendesk by email", zendesk_email_search_url(@claim.email_address) , new_tab: "" %>
+          </p>
+          <p>
+            <%= govuk_link_to "View all support tickets in Zendesk by claim reference", zendesk_claim_search_url(@claim.reference), new_tab: "" %>
           </p>
         <% end %>
         Create a ticket on Zendesk and enter the URL here.
