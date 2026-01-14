@@ -1,7 +1,9 @@
+<% content_for(:phase) { "Alpha" } %>
+
 <% content_for(
   :page_title,
   page_title(
-    "Check your answers before sending your application",
+    @form.t(:title),
     journey: current_journey_routing_name,
     show_error: @form.errors.any?
   )
@@ -10,15 +12,55 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">
-      Check your answers before sending your application
+      <%= @form.t(:heading) %>
     </h1>
 
     <%= render(
       partial: "claims/check_your_answers_section",
       locals: {
-        heading: "Eligibility details",
-        answers: journey.answers_for_claim(@form.journey_session).eligibility_answers
+        heading: @form.t(:payment_section_heading),
+        answers: journey.answers_for_claim(@form.journey_session).payment_answers
       }
     ) %>
+
+    <%= render(
+      partial: "claims/check_your_answers_section",
+      locals: {
+        heading: @form.t(:contact_section_heading),
+        answers: journey.answers_for_claim(@form.journey_session).contact_answers
+      }
+    ) %>
+
+    <%= render(
+      partial: "claims/check_your_answers_section",
+      locals: {
+        heading: @form.t(:payroll_section_heading),
+        answers: journey.answers_for_claim(@form.journey_session).payroll_answers
+      }
+    ) %>
+
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      method: :patch,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <h2 class="govuk-heading-m">
+        Declaration
+      </h2>
+
+      <p class="govuk-body">
+        By submitting this application, you’re confirming that:
+      </p>
+
+      <%= govuk_list([
+        "the information you have provided is correct",
+        "you plan to continue working as an early years teacher"
+      ], type: :bullet) %>
+
+      <%= f.govuk_submit(@form.t(:submit_button)) %>
+    <% end %>
   </div>
 </div>

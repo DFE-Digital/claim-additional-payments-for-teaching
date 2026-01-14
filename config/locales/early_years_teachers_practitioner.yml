@@ -1,0 +1,69 @@
+en:
+  early_years_teachers_practitioner:
+    journey_name: "Early years teachers - practitioner"
+    feedback_email: "EY.Financial-Incentives@education.gov.uk"
+    landing_page:
+      title: "Claim a recognition payment"
+    forms:
+      sign_in_or_continue:
+        title: "Sign in or continue"
+      confirm_details:
+        title: "Check your details from DfE Identity"
+        heading: "Check your details from DfE Identity"
+        intro: "We've received the following information from your DfE Identity account."
+        full_name_label: "Full name"
+        date_of_birth_label: "Date of birth"
+        national_insurance_number_label: "National Insurance number"
+        teacher_reference_number_label: "Teacher reference number (TRN)"
+        question: "Are these details correct?"
+        errors:
+          inclusion: "Select yes if these details are correct"
+      full_name:
+        title: "Enter your full name"
+        first_name:
+          label: "First name"
+        middle_name:
+          label: "Middle name (optional)"
+        surname:
+          label: "Last name"
+      date_of_birth:
+        title: "Enter your date of birth"
+        hint: "For example, 27 3 2007"
+      national_insurance_number:
+        title: "Enter your National Insurance number"
+        hint: "It's on your National Insurance card, benefit letter, payslip or P60. For example, 'QQ 12 34 56 C'."
+      teacher_reference_number:
+        title: "Enter your teacher reference number (TRN)"
+        hint: "You can get this from your payslip, teacher pension statement or teacher training records."
+        details_title: "Help to find a lost TRN"
+        details_text_html: 'Use the online service to <a class="govuk-link" href="https://find-a-lost-trn.education.gov.uk/start" target="_blank">find a lost TRN (opens in new tab)</a> if you are unable to find it on your payslip, teacher pension statement or teacher training records.'
+      check_your_answers_part_one:
+        title: "Check your answers"
+        heading: "Check your answers"
+        section_heading: "Personal details"
+      eligibility_confirmed:
+        title: "You're eligible for a recognition payment"
+        heading: "You're eligible for a recognition payment"
+        paragraph_one: "Congratulations, you're eligible for an early years teacher recognition payment of £4,500."
+        paragraph_two_html: 'The payment might impact your benefits. You should <a class="govuk-link" href="https://www.gov.uk/benefits-calculators" target="_blank">check if these will be affected</a> first before accepting the claim.'
+        question: "Do you want to accept the payment?"
+        hint: "If you click no, you'll cancel your claim and exit the service."
+        errors:
+          inclusion: "Select yes if you want to accept the payment"
+      payment_options:
+        title: "Choose how you want to be paid"
+        lump_sum_label: "One lump sum"
+        lump_sum_hint: "You'll receive a single payment of £4,500"
+        monthly_instalments_label: "Monthly instalments"
+        monthly_instalments_hint: "You'll receive 10 monthly payments of £450"
+        errors:
+          inclusion: "Select how you want to be paid"
+      check_your_answers:
+        title: "Check your answers before sending your application"
+        heading: "Check your answers before sending your application"
+        eligibility_section_heading: "Personal details"
+        payment_section_heading: "Payment details"
+        contact_section_heading: "Contact details"
+        payroll_section_heading: "Bank details"
+        submit_button: "Confirm and send"
+
