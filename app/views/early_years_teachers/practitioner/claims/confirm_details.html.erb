@@ -1,0 +1,67 @@
+<% content_for(:phase) { "Alpha" } %>
+
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:title),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <%= @form.t(:heading) %>
+    </h1>
+
+    <p class="govuk-body">
+      <%= @form.t(:intro) %>
+    </p>
+
+    <%= govuk_summary_list do |summary_list|
+      summary_list.with_row do |row|
+        row.with_key { @form.t(:full_name_label) }
+        row.with_value { @form.answers.full_name }
+      end
+
+      summary_list.with_row do |row|
+        row.with_key { @form.t(:date_of_birth_label) }
+        row.with_value { @form.answers.date_of_birth&.to_fs(:long_uk) }
+      end
+
+      summary_list.with_row do |row|
+        row.with_key { @form.t(:national_insurance_number_label) }
+        row.with_value { @form.answers.national_insurance_number }
+      end
+
+      summary_list.with_row do |row|
+        row.with_key { @form.t(:teacher_reference_number_label) }
+        row.with_value { @form.answers.teacher_reference_number }
+      end
+    end %>
+
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      method: :patch,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_collection_radio_buttons(
+        :details_correct,
+        @form.radio_options,
+        :id,
+        :name,
+        legend: {
+          text: f.object.t(:question),
+          size: "m"
+        },
+        inline: true
+      ) %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>
