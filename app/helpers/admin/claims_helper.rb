@@ -316,5 +316,9 @@ module Admin
     def zendesk_email_search_url(email_address)
       "https://becomingateacher.zendesk.com/agent/search/1?copy&type=ticket&q=#{CGI.escape(email_address)}"
     end
+
+    def zendesk_claim_search_url(claim_reference)
+      "https://becomingateacher.zendesk.com/agent/search/1?copy&type=ticket&q=custom_field_19564949397009:#{claim_reference}"
+    end
   end
 end

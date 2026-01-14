@@ -15,7 +15,8 @@ RSpec.feature "Admin claim support tickets" do
 
     click_on "Notes and support"
 
-    expect(page).to have_link("View all support tickets in Zendesk", href: "https://becomingateacher.zendesk.com/agent/search/1?copy&type=ticket&q=person1%40example.com")
+    expect(page).to have_link("View all support tickets in Zendesk by email", href: "https://becomingateacher.zendesk.com/agent/search/1?copy&type=ticket&q=person1%40example.com")
+    expect(page).to have_link("View all support tickets in Zendesk by claim reference", href: "https://becomingateacher.zendesk.com/agent/search/1?copy&type=ticket&q=custom_field_19564949397009:#{claim.reference}")
 
     fill_in "Support ticket", with: "https://account-sub-domain.zendesk.com/agent/tickets/1638"
     click_on "Save support ticket"
@@ -25,6 +26,7 @@ RSpec.feature "Admin claim support tickets" do
     expect(claim.support_ticket.created_by).to eq(@signed_in_user)
 
     expect(page).to have_link(href: "https://account-sub-domain.zendesk.com/agent/tickets/1638")
-    expect(page).to have_link("View all support tickets in Zendesk", href: "https://becomingateacher.zendesk.com/agent/search/1?copy&type=ticket&q=person1%40example.com")
+    expect(page).to have_link("View all support tickets in Zendesk by email", href: "https://becomingateacher.zendesk.com/agent/search/1?copy&type=ticket&q=person1%40example.com")
+    expect(page).to have_link("View all support tickets in Zendesk by claim reference", href: "https://becomingateacher.zendesk.com/agent/search/1?copy&type=ticket&q=custom_field_19564949397009:#{claim.reference}")
   end
 end
