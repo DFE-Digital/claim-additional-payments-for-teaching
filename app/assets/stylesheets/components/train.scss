@@ -1,0 +1,27 @@
+.train {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 30px;
+  flex-direction: column;
+
+  @media (min-width:780px) {
+    flex-direction: row;
+  }
+
+  hr {
+    min-height: 100%;
+  }
+
+  .train__carriage {
+    .train__carriage__title {
+      @extend .govuk-heading-m;
+    }
+
+    .train__carriage__body {
+      @extend .govuk-body-l;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+  }
+}
