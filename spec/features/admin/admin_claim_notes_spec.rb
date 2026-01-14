@@ -43,4 +43,17 @@ RSpec.feature "Admin claim notes" do
 
     expect(page).to have_content("Enter a note")
   end
+
+  scenario "URL in note" do
+    claim = create(:claim, :submitted)
+    note = create(:note, body: "A link to a web site https://www.gov.uk", claim: claim)
+
+    visit admin_claims_path
+    find("a[href='#{admin_claim_tasks_path(claim)}']").click
+
+    click_on "Notes and support"
+
+    expect(page).to have_content(note.body)
+    expect(page).to have_link("https://www.gov.uk")
+  end
 end
