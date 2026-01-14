@@ -9,7 +9,7 @@
     </div>
 
     <div class="train__carriage__body">
-      <%= @my_claims.overdue.count %>
+      <%= @my_claims.overdue.count %><span class="govuk-visually-hidden"> overdue claims</span>
     </div>
   </div>
 
@@ -23,7 +23,7 @@
     </div>
 
     <div class="train__carriage__body">
-      <%= @my_claims.due_today.count %>
+      <%= @my_claims.due_today.count %><span class="govuk-visually-hidden"> claims due today</span>
     </div>
   </div>
 
@@ -37,7 +37,7 @@
     </div>
 
     <div class="train__carriage__body">
-      <%= @my_claims.due_in_7_days.count %>
+      <%= @my_claims.due_in_7_days.count %><span class="govuk-visually-hidden"> claims due within 7 days</span>
     </div>
   </div>
 
@@ -51,7 +51,7 @@
     </div>
 
     <div class="train__carriage__body">
-      <%= @my_claims.on_hold.count %>
+      <%= @my_claims.on_hold.count %><span class="govuk-visually-hidden"> on hold claims</span>
     </div>
   </div>
 
@@ -65,7 +65,7 @@
     </div>
 
     <div class="train__carriage__body">
-      <%= @my_claims.active_claims.count %>
+      <%= @my_claims.active_claims.count %><span class="govuk-visually-hidden"> active assigned claims</span>
     </div>
   </div>
 </div>
