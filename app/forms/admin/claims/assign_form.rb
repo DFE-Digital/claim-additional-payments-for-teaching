@@ -3,6 +3,7 @@ module Admin::Claims
     include ActiveModel::Model
     include ActiveModel::Attributes
 
+    attr_reader :flash_message
     attr_accessor :current_admin, :claim
 
     attribute :assign, :string
@@ -29,6 +30,8 @@ module Admin::Claims
             created_by: current_admin
           )
 
+          @flash_message = "This claim has now been successfully unassigned from #{claim.assigned_to.full_name}"
+
           claim.update assigned_to: nil
         end
       when "myself"
@@ -37,6 +40,8 @@ module Admin::Claims
             body: "This claim was assigned to #{current_admin.full_name}",
             created_by: current_admin
           )
+
+          @flash_message = "This claim has now been successfully assigned to #{current_admin.full_name}"
 
           claim.update assigned_to: current_admin
         end
@@ -47,9 +52,15 @@ module Admin::Claims
             created_by: current_admin
           )
 
+          @flash_message = "This claim has now been successfully assigned to #{colleague.full_name}"
+
           claim.update assigned_to: colleague
         end
       end
+    rescue
+      @flash_message = nil
+
+      false
     end
 
     def unassignable?

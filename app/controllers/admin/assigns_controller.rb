@@ -13,6 +13,8 @@ class Admin::AssignsController < Admin::BaseAdminController
     if @form.valid?
       @form.save
 
+      flash[:notice] = @form.flash_message
+
       redirect_to admin_claim_tasks_path(@claim)
     else
       render :show
