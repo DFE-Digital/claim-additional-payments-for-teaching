@@ -4,14 +4,16 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <span class="govuk-caption-xl"><%= @claim.policy.short_name %> (<%= @claim.academic_year %>)</span>
-    <h1 class="govuk-heading-xl govuk-heading--navigation">
-      <span id="claim-heading">
-        <%= claim_summary_heading(@claim) %>
-      </span>
-    </h1>
-
     <%= form_with model: @form, scope: "assign_form", url: admin_claim_assigns_path(@claim), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <span class="govuk-caption-xl"><%= @claim.policy.short_name %> (<%= @claim.academic_year %>)</span>
+      <h1 class="govuk-heading-xl govuk-heading--navigation">
+        <span id="claim-heading">
+          <%= claim_summary_heading(@claim) %>
+        </span>
+      </h1>
+
       <%= f.govuk_radio_buttons_fieldset(
         :assign,
         legend: {
