@@ -46,7 +46,7 @@ module Admin
 
     def active_scope
       exclusion_scope = current_admin.assigned_claims.approved.or(current_admin.assigned_claims.rejected)
-      exclusion_ids = exclusion_scope.pluck(:id)
+      exclusion_ids = exclusion_scope.select(:id)
 
       current_admin
         .assigned_claims
