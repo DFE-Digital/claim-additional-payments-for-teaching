@@ -9,11 +9,7 @@ module Admin
     private
 
     def admin
-      if params[:id]
-        DfeSignIn::User.find(params[:id])
-      else
-        current_admin
-      end
+      DfeSignIn::User.find(params[:id])
     end
   end
 end
