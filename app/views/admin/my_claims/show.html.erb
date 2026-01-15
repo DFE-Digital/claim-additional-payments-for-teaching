@@ -1,0 +1,99 @@
+<h1 class="govuk-heading-l">
+  My claims
+</h1>
+
+<div class="train">
+  <div class="train__carriage">
+    <div class="train__carriage__title">
+      Overdue
+    </div>
+
+    <div class="train__carriage__body">
+      <%= @my_claims.overdue.count %><span class="govuk-visually-hidden"> overdue claims</span>
+    </div>
+  </div>
+
+  <div>
+    <hr />
+  </div>
+
+  <div class="train__carriage">
+    <div class="train__carriage__title">
+      Due today
+    </div>
+
+    <div class="train__carriage__body">
+      <%= @my_claims.due_today.count %><span class="govuk-visually-hidden"> claims due today</span>
+    </div>
+  </div>
+
+  <div>
+    <hr />
+  </div>
+
+  <div class="train__carriage">
+    <div class="train__carriage__title">
+      Due in 7 days
+    </div>
+
+    <div class="train__carriage__body">
+      <%= @my_claims.due_in_7_days.count %><span class="govuk-visually-hidden"> claims due within 7 days</span>
+    </div>
+  </div>
+
+  <div>
+    <hr />
+  </div>
+
+  <div class="train__carriage">
+    <div class="train__carriage__title">
+      On hold
+    </div>
+
+    <div class="train__carriage__body">
+      <%= @my_claims.on_hold.count %><span class="govuk-visually-hidden"> on hold claims</span>
+    </div>
+  </div>
+
+  <div>
+    <hr />
+  </div>
+
+  <div class="train__carriage">
+    <div class="train__carriage__title">
+      Active claims
+    </div>
+
+    <div class="train__carriage__body">
+      <%= @my_claims.active_claims.count %><span class="govuk-visually-hidden"> active assigned claims</span>
+    </div>
+  </div>
+</div>
+
+<%= govuk_table do |table| %>
+  <% table.with_head do |head| %>
+    <% head.with_row do |row| %>
+      <% row.with_cell(text: "Reference") %>
+      <% row.with_cell(text: "Applicant") %>
+      <% row.with_cell(text: "Policy") %>
+      <% row.with_cell(text: "Submitted") %>
+      <% row.with_cell(text: "Decision deadline") %>
+      <% row.with_cell(text: "On hold") %>
+    <% end %>
+  <% end %>
+
+  <% table.with_body do |body| %>
+    <% @my_claims.active_claims.each do |claim| %>
+      <% body.with_row do |row| %>
+        <% deadline = claim.decision_deadline_date ? l(claim.decision_deadline_date) : "N/A" %>
+
+        <% row.with_cell(text: govuk_link_to(claim.reference, admin_claim_tasks_path(claim))) %>
+        <% row.with_cell(text: claim.full_name) %>
+        <% row.with_cell(text: claim.policy.acronym) %>
+        <% row.with_cell(text: l(claim.submitted_at.to_date)) %>
+        <% row.with_cell(text: deadline) %>
+        <% row.with_cell(text: t(claim.held, scope: :boolean)) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

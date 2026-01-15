@@ -108,6 +108,8 @@ Rails.application.routes.draw do
 
     mount MissionControl::Jobs::Engine, at: "/jobs"
 
+    resources :my_claims, only: [:show], path: "my-claims"
+
     resource :service_overview, only: [:show], path: "service-overview"
 
     get "/auth/sign-in" => "auth#sign_in", :as => :sign_in

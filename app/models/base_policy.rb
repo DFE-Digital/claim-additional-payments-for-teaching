@@ -13,6 +13,10 @@ module BasePolicy
     I18n.t("#{locale_key}.policy_short_name")
   end
 
+  def acronym
+    I18n.t("#{locale_key}.policy_acronym")
+  end
+
   def support_email_address
     I18n.t("#{locale_key}.support_email_address")
   end
