@@ -22,6 +22,8 @@ module Admin::Claims
     end
 
     def save
+      return false if invalid?
+
       case assign
       when "unassign"
         ApplicationRecord.transaction do
