@@ -6,7 +6,6 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks, feature_f
 
     let(:payroll_gender) { "male" }
     let(:teacher_reference_number) { "1234567" }
-    let(:matching_claims) { Claim.none }
     let(:hmrc_bank_validation_succeeded) { true }
     let(:claimant_first_name) { "Edna" }
     let(:claimant_surname) { "Krabappel" }
@@ -45,18 +44,22 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks, feature_f
       )
     end
 
+    let(:duplicate_claim) do
+      create(
+        :claim,
+        policy: Policies::FurtherEducationPayments,
+        email_address: claimant_email_address,
+        academic_year: academic_year,
+        eligibility: eligibility
+      )
+    end
+
     let(:invariant_tasks) do
       [
         "one_login_identity",
         "fe_provider_verification_v2",
         "student_loan_plan"
       ]
-    end
-
-    before do
-      allow(Claim::MatchingAttributeFinder).to(
-        receive(:new).and_return(double(matching_claims: matching_claims))
-      )
     end
 
     context "when a year 1 fe claim" do
@@ -81,7 +84,7 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks, feature_f
     end
 
     context "when there are matching claims" do
-      let(:matching_claims) { Claim.all }
+      before { duplicate_claim }
       it { expect(subject.applicable_task_names).to include("matching_details") }
       it { expect(subject.applicable_task_names).to include(*invariant_tasks) }
     end
