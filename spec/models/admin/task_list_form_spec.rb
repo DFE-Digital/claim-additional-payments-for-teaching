@@ -126,6 +126,104 @@ RSpec.describe Admin::TaskListForm do
       end
     end
 
+    context "when multiple filters are applied" do
+      context "when the filters are for the same task" do
+        it "ors the filters" do
+          claim_1 = create(
+            :claim,
+            policy: Policies::EarlyYearsPayments,
+            academic_year: AcademicYear.current
+          )
+
+          create(
+            :task,
+            :passed,
+            name: "ey_eoi_cross_reference",
+            claim: claim_1
+          )
+
+          claim_2 = create(
+            :claim,
+            policy: Policies::EarlyYearsPayments,
+            academic_year: AcademicYear.current
+          )
+
+          create(
+            :task,
+            :failed,
+            name: "ey_eoi_cross_reference",
+            claim: claim_2
+          )
+
+          form = described_class.new(
+            policy_name: "early_years_payments",
+            statuses: {"ey_eoi_cross_reference" => ["passed", "failed"]}
+          )
+
+          expect(form.claims.map(&:reference)).to contain_exactly(
+            claim_1.reference,
+            claim_2.reference
+          )
+        end
+      end
+
+      context "when the filters are for different tasks" do
+        it "ands the filters" do
+          claim_1 = create(
+            :claim,
+            policy: Policies::EarlyYearsPayments,
+            academic_year: AcademicYear.current
+          )
+
+          create(
+            :task,
+            :passed,
+            name: "ey_eoi_cross_reference",
+            claim: claim_1
+          )
+
+          create(
+            :task,
+            :failed,
+            name: "employment",
+            claim: claim_1
+          )
+
+          claim_2 = create(
+            :claim,
+            policy: Policies::EarlyYearsPayments,
+            academic_year: AcademicYear.current
+          )
+
+          create(
+            :task,
+            :failed,
+            name: "ey_eoi_cross_reference",
+            claim: claim_2
+          )
+
+          create(
+            :task,
+            :passed,
+            name: "employment",
+            claim: claim_2
+          )
+
+          form = described_class.new(
+            policy_name: "early_years_payments",
+            statuses: {
+              "ey_eoi_cross_reference" => ["passed", "failed"],
+              "employment" => ["failed"]
+            }
+          )
+
+          expect(form.claims.map(&:reference)).to contain_exactly(
+            claim_1.reference
+          )
+        end
+      end
+    end
+
     context "when assignee filters are applied" do
       it "returns ClaimPresenters matching the filters" do
         assignee_1 = create(:dfe_signin_user, :support_agent)

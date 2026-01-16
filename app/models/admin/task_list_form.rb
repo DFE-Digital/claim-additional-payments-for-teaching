@@ -19,7 +19,7 @@ module Admin
         end
 
         def filter_status
-          if status == "no data"
+          if status == "no data" || status == "na"
             "incomplete"
           else
             status
@@ -144,6 +144,8 @@ module Admin
 
       # Set default for initial page load
       self.statuses = all_statuses if statuses.empty? && !clear_statuses
+
+      self.statuses = statuses.transform_values(&:compact_blank)
     end
 
     def policy
@@ -161,11 +163,7 @@ module Admin
     def claims
       @claims ||= claim_scope.map do |claim|
         ClaimPresenter.new(claim: claim, available_tasks: policy_tasks)
-      end.select do |presenter|
-        statuses.any? do |task_name, statuses|
-          statuses.include?(presenter.task(task_name).filter_status)
-        end
-      end
+      end.select { |presenter| show_claim?(presenter) }
     end
 
     def policy_tasks
@@ -244,6 +242,21 @@ module Admin
       end
 
       body.unshift(head)
+    end
+
+    def applied_statuses
+      @applied_statuses ||= statuses.reject { |t, s| s.blank? }
+    end
+
+    def show_claim?(claim)
+      # If we've unchecked all statuses, show no claims
+      return false if clear_statuses
+
+      # AND statuses between tasks
+      # OR statuses within a task
+      applied_statuses.all? do |task_name, selected_statuses|
+        selected_statuses.include?(claim.task(task_name).filter_status)
+      end
     end
   end
 end

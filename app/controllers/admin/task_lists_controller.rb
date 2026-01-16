@@ -25,7 +25,7 @@ module Admin
         :show_filter_controls,
         :clear_statuses,
         :assignee_id,
-        statuses: Hash.new([])
+        statuses: Hash.new { [] }
       )
     end
   end

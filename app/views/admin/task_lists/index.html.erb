@@ -14,7 +14,12 @@
       <% Policies.all.select(&:active?).each do |policy| %>
         <%= govuk_button_link_to(
           policy.short_name,
-          admin_task_lists_path(policy_name: policy.locale_key),
+          admin_task_lists_path(
+            @presenter.applied_params(
+              policy_name: policy.locale_key,
+              statuses: {}
+            )
+          ),
           secondary: true,
         ) %>
       <% end %>
