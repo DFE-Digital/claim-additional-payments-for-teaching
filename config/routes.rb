@@ -147,7 +147,7 @@ Rails.application.routes.draw do
         resources :provider_verification_emails, only: [:create]
       end
 
-      resource :assigns, only: [:show, :update], path: "assign"
+      resource :assignments, only: [:show, :update], path: "assignment"
     end
 
     resources :qualification_report_uploads, only: [:new, :create]

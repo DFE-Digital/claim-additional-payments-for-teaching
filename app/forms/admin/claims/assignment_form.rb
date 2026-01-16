@@ -1,5 +1,5 @@
 module Admin::Claims
-  class AssignForm
+  class AssignmentForm
     include ActiveModel::Model
     include ActiveModel::Attributes
 
@@ -34,7 +34,7 @@ module Admin::Claims
 
           @flash_message = "This claim has now been successfully unassigned from #{claim.assigned_to.full_name}"
 
-          claim.update assigned_to: nil
+          claim.update! assigned_to: nil
         end
       when "myself"
         ApplicationRecord.transaction do
@@ -45,7 +45,7 @@ module Admin::Claims
 
           @flash_message = "This claim has now been successfully assigned to #{current_admin.full_name}"
 
-          claim.update assigned_to: current_admin
+          claim.update! assigned_to: current_admin
         end
       when "colleague"
         ApplicationRecord.transaction do
@@ -56,7 +56,7 @@ module Admin::Claims
 
           @flash_message = "This claim has now been successfully assigned to #{colleague.full_name}"
 
-          claim.update assigned_to: colleague
+          claim.update! assigned_to: colleague
         end
       end
     rescue

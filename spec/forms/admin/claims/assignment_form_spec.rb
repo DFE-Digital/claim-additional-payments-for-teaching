@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Admin::Claims::AssignForm do
+RSpec.describe Admin::Claims::AssignmentForm do
   let!(:current_admin) { create(:dfe_signin_user, :service_operator, :with_random_name) }
   let!(:second_admin) { create(:dfe_signin_user, :service_operator, :with_random_name) }
   let!(:third_admin) { create(:dfe_signin_user, :service_operator, :with_random_name) }

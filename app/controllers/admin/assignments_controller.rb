@@ -1,14 +1,14 @@
-class Admin::AssignsController < Admin::BaseAdminController
+class Admin::AssignmentsController < Admin::BaseAdminController
   before_action :ensure_service_operator
 
   def show
     @claim = Claim.find(params[:claim_id])
-    @form = Admin::Claims::AssignForm.new(all_params)
+    @form = Admin::Claims::AssignmentForm.new(all_params)
   end
 
   def update
     @claim = Claim.find(params[:claim_id])
-    @form = Admin::Claims::AssignForm.new(all_params)
+    @form = Admin::Claims::AssignmentForm.new(all_params)
 
     if @form.valid?
       @form.save
@@ -30,7 +30,7 @@ class Admin::AssignsController < Admin::BaseAdminController
 
   def form_params
     params
-      .fetch(:assign_form, {})
+      .fetch(:assignment_form, {})
       .permit(
         :assign,
         :colleague_id
