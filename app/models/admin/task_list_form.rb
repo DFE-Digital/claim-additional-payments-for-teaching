@@ -137,6 +137,7 @@ module Admin
     attribute :show_filter_controls, :boolean, default: false
     attribute :statuses, default: {}
     attribute :clear_statuses, :boolean, default: false
+    attribute :assignee_id, :string, default: "all"
 
     def initialize(params)
       super
@@ -179,11 +180,14 @@ module Admin
       %w[passed failed incomplete]
     end
 
-    def applied_params
+    def applied_params(merge = {})
       {
-        policy_name: policy_name,
-        statuses: statuses,
-        show_filter_controls: show_filter_controls?
+        model_name.param_key => {
+          policy_name: policy_name,
+          statuses: statuses,
+          show_filter_controls: show_filter_controls?,
+          assignee_id: assignee_id
+        }.merge(merge)
       }
     end
 
@@ -199,16 +203,35 @@ module Admin
       end
     end
 
+    ANY_ADMIN = Struct.new(:id, :full_name).new("all", "All")
+    NULL_ADMIN = Struct.new(:id, :full_name).new("unassigned", "Unassigned")
+
+    def assignees
+      @assignees ||= [ANY_ADMIN, NULL_ADMIN, *DfeSignIn::User.admin]
+    end
+
     private
 
     attr_reader :params
 
     def claim_scope
-      Claim
+      return @claim_scope if defined?(@claim_scope)
+
+      @claim_scope = Claim
         .by_academic_year(AcademicYear.current)
         .awaiting_decision
         .by_policy(policy)
-        .includes(:tasks, eligibility: :verified_by)
+
+      case assignee_id
+      when "all"
+        # NOOP
+      when "unassigned"
+        @claim_scope = @claim_scope.where(assigned_to_id: nil)
+      else
+        @claim_scope = @claim_scope.where(assigned_to_id: assignee_id)
+      end
+
+      @claim_scope.includes(:tasks, eligibility: :verified_by)
     end
 
     def as_csv
