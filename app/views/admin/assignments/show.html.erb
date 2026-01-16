@@ -1,0 +1,44 @@
+<% content_for :back_link do %>
+  <%= govuk_back_link href: admin_claim_tasks_path(@claim) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= form_with model: @form, scope: "assignment_form", url: admin_claim_assignments_path(@claim), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <span class="govuk-caption-xl"><%= @claim.policy.short_name %> (<%= @claim.academic_year %>)</span>
+      <h1 class="govuk-heading-xl govuk-heading--navigation">
+        <span id="claim-heading">
+          <%= claim_summary_heading(@claim) %>
+        </span>
+      </h1>
+
+      <%= f.govuk_radio_buttons_fieldset(
+        :assign,
+        legend: {
+          text: "Who would you like to assign this claim to?",
+          tag: "h1",
+          size: "m"
+        }) do %>
+
+        <% if @form.can_assign_to_myself? %>
+          <%= f.govuk_radio_button :assign, "myself", label: { text: "Myself"}, link_errors: true %>
+        <% end %>
+
+        <% if @form.unassignable? %>
+          <%= f.govuk_radio_button :assign, "unassign", label: { text: "Unassign" } %>
+        <% end %>
+
+        <%= f.govuk_radio_divider %>
+        <%= f.govuk_radio_button :assign, "colleague", label: { text: "A colleague" } do %>
+          <%= f.govuk_collection_select :colleague_id, @form.colleagues, :id, :full_name,
+            label: {
+              text: "Which colleague?" } %>
+        <% end %>
+
+        <%= f.govuk_submit "Save changes", class: "govuk-!-margin-top-5" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

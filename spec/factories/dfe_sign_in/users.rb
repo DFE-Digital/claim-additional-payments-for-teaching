@@ -14,6 +14,11 @@ FactoryBot.define do
       organisation_name { nil }
     end
 
+    trait :with_random_name do
+      given_name { Faker::Name.first_name }
+      family_name { Faker::Name.last_name }
+    end
+
     trait :deleted do
       deleted_at { Time.zone.now }
     end

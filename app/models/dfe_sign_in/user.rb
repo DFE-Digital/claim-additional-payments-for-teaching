@@ -14,6 +14,7 @@ module DfeSignIn
 
     scope :admin, -> { where(user_type: "admin") }
     scope :provider, -> { where(user_type: "provider") }
+    scope :service_operators, -> { where("role_codes @> ?", "{teacher_payments_access}") }
 
     def self.table_name
       "dfe_sign_in_users"
