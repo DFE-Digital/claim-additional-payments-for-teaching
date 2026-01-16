@@ -163,14 +163,23 @@ RSpec.describe Admin::MyClaims do
       )
     end
 
-    let!(:my_claim_with_no_dates) do
+    let!(:my_claim_with_no_deadline) do
       create(
         :claim,
         :submitted,
         assigned_to: current_admin,
         policy: Policies::EarlyYearsPayments,
-        submitted_at: nil,
         eligibility:
+      )
+    end
+
+    let!(:my_claim_with_no_submitted_at) do
+      create(
+        :claim,
+        :submitted,
+        assigned_to: current_admin,
+        policy: Policies::EarlyYearsPayments,
+        submitted_at: nil
       )
     end
 
@@ -202,10 +211,15 @@ RSpec.describe Admin::MyClaims do
 
     it "returns all my active claims" do
       expect(subject.active_claims).to include(my_claim)
-      expect(subject.active_claims).to include(my_claim_with_no_dates)
+      expect(subject.active_claims).to include(my_claim_with_no_submitted_at)
+      expect(subject.active_claims).to include(my_claim_with_no_deadline)
       expect(subject.active_claims).not_to include(not_my_claim)
       expect(subject.active_claims).not_to include(my_approved_claim)
       expect(subject.active_claims).not_to include(my_rejected_claim)
+    end
+
+    it "orders claims correctly" do
+      expect(subject.active_claims).to eql([my_claim_with_no_submitted_at, my_claim, my_claim_with_no_deadline])
     end
   end
 end

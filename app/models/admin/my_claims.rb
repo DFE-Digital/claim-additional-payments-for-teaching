@@ -36,13 +36,16 @@ module Admin
     end
 
     def active_claims
-      @active_claims ||= active_scope
-        .sort_by do |claim|
-          [claim.decision_deadline_date || DateTime::Infinity.new, claim.submitted_at || DateTime::Infinity.new]
-        end
+      @active_claims ||= active_scope.sort_by do |claim|
+        [claim.decision_deadline_date || future_date, claim.submitted_at || future_date]
+      end
     end
 
     private
+
+    def future_date
+      @future_date ||= 10.years.from_now
+    end
 
     def active_scope
       exclusion_scope = current_admin.assigned_claims.approved.or(current_admin.assigned_claims.rejected)
