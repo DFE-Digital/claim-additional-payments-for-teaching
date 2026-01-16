@@ -25,7 +25,7 @@
         <%= govuk_button_link_to(
           "Hide filters",
           admin_task_lists_path(
-            @presenter.applied_params.merge(show_filter_controls: false)
+            @presenter.applied_params(show_filter_controls: false)
           ),
           secondary: true,
         ) %>
@@ -33,7 +33,7 @@
         <%= govuk_button_link_to(
           "Show filters",
           admin_task_lists_path(
-            @presenter.applied_params.merge(show_filter_controls: true)
+            @presenter.applied_params(show_filter_controls: true)
           ),
           secondary: true,
         ) %>
@@ -44,27 +44,28 @@
       "govuk-visually-hidden": !@presenter.show_filter_controls?
     ) %>">
       <%= form_with(
+        model: @presenter,
         url: admin_task_lists_path,
         method: :get,
         builder: GOVUKDesignSystemFormBuilder::FormBuilder
       ) do |f| %>
-        <%= f.hidden_field :policy_name, value: @presenter.policy.locale_key %>
+        <%= f.hidden_field :policy_name, value: f.object.policy.locale_key %>
         <%= f.hidden_field(
           :show_filter_controls,
-          value: @presenter.show_filter_controls?
+          value: f.object.show_filter_controls?
         ) %>
 
         <div class="govuk-button-group">
           <%= govuk_button_link_to(
             "Check all",
             admin_task_lists_path(
-              @presenter.applied_params.merge(statuses: @presenter.all_statuses)
+              f.object.applied_params(statuses: f.object.all_statuses)
             ),
             secondary: true,
           ) %>
           <%= govuk_button_link_to(
             "Uncheck all",
-            admin_task_lists_path(@presenter.applied_params.merge(
+            admin_task_lists_path(f.object.applied_params(
               statuses: {},
               clear_statuses: true
             )),
@@ -72,30 +73,41 @@
           ) %>
         </div>
 
-        <% @presenter.policy_tasks.each_slice(3) do |task_keys| %>
-          <div class="govuk-grid-row">
-            <% task_keys.each do |task_key| %>
-              <div class="govuk-grid-column-one-third">
-                <%= f.govuk_check_boxes_fieldset(
-                  "statuses[#{task_key}]",
-                  legend: {
-                    text: I18n.t("admin.tasks.#{task_key}.name"),
-                    size: "s",
-                  }
-                ) do %>
-                  <% @presenter.task_statuses(task_key).each do |status| %>
-                    <%= f.govuk_check_box(
-                      "statuses[#{task_key}]",
-                      status,
-                      label: { text: status.humanize },
-                      checked: @presenter.selected_statuses_for(task_key).include?(status),
-                    ) %>
+        <%= f.fields_for :statuses do |ff| %>
+          <% f.object.policy_tasks.each_slice(3) do |task_keys| %>
+            <div class="govuk-grid-row">
+              <% task_keys.each do |task_key| %>
+                <div class="govuk-grid-column-one-third">
+                  <%= ff.govuk_check_boxes_fieldset(
+                    task_key,
+                    legend: {
+                      text: I18n.t("admin.tasks.#{task_key}.name"),
+                      size: "s",
+                    }
+                  ) do %>
+                    <% f.object.task_statuses(task_key).each do |status| %>
+                      <%= ff.govuk_check_box(
+                        task_key,
+                        status,
+                        label: { text: status.humanize },
+                        checked: f.object.selected_statuses_for(task_key).include?(status),
+                      ) %>
+                    <% end %>
                   <% end %>
-                <% end %>
-              </div>
-            <% end %>
-          </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
         <% end %>
+
+        <%= f.govuk_collection_select(
+          :assignee_id,
+          f.object.assignees,
+          :id,
+          :full_name,
+          label: { text: "Assigned to" },
+        ) %>
+
 
         <%= f.govuk_submit("Apply") %>
       <% end %>
@@ -104,7 +116,7 @@
     <section id="csv-export">
       <%= govuk_button_link_to(
         "Export CSV",
-        admin_task_lists_path(@presenter.applied_params.merge(format: :csv)),
+        admin_task_lists_path(@presenter.applied_params(format: :csv)),
         secondary: true,
       ) %>
     </section>

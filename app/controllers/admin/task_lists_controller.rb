@@ -20,11 +20,12 @@ module Admin
     private
 
     def task_list_params
-      params.permit(
+      params.fetch(Admin::TaskListForm.model_name.param_key, {}).permit(
         :policy_name,
         :show_filter_controls,
         :clear_statuses,
-        statuses: Hash.new { [] }
+        :assignee_id,
+        statuses: Hash.new([])
       )
     end
   end
