@@ -38,7 +38,7 @@ module Admin
     def active_claims
       @active_claims ||= active_scope
         .sort_by do |claim|
-          [claim.decision_deadline_date, claim.submitted_at]
+          [claim.decision_deadline_date || DateTime::Infinity.new, claim.submitted_at || DateTime::Infinity.new]
         end
     end
 

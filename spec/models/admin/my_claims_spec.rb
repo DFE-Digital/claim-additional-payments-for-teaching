@@ -156,6 +156,24 @@ RSpec.describe Admin::MyClaims do
       )
     end
 
+    let(:eligibility) do
+      create(
+        :early_years_payments_eligibility,
+        start_date: nil
+      )
+    end
+
+    let!(:my_claim_with_no_dates) do
+      create(
+        :claim,
+        :submitted,
+        assigned_to: current_admin,
+        policy: Policies::EarlyYearsPayments,
+        submitted_at: nil,
+        eligibility:
+      )
+    end
+
     let!(:not_my_claim) do
       create(
         :claim,
@@ -184,6 +202,7 @@ RSpec.describe Admin::MyClaims do
 
     it "returns all my active claims" do
       expect(subject.active_claims).to include(my_claim)
+      expect(subject.active_claims).to include(my_claim_with_no_dates)
       expect(subject.active_claims).not_to include(not_my_claim)
       expect(subject.active_claims).not_to include(my_approved_claim)
       expect(subject.active_claims).not_to include(my_rejected_claim)
