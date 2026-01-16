@@ -2,15 +2,7 @@
 
 module Policies
   module InternationalRelocationPayments
-    class ClaimCheckingTasks
-      attr_reader :claim
-
-      def initialize(claim)
-        @claim = claim
-      end
-
-      delegate :policy, to: :claim
-
+    class ClaimCheckingTasks < Policies::ClaimCheckingTasks
       def applicable_task_names
         tasks = []
 
@@ -21,29 +13,17 @@ module Policies
         tasks << "arrival_date" if claim.tasks.arrival_date.exists?
         tasks << "previous_residency" if claim.tasks.previous_residency.exists?
         tasks << "employment"
-        tasks << "employment_contract" if claim.tasks.exists?(name: "employment_contract")
-        tasks << "employment_start" if claim.tasks.exists?(name: "employment_start")
-        tasks << "subject" if claim.tasks.exists?(name: "subject")
+        tasks << "employment_contract" if task_exists?("employment_contract")
+        tasks << "employment_start" if task_exists?("employment_start")
+        tasks << "subject" if task_exists?("subject")
         tasks << "teaching_hours"
         tasks << "employment_history" if claim.eligibility.changed_workplace_or_new_contract?
         tasks << "continuous_employment"
         tasks << "payroll_details" if claim.must_manually_validate_bank_details?
         tasks << "matching_details" if matching_claims.exists?
-        tasks << "payroll_gender" if claim.payroll_gender_missing? || claim.tasks.exists?(name: "payroll_gender")
+        tasks << "payroll_gender" if claim.payroll_gender_missing? || task_exists?("payroll_gender")
 
         tasks
-      end
-
-      def applicable_task_objects
-        applicable_task_names.map do |name|
-          OpenStruct.new(name:, locale_key: name)
-        end
-      end
-
-      private
-
-      def matching_claims
-        @matching_claims ||= Claim::MatchingAttributeFinder.new(claim).matching_claims
       end
     end
   end
