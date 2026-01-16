@@ -1,7 +1,9 @@
+<% content_for(:phase) { "Alpha" } %>
+
 <% content_for(
   :page_title,
   page_title(
-    t("early_years_teachers_practitioner.forms.favourite_colour.question"),
+    @form.t(:title),
     journey: current_journey_routing_name,
     show_error: @form.errors.any?
   )
@@ -12,15 +14,22 @@
     <%= form_for(
       @form,
       url: @form.url,
+      method: :patch,
       builder: GOVUKDesignSystemFormBuilder::FormBuilder
     ) do |f| %>
       <%= f.govuk_error_summary %>
 
       <%= f.govuk_text_field(
-        :favourite_colour,
+        :national_insurance_number,
+        width: 10,
+        spellcheck: false,
         label: {
-          text: t("early_years_teachers_practitioner.forms.favourite_colour.question"),
-          size: "xl"
+          text: f.object.t(:title),
+          tag: "h1",
+          size: "l"
+        },
+        hint: {
+          text: f.object.t(:hint)
         }
       ) %>
 
@@ -28,5 +37,3 @@
     <% end %>
   </div>
 </div>
-
-
