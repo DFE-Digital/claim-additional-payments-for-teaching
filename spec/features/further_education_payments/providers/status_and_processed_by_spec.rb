@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Status and Processed by labels" do
   before do
-    allow(DfESignIn).to receive(:bypass?).and_return(true)
+    allow(DfeSignIn::Config).to receive(:instance).and_return(OpenStruct.new(bypass?: true))
   end
 
   let(:fe_provider) do

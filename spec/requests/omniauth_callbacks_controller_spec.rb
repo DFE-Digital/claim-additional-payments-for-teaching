@@ -151,7 +151,7 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
       OmniAuth.config.mock_auth[:onelogin] = omniauth_hash
       Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:onelogin]
 
-      allow(OneLoginSignIn).to receive(:bypass?).and_return(false)
+      allow(OneLogin::Config).to receive(:instance).and_return(OpenStruct.new(bypass?: false))
 
       create(:journey_configuration, :further_education_payments)
       get "/further-education-payments/claim"

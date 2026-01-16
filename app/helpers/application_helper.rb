@@ -61,7 +61,7 @@ module ApplicationHelper
   end
 
   def one_login_home_url
-    OneLogin::Config.home_url
+    OneLogin::Config.instance.home_url
   end
 
   def hide_cookie_banner?

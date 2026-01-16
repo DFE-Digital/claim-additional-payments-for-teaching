@@ -36,7 +36,7 @@ module Admin
     private
 
     def admin_session
-      return developer_session if DfESignIn.bypass?
+      return developer_session if DfeSignIn::Config.instance.bypass?
 
       DfeSignIn::AuthenticatedSession.from_auth_hash(request.env.fetch("omniauth.auth"), user_type: "admin")
     end

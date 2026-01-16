@@ -9,7 +9,7 @@
       GOV.UK One Login.
     </p>
 
-    <% if OneLoginSignIn.bypass? %>
+    <% if OneLogin::Config.instance.bypass? %>
       <%= render "sign_in_2_bypass" %>
     <% else %>
       <%= govuk_button_to "Continue", "/auth/onelogin_identity" %>
