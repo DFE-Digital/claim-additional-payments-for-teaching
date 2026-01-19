@@ -47,18 +47,10 @@
     ) do |f| %>
       <%= f.govuk_error_summary %>
 
-      <h2 class="govuk-heading-m">
-        Declaration
-      </h2>
-
       <p class="govuk-body">
-        By submitting this application, you’re confirming that:
+        By sending this claim you confirm that the information you have provided is
+        correct
       </p>
-
-      <%= govuk_list([
-        "the information you have provided is correct",
-        "you plan to continue working as an early years teacher"
-      ], type: :bullet) %>
 
       <%= f.govuk_submit(@form.t(:submit_button)) %>
     <% end %>
