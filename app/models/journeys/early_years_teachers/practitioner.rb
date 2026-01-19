@@ -14,6 +14,8 @@ module Journeys
         EligibilityConfirmedForm,
         PaymentNotAcceptedForm,
         PaymentOptionsForm,
+        PersonalBankAccountForm,
+        NationalInsuranceNumberForm,
         CheckYourAnswersForm,
         ConfirmationForm
       ]
