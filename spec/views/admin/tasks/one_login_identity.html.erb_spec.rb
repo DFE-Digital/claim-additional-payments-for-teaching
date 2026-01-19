@@ -48,6 +48,7 @@ RSpec.describe "admin/tasks/one_login_identity.html.erb" do
     assign(:tasks_presenter, claim.policy.admin_tasks_presenter(claim))
     assign(:form, form)
     assign(:notes, [])
+    assign(:task_note, Note.new)
     assign(:task_pagination, Admin::TaskPagination.new(claim:, current_task_name: "one_login_identity"))
 
     render

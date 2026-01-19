@@ -1,5 +1,3 @@
-<%= render "admin/tasks/notes", notes: @notes, display_description: false %>
-
 <%= govuk_summary_list(card: {title: "Task answers"}) do |summary_list| %>
   <% summary_list.with_row do |row| %>
     <% row.with_key { "Has the claimant had any breaks in employment?" } %>

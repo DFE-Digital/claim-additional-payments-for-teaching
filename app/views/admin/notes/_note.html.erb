@@ -1,5 +1,15 @@
 <div class="hmcts-timeline__item">
   <section<%= " class=banner" if note.important %>>
+    <% if note.label.present? && display_description %>
+      <p class="govuk-body govuk-!-font-weight-bold">
+        <% if Task::NAMES.include?(note.label) %>
+          Task: <%= govuk_link_to note.label.humanize, admin_claim_task_path(note.claim, name: note.label) %>
+        <% else %>
+          <%= note.label.humanize %>
+        <% end %>
+      </p>
+    <% end %>
+
     <%= simple_format(
       body_with_anchors(note.body),
       { class: "govuk-body" },
@@ -7,14 +17,12 @@
     ) %>
   </section>
 
-  <% if display_description %>
-    <p class="hmcts-timeline__description">
-      <% if note.created_by %>
-        by <%= user_details(note.created_by, include_line_break: false) %>
-      <% else %>
-        by an automated check
-      <% end %>
-      on <%= l(note.created_at) %>
-    </p>
-  <% end %>
+  <p class="hmcts-timeline__description">
+    <% if note.created_by %>
+      by <%= user_details(note.created_by, include_line_break: false) %>
+    <% else %>
+      by an automated check
+    <% end %>
+    on <%= l(note.created_at) %>
+  </p>
 </div>

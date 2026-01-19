@@ -28,6 +28,8 @@
       <%= render "form", task_name: "identity_confirmation", claim: @claim %>
     <% end %>
 
+    <%= render "task_notes_section" %>
+
     <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>
   </div>
 </div>
