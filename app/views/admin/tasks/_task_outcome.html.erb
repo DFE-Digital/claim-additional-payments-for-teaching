@@ -1,8 +1,6 @@
 <% if lookup_context.find_all("admin/tasks/_task_outcome_#{@form.task.name}").any? %>
   <%= render "admin/tasks/task_outcome_#{@form.task.name}", task: %>
 <% else %>
-  <%= render "admin/tasks/notes", notes: @notes, display_description: false %>
-
   <div class="govuk-inset-text task-outcome">
     <p class="govuk-body">
       <%= task_status_tag(@form.task.claim, @form.task.name) %>

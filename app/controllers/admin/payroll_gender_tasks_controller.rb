@@ -8,6 +8,8 @@ class Admin::PayrollGenderTasksController < Admin::TasksController
       redirect_to @task_pagination.next_task_path
     else
       @tasks_presenter = @claim.policy.admin_tasks_presenter(@claim)
+      @notes = @claim.notes.by_label("payroll_gender")
+      @task_note = Note.new
       render "payroll_gender"
     end
   end

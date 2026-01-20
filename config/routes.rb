@@ -124,7 +124,9 @@ Rails.application.routes.draw do
     end
 
     resources :claims, only: [:index, :show] do
-      resources :tasks, only: [:index, :show, :create, :update], param: :name, constraints: {name: %r{#{Task::NAMES.join("|")}}}
+      resources :tasks, only: [:index, :show, :create, :update], param: :name, constraints: {name: %r{#{Task::NAMES.join("|")}}} do
+        resources :notes, only: [:create]
+      end
       resources :payroll_gender_tasks, only: [:create], param: :name, name: "payroll_gender"
       resources :decisions, only: [:create, :new, :index] do
         resources :undos, only: [:create, :new], controller: "decisions_undo"

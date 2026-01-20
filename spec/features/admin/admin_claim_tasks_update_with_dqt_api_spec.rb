@@ -759,8 +759,8 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             )
           end
 
-          scenario "note doesn't show by an automated check" do
-            expect(notes).not_to include(
+          scenario "automated note shows by an automated check" do
+            expect(notes).to include(
               have_text("by an automated check")
             )
           end

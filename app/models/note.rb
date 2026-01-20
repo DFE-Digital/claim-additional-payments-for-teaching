@@ -7,4 +7,8 @@ class Note < ApplicationRecord
 
   scope :automated, -> { where(created_by_id: nil) }
   scope :by_label, ->(label) { order(created_at: :desc).where(label: label) }
+
+  def task_note?
+    Task::NAMES.include?(label)
+  end
 end

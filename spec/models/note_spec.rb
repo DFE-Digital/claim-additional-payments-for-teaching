@@ -21,4 +21,21 @@ RSpec.describe Note, type: :model do
       end
     end
   end
+
+  describe "#task_note?" do
+    it "returns true when label is a valid task name" do
+      note = build(:note, label: "employment")
+      expect(note.task_note?).to be true
+    end
+
+    it "returns false when label is not a valid task name" do
+      note = build(:note, label: "fraud_risk")
+      expect(note.task_note?).to be false
+    end
+
+    it "returns false when label is nil" do
+      note = build(:note, label: nil)
+      expect(note.task_note?).to be false
+    end
+  end
 end

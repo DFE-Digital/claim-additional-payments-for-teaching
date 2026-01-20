@@ -20,6 +20,8 @@
       <%= render "form", task_name: "fe_repeat_applicant_check", claim: @claim %>
     <% end %>
 
+    <%= render "task_notes_section" %>
+
     <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>
   </div>
 </div>
