@@ -2,7 +2,7 @@
   <section<%= " class=banner" if note.important %>>
     <% if note.label.present? && display_description %>
       <p class="govuk-body govuk-!-font-weight-bold">
-        <% if Task::NAMES.include?(note.label) %>
+        <% if note.task_note? %>
           Task: <%= govuk_link_to note.label.humanize, admin_claim_task_path(note.claim, name: note.label) %>
         <% else %>
           <%= note.label.humanize %>
