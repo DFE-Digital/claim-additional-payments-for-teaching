@@ -138,7 +138,7 @@ module Reports
       def decision_agent
         return unless decision
 
-        decision.created_by.full_name
+        decision.created_by&.full_name
       end
 
       def boolean(value)
