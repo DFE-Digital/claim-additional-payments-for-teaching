@@ -14,6 +14,12 @@ class ReportsJob < ApplicationJob
       .find_or_initialize_by(name: Reports::FailedProviderCheckClaims::NAME)
       .update!(csv: csv, number_of_rows: csv.lines.count - 1)
 
+    csv = Reports::FailedFeProviderVerificationV2.new.to_csv
+
+    Report
+      .find_or_initialize_by(name: Reports::FailedFeProviderVerificationV2::NAME)
+      .update!(csv: csv, number_of_rows: csv.lines.count - 1)
+
     csv = Reports::DuplicateClaims.new.to_csv
 
     Report
