@@ -89,7 +89,7 @@ module Reports
           decision_agent,
           claim.eligibility.provider_verification_contract_type,
           boolean(claim.eligibility.provider_verification_teaching_responsibilities),
-          claim.eligibility.provider_verification_taught_at_least_one_academic_term,
+          boolean(claim.eligibility.provider_verification_taught_at_least_one_academic_term),
           claim.eligibility.provider_verification_teaching_hours_per_week,
           boolean(claim.eligibility.provider_verification_half_teaching_hours),
           boolean(claim.eligibility.provider_verification_half_timetabled_teaching_time),
