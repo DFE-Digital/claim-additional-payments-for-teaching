@@ -57,6 +57,7 @@ class Task < ApplicationRecord
   scope :passed_automatically, -> { automated.where(passed: true) }
 
   scope :passed, -> { where(passed: true) }
+  scope :failed, -> { where(passed: false) }
 
   scope :no_data_census_subjects_taught, -> { census_subjects_taught.where(passed: nil, claim_verifier_match: nil) }
 
