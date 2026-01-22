@@ -151,7 +151,9 @@
               <% row.with_cell(
                 text: govuk_link_to(claim.reference, admin_claim_path(claim.id))
               ) %>
-              <% row.with_cell(text: claim.assigned_to&.full_name || "-") %>
+              <% row.with_cell(
+                text: sanitize(claim.assigned_to&.full_name || "-").split(" ").join("&nbsp;").html_safe
+              ) %>
               <% row.with_cell(text: l(claim.decision_deadline_date)) %>
               <% claim.tasks.each do |task| %>
                 <% row.with_cell(
