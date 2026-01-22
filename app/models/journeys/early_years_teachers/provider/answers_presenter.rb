@@ -42,7 +42,7 @@ module Journeys
           [
             "Nursery name",
             answers.nursery_name,
-            "check-nursery-details"
+            "update-nursery-details"
           ]
         end
 
@@ -56,7 +56,7 @@ module Journeys
           [
             "Address",
             address,
-            "check-nursery-details"
+            "update-nursery-details"
           ]
         end
 
@@ -64,7 +64,7 @@ module Journeys
           [
             "Ofsted URN",
             answers.ofsted_urn,
-            "check-nursery-details"
+            "update-nursery-details"
           ]
         end
 
@@ -72,7 +72,7 @@ module Journeys
           [
             "Provider status",
             answers.provider_status.humanize,
-            "check-nursery-details"
+            "update-nursery-details"
           ]
         end
 
@@ -88,7 +88,7 @@ module Journeys
           [
             "Nursery subtype",
             answers.nursery_subtype.humanize,
-            "check-nursery-details"
+            "update-nursery-details"
           ]
         end
 
