@@ -141,7 +141,7 @@
             <% @presenter.task_names.each do |task_name| %>
               <% row.with_cell(text: task_name) %>
             <% end %>
-            <% row.with_cell(text: "Held") %>
+            <% row.with_cell(text: "On hold") %>
           <% end %>
         <% end %>
 
@@ -165,7 +165,7 @@
                 <% row.with_cell(
                   text: task_status_content_tag(
                     status_colour: "red",
-                    status: "Held",
+                    status: "Yes",
                   )
                 ) %>
               <% else %>
