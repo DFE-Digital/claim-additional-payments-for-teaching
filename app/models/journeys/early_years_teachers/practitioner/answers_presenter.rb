@@ -82,8 +82,15 @@ module Journeys
         end
 
         def gender_answer
-          gender_text = I18n.t("answers.payroll_gender.#{answers.payroll_gender}", default: answers.payroll_gender)
-          ["Payroll gender", gender_text, "gender"]
+          gender_text = if answers.payroll_gender == "other"
+            answers.payroll_gender_other
+          else
+            I18n.t(
+              "early_years_teachers_practitioner.answers.payroll_gender.#{answers.payroll_gender}",
+              default: I18n.t("answers.payroll_gender.#{answers.payroll_gender}", default: answers.payroll_gender)
+            )
+          end
+          ["Gender", gender_text, "gender"]
         end
       end
     end
