@@ -1,6 +1,6 @@
 // fix OL header missing interpolation for calc functions
 // which causes undesired outputs due to invalid property values
-@use "govuk-one-login-service-header/dist/styles/service-header-no-imports";
+@use "@govuk-one-login/service-header/dist/styles/service-header-no-imports";
 
 .rebranded-cross-service-header__toggle {
   padding: $toggle-padding $toggle-padding calc(#{$toggle-padding} + 1px) $toggle-padding !important;
