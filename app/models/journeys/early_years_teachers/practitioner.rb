@@ -15,6 +15,7 @@ module Journeys
         PaymentOptionsForm,
         HowWeUseYourInformationForm,
         PersonalBankAccountForm,
+        GenderForm,
         CheckYourAnswersForm,
         ConfirmationForm
       ]

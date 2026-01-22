@@ -28,6 +28,13 @@ en:
           inclusion: "Select how you want to be paid"
       how_we_use_your_information:
         title: "How we will use your information"
+      gender:
+        title: "What is your gender?"
+        hint: "We need this information to process your payment."
+        other_label: "Enter your gender"
+        errors:
+          inclusion: "Select your gender"
+          other_required: "Enter your gender"
       check_your_answers:
         title: "Check your answers before sending your application"
         heading: "Check your answers before sending your application"
@@ -36,4 +43,10 @@ en:
         contact_section_heading: "Contact details"
         payroll_section_heading: "Bank details"
         submit_button: "Confirm and send"
+    answers:
+      payroll_gender:
+        female: "Female"
+        male: "Male"
+        non_binary: "Non-binary"
+        prefer_not_to_say: "Prefer not to say"
 
