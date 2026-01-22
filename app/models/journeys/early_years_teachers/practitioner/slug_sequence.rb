@@ -3,16 +3,12 @@ module Journeys
     module Practitioner
       class SlugSequence
         SLUGS = %w[
-          sign-in-or-continue
-          confirm-details
-          full-name
-          date-of-birth
-          national-insurance-number
-          teacher-reference-number
-          check-your-answers-part-one
+          sign-in
+          one-login-callback-success
           eligibility-confirmed
           payment-not-accepted
           payment-options
+          how-we-use-your-information
           postcode-search
           select-home-address
           address
@@ -36,19 +32,8 @@ module Journeys
         def slugs
           array = []
 
-          array << "sign-in-or-continue"
-
-          if answers.tid_sign_in == true
-            array << "confirm-details"
-          end
-
-          if answers.tid_sign_in == false || answers.details_correct == false
-            array << "full-name"
-            array << "date-of-birth"
-            array << "national-insurance-number"
-            array << "teacher-reference-number"
-            array << "check-your-answers-part-one"
-          end
+          array << "sign-in"
+          array << "one-login-callback-success"
 
           array << "eligibility-confirmed"
 
@@ -58,6 +43,8 @@ module Journeys
           end
 
           array << "payment-options"
+
+          array << "how-we-use-your-information"
 
           array << "postcode-search"
           array << "select-home-address" unless answers.skip_postcode_search? || answers.ordnance_survey_error?

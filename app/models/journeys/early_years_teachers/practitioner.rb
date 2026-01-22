@@ -8,14 +8,13 @@ module Journeys
       POLICIES = []
 
       FORMS = [
-        SignInOrContinueForm,
-        ConfirmDetailsForm,
-        CheckYourAnswersPartOneForm,
+        SignInForm,
+        OneLoginCallbackSuccessForm,
         EligibilityConfirmedForm,
         PaymentNotAcceptedForm,
         PaymentOptionsForm,
+        HowWeUseYourInformationForm,
         PersonalBankAccountForm,
-        NationalInsuranceNumberForm,
         CheckYourAnswersForm,
         ConfirmationForm
       ]
