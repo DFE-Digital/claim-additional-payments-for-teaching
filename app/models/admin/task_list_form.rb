@@ -46,6 +46,10 @@ module Admin
         @claim.held?
       end
 
+      def assigned_to
+        @claim.assigned_to
+      end
+
       def tasks
         @tasks ||= available_tasks.map do |task_name|
           if claim_tasks.include?(task_name)
@@ -229,7 +233,7 @@ module Admin
         @claim_scope = @claim_scope.where(assigned_to_id: assignee_id)
       end
 
-      @claim_scope.includes(:tasks, eligibility: :verified_by)
+      @claim_scope.includes(:tasks, :assigned_to, eligibility: :verified_by)
     end
 
     def as_csv

@@ -136,6 +136,7 @@
         <% table.with_head do |head| %>
           <% head.with_row do |row| %>
             <% row.with_cell(text: "Reference") %>
+            <% row.with_cell(text: "Assigned to") %>
             <% @presenter.task_names.each do |task_name| %>
               <% row.with_cell(text: task_name) %>
             <% end %>
@@ -149,6 +150,7 @@
               <% row.with_cell(
                 text: govuk_link_to(claim.reference, admin_claim_path(claim.id))
               ) %>
+              <% row.with_cell(text: claim.assigned_to&.full_name || "-") %>
               <% claim.tasks.each do |task| %>
                 <% row.with_cell(
                   text: task_status_content_tag(
