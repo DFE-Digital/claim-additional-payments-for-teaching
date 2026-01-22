@@ -1,0 +1,81 @@
+<% content_for(:phase) { "Alpha" } %>
+
+<% content_for(
+  :page_title,
+  page_title(
+    "How we will use your information",
+    journey: current_journey_routing_name
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      How we will use your information
+    </h1>
+
+    <h2 class="govuk-heading-m">
+      To process your application
+    </h2>
+
+    <p class="govuk-body">
+      We will check the information you have provided with the:
+    </p>
+
+    <%= govuk_list [
+      "early years provider where you currently teach",
+      "Student Loans Company, if you have a student loan"
+    ], type: :bullet %>
+
+    <h2 class="govuk-heading-m">
+      To pay you
+    </h2>
+
+    <p class="govuk-body">
+      The Department of Education (DfE) will make the payment directly to you.
+    </p>
+
+    <p class="govuk-body">
+      To complete the rest of your application, you will need your:
+    </p>
+
+    <%= govuk_list [
+      "National Insurance number",
+      "bank account details"
+    ], type: :bullet %>
+
+    <h2 class="govuk-heading-m">
+      Student loan deductions
+    </h2>
+
+    <p class="govuk-body">
+      If you are currently paying off a student loan, a deduction from your payment
+      will go towards repaying it.
+    </p>
+
+    <h2 class="govuk-heading-m">
+      Income Tax
+    </h2>
+
+    <p class="govuk-body">
+      DfE will pay National Insurance and basic rate Income Tax on the recruitment
+      bonus on your behalf. If you earn £50,270 or more a year, you'll need to pay any
+      Income Tax at the higher rate through PAYE.
+    </p>
+
+    <p class="govuk-body">
+      For more details, you can read about payments and deductions for the
+      <%= govuk_link_to(
+        "early years financial incentive payment",
+        guidance_path(Journeys::EarlyYearsPayment::Provider::Start.routing_name),
+        new_tab: true
+      ) %>
+    </p>
+
+    <%= govuk_button_to(
+      "Continue",
+      claim_path(current_journey_routing_name),
+      method: :patch
+    ) %>
+  </div>
+</div>
