@@ -244,6 +244,38 @@ RSpec.feature "Provider verification access control" do
         "You do not have access to verify claims for this organisation"
       )
     end
+
+    it "shows incorrect role if the provider is missing" do
+      mock_dfe_sign_in_auth_session(
+        provider: :dfe_fe_provider,
+        auth_hash: {
+          uid: "11111",
+          extra: {
+            raw_info: {
+              organisation: {
+                id: "22222",
+                ukprn: "99999999"
+              }
+            }
+          }
+        }
+      )
+
+      stub_dfe_sign_in_user_info_request(
+        "11111",
+        "22222",
+        "incorrect_role_code",
+        user_type: "provider"
+      )
+
+      visit new_further_education_payments_providers_session_path
+
+      click_on "Start now"
+
+      expect(page).to have_text(
+        "You do not have access to verify claims for this organisation"
+      )
+    end
   end
 
   context "when the user was deleted" do
