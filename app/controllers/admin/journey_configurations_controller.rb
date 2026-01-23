@@ -25,6 +25,9 @@ module Admin
           FILE_UPLOAD_TARGET_DATA_MODELS[journey_configuration.routing_name]
         )
         .includes(:uploaded_by)
+
+      @feature_flags_form = FeatureFlagsForm.new
+      @feature_flags_form.load_data
     end
 
     def update
@@ -49,7 +52,14 @@ module Admin
     end
 
     def journey_configuration_params
-      params.require(:journey_configuration).permit(:availability_message, :open_for_submissions, :current_academic_year, :teacher_id_enabled)
+      params
+        .require(:journey_configuration)
+        .permit(
+          :availability_message,
+          :open_for_submissions,
+          :current_academic_year,
+          :teacher_id_enabled
+        )
     end
 
     def send_reminders

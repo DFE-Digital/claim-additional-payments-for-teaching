@@ -173,6 +173,7 @@ Rails.application.routes.draw do
     resources :payments, only: :show
 
     resources :journey_configurations, only: [:index, :edit, :update], path: "journey-configurations"
+    resource :feature_flags, only: [:update], path: "feature-flags"
     resources :targeted_retention_incentive_payments_awards, only: [:index, :create]
     resource :eligible_ey_providers, only: [:create, :show], path: "eligible-early-years-providers"
     resource :eligible_fe_providers, only: [:create, :show], path: "eligible-further-education-providers"
