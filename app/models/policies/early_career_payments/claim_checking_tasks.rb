@@ -36,7 +36,7 @@ module Policies
       private
 
       def matching_claims
-        @matching_claims ||= Claim::MatchingAttributeFinder.new(claim).matching_claims
+        @matching_claims ||= Claims::Match.matching_claims_shim(claim)
       end
     end
   end
