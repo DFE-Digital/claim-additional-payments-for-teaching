@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Provider verifying claims" do
+RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard] do
   before do
     create(:journey_configuration, :further_education_payments)
   end

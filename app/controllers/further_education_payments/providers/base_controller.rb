@@ -4,10 +4,17 @@ module FurtherEducationPayments
       include HttpAuthConcern
       include Pagy::Backend
 
+      before_action :check_fe_provider_dashboard_open
       before_action :authenticate_user!
       before_action :authorize_user!, if: :current_user
 
       private
+
+      def check_fe_provider_dashboard_open
+        if FeatureFlag.disabled?("fe_provider_dashboard")
+          render "further_education_payments/providers/closed"
+        end
+      end
 
       def authenticate_user!
         if current_user.null_user?
