@@ -33,5 +33,10 @@
       <% row.with_key { "National Insurance number" } %>
       <% row.with_value { teacher.teacher_national_insurance_number } %>
     <% end %>
+
+    <% list.with_row do |row| %>
+      <% row.with_key { "Teacher reference number (TRN)" } %>
+      <% row.with_value { teacher.teacher_reference_number } %>
+    <% end %>
   <% end %>
 <% end %>

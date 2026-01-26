@@ -63,6 +63,12 @@
           extra_letter_spacing: true
         ) %>
 
+        <%= f.govuk_text_field(
+          :teacher_reference_number,
+          label: { text: f.object.t([:teacher_reference_number, :label]) },
+          extra_letter_spacing: true
+        ) %>
+
         <%= f.govuk_submit %>
       <% end %>
     <% end %>

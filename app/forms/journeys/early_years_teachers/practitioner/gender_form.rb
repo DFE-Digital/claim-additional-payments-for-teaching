@@ -22,7 +22,7 @@ module Journeys
 
           journey_session.answers.assign_attributes(
             payroll_gender: payroll_gender,
-            payroll_gender_other: payroll_gender == "other" ? payroll_gender_other : nil
+            payroll_gender_other: (payroll_gender == "other") ? payroll_gender_other : nil
           )
           journey_session.save!
         end

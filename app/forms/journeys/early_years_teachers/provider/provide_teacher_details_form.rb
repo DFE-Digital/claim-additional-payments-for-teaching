@@ -7,6 +7,7 @@ module Journeys
         attribute :teacher_email_address, :string
         attribute :teacher_mobile_phone_number, :string
         attribute :teacher_national_insurance_number, :string
+        attribute :teacher_reference_number, :string
 
         attribute :remove_teacher, :boolean
 
@@ -42,6 +43,13 @@ module Journeys
           }
         )
 
+        validates(
+          :teacher_reference_number,
+          presence: {
+            message: i18n_error_message("teacher_reference_number.blank")
+          }
+        )
+
         def save
           return false if invalid?
 
@@ -49,7 +57,8 @@ module Journeys
             teacher_full_name: teacher_full_name,
             teacher_email_address: teacher_email_address,
             teacher_mobile_phone_number: teacher_mobile_phone_number,
-            teacher_national_insurance_number: teacher_national_insurance_number
+            teacher_national_insurance_number: teacher_national_insurance_number,
+            teacher_reference_number: teacher_reference_number
           }
 
           teacher_details = if editing?
