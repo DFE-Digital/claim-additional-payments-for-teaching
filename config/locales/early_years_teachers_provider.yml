@@ -56,7 +56,7 @@ en:
             reference on your records.
           </p>
       organisation_email_address:
-        question: "What is your organisation's email address?"
+        question: "What is your organisation‘s email address?"
       provide_teacher_details:
         title: "Provide teacher details"
         teacher_full_name:
@@ -67,7 +67,9 @@ en:
           label: "Mobile phone number"
         teacher_national_insurance_number:
           label: "National Insurance number"
-          hint: "It’s on their National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’."
+          hint: "It‘s on their National Insurance card, benefit letter, payslip or P60. For example, 'QQ 12 34 56 C'."
+        teacher_reference_number:
+          label: "Teacher reference number (TRN)"
         errors:
           teacher_full_name:
             blank: "Enter the teacher’s full name"
@@ -77,7 +79,9 @@ en:
           teacher_mobile_phone_number:
             blank: "Enter the teacher’s mobile phone number"
           teacher_national_insurance_number:
-            blank: "Enter the teacher’s National Insurance number"
+            blank: "Enter the teacher‘s National Insurance number"
+          teacher_reference_number:
+            blank: "Enter the teacher‘s teacher reference number (TRN)"
       manage_teachers:
         title: "Manage teachers"
         add_another_teacher:

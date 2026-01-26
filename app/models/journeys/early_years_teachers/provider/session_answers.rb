@@ -44,6 +44,7 @@ module Journeys
           :teacher_email_address,
           :teacher_mobile_phone_number,
           :teacher_national_insurance_number,
+          :teacher_reference_number,
           keyword_init: true
         )
         end
