@@ -19,7 +19,7 @@ module FurtherEducationPayments
         unless current_user.role_codes.include?(
           Policies::FurtherEducationPayments::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
         )
-          redirect_to further_education_payments_providers_authorisation_failure_path(
+          return redirect_to further_education_payments_providers_authorisation_failure_path(
             reason: :incorrect_role
           )
         end
