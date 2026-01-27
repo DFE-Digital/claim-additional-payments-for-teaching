@@ -9,6 +9,31 @@ en:
         title: "Sign in with GOV.UK One Login"
       one_login_callback_success:
         title: "You've successfully signed in to GOV.UK One Login"
+      select_nursery:
+        title: "Select your nursery"
+        nursery_search:
+          label: "Search for your nursery"
+        errors:
+          blank: "Select a nursery"
+      employer_ref:
+        title: "What is your employer reference?"
+        hint: "You can find this on your payslip or by contacting your employer."
+        errors:
+          blank: "Enter your employer reference"
+      national_insurance_number:
+        title: "What is your National Insurance number?"
+        hint: "It's on your National Insurance card, benefit letter, payslip or P60. For example, 'QQ 12 34 56 C'."
+        errors:
+          blank: "Enter your National Insurance number"
+      teacher_reference_number:
+        title: "What is your teacher reference number (TRN)?"
+        hint_html: 'Your TRN is 7 digits. If you do not know your TRN, you can <a class="govuk-link" href="https://find-a-lost-trn.education.gov.uk/start" target="_blank">find a lost TRN</a>.'
+        errors:
+          blank: "Enter your teacher reference number"
+      check_your_answers_part_one:
+        title: "Check your answers"
+        heading: "Check your answers"
+        section_heading: "Your details"
       eligibility_confirmed:
         title: "You're eligible for a recognition payment"
         heading: "You're eligible for a recognition payment"

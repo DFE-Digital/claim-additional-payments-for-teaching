@@ -10,6 +10,11 @@ module Journeys
       FORMS = [
         SignInForm,
         OneLoginCallbackSuccessForm,
+        SelectNurseryForm,
+        EmployerRefForm,
+        NationalInsuranceNumberForm,
+        TeacherReferenceNumberForm,
+        CheckYourAnswersPartOneForm,
         EligibilityConfirmedForm,
         PaymentNotAcceptedForm,
         PaymentOptionsForm,

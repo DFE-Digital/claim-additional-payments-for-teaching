@@ -5,6 +5,11 @@ module Journeys
         SLUGS = %w[
           sign-in
           one-login-callback-success
+          select-nursery
+          employer-ref
+          national-insurance-number
+          teacher-reference-number
+          check-your-answers-part-one
           eligibility-confirmed
           payment-not-accepted
           payment-options
@@ -34,6 +39,12 @@ module Journeys
 
           array << "sign-in"
           array << "one-login-callback-success"
+
+          array << "select-nursery"
+          array << "employer-ref"
+          array << "national-insurance-number"
+          array << "teacher-reference-number"
+          array << "check-your-answers-part-one"
 
           array << "eligibility-confirmed"
 

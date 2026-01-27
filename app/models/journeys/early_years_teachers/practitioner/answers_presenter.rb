@@ -2,6 +2,23 @@ module Journeys
   module EarlyYearsTeachers
     module Practitioner
       class AnswersPresenter < BaseAnswersPresenter
+        NURSERIES = {
+          "1" => "Sunshine Day Nursery",
+          "2" => "Little Stars Childcare",
+          "3" => "Happy Days Nursery",
+          "4" => "Tiny Tots Preschool",
+          "5" => "Rainbow Kids Nursery"
+        }.freeze
+
+        def part_one_answers
+          [].tap do |a|
+            a << nursery_answer
+            a << employer_reference_answer
+            a << national_insurance_number_answer
+            a << teacher_reference_number_answer
+          end
+        end
+
         def eligibility_answers
           [].tap do |a|
             a << full_name_answer
@@ -49,6 +66,15 @@ module Journeys
 
         def teacher_reference_number_answer
           ["Teacher reference number (TRN)", answers.teacher_reference_number, "teacher-reference-number"]
+        end
+
+        def nursery_answer
+          nursery_name = NURSERIES[answers.nursery_id] || "Nursery #{answers.nursery_id}"
+          ["Nursery", nursery_name, "select-nursery"]
+        end
+
+        def employer_reference_answer
+          ["Employer reference", answers.employer_reference, "employer-ref"]
         end
 
         def accept_payment_answer
