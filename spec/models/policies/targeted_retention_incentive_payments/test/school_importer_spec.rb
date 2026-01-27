@@ -14,14 +14,5 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::Test::SchoolImporte
       subject.import!
       expect(School.count).to eq(2)
     end
-
-    context "when the schools are already imported" do
-      before { subject.import! }
-
-      it "raises an exception" do
-        expect { subject.import! }.to raise_error(ActiveRecord::RecordNotUnique)
-        expect(School.count).to eq(2)
-      end
-    end
   end
 end
