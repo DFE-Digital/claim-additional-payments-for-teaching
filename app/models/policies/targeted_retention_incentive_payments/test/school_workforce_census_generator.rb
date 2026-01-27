@@ -26,6 +26,10 @@ module Policies
           new.to_file(file:)
         end
 
+        def self.import!
+          new.import!
+        end
+
         def data
           personas.map do |persona|
             SchoolWorkforceCensus.new(
@@ -56,6 +60,11 @@ module Policies
           file.write(to_csv.to_s(write_headers: false))
           file.rewind
           file
+        end
+
+        def import!
+          form = Admin::SchoolWorkforceCensusForm.new({file: to_file}, DfeSignIn::User.first)
+          form.run_import!
         end
 
         private
