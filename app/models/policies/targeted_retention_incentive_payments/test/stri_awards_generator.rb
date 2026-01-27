@@ -30,6 +30,8 @@ module Policies
               school_urn: school.urn,
               award_amount: 6000
             )
+          end.uniq do |award|
+            award.school_urn
           end
         end
 
