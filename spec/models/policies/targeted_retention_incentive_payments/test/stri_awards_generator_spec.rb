@@ -58,4 +58,14 @@ STRING
       expect(file.read).to eql(expected_output)
     end
   end
+
+  describe "::import!" do
+    it "persists test awards data" do
+      expect {
+        perform_enqueued_jobs do
+          described_class.import!
+        end
+      }.to change(Policies::TargetedRetentionIncentivePayments::Award, :count).by(2)
+    end
+  end
 end
