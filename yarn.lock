@@ -40,9 +40,9 @@ govuk-frontend@^5.13.0:
   integrity sha512-6N3pHelWN7wftdM6e4YEzZAfattapa1gnd+Al6d5PUbfTr9D+T2dnphpNpjX75CTEhihlQqlL0RDQ3WIfZ3PSg==
 
 "govuk-one-login-service-header@https://github.com/govuk-one-login/service-header.git":
-  version "4.1.0"
-  uid c684b61f7d8f3222a7f1f2af27c3cc22c22e9347
-  resolved "https://github.com/govuk-one-login/service-header.git#c684b61f7d8f3222a7f1f2af27c3cc22c22e9347"
+  version "5.0.0"
+  uid c50b389cc59cd51028dea5d56d74bf54951db2b1
+  resolved "https://github.com/govuk-one-login/service-header.git#c50b389cc59cd51028dea5d56d74bf54951db2b1"
   dependencies:
     govuk-frontend "^5.13.0"
     nunjucks "^3.2.4"
