@@ -26,6 +26,10 @@ module Policies
           new.to_file(file:)
         end
 
+        def self.import!
+          new.import!
+        end
+
         def data
           personas.map do |persona|
             TeachersPensionsService.new(
@@ -66,6 +70,11 @@ module Policies
           file.write(to_csv.to_s)
           file.rewind
           file
+        end
+
+        def import!
+          form = Admin::TpsDataForm.new({file: to_file}, DfeSignIn::User.new)
+          form.run_import!
         end
 
         private

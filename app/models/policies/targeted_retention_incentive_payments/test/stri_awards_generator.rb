@@ -21,6 +21,10 @@ module Policies
           new.to_file(file:)
         end
 
+        def self.import!
+          new.import!
+        end
+
         def data
           personas.map do |persona|
             school_name = persona.school_name
@@ -51,6 +55,19 @@ module Policies
           file.write(to_csv.to_s)
           file.rewind
           file
+        end
+
+        def import!
+          form = Policies::TargetedRetentionIncentivePayments::AwardCsvImporter
+            .new(
+              academic_year: AcademicYear.new("2025/2026"),
+              csv_data: to_file,
+              admin_user: nil
+            )
+
+          unless form.process
+            raise "failed to import STRI awards"
+          end
         end
 
         private

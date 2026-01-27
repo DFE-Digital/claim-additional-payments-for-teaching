@@ -272,3 +272,7 @@ end
 if ENV["ENVIRONMENT_NAME"].start_with?("review")
   SchoolDataImporterJob.perform_later if School.count < 100
 end
+
+if ENV["ENVIRONMENT_NAME"].start_with?("review")
+  Policies::TargetedRetentionIncentivePayments::Test::UserPersona.import!
+end

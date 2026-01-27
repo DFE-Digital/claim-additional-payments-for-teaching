@@ -38,6 +38,13 @@ module Policies
           all.select { |persona| persona.eligible? }
         end
 
+        def self.import!
+          SchoolImporter.run
+          StriAwardsGenerator.import!
+          TeachersPensionsServiceGenerator.import!
+          SchoolWorkforceCensusGenerator.import!
+        end
+
         def eligible?
           expected_result == "Eligible"
         end
