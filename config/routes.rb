@@ -103,6 +103,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resource :nursery_searches, only: [:create]
+
   namespace :admin do
     get "/", to: "page#index", as: :root
 
