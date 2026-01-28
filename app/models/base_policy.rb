@@ -62,7 +62,15 @@ module BasePolicy
   end
 
   def decision_deadline_date(claim)
-    (claim.submitted_at + Claim::DECISION_DEADLINE).to_date
+    (claim.submitted_at + decision_deadline_in_weeks).to_date
+  end
+
+  def decision_deadline_in_weeks
+    Claim::DECISION_DEADLINE
+  end
+
+  def expected_payment_time_in_weeks
+    25.weeks
   end
 
   def mailer
