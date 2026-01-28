@@ -22,19 +22,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::Test::StriAwardsGen
     it "generates correct awards" do
       expected = [
         Policies::TargetedRetentionIncentivePayments::Award.new(school_urn: 1, award_amount: 6_000),
-        Policies::TargetedRetentionIncentivePayments::Award.new(school_urn: 1, award_amount: 6_000),
-        Policies::TargetedRetentionIncentivePayments::Award.new(school_urn: 1, award_amount: 6_000),
-        Policies::TargetedRetentionIncentivePayments::Award.new(school_urn: 1, award_amount: 6_000),
-        Policies::TargetedRetentionIncentivePayments::Award.new(school_urn: 1, award_amount: 6_000),
-        Policies::TargetedRetentionIncentivePayments::Award.new(school_urn: 2, award_amount: 6_000),
-        Policies::TargetedRetentionIncentivePayments::Award.new(school_urn: 1, award_amount: 6_000),
-        Policies::TargetedRetentionIncentivePayments::Award.new(school_urn: 1, award_amount: 6_000),
-        Policies::TargetedRetentionIncentivePayments::Award.new(school_urn: 1, award_amount: 6_000),
-        Policies::TargetedRetentionIncentivePayments::Award.new(school_urn: 1, award_amount: 6_000),
-        Policies::TargetedRetentionIncentivePayments::Award.new(school_urn: 1, award_amount: 6_000),
-        Policies::TargetedRetentionIncentivePayments::Award.new(school_urn: 1, award_amount: 6_000),
-        Policies::TargetedRetentionIncentivePayments::Award.new(school_urn: 1, award_amount: 6_000),
-        Policies::TargetedRetentionIncentivePayments::Award.new(school_urn: 1, award_amount: 6_000)
+        Policies::TargetedRetentionIncentivePayments::Award.new(school_urn: 2, award_amount: 6_000)
       ]
 
       described_class.data.each_with_index do |record, index|
@@ -51,19 +39,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::Test::StriAwardsGen
     it "generates correct csv" do
       expected_output = <<STRING.delete(" ")
        1,6000.0
-       1,6000.0
-       1,6000.0
-       1,6000.0
-       1,6000.0
        2,6000.0
-       1,6000.0
-       1,6000.0
-       1,6000.0
-       1,6000.0
-       1,6000.0
-       1,6000.0
-       1,6000.0
-       1,6000.0
 STRING
 
       expect(described_class.to_csv.to_s).to end_with(expected_output)
@@ -75,23 +51,21 @@ STRING
       expected_output = <<STRING.delete(" ")
        school_urn,award_amount
        1,6000.0
-       1,6000.0
-       1,6000.0
-       1,6000.0
-       1,6000.0
        2,6000.0
-       1,6000.0
-       1,6000.0
-       1,6000.0
-       1,6000.0
-       1,6000.0
-       1,6000.0
-       1,6000.0
-       1,6000.0
 STRING
 
       file = described_class.to_file
       expect(file.read).to eql(expected_output)
+    end
+  end
+
+  describe "::import!" do
+    it "persists test awards data" do
+      expect {
+        perform_enqueued_jobs do
+          described_class.import!
+        end
+      }.to change(Policies::TargetedRetentionIncentivePayments::Award, :count).by(2)
     end
   end
 end
