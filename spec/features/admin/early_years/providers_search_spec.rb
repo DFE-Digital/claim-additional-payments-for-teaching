@@ -95,6 +95,8 @@ RSpec.describe "Providers Search" do
 
     expect(page.response_headers["Content-Type"]).to include("text/csv")
     expect(page).to have_content("Nursery Name,Primary Contact Email,Max Claims,Claims Submitted,Claim References")
+
+    # TODO: CLAIM1, CLAIM2 ordering can be flaky
     expect(page).to have_content("Happy Kids Nursery,hkn@example.com,5,2,CLAIM1 CLAIM2")
     expect(page).to have_content("Sunny Days Nursery,sdn@example.com,10,0,")
   end

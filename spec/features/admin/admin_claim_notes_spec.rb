@@ -24,6 +24,10 @@ RSpec.feature "Admin claim notes" do
     note = claim.notes.last
     expect(note.body).to have_content("No data for this teacher in TPS, needs a manual employment check")
     expect(note.created_by).to eq(@signed_in_user)
+
+    visit admin_claim_tasks_path(claim)
+    click_link "Claim timeline"
+    expect(page).to have_text("Note created")
   end
 
   scenario "with validation error" do

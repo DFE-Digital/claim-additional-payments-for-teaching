@@ -63,6 +63,12 @@ RSpec.describe Admin::Claims::AssignmentForm do
         expect(note.created_by).to eql(current_admin)
         expect(note.body).to eql("This claim was unassigned from #{third_admin.full_name}")
       end
+
+      it "creates an event" do
+        expect { subject.save }.to change {
+          Event.where(claim:, name: "claim_unassigned").count
+        }.by(1)
+      end
     end
 
     context "when assigning to self" do
@@ -79,6 +85,12 @@ RSpec.describe Admin::Claims::AssignmentForm do
         expect(note.created_by).to eql(current_admin)
         expect(note.body).to eql("This claim was assigned to #{current_admin.full_name}")
       end
+
+      it "creates an event" do
+        expect { subject.save }.to change {
+          Event.where(claim:, name: "claim_assigned").count
+        }.by(1)
+      end
     end
 
     context "when assigning to colleague" do
@@ -94,6 +106,12 @@ RSpec.describe Admin::Claims::AssignmentForm do
         expect(note.claim).to eql(claim)
         expect(note.created_by).to eql(current_admin)
         expect(note.body).to eql("This claim was assigned to #{second_admin.full_name}")
+      end
+
+      it "creates an event" do
+        expect { subject.save }.to change {
+          Event.where(claim:, name: "claim_assigned").count
+        }.by(1)
       end
     end
   end

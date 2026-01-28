@@ -23,6 +23,9 @@ class PaymentMailer < ApplicationMailer
 
     @support_email_address = translate("#{claim.policy.locale_key}.support_email_address")
 
+    # Done here rather than PaymentConfirmationUpload for performance
+    Event.create(claim:, name: "email_confirmation_single_sent", entity: @payment)
+
     view_mail(
       NOTIFY_TEMPLATE_ID,
       to: @payment.email_address,
@@ -34,6 +37,11 @@ class PaymentMailer < ApplicationMailer
   # NOTE: only happens for Targeted Retention Incentive + TSLR
   def confirmation_for_multiple_claims
     @support_email_address = translate("additional_payments.support_email_address")
+
+    # Done here rather than PaymentConfirmationUpload for performance
+    @payment.claims.each do |claim|
+      Event.create(claim:, name: "email_confirmation_multiple_sent", entity: @payment)
+    end
 
     view_mail(
       NOTIFY_TEMPLATE_ID,

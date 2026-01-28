@@ -137,6 +137,11 @@ RSpec.feature "Admin rejects a claim" do
       expect(claim.email_address).to have_received_email(
         ApplicationMailer::FURTHER_EDUCATION_PAYMENTS[:CLAIM_REJECTED_NOTIFY_TEMPLATE_ID]
       )
+
+      visit admin_claim_tasks_path(claim)
+      click_link "Claim timeline"
+      expect(page).to have_text("Claim rejected")
+      expect(page).to have_text("Rejection email sent")
     end
 
     scenario "rejecting with a reason of year 1 mismatch sends a year 1 mismatch email (not the generic rejection email)" do
@@ -179,6 +184,11 @@ RSpec.feature "Admin rejects a claim" do
         }.to change { enqueued_jobs.count { |job| job[:job] == ActionMailer::MailDeliveryJob } }.by(1)
 
         expect(page).to have_content("Claim has been rejected successfully")
+
+        visit admin_claim_tasks_path(claim)
+        click_link "Claim timeline"
+        expect(page).to have_text("Claim rejected")
+        expect(page).to have_text("Provider rejection email sent")
       end
     end
 

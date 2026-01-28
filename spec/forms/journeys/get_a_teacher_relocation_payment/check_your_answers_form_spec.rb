@@ -77,9 +77,11 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::CheckYourAnswersForm do
       )
     end
 
-    before { form.save }
+    subject { form.save }
 
     it "sets the expect attributes on the claim" do
+      subject
+
       claim = form.claim
 
       eligibility = claim.eligibility
@@ -100,6 +102,12 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::CheckYourAnswersForm do
 
       expect(eligibility.award_amount).to eq(
         Policies::InternationalRelocationPayments.award_amount
+      )
+    end
+
+    it "create a claim_submitted Event" do
+      expect { subject }.to(
+        change { Event.where(name: "claim_submitted").count }.by(1)
       )
     end
   end

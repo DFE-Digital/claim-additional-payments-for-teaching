@@ -13,6 +13,15 @@ class PayrollRunJob < ApplicationJob
 
         award_amount = grouped_items.map(&:award_amount).compact.sum(0)
         Payment.create!(payroll_run: payroll_run, claims: grouped_claims, topups: group_topups, award_amount: award_amount)
+
+        grouped_claim_attributes = grouped_claims.map do |claim|
+          {
+            "claim_id" => claim.id,
+            "name" => "claim_payrolled"
+          }
+        end
+
+        Event.insert_all(grouped_claim_attributes, record_timestamps: true)
       end
 
       payroll_run.complete!

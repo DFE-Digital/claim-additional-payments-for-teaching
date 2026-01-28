@@ -99,6 +99,14 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::CheckYourAn
       )
     end
 
+    it "creates an event practitioner email sent" do
+      allow(ClaimVerifierJob).to receive(:perform_later)
+
+      expect { perform_enqueued_jobs { subject.save } }.to change {
+        Event.where(name: "email_ey_practitioner_sent").count
+      }.by(1)
+    end
+
     it "doesn't send the claim submitted notification email" do
       allow(ClaimVerifierJob).to receive(:perform_later)
 
@@ -135,6 +143,12 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::CheckYourAn
           practitioner_last_name: answers.surname,
           ref_number: claim.reference
         )
+      )
+    end
+
+    it "create a claim_submitted Event" do
+      expect { subject.save }.to(
+        change { Event.where(name: "claim_submitted").count }.by(1)
       )
     end
   end

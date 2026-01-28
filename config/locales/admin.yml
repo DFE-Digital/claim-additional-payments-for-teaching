@@ -164,6 +164,29 @@ en:
     payment_confirmation_report_uploads:
       create:
         success: Payment Confirmation Report (%{counter}) successfully uploaded
+    timeline:
+      claim_submitted: "[Claim] Claim submitted"
+      claim_hold: "[Claim] Claim put on hold"
+      claim_unhold: "[Claim] Claim hold removed"
+      claim_approved: "[Claim] Claim approved"
+      claim_rejected: "[Claim] Claim rejected"
+      claim_payrolled: "[Claim] Claim payrolled"
+      claim_amendment: "[Claim] Claim amended"
+      claim_assigned: "[Claim] Claim assigned"
+      claim_unassigned: "[Claim] Claim unassigned"
+      claim_fe_provider_verification_started: "[Provider] Provider started verification"
+      claim_fe_provider_verification_completed: "[Provider] Provider completed verification"
+      email_rejected_sent: "[Email] Rejection email sent"
+      email_confirmation_single_sent: "[Email] Email single claim confirmation sent"
+      email_confirmation_multiple_sent: "[Email] Email multiple claim confirmation sent"
+      email_three_week_old_undecided_sent: "[Email] Three week old email reminder sent"
+      email_ey_rejected_provider_sent: "[Email] Provider rejection email sent"
+      email_ey_practitioner_sent: "[Email] Practitioner email sent"
+      note_created: "[Note] Note created"
+      task_qa_required: "[Task] Quality assurance decision required"
+      task_qa_completed: "[Task] Quality assurance completed"
+      task_payroll_details_true: "[Task] Claim payroll details passed"
+      task_payroll_details_false: "[Task] Claim payroll details failed"
   student_loans:
     admin:
       claim_school: "Claim school"

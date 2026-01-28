@@ -54,22 +54,32 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::CheckA
     context "with a complete form" do
       let(:verified_at) { DateTime.new(2025, 1, 1, 0, 0, 0) }
 
-      before do
+      let(:complete_form) do
         travel_to(verified_at) do
           form.save
         end
       end
 
       it "sets the claim as verified" do
+        complete_form
+
         expect(
           claim.eligibility.provider_verification_completed_at
         ).to eq(verified_at)
       end
 
       it "records who verified the claim" do
+        complete_form
+
         expect(
           claim.eligibility.provider_verification_verified_by_id
         ).to eq(user.id)
+      end
+
+      it "creates an event" do
+        expect { complete_form }.to change {
+          Event.where(name: "claim_fe_provider_verification_completed").count
+        }.by(1)
       end
     end
 

@@ -16,6 +16,7 @@ RSpec.describe SendEmailsAfterThreeWeeksJob do
           SendEmailsAfterThreeWeeksJob.new.perform
         end
       }.to change { ActionMailer::Base.deliveries.count }.by(2)
+        .and change { Event.where(name: "email_three_week_old_undecided_sent").count }.by(2)
     end
   end
 end

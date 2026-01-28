@@ -7,6 +7,7 @@ class SendEmailsAfterThreeWeeksJob < ApplicationJob
     Rails.logger.info "Sending three-week emails to #{three_week_old_undecided_claims.count} undecided claims from the database"
     three_week_old_undecided_claims.each do |claim|
       ClaimMailer.update_after_three_weeks(claim).deliver_later
+      Event.create(claim:, name: "email_three_week_old_undecided_sent")
     end
   end
 

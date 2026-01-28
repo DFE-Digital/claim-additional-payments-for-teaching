@@ -40,6 +40,12 @@ RSpec.describe PaymentMailer, type: :mailer do
           expect(mail.body).to include("You will receive £500.00 on Tuesday 1st January 2019")
         end
 
+        it "creates an event" do
+          expect { mail.body }.to change {
+            Event.where(claim:, name: "email_confirmation_single_sent").count
+          }.by(1)
+        end
+
         context "when user does not currently have a student loan or a postgraduate loan" do
           let(:payment) { create(:payment, :confirmed, :with_figures, student_loan_repayment: 0, postgraduate_loan_repayment: 0, claims: [claim]) }
 
@@ -154,6 +160,12 @@ RSpec.describe PaymentMailer, type: :mailer do
         it "includes the amount claimed for each claim" do
           expect(mail.body).to include("Additional payment for teaching: £5,000.00")
           expect(mail.body).to include("Student loan repayments you’ve claimed back: £500.00")
+        end
+
+        it "creates an event for each claim" do
+          expect { mail.body }.to change {
+            Event.count
+          }.by(2)
         end
 
         context "when user does not currently have a student loan or a postgraduate loan" do

@@ -105,6 +105,10 @@ RSpec.feature "Admin amends a claim" do
 
     expect(page).to have_content("This claimant got some of their details wrong and then contacted us")
     expect(page).to have_content("by #{@signed_in_user.full_name} on #{I18n.l(Time.current)}")
+
+    visit admin_claim_tasks_path(claim)
+    click_link "Claim timeline"
+    expect(page).to have_text("Claim amended")
   end
 
   scenario "Service operator cancels amending a claim" do

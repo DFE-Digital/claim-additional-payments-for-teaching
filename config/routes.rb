@@ -133,6 +133,7 @@ Rails.application.routes.draw do
       end
       resources :amendments, only: [:index, :new, :create]
       resources :notes, only: [:index, :create]
+      resources :events, only: [:index]
       resources :support_tickets, only: [:create]
       resources :topups, only: [:new, :create, :destroy] do
         get :remove, on: :member

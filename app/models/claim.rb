@@ -42,6 +42,7 @@ class Claim < ApplicationRecord
   has_many :amendments, dependent: :destroy
   has_many :topups, dependent: :destroy
   has_many :notes, dependent: :destroy
+  has_many :events, dependent: :destroy
   has_one :support_ticket, dependent: :destroy
 
   belongs_to :eligibility, polymorphic: true, inverse_of: :claim, dependent: :destroy
@@ -177,7 +178,8 @@ class Claim < ApplicationRecord
     if holdable? && !held?
       self.class.transaction do
         update!(held: true)
-        notes.create!(body: "Claim put on hold: #{reason}", created_by: user)
+        note = notes.create!(body: "Claim put on hold: #{reason}", created_by: user)
+        Event.create(claim: self, name: "claim_hold", actor: user, entity: note)
       end
     end
   end
@@ -186,7 +188,8 @@ class Claim < ApplicationRecord
     if held?
       self.class.transaction do
         update!(held: false)
-        notes.create!(body: "Claim hold removed", created_by: user)
+        note = notes.create!(body: "Claim hold removed", created_by: user)
+        Event.create(claim: self, name: "claim_unhold", actor: user, entity: note)
       end
     end
   end
