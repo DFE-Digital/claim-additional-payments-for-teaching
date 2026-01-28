@@ -216,7 +216,11 @@ module Policies
     end
 
     def decision_deadline_date(claim)
-      (claim.submitted_at + DECISION_DEADLINE).to_date
+      (claim.submitted_at + decision_deadline_in_weeks).to_date
+    end
+
+    def decision_deadline_in_weeks
+      DECISION_DEADLINE
     end
 
     def year_1_claim?(claim)
