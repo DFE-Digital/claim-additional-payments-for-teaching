@@ -22,7 +22,10 @@
 
     <h2 class="govuk-heading-m">What happens next</h2>
 
-    <%= render partial: "submissions/confirmation" %>
+    <%= render(
+      partial: "submissions/confirmation",
+      locals: { policy: @form.policy },
+    ) %>
 
     <% if journey.set_a_reminder?(@form.itt_academic_year) %>
       <%= render partial: "set_reminder" %>

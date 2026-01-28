@@ -18,7 +18,10 @@
 
     <h2 class="govuk-heading-m">What happens next</h2>
 
-    <%= render partial: "submissions/confirmation" %>
+    <%= render(
+      partial: "submissions/confirmation",
+      locals: { policy: @form.policy },
+    ) %>
 
     <p class="govuk-body">
       <%= link_to "What do you think of this service?", done_page_url, class: "govuk-link" %>
