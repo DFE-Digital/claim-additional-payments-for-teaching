@@ -2,7 +2,7 @@ module HttpAuthConcern
   extend ActiveSupport::Concern
 
   included do
-    if ENV["BASIC_AUTH_USERNAME"].present? && ENV["BASIC_AUTH_PASSWORD"].present?
+    if ENV["BASIC_AUTH_USERNAME"].present? && ENV["BASIC_AUTH_PASSWORD"].present? && !FeatureFlag.enabled?(:bypass_basic_auth)
       http_basic_authenticate_with(
         name: ENV.fetch("BASIC_AUTH_USERNAME"),
         password: ENV.fetch("BASIC_AUTH_PASSWORD")
