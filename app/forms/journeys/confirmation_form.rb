@@ -2,7 +2,7 @@ module Journeys
   class ConfirmationForm < Form
     class SubmittedClaimNotFound < StandardError; end
 
-    delegate :reference, :email_address, to: :submitted_claim
+    delegate :reference, :email_address, :policy, to: :submitted_claim
 
     private
 
