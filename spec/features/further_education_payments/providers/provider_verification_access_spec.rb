@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Provider verification access control" do
+RSpec.feature "Provider verification access control", feature_flag: [:fe_provider_dashboard] do
   before do
     create(:journey_configuration, :further_education_payments)
   end

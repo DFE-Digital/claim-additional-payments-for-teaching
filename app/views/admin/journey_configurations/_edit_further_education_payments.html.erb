@@ -38,3 +38,24 @@
 <%= render partial: "file_upload_history", locals: {
   heading: "Upload history for eligible FE providers"
 } %>
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+<h2 class="govuk-heading-m">
+  Feature flags
+</h2>
+
+<%= form_with model: @feature_flags_form, scope: :feature_flags, url: admin_feature_flags_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+  <%= f.govuk_error_summary %>
+
+  <% f.object.flags.each do |flag| %>
+    <%= f.govuk_collection_radio_buttons flag.name,
+      f.object.options,
+      :id, :name,
+      inline: true,
+      legend: { text: flag.description },
+      hint: { text: flag.hint } %>
+  <% end %>
+
+  <%= f.govuk_submit "Save feature flags" %>
+<% end %>
