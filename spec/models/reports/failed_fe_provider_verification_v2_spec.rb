@@ -54,7 +54,10 @@ RSpec.describe Reports::FailedFeProviderVerificationV2 do
       :task,
       :failed,
       claim: claim_failed_fe_provider_verification,
-      name: "fe_provider_verification_v2"
+      name: "fe_provider_verification_v2",
+      data: {
+        failed_checks: ["performance_measures", "disciplinary_action"]
+      }
     )
   end
 
@@ -83,27 +86,7 @@ RSpec.describe Reports::FailedFeProviderVerificationV2 do
       expect(rows[0]["Claim status"]).to eql("Rejected")
       expect(rows[0]["Decision date"]).to eql("20/01/2026")
       expect(rows[0]["Decision agent"]).to eql("Aaron Admin")
-      expect(rows[0]["Contract of employment"]).to eql("fixed_term")
-      expect(rows[0]["Teaching responsibilities"]).to eql("Yes")
-      expect(rows[0]["One full term"]).to eql(nil)
-      expect(rows[0]["Timetabled teaching hours"]).to eql("more_than_20")
-      expect(rows[0]["Half teaching hours"]).to eql("Yes")
-      expect(rows[0]["Half timetabled teaching time"]).to eql("Yes")
-      expect(rows[0]["Performance"]).to eql("No")
-      expect(rows[0]["Disciplinary"]).to eql("No")
-      expect(rows[0]["Bank details match"]).to eql("Yes")
-      expect(rows[0]["Date of birth"]).to eql("01/01/1990")
-      expect(rows[0]["Email"]).to eql("test@example.com")
-      expect(rows[0]["Employed by college"]).to eql("Yes")
-      expect(rows[0]["National Insurance number"]).to eql("AB123456C")
-      expect(rows[0]["Postcode"]).to eql("TE57 1NG")
-      expect(rows[0]["Provider verification started at"]).to eql("20 January 2026 12:00am")
-      expect(rows[0]["Provider verification completed at"]).to eql("20 January 2026 12:00am")
-      expect(rows[0]["Continued employment"]).to eql("Yes")
-      expect(rows[0]["Contract covers full academic year"]).to eql("Yes")
-      expect(rows[0]["Employment declaration"]).to eql("Yes")
-      expect(rows[0]["Declaration"]).to eql("Yes")
-      expect(rows[0]["Teaching qualification"]).to eql("yes")
+      expect(rows[0]["Failure reasons"]).to eql("performance_measures,disciplinary_action")
       expect(rows[0]["Not started qualification reasons"]).to eql("[]")
       expect(rows[0]["Not started qualification other reason"]).to eql(nil)
     end
