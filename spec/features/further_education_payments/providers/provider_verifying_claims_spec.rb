@@ -29,7 +29,6 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
         submitted_at: DateTime.new(2025, 10, 1, 9, 0, 0),
         eligibility_attributes: {
           school: fe_provider,
-          teacher_reference_number: "1234567",
           subjects_taught: ["maths", "physics"],
           maths_courses: ["approved_level_321_maths", "gcse_maths"],
           physics_courses: ["gcse_physics"],
@@ -82,7 +81,6 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
         submitted_at: DateTime.new(2025, 10, 1, 9, 0, 0),
         eligibility_attributes: {
           school: fe_provider,
-          teacher_reference_number: "1234567",
           subjects_taught: ["maths", "physics"],
           maths_courses: ["approved_level_321_maths", "gcse_maths"],
           physics_courses: ["gcse_physics"],
@@ -174,7 +172,6 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
         submitted_at: DateTime.new(2025, 10, 1, 9, 0, 0),
         eligibility_attributes: {
           school: fe_provider,
-          teacher_reference_number: "1234567",
           subjects_taught: ["maths", "physics"],
           maths_courses: ["approved_level_321_maths", "gcse_maths"],
           physics_courses: ["gcse_physics"]
@@ -199,7 +196,6 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       end
 
       # Check details in the dropdown
-      expect(summary_row("TRN")).to have_content("1234567")
       expect(summary_row("Date submitted")).to have_content("1 October 2025")
 
       within_fieldset(
@@ -363,7 +359,6 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
         academic_year: AcademicYear.new(2025),
         eligibility_attributes: {
           school: fe_provider,
-          teacher_reference_number: "1234567",
           subjects_taught: ["building_construction"],
           building_construction_courses: ["level3_buildingconstruction_approved"]
         }
@@ -387,7 +382,6 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       end
 
       # Check details in the dropdown
-      expect(summary_row("TRN")).to have_content("1234567")
       expect(summary_row("Date submitted")).to have_content("1 March 2025")
 
       within_fieldset(
@@ -549,7 +543,6 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
         submitted_at: DateTime.new(2025, 5, 1, 9, 0, 0),
         eligibility_attributes: {
           school: fe_provider,
-          teacher_reference_number: "1234567",
           subjects_taught: ["computing", "chemistry"],
           computing_courses: ["level2_3_apprenticeship"],
           chemistry_courses: ["alevel_chemistry"]
@@ -574,7 +567,6 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       end
 
       # Check details in the dropdown
-      expect(summary_row("TRN")).to have_content("1234567")
       expect(summary_row("Date submitted")).to have_content("1 May 2025")
 
       within_fieldset(
@@ -734,8 +726,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
         submitted_at: DateTime.new(2025, 10, 1, 9, 0, 0),
         academic_year: AcademicYear.new(2025),
         eligibility_attributes: {
-          school: fe_provider,
-          teacher_reference_number: "1234567"
+          school: fe_provider
         }
       )
 
@@ -964,8 +955,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
         submitted_at: DateTime.new(2025, 10, 1, 9, 0, 0),
         academic_year: AcademicYear.new(2025),
         eligibility_attributes: {
-          school: fe_provider,
-          teacher_reference_number: "1234567"
+          school: fe_provider
         }
       )
 
@@ -1053,8 +1043,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
         submitted_at: DateTime.new(2025, 10, 1, 9, 0, 0),
         academic_year: AcademicYear.new(2025),
         eligibility_attributes: {
-          school: fe_provider,
-          teacher_reference_number: "1234567"
+          school: fe_provider
         }
       )
 

@@ -43,8 +43,7 @@ RSpec.feature "Provider verification access control", feature_flag: [:fe_provide
       surname: "Krabappel",
       reference: "AB123456",
       eligibility_attributes: {
-        school: fe_provider,
-        teacher_reference_number: "1234567"
+        school: fe_provider
       }
     )
   end
@@ -58,8 +57,7 @@ RSpec.feature "Provider verification access control", feature_flag: [:fe_provide
       surname: "Flanders",
       reference: "CD789012",
       eligibility_attributes: {
-        school: other_fe_provider,
-        teacher_reference_number: "7654321"
+        school: other_fe_provider
       }
     )
   end
@@ -73,8 +71,7 @@ RSpec.feature "Provider verification access control", feature_flag: [:fe_provide
       surname: "Flanders",
       reference: "CD789012",
       eligibility_attributes: {
-        school: fe_provider_without_ukprn,
-        teacher_reference_number: "7777777"
+        school: fe_provider_without_ukprn
       }
     )
   end

@@ -167,10 +167,6 @@ RSpec.describe "Journey session expiry" do
     choose "Female"
     click_on "Continue"
 
-    expect(page).to have_content("Teacher reference number (TRN)")
-    fill_in "claim-teacher-reference-number-field", with: "1234567"
-    click_on "Continue"
-
     expect(page).to have_content("Check your answers before sending your application")
     expect(page).not_to have_content("Do you have a valid passport?")
     expect(page).not_to have_content("Passport number")

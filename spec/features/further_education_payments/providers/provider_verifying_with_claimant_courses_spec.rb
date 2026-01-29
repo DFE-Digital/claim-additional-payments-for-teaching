@@ -27,7 +27,6 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       eligibility_trait: [:eligible],
       eligibility_attributes: {
         school: fe_provider,
-        teacher_reference_number: "1234567",
         subjects_taught: ["maths", "physics"],
         maths_courses: ["approved_level_321_maths", "gcse_maths"],
         physics_courses: ["gcse_physics"]
@@ -46,8 +45,6 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
     # Open the collapsible details section and check its content
     find("summary", text: "Claim details").click
     within("details[open]") do
-      expect(page).to have_content("TRN")
-      expect(page).to have_content("1234567")
       expect(page).to have_content("Date submitted")
       expect(page).to have_content("1 October 2025")
     end
@@ -210,7 +207,6 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       eligibility_trait: [:eligible],
       eligibility_attributes: {
         school: fe_provider,
-        teacher_reference_number: "1234567",
         subjects_taught: ["maths", "physics"],
         maths_courses: ["approved_level_321_maths", "gcse_maths"],
         physics_courses: ["gcse_physics"]
@@ -229,8 +225,6 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
     # Open the collapsible details section and check its content
     find("summary", text: "Claim details").click
     within("details[open]") do
-      expect(page).to have_content("TRN")
-      expect(page).to have_content("1234567")
       expect(page).to have_content("Date submitted")
       expect(page).to have_content("1 October 2025")
     end

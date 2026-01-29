@@ -18,7 +18,6 @@ module Journeys
           a << ["Mobile number", answers.mobile_number, "mobile-number"] if answers.provide_mobile_number?
 
           a << payroll_gender
-          a << teacher_reference_number
         end
       end
 
@@ -71,14 +70,6 @@ module Journeys
           t("further_education_payments.forms.gender.questions.payroll_gender"),
           t("answers.payroll_gender.#{answers.payroll_gender}"),
           "gender"
-        ]
-      end
-
-      def teacher_reference_number
-        [
-          t("further_education_payments.forms.teacher_reference_number.questions.teacher_reference_number"),
-          answers.teacher_reference_number,
-          "teacher-reference-number"
         ]
       end
 

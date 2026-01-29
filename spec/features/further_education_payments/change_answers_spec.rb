@@ -173,10 +173,6 @@ RSpec.feature "Further education change answers" do
     choose "Female"
     click_on "Continue"
 
-    expect(page).to have_content("Teacher reference number (TRN)")
-    fill_in "claim-teacher-reference-number-field", with: "1234567"
-    click_on "Continue"
-
     expect(page).to have_content("Check your answers before sending your application")
     click_link("Change how is your gender recorded on your employer’s payroll system?")
 
@@ -456,10 +452,6 @@ RSpec.feature "Further education change answers" do
 
     expect(page).to have_content("How is your gender recorded on your employer’s payroll system?")
     choose "Female"
-    click_on "Continue"
-
-    expect(page).to have_content("Teacher reference number (TRN)")
-    fill_in "claim-teacher-reference-number-field", with: "1234567"
     click_on "Continue"
 
     expect(page).to have_content("Check your answers before sending your application")

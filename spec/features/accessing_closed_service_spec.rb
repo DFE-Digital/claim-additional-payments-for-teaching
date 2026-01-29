@@ -192,10 +192,6 @@ RSpec.describe "Accessing a closed service" do
     choose "Female"
     click_on "Continue"
 
-    # teacher-reference-number
-    fill_in "claim-teacher-reference-number-field", with: "1234567"
-    click_on "Continue"
-
     # check-your-answers
     check "claim-claimant-declaration-1-field"
     click_on "Accept and send"
