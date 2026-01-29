@@ -177,7 +177,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
       is_expected.to eq(
         [
           [
-            "Which academic year did you start teaching in further education in England?",
+            "Which academic year did you start your further education (FE) teaching career in England?",
             "September 2023 to August 2024"
           ]
         ]

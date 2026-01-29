@@ -116,7 +116,7 @@ en:
         errors:
           inclusion: Select how many hours you are timetabled to teach during the current term
       further_education_teaching_start_year:
-        question: Which academic year did you start teaching in further education in England?
+        question: Which academic year did you start your further education (FE) teaching career in England?
         options:
           between_dates: September %{start_year} to August %{end_year}
           before_date: Before September %{year}
