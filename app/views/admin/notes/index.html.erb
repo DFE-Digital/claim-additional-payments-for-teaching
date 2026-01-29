@@ -4,7 +4,6 @@
   <%= govuk_back_link href: claims_backlink_path %>
 <% end %>
 
-<%= govuk_error_summary(@claim.support_ticket || SupportTicket.new) %>
 <%= govuk_error_summary(@hold_note || Note.new) %>
 <%= govuk_error_summary(@note || Note.new) %>
 
@@ -21,8 +20,6 @@
     <div class="govuk-tabs__panel">
       <div class="govuk-grid-row">
        <div class="govuk-grid-column-two-thirds">
-          <%= render "admin/support_tickets/widget", claim: @claim, support_ticket: (@claim.support_ticket || SupportTicket.new) %>
-
           <% if @claim.held? %>
             <h2 class="govuk-heading-m">On hold</h2>
 

@@ -43,7 +43,6 @@ class Claim < ApplicationRecord
   has_many :topups, dependent: :destroy
   has_many :notes, dependent: :destroy
   has_many :events, dependent: :destroy
-  has_one :support_ticket, dependent: :destroy
 
   belongs_to :eligibility, polymorphic: true, inverse_of: :claim, dependent: :destroy
   belongs_to :early_years_payment_eligibility,
