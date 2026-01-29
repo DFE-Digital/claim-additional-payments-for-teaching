@@ -28,5 +28,22 @@ class MigrateSupportTicketsToNotes < ActiveRecord::Migration[8.1]
 
     add_foreign_key :support_tickets, :claims
     add_foreign_key :support_tickets, :dfe_sign_in_users, column: :created_by_id
+
+    execute <<-SQL
+      INSERT INTO support_tickets (id, url, claim_id, created_by_id, created_at, updated_at)
+      SELECT
+        gen_random_uuid(),
+        SUBSTRING(body FROM 17),
+        claim_id,
+        created_by_id,
+        created_at,
+        updated_at
+      FROM notes
+      WHERE body LIKE 'ZenDesk ticket: %'
+    SQL
+
+    execute <<-SQL
+      DELETE FROM notes WHERE body LIKE 'ZenDesk ticket: %'
+    SQL
   end
 end
