@@ -28,5 +28,9 @@ module Admin
         statuses: Hash.new { [] }
       )
     end
+
+    def store_requested_admin_path?
+      false
+    end
   end
 end
