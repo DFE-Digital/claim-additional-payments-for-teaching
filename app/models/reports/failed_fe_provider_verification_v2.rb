@@ -32,6 +32,7 @@ module Reports
 
     def claims
       @claims ||= Claim
+        .approved
         .by_policy(Policies::FurtherEducationPayments)
         .where(academic_year:)
         .joins(:tasks)

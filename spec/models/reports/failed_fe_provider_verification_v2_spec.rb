@@ -31,7 +31,7 @@ RSpec.describe Reports::FailedFeProviderVerificationV2 do
     create(
       :claim,
       :submitted,
-      :rejected,
+      :approved,
       :further_education,
       :current_academic_year,
       eligibility: eligibility_failed_fe_provider_verification
@@ -83,7 +83,7 @@ RSpec.describe Reports::FailedFeProviderVerificationV2 do
       expect(rows[0]["Claim reference"]).to eql(claim_failed_fe_provider_verification.reference)
       expect(rows[0]["Full name"]).to eql(claim_failed_fe_provider_verification.full_name)
       expect(rows[0]["Claim amount"]).to eql(number_to_currency(claim_failed_fe_provider_verification.award_amount, precision: 0))
-      expect(rows[0]["Claim status"]).to eql("Rejected")
+      expect(rows[0]["Claim status"]).to eql("Approved awaiting payroll")
       expect(rows[0]["Decision date"]).to eql("20/01/2026")
       expect(rows[0]["Decision agent"]).to eql("Aaron Admin")
       expect(rows[0]["Failure reasons"]).to eql("performance_measures,disciplinary_action")
