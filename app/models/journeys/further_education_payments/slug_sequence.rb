@@ -57,7 +57,6 @@ module Journeys
       PAYMENT_DETAILS_SLUGS = %w[
         personal-bank-account
         gender
-        teacher-reference-number
       ].freeze
 
       RESULTS_SLUGS = %w[
@@ -241,7 +240,6 @@ module Journeys
 
         array << SLUGS_HASH["personal-bank-account"]
         array << SLUGS_HASH["gender"]
-        array << SLUGS_HASH["teacher-reference-number"]
         array << SLUGS_HASH["check-your-answers"]
         array << SLUGS_HASH["confirmation"]
 

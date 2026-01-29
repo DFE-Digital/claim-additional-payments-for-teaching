@@ -100,8 +100,5 @@ def when_further_education_journey_ready_to_submit
   choose "Female"
   click_on "Continue"
 
-  fill_in "claim-teacher-reference-number-field", with: "1234567"
-  click_on "Continue"
-
   check "claim-claimant-declaration-1-field"
 end

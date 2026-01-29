@@ -334,10 +334,6 @@ en:
         errors:
           inclusion: Select yes if you have a valid passport
           length: Passport number should be between 8 and 9 characters long
-      teacher_reference_number:
-        heading: Teacher reference number (TRN)
-        questions:
-          teacher_reference_number: "What is your TRN? (optional)"
       personal_details:
         errors:
           full_name:
