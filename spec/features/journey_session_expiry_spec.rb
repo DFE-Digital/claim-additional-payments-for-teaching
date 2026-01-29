@@ -37,7 +37,7 @@ RSpec.describe "Journey session expiry" do
     choose college.name
     click_button "Continue"
 
-    expect(page).to have_text("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_text("Which academic year did you start your further education (FE) teaching career in England?")
     choose("September 2023 to August 2024")
     click_button "Continue"
 
@@ -81,7 +81,7 @@ RSpec.describe "Journey session expiry" do
     choose college.name
     click_button "Continue"
 
-    expect(page).to have_text("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_text("Which academic year did you start your further education (FE) teaching career in England?")
     choose("September 2023 to August 2024")
     click_button "Continue"
 
