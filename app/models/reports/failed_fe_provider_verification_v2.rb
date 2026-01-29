@@ -73,6 +73,8 @@ module Reports
         ]
       end
 
+      private
+
       def failure_reasons
         return if task.nil?
 
