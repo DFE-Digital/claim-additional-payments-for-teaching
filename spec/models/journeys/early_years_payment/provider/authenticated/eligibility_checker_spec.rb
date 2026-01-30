@@ -35,8 +35,22 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::Eligibility
           journey_session: create(:early_years_payment_provider_authenticated_session) # Different journey session
         )
 
+        # approved claim, counted towards allowance
         create(
           :claim,
+          :approved,
+          policy: Policies::EarlyYearsPayments,
+          academic_year: AcademicYear.new("2025/2026"),
+          eligibility_attributes: {
+            nursery_urn: eligible_ey_provider.urn
+          },
+          journey_session: create(:early_years_payment_provider_authenticated_session) # Different journey session
+        )
+
+        # rejected claim, not counted towards allowance
+        create(
+          :claim,
+          :rejected,
           policy: Policies::EarlyYearsPayments,
           academic_year: AcademicYear.new("2025/2026"),
           eligibility_attributes: {
