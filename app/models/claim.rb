@@ -101,6 +101,7 @@ class Claim < ApplicationRecord
   scope :auto_approved, -> { approved.where(decisions: {created_by: nil}) }
   scope :approved, -> { joins(:decisions).merge(Decision.active.approved) }
   scope :rejected, -> { joins(:decisions).merge(Decision.active.rejected) }
+  scope :not_rejected, -> { where.not(id: rejected) }
   scope :approaching_decision_deadline, -> { awaiting_decision.where("submitted_at < ? AND submitted_at > ?", DECISION_DEADLINE.ago + DECISION_DEADLINE_WARNING_POINT, DECISION_DEADLINE.ago) }
   scope :passed_decision_deadline, -> { awaiting_decision.where("submitted_at < ?", DECISION_DEADLINE.ago) }
   scope :by_policy, ->(policy) { where(policy:) }
