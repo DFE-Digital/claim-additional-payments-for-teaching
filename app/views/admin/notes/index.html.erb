@@ -51,6 +51,15 @@
             <% end %>
           <% end %>
 
+          <h2 class="govuk-heading-m">Zendesk</h2>
+
+          <ul class="govuk-body">
+            <% if @claim.email_address %>
+              <li><%= govuk_link_to "View all support tickets in Zendesk by applicant email", zendesk_email_search_url(@claim.email_address), new_tab: "" %></li>
+            <% end %>
+            <li><%= govuk_link_to "View all support tickets in Zendesk by claim reference", zendesk_claim_search_url(@claim.reference), new_tab: "" %></li>
+          </ul>
+
           <h2 class="govuk-heading-m">Notes</h2>
 
           <div class="hmcts-timeline">
