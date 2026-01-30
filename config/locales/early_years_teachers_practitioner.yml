@@ -1,0 +1,52 @@
+en:
+  early_years_teachers_practitioner:
+    journey_name: "Early years teachers - practitioner"
+    feedback_email: "EY.Financial-Incentives@education.gov.uk"
+    landing_page:
+      title: "Claim a recognition payment"
+    forms:
+      sign_in:
+        title: "Sign in with GOV.UK One Login"
+      one_login_callback_success:
+        title: "You've successfully signed in to GOV.UK One Login"
+      eligibility_confirmed:
+        title: "You're eligible for a recognition payment"
+        heading: "You're eligible for a recognition payment"
+        paragraph_one: "Congratulations, you're eligible for an early years teacher recognition payment of £4,500."
+        paragraph_two_html: 'The payment might impact your benefits. You should <a class="govuk-link" href="https://www.gov.uk/benefits-calculators" target="_blank">check if these will be affected</a> first before accepting the claim.'
+        question: "Do you want to accept the payment?"
+        hint: "If you click no, you'll cancel your claim and exit the service."
+        errors:
+          inclusion: "Select yes if you want to accept the payment"
+      payment_options:
+        title: "Choose how you want to be paid"
+        lump_sum_label: "One lump sum"
+        lump_sum_hint: "You'll receive a single payment of £4,500"
+        monthly_instalments_label: "Monthly instalments"
+        monthly_instalments_hint: "You'll receive 10 monthly payments of £450"
+        errors:
+          inclusion: "Select how you want to be paid"
+      how_we_use_your_information:
+        title: "How we will use your information"
+      gender:
+        title: "What is your gender?"
+        hint: "We need this information to process your payment."
+        other_label: "Enter your gender"
+        errors:
+          inclusion: "Select your gender"
+          other_required: "Enter your gender"
+      check_your_answers:
+        title: "Check your answers before sending your application"
+        heading: "Check your answers before sending your application"
+        eligibility_section_heading: "Personal details"
+        payment_section_heading: "Payment details"
+        contact_section_heading: "Contact details"
+        payroll_section_heading: "Bank details"
+        submit_button: "Confirm and send"
+    answers:
+      payroll_gender:
+        female: "Female"
+        male: "Male"
+        non_binary: "Non-binary"
+        prefer_not_to_say: "Prefer not to say"
+
