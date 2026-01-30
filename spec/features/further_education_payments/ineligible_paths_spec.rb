@@ -75,7 +75,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_content("Which academic year did you start your further education (FE) teaching career in England?")
   end
 
   scenario "when ineligible FE provider is selected with js", js: true, flaky: true do
@@ -129,7 +129,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_content("Which academic year did you start your further education (FE) teaching career in England?")
   end
 
   scenario "when closed FE provider selected" do
@@ -174,7 +174,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_content("Which academic year did you start your further education (FE) teaching career in England?")
   end
 
   scenario "when fixed term contract and has not taught one term" do
@@ -208,7 +208,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_content("Which academic year did you start your further education (FE) teaching career in England?")
     choose("September 2023 to August 2024")
     click_button "Continue"
 
@@ -264,7 +264,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_content("Which academic year did you start your further education (FE) teaching career in England?")
     choose("September 2023 to August 2024")
     click_button "Continue"
 
@@ -322,7 +322,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_content("Which academic year did you start your further education (FE) teaching career in England?")
     choose("September 2023 to August 2024")
     click_button "Continue"
 
@@ -371,7 +371,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_content("Which academic year did you start your further education (FE) teaching career in England?")
     choose("September 2023 to August 2024")
     click_button "Continue"
 
@@ -430,7 +430,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_content("Which academic year did you start your further education (FE) teaching career in England?")
     choose("September 2023 to August 2024")
     click_button "Continue"
 
@@ -480,7 +480,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_content("Which academic year did you start your further education (FE) teaching career in England?")
     choose("September 2023 to August 2024")
     click_button "Continue"
 
@@ -543,7 +543,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_content("Which academic year did you start your further education (FE) teaching career in England?")
     choose("September 2023 to August 2024")
     click_button "Continue"
 
@@ -610,7 +610,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_content("Which academic year did you start your further education (FE) teaching career in England?")
     choose("Before September #{current_academic_year.start_year - 4}")
     click_button "Continue"
 
@@ -649,7 +649,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_content("Which academic year did you start your further education (FE) teaching career in England?")
     choose("September 2023 to August 2024")
     click_button "Continue"
 
@@ -726,7 +726,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_content("Which academic year did you start your further education (FE) teaching career in England?")
     choose("September 2023 to August 2024")
     click_button "Continue"
 
@@ -803,7 +803,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_content("Which academic year did you start your further education (FE) teaching career in England?")
     choose("September 2023 to August 2024")
     click_button "Continue"
 
@@ -845,7 +845,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_content("Which academic year did you start your further education (FE) teaching career in England?")
     choose("September 2023 to August 2024")
     click_button "Continue"
 
@@ -895,7 +895,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_content("Which academic year did you start your further education (FE) teaching career in England?")
     choose("September 2023 to August 2024")
     click_button "Continue"
 
@@ -950,7 +950,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_content("Which academic year did you start your further education (FE) teaching career in England?")
     choose("September 2023 to August 2024")
     click_button "Continue"
 
@@ -1005,7 +1005,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_content("Which academic year did you start your further education (FE) teaching career in England?")
     choose("September 2023 to August 2024")
     click_button "Continue"
 
@@ -1065,7 +1065,7 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     # further-education-teaching-start-year
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_content("Which academic year did you start your further education (FE) teaching career in England?")
     choose("September 2023 to August 2024")
     click_button "Continue"
 
