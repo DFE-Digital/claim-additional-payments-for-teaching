@@ -1,0 +1,70 @@
+<%# FIXME - handle bback link when editing %>
+
+<% content_for(:phase) { "Alpha" } %>
+
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:title),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      method: :patch,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.hidden_field :teacher_id %>
+
+      <% if f.object.removing_teacher? %>
+        <%= render partial: "remove_teacher", locals: { f: f } %>
+      <% else %>
+
+        <h1 class="govuk-heading-l">
+          <%= f.object.t(:title) %>
+        </h1>
+
+        <p class="govuk-body">
+          Tell us about qualified early years teachers that work at your setting so we can
+          check if they’re eligible for a payment.
+        </p>
+
+        <p class="govuk-body">
+          If you're not sure if a teacher is qualified, enter their details and we’ll
+          check.
+        </p>
+
+        <%= f.govuk_text_field(
+          :teacher_full_name,
+          label: { text: f.object.t([:teacher_full_name, :label]) },
+        ) %>
+
+        <%= f.govuk_email_field(
+          :teacher_email_address,
+          label: { text: f.object.t([:teacher_email_address, :label]) },
+        ) %>
+
+        <%= f.govuk_phone_field(
+          :teacher_mobile_phone_number,
+          label: { text: f.object.t([:teacher_mobile_phone_number, :label]) },
+        ) %>
+
+        <%= f.govuk_text_field(
+          :teacher_national_insurance_number,
+          label: { text: f.object.t([:teacher_national_insurance_number, :label]) },
+          hint: { text: f.object.t([:teacher_national_insurance_number, :hint]) },
+          extra_letter_spacing: true
+        ) %>
+
+        <%= f.govuk_submit %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

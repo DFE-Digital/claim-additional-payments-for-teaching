@@ -8,7 +8,16 @@ module Journeys
       POLICIES = []
 
       FORMS = [
-        FavouriteColourForm
+        ProviderEmailForm,
+        CheckYourEmailForm,
+        CheckNurseryDetailsForm,
+        UpdateNurseryDetailsForm,
+        EmployerPayeReferenceForm,
+        OrganisationEmailAddressForm,
+        ProvideTeacherDetailsForm,
+        ManageTeachersForm,
+        CheckYourAnswersForm,
+        ConfirmationForm
       ]
 
       def self.start_page_url

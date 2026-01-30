@@ -1,0 +1,59 @@
+<% content_for(:phase) { "Alpha" } %>
+
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:question),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      method: :patch,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <%= f.object.t(:question) %>
+      </h1>
+
+      <p class="govuk-body">
+        Click the link in the email to sign in.
+      </p>
+
+      <%= f.hidden_field :check_your_email_clicked, value: true %>
+
+      <%= govuk_inset_text do %>
+        <h2 class="govuk-heading-s">
+          Prototype only
+        </h2>
+
+        <p class="govuk-body">
+          In the real service, you would receive an email with a magic link.
+          Clicking that link would take you to the next step.
+        </p>
+
+        <%= f.govuk_submit("Simulate clicking magic link") %>
+      <% end %>
+
+      <h2 class="govuk-heading-s">
+        Not received an email?
+      </h2>
+
+      <p class="govuk-body">
+        Check your spam or junk folder. If it’s not there, you can
+        <%= govuk_link_to(
+          "try again",
+          claim_path(journey.routing_name, "provider-email")
+        ) %>
+      </p>
+
+    <% end %>
+  </div>
+</div>
