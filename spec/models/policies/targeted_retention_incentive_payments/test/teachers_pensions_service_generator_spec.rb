@@ -24,6 +24,16 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::Test::TeachersPensi
     create(:journey_configuration, :student_loans)
   end
 
+  describe "::import!" do
+    it "persists test TPS data" do
+      expect {
+        perform_enqueued_jobs do
+          described_class.import!
+        end
+      }.to change(TeachersPensionsService, :count).by(14)
+    end
+  end
+
   describe "#data" do
     it "includes all personas" do
       expect(subject.data.size).to eql 14

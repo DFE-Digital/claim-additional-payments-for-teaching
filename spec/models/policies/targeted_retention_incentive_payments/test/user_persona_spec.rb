@@ -1,13 +1,31 @@
 require "rails_helper"
 
 RSpec.describe Policies::TargetedRetentionIncentivePayments::Test::UserPersona do
-  describe ".all" do
+  describe "::all" do
     subject { described_class.all }
 
     it "returns an array of user personas defined in the CSV file" do
       expect(subject).to be_a(Array)
       expect(subject.count).to eq(14)
       expect(subject).to all(be_a(described_class))
+    end
+  end
+
+  describe "::import!" do
+    before do
+      allow(Policies::TargetedRetentionIncentivePayments::Test::SchoolImporter).to receive(:run)
+      allow(Policies::TargetedRetentionIncentivePayments::Test::StriAwardsGenerator).to receive(:import!)
+      allow(Policies::TargetedRetentionIncentivePayments::Test::TeachersPensionsServiceGenerator).to receive(:import!)
+      allow(Policies::TargetedRetentionIncentivePayments::Test::SchoolWorkforceCensusGenerator).to receive(:import!)
+    end
+
+    it "calls various importers" do
+      described_class.import!
+
+      expect(Policies::TargetedRetentionIncentivePayments::Test::SchoolImporter).to have_received(:run)
+      expect(Policies::TargetedRetentionIncentivePayments::Test::StriAwardsGenerator).to have_received(:import!)
+      expect(Policies::TargetedRetentionIncentivePayments::Test::TeachersPensionsServiceGenerator).to have_received(:import!)
+      expect(Policies::TargetedRetentionIncentivePayments::Test::SchoolWorkforceCensusGenerator).to have_received(:import!)
     end
   end
 
