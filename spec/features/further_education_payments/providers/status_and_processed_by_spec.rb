@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Status and Processed by labels" do
+RSpec.describe "Status and Processed by labels", feature_flag: [:fe_provider_dashboard] do
   before do
     allow(DfeSignIn::Config).to receive(:instance).and_return(OpenStruct.new(bypass?: true))
   end

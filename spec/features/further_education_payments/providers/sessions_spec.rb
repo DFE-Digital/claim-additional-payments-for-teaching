@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Provider session and authentication" do
+RSpec.describe "Provider session and authentication", feature_flag: [:fe_provider_dashboard] do
   before do
     allow(DfeSignIn::Config).to receive(:instance).and_return(OpenStruct.new(bypass?: true))
 

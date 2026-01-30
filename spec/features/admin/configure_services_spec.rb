@@ -137,6 +137,26 @@ RSpec.feature "Service configuration" do
     expect(page).not_to have_content("Sign in with DfE Identity")
   end
 
+  scenario "toggle FE provider dashboard", feature_flag: [:fe_provider_dashboard] do
+    given_journey_configuration
+    sign_in_as_service_operator
+
+    click_on "Manage services"
+    click_on "Change Claim a targeted retention incentive payment for further education teachers"
+
+    expect(FeatureFlag).to be_enabled("fe_provider_dashboard")
+
+    choose "Disabled"
+    click_button "Save feature flags"
+
+    expect(FeatureFlag).to be_disabled("fe_provider_dashboard")
+
+    choose "Enabled"
+    click_button "Save feature flags"
+
+    expect(FeatureFlag).to be_enabled("fe_provider_dashboard")
+  end
+
   def given_journey_configuration
     journey_configuration
   end
