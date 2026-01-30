@@ -3,8 +3,8 @@ module FurtherEducationPayments
     module Claims
       class VerificationsController < BaseController
         before_action :authorise_claim!
-        before_action :set_form, except: %i[show]
         before_action :redirect_if_verified, except: %i[show]
+        before_action :set_form, except: %i[show]
 
         def show
           @form = Verification::CheckAnswersForm.new(
