@@ -1276,7 +1276,6 @@ RSpec.describe Claim, type: :model do
       create(:task, claim: claim)
       create(:amendment, claim: claim)
       create(:decision, :approved, claim: claim)
-      create(:support_ticket, claim: claim)
     end
 
     it "destroys associated records" do
@@ -1286,7 +1285,6 @@ RSpec.describe Claim, type: :model do
       expect(Task.count).to be_zero
       expect(Amendment.count).to be_zero
       expect(Decision.count).to be_zero
-      expect(SupportTicket.count).to be_zero
     end
   end
 

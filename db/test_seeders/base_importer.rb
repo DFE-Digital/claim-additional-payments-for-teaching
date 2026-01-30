@@ -38,7 +38,6 @@ class BaseImporter
     Task.delete_all
     Amendment.delete_all
     Decision.delete_all
-    SupportTicket.delete_all
     Claim.delete_all
     Policies::EarlyCareerPayments::Eligibility.delete_all
     StudentLoans::Eligibility.delete_all

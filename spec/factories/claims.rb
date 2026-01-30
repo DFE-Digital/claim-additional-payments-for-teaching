@@ -362,12 +362,6 @@ FactoryBot.define do
       end
     end
 
-    trait :has_support_ticket do
-      after(:create) do |claim, _|
-        create(:support_ticket, claim:)
-      end
-    end
-
     trait :awaiting_provider_verification do
       eligibility_trait { :eligible }
 

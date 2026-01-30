@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_18_195943) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_29_172243) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -746,16 +746,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_18_195943) do
     t.index ["teacher_reference_number"], name: "index_sl_eligibility_trn"
   end
 
-  create_table "support_tickets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "claim_id"
-    t.datetime "created_at", null: false
-    t.uuid "created_by_id"
-    t.datetime "updated_at", null: false
-    t.string "url", null: false
-    t.index ["claim_id"], name: "index_support_tickets_on_claim_id"
-    t.index ["created_by_id"], name: "index_support_tickets_on_created_by_id"
-  end
-
   create_table "targeted_retention_incentive_payments_awards", force: :cascade do |t|
     t.string "academic_year", limit: 9, null: false
     t.decimal "award_amount", precision: 7, scale: 2
@@ -876,8 +866,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_18_195943) do
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "student_loans_eligibilities", "schools", column: "claim_school_id"
   add_foreign_key "student_loans_eligibilities", "schools", column: "current_school_id"
-  add_foreign_key "support_tickets", "claims"
-  add_foreign_key "support_tickets", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "targeted_retention_incentive_payments_awards", "file_uploads"
   add_foreign_key "tasks", "claims"
   add_foreign_key "tasks", "dfe_sign_in_users", column: "created_by_id"
