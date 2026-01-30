@@ -2,59 +2,59 @@
 # yarn lockfile v1
 
 
-a-sync-waterfall@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/a-sync-waterfall/-/a-sync-waterfall-1.0.1.tgz#75b6b6aa72598b497a125e7a2770f14f4c8a1fa7"
-  integrity sha512-RYTOHHdWipFUliRFMCS4X2Yn2X8M87V/OpSqWzKKOGhzqyUxzyVmhHDH9sAvG+ZuQf/TAOFsLCpMw09I1ufUnA==
-
-a11y-dialog@^8.1.4:
-  version "8.1.4"
-  resolved "https://registry.yarnpkg.com/a11y-dialog/-/a11y-dialog-8.1.4.tgz#8c6ba92a8c5b7858ea3c4261d596242e542b4e48"
-  integrity sha512-CgaQfoTg9t+O8vArlNAYN7Gzv6h1bpWRqggzCtng6TQ2im6XCpUQI+GWlPvQdovQtwzJN6MydxipXKB8qP5Zxw==
+"@govuk-one-login/service-header@^5.0.0":
+  "integrity" "sha512-C0TClWrjSWrN5U773hFr4ZdUlTWRTCVl4L2D8IrQWimCF84zXdY+LF2bfQM2RqUMIzjdpmMwARv7NS8Wohkrlw=="
+  "resolved" "https://registry.npmjs.org/@govuk-one-login/service-header/-/service-header-5.0.0.tgz"
+  "version" "5.0.0"
   dependencies:
-    focusable-selectors "^0.8.0"
+    "govuk-frontend" "^5.13.0"
+    "nunjucks" "^3.2.4"
 
-accessible-autocomplete@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/accessible-autocomplete/-/accessible-autocomplete-3.0.1.tgz#8ddf4934d0b4ba6acb28de486dd505e062cdc86e"
-  integrity sha512-xMshgc2LT5addvvfCTGzIkRrvhbOFeylFSnSMfS/PdjvvvElZkakCwxO3/yJYBWyi1hi3tZloqOJQ5kqqJtH4g==
+"a-sync-waterfall@^1.0.0":
+  "integrity" "sha512-RYTOHHdWipFUliRFMCS4X2Yn2X8M87V/OpSqWzKKOGhzqyUxzyVmhHDH9sAvG+ZuQf/TAOFsLCpMw09I1ufUnA=="
+  "resolved" "https://registry.npmjs.org/a-sync-waterfall/-/a-sync-waterfall-1.0.1.tgz"
+  "version" "1.0.1"
 
-asap@^2.0.3:
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/asap/-/asap-2.0.6.tgz#e50347611d7e690943208bbdafebcbc2fb866d46"
-  integrity sha512-BSHWgDSAiKs50o2Re8ppvp3seVHXSRM44cdSsT9FfNEUUZLOGWVCsiWaRPWM1Znn+mqZ1OfVZ3z3DWEzSp7hRA==
-
-commander@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-5.1.0.tgz#46abbd1652f8e059bddaef99bbdcb2ad9cf179ae"
-  integrity sha512-P0CysNDQ7rtVw4QIQtm+MRxV66vKFSvlsQvGYXZWR3qFU0jlMKHZZZgw8e+8DSah4UDKMqnknRDQz+xuQXQ/Zg==
-
-focusable-selectors@^0.8.0:
-  version "0.8.4"
-  resolved "https://registry.yarnpkg.com/focusable-selectors/-/focusable-selectors-0.8.4.tgz#2ee34129b29371766ce201499e3b88c6f79ea4c1"
-  integrity sha512-0XxbkD0KhOnX10qmnfF9U8DkDD8N/e4M77wMYw2Itoi4vdcoRjSkqXLZFIzkrLIOxzmzCGy88fNG1EbeXMD/zw==
-
-govuk-frontend@^5.13.0:
-  version "5.13.0"
-  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-5.13.0.tgz#11126d32a9ef0db17b19276253746da1ade4338b"
-  integrity sha512-6N3pHelWN7wftdM6e4YEzZAfattapa1gnd+Al6d5PUbfTr9D+T2dnphpNpjX75CTEhihlQqlL0RDQ3WIfZ3PSg==
-
-"govuk-one-login-service-header@https://github.com/govuk-one-login/service-header.git":
-  version "4.1.0"
-  uid c684b61f7d8f3222a7f1f2af27c3cc22c22e9347
-  resolved "https://github.com/govuk-one-login/service-header.git#c684b61f7d8f3222a7f1f2af27c3cc22c22e9347"
+"a11y-dialog@^8.1.4":
+  "integrity" "sha512-CgaQfoTg9t+O8vArlNAYN7Gzv6h1bpWRqggzCtng6TQ2im6XCpUQI+GWlPvQdovQtwzJN6MydxipXKB8qP5Zxw=="
+  "resolved" "https://registry.npmjs.org/a11y-dialog/-/a11y-dialog-8.1.4.tgz"
+  "version" "8.1.4"
   dependencies:
-    govuk-frontend "^5.13.0"
-    nunjucks "^3.2.4"
+    "focusable-selectors" "^0.8.0"
 
-nunjucks@^3.2.4:
-  version "3.2.4"
-  resolved "https://registry.yarnpkg.com/nunjucks/-/nunjucks-3.2.4.tgz#f0878eef528ce7b0aa35d67cc6898635fd74649e"
-  integrity sha512-26XRV6BhkgK0VOxfbU5cQI+ICFUtMLixv1noZn1tGU38kQH5A5nmmbk/O45xdyBhD1esk47nKrY0mvQpZIhRjQ==
+"accessible-autocomplete@^3.0.1":
+  "integrity" "sha512-xMshgc2LT5addvvfCTGzIkRrvhbOFeylFSnSMfS/PdjvvvElZkakCwxO3/yJYBWyi1hi3tZloqOJQ5kqqJtH4g=="
+  "resolved" "https://registry.npmjs.org/accessible-autocomplete/-/accessible-autocomplete-3.0.1.tgz"
+  "version" "3.0.1"
+
+"asap@^2.0.3":
+  "integrity" "sha512-BSHWgDSAiKs50o2Re8ppvp3seVHXSRM44cdSsT9FfNEUUZLOGWVCsiWaRPWM1Znn+mqZ1OfVZ3z3DWEzSp7hRA=="
+  "resolved" "https://registry.npmjs.org/asap/-/asap-2.0.6.tgz"
+  "version" "2.0.6"
+
+"commander@^5.1.0":
+  "integrity" "sha512-P0CysNDQ7rtVw4QIQtm+MRxV66vKFSvlsQvGYXZWR3qFU0jlMKHZZZgw8e+8DSah4UDKMqnknRDQz+xuQXQ/Zg=="
+  "resolved" "https://registry.npmjs.org/commander/-/commander-5.1.0.tgz"
+  "version" "5.1.0"
+
+"focusable-selectors@^0.8.0":
+  "integrity" "sha512-0XxbkD0KhOnX10qmnfF9U8DkDD8N/e4M77wMYw2Itoi4vdcoRjSkqXLZFIzkrLIOxzmzCGy88fNG1EbeXMD/zw=="
+  "resolved" "https://registry.npmjs.org/focusable-selectors/-/focusable-selectors-0.8.4.tgz"
+  "version" "0.8.4"
+
+"govuk-frontend@^5.13.0":
+  "integrity" "sha512-6N3pHelWN7wftdM6e4YEzZAfattapa1gnd+Al6d5PUbfTr9D+T2dnphpNpjX75CTEhihlQqlL0RDQ3WIfZ3PSg=="
+  "resolved" "https://registry.npmjs.org/govuk-frontend/-/govuk-frontend-5.13.0.tgz"
+  "version" "5.13.0"
+
+"nunjucks@^3.2.4":
+  "integrity" "sha512-26XRV6BhkgK0VOxfbU5cQI+ICFUtMLixv1noZn1tGU38kQH5A5nmmbk/O45xdyBhD1esk47nKrY0mvQpZIhRjQ=="
+  "resolved" "https://registry.npmjs.org/nunjucks/-/nunjucks-3.2.4.tgz"
+  "version" "3.2.4"
   dependencies:
-    a-sync-waterfall "^1.0.0"
-    asap "^2.0.3"
-    commander "^5.1.0"
+    "a-sync-waterfall" "^1.0.0"
+    "asap" "^2.0.3"
+    "commander" "^5.1.0"
 
 prettier@^3.8.1:
   version "3.8.1"
