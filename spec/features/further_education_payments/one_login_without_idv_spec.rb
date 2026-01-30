@@ -210,10 +210,6 @@ RSpec.feature "Further education payments" do
     choose "Female"
     click_on "Continue"
 
-    expect(page).to have_content("Teacher reference number (TRN)")
-    fill_in "claim-teacher-reference-number-field", with: "1234567"
-    click_on "Continue"
-
     expect(page).to have_content("Check your answers before sending your application")
 
     check "claim-claimant-declaration-1-field"
@@ -237,7 +233,6 @@ RSpec.feature "Further education payments" do
 
     eligibility = Policies::FurtherEducationPayments::Eligibility.last
 
-    expect(eligibility.teacher_reference_number).to eql("1234567")
     expect(eligibility.work_email).to eql("john.smith@example.com")
     expect(eligibility.work_email_verified).to be_truthy
 

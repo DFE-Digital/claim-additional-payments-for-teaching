@@ -21,11 +21,6 @@
 
     <%= govuk_summary_list do |summary_list| %>
       <% summary_list.with_row do |row| %>
-        <% row.with_key { "TRN" } %>
-        <% row.with_value { @answers_presenter.teacher_reference_number } %>
-      <% end %>
-
-      <% summary_list.with_row do |row| %>
         <% row.with_key { "Date submitted" } %>
         <% row.with_value { l(@answers_presenter.submitted_at.to_date) } %>
       <% end %>
