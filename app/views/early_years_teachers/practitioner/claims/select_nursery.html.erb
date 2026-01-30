@@ -1,0 +1,55 @@
+<% content_for(:phase) { "Alpha" } %>
+
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:title),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      method: :patch,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <%= @form.t(:title) %>
+      </h1>
+
+      <div
+        data-school-search-container="true"
+        data-school-search-path="<%= nursery_searches_path %>"
+        data-school-search-school-id-target="#<%= f.field_id(:nursery_id) %>"
+        data-school-search-search-box-target="#claim-nursery-search-field"
+        data-school-search-min_length="3"
+        data-school-search-display-menu="overlay"
+        data-school-search-input-classes="<%= class_names(
+          "govuk-input",
+          "govuk-input--error": f.object.errors[:nursery_id].present?
+        ) %>"
+        class="<%= class_names(
+          "govuk-form-group",
+          "govuk-form-group--error": f.object.errors[:nursery_id].present?
+        ) %>"
+      >
+        <%= f.hidden_field :nursery_id %>
+
+        <%= errors_tag f.object, :nursery_id %>
+
+        <%= f.govuk_text_field(
+          :nursery_search,
+          label: { text: f.object.t([:nursery_search, :label]) }
+        ) %>
+      </div>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

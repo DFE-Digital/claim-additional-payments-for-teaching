@@ -8,11 +8,29 @@ module Journeys
       POLICIES = []
 
       FORMS = [
-        FavouriteColourForm
+        SignInForm,
+        OneLoginCallbackSuccessForm,
+        SelectNurseryForm,
+        EmployerRefForm,
+        NationalInsuranceNumberForm,
+        TeacherReferenceNumberForm,
+        CheckYourAnswersPartOneForm,
+        EligibilityConfirmedForm,
+        PaymentNotAcceptedForm,
+        PaymentOptionsForm,
+        HowWeUseYourInformationForm,
+        PersonalBankAccountForm,
+        GenderForm,
+        CheckYourAnswersForm,
+        ConfirmationForm
       ]
 
       def self.start_page_url
         Rails.application.routes.url_helpers.landing_page_path(ROUTING_NAME)
+      end
+
+      def self.answers_presenter
+        AnswersPresenter
       end
     end
   end
