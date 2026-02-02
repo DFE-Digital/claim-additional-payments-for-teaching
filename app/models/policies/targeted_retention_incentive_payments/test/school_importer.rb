@@ -9,9 +9,11 @@ module Policies
         def import!
           ActiveRecord::Base.transaction do
             school_names.each_with_index do |name, index|
-              School.create!(
+              urn = 999999 - index
+
+              School.find_or_create_by!(
                 name:,
-                urn: index,
+                urn:,
                 school_type: :community_school,
                 school_type_group: :la_maintained,
                 phase: :secondary,

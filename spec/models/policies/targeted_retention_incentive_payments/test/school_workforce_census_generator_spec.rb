@@ -18,6 +18,16 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::Test::SchoolWorkfor
     )
   end
 
+  describe "::import!" do
+    it "persists test school workforce census data" do
+      expect {
+        perform_enqueued_jobs do
+          described_class.import!
+        end
+      }.to change(SchoolWorkforceCensus, :count).by(5)
+    end
+  end
+
   describe "#data" do
     it "only includes eligible data" do
       expect(subject.data.size).to eql 5
