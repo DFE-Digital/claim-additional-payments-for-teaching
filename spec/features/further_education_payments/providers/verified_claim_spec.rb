@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Provider verified claims dashboard" do
+RSpec.describe "Provider verified claims dashboard", feature_flag: [:fe_provider_dashboard] do
   before do
     allow(DfeSignIn::Config).to receive(:instance).and_return(OpenStruct.new(bypass?: true))
   end

@@ -1,0 +1,12 @@
+<% content_for(:page_title, page_title("Sorry, the service is unavailable", journey: current_journey_routing_name)) %>
+
+<h1 class="govuk-heading-xl">Sorry, the service is unavailable</h1>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <p class="govuk-body">
+      Contact <%= govuk_mail_to support_email_address(current_journey_routing_name), support_email_address(current_journey_routing_name) %>
+      if you need further information.
+    </p>
+  </div>
+</div>
