@@ -60,7 +60,7 @@ module Policies
         def import!
           form = Policies::TargetedRetentionIncentivePayments::AwardCsvImporter
             .new(
-              academic_year: AcademicYear.new("2025/2026"),
+              academic_year: AcademicYear.current,
               csv_data: to_file,
               admin_user: nil
             )
