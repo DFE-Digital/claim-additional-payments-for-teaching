@@ -1,0 +1,3 @@
+claim_year,expected_result,notes,school_name,first_name,last_name,trn,date_of_birth,nino
+2025/26,eligible,,eligible_student_loan_school,John,Doe,1234567,1/1/1970,AB123456C
+2025/26,ineligible,,ineligible_student_loan_school,John,Doe,1234567,1/1/1970,AB123456C
