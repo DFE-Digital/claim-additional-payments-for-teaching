@@ -64,6 +64,7 @@ module Journeys
         claim.journey_session = journey_session
         claim.reference ||= generate_reference
         claim.submitted_at = Time.zone.now
+        claim.decision_deadline = claim.decision_deadline_date
       end
 
       def set_eligibility_attributes(eligibility)
