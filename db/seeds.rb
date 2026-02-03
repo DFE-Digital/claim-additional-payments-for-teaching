@@ -275,4 +275,5 @@ end
 
 if ENV["ENVIRONMENT_NAME"].start_with?("review")
   Policies::TargetedRetentionIncentivePayments::Test::UserPersona.import!
+  Policies::StudentLoans::Test::UserPersona.import!
 end
