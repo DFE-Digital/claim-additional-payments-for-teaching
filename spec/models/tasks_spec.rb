@@ -98,8 +98,6 @@ RSpec.describe Tasks do
         end
       end
 
-      # FIXME determine what we should do in this scenario, this was the
-      # existing behaviour
       context "when a non-specific task has no claim verifier match" do
         let(:task_name) { "payroll_details" }
 
@@ -114,7 +112,7 @@ RSpec.describe Tasks do
           )
         end
 
-        it { is_expected.to eq([nil, nil]) }
+        it { is_expected.to eq(["Incomplete", "grey"]) }
       end
     end
 

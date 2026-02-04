@@ -41,6 +41,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_120138) do
     t.index ["payment_id"], name: "index_claim_payments_on_payment_id"
   end
 
+  create_table "claimant_flags", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "identification_attribute", null: false
+    t.string "identification_value", null: false
+    t.string "policy", null: false
+    t.uuid "previous_claim_id"
+    t.string "reason", null: false
+    t.string "suggested_action"
+    t.datetime "updated_at", null: false
+    t.index ["previous_claim_id"], name: "index_claimant_flags_on_previous_claim_id"
+  end
+
   create_table "claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "academic_year", limit: 9
     t.string "address_line_1", limit: 100
@@ -836,6 +848,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_120138) do
   add_foreign_key "amendments", "dfe_sign_in_users", column: "dfe_sign_in_users_id"
   add_foreign_key "claim_payments", "claims"
   add_foreign_key "claim_payments", "payments"
+  add_foreign_key "claimant_flags", "claims", column: "previous_claim_id"
   add_foreign_key "claims", "journeys_sessions"
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "early_career_payments_eligibilities", "schools", column: "current_school_id"

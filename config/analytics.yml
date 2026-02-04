@@ -90,6 +90,14 @@ shared:
     - policy # string, which policy this claim is for
     - claimant_declaration # boolean, did claimant agree to declaration
     - decision_deadline # date, SLA date for OPs to make a decision on claim
+  :claimant_flags:
+    - id # uuid, identifies the claimant flag
+    - created_at # datetime, when the flag was created
+    - updated_at # datetime, when the flag was last updated
+    - reason # string, key indicating why the claimant was flagged
+    - suggested_action # string, suggested action for ops to take
+    - policy # string, which policy this flag relates to
+    - previous_claim_id # uuid, references previous claim that triggered this flag
   :decisions:
     - id # uuid, identifies the decision
     - claim_id # uuid, references the associated claim

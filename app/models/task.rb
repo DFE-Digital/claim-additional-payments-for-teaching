@@ -38,6 +38,7 @@ class Task < ApplicationRecord
     first_year_application
     continuous_employment
     fe_repeat_applicant_check
+    claimant_check
   ].freeze
 
   NAMES.each { |name| scope name.to_sym, -> { where(name: name) } }

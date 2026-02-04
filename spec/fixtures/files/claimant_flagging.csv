@@ -1,0 +1,5 @@
+policy,identification_attribute,identification_value,reason,suggested_action
+FurtherEducationPayments,national_insurance_number,AB123456C,clawback,check with manager
+FurtherEducationPayments,national_insurance_number,AB123456A,clawback,check with manager
+EarlyYearsPayments,national_insurance_number,AB123456Z,clawback,
+
