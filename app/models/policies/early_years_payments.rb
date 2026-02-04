@@ -79,7 +79,7 @@ module Policies
     def decision_deadline_date(claim)
       return if claim.eligibility.start_date.blank?
 
-      (claim.eligibility.start_date + RETENTION_PERIOD + Claim::DECISION_DEADLINE).to_date
+      (claim.eligibility.start_date + RETENTION_PERIOD + decision_deadline_in_weeks).to_date
     end
 
     def mailer
