@@ -170,10 +170,6 @@ RSpec.feature "Further education payments" do
     choose "Female"
     click_on "Continue"
 
-    expect(page).to have_content("Teacher reference number (TRN)")
-    fill_in "claim-teacher-reference-number-field", with: "1234567"
-    click_on "Continue"
-
     expect(page).to have_content("Check your answers before sending your application")
     expect(page).not_to have_content("Do you have a valid passport?")
     expect(page).not_to have_content("Passport number")
@@ -192,10 +188,6 @@ RSpec.feature "Further education payments" do
     expect(claim.surname).to eql("USER")
     expect(claim.onelogin_idv_full_name).to eql("TEST USER")
     expect(claim.student_loan_plan).to eq "plan_1"
-
-    eligibility = Policies::FurtherEducationPayments::Eligibility.last
-
-    expect(eligibility.teacher_reference_number).to eql("1234567")
 
     expect(page).to have_content("You applied for a further education targeted retention incentive payment")
 
