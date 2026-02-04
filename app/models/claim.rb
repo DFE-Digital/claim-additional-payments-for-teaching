@@ -455,7 +455,7 @@ class Claim < ApplicationRecord
     if read_attribute(:decision_deadline).nil?
       decision_deadline_date
     else
-      read_attribute(:decision_deadline)
+      super
     end
   end
 
