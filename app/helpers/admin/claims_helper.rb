@@ -91,7 +91,7 @@ module Admin
       [
         [translate("admin.started_at"), l(claim.started_at)],
         [translate("admin.submitted_at"), l(claim.submitted_at)],
-        [translate("admin.decision_deadline"), l(claim.decision_deadline_date)],
+        [translate("admin.decision_deadline"), l(claim.decision_deadline)],
         [translate("admin.decision_overdue"), decision_deadline_warning(claim)]
       ]
     end
@@ -118,12 +118,12 @@ module Admin
     end
 
     def decision_deadline_warning(claim, opts = {})
-      if claim.decision_deadline_date.nil?
+      if claim.decision_deadline.nil?
         # EY claim where the practitioner journey hasn't been completed
         return I18n.t("admin.decision_overdue_not_applicable")
       end
 
-      days_until_decision_deadline = days_between(Date.today, claim.decision_deadline_date)
+      days_until_decision_deadline = days_between(Date.today, claim.decision_deadline)
 
       if days_until_decision_deadline.days > Claim::DECISION_DEADLINE_WARNING_POINT
         return opts.key?(:na_text) ? opts[:na_text] : I18n.t("admin.decision_overdue_not_applicable")

@@ -95,7 +95,7 @@ module Policies
       end
 
       def decision_deadline
-        formatted_date(claim.decision_deadline_date) if claim.submitted?
+        formatted_date(claim.decision_deadline) if claim.submitted?
       end
     end
   end

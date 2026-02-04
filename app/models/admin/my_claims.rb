@@ -9,14 +9,14 @@ module Admin
     def overdue
       active_scope
         .filter do |claim|
-          claim.decision_deadline_date < Date.today
+          claim.decision_deadline < Date.today
         end
     end
 
     def due_today
       active_scope
         .filter do |claim|
-          claim.decision_deadline_date == Date.today
+          claim.decision_deadline == Date.today
         end
     end
 
@@ -25,7 +25,7 @@ module Admin
 
       active_scope
         .filter do |claim|
-          range.include?(claim.decision_deadline_date)
+          range.include?(claim.decision_deadline)
         end
     end
 
@@ -37,7 +37,7 @@ module Admin
 
     def active_claims
       @active_claims ||= active_scope.sort_by do |claim|
-        [claim.decision_deadline_date || future_date, claim.submitted_at || future_date]
+        [claim.decision_deadline || future_date, claim.submitted_at || future_date]
       end
     end
 

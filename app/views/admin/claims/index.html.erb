@@ -76,7 +76,7 @@
               <td class="govuk-table__cell"><%= identity_confirmation_task_claim_verifier_match_status_tag(claim) %></td>
               <td class="govuk-table__cell"><%= I18n.t("#{claim.policy.locale_key}.policy_acronym") %></td>
               <td class="govuk-table__cell"><%= claim_submitted_at(claim) %></td>
-              <td class="govuk-table__cell"><%= l(claim.decision_deadline_date) if claim.decision_deadline_date %></td>
+              <td class="govuk-table__cell"><%= l(claim.decision_deadline) if claim.decision_deadline %></td>
               <td class="govuk-table__cell"><%= claim.assigned_to.present? ? claim.assigned_to.full_name.titleize : nil %></td>
             </tr>
           <% end %>

@@ -50,8 +50,8 @@ module Admin
         @claim.assigned_to
       end
 
-      def decision_deadline_date
-        @claim.decision_deadline_date
+      def decision_deadline
+        @claim.decision_deadline
       end
 
       def tasks
@@ -169,10 +169,9 @@ module Admin
     end
 
     def claims
-      @claims ||= claim_scope.map do |claim|
+      @claims ||= claim_scope.order(:decision_deadline).map do |claim|
         ClaimPresenter.new(claim: claim, available_tasks: policy_tasks)
       end.select { |presenter| show_claim?(presenter) }
-        .sort_by(&:decision_deadline_date)
     end
 
     def policy_tasks

@@ -85,7 +85,7 @@
   <% table.with_body do |body| %>
     <% @my_claims.active_claims.each do |claim| %>
       <% body.with_row do |row| %>
-        <% deadline = claim.decision_deadline_date ? l(claim.decision_deadline_date) : "N/A" %>
+        <% deadline = claim.decision_deadline ? l(claim.decision_deadline) : "N/A" %>
 
         <% row.with_cell(text: govuk_link_to(claim.reference, admin_claim_tasks_path(claim))) %>
         <% row.with_cell(text: claim.full_name) %>
