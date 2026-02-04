@@ -348,13 +348,25 @@ RSpec.describe "Targeted retention incentives ineligible paths" do
           trn: "1234567",
           params: {birthdate: "1953-10-23", nino: "AB123456C"},
           body: {
-            qualified_teacher_status: {
-              qts_date: "1990-07-01"
+            qts: {
+              holdsFrom: "1990-07-01"
             },
-            initial_teacher_training: {
-              subject1: "physics",
-              subject1_code: "F300"
-            }
+            routesToProfessionalStatuses: [
+              {
+                holdsFrom: "1990-07-01",
+                trainingSubjects: [
+                  {
+                    name: "physics",
+                    reference: "F300"
+                  }
+                ],
+                trainingStartDate: "1990-01-01",
+                trainingEndDate: nil,
+                routeToProfessionalStatusType: {
+                  name: "BA (Hons)"
+                }
+              }
+            ]
           }
         )
 
@@ -469,12 +481,25 @@ RSpec.describe "Targeted retention incentives ineligible paths" do
           trn: "1234567",
           params: {birthdate: "1940-01-01", nino: "AB123456C"},
           body: {
-            initial_teacher_training: {
-              subject1: "crytpozoology"
+            qts: {
+              holdsFrom: itt_year
             },
-            qualified_teacher_status: {
-              qts_date: itt_year
-            }
+            routesToProfessionalStatuses: [
+              {
+                holdsFrom: itt_year,
+                trainingSubjects: [
+                  {
+                    name: "crytpozoology",
+                    reference: "XXXXX"
+                  }
+                ],
+                trainingStartDate: itt_year,
+                trainingEndDate: nil,
+                routeToProfessionalStatusType: {
+                  name: "BA (Hons)"
+                }
+              }
+            ]
           }
         )
 

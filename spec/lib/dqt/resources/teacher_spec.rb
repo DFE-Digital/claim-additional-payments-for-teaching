@@ -8,17 +8,25 @@ RSpec.describe Dqt::TeacherResource do
     let(:birthdate) { "1981-01-01" }
     let(:nino) { "AB123123A" }
 
-    subject(:result) { described_class.new(client).find(trn, birthdate:, nino:) }
+    subject(:result) do
+      described_class.new(client)
+        .find(
+          trn,
+          include: "alerts,induction,routesToProfessionalStatuses"
+        )
+    end
 
     context "when DQT returns a payload" do
       let(:status) { 200 }
+
       let(:body) do
         {
-          qualified_teacher_status: {
-            qts_date: qts_date.to_s
+          qts: {
+            holdsFrom: qts_date.to_s
           }
         }
       end
+
       let(:qts_date) { (Date.today - 1.year) }
 
       before { stub_qualified_teaching_statuses_show(trn:, params: {birthdate:, nino:}, body:, status:) }
@@ -34,7 +42,7 @@ RSpec.describe Dqt::TeacherResource do
       let(:status) { 404 }
       let(:body) { nil }
 
-      before { stub_dqt_empty_response(trn:, params: {birthdate:, nino:}) }
+      before { stub_dqt_empty_response(trn:) }
 
       it { is_expected.to be nil }
     end

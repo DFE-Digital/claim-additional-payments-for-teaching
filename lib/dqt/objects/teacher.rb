@@ -1,27 +1,31 @@
 module Dqt
   class Teacher < Object
     def date_of_birth
-      date_reader(dob)
+      date_reader(dateOfBirth)
     end
 
     def first_name
-      string_reader(name) do |string|
-        string.split.first
-      end
+      string_reader(firstName)
     end
 
     def surname
-      string_reader(name) do |string|
-        string.split.last
-      end
+      string_reader(lastName)
+    end
+
+    def national_insurance_number
+      string_reader(nationalInsuranceNumber)
+    end
+
+    def teacher_reference_number
+      string_reader(trn)
     end
 
     def induction_start_date
-      date_reader(induction&.start_date)
+      date_reader(induction&.startDate)
     end
 
     def induction_completion_date
-      date_reader(induction&.completion_date)
+      date_reader(induction&.completedDate)
     end
 
     def induction_status
@@ -29,29 +33,53 @@ module Dqt
     end
 
     def qts_award_date
-      date_reader(qualified_teacher_status&.qts_date)
+      date_reader(qts&.holdsFrom)
     end
 
     def itt_subject_codes
-      return [] unless itt.respond_to?(:subject1_code)
+      return [] if routesToProfessionalStatuses.blank?
 
-      (1..3).filter_map do |n|
-        string_reader(itt&.send("subject#{n}_code"))
-      end
+      subjects = routesToProfessionalStatuses.map do |route|
+        route&.trainingSubjects
+      end.flatten.compact
+
+      subjects.map do |subject|
+        subject&.reference
+      end.compact
     end
 
     def itt_subjects
-      (1..3).filter_map do |n|
-        string_reader(itt&.send("subject#{n}"))
-      end
+      return [] if routesToProfessionalStatuses.blank?
+
+      subjects = routesToProfessionalStatuses.map do |route|
+        route&.trainingSubjects
+      end.flatten.compact
+
+      subjects.map do |subject|
+        subject&.name
+      end.compact
     end
 
+    # Returns the most recent route start date if multiple routes
     def itt_start_date
-      date_reader(itt.presence&.programme_start_date)
+      return if routesToProfessionalStatuses.blank?
+
+      most_recent_route = routesToProfessionalStatuses
+        .reject { |r| r.trainingStartDate.blank? }
+        .max_by { |r| r.trainingStartDate }
+
+      date_reader(most_recent_route&.trainingStartDate)
     end
 
+    # Returns the most recent qualification name
     def qualification_name
-      string_reader(itt&.qualification)
+      return if routesToProfessionalStatuses.blank?
+
+      most_recent_route = routesToProfessionalStatuses
+        .reject { |r| r.trainingStartDate.blank? }
+        .max_by { |r| r.holdsFrom }
+
+      string_reader(most_recent_route&.routeToProfessionalStatusType&.name)
     end
 
     def degree_codes
@@ -68,20 +96,12 @@ module Dqt
       ).pluck(:description)
     end
 
-    def national_insurance_number
-      string_reader(ni_number)
-    end
-
-    def teacher_reference_number
-      string_reader(trn)
-    end
-
-    def itt
-      initial_teacher_training
-    end
-
     def active_alert?
-      boolean_reader(active_alert)
+      return false if alerts.blank?
+
+      alerts
+        .reject { |a| a.endDate.present? }
+        .any?
     end
   end
 end

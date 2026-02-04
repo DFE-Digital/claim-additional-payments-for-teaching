@@ -12,7 +12,7 @@ ONELOGIN_REDIRECT_BASE_URL: https://test.claim-additional-teaching-payment.servi
 ONELOGIN_DID_URL: https://identity.integration.account.gov.uk/.well-known/did.json
 ONELOGIN_JWKS_URL: https://oidc.integration.account.gov.uk/.well-known/jwks.json
 
-DQT_API_URL: https://test.teacher-qualifications-api.education.gov.uk/v1
+DQT_API_URL: https://preprod.teacher-qualifications-api.education.gov.uk/v3/
 DQT_BASE_URL: https://test-api-customerengagement.platform.education.gov.uk/dqt-crm/v1/
 
 HMRC_API_BASE_URL: https://test-api.service.hmrc.gov.uk

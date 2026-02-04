@@ -21,8 +21,7 @@ RSpec.describe Dqt::Client, type: :request do
     subject(:subject) do
       Dqt::Client.new.teacher.find(
         trn,
-        birthdate: params[:birthdate],
-        nino: params[:nino]
+        include: "alerts,induction,routesToProfessionalStatuses"
       )
     end
 

@@ -16,8 +16,7 @@ class ClaimVerifierJob < ApplicationJob
     else
       Dqt::Client.new.teacher.find(
         claim.eligibility.teacher_reference_number,
-        birthdate: claim.date_of_birth.to_s,
-        nino: claim.national_insurance_number
+        include: "alerts,induction,routesToProfessionalStatuses"
       )
     end
   end

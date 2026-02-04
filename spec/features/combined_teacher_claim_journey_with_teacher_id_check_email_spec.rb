@@ -17,7 +17,7 @@ RSpec.feature "Combined journey with Teacher ID email check" do
     school
     freeze_time
     set_mock_auth(trn, {date_of_birth:, nino:})
-    stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
+    stub_dqt_empty_response(trn:)
     mock_claims_controller_address_data
   end
 

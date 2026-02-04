@@ -17,8 +17,8 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   let(:nino) { "AB123123A" }
   let(:eligible_dqt_body) do
     {
-      qualified_teacher_status: {
-        qts_date: academic_date.to_s
+      qts: {
+        holdsFrom: academic_date.to_s
       }
     }
   end

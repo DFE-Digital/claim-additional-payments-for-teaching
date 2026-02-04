@@ -17,7 +17,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
 
   scenario "Teacher makes claim for 'Student Loans' by logging in with teacher_id and selects yes to details confirm" do
     set_mock_auth(trn, {date_of_birth:, nino:})
-    stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
+    stub_dqt_empty_response(trn:)
 
     visit landing_page_path(Journeys::TeacherStudentLoanReimbursement.routing_name)
 
@@ -178,7 +178,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
 
   scenario "When user is logged in with Teacher ID and NINO is not supplied" do
     set_mock_auth(trn, {date_of_birth:, nino: nil})
-    stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino: ""})
+    stub_dqt_empty_response(trn:)
 
     visit landing_page_path(Journeys::TeacherStudentLoanReimbursement.routing_name)
     click_on "Start now"

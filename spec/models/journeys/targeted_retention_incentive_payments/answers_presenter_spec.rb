@@ -112,14 +112,25 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::AnswersPresenter, t
           answers: {
             details_check: true,
             dqt_teacher_status: {
-              qualified_teacher_status: {
-                qts_date: "2024-01-01"
+              qts: {
+                holdsFrom: "2024-01-01"
               },
-              initial_teacher_training: {
-                subject1: "mathematics",
-                subject1_code: "G100",
-                qualification: "BA (Hons)"
-              }
+              routesToProfessionalStatuses: [
+                {
+                  holdsFrom: "2024-01-01",
+                  trainingSubjects: [
+                    {
+                      name: "mathematics",
+                      reference: "G100"
+                    }
+                  ],
+                  trainingStartDate: "2023-01-09",
+                  trainingEndDate: nil,
+                  routeToProfessionalStatusType: {
+                    name: "BA (Hons)"
+                  }
+                }
+              ]
             },
             current_school_id: school.id,
             nqt_in_academic_year_after_itt: true,

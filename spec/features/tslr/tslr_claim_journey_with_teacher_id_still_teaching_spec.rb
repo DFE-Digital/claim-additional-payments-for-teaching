@@ -27,7 +27,7 @@ RSpec.feature "TSLR journey with Teacher ID still teaching school playback" do
     create(:teachers_pensions_service, teacher_reference_number: trn, end_date: recent_tps_full_months.ago, school_urn: eligible_school.establishment_number, la_urn: eligible_school.local_authority.code)
 
     set_mock_auth(trn, {date_of_birth:, nino:})
-    stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
+    stub_dqt_empty_response(trn:)
   end
 
   after do
