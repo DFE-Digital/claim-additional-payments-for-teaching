@@ -140,6 +140,11 @@ en:
       fe_repeat_applicant_check:
         name: Repeat applicant check
         title: Confirm teaching start year matches previous claims
+      claimant_check:
+        name: Claimant check
+        title: Review the reason for flagging this claim
+        reasons:
+          clawback: "Previous claims by this claimant have been clawed back"
     undo_decision:
       approved: "Undo approval"
       rejected: "Undo rejection"
@@ -425,6 +430,8 @@ en:
           title: "Does the claimant’s student loan plan match the information we hold about their loan?"
         fe_repeat_applicant_check:
           title: "Has a repeat check been performed for this claimant?"
+        claimant_check:
+          title: "Is this claim still valid despite the claimant being flagged for review?"
   early_years_payments:
     admin:
       email_address: Contact email

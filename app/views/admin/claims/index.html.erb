@@ -14,6 +14,15 @@
     <%= link_to "Upload SLC data", new_admin_student_loans_data_upload_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
     <%= link_to "Upload fraud prevention data", new_admin_fraud_risk_csv_upload_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
     <%= link_to "Reports", admin_reports_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
+    <% if FeatureFlag.enabled?(:claimant_flagging) %>
+      <%= link_to(
+        "Upload flagged claimants CSV",
+        new_admin_claimant_flags_csv_upload_path,
+        class: "govuk-button govuk-button--secondary",
+        data: { module: "govuk-button" },
+        role: :button
+      ) %>
+    <% end %>
     <% if FeatureFlag.enabled?("admin_task_lists") %>
       <%= link_to("Tasks", admin_task_lists_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button) %>
     <% end %>

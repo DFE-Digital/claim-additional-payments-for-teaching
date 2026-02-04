@@ -1,0 +1,41 @@
+<% content_for(:page_title) do %>
+  <% page_title("Claim #{@claim.reference} claimant check") %>
+<% end %>
+
+<% content_for :back_link do %>
+  <%= govuk_back_link href: admin_claim_tasks_path(@claim) %>
+<% end %>
+
+<%= render(
+  claim_summary_view,
+  claim: @claim,
+  heading: "Claimant check"
+) %>
+
+<h2 class="govuk-heading-m">
+  Claimant check
+</h2>
+
+<div class="govuk-!-margin-bottom-9">
+  <%= govuk_list do %>
+    <% @form.task.data.fetch("flags").each do |flag| %>
+      <%= tag.li do %>
+        <%= govuk_warning_text(text: t(
+          [
+            "admin",
+            "tasks",
+            "claimant_check",
+            "reasons",
+            flag.fetch("reason")
+          ].join("."),
+        )) %>
+
+        <% if flag["suggested_action"] %>
+          <%= govuk_inset_text(text: "Suggested action: " + flag.fetch("suggested_action")) %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
+
+<%= render("form") %>

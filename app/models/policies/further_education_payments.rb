@@ -22,7 +22,8 @@ module Policies
       AutomatedChecks::ClaimVerifiers::Employment,
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
       AutomatedChecks::ClaimVerifiers::FraudRisk,
-      AutomatedChecks::ClaimVerifiers::FeRepeatApplicantCheck
+      AutomatedChecks::ClaimVerifiers::FeRepeatApplicantCheck,
+      AutomatedChecks::ClaimVerifiers::ClaimantCheck
     ]
 
     # Options shown to admins when rejecting a claim

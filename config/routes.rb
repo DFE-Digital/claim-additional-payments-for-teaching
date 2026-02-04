@@ -181,6 +181,8 @@ Rails.application.routes.draw do
 
     resources :early_years_providers, only: [:index]
 
+    resources :claimant_flags_csv_uploads, only: [:new, :create]
+
     get "refresh-session", to: "sessions#refresh", as: :refresh_session
 
     patch "allocate/:id", to: "allocations#allocate", as: :allocate
