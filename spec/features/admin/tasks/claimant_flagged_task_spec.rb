@@ -19,6 +19,12 @@ RSpec.describe "Claimant flagging" do
 
     claim = submit_fe_claim_for_flagged_claimant
 
+    visit new_admin_claim_decision_path(claim)
+
+    expect(page).to have_content(
+      "You cannot approve this claim until the Claimant check task is passed"
+    )
+
     visit admin_claim_tasks_path(claim)
 
     expect(page).to have_content("Claimant check")
@@ -35,6 +41,12 @@ RSpec.describe "Claimant flagging" do
     ) { choose "Yes" }
 
     click_on "Save and continue"
+
+    visit new_admin_claim_decision_path(claim)
+
+    expect(page).not_to have_content(
+      "You cannot approve this claim until the Claimant check task is passed"
+    )
   end
 
   def submit_fe_claim_for_flagged_claimant
