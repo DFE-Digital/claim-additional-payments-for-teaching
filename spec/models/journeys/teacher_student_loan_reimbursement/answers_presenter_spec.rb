@@ -31,7 +31,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::AnswersPresenter, type
 
     it "returns an array of questions, answers, and slugs for displaying to the user for review" do
       expected_answers = [
-        [I18n.t("student_loans.forms.qts_year.questions.qts_award_year"), "Between the start of the #{(journey_configuration.current_academic_year - 11).to_s(:long)} academic year and the end of the 2020 to 2021 academic year", "qts-year"],
+        [I18n.t("student_loans.forms.qts_year.questions.qts_award_year"), "Between the start of the #{(journey_configuration.current_academic_year - 12).to_s(:long)} academic year and the end of the 2020 to 2021 academic year", "qts-year"],
         [claim_school_question, journey_session.answers.claim_school.name, "claim-school"],
         [I18n.t("student_loans.forms.current_school.question"), journey_session.answers.current_school.name, "still-teaching"],
         [subjects_taught_question(school_name: journey_session.answers.claim_school.name), "Chemistry and Physics", "subjects-taught"],
@@ -46,7 +46,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::AnswersPresenter, type
       journey_session.answers.academic_year = "2027/2028"
 
       qts_answer = answers[0][1]
-      expect(qts_answer).to eq("Between the start of the 2016 to 2017 academic year and the end of the 2020 to 2021 academic year")
+      expect(qts_answer).to eq("Between the start of the 2015 to 2016 academic year and the end of the 2020 to 2021 academic year")
     end
 
     context "when the QTS year is before the cut off date" do
