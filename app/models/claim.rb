@@ -208,6 +208,7 @@ class Claim < ApplicationRecord
 
     submitted? &&
       !held? &&
+      tasks.blocking_approval.none? &&
       !payroll_gender_missing? &&
       (!decision_made? || awaiting_qa?) &&
       !payment_prevented_by_other_claims? &&
