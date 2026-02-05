@@ -1,0 +1,80 @@
+<% content_for(:phase) { "Alpha" } %>
+
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:title),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      method: :patch,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <%= f.object.t(:title) %>
+      </h1>
+
+      <%= f.govuk_text_field(
+        :nursery_name,
+        label: { text: f.object.t([:nursery_name, :label]) },
+      ) %>
+
+      <%= f.govuk_text_field(
+        :nursery_address_line_1,
+        label: { text: f.object.t([:nursery_address_line_1, :label]) },
+      ) %>
+
+      <%= f.govuk_text_field(
+        :nursery_address_city,
+        label: { text: f.object.t([:nursery_address_city, :label]) },
+      ) %>
+
+      <%= f.govuk_text_field(
+        :nursery_address_postcode,
+        label: { text: f.object.t([:nursery_address_postcode, :label]) },
+      ) %>
+
+      <%= f.govuk_text_field(
+        :ofsted_urn,
+        label: { text: f.object.t([:ofsted_urn, :label]) },
+      ) %>
+
+      <%= f.govuk_collection_radio_buttons(
+        :provider_status,
+        f.object.provider_status_options,
+        :id,
+        :name,
+        legend: { text: f.object.t([:provider_status, :label]) },
+      ) %>
+
+      <%= f.govuk_collection_radio_buttons(
+        :nursery_type,
+        f.object.nursery_type_options,
+        :id,
+        :name,
+        legend: { text: f.object.t([:nursery_type, :label]) },
+      ) %>
+
+      <%= f.govuk_collection_radio_buttons(
+        :nursery_subtype,
+        f.object.nursery_subtype_options,
+        :id,
+        :name,
+        legend: { text: f.object.t([:nursery_subtype, :label]) },
+      ) %>
+
+      <%= f.hidden_field :nursery_details_updated, value: true %>
+
+      <%= f.govuk_submit "Save and continue" %>
+    <% end %>
+  </div>
+</div>

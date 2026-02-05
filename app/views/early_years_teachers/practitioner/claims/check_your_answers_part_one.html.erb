@@ -1,0 +1,37 @@
+<% content_for(:phase) { "Alpha" } %>
+
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:title),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      <%= @form.t(:heading) %>
+    </h1>
+
+    <%= render(
+      partial: "claims/check_your_answers_section",
+      locals: {
+        heading: @form.t(:section_heading),
+        answers: journey.answers_for_claim(@form.journey_session).part_one_answers
+      }
+    ) %>
+
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      method: :patch,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

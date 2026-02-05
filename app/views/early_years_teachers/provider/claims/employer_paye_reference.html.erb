@@ -1,0 +1,36 @@
+<% content_for(:phase) { "Alpha" } %>
+
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:question),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      method: :patch,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_text_field(
+        :employer_paye_reference,
+        label: {
+          text: f.object.t(:question),
+          tag: "h1",
+          size: "l"
+        },
+        hint: { text: f.object.t(:hint_html).html_safe },
+        width: "one-half"
+      ) %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

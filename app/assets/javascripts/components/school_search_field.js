@@ -62,6 +62,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var searchBoxTarget = document.querySelector(searchContainer.dataset.schoolSearchSearchBoxTarget);
 
+	console.log(searchContainer.dataset.schoolSearchSearchBoxTarget)
+
+	console.log('school search box target:', searchBoxTarget);
+
   if (!searchBoxTarget) { return }
 
   // get current input from the search text field and remove it, it will be
@@ -69,6 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var searchBoxId = searchBoxTarget.id;
   var searchValue = searchBoxTarget.value;
   var searchBoxName = searchBoxTarget.name;
+
   searchBoxTarget.parentNode.removeChild(searchBoxTarget);
 
   var excludeClosedSchools = searchContainer.dataset.excludeClosed || false;

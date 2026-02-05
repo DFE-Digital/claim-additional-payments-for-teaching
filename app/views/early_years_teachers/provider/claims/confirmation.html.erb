@@ -1,0 +1,36 @@
+<% content_for(:phase) { "Alpha" } %>
+
+<% content_for(
+  :page_title,
+  page_title(
+    "Confirmation",
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <div class="govuk-panel govuk-panel--confirmation">
+      <h1 class="govuk-panel__title" id="submitted-title">Claim submitted</h1>
+
+      <div class="govuk-panel__body">
+        Your reference number<br>
+        <strong><%= @form.reference %></strong>
+      </div>
+    </div>
+
+    <h2 class="govuk-heading-m">What happens next</h2>
+
+    <p class="govuk-body">
+      Thank you for providing the information we need to pay your teacher their
+      recognition payment.
+    </p>
+
+    <p class="govuk-body">
+      We’ll contact them directly so that they can claim their payment.
+    </p>
+  </div>
+</div>
+
