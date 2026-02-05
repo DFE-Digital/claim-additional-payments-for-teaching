@@ -42,6 +42,8 @@ class Task < ApplicationRecord
 
   NAMES.each { |name| scope name.to_sym, -> { where(name: name) } }
 
+  BLOCKS_APPROVAL = %w[].freeze
+
   belongs_to :claim
   belongs_to :created_by, class_name: "DfeSignIn::User", optional: true
 
@@ -59,6 +61,8 @@ class Task < ApplicationRecord
   scope :passed, -> { where(passed: true) }
   scope :failed, -> { where(passed: false) }
 
+  scope :not_passed, -> { where(passed: [nil, false]) }
+
   scope :no_data_census_subjects_taught, -> { census_subjects_taught.where(passed: nil, claim_verifier_match: nil) }
 
   def to_param
@@ -75,5 +79,13 @@ class Task < ApplicationRecord
 
   def completed?
     persisted?
+  end
+
+  def not_passed?
+    !passed
+  end
+
+  def blocks_approval?
+    BLOCKS_APPROVAL.include?(name)
   end
 end

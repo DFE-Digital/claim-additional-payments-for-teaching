@@ -16,7 +16,13 @@
 
   <div class="govuk-grid-column-two-thirds">
     <%= render("incomplete_tasks", claim: @claim, incomplete_task_names: @claim_checking_tasks.incomplete_task_names) if @claim_checking_tasks.incomplete_task_names.any? %>
-    <%= render "decision_form", claim: @claim, decision_form: @decision_form, claims_preventing_payment: @claims_preventing_payment %>
+    <%= render(
+      "decision_form",
+      claim: @claim,
+      decision_form: @decision_form,
+      claims_preventing_payment: @claims_preventing_payment,
+      claim_checking_tasks: @claim_checking_tasks
+    ) %>
 
     <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>
   </div>
