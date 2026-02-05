@@ -26,7 +26,7 @@ RSpec.describe Policies::StudentLoans::AdminTasksPresenter, type: :model do
       claim.academic_year = "2030/2031"
 
       expected_qts_answer = presenter.qualifications[0][1]
-      expect(expected_qts_answer).to eq "Between the start of the 2019 to 2020 academic year and the end of the 2020 to 2021 academic year"
+      expect(expected_qts_answer).to eq "Between the start of the 2018 to 2019 academic year and the end of the 2020 to 2021 academic year"
     end
   end
 

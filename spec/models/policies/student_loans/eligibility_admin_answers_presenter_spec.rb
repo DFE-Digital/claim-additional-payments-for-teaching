@@ -33,7 +33,7 @@ RSpec.describe Policies::StudentLoans::EligibilityAdminAnswersPresenter, type: :
       claim.academic_year = "2029/2030"
 
       expected_qts_answer = presenter.answers[0][1]
-      expect(expected_qts_answer).to eq("Between the start of the 2018 to 2019 academic year and the end of the 2020 to 2021 academic year")
+      expect(expected_qts_answer).to eq("Between the start of the 2017 to 2018 academic year and the end of the 2020 to 2021 academic year")
     end
 
     it "excludes questions skipped from the flow" do

@@ -11,12 +11,12 @@ RSpec.describe Policies::StudentLoans::PresenterMethods, type: :helper do
       {
         academic_year: "2025/2026",
         qts_award_year_answer_ineligible: "A different academic year",
-        qts_award_year_answer_eligible: "Between the start of the 2014 to 2015 academic year and the end of the 2020 to 2021 academic year"
+        qts_award_year_answer_eligible: "Between the start of the 2013 to 2014 academic year and the end of the 2020 to 2021 academic year"
       },
       {
         academic_year: "2031/2032",
         qts_award_year_answer_ineligible: "A different academic year",
-        qts_award_year_answer_eligible: "Between the start of the 2020 to 2021 academic year and the end of the 2020 to 2021 academic year"
+        qts_award_year_answer_eligible: "Between the start of the 2019 to 2020 academic year and the end of the 2020 to 2021 academic year"
       }
     ].each do |args|
       it "returns a String representing the answer of the QTS question based on qts_award_year and the academic year (#{args[:academic_year]}) the claim was made in" do

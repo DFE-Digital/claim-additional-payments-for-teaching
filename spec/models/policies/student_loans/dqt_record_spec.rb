@@ -63,7 +63,14 @@ RSpec.describe Policies::StudentLoans::DqtRecord do
       let(:qts_award_date) { Date.new(2018, 7, 1) }
       let!(:journey_configuration) { create(:journey_configuration, :student_loans, current_academic_year: "2029/2030") }
 
-      it { is_expected.to eq false }
+      it { is_expected.to be_truthy }
+    end
+
+    context "in academic year 2030/31" do
+      let(:qts_award_date) { Date.new(2018, 7, 1) }
+      let!(:journey_configuration) { create(:journey_configuration, :student_loans, current_academic_year: "2030/2031") }
+
+      it { is_expected.to be_falsey }
     end
 
     context "QTS award date is blank" do

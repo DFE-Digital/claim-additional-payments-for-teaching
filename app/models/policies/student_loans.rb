@@ -24,7 +24,7 @@ module Policies
 
     POLICY_START_YEAR = AcademicYear.new(2013).freeze
     POLICY_END_YEAR = AcademicYear.new(2020).freeze
-    ACADEMIC_YEARS_QUALIFIED_TEACHERS_CAN_CLAIM_FOR = 11
+    ACADEMIC_YEARS_QUALIFIED_TEACHERS_CAN_CLAIM_FOR = 12
 
     ELIGIBILITY_MATCHING_ATTRIBUTES = [["teacher_reference_number"]].freeze
 

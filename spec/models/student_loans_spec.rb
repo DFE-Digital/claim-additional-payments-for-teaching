@@ -29,10 +29,10 @@ RSpec.describe Policies::StudentLoans, type: :model do
   describe ".first_eligible_qts_award_year" do
     it "returns 11 years prior to the currently configured academic year, with a floor of the 2013/2014 academic year" do
       journey_configuration.update!(current_academic_year: "2031/2032")
-      expect(described_class.first_eligible_qts_award_year).to eq AcademicYear.new(2020)
+      expect(described_class.first_eligible_qts_award_year).to eq AcademicYear.new(2019)
 
       journey_configuration.update!(current_academic_year: "2027/2028")
-      expect(described_class.first_eligible_qts_award_year).to eq AcademicYear.new(2016)
+      expect(described_class.first_eligible_qts_award_year).to eq AcademicYear.new(2015)
 
       journey_configuration.update!(current_academic_year: "2024/2025")
       expect(described_class.first_eligible_qts_award_year).to eq AcademicYear.new(2013)
@@ -42,7 +42,7 @@ RSpec.describe Policies::StudentLoans, type: :model do
     end
 
     it "can return the AcademicYear based on a passed-in academic year" do
-      expect(described_class.first_eligible_qts_award_year(AcademicYear.new(2030))).to eq AcademicYear.new(2019)
+      expect(described_class.first_eligible_qts_award_year(AcademicYear.new(2030))).to eq AcademicYear.new(2018)
     end
   end
 
