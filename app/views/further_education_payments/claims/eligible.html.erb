@@ -19,17 +19,18 @@
       <%= f.govuk_submit "Apply now" %>
 
       <div class="govuk-body">
-        The targeted retention incentive payment ranges from £2,000 to £6,000, depending on:
-      </div>
-      <%= govuk_list [ "the provider you teach at", "the number of hours you teach"], type: :bullet %>
-
-      <div class="govuk-body">
-        If you teach at a further education (FE) provider that has higher levels of disadvantage, you are eligible for a higher payment.
+        If you teach at an FE provider with a higher proportion of disadvantaged students, you’ll get a higher payment. This is based on how many 16 to 19 students at your provider receive <%= govuk_link_to "disadvantage funding", "https://www.gov.uk/guidance/16-to-19-funding-how-it-works" %>.
       </div>
 
       <div class="govuk-body">
-        For more information about why you are eligible, read about the <%= govuk_link_to "targeted retention incentive payments for FE teachers guidance", t("further_education_payments.eligibility_criteria_link.url"), new_tab: true %>.
+        In the guidance on <%= govuk_link_to "targeted retention incentive payments for FE teachers", "https://www.gov.uk/guidance/targeted-retention-incentive-payments-for-fe-teachers" %>, you can find:
       </div>
+
+      <%= govuk_list [
+        "why you’re eligible",
+        "the list of eligible FE providers",
+        "the payment values"
+      ], type: :bullet %>
     <% end %>
   </div>
 </div>
