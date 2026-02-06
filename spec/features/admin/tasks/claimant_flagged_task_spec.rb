@@ -49,6 +49,23 @@ RSpec.describe "Claimant flagging" do
     )
   end
 
+  it "allows the csv of claimant flags to be downloaded" do
+    FeatureFlag.enable!(:claimant_flagging)
+
+    create(:claimant_flag)
+
+    sign_in_as_service_admin
+
+    visit admin_claims_path
+    click_on "Upload flagged claimants CSV"
+
+    click_on "Download claimant flags CSV"
+
+    expect(page.response_headers["Content-Disposition"]).to include("attachment; filename=\"claimant_flags-")
+    expect(page.body).to include("policy,identification_attribute,identification_value,reason,suggested_action")
+    expect(page.body).to include("FurtherEducationPayments,national_insurance_number,ab123456c,clawback,Speak to manager")
+  end
+
   def submit_fe_claim_for_flagged_claimant
     create(:journey_configuration, :further_education_payments)
     school = create(:school, :further_education, :fe_eligible)
