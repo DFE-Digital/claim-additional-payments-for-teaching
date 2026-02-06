@@ -19,6 +19,16 @@
 
       <%= f.govuk_submit "Upload" %>
     <% end %>
+
+    <% if current_admin.is_service_admin? %>
+      <p class="govuk-body">
+        <%= link_to(
+          "Download claimant flags CSV",
+          admin_claimant_flags_csv_download_path(format: :csv),
+          class: "govuk-link"
+        ) %>
+      </p>
+    <% end %>
   </div>
 </div>
 
