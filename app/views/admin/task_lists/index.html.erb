@@ -154,7 +154,7 @@
               <% row.with_cell(
                 text: sanitize(claim.assigned_to&.full_name || "-").split(" ").join("&nbsp;").html_safe
               ) %>
-              <% row.with_cell(text: claim.decision_deadline_date ? l(claim.decision_deadline_date) : "-") %>
+              <% row.with_cell(text: claim.decision_deadline ? l(claim.decision_deadline) : "-") %>
               <% claim.tasks.each do |task| %>
                 <% row.with_cell(
                   text: task_status_content_tag(

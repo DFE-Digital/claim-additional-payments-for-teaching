@@ -72,6 +72,7 @@ module Journeys
         claim.journey_session = journey_session
         claim.reference ||= generate_reference
         set_submitted_at_attributes
+        claim.decision_deadline = claim.decision_deadline_date
       end
 
       def mark_service_access_code_as_used!

@@ -68,7 +68,7 @@
 
       <% summary_list.with_row do |row| %>
         <% row.with_key { "Decision due" } %>
-        <% row.with_value { (l(claim.decision_deadline_date) + decision_deadline_warning(claim, {na_text: ""})).html_safe } %>
+        <% row.with_value { (l(claim.decision_deadline) + decision_deadline_warning(claim, {na_text: ""})).html_safe } %>
       <% end %>
 
       <% summary_list.with_row do |row| %>

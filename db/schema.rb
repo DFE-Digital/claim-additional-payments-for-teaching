@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_29_172243) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_02_123308) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -57,6 +57,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_29_172243) do
     t.string "column_to_remove_teacher_reference_number", limit: 11
     t.datetime "created_at", precision: nil, null: false
     t.date "date_of_birth"
+    t.date "decision_deadline"
     t.boolean "details_check"
     t.jsonb "dqt_teacher_status"
     t.uuid "eligibility_id"
@@ -120,6 +121,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_29_172243) do
     t.datetime "verified_at"
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
+    t.index ["decision_deadline"], name: "index_claims_on_decision_deadline"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
     t.index ["held"], name: "index_claims_on_held"
     t.index ["journeys_session_id"], name: "index_claims_on_journeys_session_id"

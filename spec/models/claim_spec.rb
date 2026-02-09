@@ -1599,4 +1599,40 @@ RSpec.describe Claim, type: :model do
       expect(claim.hmrc_name_match).to be_nil
     end
   end
+
+  describe "#decision_deadline" do
+    around do |example|
+      freeze_time(Time.new(2026, 2, 3)) do
+        example.run
+      end
+    end
+
+    context "when db record is nil" do
+      subject do
+        build(
+          :claim,
+          :submitted,
+          decision_deadline: nil
+        )
+      end
+
+      it "returns dynamic value" do
+        expect(subject.decision_deadline).to eql(Date.new(2026, 6, 16))
+      end
+    end
+
+    context "when db record is present" do
+      subject do
+        build(
+          :claim,
+          :submitted,
+          decision_deadline: Time.now
+        )
+      end
+
+      it "returns persisted value" do
+        expect(subject.decision_deadline).to eql(Date.new(2026, 2, 3))
+      end
+    end
+  end
 end

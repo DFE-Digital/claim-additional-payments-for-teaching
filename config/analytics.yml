@@ -89,6 +89,7 @@ shared:
     - onelogin_idv_return_codes # string, array of return codes from OL
     - policy # string, which policy this claim is for
     - claimant_declaration # boolean, did claimant agree to declaration
+    - decision_deadline # date, SLA date for OPs to make a decision on claim
   :decisions:
     - id # uuid, identifies the decision
     - claim_id # uuid, references the associated claim

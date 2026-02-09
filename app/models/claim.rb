@@ -451,6 +451,14 @@ class Claim < ApplicationRecord
     hmrc_name_match&.downcase == "yes"
   end
 
+  def decision_deadline
+    if read_attribute(:decision_deadline).nil?
+      decision_deadline_date
+    else
+      super
+    end
+  end
+
   private
 
   def one_login_idv_name_match?

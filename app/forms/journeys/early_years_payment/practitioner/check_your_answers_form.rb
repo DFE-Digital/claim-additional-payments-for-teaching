@@ -79,6 +79,7 @@ module Journeys
         def set_attributes_for_claim_submission
           claim.journey_session = journey_session
           claim.reference ||= generate_reference
+          claim.decision_deadline = claim.decision_deadline_date
           set_submitted_at_attributes
         end
 
