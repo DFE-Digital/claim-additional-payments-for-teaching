@@ -61,9 +61,8 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::QualificationDetailsFo
 
     let(:dqt_teacher_status) do
       {
-        qualified_teacher_status: {
-          name: "Qualified teacher (trained)",
-          qts_date: "2019-01-01"
+        qts: {
+          holdsFrom: "2019-01-01"
         }
       }
     end
@@ -119,40 +118,8 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::QualificationDetailsFo
         context "when there is a dqt_teacher_record" do
           let(:dqt_teacher_status) do
             {
-              trn: 123456,
-              ni_number: "AB123123A",
-              name: "Rick Sanchez",
-              dob: "66-06-06T00:00:00",
-              active_alert: false,
-              state: 0,
-              state_name: "Active",
-              qualified_teacher_status: {
-                name: "Qualified teacher (trained)",
-                qts_date: qts_award_date,
-                state: 0,
-                state_name: "Active"
-              },
-              induction: {
-                start_date: "2021-07-01T00:00:00Z",
-                completion_date: "2021-07-05T00:00:00Z",
-                status: "Pass",
-                state: 0,
-                state_name: "Active"
-              },
-              initial_teacher_training: {
-                programme_start_date: "666-06-06T00:00:00",
-                programme_end_date: "2021-07-04T00:00:00Z",
-                programme_type: "Overseas Trained Teacher Programme",
-                result: "Pass",
-                subject1: "mathematics",
-                subject1_code: "G100",
-                subject2: nil,
-                subject2_code: nil,
-                subject3: nil,
-                subject3_code: nil,
-                qualification: "BA (Hons)",
-                state: 0,
-                state_name: "Active"
+              qts: {
+                holdsFrom: qts_award_date
               }
             }
           end
@@ -164,7 +131,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::QualificationDetailsFo
                   Policies::StudentLoans.first_eligible_qts_award_year.start_year,
                   9,
                   1
-                )
+                ).to_s
               end
 
               it "sets the qts_award_year to :on_or_after_cut_off_date" do
@@ -190,7 +157,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::QualificationDetailsFo
                   Policies::StudentLoans.first_eligible_qts_award_year.start_year,
                   1,
                   1
-                )
+                ).to_s
               end
 
               it "sets the qts_award_year to :before_cut_off_date" do

@@ -377,47 +377,5 @@ FactoryBot.define do
     trait :high_risk do
       onelogin_idv_return_codes { OneLogin::ReturnCode::HIGH_RISK_CODES.sample(2) }
     end
-
-    trait :with_dqt_teacher_status do
-      dqt_teacher_status do
-        {
-          trn: 123456,
-          ni_number: "AB123123A",
-          name: "Rick Sanchez",
-          dob: "66-06-06T00:00:00",
-          active_alert: false,
-          state: 0,
-          state_name: "Active",
-          qualified_teacher_status: {
-            name: "Qualified teacher (trained)",
-            qts_date: "2018-12-01",
-            state: 0,
-            state_name: "Active"
-          },
-          induction: {
-            start_date: "2021-07-01T00:00:00Z",
-            completion_date: "2021-07-05T00:00:00Z",
-            status: "Pass",
-            state: 0,
-            state_name: "Active"
-          },
-          initial_teacher_training: {
-            programme_start_date: "666-06-06T00:00:00",
-            programme_end_date: "2021-07-04T00:00:00Z",
-            programme_type: "Overseas Trained Teacher Programme",
-            result: "Pass",
-            subject1: "mathematics",
-            subject1_code: "G100",
-            subject2: nil,
-            subject2_code: nil,
-            subject3: nil,
-            subject3_code: nil,
-            qualification: "BA (Hons)",
-            state: 0,
-            state_name: "Active"
-          }
-        }
-      end
-    end
   end
 end

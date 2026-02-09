@@ -244,9 +244,22 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
             before do
               journey_session.answers.assign_attributes(
                 dqt_teacher_status: {
-                  initial_teacher_training: {
-                    qualification: "Professional Graduate Diploma in Education" # route_into_teaching
-                  }
+                  routesToProfessionalStatuses: [
+                    {
+                      holdsFrom: "2022-01-09",
+                      trainingSubjects: [
+                        {
+                          name: "mathematics",
+                          reference: "G100"
+                        }
+                      ],
+                      trainingStartDate: "2024-01-09",
+                      trainingEndDate: nil,
+                      routeToProfessionalStatusType: {
+                        name: "Professional Graduate Diploma in Education" # route_into_teaching
+                      }
+                    }
+                  ]
                 }
               )
 
@@ -277,10 +290,22 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
                 dqt_teacher_status: {
                   # qualification maps to postgraduate so we read the
                   # qualification date from the itt programme start date
-                  initial_teacher_training: {
-                    qualification: "Professional Graduate Diploma in Education", # route_into_teaching
-                    programme_start_date: "2024-01-01T00:00:00"
-                  }
+                  routesToProfessionalStatuses: [
+                    {
+                      holdsFrom: "2024-01-09",
+                      trainingSubjects: [
+                        {
+                          name: "mathematics",
+                          reference: "G100"
+                        }
+                      ],
+                      trainingStartDate: "2024-01-01",
+                      trainingEndDate: nil,
+                      routeToProfessionalStatusType: {
+                        name: "Professional Graduate Diploma in Education" # route_into_teaching
+                      }
+                    }
+                  ]
                 }
               )
 
@@ -309,10 +334,22 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
             before do
               journey_session.answers.assign_attributes(
                 dqt_teacher_status: {
-                  initial_teacher_training: {
-                    subject1: "mathematics", # eligible_itt_subject_for_claim
-                    subject1_code: "G100"
-                  }
+                  routesToProfessionalStatuses: [
+                    {
+                      holdsFrom: "2024-01-09",
+                      trainingSubjects: [
+                        {
+                          name: "mathematics", # eligible_itt_subject_for_claim
+                          reference: "G100"
+                        }
+                      ],
+                      trainingStartDate: "2024-01-01",
+                      trainingEndDate: nil,
+                      routeToProfessionalStatusType: {
+                        name: "BA"
+                      }
+                    }
+                  ]
                 }
               )
 

@@ -539,13 +539,25 @@ RSpec.describe "Targeted retention incentives eligible paths" do
       trn: "1234567",
       params: {birthdate: "1953-10-23", nino: "AB123456C"},
       body: {
-        qualified_teacher_status: {
-          qts_date: "2023-07-01"
+        qts: {
+          holdsFrom: "2023-07-01"
         },
-        initial_teacher_training: {
-          subject1: "physics",
-          subject1_code: "F300"
-        }
+        routesToProfessionalStatuses: [
+          {
+            holdsFrom: "2023-07-01",
+            trainingSubjects: [
+              {
+                name: "physics",
+                reference: "F300"
+              }
+            ],
+            trainingStartDate: "2023-01-01",
+            trainingEndDate: nil,
+            routeToProfessionalStatusType: {
+              name: "BA (Hons)"
+            }
+          }
+        ]
       }
     )
 

@@ -11,15 +11,26 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::QualificationDetail
         details_check: true,
         dqt_teacher_status: {
           trn: teacher_reference_number_str,
-          dob: "#{date_of_birth_str}T00:00:00",
-          qualified_teacher_status: {
-            qts_date: "2024-01-01"
+          dateOfBirth: date_of_birth_str,
+          qts: {
+            holdsFrom: "2024-01-01"
           },
-          initial_teacher_training: {
-            subject1: "mathematics",
-            subject1_code: "G100",
-            qualification: "BA (Hons)"
-          }
+          routesToProfessionalStatuses: [
+            {
+              holdsFrom: "2024-01-01",
+              trainingSubjects: [
+                {
+                  name: "mathematics",
+                  reference: "G100"
+                }
+              ],
+              trainingStartDate: "2023-01-09",
+              trainingEndDate: nil,
+              routeToProfessionalStatusType: {
+                name: "BA (Hons)"
+              }
+            }
+          ]
         }
       }
     )

@@ -13,7 +13,7 @@ RSpec.feature "TSLR journey with Teacher ID teacher reference number page remova
   before do
     freeze_time
     set_mock_auth(trn, {date_of_birth:, nino:, email: "kelsie.oberbrunner@example.com"}, phone_number: "01234567890")
-    stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
+    stub_dqt_empty_response(trn:)
     mock_address_details_address_data
   end
 

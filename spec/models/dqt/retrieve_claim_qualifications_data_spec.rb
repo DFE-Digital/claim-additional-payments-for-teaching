@@ -49,8 +49,7 @@ RSpec.describe Dqt::RetrieveClaimQualificationsData do
       it "retrieves and saves the DQT payload" do
         expect(dbl).to receive(:find_raw).with(
           session.answers.teacher_reference_number,
-          birthdate: session.answers.date_of_birth.to_s,
-          nino: session.answers.national_insurance_number
+          {include: "alerts,induction,routesToProfessionalStatuses"}
         )
         expect { service.save_qualifications_result }.to(
           change { session.answers.dqt_teacher_status }

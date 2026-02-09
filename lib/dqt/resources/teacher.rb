@@ -9,7 +9,7 @@ module Dqt
 
     def find_raw(trn, **params)
       get_request(
-        "teachers/#{trn}", params: params
+        "persons/#{trn}", params: params
       )&.body
     end
   end

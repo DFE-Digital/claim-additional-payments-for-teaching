@@ -16,7 +16,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
     ineligible_school
     freeze_time
     set_mock_auth(trn, {date_of_birth:, nino:})
-    stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
+    stub_dqt_empty_response(trn:)
   end
 
   after do

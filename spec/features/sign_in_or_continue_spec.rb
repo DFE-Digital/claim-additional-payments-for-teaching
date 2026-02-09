@@ -17,7 +17,7 @@ RSpec.feature "Teacher Identity Sign in" do
     journey_configuration
     school
     set_mock_auth(trn, {date_of_birth:, nino:})
-    stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
+    stub_dqt_empty_response(trn:)
   end
 
   scenario "Teacher makes claim for 'Targeted Retention Incentive Payments' claim and select continue without signing in" do

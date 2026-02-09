@@ -14,8 +14,8 @@ RSpec.feature "TSLR journey with Teacher ID" do
   let(:nino) { "AB123123A" }
   let(:eligible_dqt_body) do
     {
-      qualified_teacher_status: {
-        qts_date: academic_date.to_s
+      qts: {
+        holdsFrom: academic_date.to_s
       }
     }
   end
@@ -62,7 +62,7 @@ RSpec.feature "TSLR journey with Teacher ID" do
 
   scenario "When user is logged in with Teacher ID and there is no matching DQT record" do
     set_mock_auth(trn, {date_of_birth:, nino:})
-    stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
+    stub_dqt_empty_response(trn:)
 
     navigate_past_sign_in_page
 
@@ -89,8 +89,8 @@ RSpec.feature "TSLR journey with Teacher ID" do
   scenario "When user is logged in with Teacher ID and the qualifications data is incomplete" do
     set_mock_auth(trn, {nino:, date_of_birth:})
     missing_qts_date_body = {
-      qualified_teacher_status: {
-        qts_date: nil
+      qts: {
+        holdsFrom: nil
       }
     }
     stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino:}, body: missing_qts_date_body)

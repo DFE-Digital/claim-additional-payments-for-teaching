@@ -29,8 +29,7 @@ module Dqt
     def response
       Dqt::Client.new.teacher.find_raw(
         @session.answers.teacher_reference_number,
-        birthdate: @session.answers.date_of_birth.to_s,
-        nino: @session.answers.national_insurance_number
+        include: "alerts,induction,routesToProfessionalStatuses"
       )
     end
   end
