@@ -103,6 +103,13 @@ Rails.application.routes.draw do
     end
   end
 
+  if Rails.env.development? || Rails.env.test? ||
+      ENV["ENVIRONMENT_NAME"]&.start_with?("review") ||
+      ENV["ENVIRONMENT_NAME"] == "test"
+    get "/testdata", to: "test_data#index", as: :test_data
+    get "/testdata/download/:file_key", to: "test_data#download", as: :test_data_download
+  end
+
   namespace :admin do
     get "/", to: "page#index", as: :root
 

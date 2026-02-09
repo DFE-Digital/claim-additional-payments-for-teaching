@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" class="govuk-template govuk-template--rebranded app-html-class">
+  <head>
+    <title>
+      <%= content_for(:page_title) || "Test Data Downloads – GOV.UK" %>
+    </title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#1d70b8">
+    <meta name="robots" content="noindex,nofollow">
+
+    <%= favicon_link_tag asset_path("favicon.ico") %>
+
+    <%= stylesheet_link_tag 'application', media: 'all' %>
+  </head>
+
+  <body class="govuk-template__body">
+    <%= javascript_include_tag 'js_check' %>
+
+    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+
+    <div class="govuk-width-container">
+      <main class="govuk-main-wrapper app-main-class" id="main-content">
+        <%= yield %>
+      </main>
+    </div>
+
+    <%= javascript_include_tag 'application' %>
+  </body>
+</html>
