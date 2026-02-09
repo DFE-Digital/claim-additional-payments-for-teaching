@@ -3,58 +3,63 @@
 
 
 "@govuk-one-login/service-header@^5.0.0":
-  "integrity" "sha512-C0TClWrjSWrN5U773hFr4ZdUlTWRTCVl4L2D8IrQWimCF84zXdY+LF2bfQM2RqUMIzjdpmMwARv7NS8Wohkrlw=="
-  "resolved" "https://registry.npmjs.org/@govuk-one-login/service-header/-/service-header-5.0.0.tgz"
-  "version" "5.0.0"
+  version "5.0.0"
+  resolved "https://registry.npmjs.org/@govuk-one-login/service-header/-/service-header-5.0.0.tgz"
+  integrity sha512-C0TClWrjSWrN5U773hFr4ZdUlTWRTCVl4L2D8IrQWimCF84zXdY+LF2bfQM2RqUMIzjdpmMwARv7NS8Wohkrlw==
   dependencies:
-    "govuk-frontend" "^5.13.0"
-    "nunjucks" "^3.2.4"
+    govuk-frontend "^5.13.0"
+    nunjucks "^3.2.4"
 
-"a-sync-waterfall@^1.0.0":
-  "integrity" "sha512-RYTOHHdWipFUliRFMCS4X2Yn2X8M87V/OpSqWzKKOGhzqyUxzyVmhHDH9sAvG+ZuQf/TAOFsLCpMw09I1ufUnA=="
-  "resolved" "https://registry.npmjs.org/a-sync-waterfall/-/a-sync-waterfall-1.0.1.tgz"
-  "version" "1.0.1"
+a-sync-waterfall@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/a-sync-waterfall/-/a-sync-waterfall-1.0.1.tgz"
+  integrity sha512-RYTOHHdWipFUliRFMCS4X2Yn2X8M87V/OpSqWzKKOGhzqyUxzyVmhHDH9sAvG+ZuQf/TAOFsLCpMw09I1ufUnA==
 
-"a11y-dialog@^8.1.4":
-  "integrity" "sha512-CgaQfoTg9t+O8vArlNAYN7Gzv6h1bpWRqggzCtng6TQ2im6XCpUQI+GWlPvQdovQtwzJN6MydxipXKB8qP5Zxw=="
-  "resolved" "https://registry.npmjs.org/a11y-dialog/-/a11y-dialog-8.1.4.tgz"
-  "version" "8.1.4"
+a11y-dialog@^8.1.4:
+  version "8.1.4"
+  resolved "https://registry.npmjs.org/a11y-dialog/-/a11y-dialog-8.1.4.tgz"
+  integrity sha512-CgaQfoTg9t+O8vArlNAYN7Gzv6h1bpWRqggzCtng6TQ2im6XCpUQI+GWlPvQdovQtwzJN6MydxipXKB8qP5Zxw==
   dependencies:
-    "focusable-selectors" "^0.8.0"
+    focusable-selectors "^0.8.0"
 
-"accessible-autocomplete@^3.0.1":
-  "integrity" "sha512-xMshgc2LT5addvvfCTGzIkRrvhbOFeylFSnSMfS/PdjvvvElZkakCwxO3/yJYBWyi1hi3tZloqOJQ5kqqJtH4g=="
-  "resolved" "https://registry.npmjs.org/accessible-autocomplete/-/accessible-autocomplete-3.0.1.tgz"
-  "version" "3.0.1"
+accessible-autocomplete@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.npmjs.org/accessible-autocomplete/-/accessible-autocomplete-3.0.1.tgz"
+  integrity sha512-xMshgc2LT5addvvfCTGzIkRrvhbOFeylFSnSMfS/PdjvvvElZkakCwxO3/yJYBWyi1hi3tZloqOJQ5kqqJtH4g==
 
-"asap@^2.0.3":
-  "integrity" "sha512-BSHWgDSAiKs50o2Re8ppvp3seVHXSRM44cdSsT9FfNEUUZLOGWVCsiWaRPWM1Znn+mqZ1OfVZ3z3DWEzSp7hRA=="
-  "resolved" "https://registry.npmjs.org/asap/-/asap-2.0.6.tgz"
-  "version" "2.0.6"
+asap@^2.0.3:
+  version "2.0.6"
+  resolved "https://registry.npmjs.org/asap/-/asap-2.0.6.tgz"
+  integrity sha512-BSHWgDSAiKs50o2Re8ppvp3seVHXSRM44cdSsT9FfNEUUZLOGWVCsiWaRPWM1Znn+mqZ1OfVZ3z3DWEzSp7hRA==
 
-"commander@^5.1.0":
-  "integrity" "sha512-P0CysNDQ7rtVw4QIQtm+MRxV66vKFSvlsQvGYXZWR3qFU0jlMKHZZZgw8e+8DSah4UDKMqnknRDQz+xuQXQ/Zg=="
-  "resolved" "https://registry.npmjs.org/commander/-/commander-5.1.0.tgz"
-  "version" "5.1.0"
+commander@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.npmjs.org/commander/-/commander-5.1.0.tgz"
+  integrity sha512-P0CysNDQ7rtVw4QIQtm+MRxV66vKFSvlsQvGYXZWR3qFU0jlMKHZZZgw8e+8DSah4UDKMqnknRDQz+xuQXQ/Zg==
 
-"focusable-selectors@^0.8.0":
-  "integrity" "sha512-0XxbkD0KhOnX10qmnfF9U8DkDD8N/e4M77wMYw2Itoi4vdcoRjSkqXLZFIzkrLIOxzmzCGy88fNG1EbeXMD/zw=="
-  "resolved" "https://registry.npmjs.org/focusable-selectors/-/focusable-selectors-0.8.4.tgz"
-  "version" "0.8.4"
+focusable-selectors@^0.8.0:
+  version "0.8.4"
+  resolved "https://registry.npmjs.org/focusable-selectors/-/focusable-selectors-0.8.4.tgz"
+  integrity sha512-0XxbkD0KhOnX10qmnfF9U8DkDD8N/e4M77wMYw2Itoi4vdcoRjSkqXLZFIzkrLIOxzmzCGy88fNG1EbeXMD/zw==
 
-"govuk-frontend@^5.13.0":
-  "integrity" "sha512-6N3pHelWN7wftdM6e4YEzZAfattapa1gnd+Al6d5PUbfTr9D+T2dnphpNpjX75CTEhihlQqlL0RDQ3WIfZ3PSg=="
-  "resolved" "https://registry.npmjs.org/govuk-frontend/-/govuk-frontend-5.13.0.tgz"
-  "version" "5.13.0"
+govuk-frontend@^5.13.0:
+  version "5.13.0"
+  resolved "https://registry.npmjs.org/govuk-frontend/-/govuk-frontend-5.13.0.tgz"
+  integrity sha512-6N3pHelWN7wftdM6e4YEzZAfattapa1gnd+Al6d5PUbfTr9D+T2dnphpNpjX75CTEhihlQqlL0RDQ3WIfZ3PSg==
 
-"nunjucks@^3.2.4":
-  "integrity" "sha512-26XRV6BhkgK0VOxfbU5cQI+ICFUtMLixv1noZn1tGU38kQH5A5nmmbk/O45xdyBhD1esk47nKrY0mvQpZIhRjQ=="
-  "resolved" "https://registry.npmjs.org/nunjucks/-/nunjucks-3.2.4.tgz"
-  "version" "3.2.4"
+govuk-frontend@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-6.0.0.tgz#5906601cc9249027796c233f537eca00a0add0db"
+  integrity sha512-n1DUbQD6coHL3UkQS0yTbd4ziIxLBzkWBODVCjXMclSY7FvOGeHcTg3c72z6u7DQECQb0tfZofhPjGxPUOIizA==
+
+nunjucks@^3.2.4:
+  version "3.2.4"
+  resolved "https://registry.npmjs.org/nunjucks/-/nunjucks-3.2.4.tgz"
+  integrity sha512-26XRV6BhkgK0VOxfbU5cQI+ICFUtMLixv1noZn1tGU38kQH5A5nmmbk/O45xdyBhD1esk47nKrY0mvQpZIhRjQ==
   dependencies:
-    "a-sync-waterfall" "^1.0.0"
-    "asap" "^2.0.3"
-    "commander" "^5.1.0"
+    a-sync-waterfall "^1.0.0"
+    asap "^2.0.3"
+    commander "^5.1.0"
 
 prettier@^3.8.1:
   version "3.8.1"
