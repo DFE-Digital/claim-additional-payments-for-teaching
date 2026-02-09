@@ -1,0 +1,47 @@
+<% content_for(:page_title, "Test Data Downloads – GOV.UK") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">Test Data Downloads</h1>
+
+    <h2 class="govuk-heading-l">User Personas</h2>
+    <p class="govuk-body">Use these for testing claim journeys.</p>
+
+    <table class="govuk-table">
+      <thead class="govuk-table__header">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">File</th>
+          <th scope="col" class="govuk-table__header">Action</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <% @persona_files.each do |key, file| %>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell"><%= file[:label] %></td>
+            <td class="govuk-table__cell"><%= govuk_link_to "Download", test_data_download_path(file_key: key) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <h2 class="govuk-heading-l">STRI Supporting Test Data</h2>
+    <p class="govuk-body">CSV files providing supporting data. These can be preloaded prior to testing.</p>
+
+    <table class="govuk-table">
+      <thead class="govuk-table__header">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">File</th>
+          <th scope="col" class="govuk-table__header">Action</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <% @generated_files.each do |key, file| %>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell"><%= file[:label] %></td>
+            <td class="govuk-table__cell"><%= govuk_link_to "Download", test_data_download_path(file_key: key) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
