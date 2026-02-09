@@ -16,7 +16,6 @@ FactoryBot.define do
       physics_courses { ["gcse_physics"] }
       subject_to_formal_performance_action { false }
       subject_to_disciplinary_action { false }
-      repeat_applicant_check_passed { true }
     end
 
     trait :eligible_school do

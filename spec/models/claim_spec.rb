@@ -985,8 +985,8 @@ RSpec.describe Claim, type: :model do
     let!(:year_1_claim_not_verified_has_duplicates_provider_email_not_sent) { create(:claim, :submitted, academic_year: AcademicYear.new(2024), policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
     let!(:year_1_claim_not_verified_has_duplicates_provider_email_manually_sent) { create(:claim, :submitted, academic_year: AcademicYear.new(2024), policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
     let!(:year_1_claim_with_fe_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, academic_year: AcademicYear.new(2024), eligibility_trait: :year_one_verified) }
-    let!(:year_2_claim_awaiting_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, eligibility_attributes: {repeat_applicant_check_passed: true}) }
-    let!(:year_2_claim_with_completed_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, eligibility_attributes: {repeat_applicant_check_passed: true, provider_verification_completed_at: DateTime.now}) }
+    let!(:year_2_claim_awaiting_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments) }
+    let!(:year_2_claim_with_completed_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, eligibility_attributes: {provider_verification_completed_at: DateTime.now}) }
     let!(:non_fe_claim) { create(:claim, policy: Policies::StudentLoans) }
 
     before do

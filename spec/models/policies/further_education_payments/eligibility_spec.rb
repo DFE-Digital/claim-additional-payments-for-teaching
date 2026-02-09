@@ -91,30 +91,11 @@ RSpec.describe Policies::FurtherEducationPayments::Eligibility do
     end
 
     let(:eligibility) do
-      build(
-        :further_education_payments_eligibility,
-        repeat_applicant_check_passed:
-      )
+      build(:further_education_payments_eligibility)
     end
 
     context "when not verified" do
-      context "when repeat_applicant_check_passed=true" do
-        let(:repeat_applicant_check_passed) { true }
-
-        it { is_expected.to be true }
-      end
-
-      context "when repeat_applicant_check_passed=false" do
-        let(:repeat_applicant_check_passed) { false }
-
-        it { is_expected.to be false }
-      end
-
-      context "when repeat_applicant_check_passed=nil" do
-        let(:repeat_applicant_check_passed) { nil }
-
-        it { is_expected.to be false }
-      end
+      it { is_expected.to be true }
     end
   end
 end

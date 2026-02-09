@@ -59,7 +59,6 @@ module Policies
         joins(:claim).merge(Claim.after_academic_year(AcademicYear.new(2024)))
           .where(provider_verification_completed_at: nil)
           .where(flagged_as_duplicate: false)
-          .where(repeat_applicant_check_passed: true)
       end
 
       scope :awaiting_provider_verification, -> do
@@ -123,7 +122,7 @@ module Policies
           # when a provider verification email is sent by the admin team, a note is created
           !flagged_as_duplicate? || claim.notes.where(label: "provider_verification").any?
         else
-          !flagged_as_duplicate? && !!repeat_applicant_check_passed
+          !flagged_as_duplicate?
         end
       end
 

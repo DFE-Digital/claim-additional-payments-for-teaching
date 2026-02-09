@@ -1,7 +1,14 @@
 require "rails_helper"
 
 RSpec.describe Admin::Tasks::FeRepeatApplicantCheckForm, type: :model do
-  subject { described_class.new(claim:, passed:) }
+  subject do
+    described_class.new(
+      claim:,
+      passed:,
+      name: "fe_repeat_applicant_check",
+      admin_user: admin_user
+    )
+  end
 
   let(:academic_year) { AcademicYear.new(2025) }
 
@@ -42,7 +49,7 @@ RSpec.describe Admin::Tasks::FeRepeatApplicantCheckForm, type: :model do
         expect(subject.save).to be true
         expect(subject.task.passed).to be true
         expect(subject.task.manual).to be true
-        expect(claim.eligibility.reload.repeat_applicant_check_passed).to be true
+        expect(subject.task.created_by).to eq admin_user
       end
     end
 
@@ -53,7 +60,7 @@ RSpec.describe Admin::Tasks::FeRepeatApplicantCheckForm, type: :model do
         expect(subject.save).to be true
         expect(subject.task.passed).to be false
         expect(subject.task.manual).to be true
-        expect(claim.eligibility.reload.repeat_applicant_check_passed).to be false
+        expect(subject.task.created_by).to eq admin_user
       end
     end
   end
