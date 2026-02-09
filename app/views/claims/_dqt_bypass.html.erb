@@ -23,15 +23,6 @@
 <% end %>
 
 <%= f.govuk_text_field(
-  :dqt_qts_name,
-  value: "Qualified teacher (trained)",
-  label: {
-    text: "QTS name",
-    size: "s"
-  },
-) %>
-
-<%= f.govuk_text_field(
   :dqt_qts_date,
   label: {
     text: "QTS date",
@@ -86,18 +77,6 @@
     size: "s",
   },
   hint: { text: "yyyy-mm-dd" }
-) %>
-
-<%= f.govuk_collection_radio_buttons(
-  :dqt_itt_result,
-  f.object.dqt_itt_result_options,
-  :id,
-  :name,
-  legend: {
-    text: "ITT result",
-    size: "s",
-  },
-  inline: true,
 ) %>
 
 <%= f.govuk_select(

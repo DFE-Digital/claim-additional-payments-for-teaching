@@ -65,8 +65,7 @@ module AutomatedChecks
           claim: claim_arg,
           dqt_teacher_status: Dqt::Client.new.teacher.find(
             claim_arg.eligibility.teacher_reference_number,
-            birthdate: claim_arg.date_of_birth,
-            nino: claim_arg.national_insurance_number
+            include: "alerts,induction,routesToProfessionalStatuses"
           )
         }
       end
@@ -81,15 +80,25 @@ module AutomatedChecks
         context "with eligible qualifications" do
           let(:data) do
             {
-              initial_teacher_training: {
-                programme_start_date: Date.new(claim_arg.eligibility.itt_academic_year.start_year, 9, 1),
-                subject1: "mathematics",
-                subject1_code: "G100",
-                qualification: "BA"
+              qts: {
+                holdsFrom: Date.new(claim_arg.eligibility.itt_academic_year.start_year, 9, 2).to_s
               },
-              qualified_teacher_status: {
-                qts_date: Date.new(claim_arg.eligibility.itt_academic_year.start_year, 9, 2)
-              }
+              routesToProfessionalStatuses: [
+                {
+                  holdsFrom: Date.new(claim_arg.eligibility.itt_academic_year.start_year, 9, 2).to_s,
+                  trainingSubjects: [
+                    {
+                      name: "mathematics",
+                      reference: "G100"
+                    }
+                  ],
+                  trainingStartDate: Date.new(claim_arg.eligibility.itt_academic_year.start_year, 9, 1).to_s,
+                  trainingEndDate: nil,
+                  routeToProfessionalStatusType: {
+                    name: "BA"
+                  }
+                }
+              ]
             }
           end
 
@@ -135,8 +144,8 @@ module AutomatedChecks
             let(:data) do
               super().merge(
                 {
-                  qualified_teacher_status: {
-                    qts_date: Date.new(claim_arg.eligibility.itt_academic_year.start_year - 1, 9, 2)
+                  qts: {
+                    holdsFrom: Date.new(claim_arg.eligibility.itt_academic_year.start_year - 1, 9, 2).to_s
                   }
                 }
               )
@@ -257,12 +266,22 @@ module AutomatedChecks
             let(:data) do
               super().merge(
                 {
-                  initial_teacher_training: {
-                    subject1: nil,
-                    subject1_code: "NoCode",
-                    programme_start_date: super().dig(:initial_teacher_training, :programme_start_date),
-                    qualification: super().dig(:initial_teacher_training, :qualification)
-                  }
+                  routesToProfessionalStatuses: [
+                    {
+                      holdsFrom: Date.new(claim_arg.eligibility.itt_academic_year.start_year, 9, 2).to_s,
+                      trainingSubjects: [
+                        {
+                          name: nil,
+                          reference: "NoCode"
+                        }
+                      ],
+                      trainingStartDate: Date.new(claim_arg.eligibility.itt_academic_year.start_year, 9, 1).to_s,
+                      trainingEndDate: nil,
+                      routeToProfessionalStatusType: {
+                        name: "BA"
+                      }
+                    }
+                  ]
                 }
               )
             end
@@ -397,19 +416,27 @@ module AutomatedChecks
 
           context "without multiple eligibilities" do
             let(:data) do
-              super().merge(
-                {
-                  initial_teacher_training: {
-                    subject1: nil,
-                    subject1_code: "NoCode",
-                    qualification: super().dig(:initial_teacher_training, :qualification),
-                    programme_start_date: super().dig(:initial_teacher_training, :programme_start_date)
-                  },
-                  qualified_teacher_status: {
-                    qts_date: Date.new(claim_arg.eligibility.itt_academic_year.start_year - 1, 9, 2)
+              {
+                qts: {
+                  holdsFrom: Date.new(claim_arg.eligibility.itt_academic_year.start_year - 1, 9, 2).to_s
+                },
+                routesToProfessionalStatuses: [
+                  {
+                    holdsFrom: Date.new(claim_arg.eligibility.itt_academic_year.start_year, 9, 2).to_s,
+                    trainingSubjects: [
+                      {
+                        name: nil,
+                        reference: "NoCode"
+                      }
+                    ],
+                    trainingStartDate: Date.new(claim_arg.eligibility.itt_academic_year.start_year, 9, 1).to_s,
+                    trainingEndDate: nil,
+                    routeToProfessionalStatusType: {
+                      name: "BA"
+                    }
                   }
-                }
-              )
+                ]
+              }
             end
 
             it { is_expected.to be_an_instance_of(Task) }

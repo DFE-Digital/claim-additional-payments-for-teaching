@@ -20,7 +20,7 @@ class Hash
   # we'll convert it to an integer to be treated as the index into an array
   def steps_from path
     path.split("/").map do |step|
-      if step.match?(/D/)
+      if step.match?(/\d/)
         step.to_i
       else
         step.to_sym
@@ -35,43 +35,84 @@ RSpec.describe Dqt::Teacher do
   let(:teacher_reference_number_str) { "1001000" }
   let(:date_of_birth_str) { "1987-08-22" }
 
+  let(:alerts) { [] }
+
+  let(:training_subjects) do
+    [
+      {
+        name: "Mathematics",
+        reference: "G100"
+      }
+    ]
+  end
+
+  let(:training_subjects_multiple) do
+    [
+      {
+        name: "Chemistry",
+        reference: "F100"
+      },
+      {
+        name: "Physics",
+        reference: "F300"
+      }
+    ]
+  end
+
+  let(:routes) do
+    [
+      {
+        holdsFrom: "2022-01-09",
+        trainingSubjects: training_subjects,
+        trainingStartDate: "2021-06-27",
+        trainingEndDate: "2021-07-04",
+        routeToProfessionalStatusType: {
+          name: "Graduate Diploma"
+        }
+      }
+    ]
+  end
+
+  let(:routes_multiple) do
+    [
+      {
+        holdsFrom: "2022-01-09",
+        trainingSubjects: training_subjects,
+        trainingStartDate: "2021-06-27",
+        trainingEndDate: "2021-07-04",
+        routeToProfessionalStatusType: {
+          name: "Graduate Diploma"
+        }
+      },
+      {
+        holdsFrom: "2022-01-09",
+        trainingSubjects: training_subjects_multiple,
+        trainingStartDate: "2021-06-27",
+        trainingEndDate: "2021-07-04",
+        routeToProfessionalStatusType: {
+          name: "Graduate Diploma"
+        }
+      }
+    ]
+  end
+
   let(:qualified_teaching_status_response) do
     {
+      qts: {
+        holdsFrom: "2020-04-03"
+      },
       trn: teacher_reference_number_str,
-      ni_number: "JR501209A",
-      name: "Fenton Laing",
-      dob: "#{date_of_birth_str}T00:00:00",
-      active_alert: false,
-      state: 0,
-      state_name: "Active",
-      qualified_teacher_status: {
-        name: "Qualified teacher (trained)",
-        qts_date: "2020-04-03T00:00:00",
-        state: 0,
-        state_name: "Active"
-      },
+      alerts: alerts,
+      lastName: "Laing",
+      firstName: "Fenton",
       induction: {
-        start_date: "2021-07-01T00:00:00Z",
-        completion_date: "2021-07-05T00:00:00Z",
-        status: "Pass",
-        state: 0,
-        state_name: "Active"
+        status: "Passed",
+        startDate: "2021-07-01",
+        completedDate: "2021-07-05"
       },
-      initial_teacher_training: {
-        programme_start_date: "2021-06-27T00:00:00Z",
-        programme_end_date: "2021-07-04T00:00:00Z",
-        programme_type: "Overseas Trained Teacher Programme",
-        result: "Pass",
-        subject1: "mathematics",
-        subject1_code: "G100",
-        subject2: "NULL",
-        subject2_code: "NULL",
-        subject3: "NULL",
-        subject3_code: "NULL",
-        qualification: "Graduate Diploma",
-        state: 0,
-        state_name: "Active"
-      }
+      dateOfBirth: date_of_birth_str,
+      nationalInsuranceNumber: "JR501209A",
+      routesToProfessionalStatuses: routes
     }
   end
 
@@ -144,6 +185,7 @@ RSpec.describe Dqt::Teacher do
       end
     end
 
+    # NOTE: not sure the v3 API has these issues anymore, but leaving for now
     [
       "nil",
       "NIL",
@@ -168,13 +210,16 @@ RSpec.describe Dqt::Teacher do
 
   shared_examples "date reader" do |response_keys|
     context "when response value Date as String" do
-      before { qualified_teaching_status_response.replace_at_path(response_keys, "1944-10-22") }
+      before {
+        qualified_teaching_status_response.replace_at_path(response_keys, "1944-10-22")
+      }
 
       it "returns String" do
         expect(subject).to eq Date.new(1944, 10, 22)
       end
     end
 
+    # NOTE: v3 API should be just YYYY-MM-DD, but leaving here for now
     [
       "1944-10-22T00:00:00",
       "1944-10-22T00:00:00+00:00",
@@ -230,85 +275,7 @@ RSpec.describe Dqt::Teacher do
       end
     end
 
-    [
-      "nil",
-      "NIL",
-      "Nil",
-      "NiL",
-      " nil ",
-      "null",
-      "NULL",
-      "Null",
-      "NuLl",
-      " null "
-    ].each do |nil_string|
-      context "when response value nil (eg '#{nil_string}') as String" do
-        before { qualified_teaching_status_response.replace_at_path(response_keys, nil_string) }
-
-        it "returns nil" do
-          expect(subject).to equal nil
-        end
-      end
-    end
-  end
-
-  shared_examples "boolean reader" do |response_keys|
-    context "when response value true" do
-      before { qualified_teaching_status_response.replace_at_path(response_keys, true) }
-
-      it "returns true" do
-        expect(subject).to equal true
-      end
-    end
-
-    context "when response value false" do
-      before { qualified_teaching_status_response.replace_at_path(response_keys, false) }
-
-      it "returns false" do
-        expect(subject).to equal false
-      end
-    end
-
-    [
-      "true",
-      "TRUE",
-      "True",
-      "TrUe",
-      " true "
-    ].each do |true_string|
-      context "when response value true as String (eg '#{true_string}')" do
-        before { qualified_teaching_status_response.replace_at_path(response_keys, true_string) }
-
-        it "returns true" do
-          expect(subject).to equal true
-        end
-      end
-    end
-
-    [
-      "false",
-      "FALSE",
-      "False",
-      "FaLsE",
-      " false "
-    ].each do |false_string|
-      context "when response value false as String (eg '#{false_string}')" do
-        before { qualified_teaching_status_response.replace_at_path(response_keys, false_string) }
-
-        it "returns false" do
-          expect(subject).to equal false
-        end
-      end
-    end
-
-    context "when response value nil" do
-      before { qualified_teaching_status_response.replace_at_path(response_keys, nil) }
-
-      it "returns nil" do
-        expect(subject).to equal nil
-      end
-    end
-
+    # NOTE: not sure the v3 API has these issues anymore, but leaving for now
     [
       "nil",
       "NIL",
@@ -340,55 +307,25 @@ RSpec.describe Dqt::Teacher do
   describe "#first_name" do
     subject(:first_name) { qualified_teaching_status.first_name }
 
-    it_behaves_like "string reader", "name"
-
-    [
-      {name: "Fenton Laing", first_name: "Fenton"},
-      {name: "Fenton La La Laing", first_name: "Fenton"},
-      {name: " Fenton La Laing ", first_name: "Fenton"},
-      {name: "fenton laing", first_name: "fenton"}
-    ].each do |scenario|
-      context "when response name '#{scenario[:name]}' String" do
-        before { qualified_teaching_status_response[:name] = scenario[:name] }
-
-        it "returns '#{scenario[:first_name]}'" do
-          expect(first_name).to eq scenario[:first_name]
-        end
-      end
-    end
+    it_behaves_like "string reader", "firstName"
   end
 
   describe "#surname" do
     subject(:surname) { qualified_teaching_status.surname }
 
-    it_behaves_like "string reader", "name"
-
-    [
-      {name: "Fenton Laing", surname: "Laing"},
-      {name: "Fenton La La Laing", surname: "Laing"},
-      {name: " Fenton La Laing ", surname: "Laing"},
-      {name: "fenton laing", surname: "laing"}
-    ].each do |scenario|
-      context "when response name String (eg '#{scenario[:name]}')" do
-        before { qualified_teaching_status_response[:name] = scenario[:name] }
-
-        it "returns '#{scenario[:surname]}'" do
-          expect(surname).to eq scenario[:surname]
-        end
-      end
-    end
+    it_behaves_like "string reader", "lastName"
   end
 
   describe "#induction_start_date" do
     subject(:induction_start_date) { qualified_teaching_status.induction_start_date }
 
-    it_behaves_like "date reader", "induction/start_date"
+    it_behaves_like "date reader", "induction/startDate"
   end
 
   describe "#induction_completion_date" do
     subject(:induction_completion_date) { qualified_teaching_status.induction_completion_date }
 
-    it_behaves_like "date reader", "induction/completion_date"
+    it_behaves_like "date reader", "induction/completedDate"
   end
 
   describe "#induction_status" do
@@ -400,7 +337,7 @@ RSpec.describe Dqt::Teacher do
   describe "#date_of_birth" do
     subject(:date_of_birth) { qualified_teaching_status.date_of_birth }
 
-    it_behaves_like "date reader", "dob"
+    it_behaves_like "date reader", "dateOfBirth"
   end
 
   describe "#degree_codes" do
@@ -412,49 +349,98 @@ RSpec.describe Dqt::Teacher do
   describe "#national_insurance_number" do
     subject(:national_insurance_number) { qualified_teaching_status.national_insurance_number }
 
-    it_behaves_like "string reader", "ni_number"
+    it_behaves_like "string reader", "nationalInsuranceNumber"
   end
 
   describe "#qts_award_date" do
     subject(:qts_award_date) { qualified_teaching_status.qts_award_date }
 
-    it_behaves_like "date reader", "qualified_teacher_status/qts_date"
+    it_behaves_like "date reader", "qts/holdsFrom"
   end
 
   describe "#itt_subjects" do
     subject(:itt_subjects) { qualified_teaching_status.itt_subjects }
 
-    it_behaves_like(
-      "string reader",
-      (1..3).map { |n| "initial_teacher_training/subject#{n}" }
-    )
+    context "single itt with single code" do
+      it { is_expected.to contain_exactly("Mathematics") }
+    end
+
+    context "single itt multiple codes" do
+      let(:training_subjects) { training_subjects_multiple }
+
+      it { is_expected.to contain_exactly("Chemistry", "Physics") }
+    end
+
+    context "multiple itts" do
+      let(:routes) { routes_multiple }
+
+      it { is_expected.to contain_exactly("Mathematics", "Chemistry", "Physics") }
+    end
   end
 
   describe "#itt_subject_codes" do
     subject(:itt_subject_codes) { qualified_teaching_status.itt_subject_codes }
 
-    it_behaves_like(
-      "string reader",
-      (1..3).map { |n| "initial_teacher_training/subject#{n}_code" }
-    )
+    context "single itt with single code" do
+      it { is_expected.to contain_exactly("G100") }
+    end
+
+    context "single itt multiple codes" do
+      let(:training_subjects) { training_subjects_multiple }
+
+      it { is_expected.to contain_exactly("F100", "F300") }
+    end
+
+    context "multiple itts" do
+      let(:routes) { routes_multiple }
+
+      it { is_expected.to contain_exactly("G100", "F300", "F100") }
+    end
   end
 
   describe "#active_alert?" do
     subject(:active_alert?) { qualified_teaching_status.active_alert? }
 
-    it_behaves_like "boolean reader", "active_alert"
+    context "no alerts" do
+      it { is_expected.to be false }
+    end
+
+    context "alert without end date" do
+      let(:alerts) do
+        [
+          {
+            startDate: "2026-02-03",
+            endDate: nil
+          }
+        ]
+      end
+
+      it { is_expected.to be true }
+    end
+    context "alert with end date" do
+      let(:alerts) do
+        [
+          {
+            startDate: "2026-01-01",
+            endDate: "2026-01-31"
+          }
+        ]
+      end
+
+      it { is_expected.to be false }
+    end
   end
 
   describe "#qualification_name" do
     subject(:qualification_name) { qualified_teaching_status.qualification_name }
 
-    it_behaves_like "string reader", "initial_teacher_training/qualification"
+    it_behaves_like "string reader", "routesToProfessionalStatuses/0/routeToProfessionalStatusType/name"
   end
 
   describe "#itt_start_date" do
     subject(:itt_start_date) { qualified_teaching_status.itt_start_date }
 
-    it_behaves_like "date reader", "initial_teacher_training/programme_start_date"
+    it_behaves_like "date reader", "routesToProfessionalStatuses/0/trainingStartDate"
   end
 
   describe "#degree_names" do

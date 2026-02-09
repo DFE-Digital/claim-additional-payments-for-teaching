@@ -12,44 +12,44 @@ module DqtHelpers
 
     body = merge_recursively({
       trn: trn,
-      ni_number: params[:nino],
-      name: "Rick Sanchez",
-      dob: "#{params[:birthdate]}T00:00:00",
-      active_alert: false,
-      state: 0,
-      state_name: "Active",
-      qualified_teacher_status: {
-        name: "Qualified teacher (trained)",
-        qts_date: "1666-06-06T00:00:00",
-        state: 0,
-        state_name: "Active"
+      lastName: "Decerqueira",
+      firstName: "Kenneth",
+      dateOfBirth: params[:birthdate],
+      nationalInsuranceNumber: params[:nino],
+      qts: {
+        holdsFrom: "2022-01-09"
       },
+      routesToProfessionalStatuses: [
+        {
+          holdsFrom: "2022-01-09",
+          trainingSubjects: [
+            {
+              name: "mathematics",
+              reference: "G100"
+            }
+          ],
+          trainingStartDate: "2024-01-09",
+          trainingEndDate: nil,
+          routeToProfessionalStatusType: {
+            name: "BA (Hons)"
+          }
+        }
+      ],
       induction: {
-        start_date: "2021-07-01T00:00:00Z",
-        completion_date: "2021-07-05T00:00:00Z",
-        status: "Pass",
-        state: 0,
-        state_name: "Active"
+        status: "Passed",
+        startDate: "2024-01-09",
+        completedDate: nil,
+        exemptionReasons: []
       },
-      initial_teacher_training: {
-        programme_start_date: "666-06-06T00:00:00",
-        programme_end_date: "2021-07-04T00:00:00Z",
-        programme_type: "Overseas Trained Teacher Programme",
-        result: "Pass",
-        subject1: "mathematics",
-        subject1_code: "G100",
-        subject2: nil,
-        subject2_code: nil,
-        subject3: nil,
-        subject3_code: nil,
-        qualification: "BA (Hons)",
-        state: 0,
-        state_name: "Active"
-      }
+      alerts: []
     }, body)
 
-    stub_request(:get, "#{ENV["DQT_API_URL"]}teachers/#{trn}")
-      .with(query: WebMock::API.hash_including(params))
+    query_params = {
+      include: "alerts,induction,routesToProfessionalStatuses"
+    }
+
+    stub_request(:get, "#{ENV["DQT_API_URL"]}persons/#{trn}")
+      .with(query: WebMock::API.hash_including(query_params))
       .to_return(
         body: body.to_json,
         status: status,
@@ -57,12 +57,13 @@ module DqtHelpers
       )
   end
 
-  def stub_dqt_empty_response(
-    trn: 1231234,
-    params: {}
-  )
-    stub_request(:get, "#{ENV["DQT_API_URL"]}teachers/#{trn}")
-      .with(query: WebMock::API.hash_including(params))
+  def stub_dqt_empty_response(trn: 1231234)
+    query_params = {
+      include: "alerts,induction,routesToProfessionalStatuses"
+    }
+
+    stub_request(:get, "#{ENV["DQT_API_URL"]}persons/#{trn}")
+      .with(query: WebMock::API.hash_including(query_params))
       .to_return(
         body: {}.to_json,
         status: 404,

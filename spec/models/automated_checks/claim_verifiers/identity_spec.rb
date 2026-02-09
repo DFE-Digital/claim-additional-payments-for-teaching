@@ -62,8 +62,7 @@ module AutomatedChecks
           claim: claim_arg,
           dqt_teacher_status: Dqt::Client.new.teacher.find(
             claim_arg.eligibility.teacher_reference_number,
-            birthdate: claim_arg.date_of_birth,
-            nino: claim_arg.national_insurance_number
+            include: "alerts,induction,routesToProfessionalStatuses"
           )
         }
       end
@@ -81,9 +80,10 @@ module AutomatedChecks
             context "with matching DQT identity" do
               let(:data) do
                 {
-                  dob: claim_arg.date_of_birth,
-                  name: claim_arg.full_name,
-                  nino: claim_arg.national_insurance_number,
+                  dateOfBirth: claim_arg.date_of_birth,
+                  firstName: claim_arg.first_name,
+                  lastName: claim_arg.surname,
+                  nationalInsuranceNumber: claim_arg.national_insurance_number,
                   trn: claim_arg.eligibility.teacher_reference_number
                 }
               end
@@ -127,7 +127,7 @@ module AutomatedChecks
               end
 
               context "without matching national insurance number" do
-                let(:data) { super().merge({ni_number: "AB100000B"}) }
+                let(:data) { super().merge({nationalInsuranceNumber: "AB100000B"}) }
 
                 it { is_expected.to be_an_instance_of(Task) }
 
@@ -279,7 +279,7 @@ module AutomatedChecks
               end
 
               context "without matching first name" do
-                let(:data) { super().merge({name: "Except #{claim_arg.surname}"}) }
+                let(:data) { super().merge({firstName: "Except"}) }
 
                 it { is_expected.to be_an_instance_of(Task) }
 
@@ -355,7 +355,7 @@ module AutomatedChecks
               end
 
               context "without matching surname" do
-                let(:data) { super().merge({name: "#{claim_arg.first_name} Except"}) }
+                let(:data) { super().merge({lastName: "Except"}) }
 
                 it { is_expected.to be_an_instance_of(Task) }
 
@@ -430,50 +430,8 @@ module AutomatedChecks
                 end
               end
 
-              context "with middle names" do
-                let(:data) { super().merge({name: "#{claim_arg.first_name} Middle Names #{claim_arg.surname}"}) }
-
-                it { is_expected.to be_an_instance_of(Task) }
-
-                describe "identity confirmation task" do
-                  subject(:identity_confirmation_task) { claim_arg.tasks.find_by(name: "identity_confirmation") }
-
-                  before { perform }
-
-                  describe "#claim_verifier_match" do
-                    subject(:claim_verifier_match) { identity_confirmation_task.claim_verifier_match }
-
-                    it { is_expected.to eq "all" }
-                  end
-
-                  describe "#created_by" do
-                    subject(:created_by) { identity_confirmation_task.created_by }
-
-                    it { is_expected.to eq nil }
-                  end
-
-                  describe "#passed" do
-                    subject(:passed) { identity_confirmation_task.passed }
-
-                    it { is_expected.to eq true }
-                  end
-
-                  describe "#manual" do
-                    subject(:manual) { identity_confirmation_task.manual }
-
-                    it { is_expected.to eq false }
-                  end
-                end
-
-                describe "note" do
-                  subject(:note) { claim_arg.notes.last }
-
-                  it { is_expected.to eq(nil) }
-                end
-              end
-
               context "without matching date of birth" do
-                let(:data) { super().merge({dob: claim_arg.date_of_birth + 1.day}) }
+                let(:data) { super().merge({dateOfBirth: (claim_arg.date_of_birth + 1.day).to_s}) }
 
                 it { is_expected.to be_an_instance_of(Task) }
 
@@ -605,7 +563,16 @@ module AutomatedChecks
               end
 
               context "with teacher status alert" do
-                let(:data) { super().merge({active_alert: true}) }
+                let(:data) do
+                  super().merge(
+                    alerts: [
+                      {
+                        startDate: "2026-02-03",
+                        endDate: nil
+                      }
+                    ]
+                  )
+                end
 
                 it { is_expected.to be_an_instance_of(Task) }
 
@@ -737,8 +704,8 @@ module AutomatedChecks
                 let(:data) do
                   super().merge(
                     {
-                      dob: claim_arg.date_of_birth + 1.day,
-                      name: "Except #{claim_arg.surname}"
+                      dateOfBirth: (claim_arg.date_of_birth + 1.day).to_s,
+                      firstName: "Except"
                     }
                   )
                 end

@@ -68,52 +68,34 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
       status = 404
     else
+      # TODO: use dqt_helpers.rb stubbing not right now
       body = {
-        trn: data[:teacher_reference_number],
-        ni_number: data[:national_insurance_number],
-        name: data[:name],
-        dob: data[:date_of_birth] || Date.today,
-        active_alert: data[:active_alert?] || false,
-        state: 0,
-        state_name: "Active",
-        qualified_teacher_status: {
-          name: "Qualified teacher (trained)",
-          qts_date: (data[:qts_award_date] || Date.today).to_s,
-          state: 0,
-          state_name: "Active"
+        trn: data[:trn],
+        lastName: data[:lastName],
+        firstName: data[:firstName],
+        dateOfBirth: (data[:dateOfBirth] || Date.today).to_s,
+        nationalInsuranceNumber: data[:nationalInsuranceNumber],
+        qts: {
+          holdsFrom: (data.dig(:qts, :holdsFrom) || Date.today).to_s
         },
+        routesToProfessionalStatuses: data[:routesToProfessionalStatuses] || [],
         induction: {
-          start_date: "2021-07-01T00:00:00Z",
-          completion_date: "2021-07-05T00:00:00Z",
-          status: "Pass",
-          state: 0,
-          state_name: "Active"
+          status: "Passed",
+          startDate: "2021-07-01",
+          completedDate: "2021-07-05"
         },
-        initial_teacher_training: {
-          programme_start_date: (data[:itt_start_date] || "2020-07-04T00:00:00Z").to_s,
-          programme_end_date: "2021-07-04T00:00:00Z",
-          programme_type: "Overseas Trained Teacher Programme",
-          result: "Pass",
-          subject1: data.dig(:itt_subjects, 0).to_s,
-          subject1_code: data.dig(:itt_subject_codes, 0).to_s,
-          subject2: data.dig(:itt_subjects, 1).to_s,
-          subject2_code: data.dig(:itt_subject_codes, 1).to_s,
-          subject3: data.dig(:itt_subjects, 2).to_s,
-          subject3_codes: data.dig(:itt_subject_codes, 2).to_s,
-          qualification: (data[:qualification_name] || "Postgraduate Certificate in Education").to_s,
-          state: 0,
-          state_name: "Active"
-        }
+        alerts: data[:alerts] || []
       }
 
       status = 200
     end
 
-    stub_request(:get, "#{ENV["DQT_API_URL"]}teachers/#{claim.eligibility.teacher_reference_number}")
-      .with(query: WebMock::API.hash_including({
-        birthdate: claim.date_of_birth.to_s,
-        nino: claim.national_insurance_number
-      }))
+    query_params = {
+      include: "alerts,induction,routesToProfessionalStatuses"
+    }
+
+    stub_request(:get, "#{ENV["DQT_API_URL"]}persons/#{claim.eligibility.teacher_reference_number}")
+      .with(query: WebMock::API.hash_including(query_params))
       .to_return(
         body: body.to_json,
         status: status,
@@ -179,10 +161,11 @@ RSpec.feature "Admin claim tasks update with DQT API" do
       context "with matching DQT identity" do
         let(:data) do
           {
-            date_of_birth: claim.date_of_birth,
-            name: "#{claim.first_name} #{claim.surname}",
-            national_insurance_number: claim.national_insurance_number,
-            teacher_reference_number: claim.eligibility.teacher_reference_number
+            dateOfBirth: claim.date_of_birth,
+            firstName: claim.first_name,
+            lastName: claim.surname,
+            nationalInsuranceNumber: claim.national_insurance_number,
+            trn: claim.eligibility.teacher_reference_number
           }
         end
 
@@ -217,10 +200,11 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         context "except national insurance number" do
           let(:data) do
             {
-              date_of_birth: claim.date_of_birth,
-              name: "#{claim.first_name} #{claim.surname}",
-              national_insurance_number: "AB100000B",
-              teacher_reference_number: claim.eligibility.teacher_reference_number
+              dateOfBirth: claim.date_of_birth,
+              firstName: claim.first_name,
+              lastName: claim.surname,
+              nationalInsuranceNumber: "AB100000B",
+              trn: claim.eligibility.teacher_reference_number
             }
           end
 
@@ -273,10 +257,11 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         context "except matching teacher reference number" do
           let(:data) do
             {
-              date_of_birth: claim.date_of_birth,
-              name: "#{claim.first_name} #{claim.surname}",
-              national_insurance_number: claim.national_insurance_number,
-              teacher_reference_number: "7654321"
+              dateOfBirth: claim.date_of_birth,
+              firstName: claim.first_name,
+              lastName: claim.surname,
+              nationalInsuranceNumber: claim.national_insurance_number,
+              trn: "7654321"
             }
           end
 
@@ -325,10 +310,11 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         context "except matching first name" do
           let(:data) do
             {
-              date_of_birth: claim.date_of_birth,
-              name: "Except #{claim.surname}",
-              national_insurance_number: claim.national_insurance_number,
-              teacher_reference_number: claim.eligibility.teacher_reference_number
+              dateOfBirth: claim.date_of_birth,
+              firstName: "Except",
+              lastName: claim.surname,
+              nationalInsuranceNumber: claim.national_insurance_number,
+              trn: claim.eligibility.teacher_reference_number
             }
           end
 
@@ -381,10 +367,11 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         context "except matching surname" do
           let(:data) do
             {
-              date_of_birth: claim.date_of_birth,
-              name: "#{claim.first_name} Except",
-              national_insurance_number: claim.national_insurance_number,
-              teacher_reference_number: claim.eligibility.teacher_reference_number
+              dateOfBirth: claim.date_of_birth,
+              firstName: claim.first_name,
+              lastName: "Except",
+              nationalInsuranceNumber: claim.national_insurance_number,
+              trn: claim.eligibility.teacher_reference_number
             }
           end
 
@@ -438,52 +425,14 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           end
         end
 
-        context "with middle names" do
-          let(:data) do
-            {
-              date_of_birth: claim.date_of_birth,
-              name: "#{claim.first_name} Middle Names #{claim.surname}",
-              national_insurance_number: claim.national_insurance_number,
-              teacher_reference_number: claim.eligibility.teacher_reference_number
-            }
-          end
-
-          context "admin claim tasks view" do
-            before { visit admin_claim_tasks_path(claim) }
-
-            scenario "shows identity confirmation passed" do
-              expect(task("Identity confirmation")).to have_text("Passed")
-            end
-          end
-
-          context "admin claim tasks identity confirmation view" do
-            before { visit admin_claim_task_path(claim, :identity_confirmation) }
-
-            scenario "shows task outcome performed by automated check" do
-              expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
-            end
-          end
-
-          context "admin claim notes view" do
-            before { visit admin_claim_notes_path(claim) }
-
-            scenario "doesn't show not matched by an automated check" do
-              expect(notes).not_to include(
-                have_text(%r{[Nn]ot matched}).and(
-                  have_text("by an automated check")
-                )
-              )
-            end
-          end
-        end
-
         context "except matching date of birth" do
           let(:data) do
             {
-              date_of_birth: claim.date_of_birth + 1.day,
-              name: "#{claim.first_name} #{claim.surname}",
-              national_insurance_number: claim.national_insurance_number,
-              teacher_reference_number: claim.eligibility.teacher_reference_number
+              dateOfBirth: claim.date_of_birth + 1.day,
+              firstName: claim.first_name,
+              lastName: claim.surname,
+              nationalInsuranceNumber: claim.national_insurance_number,
+              trn: claim.eligibility.teacher_reference_number
             }
           end
 
@@ -577,11 +526,17 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         context "with teacher status alert" do
           let(:data) do
             {
-              active_alert?: true,
-              date_of_birth: claim.date_of_birth,
-              name: "#{claim.first_name} #{claim.surname}",
-              national_insurance_number: claim.national_insurance_number,
-              teacher_reference_number: claim.eligibility.teacher_reference_number
+              dateOfBirth: claim.date_of_birth,
+              firstName: claim.first_name,
+              lastName: claim.surname,
+              nationalInsuranceNumber: claim.national_insurance_number,
+              trn: claim.eligibility.teacher_reference_number,
+              alerts: [
+                {
+                  startDate: "2026-02-03",
+                  endDate: nil
+                }
+              ]
             }
           end
 
@@ -632,10 +587,11 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         context "except multiple matches" do
           let(:data) do
             {
-              date_of_birth: claim.date_of_birth + 1.day,
-              name: "Except #{claim.surname}",
-              national_insurance_number: claim.national_insurance_number,
-              teacher_reference_number: claim.eligibility.teacher_reference_number
+              dateOfBirth: claim.date_of_birth + 1.day,
+              firstName: "Except",
+              lastName: claim.surname,
+              nationalInsuranceNumber: claim.national_insurance_number,
+              trn: claim.eligibility.teacher_reference_number
             }
           end
 
@@ -728,13 +684,26 @@ RSpec.feature "Admin claim tasks update with DQT API" do
       context "with eligible qualifications" do
         let(:data) do
           {
-            qts_award_date: Date.new( # 1st September is start of academic year
-              2014,
-              9,
-              1
-            ),
-            itt_subjects: ["Mathematics"],
-            itt_subject_codes: ["100403"]
+            qts: {
+              # 1st September is start of academic year
+              holdsFrom: Date.new(2014, 9, 1)
+            },
+            routesToProfessionalStatuses: [
+              {
+                holdsFrom: "2022-01-09",
+                trainingSubjects: [
+                  {
+                    name: "Mathematics",
+                    reference: "100403"
+                  }
+                ],
+                trainingStartDate: "2020-07-04",
+                trainingEndDate: nil,
+                routeToProfessionalStatusType: {
+                  name: "Overseas Trained Teacher Programme"
+                }
+              }
+            ]
           }
         end
 
@@ -785,13 +754,29 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         context "except QTS award date" do
           let(:data) do
             {
-              qts_award_date: Date.new(
-                policy.first_eligible_qts_award_year(claim.academic_year).start_year - 1,
-                9,
-                1
-              ),
-              itt_subjects: ["A Ineligible SUBJECT"],
-              itt_subject_codes: ["821009"]
+              qts: {
+                holdsFrom: Date.new(
+                  policy.first_eligible_qts_award_year(claim.academic_year).start_year - 1,
+                  9,
+                  1
+                )
+              },
+              routesToProfessionalStatuses: [
+                {
+                  holdsFrom: "2022-01-09",
+                  trainingSubjects: [
+                    {
+                      name: "A Ineligible SUBJECT",
+                      reference: "821009"
+                    }
+                  ],
+                  trainingStartDate: "2020-07-04",
+                  trainingEndDate: nil,
+                  routeToProfessionalStatusType: {
+                    name: "Overseas Trained Teacher Programme"
+                  }
+                }
+              ]
             }
           end
 
@@ -891,14 +876,32 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
       context "without eligible qualifications" do
         let(:data) do
+          qts_award_date = Date.new(
+            policy.first_eligible_qts_award_year(claim.academic_year).start_year - 1,
+            9,
+            1
+          ).to_s
+
           {
-            qts_award_date: Date.new(
-              policy.first_eligible_qts_award_year(claim.academic_year).start_year - 1,
-              9,
-              1
-            ),
-            itt_subjects: ["Student Loans Ineligible Subject"],
-            itt_subject_codes: ["010101"]
+            qts: {
+              holdsFrom: qts_award_date
+            },
+            routesToProfessionalStatuses: [
+              {
+                holdsFrom: qts_award_date,
+                trainingSubjects: [
+                  {
+                    name: "Student Loans Ineligible Subject",
+                    reference: "010101"
+                  }
+                ],
+                trainingStartDate: "2020-07-04",
+                trainingEndDate: nil,
+                routeToProfessionalStatusType: {
+                  name: "Overseas Trained Teacher Programme"
+                }
+              }
+            ]
           }
         end
 
