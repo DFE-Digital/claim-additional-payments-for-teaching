@@ -1,11 +1,11 @@
 <% if Reminder.to_be_sent.by_journey(journey_configuration.journey).any? %>
   <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="reminders-warning-message">
     <div class="govuk-form-group">
-        <div class="govuk-warning-text" id="ecp-reminder-count-warning">
+        <div class="govuk-warning-text" id="reminder-count-warning">
         <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
           <strong class="govuk-warning-text__text">
             <span class="govuk-visually-hidden">Warning</span>
-            <%= t("admin.journey_configuration.reminder_warning", count: Reminder.to_be_sent.count) %>
+            <%= t("admin.journey_configuration.reminder_warning", count: Reminder.to_be_sent.by_journey(journey_configuration.journey).count) %>
           </strong>
         </div>
     </div>

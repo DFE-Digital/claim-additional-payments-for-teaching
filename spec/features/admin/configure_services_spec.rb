@@ -68,6 +68,8 @@ RSpec.feature "Service configuration" do
       create(:reminder, :with_fe_reminder, email_verified: true, itt_academic_year: AcademicYear.next)
       create(:reminder, :with_fe_reminder, email_verified: true, itt_academic_year: AcademicYear.current, email_sent_at: Date.today)
       create(:reminder, :with_fe_reminder, email_verified: false, itt_academic_year: AcademicYear.current)
+      # sendable reminders for a different journey should not be included in the count
+      create_list(:reminder, 3, :with_fe_reminder, email_verified: true, itt_academic_year: AcademicYear.current)
     end
 
     scenario "Service operator opens an TRI service for submissions" do
