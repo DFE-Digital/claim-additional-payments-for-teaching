@@ -35,6 +35,9 @@
   - onelogin_idv_last_name
   - onelogin_idv_full_name
   - onelogin_idv_date_of_birth
+  :claimant_flags:
+  - identification_attribute
+  - identification_value
   :dfe_sign_in_users:
   - given_name
   - family_name

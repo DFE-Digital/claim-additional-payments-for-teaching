@@ -1,0 +1,73 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Upload flagged claimants CSV
+    </h1>
+
+    <p class="govuk-body">
+      Claims submitted by a claimant who is in this CSV will be flagged with an
+      additional task to review the claim.
+    </p>
+
+    <p class="govuk-body">
+      The CSV file expects the following columns:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        policy - the policy this flag applies to. Add an new row for each policy we want
+        to flag the claimant for.
+      </li>
+
+      <li>
+        identification_attribute - the attribute on the claim used to identify the
+        claimant. Currently the attributes supported are <br>
+        <%= ClaimantFlag::IDENTIFICATION_ATTRIBUTES.join("<br>").html_safe %>
+      </li>
+
+      <li>
+        identification_value - the value of the identification attribute to match on the
+        claim. Eg if the identification attribute is "national_insurance_number" then
+        this column should contain the national insurance number of the claimant who's
+        claims we want to flag.
+      </li>
+
+      <li>
+        reason - the reason for flagging the claimant. This will be shown to the
+        admin when they are reviewing the claim. The available reasons are: <br>
+        <%= ClaimantFlag.reasons.keys.join("<br>").html_safe %>
+      </li>
+
+      <li>
+        suggested_action - (optional) this will be displayed on the task
+      </li>
+    </ul>
+
+    <%= form_with(
+      model: @form,
+      url: admin_claimant_flags_csv_uploads_path,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_file_field(
+        :file,
+        label: { text: "Upload a CSV file" },
+        javascript: true
+      ) %>
+
+      <%= f.govuk_submit "Upload" %>
+    <% end %>
+
+    <% if current_admin.is_service_admin? %>
+      <p class="govuk-body">
+        <%= link_to(
+          "Download claimant flags CSV",
+          admin_claimant_flags_csv_download_path(format: :csv),
+          class: "govuk-link"
+        ) %>
+      </p>
+    <% end %>
+  </div>
+</div>
+

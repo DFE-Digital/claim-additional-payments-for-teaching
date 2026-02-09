@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_29_172243) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_03_152342) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -39,6 +39,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_29_172243) do
     t.index ["claim_id", "payment_id"], name: "index_claim_payments_on_claim_id_and_payment_id", unique: true
     t.index ["claim_id"], name: "index_claim_payments_on_claim_id"
     t.index ["payment_id"], name: "index_claim_payments_on_payment_id"
+  end
+
+  create_table "claimant_flags", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "identification_attribute", null: false
+    t.string "identification_value", null: false
+    t.string "policy", null: false
+    t.uuid "previous_claim_id"
+    t.string "reason", null: false
+    t.string "suggested_action"
+    t.datetime "updated_at", null: false
+    t.index ["previous_claim_id"], name: "index_claimant_flags_on_previous_claim_id"
   end
 
   create_table "claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -834,6 +846,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_29_172243) do
   add_foreign_key "amendments", "dfe_sign_in_users", column: "dfe_sign_in_users_id"
   add_foreign_key "claim_payments", "claims"
   add_foreign_key "claim_payments", "payments"
+  add_foreign_key "claimant_flags", "claims", column: "previous_claim_id"
   add_foreign_key "claims", "journeys_sessions"
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "early_career_payments_eligibilities", "schools", column: "current_school_id"
