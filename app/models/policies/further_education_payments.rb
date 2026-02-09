@@ -1,6 +1,6 @@
 module Policies
   module FurtherEducationPayments
-    DECISION_DEADLINE = 25.weeks.freeze
+    DECISION_DEADLINE = 19.weeks.freeze
     # How long after claim submission the provider has to complete
     # verification before it is considered overdue
     POST_SUBMISSION_VERIFICATION_DEADLINE = 2.weeks
