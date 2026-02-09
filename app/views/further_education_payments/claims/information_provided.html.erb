@@ -14,24 +14,8 @@
 
     <%= govuk_list [
       "further education provider where you currently teach",
-      "Teacher’s Pension Scheme, if you have a teacher reference number (TRN) and choose to provide it",
       "the Student Loans Company"
     ], type: :bullet %>
-
-    <%= govuk_details(summary_text: "Where to find your TRN") do %>
-      <p class="govuk-body">
-        A TRN is a 7-digit number that uniquely identifies you in the education sector in England. Most people eligible for a TRN will be given one automatically.
-      </p>
-
-      <p class="govuk-body">
-        If you are unsure what your TRN is, you can:
-      </p>
-
-      <%= govuk_list [
-        "Check your payslip or Teachers’ Pension Scheme Benefit Statement.",
-        "Use #{govuk_link_to "Find a lost TRN", "https://find-a-lost-trn.education.gov.uk/start"} to check if you have a TRN or find your TRN.".html_safe,
-      ], type: :number %>
-    <% end %>
 
     <h2 class="govuk-heading-m">
       How we will pay you
@@ -52,22 +36,9 @@
 
     <h2 class="govuk-heading-m">Student loan deductions</h2>
 
-    <p class="govuk-body">
-      If you are currently paying off a student loan, a deduction from your payment will go towards repaying it.
-    </p>
-
-    <h2 class="govuk-heading-m">Income Tax</h2>
-
-    <p class="govuk-body">
-      Your targeted retention incentive payment is taxable income.
-      However DfE will pay any Income Tax and National Insurance contributions due to HMRC for you.
-      This means the payment amount you receive may be lower following tax deductions.
-    </p>
-
-    <p class="govuk-body">
-      For more details, you can read about payments and deductions for the
-      <%= govuk_link_to "targeted retention incentive payment", t("further_education_payments.eligibility_criteria_link.url"), new_tab: true %>.
-    </p>
+    <div class="govuk-body">
+      You can read how student loan deductions and Income Tax may affect your payment in the <%= govuk_link_to "guidance on targeted retention incentive payments for FE teachers", "https://www.gov.uk/guidance/targeted-retention-incentive-payments-for-fe-teachers#payments" %>.
+    </div>
 
     <%= govuk_button_to "Continue", claim_path(current_journey_routing_name), method: :patch %>
   </div>
