@@ -20,6 +20,10 @@ module FurtherEducationPayments
           Providers::
           Claims::
           AnswersPresenter.new(claim: @claim)
+
+        @claim_presenter =
+          FurtherEducationPayments::Providers::Claims::ClaimPresenter
+            .new(@claim)
       end
     end
   end
