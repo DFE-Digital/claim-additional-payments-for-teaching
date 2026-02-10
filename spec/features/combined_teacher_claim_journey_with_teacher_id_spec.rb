@@ -323,7 +323,7 @@ RSpec.feature "Combined journey with Teacher ID" do
           trainingStartDate: "2024-01-01",
           trainingEndDate: nil,
           routeToProfessionalStatusType: {
-            name: "BA (Hons)"
+            name: "Primary and secondary undergraduate fee funded"
           }
         }
       ]

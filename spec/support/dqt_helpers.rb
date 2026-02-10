@@ -31,7 +31,7 @@ module DqtHelpers
           trainingStartDate: "2024-01-09",
           trainingEndDate: nil,
           routeToProfessionalStatusType: {
-            name: "BA (Hons)"
+            name: "Primary and secondary undergraduate fee funded"
           }
         }
       ],

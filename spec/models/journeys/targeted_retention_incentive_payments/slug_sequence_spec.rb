@@ -256,7 +256,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
                       trainingStartDate: "2024-01-09",
                       trainingEndDate: nil,
                       routeToProfessionalStatusType: {
-                        name: "Professional Graduate Diploma in Education" # route_into_teaching
+                        name: "Core" # route_into_teaching
                       }
                     }
                   ]
@@ -302,7 +302,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
                       trainingStartDate: "2024-01-01",
                       trainingEndDate: nil,
                       routeToProfessionalStatusType: {
-                        name: "Professional Graduate Diploma in Education" # route_into_teaching
+                        name: "Core" # route_into_teaching
                       }
                     }
                   ]
@@ -346,7 +346,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
                       trainingStartDate: "2024-01-01",
                       trainingEndDate: nil,
                       routeToProfessionalStatusType: {
-                        name: "BA"
+                        name: "Primary and secondary undergraduate fee funded"
                       }
                     }
                   ]

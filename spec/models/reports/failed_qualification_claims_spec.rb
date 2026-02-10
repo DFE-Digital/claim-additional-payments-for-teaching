@@ -122,7 +122,7 @@ RSpec.describe Reports::FailedQualificationClaims do
             Degree codes:       456
             ITT start date:     01/08/2022
             QTS award date:     01/09/2023
-            Qualification name: Graduate Diploma
+            Qualification name: Core
           </pre>
         HTML
       )
@@ -171,7 +171,7 @@ RSpec.describe Reports::FailedQualificationClaims do
             Degree codes:       456
             ITT start date:     02/08/2022
             QTS award date:     01/10/2023
-            Qualification name: Graduate Diploma
+            Qualification name: Core
           </pre>
         HTML
       )
@@ -211,7 +211,7 @@ RSpec.describe Reports::FailedQualificationClaims do
             Degree codes:       456
             ITT start date:     02/08/2022
             QTS award date:     01/10/2023
-            Qualification name: Graduate Diploma
+            Qualification name: Core
           </pre>
         HTML
       )
@@ -256,7 +256,7 @@ RSpec.describe Reports::FailedQualificationClaims do
             Degree codes:       456
             ITT start date:     01/08/2022
             QTS award date:     01/09/2023
-            Qualification name: Graduate Diploma
+            Qualification name: Core
           </pre>
         HTML
       )
@@ -300,7 +300,7 @@ RSpec.describe Reports::FailedQualificationClaims do
             Degree codes:       456
             ITT start date:     01/08/2022
             QTS award date:     01/09/2023
-            Qualification name: Graduate Diploma
+            Qualification name: Core
           </pre>
         HTML
       )
@@ -390,7 +390,7 @@ RSpec.describe Reports::FailedQualificationClaims do
           "mathematics, physics",
           "01/08/2022",
           "01/09/2023",
-          "Graduate Diploma"
+          "Core"
         ],
         [
           targeted_retention_incentive_claim_approved_failed_qualification_task.reference,
@@ -406,7 +406,7 @@ RSpec.describe Reports::FailedQualificationClaims do
           "physics",
           "02/08/2022",
           "01/10/2023",
-          "Graduate Diploma"
+          "Core"
         ],
         [
           tslr_claim_approved_failed_qualification_task.reference,
@@ -422,7 +422,7 @@ RSpec.describe Reports::FailedQualificationClaims do
           "physics",
           "02/08/2022",
           "01/10/2023",
-          "Graduate Diploma"
+          "Core"
         ],
         [
           ecp_claim_approved_no_match_qualification_task.reference,
@@ -438,7 +438,7 @@ RSpec.describe Reports::FailedQualificationClaims do
           "mathematics, physics",
           "01/08/2022",
           "01/09/2023",
-          "Graduate Diploma"
+          "Core"
         ],
         [
           ecp_claim_approved_ineligibile_note.reference,
@@ -454,7 +454,7 @@ RSpec.describe Reports::FailedQualificationClaims do
           "mathematics, physics",
           "01/08/2022",
           "01/09/2023",
-          "Graduate Diploma"
+          "Core"
         ],
         [
           ecp_claim_approved_not_eligible_note.reference,

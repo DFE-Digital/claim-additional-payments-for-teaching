@@ -114,7 +114,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         Degree codes:       []
         ITT start date:     2015-09-01
         QTS award date:     2014-09-01
-        Qualification name: BA
+        Qualification name: Primary and secondary undergraduate fee funded
       </pre>
     HTML
   end

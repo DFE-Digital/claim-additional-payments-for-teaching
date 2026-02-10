@@ -39,7 +39,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::DqtRecord do
   let(:degree_codes) { [] }
   let(:itt_start_date) { Date.parse("1/9/2019") }
   let(:qts_award_date) { itt_start_date.end_of_month }
-  let(:qualification_name) { "Postgraduate Certificate in Education" }
+  let(:qualification_name) { "Core" }
 
   describe "#eligible?" do
     context "without ITT subject code" do
@@ -188,7 +188,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::DqtRecord do
 
       context "when route into teaching is different than postgrad" do
         let(:qualification) { :undergraduate_itt }
-        let(:qualification_name) { "BA" }
+        let(:qualification_name) { "Primary and secondary undergraduate fee funded" }
         let(:itt_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2018)) }
 
         it { is_expected.to be_eligible }
@@ -347,7 +347,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::DqtRecord do
 
     let(:record) do
       OpenStruct.new(
-        qualification_name: "BA",
+        qualification_name: "Primary and secondary undergraduate fee funded",
         qts_award_date:
       )
     end

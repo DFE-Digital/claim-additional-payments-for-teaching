@@ -363,7 +363,7 @@ RSpec.describe "Targeted retention incentives ineligible paths" do
                 trainingStartDate: "1990-01-01",
                 trainingEndDate: nil,
                 routeToProfessionalStatusType: {
-                  name: "BA (Hons)"
+                  name: "Primary and secondary undergraduate fee funded"
                 }
               }
             ]
@@ -496,7 +496,7 @@ RSpec.describe "Targeted retention incentives ineligible paths" do
                 trainingStartDate: itt_year,
                 trainingEndDate: nil,
                 routeToProfessionalStatusType: {
-                  name: "BA (Hons)"
+                  name: "Primary and secondary undergraduate fee funded"
                 }
               }
             ]

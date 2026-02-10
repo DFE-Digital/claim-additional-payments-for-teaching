@@ -554,7 +554,7 @@ RSpec.describe "Targeted retention incentives eligible paths" do
             trainingStartDate: "2023-01-01",
             trainingEndDate: nil,
             routeToProfessionalStatusType: {
-              name: "BA (Hons)"
+              name: "Primary and secondary undergraduate fee funded"
             }
           }
         ]
