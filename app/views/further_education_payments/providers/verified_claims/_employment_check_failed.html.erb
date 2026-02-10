@@ -6,7 +6,7 @@
 
     <h1 class="govuk-heading-l">
       Claim reference: <%= @answers_presenter.reference %>
-      <%= govuk_tag(text: "Rejected", colour: "red") %>
+      <%= govuk_tag(text: @claim_presenter.dfe_status_text, colour: @claim_presenter.dfe_status_colour) %>
     </h1>
 
     <%= govuk_inset_text(

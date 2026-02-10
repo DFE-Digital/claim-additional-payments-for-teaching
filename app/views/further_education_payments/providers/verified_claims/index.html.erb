@@ -27,6 +27,7 @@
       <% row.with_cell(text: "Claim reference") %>
       <% row.with_cell(text: "Date verified") %>
       <% row.with_cell(text: "Status") %>
+      <% row.with_cell(text: "DfE Status") %>
     <% end %>
   <% end %>
 
@@ -39,6 +40,7 @@
         <% row.with_cell(text: presenter.reference) %>
         <% row.with_cell(text: l(presenter.provider_verification_completed_at)) %>
         <% row.with_cell(text: govuk_tag(text: presenter.status, colour: presenter.colour)) %>
+        <% row.with_cell(text: govuk_tag(text: presenter.dfe_status_text, colour: presenter.dfe_status_colour)) %>
       <% end %>
     <% end %>
   <% end %>

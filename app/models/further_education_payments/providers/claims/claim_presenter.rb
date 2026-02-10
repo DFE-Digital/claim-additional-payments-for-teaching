@@ -46,6 +46,39 @@ module FurtherEducationPayments
           end
         end
 
+        def dfe_status
+          if Claim.not_awaiting_qa.include?(claim)
+            :approved
+          elsif Claim.rejected_not_awaiting_qa.include?(claim)
+            :rejected
+          else
+            :pending
+          end
+        end
+
+        def dfe_status_text
+          I18n.t(
+            dfe_status,
+            scope: [
+              :further_education_payments_provider,
+              :presenters,
+              :claim_presenter,
+              :dfe_status
+            ]
+          )
+        end
+
+        def dfe_status_colour
+          case dfe_status
+          when :approved
+            "green"
+          when :rejected
+            "red"
+          when :pending
+            "yellow"
+          end
+        end
+
         def processed_by
           eligibility.processed_by_label
         end
