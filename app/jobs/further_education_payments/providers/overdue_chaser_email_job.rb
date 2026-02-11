@@ -2,6 +2,8 @@ module FurtherEducationPayments
   module Providers
     class OverdueChaserEmailJob < ApplicationJob
       def perform
+        return unless FeatureFlag.enabled?("fe_provider_dashboard")
+
         scope = Policies::FurtherEducationPayments::Eligibility
 
         scope = scope.awaiting_provider_verification_year_2
