@@ -332,7 +332,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       ).to eql("/further-education-payments/providers/verified-claims")
       expect(page).to have_css(
         "table tbody tr:first-child td:nth-child(4)",
-        text: "Completed"
+        text: "Pending"
       )
     end
   end
@@ -1263,7 +1263,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
           expect(page).to have_content(claim.reference)
 
           within table_row(claim.reference) do
-            expect(page).to have_content("Rejected")
+            expect(page).to have_content("Pending")
           end
 
           click_on claim.full_name

@@ -85,12 +85,12 @@ RSpec.describe "Provider verified claims dashboard", feature_flag: [:fe_provider
     expect(page).to have_selector("table tbody tr:first-child td:nth-child(1)", text: "A B")
     expect(page).to have_selector("table tbody tr:first-child td:nth-child(2)", text: claim2.reference)
     expect(page).to have_selector("table tbody tr:first-child td:nth-child(3)", text: "14 December 2024")
-    expect(page).to have_selector("table tbody tr:first-child td:nth-child(4)", text: "Complete")
+    expect(page).to have_selector("table tbody tr:first-child td:nth-child(4)", text: "Pending")
 
     expect(page).to have_selector("table tbody tr:nth-child(2) td:nth-child(1)", text: "C D")
     expect(page).to have_selector("table tbody tr:nth-child(2) td:nth-child(2)", text: claim1.reference)
     expect(page).to have_selector("table tbody tr:nth-child(2) td:nth-child(3)", text: "14 December 2024")
-    expect(page).to have_selector("table tbody tr:nth-child(2) td:nth-child(4)", text: "Complete")
+    expect(page).to have_selector("table tbody tr:nth-child(2) td:nth-child(4)", text: "Pending")
 
     click_link "A B"
 
