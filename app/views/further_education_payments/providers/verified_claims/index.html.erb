@@ -37,7 +37,7 @@
       <% body.with_row do |row| %>
         <% row.with_cell(text: govuk_link_to(presenter.full_name, further_education_payments_providers_verified_claim_path(presenter.claim))) %>
         <% row.with_cell(text: presenter.reference) %>
-        <% row.with_cell(text: l(presenter.provider_verification_completed_at)) %>
+        <% row.with_cell(text: l(presenter.provider_verification_completed_at.to_date)) %>
         <% row.with_cell(text: govuk_tag(text: presenter.dfe_status_text, colour: presenter.dfe_status_colour)) %>
       <% end %>
     <% end %>
