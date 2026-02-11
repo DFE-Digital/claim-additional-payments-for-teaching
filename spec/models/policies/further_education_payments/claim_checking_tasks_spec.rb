@@ -15,11 +15,17 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks, feature_f
     let(:identity_confirmed_with_onelogin) { true }
     let(:academic_year) { AcademicYear.current }
 
+    let(:fe_provider) do
+      create(:eligible_fe_provider, :with_school)
+    end
+
     let(:eligibility) do
       build(
         :further_education_payments_eligibility,
+        :eligible,
         :provider_verification_completed,
         teacher_reference_number: teacher_reference_number,
+        school: fe_provider.school,
         verified_by: create(
           :dfe_signin_user,
           given_name: "Walter",
@@ -168,6 +174,17 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks, feature_f
       it "shows alternative_verification task" do
         expect(subject.applicable_task_names).to include("fe_alternative_verification")
       end
+    end
+
+    context "when the provider is flagged" do
+      before do
+        create(
+          :further_education_payments_provider_flag,
+          ukprn: fe_provider.ukprn
+        )
+      end
+
+      it { expect(subject.applicable_task_names).to include("fe_provider_check") }
     end
   end
 end

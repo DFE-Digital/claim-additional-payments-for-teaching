@@ -38,12 +38,13 @@ class Task < ApplicationRecord
     first_year_application
     continuous_employment
     fe_repeat_applicant_check
+    fe_provider_check
     claimant_check
   ].freeze
 
   NAMES.each { |name| scope name.to_sym, -> { where(name: name) } }
 
-  BLOCKS_APPROAVAL = %w[claimant_check].freeze
+  BLOCKS_APPROAVAL = %w[claimant_check fe_provider_check].freeze
 
   belongs_to :claim
   belongs_to :created_by, class_name: "DfeSignIn::User", optional: true

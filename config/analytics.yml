@@ -355,6 +355,13 @@ shared:
     - flagged_as_mismatch_on_teaching_start_year # boolean, previous claim has a further_education_teaching_start_year of 2020 (for year2 claims) or there is a mismatch (for year3 and onwards)
     - flagged_as_previously_start_year_matches_claim_false # boolean, previous rejected claim where provider start year did not match claimant start year
     - provider_verification_deadline # date, deadline date for when provider should verify a claim
+  :further_education_payments_provider_flags:
+    - id # uuid, not used for anything
+    - academic_year # string, which academic year this flag applys to
+    - reason # string, reason for flagging claims from this provider, for 25/26 AY this will always be clawbacks
+    - ukprn # integer, ukprn of the provider who's claims we're flagging
+    - created_at # datetime, timestamp when record was created
+    - updated_at # datetime, timestamp when record was last updated
   :eligible_ey_providers:
     - id # uuid, that identifies eligible EY provider
     - nursery_name # string, name of school
