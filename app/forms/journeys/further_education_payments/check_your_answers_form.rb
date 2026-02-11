@@ -104,6 +104,8 @@ module Journeys
             eligibility.public_send(:"#{name}=", value)
           end
         end
+
+        eligibility.provider_verification_deadline = Policies::FurtherEducationPayments.provider_verification_deadline(claim)
       end
 
       def generate_reference

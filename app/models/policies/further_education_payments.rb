@@ -232,6 +232,11 @@ module Policies
     end
 
     def provider_verification_deadline(claim)
+      if claim.nil?
+        claim = Claim.new(created_at: Time.zone.now)
+        claim.eligibility = Policies::FurtherEducationPayments::Eligibility.new
+      end
+
       if claim.eligibility.read_attribute(:provider_verification_deadline).present?
         claim.eligibility.read_attribute(:provider_verification_deadline)
       else

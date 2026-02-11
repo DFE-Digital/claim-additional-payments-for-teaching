@@ -50,6 +50,12 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
   describe "#save" do
     subject { form.save }
 
+    around do |example|
+      freeze_time(Time.new(2026, 2, 11)) do
+        example.run
+      end
+    end
+
     it "saves all answers into the Eligibility model" do
       subject
       claim = form.claim
@@ -95,6 +101,8 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
       expect(eligibility.subject_to_formal_performance_action).to eq(answers.subject_to_formal_performance_action)
       expect(eligibility.subject_to_disciplinary_action).to eq(answers.subject_to_disciplinary_action)
       expect(eligibility.half_teaching_hours).to eq(answers.half_teaching_hours)
+
+      expect(eligibility.provider_verification_deadline).to eql(Date.new(2026, 5, 4))
     end
 
     context "when in year 2 - further_education_teaching_start_year" do
