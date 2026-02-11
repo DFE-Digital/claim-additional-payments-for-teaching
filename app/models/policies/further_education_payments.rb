@@ -3,7 +3,7 @@ module Policies
     DECISION_DEADLINE = 19.weeks.freeze
     # How long after claim submission the provider has to complete
     # verification before it is considered overdue
-    POST_SUBMISSION_VERIFICATION_DEADLINE = 2.weeks
+    POST_SUBMISSION_VERIFICATION_DEADLINE = 3.weeks
 
     include BasePolicy
     extend self
@@ -229,6 +229,19 @@ module Policies
 
     def year_2_claim?(claim)
       claim.academic_year == AcademicYear.new(2025)
+    end
+
+    def provider_verification_deadline(claim)
+      if claim.eligibility.read_attribute(:provider_verification_deadline).present?
+        claim.eligibility.read_attribute(:provider_verification_deadline)
+      else
+        (claim.created_at + POST_SUBMISSION_VERIFICATION_DEADLINE).to_date
+
+        [
+          (claim.created_at + POST_SUBMISSION_VERIFICATION_DEADLINE).to_date,
+          Date.new(2026, 4, 13) + POST_SUBMISSION_VERIFICATION_DEADLINE
+        ].max
+      end
     end
   end
 end

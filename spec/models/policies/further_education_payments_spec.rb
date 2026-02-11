@@ -80,4 +80,47 @@ RSpec.describe Policies::FurtherEducationPayments do
       subject.provider_verification_completed!(claim)
     end
   end
+
+  describe "#provider_verification_deadline" do
+    let(:now) { Time.new(2026, 2, 11) }
+
+    around do |example|
+      freeze_time(now) do
+        example.run
+      end
+    end
+
+    context "when db value not persisted" do
+      let(:claim) { create(:claim, :further_education) }
+
+      it "returns calculated value" do
+        expect(subject.provider_verification_deadline(claim)).to eql Date.new(2026, 5, 4)
+      end
+    end
+
+    context "when db value not persisted and after opening" do
+      let(:now) { Time.new(2026, 6, 1) }
+      let(:claim) { create(:claim, :further_education) }
+
+      it "returns calculated value" do
+        expect(subject.provider_verification_deadline(claim)).to eql Date.new(2026, 6, 22)
+      end
+    end
+
+    context "when db value persisted" do
+      let(:claim) do
+        create(
+          :claim,
+          :further_education,
+          eligibility_attributes: {
+            provider_verification_deadline: Date.today
+          }
+        )
+      end
+
+      it "returns persisted value" do
+        expect(subject.provider_verification_deadline(claim)).to eql Date.new(2026, 2, 11)
+      end
+    end
+  end
 end

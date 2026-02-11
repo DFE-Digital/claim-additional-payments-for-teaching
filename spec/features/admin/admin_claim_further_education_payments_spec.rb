@@ -247,7 +247,7 @@ RSpec.feature "Admin claim further education payments" do
               :further_education,
               :submitted,
               eligibility: eligibility,
-              created_at: 3.weeks.ago
+              created_at: 4.weeks.ago
             )
 
             visit admin_claim_task_path(claim, "fe_provider_verification_v2")
