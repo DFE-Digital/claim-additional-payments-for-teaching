@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe FurtherEducationPayments::Providers::WeeklyUpdateEmailJob, type: :job do
+RSpec.describe FurtherEducationPayments::Providers::WeeklyUpdateEmailJob, type: :job, feature_flag: [:fe_provider_dashboard] do
   let(:provider) { create(:eligible_fe_provider, :with_school) }
   let(:other_provider) { create(:eligible_fe_provider, :with_school) }
 
