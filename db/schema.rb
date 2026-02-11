@@ -381,6 +381,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_11_162402) do
     t.index ["school_id"], name: "index_fe_payments_eligibilities_on_school_id"
   end
 
+  create_table "further_education_payments_provider_flags", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "academic_year", null: false
+    t.datetime "created_at", null: false
+    t.string "reason", null: false
+    t.integer "ukprn", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "international_relocation_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "application_route"
     t.decimal "award_amount", precision: 7, scale: 2
