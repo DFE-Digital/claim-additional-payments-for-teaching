@@ -34,7 +34,8 @@ module Journeys
 
           journey_session.answers.assign_attributes(
             add_another_teacher: add_another_teacher,
-            teacher_details_form_completed: !add_another_teacher
+            teacher_details_form_completed: !add_another_teacher,
+            performance_and_discipline_completed: !add_another_teacher
           )
           journey_session.save!
         end

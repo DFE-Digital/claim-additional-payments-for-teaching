@@ -11,6 +11,22 @@
   )
 ) %>
 
+<% if @form.teacher_id %>
+  <%= govuk_back_link(
+     href: claim_path(
+       current_journey_routing_name,
+       "manage-teachers"
+     )
+  ) %>
+<% else %>
+  <%= govuk_back_link(
+     href: claim_path(
+       current_journey_routing_name,
+       "organisation-email-address"
+     )
+  ) %>
+<% end %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(

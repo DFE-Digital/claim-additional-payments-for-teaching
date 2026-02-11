@@ -10,6 +10,8 @@ module Journeys
           employer-paye-reference
           organisation-email-address
           provide-teacher-details
+          performance-and-discipline
+          teacher-not-eligible
           manage-teachers
           check-your-answers
           confirmation
@@ -17,7 +19,12 @@ module Journeys
 
         RESTRICTED_SLUGS = %w[].freeze
 
-        DEAD_END_SLUGS = %w[confirmation].freeze
+        DEAD_END_SLUGS = %w[
+          provide-teacher-details
+          performance-and-discipline
+          teacher-not-eligible
+          confirmation
+        ].freeze
 
         attr_reader :journey_session
 
@@ -43,6 +50,14 @@ module Journeys
           array << "organisation-email-address"
 
           array << "provide-teacher-details"
+
+          if answers.current_teacher&.performance_and_discipline_incomplete?
+            array << "performance-and-discipline"
+          end
+
+          if answers.current_teacher&.performance_or_discipline
+            array << "teacher-not-eligible"
+          end
 
           array << "manage-teachers"
 

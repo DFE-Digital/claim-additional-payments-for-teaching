@@ -82,6 +82,17 @@ en:
             blank: "Enter the teacher‘s National Insurance number"
           teacher_reference_number:
             blank: "Enter the teacher‘s teacher reference number (TRN)"
+      performance_and_discipline:
+        title: "Performance and discipline"
+        question: "Is %{teacher_name} currently subject to any performance or disciplinary measures?"
+        errors:
+          inclusion: "Select yes if this teacher is subject to performance or disciplinary measures"
+      teacher_not_eligible:
+        title: "%{teacher_name} is not eligible"
+        paragraph_one: "You can only claim the incentive payment for a teacher who is not subject to any performance or disciplinary measures."
+        paragraph_two: "%{teacher_name} will not be contacted to claim this payment."
+        sign_out: "Sign out"
+        view_added_teachers: "View added teachers"
       manage_teachers:
         title: "Manage teachers"
         add_another_teacher:

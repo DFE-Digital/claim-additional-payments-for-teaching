@@ -29,6 +29,15 @@ module Journeys
           default: false
         )
 
+        attribute :current_teacher_id, :string, pii: false
+
+        attribute(
+          :performance_and_discipline_completed,
+          :boolean,
+          pii: false,
+          default: false
+        )
+
         attribute :add_another_teacher, :boolean, pii: false
 
         # FIXME added for prototyping - delete this when we're persisting claims
@@ -38,21 +47,79 @@ module Journeys
           pii: false
         )
 
-        class Teacher < Struct.new(
-          :teacher_id,
-          :teacher_full_name,
-          :teacher_email_address,
-          :teacher_mobile_phone_number,
-          :teacher_national_insurance_number,
-          :teacher_reference_number,
-          keyword_init: true
-        )
+        class Teacher
+          include ActiveModel::Model
+          include ActiveModel::Attributes
+
+          attribute :teacher_id
+          attribute :teacher_full_name
+          attribute :teacher_email_address
+          attribute :teacher_mobile_phone_number
+          attribute :teacher_national_insurance_number
+          attribute :teacher_reference_number
+          attribute :performance_or_discipline
+
+          def initialize(params)
+            @answers = params.delete(:answers)
+
+            super
+          end
+
+          def save!
+            if new_record?
+              self.teacher_id = SecureRandom.uuid
+
+              teachers = @answers.teachers << self
+            else
+              teachers = @answers.teachers.map do |t|
+                if t.teacher_id == teacher_id
+                  self
+                else
+                  t
+                end
+              end
+            end
+
+            @answers.send(:teachers=, teachers)
+          end
+
+          def destroy!
+            teachers = @answers.teachers.map do |t|
+              if t.teacher_id == teacher_id
+                nil
+              else
+                t
+              end
+            end.compact
+
+            @answers.send(:teachers=, teachers)
+          end
+
+          def performance_and_discipline_completed?
+            !performance_or_discipline.nil?
+          end
+
+          def performance_and_discipline_incomplete?
+            performance_or_discipline.nil?
+          end
+
+          def new_record?
+            !@answers.teachers.map(&:teacher_id).compact_blank.include?(teacher_id)
+          end
         end
 
         def teachers
           @teachers ||= teacher_details.map do |teacher_attrs|
-            Teacher.new(**teacher_attrs.symbolize_keys)
+            Teacher.new(**teacher_attrs.symbolize_keys, answers: self)
           end
+        end
+
+        def current_teacher
+          @current_teacher ||= teachers.detect { |t| t.teacher_id == current_teacher_id }
+        end
+
+        def new_teacher
+          Teacher.new(answers: self)
         end
 
         def edit_teacher_path(teacher, return_to_slug:)
@@ -88,6 +155,8 @@ module Journeys
             session: {}
           )
         end
+
+        attr_writer :teachers
       end
     end
   end

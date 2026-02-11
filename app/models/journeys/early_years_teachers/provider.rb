@@ -15,6 +15,8 @@ module Journeys
         EmployerPayeReferenceForm,
         OrganisationEmailAddressForm,
         ProvideTeacherDetailsForm,
+        PerformanceAndDisciplineForm,
+        TeacherNotEligibleForm,
         ManageTeachersForm,
         CheckYourAnswersForm,
         ConfirmationForm

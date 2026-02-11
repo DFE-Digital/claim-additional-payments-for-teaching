@@ -38,5 +38,10 @@
       <% row.with_key { "Teacher reference number (TRN)" } %>
       <% row.with_value { teacher.teacher_reference_number } %>
     <% end %>
+
+    <% list.with_row do |row| %>
+      <% row.with_key { "Performance or discipline" } %>
+      <% row.with_value { I18n.t(teacher.performance_or_discipline, scope: :boolean) } %>
+    <% end %>
   <% end %>
 <% end %>
