@@ -84,6 +84,9 @@ en:
       identity_confirmation:
         name: Identity confirmation
         title: "Confirm the claimant made the claim"
+      fe_provider_check:
+        name: Provider check
+        title: "Check the provider's response"
       provider_verification:
         name: Provider verification
         title: "Confirm the provider has responded and verified the claimant’s information"
@@ -425,6 +428,8 @@ en:
           title: "Does the claimant’s student loan plan match the information we hold about their loan?"
         fe_repeat_applicant_check:
           title: "Has a repeat check been performed for this claimant?"
+        fe_provider_check:
+          title: "Has the provider's response been checked for accuracy?"
   early_years_payments:
     admin:
       email_address: Contact email
