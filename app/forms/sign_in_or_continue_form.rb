@@ -68,6 +68,10 @@ class SignInOrContinueForm < Form
     false
   end
 
+  def dqt_bypassable?
+    false
+  end
+
   def radio_options
     [
       Option.new(id: true, name: "Yes"),

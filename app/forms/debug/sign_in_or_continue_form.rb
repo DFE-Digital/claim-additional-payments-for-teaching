@@ -19,6 +19,10 @@ module Debug
       true
     end
 
+    def dqt_bypassable?
+      !ENV["ENVIRONMENT_NAME"].start_with?("review")
+    end
+
     def dqt_induction_status_options
       [
         Form::Option.new(id: "Passed", name: "Passed"),
@@ -45,6 +49,12 @@ module Debug
     private
 
     def retrieve_qualifications_data!
+      # NOTE: We want to test real DQT calls in Review Apps
+      if !dqt_bypassable?
+        super
+        return
+      end
+
       dqt_teacher_status = {
         trn: teacher_id_user_info.trn,
         nationalInsuranceNumber: teacher_id_user_info.ni_number,
