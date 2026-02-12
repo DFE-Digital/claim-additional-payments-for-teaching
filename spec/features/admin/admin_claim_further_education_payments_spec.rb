@@ -239,15 +239,15 @@ RSpec.feature "Admin claim further education payments" do
             eligibility = create(
               :further_education_payments_eligibility,
               :eligible,
-              school: provider.school
+              school: provider.school,
+              provider_verification_deadline: 4.weeks.ago
             )
 
             claim = create(
               :claim,
               :further_education,
               :submitted,
-              eligibility: eligibility,
-              created_at: 4.weeks.ago
+              eligibility: eligibility
             )
 
             visit admin_claim_task_path(claim, "fe_provider_verification_v2")

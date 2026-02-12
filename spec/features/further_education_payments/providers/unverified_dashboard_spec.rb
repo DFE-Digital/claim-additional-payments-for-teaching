@@ -19,7 +19,12 @@ RSpec.describe "Provider unverified claims dashboard", feature_flag: [:fe_provid
 
   scenario "when provider has an unverified claim" do
     school = create(:school, :fe_eligible, ukprn: "12345678")
-    eligibility = create(:further_education_payments_eligibility, :eligible, school:)
+    eligibility = create(
+      :further_education_payments_eligibility,
+      :eligible,
+      school:,
+      provider_verification_deadline: Date.new(2025, 1, 3)
+    )
     create(
       :claim,
       :further_education,
@@ -32,7 +37,8 @@ RSpec.describe "Provider unverified claims dashboard", feature_flag: [:fe_provid
     other_eligibility = create(
       :further_education_payments_eligibility,
       :eligible,
-      school: create(:school, :fe_eligible, ukprn: "87654321")
+      school: create(:school, :fe_eligible, ukprn: "87654321"),
+      provider_verification_deadline: Date.new(2025, 1, 3)
     )
     create(
       :claim,

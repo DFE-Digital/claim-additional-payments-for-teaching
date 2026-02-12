@@ -95,7 +95,7 @@ module Policies
     end
 
     def verification_due_date_for_claim(claim)
-      (claim.created_at + POST_SUBMISSION_VERIFICATION_DEADLINE).to_date
+      provider_verification_deadline(claim)
     end
 
     def verification_expiry_date_for_claim(claim)
