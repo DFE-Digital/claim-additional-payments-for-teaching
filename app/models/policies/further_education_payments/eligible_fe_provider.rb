@@ -17,7 +17,12 @@ module Policies
         end
 
         def verification_overdue
-          where(claims: {created_at: ..2.weeks.ago})
+          merge(
+            Policies::FurtherEducationPayments::Eligibility
+              .where(
+                provider_verification_deadline: ..Time.zone.now
+              )
+          )
         end
 
         def verification_not_started

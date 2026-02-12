@@ -59,11 +59,11 @@ RSpec.describe FurtherEducationPayments::Providers::WeeklyUpdateEmailJob, type: 
         :further_education_payments_eligibility,
         :eligible,
         school: provider.school,
+        provider_verification_deadline: 1.day.ago,
         claim: create(
           :claim,
           :further_education,
-          :submitted,
-          created_at: 2.weeks.ago
+          :submitted
         )
       )
     end
