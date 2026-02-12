@@ -15,7 +15,8 @@ RSpec.describe FurtherEducationPayments::Providers::OverdueChaserEmailJob, type:
     eligibility = create(
       :further_education_payments_eligibility,
       :eligible,
-      school: school
+      school: school,
+      provider_verification_deadline: 1.day.from_now
     )
 
     create(
@@ -38,7 +39,8 @@ RSpec.describe FurtherEducationPayments::Providers::OverdueChaserEmailJob, type:
       :further_education_payments_eligibility,
       :eligible,
       school: school,
-      provider_verification_completed_at: 1.day.ago
+      provider_verification_completed_at: 1.day.ago,
+      provider_verification_deadline: 1.day.ago
     )
 
     create(
@@ -61,7 +63,8 @@ RSpec.describe FurtherEducationPayments::Providers::OverdueChaserEmailJob, type:
       :further_education_payments_eligibility,
       :eligible,
       school: school,
-      provider_verification_chase_email_last_sent_at: 6.days.ago
+      provider_verification_chase_email_last_sent_at: 6.days.ago,
+      provider_verification_deadline: 1.day.ago
     )
 
     create(
@@ -83,7 +86,8 @@ RSpec.describe FurtherEducationPayments::Providers::OverdueChaserEmailJob, type:
     eligibility = create(
       :further_education_payments_eligibility,
       :eligible,
-      school: school
+      school: school,
+      provider_verification_deadline: 4.weeks.ago
     )
 
     create(
@@ -106,7 +110,8 @@ RSpec.describe FurtherEducationPayments::Providers::OverdueChaserEmailJob, type:
       :further_education_payments_eligibility,
       :eligible,
       school: school,
-      provider_verification_chase_email_last_sent_at: 8.days.ago
+      provider_verification_chase_email_last_sent_at: 8.days.ago,
+      provider_verification_deadline: 1.week.ago + 6.days
     )
 
     create(
