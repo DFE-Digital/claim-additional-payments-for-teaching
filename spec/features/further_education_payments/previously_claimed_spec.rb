@@ -48,7 +48,7 @@ RSpec.feature "Further education payments" do
     choose("Permanent")
     click_button "Continue"
 
-    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
+    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the spring term?")
     choose("12 or more hours per week, but fewer than 20")
     click_button "Continue"
 

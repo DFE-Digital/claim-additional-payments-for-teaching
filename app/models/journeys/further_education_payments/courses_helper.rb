@@ -44,7 +44,7 @@ module Journeys
         },
         early_years_courses: {
           coursetoeyq: [
-            "Early years qualification approved for funding at level 3 and below which enables providers to count the recipient in staff:child ratios on 14 October 2024",
+            "Early years qualifications approved for funding at level 3 and below on 2 March 2026 which enables providers to count the recipient in staff:child ratios on",
             "https://www.gov.uk/guidance/targeted-retention-incentive-payments-for-fe-teachers#early-years"
           ]
         },

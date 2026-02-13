@@ -106,7 +106,7 @@ en:
           inclusion: Select yes if you have taught at %{school_name} for the full spring term
       teaching_hours_per_week:
         question:
-          On average, how many hours per week are you timetabled to teach at %{school_name} during the current term?
+          On average, how many hours per week are you timetabled to teach at %{school_name} during the spring term?
         hint: ‘Timetabled teaching hours’ refer to the time you independently spend teaching lessons to students of all ages.
         options:
           more_than_20: 20 hours or more per week
@@ -114,7 +114,7 @@ en:
           between_2_5_and_12: 2.5 or more hours per week, but fewer than 12
           less_than_2_5: Fewer than 2.5 hours each week
         errors:
-          inclusion: Select how many hours you are timetabled to teach during the current term
+          inclusion: Select how many hours you are timetabled to teach during the spring term
       further_education_teaching_start_year:
         question: Which academic year did you start your further education (FE) teaching career in England?
         options:

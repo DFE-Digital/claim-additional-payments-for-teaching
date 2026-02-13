@@ -80,7 +80,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
               "Permanent contract (including full-time and part-time contracts)"
             ],
             [
-              "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the current term?",
+              "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the spring term?",
               "12 or more hours per week, but fewer than 20"
             ]
           ]
@@ -105,7 +105,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
               "Yes"
             ],
             [
-              "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the current term?",
+              "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the spring term?",
               "Fewer than 2.5 hours each week"
             ]
           ]
@@ -132,7 +132,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
                 "Yes"
               ],
               [
-                "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the current term?",
+                "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the spring term?",
                 "2.5 or more hours per week, but fewer than 12"
               ]
             ]
@@ -160,7 +160,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
                 "No"
               ],
               [
-                "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the current term?",
+                "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the spring term?",
                 "2.5 or more hours per week, but fewer than 12"
               ]
             ]
