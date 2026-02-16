@@ -38,7 +38,6 @@ module AutomatedChecks
 
           if passed
             create_task(passed:)
-            claim.eligibility.update!(repeat_applicant_check_passed: true)
           end
         end
       end

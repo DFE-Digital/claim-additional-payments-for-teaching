@@ -111,8 +111,7 @@ RSpec.describe Admin::ClaimsFilterForm, type: :model do
           create(
             :further_education_payments_eligibility,
             claim: claim_awaiting_provider_verification_1,
-            flagged_as_duplicate: false,
-            repeat_applicant_check_passed: true
+            flagged_as_duplicate: false
           )
 
           # Claim 2 - not expected, a duplicate
@@ -126,26 +125,10 @@ RSpec.describe Admin::ClaimsFilterForm, type: :model do
           create(
             :further_education_payments_eligibility,
             claim: claim_awaiting_provider_verification_2,
-            flagged_as_duplicate: true,
-            repeat_applicant_check_passed: true
+            flagged_as_duplicate: true
           )
 
-          # Claim 3 - not expected - repeat_applicant_check_passed failed
-          claim_awaiting_provider_verification_3 = build(
-            :claim,
-            :submitted,
-            :further_education,
-            academic_year:
-          )
-
-          create(
-            :further_education_payments_eligibility,
-            claim: claim_awaiting_provider_verification_3,
-            flagged_as_duplicate: false,
-            repeat_applicant_check_passed: false
-          )
-
-          # Claim 4 - not expected - verified
+          # Claim 3 - not expected - verified
           claim_awaiting_provider_verification_3 = build(
             :claim,
             :submitted,
@@ -157,8 +140,7 @@ RSpec.describe Admin::ClaimsFilterForm, type: :model do
             :further_education_payments_eligibility,
             :provider_verification_completed,
             claim: claim_awaiting_provider_verification_3,
-            flagged_as_duplicate: false,
-            repeat_applicant_check_passed: true
+            flagged_as_duplicate: false
           )
 
           form = described_class.new(

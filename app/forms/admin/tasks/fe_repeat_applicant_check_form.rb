@@ -8,15 +8,11 @@ module Admin
       def save
         return false if invalid?
 
-        ActiveRecord::Base.transaction do
-          task.update(
-            passed:,
-            created_by: admin_user,
-            manual: true
-          )
-
-          claim.eligibility.update!(repeat_applicant_check_passed: passed)
-        end
+        task.update!(
+          passed:,
+          created_by: admin_user,
+          manual: true
+        )
       end
     end
   end

@@ -6,7 +6,6 @@ module Policies
           merge(
             Policies::FurtherEducationPayments::Eligibility
               .where(provider_verification_completed_at: nil)
-              .where(repeat_applicant_check_passed: true)
           )
         end
 

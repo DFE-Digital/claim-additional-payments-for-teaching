@@ -34,32 +34,22 @@ RSpec.describe Policies::FurtherEducationPayments::EligibleFeProvider do
 
         provider_2 = create(:eligible_fe_provider, :with_school)
 
-        _unverified_eligibility_failed_applicant_check = create(
-          :further_education_payments_eligibility,
-          school: provider_1.school,
-          repeat_applicant_check_passed: false,
-          claim: create(:claim, :further_education)
-        )
-
         _verified_eligibility = create(
           :further_education_payments_eligibility,
           :provider_verification_completed,
           school: provider_1.school,
-          repeat_applicant_check_passed: false,
           claim: create(:claim, :further_education)
         )
 
         _unverified_eligibility_other_provider = create(
           :further_education_payments_eligibility,
           school: provider_2.school,
-          repeat_applicant_check_passed: true,
           claim: create(:claim, :further_education)
         )
 
         unverified_eligibility = create(
           :further_education_payments_eligibility,
           school: provider_1.school,
-          repeat_applicant_check_passed: true,
           claim: create(:claim, :further_education)
         )
 
