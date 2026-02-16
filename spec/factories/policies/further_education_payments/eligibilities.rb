@@ -200,6 +200,7 @@ FactoryBot.define do
 
     trait :provider_verification_completed do
       provider_verifiable
+      provider_verification_declaration { true }
       provider_verification_completed_at { Time.zone.now }
       provider_verification_verified_by_id { create(:dfe_signin_user).id }
     end
