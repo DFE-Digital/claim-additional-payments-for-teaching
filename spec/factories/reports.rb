@@ -76,7 +76,7 @@ FactoryBot.define do
             "mathematics",
             "02/08/2022",
             "01/10/2023",
-            "Graduate Diploma"
+            "Core"
           ]
         ].join("\n")
       end

@@ -127,7 +127,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::AnswersPresenter, t
                   trainingStartDate: "2023-01-09",
                   trainingEndDate: nil,
                   routeToProfessionalStatusType: {
-                    name: "BA (Hons)"
+                    name: "Primary and secondary undergraduate fee funded"
                   }
                 }
               ]

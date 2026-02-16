@@ -83,7 +83,7 @@ RSpec.describe Dqt::Matchers::General do
     let(:qts_award_date) { Date.parse("30/9/2019") }
 
     context "when the route is Undergraduate ITT" do
-      let(:qualification_name) { "BA" }
+      let(:qualification_name) { "Primary and secondary undergraduate fee funded" }
 
       it "returns the QTS Award date" do
         is_expected.to eq(qts_award_date)
@@ -91,7 +91,7 @@ RSpec.describe Dqt::Matchers::General do
     end
 
     context "when the route is Assessment Only" do
-      let(:qualification_name) { "Assessment Only Route" }
+      let(:qualification_name) { "Assessment Only" }
 
       it "returns the QTS Award date" do
         is_expected.to eq(qts_award_date)
@@ -99,7 +99,7 @@ RSpec.describe Dqt::Matchers::General do
     end
 
     context "when the route is Overseas Recognition" do
-      let(:qualification_name) { "EEA" }
+      let(:qualification_name) { "Apply for Qualified Teacher Status in England" }
 
       it "returns the QTS Award date" do
         is_expected.to eq(qts_award_date)
@@ -117,7 +117,7 @@ RSpec.describe Dqt::Matchers::General do
     end
 
     context "when the route is Postgraduate ITT" do
-      let(:qualification_name) { "Degree" }
+      let(:qualification_name) { "Core" }
 
       context "when the ITT Start date is before the 18th of August" do
         let(:itt_start_date) { Date.parse("17/8/2019") }
@@ -162,7 +162,7 @@ RSpec.describe Dqt::Matchers::General do
   describe ".itt_year" do
     subject(:itt_year) { described_class.itt_year }
 
-    let(:qualification_name) { "BA" }
+    let(:qualification_name) { "Primary and secondary undergraduate fee funded" }
     let(:itt_start_date) { Date.parse("1/9/2019") }
 
     before do
@@ -179,14 +179,14 @@ RSpec.describe Dqt::Matchers::General do
     subject { described_class.eligible_qualification? }
 
     context "when the qualification name belongs to the qualification category on the claim" do
-      let(:qualification_name) { "BA" }
+      let(:qualification_name) { "Primary and secondary undergraduate fee funded" }
       let(:qualification) { :undergraduate_itt }
 
       it { is_expected.to eq(true) }
     end
 
     context "when the qualification name does not belong to the qualification category on the claim" do
-      let(:qualification_name) { "Degree" }
+      let(:qualification_name) { "Assessment Only" }
       let(:qualification) { :undergraduate_itt }
 
       it { is_expected.to eq(false) }
@@ -197,25 +197,25 @@ RSpec.describe Dqt::Matchers::General do
     subject { described_class.qts_award_date_after_itt_start_date? }
 
     context "when the route is Undergraduate ITT" do
-      let(:qualification_name) { "BA" }
+      let(:qualification_name) { "Primary and secondary undergraduate fee funded" }
 
       it { is_expected.to eq(true) }
     end
 
     context "when the route is Assessment Only" do
-      let(:qualification_name) { "Assessment Only Route" }
+      let(:qualification_name) { "Assessment Only" }
 
       it { is_expected.to eq(true) }
     end
 
     context "when the route is Overseas Recognition" do
-      let(:qualification_name) { "EEA" }
+      let(:qualification_name) { "Apply for Qualified Teacher Status in England" }
 
       it { is_expected.to eq(true) }
     end
 
     context "when the route is Postgraduate ITT" do
-      let(:qualification_name) { "Degree" }
+      let(:qualification_name) { "Core" }
 
       context "when the QTS Award date is blank" do
         let(:qts_award_date) { nil }
@@ -252,19 +252,12 @@ RSpec.describe Dqt::Matchers::General do
       end
     end
 
-    context "when a qualification is present in more than one category" do
-      let(:qualification_name) { "QTS Award" }
+    context "when case is different" do
+      let(:qualification_name) { "ASSESSMENT ONLY" }
 
-      before do
-        stub_const("Dqt::Matchers::General::QUALIFICATION_MATCHING_TYPE", {
-          postgraduate_itt: ["Degree", qualification_name],
-          undergraduate_itt: ["BA", qualification_name],
-          assessment_only: ["Assessment Only Route", qualification_name],
-          overseas_recognition: ["EEA"]
-        })
+      it "ignores case and returns a match" do
+        expect(subject).to eq :assessment_only
       end
-
-      it { is_expected.to be_nil }
     end
   end
 end

@@ -95,7 +95,7 @@ module AutomatedChecks
                   trainingStartDate: Date.new(claim_arg.eligibility.itt_academic_year.start_year, 9, 1).to_s,
                   trainingEndDate: nil,
                   routeToProfessionalStatusType: {
-                    name: "BA"
+                    name: "Primary and secondary undergraduate fee funded"
                   }
                 }
               ]
@@ -201,7 +201,7 @@ module AutomatedChecks
                         Degree codes:       []
                         ITT start date:     2020-09-01
                         QTS award date:     2019-09-02
-                        Qualification name: BA
+                        Qualification name: Primary and secondary undergraduate fee funded
                       </pre>
                     HTML
                   )
@@ -240,7 +240,7 @@ module AutomatedChecks
                           Degree codes:       ["100403", "100105"]
                           ITT start date:     2020-09-01
                           QTS award date:     2019-09-02
-                          Qualification name: BA
+                          Qualification name: Primary and secondary undergraduate fee funded
                         </pre>
                       HTML
                     )
@@ -278,7 +278,7 @@ module AutomatedChecks
                       trainingStartDate: Date.new(claim_arg.eligibility.itt_academic_year.start_year, 9, 1).to_s,
                       trainingEndDate: nil,
                       routeToProfessionalStatusType: {
-                        name: "BA"
+                        name: "Primary and secondary undergraduate fee funded"
                       }
                     }
                   ]
@@ -336,7 +336,7 @@ module AutomatedChecks
                         Degree codes:       []
                         ITT start date:     2020-09-01
                         QTS award date:     2020-09-02
-                        Qualification name: BA
+                        Qualification name: Primary and secondary undergraduate fee funded
                       </pre>
                     HTML
                   )
@@ -432,7 +432,7 @@ module AutomatedChecks
                     trainingStartDate: Date.new(claim_arg.eligibility.itt_academic_year.start_year, 9, 1).to_s,
                     trainingEndDate: nil,
                     routeToProfessionalStatusType: {
-                      name: "BA"
+                      name: "Primary and secondary undergraduate fee funded"
                     }
                   }
                 ]
@@ -489,7 +489,7 @@ module AutomatedChecks
                         Degree codes:       []
                         ITT start date:     2020-09-01
                         QTS award date:     2019-09-02
-                        Qualification name: BA
+                        Qualification name: Primary and secondary undergraduate fee funded
                       </pre>
                     HTML
                   )

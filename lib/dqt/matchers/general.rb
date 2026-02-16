@@ -3,62 +3,65 @@ module Dqt
     module General
       QUALIFICATION_MATCHING_TYPE = {
         postgraduate_itt: [
-          "Degree",
-          "Degree Equivalent (this will include foreign qualifications)",
-          "Flexible - Assessment Only",
-          "Flexible - PGCE",
-          "Flexible - ProfGCE",
-          "Graduate Certificate in Education",
-          "Graduate Diploma",
-          "GTP",
+          "Core",
+          "Flexible ITT",
+          "Future Teaching Scholars",
+          "Graduate non-trained",
+          "Graduate Teacher Programme",
+          "HEI",
+          "HEI - Historic",
+          "High Potential ITT",
+          "Legacy ITT",
+          "Legacy Migration",
           "Licensed Teacher Programme",
-          "Masters, not by research",
-          "OTT (Exempt From Induction)",
-          "PGCE (Articled Teachers Scheme)",
-          "Postgraduate Certificate in Education",
-          "Postgraduate Certificate in Education (Flexible)",
-          "Postgraduate Diploma in Education",
-          "Professional Graduate Certificate in Education",
-          "Professional Graduate Diploma in Education",
-          "QTS Award",
-          "Teach First",
-          "Teach First (TNP)",
-          "Teachers Certificate",
-          "Unknown"
-        ],
+          "Licensed Teacher Programme - Armed Forces",
+          "Licensed Teacher Programme - FE",
+          "Licensed Teacher Programme - Independent School",
+          "Licensed Teacher Programme - Maintained School",
+          "Overseas Trained Teacher Programme",
+          "PGATC ITT",
+          "PGATD ITT",
+          "PGCE ITT",
+          "PGDE ITT",
+          "Postgraduate Teaching Apprenticeship",
+          "Primary and secondary postgraduate fee funded",
+          "ProfGCE ITT",
+          "ProfGDE ITT",
+          "Provider led Postgrad",
+          "School Centered ITT",
+          "School Direct Training Programme",
+          "School Direct Training Programme Salaried",
+          "School Direct Training Programme Self Funded",
+          "TC ITT",
+          "TCMH",
+          "Teach First Programme"
+        ].map(&:downcase),
         undergraduate_itt: [
-          "BA",
-          "BA (Hons)",
-          "BA (Hons) Combined Studies/Education of the Deaf",
-          "BA (Hons) with Intercalated PGCE",
-          "BA Combined Studies/Education of the Deaf",
-          "BA with intercalated PGCE",
-          "BA/Certificate in Education (QTS)",
-          "BA/Education (QTS)",
-          "BEd",
-          "BEd (Hons)",
-          "BSc",
-          "BSc (Hons)",
-          "BSc (Hons) with Intercalated PGCE",
-          "BSc/Certificate in Education (QTS)",
-          "BSc/Education (QTS)",
-          "RTP",
+          "Primary and secondary undergraduate fee funded",
+          "Provider led Undergrad",
+          "Registered Teacher Programme",
+          "Teacher Degree Apprenticeship",
           "Troops to Teach",
-          "Undergraduate Master of Teaching"
-        ],
+          "UGMT ITT",
+          "Undergraduate Opt In"
+        ].map(&:downcase),
         assessment_only: [
-          "Assessment Only Route",
-          "QTS Assessment only",
-          "QTS Award only"
-        ],
+          "Assessment Only",
+          "Long Service",
+          "Other Qualifications non ITT"
+        ].map(&:downcase),
         overseas_recognition: [
-          "EEA",
-          "Northern Ireland",
-          "Qualification gained in Europe",
-          "OTT",
-          "OTT Recognition",
-          "Scotland"
-        ]
+          "Apply for Qualified Teacher Status in England",
+          "EC directive",
+          "European Recognition",
+          "European Recognition - PQTS",
+          "International Qualified Teacher Status",
+          "Licensed Teacher Programme - OTT",
+          "Northern Irish Recognition",
+          "Overseas Trained Teacher Recognition",
+          "Scottish Recognition",
+          "Welsh Recognition"
+        ].map(&:downcase)
       }.freeze
 
       def academic_date
@@ -83,7 +86,7 @@ module Dqt
       end
 
       def eligible_qualification?
-        QUALIFICATION_MATCHING_TYPE[qualification.to_sym].include?(qualification_name)
+        QUALIFICATION_MATCHING_TYPE[qualification.to_sym].include?(qualification_name&.downcase)
       end
 
       def qts_award_date_after_itt_start_date?
@@ -94,12 +97,9 @@ module Dqt
       end
 
       def route_into_teaching
-        @route_into_teaching ||= begin
-          # All the categories need to be browsed in order to estabilish the uniqueness of a match.
-          # We cannot infer the correct category if a qualification is present in more than one category.
-          match = QUALIFICATION_MATCHING_TYPE.select { |_, category| category.include?(qualification_name) }.keys
-          (match.count == 1) ? match.first : nil
-        end
+        QUALIFICATION_MATCHING_TYPE.find do |_category, values|
+          values.include?(qualification_name&.downcase)
+        end&.first
       end
     end
   end

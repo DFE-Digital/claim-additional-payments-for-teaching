@@ -67,7 +67,7 @@ RSpec.describe Dqt::Teacher do
         trainingStartDate: "2021-06-27",
         trainingEndDate: "2021-07-04",
         routeToProfessionalStatusType: {
-          name: "Graduate Diploma"
+          name: "Core"
         }
       }
     ]
@@ -81,7 +81,7 @@ RSpec.describe Dqt::Teacher do
         trainingStartDate: "2021-06-27",
         trainingEndDate: "2021-07-04",
         routeToProfessionalStatusType: {
-          name: "Graduate Diploma"
+          name: "Core"
         }
       },
       {
@@ -90,7 +90,7 @@ RSpec.describe Dqt::Teacher do
         trainingStartDate: "2021-06-27",
         trainingEndDate: "2021-07-04",
         routeToProfessionalStatusType: {
-          name: "Graduate Diploma"
+          name: "Core"
         }
       }
     ]
