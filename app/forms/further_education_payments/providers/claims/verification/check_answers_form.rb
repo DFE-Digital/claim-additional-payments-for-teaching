@@ -19,7 +19,7 @@ module FurtherEducationPayments
 
           delegate(
             :provider_verification_teaching_responsibilities,
-            :provider_verification_teaching_start_year_matches_claim,
+            :provider_verification_teaching_start_year,
             :provider_verification_teaching_qualification,
             :provider_verification_contract_covers_full_academic_year,
             :provider_verification_contract_type,
@@ -43,10 +43,15 @@ module FurtherEducationPayments
           end
 
           def in_first_five_years
-            if provider_verification_teaching_start_year_matches_claim.nil?
+            if provider_verification_teaching_start_year.nil?
               NOT_ANSWERED
             else
-              I18n.t(provider_verification_teaching_start_year_matches_claim, scope: :boolean)
+              academic_year = AcademicYear.new(provider_verification_teaching_start_year)
+              I18n.t(
+                "further_education_payments.forms.further_education_teaching_start_year.options.between_dates",
+                start_year: academic_year.start_year,
+                end_year: academic_year.end_year
+              )
             end
           end
 

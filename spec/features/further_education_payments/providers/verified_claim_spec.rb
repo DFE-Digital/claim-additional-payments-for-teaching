@@ -40,8 +40,8 @@ RSpec.describe "Provider verified claims dashboard", feature_flag: [:fe_provider
       value: "Yes"
     )
     expect(page).to have_summary_item(
-      key: "In first 5 years of FE teaching",
-      value: "Yes"
+      key: "FE teaching start year",
+      value: "September 2023 to August 2024"
     )
     expect(page).to have_summary_item(
       key: "Teaching qualification",

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_11_162402) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_16_120138) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -358,7 +358,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_11_162402) do
     t.string "provider_verification_teaching_hours_per_week"
     t.string "provider_verification_teaching_qualification"
     t.boolean "provider_verification_teaching_responsibilities"
-    t.boolean "provider_verification_teaching_start_year_matches_claim"
+    t.string "provider_verification_teaching_start_year"
     t.uuid "provider_verification_verified_by_id"
     t.text "provision_search"
     t.uuid "school_id"
