@@ -1,0 +1,25 @@
+<%= f.hidden_field :teacher_id %>
+<%= f.hidden_field :remove_teacher %>
+
+<h1 class="govuk-heading-l">
+  Remove <%= f.object.teacher_full_name %>?
+</h1>
+
+<p class="govuk-body">
+  Are you sure you want to remove
+  <strong><%= f.object.teacher_full_name %></strong>
+  from your list of early years teachers?
+</p>
+
+<%= f.govuk_submit("Confirm") %>
+
+<%= govuk_button_link_to(
+  "Cancel",
+  claim_path(
+    current_journey_routing_name,
+    "manage-teachers"
+  ),
+  secondary: true,
+  class: "govuk-!-margin-left-4"
+) %>
+

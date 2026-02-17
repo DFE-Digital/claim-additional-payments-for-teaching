@@ -1,0 +1,52 @@
+<% content_for(:phase) { "Alpha" } %>
+
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:title),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-panel govuk-panel--informational">
+      <h1 class="govuk-panel__title">
+        <%= @form.t(:heading) %>
+      </h1>
+    </div>
+
+    <p class="govuk-body">
+      <%= @form.t(:paragraph_one) %>
+    </p>
+
+    <p class="govuk-body">
+      <%= @form.t(:paragraph_two_html).html_safe %>
+    </p>
+
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      method: :patch,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_collection_radio_buttons(
+        :accept_payment,
+        @form.radio_options,
+        :id,
+        :name,
+        legend: {
+          text: f.object.t(:question),
+          size: "m"
+        },
+        hint: { text: f.object.t(:hint) },
+        inline: true
+      ) %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

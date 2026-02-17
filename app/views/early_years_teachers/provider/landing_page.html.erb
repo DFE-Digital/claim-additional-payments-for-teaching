@@ -1,6 +1,30 @@
+<% content_for(:phase) { "Alpha" } %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl"><%= t("early_years_teachers_provider.landing_page.title") %></h1>
+    <h1 class="govuk-heading-xl">
+      <%= t("early_years_teachers_provider.landing_page.title") %>
+    </h1>
+
+    <p class="govuk-body">
+      Use this service to provide information about teachers at your setting who may
+      be eligible for a recognition payment.
+    </p>
+
+    <p class="govuk-body">
+      You’ll need to:
+    </p>
+
+    <%= govuk_list([
+      "check we have the right details for your nursery",
+      "provide your employer PAYE reference number",
+      "provide your organisation's email address",
+      "provide teacher contact details and their national insurance number"
+    ], type: :bullet) %>
+
+    <p class="govuk-body">
+      This will take around 15 minutes to complete.
+    </p>
 
     <% if @journey_open %>
       <p class="govuk-!-margin-top-8">
