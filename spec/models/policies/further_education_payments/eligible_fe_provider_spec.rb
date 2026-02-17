@@ -94,25 +94,36 @@ RSpec.describe Policies::FurtherEducationPayments::EligibleFeProvider do
     describe ".verification_overdue" do
       it "returns only overdue claims belonging to the provider" do
         provider_1 = create(:eligible_fe_provider, :with_school)
-
         provider_2 = create(:eligible_fe_provider, :with_school)
 
         _not_overdue_eligibility = create(
           :further_education_payments_eligibility,
           school: provider_1.school,
-          claim: create(:claim, :further_education, created_at: 1.week.ago)
+          provider_verification_deadline: 1.day.from_now,
+          claim: create(
+            :claim,
+            :further_education
+          )
         )
 
         _overdue_eligibility_other_provider = create(
           :further_education_payments_eligibility,
           school: provider_2.school,
-          claim: create(:claim, :further_education, created_at: 3.weeks.ago)
+          provider_verification_deadline: 1.day.ago,
+          claim: create(
+            :claim,
+            :further_education
+          )
         )
 
         overdue_eligibility = create(
           :further_education_payments_eligibility,
           school: provider_1.school,
-          claim: create(:claim, :further_education, created_at: 3.weeks.ago)
+          provider_verification_deadline: 1.day.ago,
+          claim: create(
+            :claim,
+            :further_education
+          )
         )
 
         expect(provider_1.claims.verification_overdue).to contain_exactly(

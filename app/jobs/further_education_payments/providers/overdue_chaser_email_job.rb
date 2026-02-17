@@ -2,29 +2,17 @@ module FurtherEducationPayments
   module Providers
     class OverdueChaserEmailJob < ApplicationJob
       def perform
-        scope = Policies::FurtherEducationPayments::Eligibility
+        return unless FeatureFlag.enabled?("fe_provider_dashboard")
 
-        scope = scope.awaiting_provider_verification_year_2
+        base_scope = Policies::FurtherEducationPayments::Eligibility
+          .awaiting_provider_verification_year_2
+          .where(provider_verification_completed_at: nil)
+          .where(provider_verification_deadline: Policies::FurtherEducationPayments::POST_SUBMISSION_VERIFICATION_DEADLINE.ago..Time.zone.now)
 
-        scope = scope.where(provider_verification_completed_at: nil)
-
-        # Verification is due 2 weeks after claim creation
-        overdue_date = Policies::FurtherEducationPayments::POST_SUBMISSION_VERIFICATION_DEADLINE.ago
-
-        # Claims after this date will have received 3 chaser emails
-        received_3_chasers_date = 5.weeks.ago + 1.day
-
-        # Overdue claims that haven't received 3 chasers
-        target_date_range = received_3_chasers_date.beginning_of_day..overdue_date.end_of_day
-
-        scope = scope.joins(:claim).merge(
-          Claim.where(created_at: target_date_range)
-        )
-
-        scope = scope.where(
+        scope = base_scope.where(
           provider_verification_chase_email_last_sent_at: ..1.week.ago
         ).or(
-          scope.where(provider_verification_chase_email_last_sent_at: nil)
+          base_scope.where(provider_verification_chase_email_last_sent_at: nil)
         )
 
         scope.find_each do |eligibility|

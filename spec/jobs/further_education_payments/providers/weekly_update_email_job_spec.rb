@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe FurtherEducationPayments::Providers::WeeklyUpdateEmailJob, type: :job do
+RSpec.describe FurtherEducationPayments::Providers::WeeklyUpdateEmailJob, type: :job, feature_flag: [:fe_provider_dashboard] do
   let(:provider) { create(:eligible_fe_provider, :with_school) }
   let(:other_provider) { create(:eligible_fe_provider, :with_school) }
 
@@ -59,11 +59,11 @@ RSpec.describe FurtherEducationPayments::Providers::WeeklyUpdateEmailJob, type: 
         :further_education_payments_eligibility,
         :eligible,
         school: provider.school,
+        provider_verification_deadline: 1.day.ago,
         claim: create(
           :claim,
           :further_education,
-          :submitted,
-          created_at: 2.weeks.ago
+          :submitted
         )
       )
     end

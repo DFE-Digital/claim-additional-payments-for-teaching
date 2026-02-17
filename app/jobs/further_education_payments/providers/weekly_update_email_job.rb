@@ -2,6 +2,8 @@ module FurtherEducationPayments
   module Providers
     class WeeklyUpdateEmailJob < ApplicationJob
       def perform
+        return unless FeatureFlag.enabled?("fe_provider_dashboard")
+
         providers_with_unverified_claims =
           Policies::FurtherEducationPayments::EligibleFeProvider.joins(
             "JOIN schools ON " \
