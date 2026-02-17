@@ -124,7 +124,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
     click_on "Continue"
 
     expect(page).to have_text("Is Edna Krabappel expected to work at " \
-      "Springfield College until the end of the academic year?")
+      "Springfield College or another eligible FE provider until the end of the academic year?")
 
     choose "Yes"
     click_on "Continue"
@@ -304,7 +304,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
     click_on "Continue"
 
     expect(page).to have_text("Is Edna Krabappel expected to work at " \
-      "Springfield College until the end of the academic year?")
+      "Springfield College or another eligible FE provider until the end of the academic year?")
 
     choose "Yes"
     click_on "Continue"

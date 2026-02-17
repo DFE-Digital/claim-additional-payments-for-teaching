@@ -230,7 +230,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminProviderAnswe
             "Yes"
           ],
           [
-            "Is Edna Krabappel expected to work at Springfield Elementary until the end of the academic year?",
+            "Is Edna Krabappel expected to work at Springfield Elementary or another eligible FE provider until the end of the academic year?",
             "Yes"
           ]
         ])
