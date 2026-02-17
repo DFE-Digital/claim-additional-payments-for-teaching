@@ -3,7 +3,11 @@ module Policies
     class Eligibility < ApplicationRecord
       include ProviderVerificationConstants
 
-      AMENDABLE_ATTRIBUTES = [:award_amount, :teacher_reference_number].freeze
+      AMENDABLE_ATTRIBUTES = [
+        :award_amount,
+        :teacher_reference_number,
+        :further_education_teaching_start_year
+      ].freeze
 
       self.table_name = "further_education_payments_eligibilities"
 
