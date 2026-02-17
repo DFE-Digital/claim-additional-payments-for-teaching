@@ -2,7 +2,13 @@ require "rails_helper"
 
 RSpec.describe ClaimVerifierJob do
   describe "#perform" do
-    let(:claim) { build(:claim, dqt_teacher_status:) }
+    let(:claim) do
+      build(
+        :claim,
+        dqt_teacher_status:,
+        eligibility_attributes: {teacher_reference_number: "1234567"}
+      )
+    end
     let(:dbl) { double(find: mock_payload) }
     let(:verifier) { double(perform: true) }
     let(:mock_payload) { Dqt::Teacher.new({"mock" => "mock"}) }
@@ -38,6 +44,23 @@ RSpec.describe ClaimVerifierJob do
         expect(AutomatedChecks::ClaimVerifier).to receive(:new).with(claim:, dqt_teacher_status: mock_payload)
         described_class.new.perform(claim)
       end
+
+      context "when the claim eligibility does not have a teacher reference number" do
+        let(:claim) do
+          build(
+            :claim,
+            dqt_teacher_status:,
+            policy: Policies::FurtherEducationPayments, # TRN is optional in FE
+            eligibility_attributes: {teacher_reference_number: nil}
+          )
+        end
+
+        it "performs the verifier job but doesn't request dqt info" do
+          expect(AutomatedChecks::ClaimVerifier).to receive(:new)
+          expect(dbl).not_to receive(:find)
+          described_class.new.perform(claim)
+        end
+      end
     end
 
     context "when the claim is for EarlyYearsPayments" do
@@ -61,6 +84,23 @@ RSpec.describe ClaimVerifierJob do
       it "performs the verifier job" do
         expect(AutomatedChecks::ClaimVerifier).to receive(:new).with(claim:, dqt_teacher_status: mock_payload)
         described_class.new.perform(claim)
+      end
+
+      context "when the claim eligibility does not have a teacher reference number" do
+        let(:claim) do
+          build(
+            :claim,
+            dqt_teacher_status:,
+            policy: Policies::FurtherEducationPayments, # TRN is optional in FE
+            eligibility_attributes: {teacher_reference_number: nil}
+          )
+        end
+
+        it "performs the verifier job but doesn't request dqt info" do
+          expect(AutomatedChecks::ClaimVerifier).to receive(:new)
+          expect(dbl).not_to receive(:find)
+          described_class.new.perform(claim)
+        end
       end
     end
   end

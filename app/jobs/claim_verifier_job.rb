@@ -13,7 +13,7 @@ class ClaimVerifierJob < ApplicationJob
 
     if claim.has_dqt_record?
       Dqt::Teacher.new(claim.dqt_teacher_status)
-    else
+    elsif claim.eligibility.teacher_reference_number.present?
       Dqt::Client.new.teacher.find(
         claim.eligibility.teacher_reference_number,
         include: "alerts,induction,routesToProfessionalStatuses"
