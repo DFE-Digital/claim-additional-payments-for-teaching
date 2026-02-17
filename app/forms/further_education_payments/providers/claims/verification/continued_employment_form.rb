@@ -11,7 +11,7 @@ module FurtherEducationPayments
               in: ->(form) { form.continued_employment_options.map(&:id) },
               message: ->(form, _) do
                 "Select yes if #{form.claimant_name} is expected to work " \
-                "at #{form.provider_name} until the end of the academic year"
+                "at #{form.provider_name} or another eligible FE provider until the end of the academic year"
               end
             },
             allow_nil: :save_and_exit?

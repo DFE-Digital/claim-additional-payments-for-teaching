@@ -402,7 +402,7 @@ en:
         provider_verification_claimant_email:
           question: "Email address"
         provider_verification_continued_employment:
-          question: "Is %{claimant_name} expected to work at %{provider_name} until the end of the academic year?"
+          question: "Is %{claimant_name} expected to work at %{provider_name} or another eligible FE provider until the end of the academic year?"
         provider_verification_contract_covers_full_academic_year:
           question: "Does %{claimant_name} have a fixed-term contract for the full %{academic_year} academic year?"
         provider_verification_contract_type:
@@ -567,4 +567,3 @@ en:
           label: "To the best of my knowledge, I confirm that I have verified the claimant’s identity and the information provided in this form is correct."
           errors:
             acceptance: "Tick the box to confirm that you have verified the claimant’s identity and the information provided in this form is correct"
-
