@@ -125,7 +125,7 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
           ["What type of contract do you have directly with #{college.name}?",
             "Permanent",
             "contract-type"],
-          ["On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?",
+          ["On average, how many hours per week are you timetabled to teach at #{college.name} during the spring term?",
             "12 or more hours per week, but fewer than 20",
             "teaching-hours-per-week"],
           ["Which academic year did you start your further education (FE) teaching career in England?",
@@ -161,7 +161,7 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
             "<p class=\"govuk-body\">Early years practitioner (level 2) apprenticeship</p>" \
             "<p class=\"govuk-body\">Early years educator (level 3) apprenticeship</p>" \
             "<p class=\"govuk-body\">T Level in education and early years (early years educator)</p>" \
-            "<p class=\"govuk-body\">Early years qualification approved for funding at level 3 and below which enables providers to count the recipient in staff:child ratios on 14 October 2024</p>",
+            "<p class=\"govuk-body\">Early years qualifications approved for funding at level 3 and below on 2 March 2026 which enables providers to count the recipient in staff:child ratios on</p>",
             "early-years-courses"],
           ["Engineering and manufacturing courses",
             "<p class=\"govuk-body\">Qualifications approved for funding at level 3 and below in the engineering sector subject area</p>" \
