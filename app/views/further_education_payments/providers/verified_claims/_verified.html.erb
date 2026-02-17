@@ -9,7 +9,7 @@
     </h1>
 
     <div class="govuk-!-margin-bottom-6">
-      <%= govuk_tag(text: "Pending", colour: "yellow") %>
+      <%= govuk_tag(text: @claim_presenter.dfe_status_text, colour: @claim_presenter.dfe_status_colour) %>
     </div>
 
     <h2 class="govuk-heading-m">

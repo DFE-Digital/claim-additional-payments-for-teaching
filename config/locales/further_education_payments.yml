@@ -382,6 +382,12 @@ en:
     journey_name: Claim a targeted retention incentive payment for further education teachers - provider
     feedback_email: "FE-targeted.retention-incentive@education.gov.uk"
     support_email_address: "FE-targeted.retention-incentive@education.gov.uk"
+    presenters:
+      claim_presenter:
+        dfe_status:
+          approved: Approved
+          rejected: Rejected
+          pending: Pending
     forms:
       verification:
         provider_verification_claimant_employed_by_college:
