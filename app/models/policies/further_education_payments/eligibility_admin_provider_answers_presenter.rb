@@ -134,15 +134,10 @@ module Policies
         answer = if eligibility.provider_verification_teaching_start_year.nil?
           "Not answered"
         else
-          provider_academic_year = AcademicYear.new(
-            eligibility.provider_verification_teaching_start_year
-          )
-          I18n.t(
-            "options.between_dates",
-            start_year: provider_academic_year.start_year,
-            end_year: provider_academic_year.end_year,
-            scope: "further_education_payments.forms.further_education_teaching_start_year"
-          )
+          EligibleAcademicYear.new(
+            candidate_academic_year: eligibility.provider_verification_teaching_start_year,
+            current_academic_year: eligibility.claim.academic_year
+          ).to_s
         end
 
         [

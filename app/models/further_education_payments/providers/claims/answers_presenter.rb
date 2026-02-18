@@ -28,9 +28,7 @@ module FurtherEducationPayments
               text: "FE teaching start year"
             },
             value: {
-              text: format_teaching_start_year(
-                claim.eligibility.provider_verification_teaching_start_year
-              )
+              text: formatted_teaching_start_year
             }
           }
 
@@ -177,14 +175,13 @@ module FurtherEducationPayments
 
         private
 
-        def format_teaching_start_year(start_year)
+        def formatted_teaching_start_year
+          start_year = claim.eligibility.provider_verification_teaching_start_year
           return "Not provided" if start_year.nil?
 
-          academic_year = AcademicYear.new(start_year)
-          I18n.t(
-            "further_education_payments.forms.further_education_teaching_start_year.options.between_dates",
-            start_year: academic_year.start_year,
-            end_year: academic_year.end_year
+          Policies::FurtherEducationPayments::EligibleAcademicYear.new(
+            candidate_academic_year: start_year,
+            current_academic_year: claim.academic_year
           )
         end
 

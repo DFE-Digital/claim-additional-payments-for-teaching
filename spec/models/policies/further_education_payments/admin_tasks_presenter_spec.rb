@@ -79,7 +79,7 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
         expect(rows).to include([
           "First 5 years of teaching",
           "September 2023 to 2024",
-          "Yes"
+          "September 2023 to August 2024"
         ])
 
         expect(rows).to include(["Teaching qualification", "Yes", "Yes"])
