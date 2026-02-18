@@ -47,7 +47,7 @@ module AutomatedChecks
 
       def provider_confirms_claimant_answers?
         eligibility.provider_verification_teaching_responsibilities == true &&
-          eligibility.provider_verification_teaching_start_year == eligibility.further_education_teaching_start_year &&
+          eligibility.claimant_and_provider_teaching_start_year_match? &&
           eligibility.provider_verification_half_teaching_hours == true &&
           eligibility.provider_verification_half_timetabled_teaching_time == true &&
           eligibility.provider_verification_continued_employment == true &&
@@ -72,8 +72,7 @@ module AutomatedChecks
           @failed_checks << "no_teaching_responsibilities"
         end
 
-        if eligibility.provider_verification_teaching_start_year.present? &&
-            eligibility.provider_verification_teaching_start_year != eligibility.further_education_teaching_start_year
+        if !eligibility.claimant_and_provider_teaching_start_year_match?
           @failed_checks << "teaching_start_year_mismatch"
         end
 

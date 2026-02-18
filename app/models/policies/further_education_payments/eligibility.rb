@@ -305,6 +305,10 @@ module Policies
         claim.academic_year == AcademicYear.new(2024)
       end
 
+      def claimant_and_provider_teaching_start_year_match?
+        provider_verification_teaching_start_year == further_education_teaching_start_year
+      end
+
       private
 
       def provider_user
