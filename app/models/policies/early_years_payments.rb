@@ -106,5 +106,11 @@ module Policies
     def alternative_idv_completed!(claim)
       Tasks::EyAlternativeVerificationJob.perform_later(claim)
     end
+
+    private
+
+    def decision_deadline_in_weeks
+      10.weeks
+    end
   end
 end
