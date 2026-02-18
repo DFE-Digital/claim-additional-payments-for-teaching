@@ -163,7 +163,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     when Policies::InternationalRelocationPayments
       ["First year application", "Identity confirmation", "Visa", "Employment", "Teaching hours", "Continuous employment", "Decision"]
     when Policies::FurtherEducationPayments
-      ["Identity confirmation", "Repeat applicant check", "Provider verification", "Employment", "Student loan plan", "Decision"]
+      ["Identity confirmation", "Repeat application mismatch check", "Provider verification", "Employment", "Student loan plan", "Decision"]
     when Policies::EarlyYearsPayments
       ["EOI cross reference", "One Login identity check", "Employment", "Student loan plan", "Decision"]
     else

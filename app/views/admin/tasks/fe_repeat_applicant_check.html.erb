@@ -1,4 +1,4 @@
-<% content_for(:page_title) { page_title("Claim #{@claim.reference} repeat applicant check for #{@claim.policy.short_name}") } %>
+<% content_for(:page_title) { page_title("Claim #{@claim.reference} #{I18n.t(:name, scope: [:admin, :tasks, :fe_repeat_applicant_check]).downcase} for #{@claim.policy.short_name}") } %>
 
 <% content_for :back_link do %>
   <%= govuk_back_link href: admin_claim_tasks_path(@claim) %>
@@ -10,7 +10,9 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h2 class="govuk-heading-l">Repeat applicant check</h2>
+    <h2 class="govuk-heading-l">
+      <%= I18n.t(:name, scope: [:admin, :tasks, :fe_repeat_applicant_check]) %>
+    </h2>
   </div>
 
   <div class="govuk-grid-column-two-thirds">
