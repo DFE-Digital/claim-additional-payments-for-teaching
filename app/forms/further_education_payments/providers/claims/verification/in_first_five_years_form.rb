@@ -3,8 +3,6 @@ module FurtherEducationPayments
     module Claims
       module Verification
         class InFirstFiveYearsForm < BaseForm
-          YEARS_BEFORE = -4
-
           attribute :provider_verification_teaching_start_year, :string
 
           validates(
@@ -20,8 +18,9 @@ module FurtherEducationPayments
           )
 
           def teaching_start_year_options
-            array = (YEARS_BEFORE..0).map do |delta|
-              academic_year = AcademicYear.current + delta
+            academic_years = Policies::FurtherEducationPayments.selectable_teaching_start_academic_years
+
+            array = academic_years.map do |academic_year|
               Form::Option.new(
                 id: academic_year.start_year.to_s,
                 name: I18n.t(
@@ -30,7 +29,7 @@ module FurtherEducationPayments
                   end_year: academic_year.end_year
                 )
               )
-            end.reverse
+            end
 
             array << Form::Option.new(
               id: "pre-#{before_year}",
@@ -46,8 +45,7 @@ module FurtherEducationPayments
           private
 
           def before_year
-            academic_year = AcademicYear.current + YEARS_BEFORE
-            academic_year.start_year
+            Policies::FurtherEducationPayments.selectable_teaching_start_academic_years.last.start_year
           end
         end
       end
