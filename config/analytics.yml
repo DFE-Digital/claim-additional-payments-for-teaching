@@ -323,7 +323,7 @@ shared:
     - claimant_identity_verified_at # datetime, DEPRECATED
     - valid_passport # boolean, DEPRECATED, does the claimant have a valid passport
     - provider_verification_teaching_responsibilities # boolean, does provider think claimant has teaching responsibilities
-    - provider_verification_teaching_start_year_matches_claim # boolean, does provider agree with claimants teaching start year
+    - provider_verification_teaching_start_year # string, academic year the provider says the claimant started FE teaching
     - provider_verification_teaching_qualification # string, does provider think claimant has teaching qualification
     - provider_verification_contract_type # string, what contract type does claimant have according to provider
     - provider_verification_contract_covers_full_academic_year # boolean, does provider think claimant contract covers entire academic year
@@ -345,7 +345,7 @@ shared:
     - provider_verification_not_started_qualification_reason_other # string, if provider_verification_not_started_qualification_reasons is other, provides detail (given by the provider)
     - work_email_verified # boolean, has claimants work email been verified via OTP
     - flagged_as_mismatch_on_teaching_start_year # boolean, previous claim has a further_education_teaching_start_year of 2020 (for year2 claims) or there is a mismatch (for year3 and onwards)
-    - flagged_as_previously_start_year_matches_claim_false # boolean, previous rejected claim where provider_verification_teaching_start_year_matches_claim was false
+    - flagged_as_previously_start_year_matches_claim_false # boolean, previous rejected claim where provider start year did not match claimant start year
     - provider_verification_deadline # date, deadline date for when provider should verify a claim
   :eligible_ey_providers:
     - id # uuid, that identifies eligible EY provider

@@ -181,6 +181,13 @@
     </div>
   </div>
 
+  <% if lookup_context.exists?("admin/amendments/_#{f.object.claim.policy.locale_key}") %>
+    <%= render(
+      partial: "further_education_payments",
+      locals: { f: f }
+    ) %>
+  <% end %>
+
   <% if @form.show_award_amount? %>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-third">
