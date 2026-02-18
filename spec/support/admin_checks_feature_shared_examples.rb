@@ -258,10 +258,10 @@ RSpec.shared_examples "Admin Checks" do |policy|
 
     click_on I18n.t("admin.tasks.one_login_identity.title")
 
-    expect(page).to have_link("Next:Repeat applicant check")
+    expect(page).to have_link("Next:Repeat application mismatch check")
     expect(page).not_to have_link("Previous")
 
-    click_link("Next:Repeat applicant check")
+    click_link("Next:Repeat application mismatch check")
 
     expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.fe_repeat_applicant_check.title"))
     expect(page).to have_link("Next:Provider verification")
@@ -271,7 +271,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
 
     expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.provider_verification.title"))
     expect(page).to have_link("Next:Student loan plan")
-    expect(page).to have_link("Previous:Repeat applicant check")
+    expect(page).to have_link("Previous:Repeat application mismatch check")
 
     choose "Yes"
     click_on "Save and continue"
