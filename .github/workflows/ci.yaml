@@ -62,7 +62,7 @@ jobs:
         with:
           terraform_version: 1.8.4
       - run: terraform fmt -check -diff
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         name: Cache tflint plugin dir
         with:
           path: ~/.tflint.d/plugins
@@ -109,7 +109,7 @@ jobs:
           bundler-cache: true
       - name: Restore assets cache
         id: assets-cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: |
             public/assets
@@ -121,7 +121,7 @@ jobs:
         run: bin/rails assets:precompile
       - name: Save assets cache
         if: ${{ steps.assets-cache.outputs.cache-hit != 'true' }}
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: |
             public/assets
