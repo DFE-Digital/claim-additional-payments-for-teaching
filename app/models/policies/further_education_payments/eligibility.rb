@@ -3,7 +3,11 @@ module Policies
     class Eligibility < ApplicationRecord
       include ProviderVerificationConstants
 
-      AMENDABLE_ATTRIBUTES = [:award_amount, :teacher_reference_number].freeze
+      AMENDABLE_ATTRIBUTES = [
+        :award_amount,
+        :teacher_reference_number,
+        :further_education_teaching_start_year
+      ].freeze
 
       self.table_name = "further_education_payments_eligibilities"
 
@@ -274,7 +278,8 @@ module Policies
         # For year 2+ rejections we store the provider verification on the eligibility
         eligibility_ids_for_provider_verification_false =
           Policies::FurtherEducationPayments::Eligibility
-            .where(provider_verification_teaching_start_year_matches_claim: false)
+            .where.not(provider_verification_teaching_start_year: nil)
+            .where("provider_verification_teaching_start_year != further_education_teaching_start_year")
 
         # For year 1 rejections the verification assertions are stored as JSON on the eligibility
         year_one_assertion = [{"name" => "further_education_teaching_start_year", "outcome" => false}].to_json
@@ -298,6 +303,10 @@ module Policies
 
       def year_1_claim?
         claim.academic_year == AcademicYear.new(2024)
+      end
+
+      def claimant_and_provider_teaching_start_year_match?
+        provider_verification_teaching_start_year == further_education_teaching_start_year
       end
 
       private

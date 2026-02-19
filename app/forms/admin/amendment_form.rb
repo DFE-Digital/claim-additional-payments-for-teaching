@@ -60,6 +60,15 @@ class Admin::AmendmentForm
 
   validate :validate_changes_present
 
+  def self.form_for_claim(claim)
+    case claim.policy
+    when Policies::FurtherEducationPayments
+      Admin::Amendments::FurtherEducationPaymentsForm
+    else
+      self
+    end
+  end
+
   def self.amendable_attributes(claim:, admin_user:)
     array = Claim::AMENDABLE_ATTRIBUTES + claim.policy::Eligibility::AMENDABLE_ATTRIBUTES + [:notes]
 
