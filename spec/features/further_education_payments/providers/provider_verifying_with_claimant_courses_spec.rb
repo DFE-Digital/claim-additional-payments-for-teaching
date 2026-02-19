@@ -55,10 +55,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
 
     click_on "Continue"
 
-    within_fieldset(
-      "Did Edna Krabappel start their further education (FE) teaching " \
-      "career in England during September 2023 to August 2024?"
-    ) { choose "Yes" }
+    choose "September 2023 to August 2024"
 
     click_on "Continue"
 
@@ -137,8 +134,8 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
     ).to have_content("Yes")
 
     expect(
-      summary_row("In first 5 years of FE teaching")
-    ).to have_content("Yes")
+      summary_row("FE teaching start year")
+    ).to have_content("September 2023 to August 2024")
 
     expect(
       summary_row("Teaching qualification")
@@ -235,10 +232,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
 
     click_on "Continue"
 
-    within_fieldset(
-      "Did Edna Krabappel start their further education (FE) teaching " \
-      "career in England during September 2023 to August 2024?"
-    ) { choose "Yes" }
+    choose "September 2023 to August 2024"
 
     click_on "Continue"
 
@@ -317,8 +311,8 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
     ).to have_content("Yes")
 
     expect(
-      summary_row("In first 5 years of FE teaching")
-    ).to have_content("Yes")
+      summary_row("FE teaching start year")
+    ).to have_content("September 2023 to August 2024")
 
     expect(
       summary_row("Teaching qualification")

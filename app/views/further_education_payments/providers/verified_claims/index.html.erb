@@ -26,7 +26,7 @@
       <% row.with_cell(text: "Claimant name") %>
       <% row.with_cell(text: "Claim reference") %>
       <% row.with_cell(text: "Date verified") %>
-      <% row.with_cell(text: "Status") %>
+      <% row.with_cell(text: "DfE Status") %>
     <% end %>
   <% end %>
 
@@ -37,8 +37,8 @@
       <% body.with_row do |row| %>
         <% row.with_cell(text: govuk_link_to(presenter.full_name, further_education_payments_providers_verified_claim_path(presenter.claim))) %>
         <% row.with_cell(text: presenter.reference) %>
-        <% row.with_cell(text: l(presenter.provider_verification_completed_at)) %>
-        <% row.with_cell(text: govuk_tag(text: presenter.status, colour: presenter.colour)) %>
+        <% row.with_cell(text: l(presenter.provider_verification_completed_at.to_date)) %>
+        <% row.with_cell(text: govuk_tag(text: presenter.dfe_status_text, colour: presenter.dfe_status_colour)) %>
       <% end %>
     <% end %>
   <% end %>

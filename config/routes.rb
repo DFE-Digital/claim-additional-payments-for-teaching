@@ -188,6 +188,10 @@ Rails.application.routes.draw do
 
     resources :early_years_providers, only: [:index]
 
+    namespace :further_education_payments do
+      resource :flagged_providers_csv, only: [:update]
+    end
+
     get "refresh-session", to: "sessions#refresh", as: :refresh_session
 
     patch "allocate/:id", to: "allocations#allocate", as: :allocate

@@ -28,6 +28,8 @@ module Admin
 
       @feature_flags_form = FeatureFlagsForm.new
       @feature_flags_form.load_data
+
+      @flagged_fe_providers_form = FurtherEducationPayments::FlaggedProvidersCsvForm.new(admin: admin_user)
     end
 
     def update

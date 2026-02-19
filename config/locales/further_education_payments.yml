@@ -382,6 +382,12 @@ en:
     journey_name: Claim a targeted retention incentive payment for further education teachers - provider
     feedback_email: "FE-targeted.retention-incentive@education.gov.uk"
     support_email_address: "FE-targeted.retention-incentive@education.gov.uk"
+    presenters:
+      claim_presenter:
+        dfe_status:
+          approved: Approved
+          rejected: Rejected
+          pending: Pending
     forms:
       verification:
         provider_verification_claimant_employed_by_college:
@@ -416,8 +422,8 @@ en:
           question: "Did %{claimant_name} spend at least half of their timetabled teaching hours teaching students on 16 to 19 study programmes, T Levels or 16 to 19 apprenticeships?"
         provider_verification_half_timetabled_teaching_time:
           question: "During the spring term, did %{claimant_name} spend at least half of their timetabled teaching hours teaching these courses?"
-        provider_verification_teaching_start_year_matches_claim:
-          question: "Did %{claimant_name} start their further education (FE) teaching career in England during %{claimant_further_education_teaching_start_year}?"
+        provider_verification_teaching_start_year:
+          question: "%{claimant_name} has indicated that they began their FE teaching career in England during %{claimant_further_education_teaching_start_year}. Please confirm the academic year in which %{claimant_name} actually started their FE teaching career in England."
         provider_verification_not_started_qualification_reasons:
           question: "%{claimant_name} said last year that they planned to start a teaching qualification within 12 months. They’ve confirmed the same intention in their application this year. Tell us why they have not yet started or finished a teaching qualification"
         provider_verification_performance_measures:

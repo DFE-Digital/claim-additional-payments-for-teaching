@@ -110,7 +110,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       ).to have_content("Yes")
 
       expect(
-        summary_row("In first 5 years of FE teaching")
+        summary_row("FE teaching start year")
       ).to have_content("Not answered")
 
       expect(
@@ -204,10 +204,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
 
       click_on "Continue"
 
-      within_fieldset(
-        "Did Edna Krabappel start their further education (FE) teaching " \
-        "career in England during September 2023 to August 2024?"
-      ) { choose "Yes" }
+      choose "September 2023 to August 2024"
       click_on "Continue"
 
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
@@ -281,8 +278,8 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       ).to have_content("Yes")
 
       expect(
-        summary_row("In first 5 years of FE teaching")
-      ).to have_content("Yes")
+        summary_row("FE teaching start year")
+      ).to have_content("September 2023 to August 2024")
 
       expect(
         summary_row("Teaching qualification")
@@ -332,7 +329,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       ).to eql("/further-education-payments/providers/verified-claims")
       expect(page).to have_css(
         "table tbody tr:first-child td:nth-child(4)",
-        text: "Completed"
+        text: "Pending"
       )
     end
   end
@@ -389,10 +386,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       ) { choose "Yes" }
       click_on "Continue"
 
-      within_fieldset(
-        "Did Edna Krabappel start their further education (FE) teaching " \
-        "career in England during September 2023 to August 2024?"
-      ) { choose "Yes" }
+      choose "September 2023 to August 2024"
       click_on "Continue"
 
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
@@ -469,8 +463,8 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       ).to have_content "Yes"
 
       expect(
-        summary_row("In first 5 years of FE teaching")
-      ).to have_content "Yes"
+        summary_row("FE teaching start year")
+      ).to have_content "September 2023 to August 2024"
 
       expect(
         summary_row("Teaching qualification")
@@ -575,10 +569,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
 
       click_on "Continue"
 
-      within_fieldset(
-        "Did Edna Krabappel start their further education (FE) teaching " \
-        "career in England during September 2023 to August 2024?"
-      ) { choose "Yes" }
+      choose "September 2023 to August 2024"
 
       click_on "Continue"
 
@@ -658,8 +649,8 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       ).to have_content "Yes"
 
       expect(
-        summary_row("In first 5 years of FE teaching")
-      ).to have_content "Yes"
+        summary_row("FE teaching start year")
+      ).to have_content "September 2023 to August 2024"
 
       expect(
         summary_row("Teaching qualification")
@@ -739,10 +730,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       ) { choose "Yes" }
       click_on "Continue"
 
-      within_fieldset(
-        "Did Edna Krabappel start their further education (FE) teaching " \
-        "career in England during September 2023 to August 2024?"
-      ) { choose "Yes" }
+      choose "September 2023 to August 2024"
       click_on "Continue"
 
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
@@ -968,10 +956,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       ) { choose "Yes" }
       click_on "Continue"
 
-      within_fieldset(
-        "Did Edna Krabappel start their further education (FE) teaching " \
-        "career in England during September 2023 to August 2024?"
-      ) { choose "Yes" }
+      choose "September 2023 to August 2024"
       click_on "Continue"
 
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
@@ -1057,10 +1042,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
 
       click_on "Continue"
 
-      within_fieldset(
-        "Did Edna Krabappel start their further education (FE) teaching " \
-        "career in England during September 2023 to August 2024?"
-      ) { choose "Yes" }
+      choose "September 2023 to August 2024"
 
       click_on "Continue"
 
@@ -1263,7 +1245,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
           expect(page).to have_content(claim.reference)
 
           within table_row(claim.reference) do
-            expect(page).to have_content("Rejected")
+            expect(page).to have_content("Pending")
           end
 
           click_on claim.full_name
@@ -1423,10 +1405,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       ) { choose "Yes" }
       click_on "Continue"
 
-      within_fieldset(
-        "Did Edna Krabappel start their further education (FE) teaching career " \
-        "in England during September 2023 to August 2024?"
-      ) { choose "Yes" }
+      choose "September 2023 to August 2024"
       click_on "Continue"
 
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
@@ -1562,10 +1541,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       ) { choose "Yes" }
       click_on "Continue"
 
-      within_fieldset(
-        "Did Edna Krabappel start their further education (FE) teaching career " \
-        "in England during September 2023 to August 2024?"
-      ) { choose "Yes" }
+      choose "September 2023 to August 2024"
       click_on "Continue"
 
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do

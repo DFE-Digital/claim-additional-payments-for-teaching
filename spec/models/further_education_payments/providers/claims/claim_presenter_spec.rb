@@ -1,10 +1,12 @@
 require "rails_helper"
 
 RSpec.describe FurtherEducationPayments::Providers::Claims::ClaimPresenter do
-  describe "#status and #colour" do
-    let(:claim) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility: eligibility) }
-    let(:presenter) { described_class.new(claim) }
+  subject(:presenter) { described_class.new(claim) }
 
+  let(:claim) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility: eligibility) }
+  let(:eligibility) { create(:further_education_payments_eligibility) }
+
+  describe "#status and #colour" do
     context "when provider verification is not started" do
       let(:eligibility) do
         create(:further_education_payments_eligibility,
@@ -54,6 +56,52 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::ClaimPresenter do
       it "returns 'Unknown' status with grey colour" do
         expect(presenter.status).to eq("Unknown")
         expect(presenter.colour).to eq("grey")
+      end
+    end
+  end
+
+  describe "#dfe_status, #dfe_status_text, #dfe_status_colour" do
+    context "when new" do
+      it "returns :pending, pending text, yellow" do
+        expect(subject.dfe_status).to eql(:pending)
+        expect(subject.dfe_status_text).to match(/pending/i)
+        expect(subject.dfe_status_colour).to eql("yellow")
+      end
+    end
+
+    context "when approved" do
+      let(:claim) do
+        create(
+          :claim,
+          :submitted,
+          :approved,
+          policy: Policies::FurtherEducationPayments,
+          eligibility: eligibility
+        )
+      end
+
+      it "returns :approved, approved text, green" do
+        expect(subject.dfe_status).to eql(:approved)
+        expect(subject.dfe_status_text).to match(/approved/i)
+        expect(subject.dfe_status_colour).to eql("green")
+      end
+    end
+
+    context "when rejected" do
+      let(:claim) do
+        create(
+          :claim,
+          :submitted,
+          :rejected,
+          policy: Policies::FurtherEducationPayments,
+          eligibility: eligibility
+        )
+      end
+
+      it "returns :rejected, rejected text, red" do
+        expect(subject.dfe_status).to eql(:rejected)
+        expect(subject.dfe_status_text).to match(/rejected/i)
+        expect(subject.dfe_status_colour).to eql("red")
       end
     end
   end

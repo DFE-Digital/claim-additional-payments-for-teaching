@@ -25,13 +25,10 @@ module FurtherEducationPayments
 
           array << {
             key: {
-              text: "In first 5 years of FE teaching"
+              text: "FE teaching start year"
             },
             value: {
-              text: I18n.t(
-                claim.eligibility.provider_verification_teaching_start_year_matches_claim,
-                scope: :boolean
-              )
+              text: formatted_teaching_start_year
             }
           }
 
@@ -177,6 +174,16 @@ module FurtherEducationPayments
         delegate :reference, :submitted_at, to: :claim
 
         private
+
+        def formatted_teaching_start_year
+          start_year = claim.eligibility.provider_verification_teaching_start_year
+          return "Not provided" if start_year.nil?
+
+          Policies::FurtherEducationPayments::EligibleAcademicYear.new(
+            candidate_academic_year: start_year,
+            current_academic_year: claim.academic_year
+          )
+        end
 
         def subject_names_sentence
           claim.eligibility.subjects_taught.map do |subject|
