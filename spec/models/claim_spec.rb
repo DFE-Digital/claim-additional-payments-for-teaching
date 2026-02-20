@@ -372,6 +372,44 @@ RSpec.describe Claim, type: :model do
       expect(claim.approvable?).to eq false
     end
 
+    context "when the claim has approval blocking tasks" do
+      let(:task_name) { "payroll_gender" }
+
+      before do
+        stub_const("Task::BLOCKS_APPROVAL", [task_name])
+      end
+
+      context "when the task is incomplete" do
+        it "returns false" do
+          claim = create(:claim, :submitted)
+          create(
+            :task,
+            :claim_verifier_context,
+            claim: claim,
+            name: task_name,
+            passed: nil
+          )
+          expect(claim.approvable?).to eq false
+        end
+      end
+
+      context "when the task is failed" do
+        it "returns false" do
+          claim = create(:claim, :submitted)
+          create(:task, claim: claim, name: task_name, passed: false)
+          expect(claim.approvable?).to eq false
+        end
+      end
+
+      context "when the task is passed" do
+        it "returns true" do
+          claim = create(:claim, :submitted)
+          create(:task, claim: claim, name: task_name, passed: true)
+          expect(claim.approvable?).to eq true
+        end
+      end
+    end
+
     context "when the claim is held" do
       subject(:claim) { create(:claim, :held) }
       it { is_expected.not_to be_approvable }

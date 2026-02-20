@@ -44,6 +44,10 @@ class ClaimCheckingTasks
       .applicable_task_objects
   end
 
+  def blocking_approval
+    policy::ClaimCheckingTasks.new(claim).blocking_approval
+  end
+
   def pageable_tasks
     array = applicable_task_names
     array << "decision"
