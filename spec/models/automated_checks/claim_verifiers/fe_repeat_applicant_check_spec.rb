@@ -98,7 +98,8 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeRepeatApplicantCheck do
           onelogin_uid: claim.onelogin_uid,
           eligibility: create(
             :further_education_payments_eligibility,
-            provider_verification_teaching_start_year_matches_claim: false
+            further_education_teaching_start_year: "2023",
+            provider_verification_teaching_start_year: "2020"
           )
         )
       end

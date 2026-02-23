@@ -270,7 +270,7 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
         end
       end
 
-      context "when a year 1 rejected claim exists with provider_verification_teaching_start_year_matches_claim false" do
+      context "when a year 1 rejected claim exists with provider start year mismatch" do
         before do
           previous_year_1_claim_rejected
         end
@@ -321,7 +321,7 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
           academic_year: AcademicYear.new(2025),
           onelogin_uid: answers.onelogin_uid,
           eligibility_attributes: {
-            provider_verification_teaching_start_year_matches_claim: false
+            provider_verification_teaching_start_year: "2020"
           }
         )
       end
@@ -340,7 +340,7 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
         end
       end
 
-      context "when a year 2 rejected claim exists with provider_verification_teaching_start_year_matches_claim false" do
+      context "when a year 2 rejected claim exists with provider start year mismatch" do
         before do
           previous_year_2_claim_rejected
         end

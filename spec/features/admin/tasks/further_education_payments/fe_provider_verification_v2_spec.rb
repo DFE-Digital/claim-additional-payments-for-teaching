@@ -47,7 +47,7 @@ RSpec.feature "Viewing the FE provider verification year 2 task" do
           teaching_responsibilities: true,
           provider_verification_teaching_responsibilities: true,
           further_education_teaching_start_year: "2023",
-          provider_verification_teaching_start_year_matches_claim: true,
+          provider_verification_teaching_start_year: "2023",
           teaching_hours_per_week: "more_than_12",
           provider_verification_teaching_hours_per_week: "more_than_12",
           half_teaching_hours: true,
@@ -80,7 +80,7 @@ RSpec.feature "Viewing the FE provider verification year 2 task" do
 
       within_table_row("First 5 years of teaching") do |claimant_answer, provider_answer|
         expect(claimant_answer).to have_content("September 2023 to 2024")
-        expect(provider_answer).to have_content("Yes")
+        expect(provider_answer).to have_content("September 2023 to August 2024")
       end
 
       within_table_row("Timetabled teaching hours") do |claimant_answer, provider_answer|

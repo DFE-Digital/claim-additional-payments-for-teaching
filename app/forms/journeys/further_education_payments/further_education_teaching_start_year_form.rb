@@ -8,16 +8,15 @@ module Journeys
           message: ->(object, data) { i18n_error_message(:blank, before_year: object.before_year).call(object, data) }
         }
 
-      YEARS_BEFORE = -4
-
       def radio_options
-        array = (YEARS_BEFORE..0).map do |delta|
-          academic_year = AcademicYear.current + delta
+        academic_years = eligibile_academic_years.reverse
+
+        array = academic_years.map do |academic_year|
           Option.new(
             id: academic_year.start_year.to_s,
             name: t("options.between_dates", start_year: academic_year.start_year, end_year: academic_year.end_year)
           )
-        end.reverse
+        end
 
         array << Option.new(
           id: "pre-#{before_year}",
@@ -35,8 +34,14 @@ module Journeys
       end
 
       def before_year
-        academic_year = AcademicYear.current + YEARS_BEFORE
-        academic_year.start_year
+        eligibile_academic_years.first.start_year
+      end
+
+      private
+
+      def eligibile_academic_years
+        Policies::FurtherEducationPayments
+          .selectable_teaching_start_academic_years(AcademicYear.current)
       end
     end
   end

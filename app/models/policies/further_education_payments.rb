@@ -82,6 +82,10 @@ module Policies
       start_of_academic_year - 5.years
     }
 
+    def selectable_teaching_start_academic_years(current_academic_year)
+      (-4..0).map { |delta| current_academic_year + delta }
+    end
+
     def alternative_idv_completed!(claim)
       Tasks::FeAlternativeVerificationJob.perform_later(claim)
     end

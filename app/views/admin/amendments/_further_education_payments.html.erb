@@ -1,0 +1,17 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-third">
+    <div class="govuk-body">
+      <%= label_tag(
+        "amendment-further-education-teaching-start-year-field",
+        "Claimant entered teaching start academic year"
+      ) %>
+    </div>
+  </div>
+  <div class="govuk-grid-column-two-thirds">
+    <%= f.govuk_text_field(
+      :further_education_teaching_start_year,
+      label: nil,
+      width: 10
+    )%>
+  </div>
+</div>

@@ -177,9 +177,11 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminProviderAnswe
             "Yes"
           ],
           [
-            "Did Edna Krabappel start their further education (FE) teaching " \
-            "career in England during September 2023 to August 2024?",
-            "Yes"
+            "Edna Krabappel has indicated that they began their FE teaching " \
+            "career in England during September 2023 to August 2024. Please " \
+            "confirm the academic year in which Edna Krabappel actually " \
+            "started their FE teaching career in England.",
+            "September 2023 to August 2024"
           ],
           [
             "Does Edna Krabappel have a teaching qualification?",

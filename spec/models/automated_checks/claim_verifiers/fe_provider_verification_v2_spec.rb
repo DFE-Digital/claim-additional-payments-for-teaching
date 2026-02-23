@@ -35,7 +35,8 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
         let(:eligibility) do
           build(
             :further_education_payments_eligibility,
-            provider_verification_teaching_start_year_matches_claim: false
+            further_education_teaching_start_year: "2023",
+            provider_verification_teaching_start_year: "2020"
           )
         end
 
@@ -403,7 +404,8 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
         build(
           :further_education_payments_eligibility,
           provider_verification_teaching_responsibilities: true,
-          provider_verification_teaching_start_year_matches_claim: true,
+          further_education_teaching_start_year: "2023",
+          provider_verification_teaching_start_year: "2023",
           provider_verification_half_teaching_hours: true,
           provider_verification_half_timetabled_teaching_time: true,
           provider_verification_performance_measures: false,

@@ -28,13 +28,13 @@
       </h2>
 
       <%= f.govuk_collection_radio_buttons(
-        :provider_verification_teaching_start_year_matches_claim,
-        f.object.teaching_start_year_matches_claim_options,
+        :provider_verification_teaching_start_year,
+        f.object.teaching_start_year_options,
         :id,
         :name,
         legend: {
           text: f.object.t(
-            "provider_verification_teaching_start_year_matches_claim.question",
+            "provider_verification_teaching_start_year.question",
             claimant_name: f.object.claimant_name,
             claimant_further_education_teaching_start_year: f.object.claimant_further_education_teaching_start_year
           ),

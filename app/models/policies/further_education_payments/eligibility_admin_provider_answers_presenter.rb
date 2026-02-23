@@ -113,34 +113,40 @@ module Policies
             claimant_name: eligibility.claim.full_name
           ),
           I18n.t(
-            eligibility.provider_verification_teaching_start_year_matches_claim,
+            eligibility.provider_verification_teaching_responsibilities,
             scope: :boolean
           )
         ]
       end
 
       def in_first_five_years
-        academic_year = AcademicYear.new(
+        claimant_academic_year = AcademicYear.new(
           eligibility.further_education_teaching_start_year
         )
 
-        academic_year_full = I18n.t(
+        claimant_academic_year_full = I18n.t(
           "options.between_dates",
-          start_year: academic_year.start_year,
-          end_year: academic_year.end_year,
+          start_year: claimant_academic_year.start_year,
+          end_year: claimant_academic_year.end_year,
           scope: "further_education_payments.forms.further_education_teaching_start_year"
         )
 
+        answer = if eligibility.provider_verification_teaching_start_year.nil?
+          "Not answered"
+        else
+          EligibleAcademicYear.new(
+            candidate_academic_year: eligibility.provider_verification_teaching_start_year,
+            current_academic_year: eligibility.claim.academic_year
+          ).to_s
+        end
+
         [
           question(
-            :provider_verification_teaching_start_year_matches_claim,
+            :provider_verification_teaching_start_year,
             claimant_name: eligibility.claim.full_name,
-            claimant_further_education_teaching_start_year: academic_year_full
+            claimant_further_education_teaching_start_year: claimant_academic_year_full
           ),
-          I18n.t(
-            eligibility.provider_verification_teaching_start_year_matches_claim,
-            scope: :boolean
-          )
+          answer
         ]
       end
 

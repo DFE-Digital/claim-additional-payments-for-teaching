@@ -23,19 +23,19 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::InFirs
     context "when submission" do
       it do
         is_expected.not_to(
-          allow_value(nil).for(:provider_verification_teaching_start_year_matches_claim)
+          allow_value(nil).for(:provider_verification_teaching_start_year)
         )
       end
 
       it do
         is_expected.to(
-          allow_value(true).for(:provider_verification_teaching_start_year_matches_claim)
+          allow_value("2023").for(:provider_verification_teaching_start_year)
         )
       end
 
       it do
-        is_expected.to(
-          allow_value(false).for(:provider_verification_teaching_start_year_matches_claim)
+        is_expected.not_to(
+          allow_value("invalid").for(:provider_verification_teaching_start_year)
         )
       end
     end
@@ -47,7 +47,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::InFirs
 
       it do
         is_expected.to(
-          allow_value(nil).for(:provider_verification_teaching_start_year_matches_claim)
+          allow_value(nil).for(:provider_verification_teaching_start_year)
         )
       end
     end
@@ -57,7 +57,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::InFirs
     context "when form is valid" do
       let(:params) do
         {
-          provider_verification_teaching_start_year_matches_claim: true
+          provider_verification_teaching_start_year: "2023"
         }
       end
 
@@ -79,7 +79,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::InFirs
     context "when form is valid" do
       let(:params) do
         {
-          provider_verification_teaching_start_year_matches_claim: true
+          provider_verification_teaching_start_year: "2023"
         }
       end
 
@@ -89,8 +89,8 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::InFirs
         claim.eligibility.reload
 
         expect(
-          claim.eligibility.provider_verification_teaching_start_year_matches_claim
-        ).to be(true)
+          claim.eligibility.provider_verification_teaching_start_year
+        ).to eq("2023")
       end
     end
 
