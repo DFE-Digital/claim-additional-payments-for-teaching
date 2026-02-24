@@ -138,7 +138,7 @@ en:
         name: Continuous employment
         title: Check for breaks in employment
       fe_repeat_applicant_check:
-        name: Repeat applicant check
+        name: Repeat application mismatch check
         title: Confirm teaching start year matches previous claims
     undo_decision:
       approved: "Undo approval"
