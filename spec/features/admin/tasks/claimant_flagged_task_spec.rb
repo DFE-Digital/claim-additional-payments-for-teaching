@@ -100,7 +100,7 @@ RSpec.describe "Claimant flagging" do
     choose school.name
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_content("Which academic year did you start your further education (FE) teaching career in England?")
     choose("September 2023 to August 2024")
     click_button "Continue"
 
@@ -112,7 +112,7 @@ RSpec.describe "Claimant flagging" do
     choose("Permanent")
     click_button "Continue"
 
-    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{school.name} during the current term?")
+    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{school.name} during the spring term?")
     choose("12 or more hours per week, but fewer than 20")
     click_button "Continue"
 

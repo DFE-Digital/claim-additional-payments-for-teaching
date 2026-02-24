@@ -7,7 +7,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/claim.rb",
-      "line": 155,
+      "line": 156,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "joins(\"JOIN (\\n  #{Policies::POLICIES.map do\n \"\\n                SELECT\\n                id,\\n                award_amount AS award_amount,\\n                '#{policy::Eligibility}' AS eligibility_type\\n                FROM #{policy::Eligibility.table_name}\\n              \"\n end.join(\" UNION ALL \")}\\n) AS eligibilities\\nON claims.eligibility_id = eligibilities.id\\nAND claims.eligibility_type = eligibilities.eligibility_type\\n\")",
       "render_path": null,
@@ -66,6 +66,62 @@
       "confidence": "Weak",
       "cwe_id": [
         22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "c08e25c5e0de45a4d000f9003e5a7afd1340b433e600aebe24e71cca8305d4c2",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/admin/claimant_flags_csv_uploads/new.html.erb",
+      "line": 25,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "ClaimantFlag::IDENTIFICATION_ATTRIBUTES.join(\"<br>\")",
+      "render_path": null,
+      "location": {
+        "type": "template",
+        "template": "admin/claimant_flags_csv_uploads/new"
+      },
+      "user_input": "ClaimantFlag::IDENTIFICATION_ATTRIBUTES.join(\"<br>\")",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "f0edf42272b906a16c081be54b19513cfe9e95fa1a90f4c2b6e9a33dc6263a25",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/admin/claimant_flags_csv_uploads/new.html.erb",
+      "line": 38,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "ClaimantFlag.reasons.keys.join(\"<br>\")",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Admin::ClaimantFlagsCsvUploadsController",
+          "method": "new",
+          "line": 7,
+          "file": "app/controllers/admin/claimant_flags_csv_uploads_controller.rb",
+          "rendered": {
+            "name": "admin/claimant_flags_csv_uploads/new",
+            "file": "app/views/admin/claimant_flags_csv_uploads/new.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "admin/claimant_flags_csv_uploads/new"
+      },
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        79
       ],
       "note": ""
     },
