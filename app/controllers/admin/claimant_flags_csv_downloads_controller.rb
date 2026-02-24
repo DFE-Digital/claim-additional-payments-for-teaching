@@ -19,7 +19,7 @@ module Admin
 
     def generate_csv
       CSV.generate(headers: true) do |csv|
-        csv << ["policy", "identification_attribute", "identification_value", "reason", "suggested_action"]
+        csv << ["policy", "identification_attribute", "identification_value", "reason", "suggested_action", "related_claims"]
 
         @claimant_flags.find_each do |claimant_flag|
           csv << [
@@ -27,7 +27,8 @@ module Admin
             claimant_flag.identification_attribute,
             claimant_flag.identification_value,
             claimant_flag.reason,
-            claimant_flag.suggested_action
+            claimant_flag.suggested_action,
+            claimant_flag.related_claims.join(";")
           ]
         end
       end

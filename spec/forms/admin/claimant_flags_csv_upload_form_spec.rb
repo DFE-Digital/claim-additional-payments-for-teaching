@@ -13,9 +13,9 @@ RSpec.describe Admin::ClaimantFlagsCsvUploadForm do
     context "when not all rows have a valid policy" do
       let(:data) do
         <<~CSV
-          policy,identification_attribute,identification_value,reason,suggested_action
-          FurtherEducationPayments,national_insurance_number,AB123456C,clawback,check with manager
-          NotAPolicy,national_insurance_number,AB123456C,clawback,check with manager
+          policy,identification_attribute,identification_value,reason,suggested_action,related_claims
+          FurtherEducationPayments,national_insurance_number,AB123456C,clawback,check with manager,
+          NotAPolicy,national_insurance_number,AB123456C,clawback,check with manager,
         CSV
       end
 
@@ -25,10 +25,10 @@ RSpec.describe Admin::ClaimantFlagsCsvUploadForm do
     context "when not all rows have a valid identification_attribute" do
       let(:data) do
         <<~CSV
-          policy,identification_attribute,identification_value,reason,suggested_action
-          FurtherEducationPayments,national_insurance_number,AB123456C,clawback,check with manager
-          FurtherEducationPayments,height,AB123456C,clawback,check with manager
-          EarlyYearsPayments,national_insurance_number,AB123456C,clawback,check with manager
+          policy,identification_attribute,identification_value,reason,suggested_action,related_claims
+          FurtherEducationPayments,national_insurance_number,AB123456C,clawback,check with manager,
+          FurtherEducationPayments,height,AB123456C,clawback,check with manager,
+          EarlyYearsPayments,national_insurance_number,AB123456C,clawback,check with manager,
         CSV
       end
 
@@ -42,10 +42,10 @@ RSpec.describe Admin::ClaimantFlagsCsvUploadForm do
     context "when not all rows have a valid reason" do
       let(:data) do
         <<~CSV
-          policy,identification_attribute,identification_value,reason,suggested_action
-          FurtherEducationPayments,national_insurance_number,AB123456C,clawback,check with manager
-          FurtherEducationPayments,national_insurance_number,AB123456C,clawback,check with manager
-          EarlyYearsPayments,national_insurance_number,AB123456C,not_a_reason,check with manager
+          policy,identification_attribute,identification_value,reason,suggested_action,related_claims
+          FurtherEducationPayments,national_insurance_number,AB123456C,clawback,check with manager,
+          FurtherEducationPayments,national_insurance_number,AB123456C,clawback,check with manager,
+          EarlyYearsPayments,national_insurance_number,AB123456C,not_a_reason,check with manager,
         CSV
       end
 
@@ -90,18 +90,21 @@ RSpec.describe Admin::ClaimantFlagsCsvUploadForm do
         expect(flag_1.identification_value).to eq("ab123456c")
         expect(flag_1.reason).to eq("clawback")
         expect(flag_1.suggested_action).to eq "check with manager"
+        expect(flag_1.related_claims).to eq %w[ABC12345 DEF67890]
 
         expect(flag_2.policy).to eq("FurtherEducationPayments")
         expect(flag_2.identification_attribute).to eq("national_insurance_number")
         expect(flag_2.identification_value).to eq("ab123456a")
         expect(flag_2.reason).to eq("clawback")
         expect(flag_2.suggested_action).to eq "check with manager"
+        expect(flag_2.related_claims).to eq %w[GHI11111]
 
         expect(flag_3.policy).to eq("EarlyYearsPayments")
         expect(flag_3.identification_attribute).to eq("national_insurance_number")
         expect(flag_3.identification_value).to eq("ab123456z")
         expect(flag_3.reason).to eq("clawback")
         expect(flag_3.suggested_action).to eq nil
+        expect(flag_3.related_claims).to eq []
       end
     end
   end

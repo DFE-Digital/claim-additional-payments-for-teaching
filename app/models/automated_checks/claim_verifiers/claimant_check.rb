@@ -18,6 +18,7 @@ module AutomatedChecks
               claimant_match_on: flag.identification_attribute,
               reason: flag.reason,
               suggested_action: flag.suggested_action,
+              related_claims: flag.related_claims,
               flag_id: flag.id
             }
           end

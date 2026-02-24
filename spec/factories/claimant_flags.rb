@@ -5,6 +5,6 @@ FactoryBot.define do
     reason { "clawback" }
     suggested_action { "Speak to manager" }
     policy { "FurtherEducationPayments" }
-    previous_claim { nil }
+    related_claims { [] }
   end
 end

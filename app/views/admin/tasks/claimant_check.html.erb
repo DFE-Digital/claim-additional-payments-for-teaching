@@ -33,6 +33,15 @@
         <% if flag["suggested_action"] %>
           <%= govuk_inset_text(text: "Suggested action: " + flag.fetch("suggested_action")) %>
         <% end %>
+
+        <% if flag["related_claims"].present? %>
+          <p class="govuk-body">
+            <strong>Related claims:</strong>
+            <% flag["related_claims"].each do |reference| %>
+              <%= govuk_link_to reference, search_admin_claims_path(query: reference) %>
+            <% end %>
+          </p>
+        <% end %>
       <% end %>
     <% end %>
   <% end %>

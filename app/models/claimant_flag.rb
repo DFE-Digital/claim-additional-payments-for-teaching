@@ -1,8 +1,6 @@
 class ClaimantFlag < ApplicationRecord
   IDENTIFICATION_ATTRIBUTES = %w[national_insurance_number].freeze
 
-  belongs_to :previous_claim, class_name: "Claim", optional: true
-
   enum :reason, %w[clawback].index_by(&:itself)
 
   normalizes :identification_value, with: ->(idv) { idv.strip.downcase }

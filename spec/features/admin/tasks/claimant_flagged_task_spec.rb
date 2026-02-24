@@ -36,6 +36,10 @@ RSpec.describe "Claimant flagging" do
 
     expect(page).to have_content("Suggested action: check with manager")
 
+    expect(page).to have_content("Related claims:")
+    expect(page).to have_link("ABC12345")
+    expect(page).to have_link("DEF67890")
+
     within_fieldset(
       "Is this claim still valid despite the claimant being flagged for review?"
     ) { choose "Yes" }
@@ -62,8 +66,8 @@ RSpec.describe "Claimant flagging" do
     click_on "Download claimant flags CSV"
 
     expect(page.response_headers["Content-Disposition"]).to include("attachment; filename=\"claimant_flags-")
-    expect(page.body).to include("policy,identification_attribute,identification_value,reason,suggested_action")
-    expect(page.body).to include("FurtherEducationPayments,national_insurance_number,ab123456c,clawback,Speak to manager")
+    expect(page.body).to include("policy,identification_attribute,identification_value,reason,suggested_action,related_claims")
+    expect(page.body).to include("FurtherEducationPayments,national_insurance_number,ab123456c,clawback,Speak to manager,")
   end
 
   def submit_fe_claim_for_flagged_claimant

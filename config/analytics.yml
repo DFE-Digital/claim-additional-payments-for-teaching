@@ -97,7 +97,7 @@ shared:
     - reason # string, key indicating why the claimant was flagged
     - suggested_action # string, suggested action for ops to take
     - policy # string, which policy this flag relates to
-    - previous_claim_id # uuid, references previous claim that triggered this flag
+    - related_claims # jsonb, claim references related to this flag
   :decisions:
     - id # uuid, identifies the decision
     - claim_id # uuid, references the associated claim

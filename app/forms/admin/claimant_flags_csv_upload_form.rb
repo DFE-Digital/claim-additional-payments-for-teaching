@@ -31,12 +31,19 @@ module Admin
         csv.each do |row|
           policy = policies.fetch(row["policy"])
 
+          related_claims = row["related_claims"]
+            .to_s
+            .split(";")
+            .map(&:strip)
+            .reject(&:blank?)
+
           ClaimantFlag.create!(
             policy: policy,
             identification_attribute: row["identification_attribute"],
             identification_value: row["identification_value"],
             reason: row["reason"],
-            suggested_action: row["suggested_action"].presence
+            suggested_action: row["suggested_action"].presence,
+            related_claims: related_claims
           )
         end
       end

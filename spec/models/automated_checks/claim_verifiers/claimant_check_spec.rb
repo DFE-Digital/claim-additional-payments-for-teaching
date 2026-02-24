@@ -2,8 +2,6 @@ require "rails_helper"
 
 RSpec.describe AutomatedChecks::ClaimVerifiers::ClaimantCheck do
   describe "#perform" do
-    let(:previous_claim) { create(:claim) }
-
     let(:claimant_flag) do
       create(
         :claimant_flag,
@@ -12,7 +10,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ClaimantCheck do
         identification_value: "AB123456C",
         reason: "clawback",
         suggested_action: "speak to manager",
-        previous_claim: previous_claim
+        related_claims: %w[ABC12345 DEF67890]
       )
     end
 
@@ -64,6 +62,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ClaimantCheck do
                 "claimant_match_on" => "national_insurance_number",
                 "reason" => "clawback",
                 "suggested_action" => "speak to manager",
+                "related_claims" => %w[ABC12345 DEF67890],
                 "flag_id" => claimant_flag.id
               }
             ]
