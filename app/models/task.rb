@@ -79,6 +79,10 @@ class Task < ApplicationRecord
     passed == false
   end
 
+  def not_passed?
+    failed? || passed.nil?
+  end
+
   def identity_confirmation?
     name == "identity_confirmation"
   end
