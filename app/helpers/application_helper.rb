@@ -103,7 +103,7 @@ module ApplicationHelper
       {text: "Search", href: search_admin_claims_path, active_when: search_admin_claims_path},
       {text: "Payroll", href: admin_payroll_runs_path, active_when: admin_payroll_runs_path},
       {text: "Manage services", href: admin_journey_configurations_path, active_when: admin_journey_configurations_path},
-      {text: "Reports", href: admin_reports_path, active_when: admin_reports_path},
+      {text: "QA Reports", href: admin_reports_path, active_when: admin_reports_path},
       {text: "Sign out", href: admin_sign_out_path}
     ]
   end
