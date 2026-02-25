@@ -1,0 +1,4 @@
+policy,identification_attribute,identification_value,reason,suggested_action,related_claims
+FurtherEducationPayments,national_insurance_number,AB123456C,clawback,check with manager,ABC12345;DEF67890
+FurtherEducationPayments,national_insurance_number,AB123456A,clawback,check with manager,GHI11111
+EarlyYearsPayments,national_insurance_number,AB123456Z,clawback,,

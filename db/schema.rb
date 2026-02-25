@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_16_120138) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_24_164933) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -39,6 +39,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_120138) do
     t.index ["claim_id", "payment_id"], name: "index_claim_payments_on_claim_id_and_payment_id", unique: true
     t.index ["claim_id"], name: "index_claim_payments_on_claim_id"
     t.index ["payment_id"], name: "index_claim_payments_on_payment_id"
+  end
+
+  create_table "claimant_flags", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "identification_attribute", null: false
+    t.string "identification_value", null: false
+    t.string "policy", null: false
+    t.string "reason", null: false
+    t.string "related_claims", default: [], array: true
+    t.string "suggested_action"
+    t.datetime "updated_at", null: false
   end
 
   create_table "claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
