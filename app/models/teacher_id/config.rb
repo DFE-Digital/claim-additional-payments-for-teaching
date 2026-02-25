@@ -23,6 +23,8 @@ module TeacherId
           @sign_in_redirect_uri.host = ENV["CANONICAL_HOSTNAME"]
         end
       end
+
+      @sign_in_redirect_uri
     end
   end
 end
