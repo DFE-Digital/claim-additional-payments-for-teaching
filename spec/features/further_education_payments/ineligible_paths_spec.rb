@@ -336,7 +336,7 @@ RSpec.feature "Further education payments ineligible paths" do
 
     expect(page).to have_content(
       "In order to claim a targeted retention incentive payment, " \
-      "you must be directly employed by the FE provider where you work."
+      "you must be directly employed by an eligible FE provider."
     )
   end
 
