@@ -33,7 +33,7 @@ runs:
   steps:
     - uses: hashicorp/setup-terraform@v3
       with:
-        terraform_version: 1.8.4
+        terraform_version: 1.14.5
         terraform_wrapper: false
 
     - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
