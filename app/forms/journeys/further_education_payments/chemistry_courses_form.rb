@@ -35,7 +35,7 @@ module Journeys
           ),
           Option.new(
             id: "none",
-            name: "They do not teach any of these courses"
+            name: "I do not teach any of these courses"
           )
         ]
       end
