@@ -6,9 +6,7 @@
     </p>
 
     <p class="govuk-body">
-      You must have been employed in an eligible state-funded secondary school in England for the last financial year
-      (6 April <%= (@academic_year - 1).start_year.to_s %> to 5 April <%= (@academic_year - 1).end_year.to_s %>).
-      You must also be currently working as a teacher in a state-funded secondary school in England.
+      You must have been employed in an eligible state-funded secondary school in England in the <%= (@academic_year - 1).start_year.to_s %> to <%= @academic_year.start_year.to_s %> financial year (6 April <%= (@academic_year - 1).start_year.to_s %> to 5 April <%= @academic_year.start_year.to_s %>).
     </p>
 
     <p class="govuk-body">
@@ -26,7 +24,7 @@
     </p>
 
     <p class="govuk-body">
-      You must apply before 31 March <%= @academic_year.end_year.to_s %>.
+      You must apply before 31 May <%= @academic_year.end_year.to_s %>.
     </p>
 
     <%# TODO: There isn't any journey closed content, for now hide the button %>
