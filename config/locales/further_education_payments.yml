@@ -49,7 +49,7 @@ en:
         claim_already_submitted_this_policy_year:
           heading: "You've already submited a claim in this claim window"
       previously_claimed:
-        question: "Did you apply for a targeted retention incentive payment for your work in further education between %{previous_claim_window_start} and %{previous_claim_window_end}?"
+        question: "Did you apply for a targeted retention incentive payment in further education between %{previous_claim_window_start} and %{previous_claim_window_end}?"
         hint: Tell us if you applied for the payment. Not whether it was approved or paid.
         options:
           true: "Yes"

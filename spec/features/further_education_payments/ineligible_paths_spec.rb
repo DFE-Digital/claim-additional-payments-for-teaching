@@ -1044,7 +1044,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_text("Did you apply for a targeted retention incentive payment for your work in further education")
+    expect(page).to have_text("Did you apply for a targeted retention incentive payment in further education")
     choose "No"
     click_button "Continue"
 
