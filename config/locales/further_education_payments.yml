@@ -149,7 +149,7 @@ en:
       courses: &courses
         hint: |
           <p>
-            Contact your provider if you are unsure which one to pick. Or you cannot find the one you teach.
+            Contact your provider if you are unsure which one to pick, or you cannot find the one you teach.
           </p>
 
           <p>
