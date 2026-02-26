@@ -336,7 +336,7 @@ RSpec.feature "Further education payments ineligible paths" do
 
     expect(page).to have_content(
       "In order to claim a targeted retention incentive payment, " \
-      "you must be directly employed by the FE provider where you work."
+      "you must be directly employed by an eligible FE provider."
     )
   end
 
@@ -1044,7 +1044,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_text("Did you apply for a targeted retention incentive payment for your work in further education")
+    expect(page).to have_text("Did you apply for a targeted retention incentive payment in further education")
     choose "No"
     click_button "Continue"
 
