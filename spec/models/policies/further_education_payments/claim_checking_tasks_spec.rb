@@ -175,16 +175,5 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks, feature_f
         expect(subject.applicable_task_names).to include("fe_alternative_verification")
       end
     end
-
-    context "when the provider is flagged" do
-      before do
-        create(
-          :further_education_payments_provider_flag,
-          ukprn: fe_provider.ukprn
-        )
-      end
-
-      it { expect(subject.applicable_task_names).to include("fe_provider_check") }
-    end
   end
 end

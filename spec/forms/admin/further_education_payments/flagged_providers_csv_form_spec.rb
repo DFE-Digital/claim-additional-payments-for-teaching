@@ -91,7 +91,9 @@ RSpec.describe Admin::FurtherEducationPayments::FlaggedProvidersCsvForm do
 
         form.save
 
-        expect(provider).to be_flagged
+        expect(
+          Policies::FurtherEducationPayments::ProviderFlag.for(provider)
+        ).to be_present
       end
     end
   end

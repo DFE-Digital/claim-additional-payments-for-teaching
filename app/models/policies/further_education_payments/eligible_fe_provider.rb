@@ -76,10 +76,6 @@ module Policies
       def name
         school.name
       end
-
-      def flagged?
-        ProviderFlag.for(self).present?
-      end
     end
   end
 end
