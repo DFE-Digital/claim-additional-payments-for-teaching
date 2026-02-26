@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe DeletePersonalDataFromOldClaimsJob do
-  describe "#perform" do
+  describe "#perform", skip: "job temporarily disabled" do
     let(:current_academic_year) { AcademicYear.current }
     let(:last_academic_year) { Time.zone.local(current_academic_year.start_year, 8, 1) }
     let(:over_1_ago) { 12.months.ago - 2.days }

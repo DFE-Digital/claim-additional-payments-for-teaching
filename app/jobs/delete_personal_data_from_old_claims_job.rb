@@ -2,6 +2,9 @@
 # to remove personal data from eligible claims.
 class DeletePersonalDataFromOldClaimsJob < ApplicationJob
   def perform
+    # temporarily disable this job
+    return true
+
     Rails.logger.info "Deleting personal data from old claims which have been rejected or paid"
     Policies::POLICIES.each do |policy|
       policy::ClaimPersonalDataScrubber.new.scrub_completed_claims
