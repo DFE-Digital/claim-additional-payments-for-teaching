@@ -357,7 +357,6 @@ shared:
     - provider_verification_deadline # date, deadline date for when provider should verify a claim
   :further_education_payments_provider_flags:
     - id # uuid, not used for anything
-    - academic_year # string, which academic year this flag applys to
     - reason # string, reason for flagging claims from this provider, for 25/26 AY this will always be clawbacks
     - ukprn # integer, ukprn of the provider who's claims we're flagging
     - created_at # datetime, timestamp when record was created

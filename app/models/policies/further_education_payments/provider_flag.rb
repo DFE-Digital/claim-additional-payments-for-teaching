@@ -3,13 +3,9 @@ module Policies
     class ProviderFlag < ApplicationRecord
       self.table_name = "further_education_payments_provider_flags"
 
-      attribute :academic_year, AcademicYear::Type.new
-
       enum :reason, %w[clawback].index_by(&:itself)
 
       validate :fe_provider_exists
-
-      validates :academic_year, presence: true
 
       validates(
         :reason,
@@ -20,10 +16,7 @@ module Policies
       )
 
       def self.for(fe_provider)
-        find_by(
-          academic_year: fe_provider.academic_year,
-          ukprn: fe_provider.ukprn
-        )
+        find_by(ukprn: fe_provider.ukprn)
       end
 
       private
@@ -35,7 +28,7 @@ module Policies
       end
 
       def fe_provider_exists?
-        EligibleFeProvider.exists?(academic_year: academic_year, ukprn: ukprn)
+        EligibleFeProvider.exists?(ukprn: ukprn)
       end
     end
   end

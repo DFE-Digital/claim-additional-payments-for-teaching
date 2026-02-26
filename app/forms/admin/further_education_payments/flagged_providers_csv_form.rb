@@ -36,7 +36,6 @@ module Admin
       def flags
         @flags ||= csv.map do |row|
           Policies::FurtherEducationPayments::ProviderFlag.new(
-            academic_year: AcademicYear.current,
             ukprn: row["ukprn"],
             reason: row["reason"]
           )
