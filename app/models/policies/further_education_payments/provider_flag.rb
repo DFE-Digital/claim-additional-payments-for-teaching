@@ -15,7 +15,7 @@ module Policies
         :reason,
         inclusion: {
           in: -> { reasons.keys },
-          messsage: "reason must be one of #{reasons.keys}"
+          messsage: "reason must be one of #{reasons.keys.join(", ")}"
         }
       )
 

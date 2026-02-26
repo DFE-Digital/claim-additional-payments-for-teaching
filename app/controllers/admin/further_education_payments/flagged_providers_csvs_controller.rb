@@ -9,7 +9,7 @@ module Admin
         if @flagged_fe_providers_form.save
           flash[:notice] = "Flagged providers CSV uploaded successfully."
         else
-          flash[:alert] = @flagged_fe_providers_form.errors.full_messages
+          flash[:alert] = @flagged_fe_providers_form.errors.full_messages.join(", ")
         end
 
         redirect_to edit_admin_journey_configuration_path(
