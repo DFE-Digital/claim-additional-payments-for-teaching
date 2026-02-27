@@ -139,7 +139,7 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
             "<p class=\"govuk-body\">T Level in building services engineering for construction</p>" \
             "<p class=\"govuk-body\">T Level in onsite construction</p>" \
             "<p class=\"govuk-body\">T Level in design, surveying and planning for construction</p>" \
-            "<p class=\"govuk-body\">Level 2 or level 3 apprenticeships in the construction and the built environment occupational route</p>",
+            "<p class=\"govuk-body\">Level 2 or level 3 apprenticeships in the construction and the built environment occupational map</p>",
             "building-construction-courses"],
           ["Chemistry courses",
             "<p class=\"govuk-body\">A or AS level chemistry</p>" \
@@ -155,13 +155,13 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
             "<p class=\"govuk-body\">T Level in digital business services</p>" \
             "<p class=\"govuk-body\">T Level in digital production, design and development</p>" \
             "<p class=\"govuk-body\">IBO level 3 SL and HL computer science, taught as part of a diploma or career related programme or as a standalone certificate</p>" \
-            "<p class=\"govuk-body\">Level 2 or level 3 apprenticeships in the digital occupational route</p>",
+            "<p class=\"govuk-body\">Level 2 or level 3 apprenticeships in the digital occupational map</p>",
             "computing-courses"],
           ["Early years courses",
             "<p class=\"govuk-body\">Early years practitioner (level 2) apprenticeship</p>" \
             "<p class=\"govuk-body\">Early years educator (level 3) apprenticeship</p>" \
             "<p class=\"govuk-body\">T Level in education and early years (early years educator)</p>" \
-            "<p class=\"govuk-body\">Early years qualifications at Level 3 and below that allow providers to count the recipient in staff‑to‑child ratios and are listed in the eligibility criteria on</p>",
+            "<p class=\"govuk-body\">Early years qualifications at Level 3 and below that allow providers to count the recipient in staff‑to‑child ratios and are listed in the eligibility criteria</p>",
             "early-years-courses"],
           ["Engineering and manufacturing courses",
             "<p class=\"govuk-body\">Qualifications approved for funding at level 3 and below in the engineering sector subject area</p>" \
@@ -170,7 +170,7 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
             "<p class=\"govuk-body\">T Level in design and development for engineering and manufacturing</p>" \
             "<p class=\"govuk-body\">T Level in maintenance, installation and repair for engineering and manufacturing</p>" \
             "<p class=\"govuk-body\">T Level in engineering, manufacturing, processing and control</p>" \
-            "<p class=\"govuk-body\">Level 2 or level 3 apprenticeships in the engineering and manufacturing occupational route</p>",
+            "<p class=\"govuk-body\">Level 2 or level 3 apprenticeships in the engineering and manufacturing occupational map</p>",
             "engineering-manufacturing-courses"],
           ["Maths courses",
             "<p class=\"govuk-body\">Qualifications approved for funding at level 3 and below in the mathematics and statistics sector subject area</p>" \
