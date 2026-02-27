@@ -1,47 +1,45 @@
 require "rails_helper"
 
-RSpec.describe "Claimant flagging" do
-  it "flags claimants identified in the CSV" do
-    FeatureFlag.enable!(:claimant_flagging)
+RSpec.describe "Provider flagging" do
+  it "flags any claims from providers in the CSV" do
+    create(:journey_configuration, :further_education_payments)
 
-    flagged_claimants_csv = File.open(
-      Rails.root.join("spec", "fixtures", "files", "claimant_flagging.csv")
+    provider = create(:eligible_fe_provider, :with_school, ukprn: 999999)
+
+    csv = File.open(
+      Rails.root.join("spec", "fixtures", "files", "provider_flags.csv")
     )
 
     sign_in_as_service_admin
 
-    visit admin_claims_path
-    click_on "Upload flagged claimants CSV"
-    attach_file "Upload a CSV file", flagged_claimants_csv.path
-    click_on "Upload"
+    visit admin_journey_configurations_path
+    click_on "Change Claim a targeted retention incentive payment for further education teachers"
 
-    expect(page).to have_content("Flagged claimants CSV uploaded successfully.")
+    attach_file "Upload flagged FE providers CSV", csv.path
+    click_button "Upload flagged FE providers"
 
-    claim = submit_fe_claim_for_flagged_claimant
+    expect(page).to have_content("Flagged providers CSV uploaded successfully.")
+
+    claim = submit_fe_claim_for_flagged_claimant(provider)
 
     visit new_admin_claim_decision_path(claim)
 
     expect(page).to have_content(
-      "You cannot approve this claim until the Claimant check task is passed"
+      "You cannot approve this claim until the Provider flagging task is passed"
     )
 
     visit admin_claim_tasks_path(claim)
 
-    expect(page).to have_content("Claimant check")
-    click_on "Review the reason for flagging this claim"
+    expect(page).to have_content("Provider flagging")
+
+    click_on "Check the provider's response"
 
     expect(page).to have_content(
-      "Review previous clawback for this applicant"
+      "Claims from this provider have been flagged for additional review"
     )
 
-    expect(page).to have_content("Suggested action: check with manager")
-
-    expect(page).to have_content("Related claims:")
-    expect(page).to have_link("ABC12345")
-    expect(page).to have_link("DEF67890")
-
     within_fieldset(
-      "Is this claim still valid despite the claimant being flagged for review?"
+      "Has the provider's response been checked for accuracy?"
     ) { choose "Yes" }
 
     click_on "Save and continue"
@@ -49,30 +47,12 @@ RSpec.describe "Claimant flagging" do
     visit new_admin_claim_decision_path(claim)
 
     expect(page).not_to have_content(
-      "You cannot approve this claim until the Claimant check task is passed"
+      "You cannot approve this claim until the Provider flagging task is passed"
     )
   end
 
-  it "allows the csv of claimant flags to be downloaded" do
-    FeatureFlag.enable!(:claimant_flagging)
-
-    create(:claimant_flag)
-
-    sign_in_as_service_admin
-
-    visit admin_claims_path
-    click_on "Upload flagged claimants CSV"
-
-    click_on "Download claimant flags CSV"
-
-    expect(page.response_headers["Content-Disposition"]).to include("attachment; filename=\"claimant_flags-")
-    expect(page.body).to include("policy,identification_attribute,identification_value,reason,suggested_action,related_claims")
-    expect(page.body).to include("FurtherEducationPayments,national_insurance_number,ab123456c,clawback,Speak to manager,")
-  end
-
-  def submit_fe_claim_for_flagged_claimant
-    create(:journey_configuration, :further_education_payments)
-    school = create(:school, :further_education, :fe_eligible)
+  def submit_fe_claim_for_flagged_claimant(provider)
+    school = provider.school
 
     visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     click_link "Start now"
@@ -101,7 +81,7 @@ RSpec.describe "Claimant flagging" do
     click_button "Continue"
 
     expect(page).to have_content("Which academic year did you start your further education (FE) teaching career in England?")
-    choose("September 2023 to August 2024")
+    choose("September 2024 to August 2025")
     click_button "Continue"
 
     expect(page).to have_content("Do you have a teaching qualification?")

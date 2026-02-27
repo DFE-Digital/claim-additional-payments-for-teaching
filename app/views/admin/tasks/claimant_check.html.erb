@@ -1,5 +1,5 @@
 <% content_for(:page_title) do %>
-  <% page_title("Claim #{@claim.reference} claimant check") %>
+  <% page_title("Claim #{@claim.reference} previous claimant clawback") %>
 <% end %>
 
 <% content_for :back_link do %>
@@ -9,11 +9,11 @@
 <%= render(
   claim_summary_view,
   claim: @claim,
-  heading: "Claimant check"
+  heading: "Previous claimant clawback"
 ) %>
 
 <h2 class="govuk-heading-m">
-  Claimant check
+  Previous claimant clawback
 </h2>
 
 <div class="govuk-!-margin-bottom-9">

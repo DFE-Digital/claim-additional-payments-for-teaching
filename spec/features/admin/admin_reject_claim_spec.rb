@@ -144,21 +144,27 @@ RSpec.feature "Admin rejects a claim" do
       expect(page).to have_text("Rejection email sent")
     end
 
-    scenario "rejecting with a reason of year 1 mismatch sends a year 1 mismatch email (not the generic rejection email)" do
+    scenario "rejecting with just the other_reason_only_used_in_exceptional_circumstances does not send an email" do
       visit admin_claim_tasks_path(claim)
 
       click_on "Approve or reject this claim"
       choose "Reject"
 
-      check "Information mismatch against year 1 application"
+      check "Other reason only used in exceptional circumstances"
+      fill_in "Decision notes", with: "A note with exceptional reasons"
 
       click_button "Confirm decision"
 
       expect(page).to have_content("Claim has been rejected successfully")
 
-      expect(claim.email_address).to have_received_email(
-        ApplicationMailer::FURTHER_EDUCATION_PAYMENTS[:CLAIM_REJECTED_MISMATCH_YEAR1_NOTIFY_TEMPLATE_ID]
+      expect(claim.email_address).not_to have_received_email(
+        ApplicationMailer::FURTHER_EDUCATION_PAYMENTS[:CLAIM_REJECTED_NOTIFY_TEMPLATE_ID]
       )
+
+      visit admin_claim_tasks_path(claim)
+      click_link "Claim timeline"
+      expect(page).to have_text("Claim rejected")
+      expect(page).not_to have_text("Rejection email sent")
     end
   end
 

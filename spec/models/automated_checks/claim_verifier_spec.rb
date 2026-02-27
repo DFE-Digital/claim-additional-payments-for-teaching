@@ -116,7 +116,19 @@ RSpec.describe AutomatedChecks::ClaimVerifier do
     context "when verifier is conditional" do
       subject(:perform) { claim_verifier }
 
-      let(:claim) { create(:claim, policy: Policies::FurtherEducationPayments) }
+      let(:provider) { create(:eligible_fe_provider, :with_school) }
+
+      let(:eligibility) do
+        create(:further_education_payments_eligibility, school: provider.school)
+      end
+
+      let(:claim) do
+        create(
+          :claim,
+          policy: Policies::FurtherEducationPayments,
+          eligibility: eligibility
+        )
+      end
 
       let(:claim_verifier_args) do
         {

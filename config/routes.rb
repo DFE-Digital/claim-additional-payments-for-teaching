@@ -190,6 +190,9 @@ Rails.application.routes.draw do
 
     resources :claimant_flags_csv_uploads, only: [:new, :create]
     resource :claimant_flags_csv_download, only: :show
+    namespace :further_education_payments do
+      resource :flagged_providers_csv, only: [:update]
+    end
 
     get "refresh-session", to: "sessions#refresh", as: :refresh_session
 
