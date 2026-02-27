@@ -23,27 +23,29 @@ module Policies
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
       AutomatedChecks::ClaimVerifiers::FraudRisk,
       AutomatedChecks::ClaimVerifiers::FeRepeatApplicantCheck,
-      AutomatedChecks::ClaimVerifiers::ClaimantCheck
+      AutomatedChecks::ClaimVerifiers::ClaimantCheck,
+      AutomatedChecks::ClaimVerifiers::ProviderCheck
     ]
 
     # Options shown to admins when rejecting a claim
     ADMIN_DECISION_REJECTED_REASONS = [
       :no_teaching_responsibilities,
-      :no_eligible_contract_of_employment,
-      :works_less_than_2_point_5_hours_per_week,
       :has_worked_in_further_education_for_more_than_5_years,
-      :ineligible_subject_or_courses,
+      :no_teaching_qualification,
+      :no_eligible_contract_of_employment,
+      :insufficient_hours_per_week,
       :insufficient_time_spent_teaching_eligibble_students,
-      :subject_to_performance_measures,
-      :subject_to_disciplinary_action,
+      :ineligible_subject_or_courses,
+      :performance_measures_or_disciplinary_action,
+      :not_working_at_eligible_fe_provider_until_end_of_academic_year,
+      :variable_or_short_term_fixed_and_not_worked_whole_spring_academic_term,
       :identity_check_failed,
       :alternative_identity_verification_check_failed,
-      :duplicate_claim,
       :no_response,
-      :no_response_from_employer,
-      :information_mismatch_against_year_1_application,
-      :other
-    ]
+      :duplicate_claim,
+      :repeat_application_mismatch,
+      :other_reason_only_used_in_exceptional_circumstances
+    ].freeze
 
     # Attributes to delete from claims submitted before the current academic
     # year

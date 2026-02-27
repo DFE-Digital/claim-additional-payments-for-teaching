@@ -18,7 +18,7 @@
   <%= govuk_warning_text(text: "You cannot approve or reject a claim that is on hold") %>
 <% end %>
 
-<% claim.tasks.blocking_approval.each do |task| %>
+<% claim.claim_checking_tasks.blocking_approval.each do |task| %>
   <% display_name = t("admin.tasks.#{task.name}.name") %>
 
   <%= govuk_warning_text(

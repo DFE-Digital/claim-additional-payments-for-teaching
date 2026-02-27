@@ -19,7 +19,10 @@ module Admin
       presence: {
         message: "You must enter a reason for rejecting this claim in the decision note"
       },
-      if: proc { |form| form.rejected_reasons.include?("other") }
+      if: proc { |form|
+        form.rejected_reasons.include?("other") ||
+          form.rejected_reasons.include?("other_reason_only_used_in_exceptional_circumstances")
+      }
 
     validate :validate_rejected_reasons_permitted
     validate :validate_payroll_gender_present_for_approval
@@ -155,7 +158,10 @@ module Admin
 
       claim.policy.mailer.approved(claim).deliver_later if latest_decision.approved?
 
-      if latest_decision.rejected? && claim.email_address.present?
+      if latest_decision.rejected? &&
+          claim.email_address.present? &&
+          !only_other_reason_only_used_in_exceptional_circumstances_reason_selected?
+
         ClaimMailer.rejected(claim).deliver_later
         Event.create(claim:, name: "email_rejected_sent", actor: current_admin, entity: latest_decision)
       end
@@ -190,6 +196,12 @@ module Admin
 
     def claims_preventing_payment_finder
       @claims_preventing_payment_finder ||= Claim::ClaimsPreventingPaymentFinder.new(claim)
+    end
+
+    def only_other_reason_only_used_in_exceptional_circumstances_reason_selected?
+      rejected_reasons_hash
+        &.select { |_k, v| v == "1" }
+        &.keys == ["other_reason_only_used_in_exceptional_circumstances"]
     end
   end
 end

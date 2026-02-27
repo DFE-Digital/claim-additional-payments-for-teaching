@@ -241,42 +241,26 @@ RSpec.describe ClaimMailer, type: :mailer do
 
           let(:expected_rejected_reasons_keys) do
             {
-              reason_alternative_identity_verification_check_failed: "no",
-              reason_duplicate_claim: "no",
-              reason_has_worked_in_further_education_for_more_than_5_years: "no",
-              reason_identity_check_failed: "no",
-              reason_ineligible_subject_or_courses: "no",
-              reason_information_mismatch_against_year_1_application: "no",
-              reason_insufficient_time_spent_teaching_eligibble_students: "no",
-              reason_no_eligible_contract_of_employment: "no",
-              reason_no_response: "no",
-              reason_no_response_from_employer: "no",
               reason_no_teaching_responsibilities: "yes",
-              reason_other: "no",
-              reason_subject_to_disciplinary_action: "no",
-              reason_subject_to_performance_measures: "no",
-              reason_works_less_than_2_point_5_hours_per_week: "no"
+              reason_has_worked_in_further_education_for_more_than_5_years: "no",
+              reason_no_teaching_qualification: "no",
+              reason_no_eligible_contract_of_employment: "no",
+              reason_insufficient_hours_per_week: "no",
+              reason_insufficient_time_spent_teaching_eligibble_students: "no",
+              reason_ineligible_subject_or_courses: "no",
+              reason_performance_measures_or_disciplinary_action: "no",
+              reason_not_working_at_eligible_fe_provider_until_end_of_academic_year: "no",
+              reason_variable_or_short_term_fixed_and_not_worked_whole_spring_academic_term: "no",
+              reason_identity_check_failed: "no",
+              reason_alternative_identity_verification_check_failed: "no",
+              reason_no_response: "no",
+              reason_duplicate_claim: "no",
+              reason_repeat_application_mismatch: "no",
+              reason_other_reason_only_used_in_exceptional_circumstances: "no"
             }
           end
 
           include_examples "template id and personalisation keys"
-
-          context "rejected reason includes information_mismatch_against_year_1_application" do
-            let(:expected_template_id) { "0887d174-59c8-4e28-acdf-79097c8d54c3" }
-
-            let(:claim) do
-              build(
-                :claim,
-                :rejected,
-                policy:,
-                rejected_reasons: {information_mismatch_against_year_1_application: "1"}
-              )
-            end
-
-            let(:expected_rejected_reasons_keys) { {} }
-
-            include_examples "template id and personalisation keys"
-          end
         end
       end
 
