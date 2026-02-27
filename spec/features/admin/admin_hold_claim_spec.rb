@@ -1,11 +1,10 @@
 require "rails_helper"
 
 RSpec.feature "Admin holds a claim" do
-  before { FeatureFlag.enable!(:schools_claims_approvable?) }
-
   let!(:claim) { create(:claim, :submitted) }
 
   before do
+    FeatureFlag.enable!(:schools_claims_approvable?)
     @signed_in_user = sign_in_as_service_operator
   end
 
