@@ -1026,7 +1026,7 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible")
-    expect(page).to have_content("half of your timetabled teaching hours must include")
+    expect(page).to have_content("half of your timetabled teaching hours must be spent")
   end
 
   scenario "when the claimant has already submitted a claim" do

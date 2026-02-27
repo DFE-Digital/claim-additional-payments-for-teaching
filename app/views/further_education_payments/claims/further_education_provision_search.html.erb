@@ -30,11 +30,10 @@
         summary_text: "What FE providers are eligible?"
       ) do %>
         <p class="govuk-body">
-          A
-          <%= govuk_link_to("list of eligible further education providers and payment values",
-            "https://assets.publishing.service.gov.uk/media/682ddb93c054883884bff39e/list-of-eligible-further-education-providers-and-payment-values-for-targeted-retention-incentive-2025-2026.xlsx")
+          You can find 
+          <%= govuk_link_to("a list to eligible further education providers and payment values (opens in a new tab).",
+            "https://www.gov.uk/guidance/targeted-retention-incentive-payments-for-fe-teachers#Eligible-FE-providers", target: "_blank") %>
           %>
-          (MS Excel Spreadsheet, 34KB) is available
         </p>
       <% end %>
 
