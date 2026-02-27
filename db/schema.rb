@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_24_164933) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_26_153053) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -390,6 +390,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_24_164933) do
     t.index ["provider_assigned_to_id"], name: "idx_on_provider_assigned_to_id_5db250f0fe"
     t.index ["provider_verification_verified_by_id"], name: "idx_on_provider_verification_verified_by_id_c38aef7b6c"
     t.index ["school_id"], name: "index_fe_payments_eligibilities_on_school_id"
+  end
+
+  create_table "further_education_payments_provider_flags", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "reason", null: false
+    t.integer "ukprn", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "international_relocation_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -375,7 +375,7 @@ RSpec.describe Claim, type: :model do
     context "when the claim has approval blocking tasks" do
       context "when the task is incomplete" do
         it "returns false" do
-          claim = create(:claim, :submitted)
+          claim = create(:claim, :submitted, :further_education)
           create(
             :task,
             :claim_verifier_context,
@@ -389,7 +389,7 @@ RSpec.describe Claim, type: :model do
 
       context "when the task is failed" do
         it "returns false" do
-          claim = create(:claim, :submitted)
+          claim = create(:claim, :submitted, :further_education)
           create(:task, claim: claim, name: "claimant_check", passed: false)
           expect(claim.approvable?).to eq false
         end
@@ -397,7 +397,7 @@ RSpec.describe Claim, type: :model do
 
       context "when the task is passed" do
         it "returns true" do
-          claim = create(:claim, :submitted)
+          claim = create(:claim, :submitted, :further_education)
           create(:task, claim: claim, name: "claimant_check", passed: true)
           expect(claim.approvable?).to eq true
         end

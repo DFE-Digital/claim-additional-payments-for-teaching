@@ -15,11 +15,17 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks, feature_f
     let(:identity_confirmed_with_onelogin) { true }
     let(:academic_year) { AcademicYear.current }
 
+    let(:fe_provider) do
+      create(:eligible_fe_provider, :with_school)
+    end
+
     let(:eligibility) do
       build(
         :further_education_payments_eligibility,
+        :eligible,
         :provider_verification_completed,
         teacher_reference_number: teacher_reference_number,
+        school: fe_provider.school,
         verified_by: create(
           :dfe_signin_user,
           given_name: "Walter",

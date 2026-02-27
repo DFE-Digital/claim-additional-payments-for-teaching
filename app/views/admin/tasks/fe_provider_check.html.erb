@@ -1,0 +1,36 @@
+<% content_for(:page_title) do %>
+  <% page_title("Claim #{@claim.reference} provider flagging") %>
+<% end %>
+
+<% content_for :back_link do %>
+  <%= govuk_back_link href: admin_claim_tasks_path(@claim) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <%= render(
+    "claim_summary_further_education_payments",
+    claim: @claim,
+    heading: "Provider flagging"
+  ) %>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= govuk_warning_text(
+      text: "Claims from this provider have been flagged for additional review"
+    ) %>
+
+    <p class="govuk-body">
+      This provider was flagged due to previous incorrect provider verification
+      details.
+    </p>
+
+    <%= govuk_inset_text(text: "Suggested action: check with manager") %>
+  </div>
+</div>
+
+<% if !@form.task.passed.nil? %>
+  <%= render "task_outcome", task: @form.task %>
+<% else %>
+  <%= render "form", task_name: @form.task.name, claim: @claim %>
+<% end %>

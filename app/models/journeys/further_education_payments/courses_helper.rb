@@ -24,8 +24,8 @@ module Journeys
             "https://www.qualifications.education.gov.uk/Search?Status=All&Level=0,1,2,3,4&Sub=7"
           ],
           level2_3_apprenticeship: [
-            "construction and the built environment occupational route",
-            "https://occupational-maps.instituteforapprenticeships.org/maps/route/construction"
+            "construction and the built environment occupational map",
+            "https://occupational-maps.skillsengland.education.gov.uk/maps/route/construction"
           ]
         },
         computing_courses: {
@@ -38,13 +38,13 @@ module Journeys
             "https://www.qualifications.education.gov.uk/Search?Status=All&Level=0,1,2,3,4&Sub=12&PageSize=10&Sort=Status"
           ],
           level2_3_apprenticeship: [
-            "digital occupational route",
-            "https://occupational-maps.instituteforapprenticeships.org/maps/route/digital"
+            "digital occupational map",
+            "https://occupational-maps.skillsengland.education.gov.uk/maps/route/digital"
           ]
         },
         early_years_courses: {
           coursetoeyq: [
-            "Early years qualifications at Level 3 and below that allow providers to count the recipient in staff‑to‑child ratios and are listed in the eligibility criteria on",
+            "Early years qualifications at Level 3 and below that allow providers to count the recipient in staff‑to‑child ratios and are listed in the eligibility criteria",
             "https://www.gov.uk/guidance/targeted-retention-incentive-payments-for-fe-teachers#early-years"
           ]
         },
@@ -62,8 +62,8 @@ module Journeys
             "https://www.qualifications.education.gov.uk/Search?Status=All&Level=0,1,2,3,4&Sub=47&PageSize=10&Sort=Status"
           ],
           level2_3_apprenticeship: [
-            "engineering and manufacturing occupational route",
-            "https://occupational-maps.instituteforapprenticeships.org/maps/route/engineering-manufacturing"
+            "engineering and manufacturing occupational map",
+            "https://occupational-maps.skillsengland.education.gov.uk/maps/route/digital"
           ]
         },
         maths_courses: {

@@ -15,7 +15,21 @@ module Policies
       end
     end
 
+    def blocking_approval
+      @blocking_approval ||= all_tasks
+        .select(&:blocks_approval?)
+        .select(&:not_passed?)
+    end
+
     private
+
+    def all_tasks
+      @all_tasks ||= applicable_task_names.map do |name|
+        # Not using `claim.tasks.find_or_initialize_by` here as we don't want to
+        # modify `claim.tasks`.
+        claim.tasks.find_by(name: name) || Task.new(name: name)
+      end
+    end
 
     def skip_matching_claims_check?
       !!@skip_matching_claims_check
