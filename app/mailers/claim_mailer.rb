@@ -32,13 +32,6 @@ class ClaimMailer < ApplicationMailer
     unknown_policy_check(claim)
     set_common_instance_variables(claim)
 
-    if claim.latest_decision
-        &.rejected_reasons_hash
-        &.[](:reason_information_mismatch_against_year_1_application) == "1"
-
-      return rejected_information_mismatch_against_year_1_application(claim)
-    end
-
     personalisation = {
       first_name: @claim.first_name,
       ref_number: @claim.reference,
@@ -212,16 +205,5 @@ class ClaimMailer < ApplicationMailer
       ArgumentError,
       "Claim policy does not match the expected policy `#{policy}`"
     )
-  end
-
-  def rejected_information_mismatch_against_year_1_application(claim)
-    personalisation = {
-      first_name: @claim.first_name,
-      ref_number: @claim.reference,
-      support_email_address: @support_email_address,
-      current_financial_year: ""
-    }
-
-    send_mail(template_ids(claim)[:CLAIM_REJECTED_MISMATCH_YEAR1_NOTIFY_TEMPLATE_ID], personalisation)
   end
 end
