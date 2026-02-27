@@ -144,7 +144,7 @@ en:
         name: Previous claim mismatch
         title: Confirm teaching start year matches previous claims
       claimant_check:
-        name: Claimant check
+        name: Previous claimant clawback
         title: Review the reason for flagging this claim
         reasons:
           clawback: "Review previous clawback for this applicant"
