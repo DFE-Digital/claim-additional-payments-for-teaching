@@ -25,12 +25,12 @@ RSpec.describe "Provider flagging" do
     visit new_admin_claim_decision_path(claim)
 
     expect(page).to have_content(
-      "You cannot approve this claim until the Provider check task is passed"
+      "You cannot approve this claim until the Provider flagging task is passed"
     )
 
     visit admin_claim_tasks_path(claim)
 
-    expect(page).to have_content("Provider check")
+    expect(page).to have_content("Provider flagging")
 
     click_on "Check the provider's response"
 
@@ -47,7 +47,7 @@ RSpec.describe "Provider flagging" do
     visit new_admin_claim_decision_path(claim)
 
     expect(page).not_to have_content(
-      "You cannot approve this claim until the Provider check task is passed"
+      "You cannot approve this claim until the Provider flagging task is passed"
     )
   end
 

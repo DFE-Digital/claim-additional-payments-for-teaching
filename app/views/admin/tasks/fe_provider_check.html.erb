@@ -1,5 +1,5 @@
 <% content_for(:page_title) do %>
-  <% page_title("Claim #{@claim.reference} provider check") %>
+  <% page_title("Claim #{@claim.reference} provider flagging") %>
 <% end %>
 
 <% content_for :back_link do %>
@@ -10,7 +10,7 @@
   <%= render(
     "claim_summary_further_education_payments",
     claim: @claim,
-    heading: "Provider check"
+    heading: "Provider flagging"
   ) %>
 </div>
 
@@ -21,9 +21,11 @@
     ) %>
 
     <p class="govuk-body">
-      Last year claims from this provider were clawed back due to incorrect
-      provider verification details.
+      This provider was flagged due to previous incorrect provider verification
+      details.
     </p>
+
+    <%= govuk_inset_text(text: "Suggested action: check with manager") %>
   </div>
 </div>
 

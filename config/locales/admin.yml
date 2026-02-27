@@ -85,7 +85,7 @@ en:
         name: Identity confirmation
         title: "Confirm the claimant made the claim"
       fe_provider_check:
-        name: Provider check
+        name: Provider flagging
         title: "Check the provider's response"
       provider_verification:
         name: Provider verification
