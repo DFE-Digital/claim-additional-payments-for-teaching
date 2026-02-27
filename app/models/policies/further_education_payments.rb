@@ -153,6 +153,8 @@ module Policies
     end
 
     def approvable?(claim)
+      return false unless FeatureFlag.enabled?(:fe_claims_approvable)
+
       ClaimCheckingTasks.new(claim).incomplete_task_names.exclude?(
         "alternative_identity_verification"
       ) && !claim.tasks.find_by(name: "alternative_identity_verification")&.failed?
