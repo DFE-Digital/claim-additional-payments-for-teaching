@@ -63,7 +63,7 @@ module Journeys
           ],
           level2_3_apprenticeship: [
             "engineering and manufacturing occupational map",
-            "https://occupational-maps.skillsengland.education.gov.uk/maps/route/digital"
+            "https://occupational-maps.skillsengland.education.gov.uk/maps/route/engineering-manufacturing"
           ]
         },
         maths_courses: {
