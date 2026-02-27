@@ -31,7 +31,7 @@ RSpec.describe "Claimant flagging" do
     click_on "Review the reason for flagging this claim"
 
     expect(page).to have_content(
-      "Previous claims by this claimant have been clawed back"
+      "Review previous clawback for this applicant"
     )
 
     expect(page).to have_content("Suggested action: check with manager")
