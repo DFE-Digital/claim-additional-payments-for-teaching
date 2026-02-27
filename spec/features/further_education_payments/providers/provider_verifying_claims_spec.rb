@@ -628,7 +628,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
 
       # list of courses by the claimaint
       expect(page).to have_text("Level 2 or level 3 apprenticeships in the " \
-        "digital occupational route (opens in new tab)")
+        "digital occupational map (opens in new tab)")
 
       expect(page).to have_text("A or AS level chemistry")
 
