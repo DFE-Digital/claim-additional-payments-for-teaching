@@ -22,16 +22,16 @@ RSpec.describe "Claimant flagging" do
     visit new_admin_claim_decision_path(claim)
 
     expect(page).to have_content(
-      "You cannot approve this claim until the Claimant check task is passed"
+      "You cannot approve this claim until the Previous claimant clawback task is passed"
     )
 
     visit admin_claim_tasks_path(claim)
 
-    expect(page).to have_content("Claimant check")
+    expect(page).to have_content("Previous claimant clawback")
     click_on "Review the reason for flagging this claim"
 
     expect(page).to have_content(
-      "Previous claims by this claimant have been clawed back"
+      "Review previous clawback for this applicant"
     )
 
     expect(page).to have_content("Suggested action: check with manager")
@@ -49,7 +49,7 @@ RSpec.describe "Claimant flagging" do
     visit new_admin_claim_decision_path(claim)
 
     expect(page).not_to have_content(
-      "You cannot approve this claim until the Claimant check task is passed"
+      "You cannot approve this claim until the Previous claimant clawback task is passed"
     )
   end
 
