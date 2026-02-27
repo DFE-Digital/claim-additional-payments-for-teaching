@@ -10,7 +10,8 @@ RSpec.describe Policies::FurtherEducationPayments, type: :model do
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
       AutomatedChecks::ClaimVerifiers::FraudRisk,
       AutomatedChecks::ClaimVerifiers::FeRepeatApplicantCheck,
-      AutomatedChecks::ClaimVerifiers::ClaimantCheck
+      AutomatedChecks::ClaimVerifiers::ClaimantCheck,
+      AutomatedChecks::ClaimVerifiers::ProviderCheck
     ])
   end
 

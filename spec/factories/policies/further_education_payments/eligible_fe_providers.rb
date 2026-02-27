@@ -17,7 +17,7 @@ FactoryBot.define do
 
     trait :with_school do
       after(:create) do |eligible_fe_provider|
-        create(:school, ukprn: eligible_fe_provider.ukprn)
+        create(:school, :further_education, ukprn: eligible_fe_provider.ukprn)
       end
     end
   end

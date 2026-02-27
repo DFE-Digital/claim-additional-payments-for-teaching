@@ -209,7 +209,7 @@ class Claim < ApplicationRecord
 
     submitted? &&
       !held? &&
-      tasks.blocking_approval.none? &&
+      claim_checking_tasks.blocking_approval.none? &&
       !payroll_gender_missing? &&
       (!decision_made? || awaiting_qa?) &&
       !payment_prevented_by_other_claims? &&
@@ -459,6 +459,10 @@ class Claim < ApplicationRecord
     else
       super
     end
+  end
+
+  def claim_checking_tasks
+    @claim_checking_tasks ||= policy::ClaimCheckingTasks.new(self)
   end
 
   private
