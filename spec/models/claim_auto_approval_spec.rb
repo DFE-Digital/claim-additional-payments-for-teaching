@@ -259,4 +259,82 @@ RSpec.describe ClaimAutoApproval do
       end
     end
   end
+
+  describe "disabling claim approval" do
+    context "when the policy is FE" do
+      it "doesn't approve the claim" do
+        FeatureFlag.disable!(:fe_claims_approvable)
+
+        claim = create(:claim, :further_education, :approveable)
+
+        auto_approval = described_class.new(claim)
+
+        expect(auto_approval).not_to be_eligible
+
+        expect { auto_approval.auto_approve! }.not_to(
+          change(claim.reload.decisions, :count)
+        )
+
+        FeatureFlag.enable!(:fe_claims_approvable)
+
+        expect(auto_approval).to be_eligible
+
+        expect { auto_approval.auto_approve! }.to(
+          change(claim.reload.decisions, :count).from(0).to(1)
+        )
+      end
+    end
+
+    context "when the policy is loans" do
+      it "doesn't approve the claim" do
+        FeatureFlag.disable!(:schools_claims_approvable)
+
+        claim = create(:claim, :approveable, policy: Policies::StudentLoans)
+
+        auto_approval = described_class.new(claim)
+
+        expect(auto_approval).not_to be_eligible
+
+        expect { auto_approval.auto_approve! }.not_to(
+          change(claim.reload.decisions, :count)
+        )
+
+        FeatureFlag.enable!(:schools_claims_approvable)
+
+        expect(auto_approval).to be_eligible
+
+        expect { auto_approval.auto_approve! }.to(
+          change(claim.reload.decisions, :count).from(0).to(1)
+        )
+      end
+    end
+
+    context "when the policy is schools" do
+      it "doesn't approve the claim" do
+        FeatureFlag.disable!(:schools_claims_approvable)
+
+        claim = create(
+          :claim,
+          :approveable,
+          policy: Policies::TargetedRetentionIncentivePayments
+        )
+
+        auto_approval = described_class.new(claim)
+
+        expect(auto_approval).not_to be_eligible
+
+        expect { auto_approval.auto_approve! }.not_to(
+          change(claim.reload.decisions, :count)
+        )
+
+        FeatureFlag.enable!(:schools_claims_approvable)
+
+        expect(auto_approval).to be_eligible
+
+        expect { auto_approval.auto_approve! }.to(
+          change(claim.reload.decisions, :count).from(0).to(1)
+        )
+      end
+    end
+  end
 end
