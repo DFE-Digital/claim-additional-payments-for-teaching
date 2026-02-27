@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Admin checking a claim missing a payroll gender" do
   before do
+    FeatureFlag.enable!(:schools_claims_approvable?)
     create(:journey_configuration, :student_loans)
     disable_claim_qa_flagging
     @signed_in_user = sign_in_as_service_operator

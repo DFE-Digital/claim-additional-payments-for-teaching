@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Payment do
+  before { FeatureFlag.enable!(:schools_claims_approvable?) }
+
   subject { build(:payment) }
 
   describe ".non_topup_claims" do

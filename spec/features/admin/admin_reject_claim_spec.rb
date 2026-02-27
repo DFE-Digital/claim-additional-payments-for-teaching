@@ -1,12 +1,14 @@
 require "rails_helper"
 
 RSpec.feature "Admin rejects a claim" do
-  let!(:claim) { create(:claim, :submitted) }
-
   before do
+    FeatureFlag.enable!(:schools_claims_approvable?)
+    FeatureFlag.enable!(:fe_claims_approvable)
     disable_claim_qa_flagging
     @signed_in_user = sign_in_as_service_operator
   end
+
+  let!(:claim) { create(:claim, :submitted) }
 
   scenario "Reject a claim with a selected reason" do
     visit admin_claim_tasks_path(claim)

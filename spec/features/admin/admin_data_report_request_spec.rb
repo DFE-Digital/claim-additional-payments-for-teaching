@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Data report request" do
+  before { FeatureFlag.enable!(:schools_claims_approvable?) }
+
   scenario "Service operator can download an external data report request file" do
     create(:journey_configuration, :student_loans)
     create(:journey_configuration, :targeted_retention_incentive_payments)

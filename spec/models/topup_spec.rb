@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Topup, type: :model do
+  before { FeatureFlag.enable!(:schools_claims_approvable?) }
+
   let(:user) { create(:dfe_signin_user) }
   let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments) }
   let(:targeted_retention_incentive_claim) { create(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments, eligibility: targeted_retention_incentive_eligibility) }

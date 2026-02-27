@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe AutoApproveClaimJob do
+  before { FeatureFlag.enable!(:schools_claims_approvable?) }
+
   subject(:auto_approve_claim_job) { described_class.new }
 
   it { expect(described_class.new).to be_an(ApplicationJob) }

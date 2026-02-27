@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Payroll" do
   before do
+    FeatureFlag.enable!(:schools_claims_approvable?)
     @signed_in_user = sign_in_as_service_admin
   end
 

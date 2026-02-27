@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Admin::ClaimsHelper do
+  before { FeatureFlag.enable!(:schools_claims_approvable?) }
+
   let(:claim_school) { create(:school) }
   let(:current_school) { create(:school, :student_loans_eligible) }
 

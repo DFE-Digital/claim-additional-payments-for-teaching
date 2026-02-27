@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Claim::ClaimsPreventingPaymentFinder do
+  before { FeatureFlag.enable!(:schools_claims_approvable?) }
+
   let(:user) { create(:dfe_signin_user) }
   let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments) }
   subject(:finder) { described_class.new(claim) }

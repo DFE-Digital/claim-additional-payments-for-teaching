@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Admin reverses a claim decision" do
+  before { FeatureFlag.enable!(:schools_claims_approvable?) }
+
   it "allows admins to reverse a claim decision" do
     sign_in_as_service_operator
 

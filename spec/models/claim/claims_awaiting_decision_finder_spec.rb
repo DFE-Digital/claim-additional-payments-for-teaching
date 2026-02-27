@@ -1,6 +1,11 @@
 require "rails_helper"
 
 RSpec.describe Claim::ClaimsAwaitingDecisionFinder do
+  before do
+    FeatureFlag.enable!(:schools_claims_approvable?)
+    FeatureFlag.enable!(:fe_claims_approvable)
+  end
+
   let!(:fe_journey_configuration) { create(:journey_configuration, :further_education_payments, current_academic_year: fe_academic_year) }
   let!(:ap_journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments, current_academic_year: tri_academic_year) }
   let!(:claim_fe_awaiting_decision_submitted_using_slc_data_false) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, academic_year: fe_academic_year, submitted_using_slc_data: false) }

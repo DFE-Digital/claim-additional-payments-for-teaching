@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "Admin claim amendments" do
+  before { FeatureFlag.enable!(:schools_claims_approvable?) }
+
   let(:claim) do
     create(
       :claim,

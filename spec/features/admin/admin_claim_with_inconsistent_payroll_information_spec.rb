@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Admin checking a claim with inconsistent payroll information" do
+  before { FeatureFlag.enable!(:schools_claims_approvable?) }
+
   let(:personal_details) do
     {
       national_insurance_number: generate(:national_insurance_number),

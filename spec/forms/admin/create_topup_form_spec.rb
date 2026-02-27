@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Admin::CreateTopupForm do
+  before { FeatureFlag.enable!(:schools_claims_approvable?) }
+
   let(:claim) { create(:claim, :approved) }
 
   let(:admin) { create(:dfe_signin_user) }

@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Admin holds a claim" do
+  before { FeatureFlag.enable!(:schools_claims_approvable?) }
+
   let!(:claim) { create(:claim, :submitted) }
 
   before do

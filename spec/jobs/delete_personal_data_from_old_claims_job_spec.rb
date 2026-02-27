@@ -1,6 +1,11 @@
 require "rails_helper"
 
 RSpec.describe DeletePersonalDataFromOldClaimsJob do
+  before do
+    FeatureFlag.enable!(:schools_claims_approvable?)
+    FeatureFlag.enable!(:fe_claims_approvable)
+  end
+
   describe "#perform", skip: "job temporarily disabled" do
     let(:current_academic_year) { AcademicYear.current }
     let(:last_academic_year) { Time.zone.local(current_academic_year.start_year, 8, 1) }

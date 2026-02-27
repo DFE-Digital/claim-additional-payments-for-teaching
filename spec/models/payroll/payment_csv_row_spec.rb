@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe Payroll::PaymentCsvRow do
   before do
+    FeatureFlag.enable!(:schools_claims_approvable?)
     create(:journey_configuration, :student_loans)
     create(:journey_configuration, :targeted_retention_incentive_payments)
   end

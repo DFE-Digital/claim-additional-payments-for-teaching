@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Admin claims", type: :request do
   before do
+    FeatureFlag.enable!(:schools_claims_approvable?)
     create(:journey_configuration, :student_loans)
     create(:journey_configuration, :targeted_retention_incentive_payments)
     sign_in_as_service_operator

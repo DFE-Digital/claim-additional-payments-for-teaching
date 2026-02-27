@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Admin claim filtering" do
   before do
+    FeatureFlag.enable!(:schools_claims_approvable?)
     create(:journey_configuration, :targeted_retention_incentive_payments)
   end
 

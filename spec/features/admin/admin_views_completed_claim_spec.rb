@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Admin can view completed claims" do
   before do
+    FeatureFlag.enable!(:schools_claims_approvable?)
     create(:journey_configuration, :student_loans)
     @signed_in_user = sign_in_as_service_operator
   end

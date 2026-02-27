@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Amendment, type: :model do
+  before { FeatureFlag.enable!(:schools_claims_approvable?) }
+
   it "is invalid if there are no claim changes" do
     amendment = build(:amendment, claim_changes: {})
     expect(amendment).not_to be_valid

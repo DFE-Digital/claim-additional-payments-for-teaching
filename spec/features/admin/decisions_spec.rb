@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Admin decisions" do
+  before { FeatureFlag.enable!(:schools_claims_approvable?) }
+
   context "when signed in as a service operator" do
     let(:claim) { create(:claim, :submitted, policy: Policies::TargetedRetentionIncentivePayments) }
 

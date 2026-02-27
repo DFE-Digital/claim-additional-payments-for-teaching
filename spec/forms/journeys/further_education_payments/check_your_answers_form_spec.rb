@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
   before do
+    FeatureFlag.enable!(:fe_claims_approvable)
     create(:journey_configuration, :further_education_payments, current_academic_year:)
   end
 

@@ -2,7 +2,10 @@ require "rails_helper"
 
 RSpec.describe "Admin payroll runs" do
   context "when signed in as a service operator" do
-    before { @signed_in_user = sign_in_as_service_operator }
+    before do
+      FeatureFlag.enable!(:schools_claims_approvable?)
+      @signed_in_user = sign_in_as_service_operator
+    end
 
     describe "admin_payroll_runs#new" do
       it "displays a preview of the payrollable claims" do

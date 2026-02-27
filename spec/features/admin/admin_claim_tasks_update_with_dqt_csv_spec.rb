@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Admin claim tasks update with DQT CSV" do
   before do
+    FeatureFlag.enable!(:schools_claims_approvable?)
     create(:journey_configuration, :student_loans)
     sign_in_as_service_operator
   end

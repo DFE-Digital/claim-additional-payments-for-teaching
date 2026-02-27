@@ -2,7 +2,10 @@ require "rails_helper"
 
 RSpec.describe "Undoing decisions", type: :request do
   context "when signed in as a service operator" do
-    before { @signed_in_user = sign_in_as_service_operator }
+    before do
+      FeatureFlag.enable!(:schools_claims_approvable?)
+      @signed_in_user = sign_in_as_service_operator
+    end
 
     describe "#create" do
       let(:claim) { create(:claim, :approved) }

@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Admin::ClaimsFilterForm, type: :model do
+  before { FeatureFlag.enable!(:schools_claims_approvable?) }
+
   describe "#claims" do
     let(:session) { {} }
     let(:filters) { {team_member: "all", policy: "all", status: "awaiting_decision"} }

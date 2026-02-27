@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Admin checks a claim" do
+  before { FeatureFlag.enable!(:schools_claims_approvable?) }
+
   context "User is logged in as a service operator" do
     before do
       disable_claim_qa_flagging

@@ -1,6 +1,11 @@
 require "rails_helper"
 
 RSpec.describe PayrollRunJob, type: :job do
+  before do
+    FeatureFlag.enable!(:schools_claims_approvable?)
+    FeatureFlag.enable!(:fe_claims_approvable)
+  end
+
   let(:user) { create(:dfe_signin_user) }
   let(:payroll_run) { create(:payroll_run, created_by: user) }
 

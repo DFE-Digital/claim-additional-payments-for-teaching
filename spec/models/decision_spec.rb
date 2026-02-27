@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Decision, type: :model do
+  before { FeatureFlag.enable!(:schools_claims_approvable?) }
+
   let(:user) { create(:dfe_signin_user) }
 
   describe "associations" do

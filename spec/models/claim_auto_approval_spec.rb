@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe ClaimAutoApproval do
+  before { FeatureFlag.enable!(:schools_claims_approvable?) }
+
   subject(:claim_auto_approval) { described_class.new(claim) }
 
   let(:claim) { create(:claim, :submitted) }

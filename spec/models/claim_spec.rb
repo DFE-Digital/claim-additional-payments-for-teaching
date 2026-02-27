@@ -1,6 +1,11 @@
 require "rails_helper"
 
 RSpec.describe Claim, type: :model do
+  before do
+    FeatureFlag.enable!(:schools_claims_approvable?)
+    FeatureFlag.enable!(:fe_claims_approvable)
+  end
+
   describe "scopes" do
     describe "::require_in_progress_update_emails" do
       let(:claim_1) { create(:claim, policy: Policies::StudentLoans) }
