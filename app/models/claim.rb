@@ -450,6 +450,17 @@ class Claim < ApplicationRecord
     @claim_checking_tasks ||= policy::ClaimCheckingTasks.new(self)
   end
 
+  def most_recent_scheduled_payment_date
+    [
+      payments.maximum("scheduled_payment_date"),
+      topups.joins(:payment).maximum("scheduled_payment_date")
+    ].compact.max
+  end
+
+  def paid?
+    most_recent_scheduled_payment_date.present?
+  end
+
   private
 
   def one_login_idv_name_match?
