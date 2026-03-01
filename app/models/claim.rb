@@ -461,6 +461,17 @@ class Claim < ApplicationRecord
     self.reference = generate_reference
   end
 
+  def most_recent_scheduled_payment_date
+    [
+      payments.maximum("scheduled_payment_date"),
+      topups.joins(:payment).maximum("scheduled_payment_date")
+    ].compact.max
+  end
+
+  def paid?
+    most_recent_scheduled_payment_date.present?
+  end
+
   private
 
   def generate_reference
