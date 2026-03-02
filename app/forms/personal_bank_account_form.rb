@@ -93,7 +93,15 @@ class PersonalBankAccountForm < Form
       response = e.response
       @hmrc_api_response_error = true
     ensure
-      new_hmrc_bank_validation_responses_value = journey_session.answers.hmrc_bank_validation_responses.dup << {code: response.status, body: response.body}
+      code = if response.respond_to?(:code)
+        response.code
+      elsif response.respond_to?(:status)
+        response.status
+      else
+        1
+      end
+
+      new_hmrc_bank_validation_responses_value = journey_session.answers.hmrc_bank_validation_responses.dup << {code: code, body: response.body}
       journey_session.answers.assign_attributes(
         hmrc_bank_validation_responses: new_hmrc_bank_validation_responses_value
       )
