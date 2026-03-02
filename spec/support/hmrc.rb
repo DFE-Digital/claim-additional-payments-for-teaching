@@ -4,7 +4,7 @@ RSpec.shared_context "with stubbed HMRC client", shared_context: :metadata do
       name_match?: name_match,
       sort_code_correct?: sort_code_correct,
       account_exists?: account_exists,
-      code: 200,
+      status: 200,
       success?: name_match && account_exists && sort_code_correct,
       body: "Test response"
     )
@@ -36,7 +36,7 @@ end
 RSpec.shared_context "with failing HMRC bank validation API request", shared_context: :metadata do
   before do
     @old_hmrc_client = Hmrc.client
-    Hmrc.configure { |config| config.http_client = double(post: double(success?: false, status: 429, body: "Test failure", code: 429)) }
+    Hmrc.configure { |config| config.http_client = double(post: double(success?: false, body: "Test failure", status: 429)) }
     Hmrc.client = Hmrc::Client.new
   end
 

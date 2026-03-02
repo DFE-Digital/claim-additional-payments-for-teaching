@@ -105,7 +105,7 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
 
   context "HMRC API returns a 200 response", :with_stubbed_hmrc_client do
     context "HMRC API passes bank details match" do
-      let(:hmrc_response) { double(name_match?: true, sort_code_correct?: true, code: 200, body: "Test response") }
+      let(:hmrc_response) { double(name_match?: true, sort_code_correct?: true, status: 200, body: "Test response") }
 
       scenario "redirects user to next page" do
         allow(hmrc_response).to receive(:success?).and_return(true)
