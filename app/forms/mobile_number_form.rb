@@ -59,7 +59,7 @@ class MobileNumberForm < Form
   end
 
   def handle_notify_error(error)
-    if error.message.include?("ValidationError: phone_number Number is not valid")
+    if error.message.include?("ValidationError:")
       errors.add(:mobile_number, i18n_errors_path("invalid"))
     else
       raise error

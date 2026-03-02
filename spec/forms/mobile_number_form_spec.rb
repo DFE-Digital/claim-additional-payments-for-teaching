@@ -230,6 +230,28 @@ RSpec.describe MobileNumberForm do
           end
         end
 
+        context "when the error is an phone number too long" do
+          let(:mobile_number) { "07123456789" }
+          let(:notify_double) { instance_double(NotifySmsMessage) }
+
+          before do
+            allow(notify_double).to receive(:deliver!).and_raise(
+              NotifySmsMessage::NotifySmsError,
+              "ValidationError: phone_number Too many digits"
+            )
+          end
+
+          it "adds a validation error" do
+            expect(subject).to eq false
+            expect(form.errors[:mobile_number]).to include(
+              "Enter a mobile number, like 07700 900 982 or +44 7700 900 982"
+            )
+            journey_session.reload
+            expect(journey_session.answers.mobile_number).to be_nil
+            expect(journey_session.answers.sent_one_time_password_at).to be_nil
+          end
+        end
+
         context "when some other error" do
           let(:mobile_number) { "07123456789" }
           let(:notify_double) { instance_double(NotifySmsMessage) }
