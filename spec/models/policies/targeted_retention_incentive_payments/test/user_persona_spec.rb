@@ -99,7 +99,23 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::Test::UserPersona d
         "last_name" => "Smith",
         "teacher_reference_number" => "1234567",
         "date_of_birth" => "01/01/1990",
-        "national_insurance_number" => "AB123456C"
+        "national_insurance_number" => "AB123456C",
+        "trs_first_name" => "Bob",
+        "trs_last_name" => "Doe",
+        "trs_date_of_birth" => "02/02/1970",
+        "trs_national_insurance_number" => "AB123456D",
+        "trs_email_address" => "bob.doe@example.com",
+        "trs_induction_start_date" => "01/01/2010",
+        "trs_induction_completion_date" => "01/01/2011",
+        "trs_induction_status" => "???",
+        "trs_qts_award_date" => "01/01/2013",
+        "trs_itt_subject_codes" => "???",
+        "trs_itt_subjects" => "???",
+        "trs_itt_start_date" => "01/01/2012",
+        "trs_qualification_name" => "???",
+        "trs_degree_codes" => "???",
+        "trs_degree_names" => "???",
+        "trs_active_alert" => "no"
       }
     end
 
