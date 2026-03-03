@@ -76,7 +76,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::Test::UserPersona d
     end
   end
 
-  describe "#to_csv" do
+  describe "#to_csv_row" do
     subject { described_class.new(csv_row) }
 
     let(:csv_row) do
@@ -120,7 +120,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::Test::UserPersona d
     end
 
     it "converts current record to csv row" do
-      expect(subject.to_csv).to eql(csv_row.values.join(","))
+      expect(subject.to_csv_row).to eql(csv_row.values)
     end
   end
 

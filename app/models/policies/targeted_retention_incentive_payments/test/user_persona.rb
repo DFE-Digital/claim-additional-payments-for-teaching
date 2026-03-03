@@ -179,10 +179,10 @@ module Policies
           false
         end
 
-        def to_csv
+        def to_csv_row
           HEADERS.map do |header|
             public_send(header)
-          end.join(",")
+          end
         end
       end
     end
