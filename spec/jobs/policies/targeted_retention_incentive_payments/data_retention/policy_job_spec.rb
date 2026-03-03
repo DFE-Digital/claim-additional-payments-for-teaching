@@ -97,6 +97,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::DataRetention::Poli
     expect(claim.middle_name).to be_nil
     expect(claim.surname).to be_nil
     expect(claim.date_of_birth).to be_nil
+    expect(claim.email_address).to be_nil
     expect(claim.address_line_1).to be_nil
     expect(claim.address_line_2).to be_nil
     expect(claim.address_line_3).to be_nil
@@ -119,6 +120,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::DataRetention::Poli
     expect(claim.middle_name).to eq("Michael")
     expect(claim.surname).to eq("Smith")
     expect(claim.date_of_birth).to eq(Date.new(1990, 1, 1))
+    expect(claim.email_address).to eq("test@example.com")
     expect(claim.address_line_1).to eq("1 Test Road")
     expect(claim.address_line_2).to eq("Test Town")
     expect(claim.address_line_3).to eq("Test County")
@@ -137,7 +139,6 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::DataRetention::Poli
   end
 
   def assert_non_personal_claim_attributes_retained(claim)
-    expect(claim.email_address).to eq("test@example.com")
     expect(claim.email_verified).to eq(true)
     expect(claim.provide_mobile_number).to eq(true)
     expect(claim.mobile_verified).to eq(true)
