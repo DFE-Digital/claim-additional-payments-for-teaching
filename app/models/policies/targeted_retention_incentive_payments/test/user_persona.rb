@@ -4,28 +4,68 @@ module Policies
       class UserPersona
         FILE = Rails.root.join("spec/personas/targeted_retention_incentive_payments.csv")
 
-        attr_reader :school_name,
-          :teaching_subject,
+        HEADERS = %w[
+          claim_year
+          expected_result
+          notes
+          school_name
+          supply_teacher
+          full_term_contract
+          employed_directly_by_school
+          subject_to_poor_performance_measures
+          itt_year
+          more_than_50_of_hours_teaching_eligible_subjects
+          teaching_subject
+          itt_subject_claimed
+          degree_subject
+          trainee
+          first_name
+          last_name
+          teacher_reference_number
+          date_of_birth
+          national_insurance_number
+        ]
+
+        attr_reader :claim_year,
           :expected_result,
+          :notes,
+          :school_name,
+          :supply_teacher,
+          :full_term_contract,
+          :employed_directly_by_school,
+          :subject_to_poor_performance_measures,
+          :itt_year,
+          :more_than_50_of_hours_teaching_eligible_subjects,
+          :teaching_subject,
+          :itt_subject_claimed,
+          :degree_subject,
+          :trainee,
           :first_name,
           :last_name,
+          :teacher_reference_number,
           :date_of_birth,
-          :national_insurance_number,
-          :itt_subject_claimed,
-          :itt_year,
-          :teacher_reference_number
+          :national_insurance_number
 
         def initialize(csv_row)
+          @claim_year = csv_row["claim_year"]
+          @expected_result = csv_row["expected_result"]
+          @notes = csv_row["notes"]
           @school_name = csv_row["school_name"]
+          @supply_teacher = csv_row["supply_teacher"]
+          @full_term_contract = csv_row["full_term_contract"]
+          @employed_directly_by_school = csv_row["employed_directly_by_school"]
+          @subject_to_poor_performance_measures = csv_row["subject_to_poor_performance_measures"]
+          @itt_year = AcademicYear.new(csv_row["itt_year"])
+          @more_than_50_of_hours_teaching_eligible_subjects = csv_row["more_than_50_of_hours_teaching_eligible_subjects"]
+          @teaching_subject = csv_row["teaching_subject"]
+          @itt_subject_claimed = csv_row["itt_subject_claimed"]
+          @degree_subject = csv_row["degree_subject"]
+          @trainee = csv_row["trainee"]
           @first_name = csv_row["first_name"]
           @last_name = csv_row["last_name"]
+          @teacher_reference_number = csv_row["teacher_reference_number"]
           @date_of_birth = csv_row["date_of_birth"]
           @national_insurance_number = csv_row["national_insurance_number"]
-          @itt_subject_claimed = csv_row["itt_subject_claimed"]
-          @itt_year = AcademicYear.new(csv_row["itt_year"])
-          @teacher_reference_number = csv_row["teacher_reference_number"]
-          @teaching_subject = csv_row["teaching_subject"]
-          @expected_result = csv_row["expected_result"]
         end
 
         def self.all
@@ -87,6 +127,12 @@ module Policies
         # Used for TRS data load
         def active_alert?
           false
+        end
+
+        def to_csv
+          HEADERS.map do |header|
+            public_send(header)
+          end.join(",")
         end
       end
     end

@@ -76,6 +76,38 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::Test::UserPersona d
     end
   end
 
+  describe "#to_csv" do
+    subject { described_class.new(csv_row) }
+
+    let(:csv_row) do
+      {
+        "claim_year" => "2025",
+        "expected_result" => "Eligible",
+        "notes" => "some notes",
+        "school_name" => "Test School",
+        "supply_teacher" => "no",
+        "full_term_contract" => "yes",
+        "employed_directly_by_school" => "yes",
+        "subject_to_poor_performance_measures" => "no",
+        "itt_year" => "2024/2025",
+        "more_than_50_of_hours_teaching_eligible_subjects" => "yes",
+        "teaching_subject" => "Maths",
+        "itt_subject_claimed" => "Mathematics",
+        "degree_subject" => "English",
+        "trainee" => "no",
+        "first_name" => "John",
+        "last_name" => "Smith",
+        "teacher_reference_number" => "1234567",
+        "date_of_birth" => "01/01/1990",
+        "national_insurance_number" => "AB123456C"
+      }
+    end
+
+    it "converts current record to csv row" do
+      expect(subject.to_csv).to eql(csv_row.values.join(","))
+    end
+  end
+
   describe "TRS data methods" do
     subject { described_class.new(csv_row) }
 
