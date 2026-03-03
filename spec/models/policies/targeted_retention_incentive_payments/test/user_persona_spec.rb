@@ -34,16 +34,16 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::Test::UserPersona d
 
     let(:csv_row) do
       {
-        "School name" => "Test School",
-        "First name" => "John",
-        "Last name" => "Smith",
-        "Date of birth" => "01/01/1990",
-        "NINO" => "AB123456C",
-        "ITT subject claimed" => "Mathematics",
-        "ITT year" => "2024/2025",
-        "TRN" => "1234567",
-        "Teaching subject" => "Maths",
-        "Expected result" => "Eligible"
+        "school_name" => "Test School",
+        "first_name" => "John",
+        "last_name" => "Smith",
+        "date_of_birth" => "01/01/1990",
+        "national_insurance_number" => "AB123456C",
+        "itt_subject_claimed" => "Mathematics",
+        "itt_year" => "2024/2025",
+        "teacher_reference_number" => "1234567",
+        "teaching_subject" => "Maths",
+        "expected_result" => "Eligible"
       }
     end
 
@@ -81,16 +81,16 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::Test::UserPersona d
 
     let(:csv_row) do
       {
-        "School name" => "Test School",
-        "First name" => "John",
-        "Last name" => "Smith",
-        "Date of birth" => "01/01/1990",
-        "NINO" => "AB123456C",
-        "ITT subject claimed" => "Mathematics",
-        "ITT year" => "2024/2025",
-        "TRN" => "1234567",
-        "Teaching subject" => "Maths",
-        "Expected result" => "Eligible"
+        "school_name" => "Test School",
+        "first_name" => "John",
+        "last_name" => "Smith",
+        "date_of_birth" => "01/01/1990",
+        "national_insurance_number" => "AB123456C",
+        "itt_subject_claimed" => "Mathematics",
+        "itt_year" => "2024/2025",
+        "teacher_reference_number" => "1234567",
+        "teaching_subject" => "Maths",
+        "expected_result" => "Eligible"
       }
     end
 
@@ -129,16 +129,16 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::Test::UserPersona d
       context "when ITT subject is not eligible" do
         let(:csv_row) do
           {
-            "School name" => "Test School",
-            "First name" => "John",
-            "Last name" => "Smith",
-            "Date of birth" => "01/01/1990",
-            "NINO" => "AB123456C",
-            "ITT subject claimed" => "Art",
-            "ITT year" => "2024/2025",
-            "TRN" => "1234567",
-            "Teaching subject" => "Art",
-            "Expected result" => "Ineligible"
+            "school_name" => "Test School",
+            "first_name" => "John",
+            "last_name" => "Smith",
+            "date_of_birth" => "01/01/1990",
+            "national_insurance_number" => "AB123456C",
+            "itt_subject_claimed" => "Art",
+            "itt_year" => "2024/2025",
+            "teacher_reference_number" => "1234567",
+            "teaching_subject" => "Art",
+            "expected_result" => "Ineligible"
           }
         end
 
