@@ -24,6 +24,22 @@ module Policies
           teacher_reference_number
           date_of_birth
           national_insurance_number
+          trs_first_name
+          trs_last_name
+          trs_date_of_birth
+          trs_national_insurance_number
+          trs_email_address
+          trs_induction_start_date
+          trs_induction_completion_date
+          trs_induction_status
+          trs_qts_award_date
+          trs_itt_subject_codes
+          trs_itt_subjects
+          trs_itt_start_date
+          trs_qualification_name
+          trs_degree_codes
+          trs_degree_names
+          trs_active_alert
         ]
 
         attr_reader :claim_year,
@@ -46,6 +62,23 @@ module Policies
           :date_of_birth,
           :national_insurance_number
 
+        attr_accessor :trs_first_name,
+          :trs_last_name,
+          :trs_date_of_birth,
+          :trs_national_insurance_number,
+          :trs_email_address,
+          :trs_induction_start_date,
+          :trs_induction_completion_date,
+          :trs_induction_status,
+          :trs_qts_award_date,
+          :trs_itt_subject_codes,
+          :trs_itt_subjects,
+          :trs_itt_start_date,
+          :trs_qualification_name,
+          :trs_degree_codes,
+          :trs_degree_names,
+          :trs_active_alert
+
         def initialize(csv_row)
           @claim_year = csv_row["claim_year"]
           @expected_result = csv_row["expected_result"]
@@ -66,6 +99,23 @@ module Policies
           @teacher_reference_number = csv_row["teacher_reference_number"]
           @date_of_birth = csv_row["date_of_birth"]
           @national_insurance_number = csv_row["national_insurance_number"]
+
+          @trs_first_name = csv_row["trs_first_name"]
+          @trs_last_name = csv_row["trs_last_name"]
+          @trs_date_of_birth = csv_row["trs_date_of_birth"]
+          @trs_national_insurance_number = csv_row["trs_national_insurance_number"]
+          @trs_email_address = csv_row["trs_email_address"]
+          @trs_induction_start_date = csv_row["trs_induction_start_date"]
+          @trs_induction_completion_date = csv_row["trs_induction_completion_date"]
+          @trs_induction_status = csv_row["trs_induction_status"]
+          @trs_qts_award_date = csv_row["trs_qts_award_date"]
+          @trs_itt_subject_codes = csv_row["trs_itt_subject_codes"]
+          @trs_itt_subjects = csv_row["trs_itt_subjects"]
+          @trs_itt_start_date = csv_row["trs_itt_start_date"]
+          @trs_qualification_name = csv_row["trs_qualification_name"]
+          @trs_degree_codes = csv_row["trs_degree_codes"]
+          @trs_degree_names = csv_row["trs_degree_names"]
+          @trs_active_alert = csv_row["trs_active_alert"]
         end
 
         def self.all
