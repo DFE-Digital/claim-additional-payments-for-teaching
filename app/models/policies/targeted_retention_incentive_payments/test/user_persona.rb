@@ -16,16 +16,16 @@ module Policies
           :teacher_reference_number
 
         def initialize(csv_row)
-          @school_name = csv_row["School name"]
-          @first_name = csv_row["First name"]
-          @last_name = csv_row["Last name"]
-          @date_of_birth = csv_row["Date of birth"]
-          @national_insurance_number = csv_row["NINO"]
-          @itt_subject_claimed = csv_row["ITT subject claimed"]
-          @itt_year = AcademicYear.new(csv_row["ITT year"])
-          @teacher_reference_number = csv_row["TRN"]
-          @teaching_subject = csv_row["Teaching subject"]
-          @expected_result = csv_row["Expected result"]
+          @school_name = csv_row["school_name"]
+          @first_name = csv_row["first_name"]
+          @last_name = csv_row["last_name"]
+          @date_of_birth = csv_row["date_of_birth"]
+          @national_insurance_number = csv_row["national_insurance_number"]
+          @itt_subject_claimed = csv_row["itt_subject_claimed"]
+          @itt_year = AcademicYear.new(csv_row["itt_year"])
+          @teacher_reference_number = csv_row["teacher_reference_number"]
+          @teaching_subject = csv_row["teaching_subject"]
+          @expected_result = csv_row["expected_result"]
         end
 
         def self.all
