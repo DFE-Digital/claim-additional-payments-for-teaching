@@ -77,8 +77,8 @@ class Claim
             ExcelUtils.escape_formulas(claim.date_of_birth),
             ExcelUtils.escape_formulas(nil),
             ExcelUtils.escape_formulas(claim.policy),
-            ExcelUtils.escape_formulas(claim.eligibility.school.name),
-            ExcelUtils.escape_formulas(claim.eligibility.school.urn)
+            ExcelUtils.escape_formulas(claim.eligibility.school&.name),
+            ExcelUtils.escape_formulas(claim.eligibility.school&.urn)
           ]
         end
       end
