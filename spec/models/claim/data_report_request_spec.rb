@@ -61,6 +61,34 @@ RSpec.describe Claim::DataReportRequest do
           expect(csv[index]["School unique reference number"]).to eql(claim.eligibility.current_school.urn.to_s)
         end
       end
+
+      context "when school not present" do
+        let(:eligibility) do
+          build(
+            :further_education_payments_eligibility,
+            :eligible,
+            school: nil
+          )
+        end
+
+        let(:claims) do
+          [
+            create(
+              :claim,
+              :submitted,
+              policy: Policies::FurtherEducationPayments,
+              eligibility:
+            )
+          ]
+        end
+
+        it "contains empty school" do
+          claims.each_with_index do |claim, index|
+            expect(csv[index]["School name"]).to be_nil
+            expect(csv[index]["School unique reference number"]).to be_nil
+          end
+        end
+      end
     end
 
     context "IRP policy claims" do
