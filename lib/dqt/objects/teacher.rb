@@ -1,5 +1,9 @@
 module Dqt
   class Teacher < Object
+    def email_address
+      string_reader(emailAddress)
+    end
+
     def date_of_birth
       date_reader(dateOfBirth)
     end
