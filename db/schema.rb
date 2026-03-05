@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_05_130500) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_05_161503) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -448,6 +448,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_05_130500) do
     t.datetime "updated_at", null: false
     t.index "((answers ->> 'onelogin_uid'::text))", name: "sessions_one_login_uid_index"
     t.index "((answers ->> 'onelogin_uid'::text)), ((answers #>> '{academic_year,start_year}'::text[])), ((answers #>> '{academic_year,end_year}'::text[]))", name: "sessions_one_login_existing_index"
+    t.index ["expired"], name: "index_journeys_sessions_on_expired"
     t.index ["updated_at"], name: "index_journeys_sessions_on_updated_at"
   end
 
