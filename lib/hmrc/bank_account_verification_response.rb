@@ -18,6 +18,10 @@ module Hmrc
       end
     end
 
+    def status
+      code
+    end
+
     def success?
       name_match? && sort_code_correct? && account_exists?
     end
