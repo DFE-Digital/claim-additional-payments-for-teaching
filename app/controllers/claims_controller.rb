@@ -2,6 +2,7 @@ class ClaimsController < BasePublicController
   before_action :set_cache_headers
   before_action :check_whether_closed_for_submissions, if: :current_journey_routing_name
   before_action :create_session_if_skip_landing_page, if: :skip_landing_page?
+  before_action :add_answers_to_sentry_context, only: [:show, :update]
   before_action :send_unstarted_claimants_to_the_start, if: :send_to_start?
 
   def create_session_if_skip_landing_page
@@ -16,8 +17,6 @@ class ClaimsController < BasePublicController
   before_action :prepend_view_path_for_journey
   before_action :persist_claim, only: [:new, :create]
   before_action :handle_magic_link, only: [:new], if: -> { journey.start_with_magic_link? }
-  before_action :add_answers_to_sentry_context, only: [:show, :update]
-
   before_action :sign_out, only: [:signed_out]
 
   # ordering of these includes is important
@@ -133,6 +132,11 @@ class ClaimsController < BasePublicController
     return unless journey_session
 
     Sentry.configure_scope do |scope|
+      scope.set_context(
+        "Journey session",
+        journeys_session_id: journey_session.id
+      )
+
       scope.set_context(
         "Journey session anwers",
         journey_session.answers.attributes_with_pii_redacted
