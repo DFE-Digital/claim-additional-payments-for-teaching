@@ -96,11 +96,6 @@ RSpec.describe PersonalBankAccountForm do
             expect(hmrc_client).to have_received(:verify_personal_bank_account)
           end
 
-          it "sets hmrc_api_validation_attempted" do
-            form.valid?
-            expect(form).to be_hmrc_api_validation_attempted
-          end
-
           it "adds the response to the claim" do
             expect { form.valid? }.to(
               change { journey_session.reload.answers.hmrc_bank_validation_responses }
@@ -126,22 +121,12 @@ RSpec.describe PersonalBankAccountForm do
               form.valid?
               expect(form.errors[:bank_sort_code].first).to eq("Enter a valid sort code")
             end
-
-            it "does not set hmrc_api_validation_succeeded" do
-              form.valid?
-              expect(form).not_to be_hmrc_api_validation_succeeded
-            end
           end
 
           context "when the account number doesn't pass basic validation" do
             let(:bank_account_number) { 99 }
 
             it { is_expected.to be_invalid }
-
-            it "does not contact the HMRC API" do
-              form.valid?
-              expect(hmrc_client).not_to have_received(:verify_personal_bank_account)
-            end
           end
 
           context "when there is an HMRC validation error with the account name" do
@@ -151,11 +136,6 @@ RSpec.describe PersonalBankAccountForm do
               form.valid?
               expect(form.errors[:banking_name].first).to eq("Enter a valid name on the account")
             end
-
-            it "does not set hmrc_api_validation_succeeded" do
-              form.valid?
-              expect(form).not_to be_hmrc_api_validation_succeeded
-            end
           end
 
           context "when there is an error with the account number" do
@@ -164,11 +144,6 @@ RSpec.describe PersonalBankAccountForm do
             it "adds an error" do
               form.valid?
               expect(form.errors[:bank_account_number].first).to eq("Enter the account number associated with the name on the account and/or sort code")
-            end
-
-            it "does not set hmrc_api_validation_succeeded" do
-              form.valid?
-              expect(form).not_to be_hmrc_api_validation_succeeded
             end
           end
 
@@ -186,16 +161,6 @@ RSpec.describe PersonalBankAccountForm do
               expect(form.errors[:bank_sort_code]).to be_empty
               expect(form.errors[:bank_account_number]).to be_empty
               expect(form.errors[:banking_name]).to be_empty
-            end
-
-            it "sets hmrc_api_validation_attempted" do
-              form.valid?
-              expect(form).to be_hmrc_api_validation_attempted
-            end
-
-            it "does not set hmrc_api_validation_succeeded" do
-              form.valid?
-              expect(form).not_to be_hmrc_api_validation_succeeded
             end
 
             it "adds the response to the claim" do
@@ -219,11 +184,6 @@ RSpec.describe PersonalBankAccountForm do
             expect(form.errors[:bank_account_number]).to be_empty
             expect(form.errors[:banking_name]).to be_empty
           end
-
-          it "does not set hmrc_api_validation_succeeded" do
-            form.valid?
-            expect(form).not_to be_hmrc_api_validation_succeeded
-          end
         end
       end
 
@@ -237,16 +197,6 @@ RSpec.describe PersonalBankAccountForm do
 
         it "catches the exception" do
           expect { form.valid? }.not_to raise_error
-        end
-
-        it "does not set hmrc_api_validation_attempted" do
-          form.valid?
-          expect(form).not_to be_hmrc_api_validation_attempted
-        end
-
-        it "does not set hmrc_api_validation_succeeded" do
-          form.valid?
-          expect(form).not_to be_hmrc_api_validation_succeeded
         end
 
         it "adds the response to the claim" do

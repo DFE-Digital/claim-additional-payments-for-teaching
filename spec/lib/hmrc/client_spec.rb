@@ -130,8 +130,8 @@ RSpec.describe Hmrc::Client do
       let(:response_success) { false }
       let(:response_to_return) { "" }
 
-      it "raises an error" do
-        expect { response }.to raise_error(Hmrc::ResponseError)
+      it "returns an error response" do
+        expect(response.errored?).to be true
       end
     end
   end

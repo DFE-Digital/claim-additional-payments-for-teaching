@@ -10,6 +10,12 @@ module Hmrc
       @body ||= JSON.parse(payload.body)
     end
 
+    def safe_body
+      body
+    rescue JSON::ParserError
+      payload.body
+    end
+
     def code
       if payload.respond_to?(:status)
         payload.status.to_i
@@ -24,6 +30,14 @@ module Hmrc
 
     def success?
       name_match? && sort_code_correct? && account_exists?
+    end
+
+    def details_validated?
+      success?
+    end
+
+    def errored?
+      !payload.success?
     end
 
     def name_match?
