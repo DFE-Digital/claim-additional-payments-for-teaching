@@ -15,7 +15,7 @@ module Hmrc
     end
 
     def verify_personal_bank_account(sort_code, account_number, name)
-      refresh_token_if_required
+      refresh_token_if_required!
 
       payload = {
         account: {
@@ -27,16 +27,19 @@ module Hmrc
         }
       }.to_json
 
-      response = post_request!("/misc/bank-account/verify/personal", payload, request_headers)
+      response = post_request("/misc/bank-account/verify/personal", payload, request_headers)
 
       BankAccountVerificationResponse.new(response)
+    rescue ResponseError => e
+      # refreshing the token failed
+      BankAccountVerificationResponse.new(e.response)
     end
 
     private
 
     attr_accessor :base_url, :client_id, :client_secret, :http_client, :logger, :token, :token_expiry
 
-    def refresh_token_if_required
+    def refresh_token_if_required!
       return unless token_invalid?
 
       request_time = Time.zone.now

@@ -1,12 +1,16 @@
+# TODO refactor this to stub the network request rather than using doubles
+# doubles too fragile.
 RSpec.shared_context "with stubbed HMRC client", shared_context: :metadata do
   let(:hmrc_response) do
     double(
+      "Hmrc::BankAccountVerificationResponse",
       name_match?: name_match,
       sort_code_correct?: sort_code_correct,
       account_exists?: account_exists,
       status: 200,
       success?: name_match && account_exists && sort_code_correct,
-      body: "Test response"
+      safe_body: "Test response",
+      errored?: false
     )
   end
 
