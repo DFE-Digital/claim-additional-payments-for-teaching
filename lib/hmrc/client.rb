@@ -27,7 +27,7 @@ module Hmrc
         }
       }.to_json
 
-      response = post_request("/misc/bank-account/verify/personal", payload, request_headers)
+      response = post_request!("/misc/bank-account/verify/personal", payload, request_headers)
 
       BankAccountVerificationResponse.new(response)
     end
@@ -40,7 +40,7 @@ module Hmrc
       return unless token_invalid?
 
       request_time = Time.zone.now
-      response = post_request("/oauth/token", token_request_payload)
+      response = post_request!("/oauth/token", token_request_payload)
 
       body = JSON.parse(response.body)
 
@@ -70,11 +70,15 @@ module Hmrc
     end
 
     def post_request(path, payload, headers = nil)
-      response = http_client.post(
+      http_client.post(
         "#{base_url}#{path}",
         payload,
         headers
       )
+    end
+
+    def post_request!(path, payload, headers = nil)
+      response = post_request(path, payload, headers)
 
       if !response.success?
         logger.info("HMRC API error: response code #{response.status}")
