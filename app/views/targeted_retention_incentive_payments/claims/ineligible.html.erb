@@ -26,7 +26,8 @@
     <% when :poor_performance %>
       <%= render partial: "generic" %>
     <% else %>
-      <% fail "unknown ineligibility reason #{@form.ineligibility_reason}" %>
+      <% Sentry.capture_message("unknown ineligibility reason #{@form.ineligibility_reason}") %>
+      <%= render partial: "generic" %>
     <% end %>
 
     <p class="govuk-body">
