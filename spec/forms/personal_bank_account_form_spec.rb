@@ -93,13 +93,16 @@ RSpec.describe PersonalBankAccountForm do
         context "when HMRC bank validation is enabled", :with_hmrc_bank_validation_enabled do
           it "contacts the HMRC API" do
             form.valid?
-            expect(hmrc_client).to have_received(:verify_personal_bank_account)
+            expect(a_request(:post, "#{HMRC_TEST_BASE_URL}/misc/bank-account/verify/personal")).to have_been_made
           end
 
           it "adds the response to the claim" do
             expect { form.valid? }.to(
               change { journey_session.reload.answers.hmrc_bank_validation_responses }
-              .from([]).to([{"body" => "Test response", "code" => 200}])
+              .from([]).to([{
+                "body" => {"sortCodeIsPresentOnEISCD" => "yes", "accountExists" => "yes", "nameMatches" => "yes"},
+                "code" => 200
+              }])
             )
           end
 
@@ -110,7 +113,7 @@ RSpec.describe PersonalBankAccountForm do
 
             it "does not contact the HMRC API" do
               form.valid?
-              expect(hmrc_client).not_to have_received(:verify_personal_bank_account)
+              expect(a_request(:post, "#{HMRC_TEST_BASE_URL}/misc/bank-account/verify/personal")).not_to have_been_made
             end
           end
 
@@ -153,7 +156,7 @@ RSpec.describe PersonalBankAccountForm do
 
             it "contacts the HMRC API" do
               form.valid?
-              expect(hmrc_client).to have_received(:verify_personal_bank_account)
+              expect(a_request(:post, "#{HMRC_TEST_BASE_URL}/misc/bank-account/verify/personal")).to have_been_made
             end
 
             it "does not add any errors" do
@@ -166,7 +169,10 @@ RSpec.describe PersonalBankAccountForm do
             it "adds the response to the claim" do
               expect { form.valid? }.to(
                 change { journey_session.reload.answers.hmrc_bank_validation_responses }
-                .from([]).to([{"body" => "Test response", "code" => 200}])
+                .from([]).to([{
+                  "body" => {"sortCodeIsPresentOnEISCD" => "yes", "accountExists" => "no", "nameMatches" => "yes"},
+                  "code" => 200
+                }])
               )
             end
           end
@@ -176,7 +182,7 @@ RSpec.describe PersonalBankAccountForm do
           before { form.valid? }
 
           it "does not contact the HMRC API" do
-            expect(hmrc_client).not_to have_received(:verify_personal_bank_account)
+            expect(a_request(:post, "#{HMRC_TEST_BASE_URL}/misc/bank-account/verify/personal")).not_to have_been_made
           end
 
           it "does not add any errors" do
