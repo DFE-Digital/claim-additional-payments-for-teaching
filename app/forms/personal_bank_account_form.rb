@@ -16,7 +16,7 @@ class PersonalBankAccountForm < Form
   validate :bank_sort_code_must_be_six_digits
 
   def save
-    return false unless valid?
+    return false unless valid?(:save)
 
     journey_session.answers.assign_attributes(
       banking_name: banking_name,
@@ -27,11 +27,11 @@ class PersonalBankAccountForm < Form
     journey_session.save!
   end
 
-  def valid?(*)
+  def valid?(context = nil)
     return false unless super
 
     # Only perform the API call if other validations have passed
-    validate_with_hmrc! if within_maximum_attempts?
+    validate_with_hmrc! if within_maximum_attempts? && context == :save
 
     # These errors are added from the response from HMRC
     errors.empty?
