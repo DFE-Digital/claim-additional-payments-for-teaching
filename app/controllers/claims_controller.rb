@@ -3,6 +3,7 @@ class ClaimsController < BasePublicController
   before_action :check_whether_closed_for_submissions, if: :current_journey_routing_name
   before_action :create_session_if_skip_landing_page, if: :skip_landing_page?
   before_action :add_answers_to_sentry_context, only: [:show, :update]
+  before_action :add_session_info_to_logs, only: [:show, :update]
   before_action :send_unstarted_claimants_to_the_start, if: :send_to_start?
 
   def create_session_if_skip_landing_page
@@ -146,6 +147,12 @@ class ClaimsController < BasePublicController
         "Journey session steps", steps: journey_session.steps
       )
     end
+  end
+
+  def add_session_info_to_logs
+    return unless journey_session
+
+    Rails.logger.info "journey_session_id: #{journey_session.id}"
   end
 
   def check_whether_closed_for_submissions
