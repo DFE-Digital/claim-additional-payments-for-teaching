@@ -18,7 +18,12 @@ module Admin::Claims
     validate :validate_colleague_selected
 
     def colleagues
-      DfeSignIn::User.service_operators - [current_admin, claim.assigned_to].compact
+      DfeSignIn::User
+        .not_deleted
+        .service_operators
+        .order(email: :asc)
+        .where
+        .not(id: [current_admin.id, claim.assigned_to&.id].compact)
     end
 
     def save
