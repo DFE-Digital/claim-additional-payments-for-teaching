@@ -47,7 +47,7 @@ RSpec.describe PersonalBankAccountForm do
         it { is_expected.not_to be_valid }
 
         it do
-          form.valid?
+          form.valid?(:save)
           expect(form.errors[:banking_name]).to contain_exactly("Enter a valid name on the account")
         end
       end
@@ -92,12 +92,12 @@ RSpec.describe PersonalBankAccountForm do
 
         context "when HMRC bank validation is enabled", :with_hmrc_bank_validation_enabled do
           it "contacts the HMRC API" do
-            form.valid?
+            form.valid?(:save)
             expect(a_request(:post, "#{HMRC_TEST_BASE_URL}/misc/bank-account/verify/personal")).to have_been_made
           end
 
           it "adds the response to the claim" do
-            expect { form.valid? }.to(
+            expect { form.valid?(:save) }.to(
               change { journey_session.reload.answers.hmrc_bank_validation_responses }
               .from([]).to([{
                 "body" => {"sortCodeIsPresentOnEISCD" => "yes", "accountExists" => "yes", "nameMatches" => "yes"},
@@ -112,7 +112,7 @@ RSpec.describe PersonalBankAccountForm do
             it { is_expected.to be_invalid }
 
             it "does not contact the HMRC API" do
-              form.valid?
+              form.valid?(:save)
               expect(a_request(:post, "#{HMRC_TEST_BASE_URL}/misc/bank-account/verify/personal")).not_to have_been_made
             end
           end
@@ -121,7 +121,7 @@ RSpec.describe PersonalBankAccountForm do
             let(:sort_code_correct) { false }
 
             it "adds an error" do
-              form.valid?
+              form.valid?(:save)
               expect(form.errors[:bank_sort_code].first).to eq("Enter a valid sort code")
             end
           end
@@ -136,7 +136,7 @@ RSpec.describe PersonalBankAccountForm do
             let(:name_match) { false }
 
             it "adds an error" do
-              form.valid?
+              form.valid?(:save)
               expect(form.errors[:banking_name].first).to eq("Enter a valid name on the account")
             end
           end
@@ -145,7 +145,7 @@ RSpec.describe PersonalBankAccountForm do
             let(:account_exists) { false }
 
             it "adds an error" do
-              form.valid?
+              form.valid?(:save)
               expect(form.errors[:bank_account_number].first).to eq("Enter the account number associated with the name on the account and/or sort code")
             end
           end
@@ -155,19 +155,19 @@ RSpec.describe PersonalBankAccountForm do
             let(:account_exists) { false }
 
             it "contacts the HMRC API" do
-              form.valid?
+              form.valid?(:save)
               expect(a_request(:post, "#{HMRC_TEST_BASE_URL}/misc/bank-account/verify/personal")).to have_been_made
             end
 
             it "does not add any errors" do
-              form.valid?
+              form.valid?(:save)
               expect(form.errors[:bank_sort_code]).to be_empty
               expect(form.errors[:bank_account_number]).to be_empty
               expect(form.errors[:banking_name]).to be_empty
             end
 
             it "adds the response to the claim" do
-              expect { form.valid? }.to(
+              expect { form.valid?(:save) }.to(
                 change { journey_session.reload.answers.hmrc_bank_validation_responses }
                 .from([]).to([{
                   "body" => {"sortCodeIsPresentOnEISCD" => "yes", "accountExists" => "no", "nameMatches" => "yes"},
@@ -179,7 +179,7 @@ RSpec.describe PersonalBankAccountForm do
         end
 
         context "when HMRC bank validation is disabled" do
-          before { form.valid? }
+          before { form.valid?(:save) }
 
           it "does not contact the HMRC API" do
             expect(a_request(:post, "#{HMRC_TEST_BASE_URL}/misc/bank-account/verify/personal")).not_to have_been_made
@@ -195,21 +195,45 @@ RSpec.describe PersonalBankAccountForm do
 
       context "when there is an HMRC API error", :with_hmrc_bank_validation_enabled, :with_failing_hmrc_bank_validation do
         it "does not add any errors" do
-          form.valid?
+          form.valid?(:save)
           expect(form.errors[:bank_sort_code]).to be_empty
           expect(form.errors[:bank_account_number]).to be_empty
           expect(form.errors[:banking_name]).to be_empty
         end
 
         it "catches the exception" do
-          expect { form.valid? }.not_to raise_error
+          expect { form.valid?(:save) }.not_to raise_error
         end
 
         it "adds the response to the claim" do
-          expect { form.valid? }.to(
+          expect { form.valid?(:save) }.to(
             change { journey_session.reload.answers.hmrc_bank_validation_responses }
             .from([]).to([{"body" => "Test failure", "code" => 429}])
           )
+        end
+      end
+
+      context "when outside the save context" do
+        context "when bank details are present but not validated with hmrc", :with_hmrc_bank_validation_enabled, :with_stubbed_hmrc_client do
+          let(:hmrc_validation_attempt_count) { 0 }
+          let(:bank_account_number) { "12-34-56-78" }
+          let(:bank_sort_code) { "12 34 56" }
+          let(:banking_name) { "Jo Bloggs" }
+
+          it "does not contact the HMRC API" do
+            form.valid?
+
+            expect(
+              a_request(
+                :post,
+                "#{HMRC_TEST_BASE_URL}/misc/bank-account/verify/personal"
+              )
+            ).not_to have_been_made
+
+            expect(
+              journey_session.reload.answers.hmrc_validation_attempt_count
+            ).to eq(0)
+          end
         end
       end
     end
