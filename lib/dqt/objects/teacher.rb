@@ -77,6 +77,7 @@ module Dqt
 
       most_recent_route = routesToProfessionalStatuses
         .reject { |r| r.trainingStartDate.blank? }
+        .reject { |r| r.holdsFrom.blank? }
         .max_by { |r| r.holdsFrom }
 
       string_reader(most_recent_route&.routeToProfessionalStatusType&.name)
