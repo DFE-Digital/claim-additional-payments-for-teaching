@@ -24,4 +24,9 @@ namespace :trs_test_data do
       logger.info "Export complete! Data is saved in #{csv_file}"
     end
   end
+
+  desc "Import test data from Teaching Record Service (TRS) into personas CSV"
+  task import: :environment do
+    Policies::TargetedRetentionIncentivePayments::Test::TrsImporter.new.call
+  end
 end
