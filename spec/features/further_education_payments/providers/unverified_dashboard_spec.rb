@@ -163,4 +163,31 @@ RSpec.describe "Provider unverified claims dashboard", feature_flag: [:fe_provid
       text: "Diana Newest"
     )
   end
+
+  scenario "when claim is rejected" do
+    school = create(:school, :fe_eligible, ukprn: "12345678")
+    eligibility = create(
+      :further_education_payments_eligibility,
+      :eligible,
+      school:,
+      provider_verification_deadline: Date.new(2025, 1, 3)
+    )
+    create(
+      :claim,
+      :further_education,
+      :submitted,
+      :rejected,
+      eligibility:,
+      submitted_at: Date.new(2024, 12, 13),
+      created_at: Date.new(2024, 12, 13)
+    )
+
+    visit "/further-education-payments/providers/claims"
+    expect(page).to have_text "Sign in"
+    fill_in "UKPRN", with: "12345678"
+    click_button "Start now"
+
+    expect(page).to have_text "Unverified claims"
+    expect(page).to have_selector("table tbody tr", count: 0)
+  end
 end

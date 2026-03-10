@@ -2,7 +2,11 @@ module FurtherEducationPayments
   module Providers
     class ClaimsController < BaseController
       def index
-        @claims = current_provider.claims.unverified.by_academic_year(
+        @claims = current_provider
+          .claims
+          .unverified
+          .not_rejected
+          .by_academic_year(
           Journeys::FurtherEducationPayments.configuration.current_academic_year
         ).order(:created_at)
 
