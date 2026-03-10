@@ -96,6 +96,29 @@ RSpec.describe Dqt::Teacher do
     ]
   end
 
+  let(:routes_multiple_with_missing_holds_from) do
+    [
+      {
+        holdsFrom: nil,
+        trainingSubjects: training_subjects,
+        trainingStartDate: "2021-06-27",
+        trainingEndDate: "2021-07-04",
+        routeToProfessionalStatusType: {
+          name: "Core1"
+        }
+      },
+      {
+        holdsFrom: "2022-01-09",
+        trainingSubjects: training_subjects_multiple,
+        trainingStartDate: "2021-06-27",
+        trainingEndDate: "2021-07-04",
+        routeToProfessionalStatusType: {
+          name: "Core2"
+        }
+      }
+    ]
+  end
+
   let(:qualified_teaching_status_response) do
     {
       qts: {
@@ -435,6 +458,15 @@ RSpec.describe Dqt::Teacher do
     subject(:qualification_name) { qualified_teaching_status.qualification_name }
 
     it_behaves_like "string reader", "routesToProfessionalStatuses/0/routeToProfessionalStatusType/name"
+
+    # CAPT-3374 - test to prove reproduce the error
+    context "multiple routes with missing holds_from" do
+      let(:routes) { routes_multiple_with_missing_holds_from }
+
+      it "excludes routes without a holdsFrom date" do
+        is_expected.to eq "Core2"
+      end
+    end
   end
 
   describe "#itt_start_date" do
