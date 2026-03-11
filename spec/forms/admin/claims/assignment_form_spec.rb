@@ -4,11 +4,14 @@ RSpec.describe Admin::Claims::AssignmentForm do
   let!(:current_admin) { create(:dfe_signin_user, :service_operator, :with_random_name) }
   let!(:second_admin) { create(:dfe_signin_user, :service_operator, :with_random_name) }
   let!(:third_admin) { create(:dfe_signin_user, :service_operator, :with_random_name) }
+  let!(:deleted_admin) { create(:dfe_signin_user, :service_operator, :with_random_name, :deleted) }
+
+  let(:assigned_to) { third_admin }
 
   let(:claim) do
     create(
       :claim,
-      assigned_to: third_admin
+      assigned_to:
     )
   end
 
@@ -45,6 +48,20 @@ RSpec.describe Admin::Claims::AssignmentForm do
 
     it "excludes currently assigned admin" do
       expect(subject.colleagues).not_to include third_admin
+    end
+
+    it "excludes deleted operators" do
+      expect(subject.colleagues).not_to include deleted_admin
+    end
+
+    context "unassigned claim" do
+      let(:assigned_to) { nil }
+
+      it "returns other service operators" do
+        expect(subject.colleagues).not_to include current_admin
+        expect(subject.colleagues).to include second_admin
+        expect(subject.colleagues).to include third_admin
+      end
     end
   end
 
