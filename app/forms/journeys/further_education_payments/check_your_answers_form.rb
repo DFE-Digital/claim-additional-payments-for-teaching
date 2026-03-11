@@ -12,6 +12,8 @@ module Journeys
           "your knowledge"
         }
 
+      validate :validate_one_claim_for_window_for_ol_account
+
       def save
         return false if invalid?
 
@@ -59,7 +61,28 @@ module Journeys
         session[:submitted_claim_id].present?
       end
 
+      def redirect?
+        @redirect
+      end
+
+      def redirect_to
+        "/further-education-payments/ineligible?ineligible_reason=claim_already_submitted_this_policy_year"
+      end
+
       private
+
+      def validate_one_claim_for_window_for_ol_account
+        claim = Claim.find_by(
+          policy: Policies::FurtherEducationPayments,
+          onelogin_uid: answers.onelogin_uid,
+          academic_year: answers.academic_year
+        )
+
+        if claim
+          errors.add(:base, "You have already submitted a claim with the reference: #{claim.reference}")
+          @redirect = true
+        end
+      end
 
       def clear_claim_session
         key = "#{Journeys::FurtherEducationPayments.routing_name}_journeys_session_id"

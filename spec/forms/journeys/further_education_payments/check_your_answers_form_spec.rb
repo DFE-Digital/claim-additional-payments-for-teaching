@@ -1,3 +1,4 @@
+require "securerandom"
 require "rails_helper"
 
 RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
@@ -18,6 +19,7 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
       onelogin_idv_last_name: "Doe",
       onelogin_idv_full_name: "John Doe",
       onelogin_idv_date_of_birth: Date.new(1970, 1, 1),
+      onelogin_uid: SecureRandom.uuid,
       first_name: "John",
       surname: "Doe",
       date_of_birth: Date.new(1970, 1, 1)
@@ -34,7 +36,7 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
   }
 
   let(:journey_session) { create(:further_education_payments_session, answers: answers) }
-  let(:form) do
+  subject(:form) do
     described_class.new(
       journey_session: journey_session,
       params: ActionController::Parameters.new(
@@ -45,6 +47,15 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
       session: {},
       journey: Journeys::FurtherEducationPayments
     )
+  end
+
+  describe "validations" do
+    it "prevents double submission against same OL uid" do
+      expect {
+        subject.save
+        subject.save
+      }.to change(Claim, :count).by(1)
+    end
   end
 
   describe "#save" do

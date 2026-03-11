@@ -1126,7 +1126,7 @@ RSpec.feature "Further education payments ineligible paths" do
 
     # ineligible
     expect(page).to have_content(
-      "You've already submitted a claim in this claim window"
+      "You’ve already submitted a claim in this claim window"
     )
 
     expect(page).to have_content(previous_claim.reference)

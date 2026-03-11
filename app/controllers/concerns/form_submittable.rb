@@ -76,6 +76,8 @@ module FormSubmittable
           @form.journey_session.save!
 
           redirect_to_next_slug
+        elsif @form.redirect?
+          redirect_to @form.redirect_to
         else
           render_template_for_current_slug
         end
