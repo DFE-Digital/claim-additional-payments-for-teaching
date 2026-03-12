@@ -1,6 +1,6 @@
 module Admin
   class PageController < BaseAdminController
-    before_action :ensure_service_team
+    before_action :ensure_service_operator
 
     def index
       flash[:notice] = "There is currently no School Workforce Census data present" if SchoolWorkforceCensus.all.size.zero?

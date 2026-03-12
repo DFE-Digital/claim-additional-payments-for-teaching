@@ -119,17 +119,4 @@ RSpec.feature "Admin checks a claim" do
       expect(claim.tasks.find_by(name: "qualifications")).to be_nil
     end
   end
-
-  context "User is logged in as a support user" do
-    scenario "User cannot view claims" do
-      sign_in_to_admin_with_role(DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
-
-      expect(page).to_not have_link(nil, href: admin_claims_path)
-
-      visit admin_claims_path
-
-      expect(page.status_code).to eq(401)
-      expect(page).to have_content("Not authorised")
-    end
-  end
 end

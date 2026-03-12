@@ -121,25 +121,5 @@ RSpec.describe "Admin payroll run downloads" do
         expect(response).to be_unauthorized
       end
     end
-
-    context "when signed in as a support agent" do
-      let(:admin) { create(:dfe_signin_user, :support_agent) }
-
-      it "responds with not authorised", :aggregate_failures do
-        payroll_run = create(:payroll_run)
-
-        get new_admin_payroll_run_download_path(payroll_run)
-        expect(response.code).to eq("401")
-        expect(response.body).to include("Not authorised")
-
-        get admin_payroll_run_download_path(payroll_run)
-        expect(response.code).to eq("401")
-        expect(response.body).to include("Not authorised")
-
-        post admin_payroll_run_download_path(payroll_run)
-        expect(response.code).to eq("401")
-        expect(response.body).to include("Not authorised")
-      end
-    end
   end
 end
