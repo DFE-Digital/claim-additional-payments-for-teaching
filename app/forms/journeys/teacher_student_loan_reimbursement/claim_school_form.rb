@@ -36,15 +36,6 @@ module Journeys
         journey_session.save!
       end
 
-      def clear_answers_from_session
-        journey_session.answers.assign_attributes(
-          possible_claim_school_id: nil,
-          provision_search: nil
-        )
-
-        journey_session.save!
-      end
-
       def show_multiple_schools_content?
         !params.has_key?(:additional_school)
       end
