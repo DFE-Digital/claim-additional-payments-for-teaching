@@ -52,16 +52,6 @@ RSpec.describe DfeSignIn::User, type: :model do
     end
   end
 
-  describe "#is_support_agent?" do
-    it "returns true when the user has the right role" do
-      user.role_codes = [DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE]
-      expect(user.is_support_agent?).to eq true
-
-      user.role_codes = ["other-role"]
-      expect(user.is_support_agent?).to eq false
-    end
-  end
-
   describe "#has_admin_access?" do
     it "returns true when user is a service operator" do
       user.role_codes = [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]
