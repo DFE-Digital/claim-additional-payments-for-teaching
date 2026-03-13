@@ -146,5 +146,9 @@ module Policies
     def payroll_file_name
       "TSLR"
     end
+
+    def approvable?(claim)
+      FeatureFlag.enabled?(:schools_claims_approvable)
+    end
   end
 end

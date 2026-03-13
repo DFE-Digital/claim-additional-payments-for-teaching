@@ -123,5 +123,9 @@ module Policies
         .first
         &.award_amount
     end
+
+    def approvable?(claim)
+      FeatureFlag.enabled?(:schools_claims_approvable)
+    end
   end
 end
