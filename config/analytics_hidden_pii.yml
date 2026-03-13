@@ -1,6 +1,20 @@
 ---
 :shared:
   :claims:
+    - first_name
+    - middle_name
+    - surname
+    - date_of_birth
+    - address_line_1
+    - address_line_2
+    - address_line_3
+    - address_line_4
+    - postcode
+    - national_insurance_number
+    - email_address
+    - payroll_gender
+    - practitioner_email_address
+    - provider_contact_name
     - onelogin_uid
   :levelling_up_premium_payments_eligibilities:
     - teacher_reference_number
@@ -12,9 +26,30 @@
     - teacher_reference_number
   :further_education_payments_eligibilities:
     - teacher_reference_number
+    - claimant_date_of_birth
+    - claimant_postcode
+    - claimant_national_insurance_number
+    - provider_verification_claimant_date_of_birth
+    - provider_verification_claimant_email
+    - provider_verification_claimant_national_insurance_number
+    - provider_verification_claimant_postcode
+    - work_email
+  :early_years_payment_eligibilities:
+    - provider_email_address
+    - practitioner_first_name
+    - practitioner_surname
+    - alternative_idv_claimant_date_of_birth
+    - alternative_idv_claimant_postcode
+    - alternative_idv_claimant_national_insurance_number
+    - alternative_idv_claimant_email
   :school_workforce_censuses:
     - teacher_reference_number
   :teachers_pensions_service:
     - teacher_reference_number
     - nino
     - gender_digit
+  :eligible_fe_providers:
+    - primary_key_contact_email_address
+  :reminders:
+    - full_name
+    - email_address
