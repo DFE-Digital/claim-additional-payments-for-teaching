@@ -1,16 +1,20 @@
 module Dqt
   class TeacherResource < Resource
     def find(trn, **)
-      response = find_raw(trn, **)
-      return unless response
+      response_body = find_raw(trn, **)
+      return unless response_body
 
-      Teacher.new(response)
+      Teacher.new(response_body)
     end
 
     def find_raw(trn, **params)
-      get_request(
+      response = get_request(
         "persons/#{trn}", params: params
-      )&.body
+      )
+
+      if response && response.status == 200
+        response.body
+      end
     end
   end
 end
