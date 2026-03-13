@@ -68,7 +68,7 @@ module Journeys
     attribute :email_address_check, :boolean, pii: false
     attribute :mobile_check, :string, pii: false
     attribute :qualifications_details_check, :boolean, pii: false
-    attribute :dqt_teacher_status, default: {}, pii: false
+    attribute :dqt_teacher_status, default: {}, pii: true
     attribute :has_student_loan, :boolean, pii: false
     attribute :student_loan_plan, :string, pii: false
     attribute :submitted_using_slc_data, :boolean, pii: false
