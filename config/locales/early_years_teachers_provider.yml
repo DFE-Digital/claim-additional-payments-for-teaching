@@ -1,0 +1,89 @@
+en:
+  early_years_teachers_provider:
+    journey_name: "Early years teachers - provider"
+    feedback_email: "EY.Financial-Incentives@education.gov.uk"
+    landing_page:
+      title: "Provide information for the recognition payment"
+    forms:
+      provider_email:
+        question: "What is your email address?"
+        hint: "We’ll send you a link to sign in"
+        label: "Email address"
+        errors:
+          invalid: "Enter an email address in the correct format"
+      check_your_email:
+        question: "Check your email"
+      check_nursery_details:
+        title: "Check your nursery details"
+        question: "Are these details correct?"
+      update_nursery_details:
+        title: "Update your nursery details"
+        nursery_name:
+          label: "Nursery name"
+        nursery_address_line_1:
+          label: "Address line 1"
+        nursery_address_city:
+          label: "City"
+        nursery_address_postcode:
+          label: "Postcode"
+        ofsted_urn:
+          label: "Ofsted URN"
+        provider_status:
+          label: "Provider status"
+        nursery_type:
+          label: "Type"
+        nursery_subtype:
+          label: "Subtype"
+      employer_paye_reference:
+        question: "What is your employer PAYE reference?"
+        hint_html: |
+          <p class="govuk-body">
+            Enter your employer PAYE reference.
+          </p>
+          <p class="govuk-body">
+            It has:
+          </p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>a 3 digit tax office number</li>
+            <li>a forward slash</li>
+            <li>your employer reference</li>
+          </ul>
+          <p class="govuk-body">
+            For example, 123/AB456.
+          </p>
+          <p class="govuk-body">
+            You might see this called Employer PAYE reference or Pay As You Earn
+            reference on your records.
+          </p>
+      organisation_email_address:
+        question: "What is your organisation's email address?"
+      provide_teacher_details:
+        title: "Provide teacher details"
+        teacher_full_name:
+          label: "Full name"
+        teacher_email_address:
+          label: "Email address"
+        teacher_mobile_phone_number:
+          label: "Mobile phone number"
+        teacher_national_insurance_number:
+          label: "National Insurance number"
+          hint: "It’s on their National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’."
+        errors:
+          teacher_full_name:
+            blank: "Enter the teacher’s full name"
+          teacher_email_address:
+            blank: "Enter the teacher’s email address"
+            invalid: "Enter the teacher’s email address in the correct format"
+          teacher_mobile_phone_number:
+            blank: "Enter the teacher’s mobile phone number"
+          teacher_national_insurance_number:
+            blank: "Enter the teacher’s National Insurance number"
+      manage_teachers:
+        title: "Manage teachers"
+        add_another_teacher:
+          label: "Do you need to add another teacher?"
+        errors:
+          add_another_teacher:
+            invalid: "Select yes if you need to add another teacher"
+            at_least_one_teacher: "You need to add at least one teacher to continue"
+
