@@ -34,16 +34,16 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::Test::UserPersona d
 
     let(:csv_row) do
       {
-        "School name" => "Test School",
-        "First name" => "John",
-        "Last name" => "Smith",
-        "Date of birth" => "01/01/1990",
-        "NINO" => "AB123456C",
-        "ITT subject claimed" => "Mathematics",
-        "ITT year" => "2024/2025",
-        "TRN" => "1234567",
-        "Teaching subject" => "Maths",
-        "Expected result" => "Eligible"
+        "school_name" => "Test School",
+        "first_name" => "John",
+        "last_name" => "Smith",
+        "date_of_birth" => "01/01/1990",
+        "national_insurance_number" => "AB123456C",
+        "itt_subject_claimed" => "Mathematics",
+        "itt_year" => "2024/2025",
+        "teacher_reference_number" => "1234567",
+        "teaching_subject" => "Maths",
+        "expected_result" => "Eligible"
       }
     end
 
@@ -76,21 +76,69 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::Test::UserPersona d
     end
   end
 
+  describe "#to_csv_row" do
+    subject { described_class.new(csv_row) }
+
+    let(:csv_row) do
+      {
+        "claim_year" => "2025",
+        "expected_result" => "Eligible",
+        "notes" => "some notes",
+        "school_name" => "Test School",
+        "supply_teacher" => "no",
+        "full_term_contract" => "yes",
+        "employed_directly_by_school" => "yes",
+        "subject_to_poor_performance_measures" => "no",
+        "itt_year" => "2024/2025",
+        "more_than_50_of_hours_teaching_eligible_subjects" => "yes",
+        "teaching_subject" => "Maths",
+        "itt_subject_claimed" => "Mathematics",
+        "degree_subject" => "English",
+        "trainee" => "no",
+        "first_name" => "John",
+        "last_name" => "Smith",
+        "teacher_reference_number" => "1234567",
+        "date_of_birth" => "01/01/1990",
+        "national_insurance_number" => "AB123456C",
+        "trs_first_name" => "Bob",
+        "trs_last_name" => "Doe",
+        "trs_date_of_birth" => "02/02/1970",
+        "trs_national_insurance_number" => "AB123456D",
+        "trs_email_address" => "bob.doe@example.com",
+        "trs_induction_start_date" => "01/01/2010",
+        "trs_induction_completion_date" => "01/01/2011",
+        "trs_induction_status" => "???",
+        "trs_qts_award_date" => "01/01/2013",
+        "trs_itt_subject_codes" => "???",
+        "trs_itt_subjects" => "???",
+        "trs_itt_start_date" => "01/01/2012",
+        "trs_qualification_name" => "???",
+        "trs_degree_codes" => "???",
+        "trs_degree_names" => "???",
+        "trs_active_alert" => "no"
+      }
+    end
+
+    it "converts current record to csv row" do
+      expect(subject.to_csv_row).to eql(csv_row.values)
+    end
+  end
+
   describe "TRS data methods" do
     subject { described_class.new(csv_row) }
 
     let(:csv_row) do
       {
-        "School name" => "Test School",
-        "First name" => "John",
-        "Last name" => "Smith",
-        "Date of birth" => "01/01/1990",
-        "NINO" => "AB123456C",
-        "ITT subject claimed" => "Mathematics",
-        "ITT year" => "2024/2025",
-        "TRN" => "1234567",
-        "Teaching subject" => "Maths",
-        "Expected result" => "Eligible"
+        "school_name" => "Test School",
+        "first_name" => "John",
+        "last_name" => "Smith",
+        "date_of_birth" => "01/01/1990",
+        "national_insurance_number" => "AB123456C",
+        "itt_subject_claimed" => "Mathematics",
+        "itt_year" => "2024/2025",
+        "teacher_reference_number" => "1234567",
+        "teaching_subject" => "Maths",
+        "expected_result" => "Eligible"
       }
     end
 
@@ -129,16 +177,16 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::Test::UserPersona d
       context "when ITT subject is not eligible" do
         let(:csv_row) do
           {
-            "School name" => "Test School",
-            "First name" => "John",
-            "Last name" => "Smith",
-            "Date of birth" => "01/01/1990",
-            "NINO" => "AB123456C",
-            "ITT subject claimed" => "Art",
-            "ITT year" => "2024/2025",
-            "TRN" => "1234567",
-            "Teaching subject" => "Art",
-            "Expected result" => "Ineligible"
+            "school_name" => "Test School",
+            "first_name" => "John",
+            "last_name" => "Smith",
+            "date_of_birth" => "01/01/1990",
+            "national_insurance_number" => "AB123456C",
+            "itt_subject_claimed" => "Art",
+            "itt_year" => "2024/2025",
+            "teacher_reference_number" => "1234567",
+            "teaching_subject" => "Art",
+            "expected_result" => "Ineligible"
           }
         end
 
