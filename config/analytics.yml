@@ -19,6 +19,8 @@ shared:
     - sent_one_time_password_at # datetime, when OTP was sent
     - journey_class # string, what journey does this reminde relate to
     - deleted_at # datetime, when was this reminder soft deleted via unsubscription
+    - full_name # string, full name for reminder
+    - email_address # string, email to send reminder
   :tasks:
     - id # uuid, that uniquely identifies this task
     - name # string, name that identifies type of task
@@ -90,6 +92,21 @@ shared:
     - policy # string, which policy this claim is for
     - claimant_declaration # boolean, did claimant agree to declaration
     - decision_deadline # date, SLA date for OPs to make a decision on claim
+    - first_name # string, first name
+    - middle_name # string, middle name
+    - surname # string, last name
+    - date_of_birth # date, date of birth
+    - address_line_1 # string, address line 1
+    - address_line_2 # string, address line 2
+    - address_line_3 # string, address line 3
+    - address_line_4 # string, address line 4
+    - postcode # string, postcode
+    - national_insurance_number # string, national insurance number
+    - email_address # string, email address
+    - payroll_gender # string, gender used for payroll purposes
+    - practitioner_email_address # string, EY journey, practitioner email as entered by provider
+    - provider_contact_name # string, EY journey, persona that complete provider journey
+    - onelogin_uid # string, identifier given by OL
   :claimant_flags:
     - id # uuid, identifies the claimant flag
     - created_at # datetime, when the flag was created
@@ -257,6 +274,7 @@ shared:
     - phone_number # string, school contact number from GIAS
     - open_date # date, when the school opend
     - ukprn # string, external identifier of school
+    - postcode_sanitised # string, postcode
   :dfe_sign_in_users:
     - id # uuid, identifies DSI user
     - dfe_sign_in_id # string, external identifier
@@ -355,6 +373,15 @@ shared:
     - flagged_as_mismatch_on_teaching_start_year # boolean, previous claim has a further_education_teaching_start_year of 2020 (for year2 claims) or there is a mismatch (for year3 and onwards)
     - flagged_as_previously_start_year_matches_claim_false # boolean, previous rejected claim where provider start year did not match claimant start year
     - provider_verification_deadline # date, deadline date for when provider should verify a claim
+    - teacher_reference_number # string, TRN
+    - claimant_date_of_birth # date, DEPRECATED, Y1 alt idv
+    - claimant_postcode # string, DEPRECATED, Y1 alt idv
+    - claimant_national_insurance_number # string, DEPRECATED, Y1 alt idv
+    - provider_verification_claimant_date_of_birth # date, date of birth given by provider
+    - provider_verification_claimant_email # string, email given by provider
+    - provider_verification_claimant_national_insurance_number # string, national insurance number given by provider
+    - provider_verification_claimant_postcode # string, postcode given by provider
+    - work_email # string, email entered by claimant where IDV fails
   :further_education_payments_provider_flags:
     - id # uuid, not used for anything
     - reason # string, reason for flagging claims from this provider, for 25/26 AY this will always be clawbacks
@@ -378,6 +405,7 @@ shared:
     - lower_award_amount # decimal, lower amound that can be awarded to claimant
     - created_at # datetime, timestamp when record was created
     - updated_at # datetime, timestamp when record was last updated
+    - primary_key_contact_email_address # string, provider contact email
   :early_years_payment_eligibilities:
     - id # uuid, identifies the eligibility
     - nursery_urn # string, external identifier
@@ -400,6 +428,13 @@ shared:
     - provider_entered_contract_type # string, nursery supplies claimants contract type
     - practitioner_reminder_email_sent_count # integer, number of times practitioner has been reminded to complete claim
     - practitioner_reminder_email_last_sent_at # datetime, when last reminder was sent to practitioner
+    - provider_email_address # string, email address of the provider
+    - practitioner_first_name # string, claimant first name given by provider
+    - practitioner_surname # string, claimant last name given by provider
+    - alternative_idv_claimant_date_of_birth # date, date of birth for alt idv
+    - alternative_idv_claimant_postcode # string, postcode for alt idv
+    - alternative_idv_claimant_national_insurance_number # string, national insurance number for alt idv
+    - alternative_idv_claimant_email # string, email for alt idv
   :school_workforce_censuses:
     - id # uuid, identifies the school workforce census record
     - teacher_reference_number # string, external identifier for teacher
