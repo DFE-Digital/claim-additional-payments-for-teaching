@@ -446,8 +446,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_05_161503) do
     t.string "journey", null: false
     t.jsonb "steps", default: []
     t.datetime "updated_at", null: false
-    t.index "((answers ->> 'onelogin_uid'::text))", name: "sessions_one_login_uid_index"
-    t.index "((answers ->> 'onelogin_uid'::text)), ((answers #>> '{academic_year,start_year}'::text[])), ((answers #>> '{academic_year,end_year}'::text[]))", name: "sessions_one_login_existing_index"
+    t.index "((answers #>> '{onelogin_uid}'::text[]))", name: "sessions_one_login_uid_index"
     t.index ["expired"], name: "index_journeys_sessions_on_expired"
     t.index ["updated_at"], name: "index_journeys_sessions_on_updated_at"
   end
