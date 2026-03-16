@@ -76,7 +76,7 @@ RSpec.describe "Provider verified claims dashboard", feature_flag: [:fe_provider
       value: "Yes"
     )
     expect(page).to have_summary_item(
-      key: "Spend at least half timetabled teaching time teaching relevant courses",
+      key: "Spend at least half of timetabled time teaching the eligible FE courses the claimant listed",
       value: "Yes"
     )
   end
