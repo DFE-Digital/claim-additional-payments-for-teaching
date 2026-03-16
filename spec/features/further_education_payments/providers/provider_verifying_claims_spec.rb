@@ -41,7 +41,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       )
 
       expect(page).to have_content("Do you want to continue verifying this claim?")
-      expect(page).to have_content("This claim was started by Boris Admin")
+      expect(page).to have_content("The verification of this claim was started by Boris Admin")
 
       choose "Yes"
       click_on "Continue"
@@ -96,14 +96,14 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       )
 
       expect(page).to have_content("Do you want to continue verifying this claim?")
-      expect(page).to have_content("This claim was started by Boris Admin")
+      expect(page).to have_content("The verification of this claim was started by Boris Admin")
 
       choose "No, I just want to see the claim"
       click_on "Continue"
 
       expect(page).to have_text("Claim: read only mode")
       expect(page).to have_text("Claim reference: AB123456")
-      expect(page).to have_content("This claim was started by Boris Admin")
+      expect(page).to have_content("The verification of this claim was started by Boris Admin")
 
       expect(
         summary_row("Teaching responsibilities")
@@ -146,7 +146,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       )
 
       expect(page).to have_content("Do you want to continue verifying this claim?")
-      expect(page).to have_content("This claim was started by Boris Admin")
+      expect(page).to have_content("The verification of this claim was started by Boris Admin")
     end
   end
 
