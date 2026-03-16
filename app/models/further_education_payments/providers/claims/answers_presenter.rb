@@ -139,7 +139,7 @@ module FurtherEducationPayments
             },
             {
               key: {
-                text: "Spend at least half timetabled teaching time teaching relevant courses"
+                text: "Spend at least half of timetabled time teaching the eligible FE courses the claimant listed"
               },
               value: {
                 text: I18n.t(
