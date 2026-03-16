@@ -7,7 +7,7 @@
 </h1>
 
 <%= govuk_inset_text(
-  text: "This claim was started by #{@form.started_by}"
+  text: "The verification of this claim was started by #{@form.started_by}"
 ) %>
 
 <%= govuk_summary_card(title: "Role and experience") do |card| %>
@@ -185,7 +185,7 @@
     <% end %>
 
     <%= summary_list.with_row do |row| %>
-      <%= row.with_key(text: "Teaches 16-19-year-olds or those with EHCP") %>
+      <%= row.with_key(text: "Teaches 16-19 study programmes, T Levels or 16-19 apprentices") %>
       <%= row.with_value(
         text: form.half_teaching_hours
       ) %>
@@ -205,7 +205,7 @@
 <%= govuk_summary_card(title: "Subject area") do |card| %>
   <%= card.with_summary_list do |summary_list| %>
     <%= summary_list.with_row do |row| %>
-      <%= row.with_key(text: "Spend at least half timetabled teaching time teaching relevant courses") %>
+      <%= row.with_key(text: "Spend at least half of timetabled time teaching the eligible FE courses the claimant listed") %>
 
       <%= row.with_value(
         text: form.half_timetabled_teaching_time

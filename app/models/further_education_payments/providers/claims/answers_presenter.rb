@@ -128,7 +128,7 @@ module FurtherEducationPayments
             },
             {
               key: {
-                text: "Teaches 16-19-year-olds or those with EHCP"
+                text: "Teaches 16-19 study programmes, T Levels or 16-19 apprentices"
               },
               value: {
                 text: I18n.t(
@@ -139,7 +139,7 @@ module FurtherEducationPayments
             },
             {
               key: {
-                text: "Spend at least half timetabled teaching time teaching relevant courses"
+                text: "Spend at least half of timetabled time teaching the eligible FE courses the claimant listed"
               },
               value: {
                 text: I18n.t(
