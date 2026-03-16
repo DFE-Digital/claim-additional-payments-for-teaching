@@ -8,8 +8,7 @@ class MobileNumberForm < Form
     }
 
   validates :mobile_number,
-    format: {
-      with: /\A(\+44\s?)?(?:\d\s?){10,11}\z/,
+    mobile_number_format: {
       message: ->(form, _) { form.i18n_errors_path("invalid") }
     },
     if: -> { mobile_number.present? }
