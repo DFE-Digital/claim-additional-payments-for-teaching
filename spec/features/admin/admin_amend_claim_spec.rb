@@ -10,6 +10,7 @@ RSpec.feature "Admin amends a claim" do
     create(
       :claim,
       :submitted,
+      email_address: "old-email-address@example.com",
       eligibility_attributes: {teacher_reference_number: "1234567"},
       payroll_gender: :dont_know,
       date_of_birth: date_of_birth,
@@ -40,6 +41,8 @@ RSpec.feature "Admin amends a claim" do
 
     fill_in "Teacher reference number", with: "7654321"
     fill_in "National insurance number", with: "YZ873206D"
+    fill_in "Email address", with: "new-email-address@example.com"
+    fill_in "Mobile number", with: "07111111111"
     fill_in "Day", with: new_date_of_birth.day
     fill_in "Month", with: new_date_of_birth.month
     fill_in "Year", with: new_date_of_birth.year
@@ -61,6 +64,8 @@ RSpec.feature "Admin amends a claim" do
     expect(amendment.claim_changes).to eq({
       "teacher_reference_number" => ["1234567", "7654321"],
       "date_of_birth" => [date_of_birth, new_date_of_birth],
+      "email_address" => ["old-email-address@example.com", "new-email-address@example.com"],
+      "mobile_number" => [nil, "07111111111"],
       "national_insurance_number" => ["AB100000C", "YZ873206D"],
       "student_loan_plan" => ["plan_1", "plan_2"],
       "bank_sort_code" => ["010203", "111213"],
@@ -76,6 +81,8 @@ RSpec.feature "Admin amends a claim" do
 
     expect(claim.eligibility.reload.teacher_reference_number).to eq("7654321")
     expect(claim.date_of_birth).to eq(new_date_of_birth)
+    expect(claim.email_address).to eq("new-email-address@example.com")
+    expect(claim.mobile_number).to eq("07111111111")
     expect(claim.student_loan_plan).to eq("plan_2")
     expect(claim.bank_sort_code).to eq("111213")
     expect(claim.bank_account_number).to eq("18929492")
@@ -93,6 +100,8 @@ RSpec.feature "Admin amends a claim" do
 
     expect(page).to have_content("Teacher reference number\nchanged from 1234567 to 7654321")
     expect(page).to have_content("Date of birth\nchanged from #{I18n.l(date_of_birth)} to #{I18n.l(new_date_of_birth)}")
+    expect(page).to have_content("Email address\nchanged from old-email-address@example.com to new-email-address@example.com")
+    expect(page).to have_content("Mobile number\nchanged from [no details] to 07111111111")
     expect(page).to have_content("Student loan repayment plan\nchanged from Plan 1 to Plan 2")
     expect(page).to have_content("Bank sort code\nchanged from 010203 to 111213")
     expect(page).to have_content("Bank account number\nchanged from 47274828 to 18929492")

@@ -12,6 +12,8 @@ class Admin::AmendmentForm
 
   attribute :teacher_reference_number, :string
   attribute :national_insurance_number, :string
+  attribute :email_address, :string
+  attribute :mobile_number, :string
   attribute :date_of_birth, :date
   attribute :student_loan_plan, :string
   attribute :banking_name, :string
@@ -34,6 +36,27 @@ class Admin::AmendmentForm
       allow_blank: true,
       message: "Teacher reference number must be 7 digits"
     }
+
+  validates :email_address,
+    presence: {
+      message: "Enter an email address"
+    }
+
+  validates :email_address,
+    email_address_format: {
+      message: "Email address must be in the correct format"
+    },
+    length: {
+      maximum: Rails.application.config.email_max_length,
+      message: "Email address must be less than %{length} characters"
+    },
+    if: -> { email_address.present? }
+
+  validates :mobile_number,
+    mobile_number_format: {
+      message: "Mobile number must be in the correct format"
+    },
+    if: -> { mobile_number.present? }
 
   validates :date_of_birth,
     presence: {
@@ -104,6 +127,8 @@ class Admin::AmendmentForm
   def load_data_from_claim
     self.teacher_reference_number = eligibility.teacher_reference_number
     self.national_insurance_number = claim.national_insurance_number
+    self.email_address = claim.email_address
+    self.mobile_number = claim.mobile_number
     self.date_of_birth = claim.date_of_birth
     self.student_loan_plan = claim.student_loan_plan
 

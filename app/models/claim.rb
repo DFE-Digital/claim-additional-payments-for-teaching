@@ -7,6 +7,8 @@ class Claim < ApplicationRecord
   AMENDABLE_ATTRIBUTES = %i[
     national_insurance_number
     date_of_birth
+    email_address
+    mobile_number
     student_loan_plan
     has_student_loan
     bank_sort_code

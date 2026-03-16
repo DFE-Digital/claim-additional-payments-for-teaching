@@ -35,6 +35,8 @@ RSpec.describe "Admin claim amendments" do
 
         request_params = {
           amendment: {
+            email_address: claim.email_address,
+            mobile_number: claim.mobile_number,
             teacher_reference_number: "7654321",
             national_insurance_number: claim.national_insurance_number,
             bank_sort_code: "111213",
@@ -79,6 +81,8 @@ RSpec.describe "Admin claim amendments" do
           amendment: {
             teacher_reference_number: claim.eligibility.teacher_reference_number,
             national_insurance_number: claim.national_insurance_number,
+            email_address: claim.email_address,
+            mobile_number: claim.mobile_number,
             bank_sort_code: "11 12 13",
             bank_account_number: claim.bank_account_number,
             student_loan_plan: claim.student_loan_plan,
@@ -110,6 +114,8 @@ RSpec.describe "Admin claim amendments" do
           amendment: {
             teacher_reference_number: claim.eligibility.teacher_reference_number,
             national_insurance_number: claim.national_insurance_number,
+            email_address: claim.email_address,
+            mobile_number: claim.mobile_number,
             bank_sort_code: "111213",
             bank_account_number: claim.bank_account_number,
             student_loan_plan: claim.student_loan_plan,
@@ -137,6 +143,8 @@ RSpec.describe "Admin claim amendments" do
           amendment: {
             teacher_reference_number: "654321",
             national_insurance_number: claim.national_insurance_number,
+            email_address: claim.email_address,
+            mobile_number: claim.mobile_number,
             bank_sort_code: "111213",
             bank_account_number: "",
             student_loan_plan: claim.student_loan_plan,
@@ -168,6 +176,8 @@ RSpec.describe "Admin claim amendments" do
           amendment: {
             teacher_reference_number: claim.eligibility.teacher_reference_number,
             national_insurance_number: claim.national_insurance_number,
+            email_address: claim.email_address,
+            mobile_number: claim.mobile_number,
             bank_sort_code: claim.bank_sort_code,
             bank_account_number: claim.bank_account_number,
             student_loan_plan: claim.student_loan_plan,
