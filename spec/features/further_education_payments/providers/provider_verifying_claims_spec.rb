@@ -134,7 +134,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       ).to have_content("Not answered")
 
       expect(
-        summary_row("Teaches 16-19-year-olds or those with EHCP")
+        summary_row("Teaches 16-19 study programmes, T Levels or 16-19 apprentices")
       ).to have_content("Not answered")
 
       expect(summary_row("Spend at least half timetabled teaching time teaching relevant courses"))
@@ -302,7 +302,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       ).to have_content("20 hours or more per week")
 
       expect(
-        summary_row("Teaches 16-19-year-olds or those with EHCP")
+        summary_row("Teaches 16-19 study programmes, T Levels or 16-19 apprentices")
       ).to have_content("Yes")
 
       expect(summary_row("Spend at least half timetabled teaching time teaching relevant courses"))
@@ -491,7 +491,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       ).to have_content("20 hours or more per week")
 
       expect(
-        summary_row("Teaches 16-19-year-olds or those with EHCP")
+        summary_row("Teaches 16-19 study programmes, T Levels or 16-19 apprentices")
       ).to have_content("Yes")
 
       expect(summary_row("Spend at least half timetabled teaching time teaching relevant courses"))

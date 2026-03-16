@@ -128,7 +128,7 @@ module FurtherEducationPayments
             },
             {
               key: {
-                text: "Teaches 16-19-year-olds or those with EHCP"
+                text: "Teaches 16-19 study programmes, T Levels or 16-19 apprentices"
               },
               value: {
                 text: I18n.t(
