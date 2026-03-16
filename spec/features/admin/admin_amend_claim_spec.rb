@@ -120,6 +120,43 @@ RSpec.feature "Admin amends a claim" do
     expect(page).to have_text("Claim amended")
   end
 
+  scenario "Changing practitioner email address on an EY claim" do
+    claim = create(
+      :claim,
+      :submitted,
+      policy: Policies::EarlyYearsPayments,
+      practitioner_email_address: "old-practitioner-address@example.com"
+    )
+
+    visit admin_claim_url(claim)
+
+    click_on "Amend claim"
+
+    expect(page).to have_field(
+      "Practitioner email address",
+      with: "old-practitioner-address@example.com"
+    )
+
+    fill_in "Practitioner email address", with: "new-practitioner-address@example.com"
+
+    fill_in "Change notes", with: "update practitioner email address"
+
+    expect { click_on "Amend claim" }.to change { claim.reload.amendments.size }.by(1)
+
+    amendment = claim.amendments.last
+
+    expect(amendment.claim_changes).to eq({
+      "practitioner_email_address" => [
+        "old-practitioner-address@example.com",
+        "new-practitioner-address@example.com"
+      ]
+    })
+
+    expect(claim.practitioner_email_address).to eq(
+      "new-practitioner-address@example.com"
+    )
+  end
+
   scenario "Service operator cancels amending a claim" do
     visit admin_claim_url(claim)
 

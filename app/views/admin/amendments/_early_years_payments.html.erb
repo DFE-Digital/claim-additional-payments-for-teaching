@@ -1,0 +1,18 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-third">
+    <div class="govuk-body">
+      <%= label_tag(
+        "amendment-practitioner-email-address-field",
+        "Practitioner email address"
+      ) %>
+    </div>
+  </div>
+  <div class="govuk-grid-column-two-thirds">
+    <%= f.govuk_text_field(
+      :practitioner_email_address,
+      label: nil,
+      width: 10
+    ) %>
+  </div>
+</div>
+

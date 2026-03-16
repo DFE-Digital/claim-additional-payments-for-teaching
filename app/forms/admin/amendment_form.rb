@@ -87,6 +87,8 @@ class Admin::AmendmentForm
     case claim.policy
     when Policies::FurtherEducationPayments
       Admin::Amendments::FurtherEducationPaymentsForm
+    when Policies::EarlyYearsPayments
+      Admin::Amendments::EarlyYearsPaymentsForm
     else
       self
     end

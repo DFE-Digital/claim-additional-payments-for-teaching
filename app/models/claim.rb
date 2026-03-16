@@ -19,6 +19,7 @@ class Claim < ApplicationRecord
     address_line_3
     address_line_4
     postcode
+    practitioner_email_address
   ].freeze
   DECISION_DEADLINE = 19.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
