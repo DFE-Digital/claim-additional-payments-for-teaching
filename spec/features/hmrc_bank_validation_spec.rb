@@ -105,13 +105,21 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
 
   context "HMRC API returns a 200 response", :with_stubbed_hmrc_client do
     context "HMRC API passes bank details match" do
-      let(:hmrc_response) { double(name_match?: true, sort_code_correct?: true, status: 200, body: "Test response") }
-
       scenario "redirects user to next page" do
-        allow(hmrc_response).to receive(:success?).and_return(true)
-        allow(hmrc_response).to receive(:account_exists?).and_return(true)
-
         get_to_bank_details_page
+
+        stub_request(
+          :post,
+          "#{HMRC_TEST_BASE_URL}/misc/bank-account/verify/personal"
+        ).to_return(
+          status: 200,
+          body: {
+            sortCodeIsPresentOnEISCD: "yes",
+            accountExists: "yes",
+            nameMatches: "yes"
+          }.to_json,
+          headers: {"Content-Type" => "application/json"}
+        )
 
         # - Enter bank account details
         fill_in "Name on your account", with: bank_name
@@ -130,11 +138,21 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
         expect(answers.hmrc_bank_validation_succeeded?).to eq true
         expect(answers.hmrc_bank_validation_responses).not_to be_empty
 
-        # - HMRC API fails bank details match"
+        # - HMRC API fails bank details match
         click_on "Back"
 
-        allow(hmrc_response).to receive(:success?).and_return(false)
-        allow(hmrc_response).to receive(:account_exists?).and_return(false)
+        stub_request(
+          :post,
+          "#{HMRC_TEST_BASE_URL}/misc/bank-account/verify/personal"
+        ).to_return(
+          status: 200,
+          body: {
+            sortCodeIsPresentOnEISCD: "yes",
+            accountExists: "no",
+            nameMatches: "yes"
+          }.to_json,
+          headers: {"Content-Type" => "application/json"}
+        )
 
         # shows an error and allows through after three attempts
 

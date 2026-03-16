@@ -1,26 +1,40 @@
-RSpec.shared_context "with stubbed HMRC client", shared_context: :metadata do
-  let(:hmrc_response) do
-    double(
-      name_match?: name_match,
-      sort_code_correct?: sort_code_correct,
-      account_exists?: account_exists,
-      status: 200,
-      success?: name_match && account_exists && sort_code_correct,
-      body: "Test response"
-    )
-  end
+HMRC_TEST_BASE_URL = "https://test-hmrc.example.com"
 
-  let(:hmrc_client) { double(verify_personal_bank_account: hmrc_response) }
+RSpec.shared_context "with stubbed HMRC client", shared_context: :metadata do
   let(:name_match) { true }
   let(:account_exists) { true }
   let(:sort_code_correct) { true }
 
-  before do
-    @old_hmrc_client = Hmrc.client
-    Hmrc.client = hmrc_client
+  let(:hmrc_bank_verification_response_body) do
+    {
+      sortCodeIsPresentOnEISCD: sort_code_correct ? "yes" : "no",
+      accountExists: account_exists ? "yes" : "no",
+      nameMatches: name_match ? "yes" : "no"
+    }.to_json
   end
 
-  after { Hmrc.client = @old_hmrc_client }
+  before do
+    @old_base_url = Hmrc.configuration.base_url
+    Hmrc.configuration.base_url = HMRC_TEST_BASE_URL
+
+    stub_request(:post, "#{HMRC_TEST_BASE_URL}/oauth/token")
+      .to_return(
+        status: 200,
+        body: {access_token: "test-token", expires_in: 3600}.to_json,
+        headers: {"Content-Type" => "application/json"}
+      )
+
+    stub_request(:post, "#{HMRC_TEST_BASE_URL}/misc/bank-account/verify/personal")
+      .to_return(
+        status: 200,
+        body: hmrc_bank_verification_response_body,
+        headers: {"Content-Type" => "application/json"}
+      )
+  end
+
+  after do
+    Hmrc.configuration.base_url = @old_base_url
+  end
 end
 
 RSpec.shared_context "with HMRC bank validation enabled", shared_context: :metadata do
@@ -35,14 +49,17 @@ end
 
 RSpec.shared_context "with failing HMRC bank validation API request", shared_context: :metadata do
   before do
-    @old_hmrc_client = Hmrc.client
-    Hmrc.configure { |config| config.http_client = double(post: double(success?: false, body: "Test failure", status: 429)) }
-    Hmrc.client = Hmrc::Client.new
+    @old_base_url = Hmrc.configuration.base_url
+    Hmrc.configuration.base_url = HMRC_TEST_BASE_URL
+
+    Hmrc.client.send(:token=, nil)
+
+    stub_request(:post, "#{HMRC_TEST_BASE_URL}/oauth/token")
+      .to_return(status: 429, body: "Test failure")
   end
 
   after do
-    Hmrc.configure { |config| config.http_client = Faraday }
-    Hmrc.client = @old_hmrc_client
+    Hmrc.configuration.base_url = @old_base_url
   end
 end
 
