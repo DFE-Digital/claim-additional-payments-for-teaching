@@ -264,10 +264,8 @@ RSpec.shared_examples "Admin Checks" do |policy|
     click_link("Next:Previous claim mismatch")
 
     expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.fe_repeat_applicant_check.title"))
-    expect(page).to have_link("Next:Provider verification")
-    expect(page).to have_link("Previous:Identity confirmation")
-
-    click_link("Next:Provider verification")
+    choose "Yes"
+    click_on "Save and continue"
 
     expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.provider_verification.title"))
     expect(page).to have_link("Next:Student loan plan")

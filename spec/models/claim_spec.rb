@@ -399,6 +399,7 @@ RSpec.describe Claim, type: :model do
         it "returns true" do
           claim = create(:claim, :submitted, :further_education)
           create(:task, claim: claim, name: "claimant_check", passed: true)
+          create(:task, claim: claim, name: "fe_repeat_applicant_check", passed: true)
           expect(claim.approvable?).to eq true
         end
       end

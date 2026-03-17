@@ -225,7 +225,7 @@ RSpec.feature "Admin rejects a claim" do
   context "QA required for a rejected claim" do
     let(:policy) { Policies::FurtherEducationPayments }
 
-    let(:claim) { create(:claim, :submitted, policy: policy) }
+    let(:claim) { create(:claim, :submitted, :approveable, policy: policy) }
 
     around do |example|
       perform_enqueued_jobs { example.run }
