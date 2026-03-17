@@ -2,6 +2,7 @@ module Claims
   class VerifyPersonalBankAccountJob < ApplicationJob
     def perform(claim)
       return if claim.hmrc_bank_validation_succeeded
+      return unless FeatureFlag.enabled?(:retry_bank_details)
 
       response = get_hmrc_response(claim)
 

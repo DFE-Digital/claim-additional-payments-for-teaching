@@ -2,6 +2,8 @@ require "rails_helper"
 
 RSpec.describe Claims::VerifyPersonalBankAccountJob, type: :job do
   before do
+    FeatureFlag.enable!(:retry_bank_details)
+
     stub_request(:post, "https://test-api.service.hmrc.gov.uk/oauth/token")
       .with(
         body: {
