@@ -999,11 +999,6 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "#amendable?" do
-    it "returns false for a claim that hasn’t been submitted" do
-      claim = build(:claim, :submittable)
-      expect(claim.amendable?).to eq(false)
-    end
-
     it "returns true for a submitted claim" do
       claim = build(:claim, :submitted)
       expect(claim.amendable?).to eq(true)

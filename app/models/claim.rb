@@ -341,7 +341,7 @@ class Claim < ApplicationRecord
   end
 
   def amendable?
-    submitted? && !payrolled? && !personal_data_removed?
+    !payrolled? && !personal_data_removed?
   end
 
   def decision_undoable?
