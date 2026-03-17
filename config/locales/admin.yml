@@ -440,7 +440,7 @@ en:
         student_loan_plan:
           title: "Does the claimant’s student loan plan match the information we hold about their loan?"
         fe_repeat_applicant_check:
-          title: "Has the teaching start year been reviewed against last year’s claim?"
+          title: "Is this claim still valid despite the claimant being flagged on a previous claim as teaching more than 5 years in FE?"
         fe_provider_check:
           title: "Has the provider's response been checked for accuracy?"
         claimant_check:
