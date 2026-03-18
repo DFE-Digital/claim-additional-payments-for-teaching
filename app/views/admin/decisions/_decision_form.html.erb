@@ -47,18 +47,6 @@
                                        size: "l",
                                        text: decision_form.heading }) do %>
 
-    <% if claim.high_risk_ol_idv? %>
-      <% if current_admin.is_service_admin? %>
-        <%= govuk_warning_text do %>
-          This claim cannot be approved or rejected without approval from the Senior Responsible Officer.
-        <% end %>
-      <% else %>
-        <%= govuk_warning_text do %>
-          This claim cannot be approved or rejected without approval from the Senior Responsible Officer. Refer this claim to your line manager and the Claim Product Team.
-        <% end %>
-      <% end %>
-    <% end %>
-
     <%= f.govuk_radio_button :approved, true,
       label: {
         text: decision_form.approve_label_text

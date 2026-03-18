@@ -386,9 +386,5 @@ FactoryBot.define do
     trait :awaiting_practitioner do
       submitted_at { nil }
     end
-
-    trait :high_risk do
-      onelogin_idv_return_codes { OneLogin::ReturnCode::HIGH_RISK_CODES.sample(2) }
-    end
   end
 end
