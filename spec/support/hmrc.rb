@@ -1,4 +1,4 @@
-HMRC_TEST_BASE_URL = "https://test-hmrc.example.com"
+HMRC_TEST_BASE_URL = "https://test-api.service.hmrc.gov.uk"
 
 RSpec.shared_context "with stubbed HMRC client", shared_context: :metadata do
   let(:name_match) { true }
