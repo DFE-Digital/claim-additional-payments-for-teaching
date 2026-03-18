@@ -43,7 +43,23 @@ RSpec.describe AnalyticsImporter do
             "entity_table_name" => "claims",
             "event_tags" => ["20240101000000"],
             "data" => a_hash_including({"key" => "id", "value" => [claim.id]}),
-            "hidden_data" => [{"key" => "onelogin_uid", "value" => []}]
+            "hidden_data" => [
+              {"key" => "onelogin_uid", "value" => []},
+              {"key" => "first_name", "value" => []},
+              {"key" => "middle_name", "value" => []},
+              {"key" => "surname", "value" => []},
+              {"key" => "date_of_birth", "value" => []},
+              {"key" => "address_line_1", "value" => []},
+              {"key" => "address_line_2", "value" => []},
+              {"key" => "address_line_3", "value" => []},
+              {"key" => "address_line_4", "value" => []},
+              {"key" => "postcode", "value" => []},
+              {"key" => "national_insurance_number", "value" => []},
+              {"key" => "email_address", "value" => []},
+              {"key" => "payroll_gender", "value" => []},
+              {"key" => "practitioner_email_address", "value" => []},
+              {"key" => "provider_contact_name", "value" => []}
+            ]
           }
         ],
         ignore_unknown: true
