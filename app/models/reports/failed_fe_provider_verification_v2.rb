@@ -13,7 +13,9 @@ module Reports
       "Decision agent",
       "Failure reasons",
       "Not started qualification reasons",
-      "Not started qualification other reason"
+      "Not started qualification other reason",
+      "Claimant FE teaching start year",
+      "Provider verification FE teaching start year"
     ]
 
     def to_csv
@@ -70,7 +72,9 @@ module Reports
           decision_agent,
           failure_reasons,
           claim.eligibility.provider_verification_not_started_qualification_reasons,
-          claim.eligibility.provider_verification_not_started_qualification_reason_other
+          claim.eligibility.provider_verification_not_started_qualification_reason_other,
+          claim.eligibility.further_education_teaching_start_year,
+          claim.eligibility.provider_verification_teaching_start_year
         ]
       end
 
