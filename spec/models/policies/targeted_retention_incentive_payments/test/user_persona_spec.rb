@@ -113,8 +113,8 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::Test::UserPersona d
         "trs_itt_subjects" => "???",
         "trs_itt_start_date" => "01/01/2012",
         "trs_qualification_name" => "???",
-        "trs_degree_codes" => "???",
-        "trs_degree_names" => "???",
+        "trs_degree_codes" => [100003, 100005],
+        "trs_degree_names" => ["ceramics", "clinical engineering"],
         "trs_active_alert" => "no"
       }
     end
