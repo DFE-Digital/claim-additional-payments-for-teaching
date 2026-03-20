@@ -36,6 +36,7 @@ RSpec.shared_examples "a claim personal data scrubber" do |policy|
     claim = create(
       :claim,
       :submitted,
+      :approveable,
       policy: policy,
       updated_at: last_academic_year
     )
@@ -168,7 +169,7 @@ RSpec.shared_examples "a claim personal data scrubber" do |policy|
   it "also deletes expected details from the scrubbed claims’ amendments, setting a personal_data_removed_at timestamp on the amendments" do
     claim, amendment = nil
     travel_to last_academic_year - 1.week do
-      claim = create(:claim, :submitted, policy: policy)
+      claim = create(:claim, :submitted, :approveable, policy: policy)
       claim_changes = {
         "student_loan_plan" => ["plan_1", claim.student_loan_plan],
         "bank_sort_code" => ["457288", claim.bank_sort_code],
@@ -238,7 +239,7 @@ RSpec.shared_examples "a claim personal data scrubber" do |policy|
 
     approved_claim = create(
       :claim,
-      :submitted,
+      :approveable,
       policy: policy,
       journey_session: session_for_approved_claim
     )

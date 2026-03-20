@@ -179,12 +179,18 @@ FactoryBot.define do
     trait :auto_approved do
       submitted
       after(:build) do |claim, _|
+        claim.claim_checking_tasks.blocking_approval.each do |task|
+          task.update! passed: true
+        end
+
         create(:decision, :auto_approved, claim: claim)
       end
     end
 
     trait :approved do
       submitted
+      approveable
+
       after(:create) do |claim, evaluator|
         if evaluator.decision_creator
           create(:decision, claim: claim, approved: true, created_by: evaluator.decision_creator)
@@ -203,8 +209,15 @@ FactoryBot.define do
       submitted
 
       after(:create) do |claim|
-        ClaimCheckingTasks.new(claim).applicable_task_names.each do |task_name|
-          create(:task, :automated, :passed, name: task_name, claim: claim)
+        case claim.policy
+        when Policies::EarlyYearsPayments
+          claim.claim_checking_tasks.applicable_task_names.each do |task_name|
+            create(:task, :automated, :passed, name: task_name, claim: claim)
+          end
+        else
+          claim.claim_checking_tasks.blocking_approval.each do |task|
+            task.update! passed: true
+          end
         end
       end
     end
