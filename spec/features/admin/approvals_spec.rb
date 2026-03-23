@@ -98,4 +98,88 @@ RSpec.describe "Approvals" do
       end
     end
   end
+
+  context "when an claim already approved for the academic year for that policy exists" do
+    context "when another claim is already approved and payrolled for this policy with same email address" do
+      let(:claim_attributes) do
+        {
+          policy: Policies::StudentLoans,
+          email_address: "same-email@example.com"
+        }
+      end
+
+      let(:payroll_run) { create(:payroll_run) }
+
+      let(:approved_claim) do
+        claim = create(:claim, :approved, **claim_attributes)
+        create(:payment, claims: [claim], payroll_run:)
+
+        claim
+      end
+
+      let(:submitted_claim) { create(:claim, :submitted, **claim_attributes) }
+
+      before do
+        approved_claim
+        submitted_claim
+      end
+
+      it "shows an error with claim reference and submitted claim cannot be approved" do
+        sign_in_as_service_operator
+
+        visit new_admin_claim_decision_path(submitted_claim)
+
+        choose "Approve"
+        click_on "Confirm decision"
+
+        expect(page.body)
+          .to have_content(/Duplicate claim has already been approved with reference #{approved_claim.reference}/)
+      end
+    end
+
+    context "when multiple claims are already approved for the academic year" do
+      let(:claim_attributes) do
+        {
+          policy: Policies::StudentLoans,
+          email_address: "same-email@example.com"
+        }
+      end
+
+      let(:payroll_run) { create(:payroll_run) }
+
+      let(:approved_claim_1) do
+        claim = create(:claim, :approved, **claim_attributes)
+        create(:payment, claims: [claim], payroll_run:)
+
+        claim
+      end
+
+      let(:approved_claim_2) do
+        claim = create(:claim, :approved, **claim_attributes)
+        create(:payment, claims: [claim], payroll_run:)
+
+        claim
+      end
+
+      let(:submitted_claim) { create(:claim, :submitted, **claim_attributes) }
+
+      before do
+        approved_claim_1
+        approved_claim_2
+        submitted_claim
+      end
+
+      it "shows an error with multiple claim references in plural form" do
+        sign_in_as_service_operator
+
+        visit new_admin_claim_decision_path(submitted_claim)
+
+        choose "Approve"
+        click_on "Confirm decision"
+
+        expect(page.body)
+          .to have_content(/Duplicate claims have already been approved with references #{approved_claim_1.reference}, #{approved_claim_2.reference}/)
+      end
+    end
+  end
 end

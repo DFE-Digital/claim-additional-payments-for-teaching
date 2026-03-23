@@ -30,6 +30,8 @@ RSpec.describe "Provider unverified claims dashboard", feature_flag: [:fe_provid
       :further_education,
       :submitted,
       eligibility:,
+      first_name: "Jo",
+      surname: "Bloggs",
       submitted_at: Date.new(2024, 12, 13),
       created_at: Date.new(2024, 12, 13)
     )
