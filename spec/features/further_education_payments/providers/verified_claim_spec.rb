@@ -72,11 +72,11 @@ RSpec.describe "Provider verified claims dashboard", feature_flag: [:fe_provider
       value: "20 hours or more per week"
     )
     expect(page).to have_summary_item(
-      key: "Teaches 16-19-year-olds or those with EHCP",
+      key: "Teaches 16-19 study programmes, T Levels or 16-19 apprentices",
       value: "Yes"
     )
     expect(page).to have_summary_item(
-      key: "Spend at least half timetabled teaching time teaching relevant courses",
+      key: "Spend at least half of timetabled time teaching the eligible FE courses the claimant listed",
       value: "Yes"
     )
   end

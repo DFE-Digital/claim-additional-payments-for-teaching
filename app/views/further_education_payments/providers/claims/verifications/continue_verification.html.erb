@@ -25,7 +25,7 @@
     ) do |f| %>
       <%= f.govuk_error_summary %>
       <%= govuk_inset_text(
-        text: "This claim was started by #{@form.started_by}"
+        text: "The verification of this claim was started by #{@form.started_by}"
       ) %>
 
       <%= f.govuk_collection_radio_buttons(

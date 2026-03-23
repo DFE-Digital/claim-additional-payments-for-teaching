@@ -41,7 +41,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       )
 
       expect(page).to have_content("Do you want to continue verifying this claim?")
-      expect(page).to have_content("This claim was started by Boris Admin")
+      expect(page).to have_content("The verification of this claim was started by Boris Admin")
 
       choose "Yes"
       click_on "Continue"
@@ -96,14 +96,14 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       )
 
       expect(page).to have_content("Do you want to continue verifying this claim?")
-      expect(page).to have_content("This claim was started by Boris Admin")
+      expect(page).to have_content("The verification of this claim was started by Boris Admin")
 
       choose "No, I just want to see the claim"
       click_on "Continue"
 
       expect(page).to have_text("Claim: read only mode")
       expect(page).to have_text("Claim reference: AB123456")
-      expect(page).to have_content("This claim was started by Boris Admin")
+      expect(page).to have_content("The verification of this claim was started by Boris Admin")
 
       expect(
         summary_row("Teaching responsibilities")
@@ -134,10 +134,10 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       ).to have_content("Not answered")
 
       expect(
-        summary_row("Teaches 16-19-year-olds or those with EHCP")
+        summary_row("Teaches 16-19 study programmes, T Levels or 16-19 apprentices")
       ).to have_content("Not answered")
 
-      expect(summary_row("Spend at least half timetabled teaching time teaching relevant courses"))
+      expect(summary_row("Spend at least half of timetabled time teaching the eligible FE courses the claimant listed"))
         .to have_content("Not answered")
 
       # Go back to the claim, it should still be assigned to the previous user and asks again
@@ -146,7 +146,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       )
 
       expect(page).to have_content("Do you want to continue verifying this claim?")
-      expect(page).to have_content("This claim was started by Boris Admin")
+      expect(page).to have_content("The verification of this claim was started by Boris Admin")
     end
   end
 
@@ -302,10 +302,10 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       ).to have_content("20 hours or more per week")
 
       expect(
-        summary_row("Teaches 16-19-year-olds or those with EHCP")
+        summary_row("Teaches 16-19 study programmes, T Levels or 16-19 apprentices")
       ).to have_content("Yes")
 
-      expect(summary_row("Spend at least half timetabled teaching time teaching relevant courses"))
+      expect(summary_row("Spend at least half of timetabled time teaching the eligible FE courses the claimant listed"))
         .to have_content("Yes")
 
       expect(
@@ -491,10 +491,10 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       ).to have_content("20 hours or more per week")
 
       expect(
-        summary_row("Teaches 16-19-year-olds or those with EHCP")
+        summary_row("Teaches 16-19 study programmes, T Levels or 16-19 apprentices")
       ).to have_content("Yes")
 
-      expect(summary_row("Spend at least half timetabled teaching time teaching relevant courses"))
+      expect(summary_row("Spend at least half of timetabled time teaching the eligible FE courses the claimant listed"))
         .to have_content("Yes")
 
       expect(
@@ -674,7 +674,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
         summary_row("Subject to disciplinary action")
       ).to have_content("No")
 
-      expect(summary_row("Spend at least half timetabled teaching time teaching relevant courses"))
+      expect(summary_row("Spend at least half of timetabled time teaching the eligible FE courses the claimant listed"))
         .to have_content("Yes")
 
       expect(
