@@ -31,8 +31,6 @@ module Admin
     end
 
     def processable?
-      return false if claim.high_risk_ol_idv? && !current_admin.is_service_admin?
-
       true
     end
 

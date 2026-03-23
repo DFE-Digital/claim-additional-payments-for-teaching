@@ -203,10 +203,6 @@ class Claim < ApplicationRecord
   end
 
   def approvable?(current_admin: nil)
-    if current_admin && high_risk_ol_idv? && !current_admin.is_service_admin?
-      return false
-    end
-
     submitted? &&
       !held? &&
       claim_checking_tasks.blocking_approval.none? &&
@@ -218,10 +214,6 @@ class Claim < ApplicationRecord
   end
 
   def rejectable?(current_admin: nil)
-    if current_admin && high_risk_ol_idv? && !current_admin.is_service_admin?
-      return false
-    end
-
     !held? && policy.rejectable?(self)
   end
 
@@ -432,10 +424,6 @@ class Claim < ApplicationRecord
 
   def failed_one_login_idv?
     onelogin_idv_at.present? && !identity_confirmed_with_onelogin?
-  end
-
-  def high_risk_ol_idv?
-    ((onelogin_idv_return_codes || []) & OneLogin::ReturnCode::HIGH_RISK_CODES).size > 0
   end
 
   def hmrc_name_match
