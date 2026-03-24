@@ -2,6 +2,14 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: redirect(Rails.application.config.guidance_url)
 
+  resources :widgets, path: "early-years-teachers-financial-incentive-payments", only: [] do
+    collection do
+      get :sign_in, path: "sign-in"
+    end
+  end
+
+  get "/early-years-teachers-financial-incentive-payments/auth/teacher/callback", to: "widgets#callback"
+
   get "/claim/auth/tid/callback", to: "omniauth_callbacks#callback"
   get "/auth/failure", to: "omniauth_callbacks#failure"
   get "/auth/onelogin", to: "omniauth_callbacks#onelogin"
