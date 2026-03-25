@@ -73,8 +73,8 @@ module Reports
           failure_reasons,
           claim.eligibility.provider_verification_not_started_qualification_reasons,
           claim.eligibility.provider_verification_not_started_qualification_reason_other,
-          claim.eligibility.further_education_teaching_start_year,
-          claim.eligibility.provider_verification_teaching_start_year
+          AcademicYear.new(claim.eligibility.further_education_teaching_start_year).to_s(:long),
+          AcademicYear.new(claim.eligibility.provider_verification_teaching_start_year).to_s(:long)
         ]
       end
 

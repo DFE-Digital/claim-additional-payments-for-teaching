@@ -90,8 +90,8 @@ RSpec.describe Reports::FailedFeProviderVerificationV2 do
       expect(rows[0]["Failure reasons"]).to eql("performance_measures,disciplinary_action")
       expect(rows[0]["Not started qualification reasons"]).to eql("[]")
       expect(rows[0]["Not started qualification other reason"]).to eql(nil)
-      expect(rows[0]["Claimant FE teaching start year"]).to eql("2023")
-      expect(rows[0]["Provider verification FE teaching start year"]).to eql("2023")
+      expect(rows[0]["Claimant FE teaching start year"]).to eql("2023 to 2024")
+      expect(rows[0]["Provider verification FE teaching start year"]).to eql("2023 to 2024")
     end
   end
 end
