@@ -54,6 +54,10 @@ FactoryBot.define do
       routing_name { Journeys::EarlyYearsTeachers::Practitioner.routing_name }
     end
 
+    trait :early_years_teachers_financial_incentive_payments do
+      routing_name { Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name }
+    end
+
     trait :closed do
       open_for_submissions { false }
     end
