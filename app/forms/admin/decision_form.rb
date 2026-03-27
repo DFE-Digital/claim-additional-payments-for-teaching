@@ -28,6 +28,7 @@ module Admin
     validate :validate_payroll_gender_present_for_approval
     validate :validate_no_payment_prevention_for_approval
     validate :validate_not_decided
+    validate :validate_no_duplicate_approved_claims_in_same_academic_year
 
     def initialize(claim:, qa:, current_admin:, params: {})
       @claim = claim
@@ -149,6 +150,26 @@ module Admin
       end
 
       # TODO: here check reasons against policy
+    end
+
+    def validate_no_duplicate_approved_claims_in_same_academic_year
+      return unless approve?
+
+      duplicate_approved_claims = claim.policy::DuplicateFinder.new(claim)
+        .find_approved_claims_in_same_academic_year
+        .select(:reference)
+
+      unless duplicate_approved_claims.empty?
+        references = duplicate_approved_claims.map(&:reference).join(", ")
+
+        message = if duplicate_approved_claims.one?
+          "Duplicate claim has already been approved with reference #{references}"
+        else
+          "Duplicate claims have already been approved with references #{references}"
+        end
+
+        errors.add(:approved, message)
+      end
     end
 
     def send_claim_result_email

@@ -45,7 +45,7 @@ RSpec.describe ClaimMailer, type: :mailer do
     end
 
     it "includes a personalisation key for 'first_name'" do
-      expect(mail.personalisation[:first_name]).to eql("Jo")
+      expect(mail.personalisation[:first_name]).to eql(claim.first_name)
       expect(mail.body).to be_empty
     end
 

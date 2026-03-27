@@ -84,8 +84,8 @@ FactoryBot.define do
     end
 
     trait :with_details_from_dfe_identity do
-      first_name { "Jo" }
-      surname { "Bloggs" }
+      first_name { Faker::Name.first_name }
+      surname { Faker::Name.last_name }
       date_of_birth { 20.years.ago.to_date }
       national_insurance_number { generate(:national_insurance_number) }
     end
@@ -293,7 +293,7 @@ FactoryBot.define do
 
     trait :with_bank_details do
       bank_or_building_society { :personal_bank_account }
-      banking_name { "Jo Bloggs" }
+      banking_name { [first_name, surname].join(" ") }
       bank_sort_code { rand(100000..999999) }
       bank_account_number { rand(10000000..99999999) }
     end

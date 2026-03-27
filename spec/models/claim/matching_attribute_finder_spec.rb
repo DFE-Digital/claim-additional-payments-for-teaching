@@ -129,10 +129,27 @@ RSpec.describe Claim::MatchingAttributeFinder do
       expect(matching_claims).to be_empty
     end
 
-    it "includes a claim with a matching teacher reference number" do
-      claim_with_matching_attribute = create(:claim, :submitted, eligibility_attributes: {teacher_reference_number: source_claim.eligibility.teacher_reference_number})
+    it "includes claims with matching teacher reference number" do
+      claim_with_matching_attribute = create(
+        :claim,
+        :submitted,
+        academic_year: source_claim.academic_year,
+        eligibility_attributes: {
+          teacher_reference_number: source_claim.eligibility.teacher_reference_number
+        }
+      )
 
-      expect(matching_claims).to eq([claim_with_matching_attribute])
+      claim_with_matching_attribute2 = create(
+        :claim,
+        :submitted,
+        academic_year: source_claim.academic_year,
+        policy: Policies::TargetedRetentionIncentivePayments,
+        eligibility_attributes: {
+          teacher_reference_number: source_claim.eligibility.teacher_reference_number
+        }
+      )
+
+      expect(matching_claims).to contain_exactly(claim_with_matching_attribute, claim_with_matching_attribute2)
     end
 
     it "includes a claim with a matching national insurance number" do

@@ -51,12 +51,12 @@ class Claim
             policy::Eligibility.where(
               "LOWER(#{concatenated_columns}) = LOWER(?)",
               vals
-            ).select(:id)
+            )
           end
         end
       end.compact_blank
 
-      eligibility_match_query = Claim.where(eligibility_id: eligibility_ids)
+      eligibility_match_query = Claim.where(eligibility: eligibility_ids)
       match_queries = match_queries.or(eligibility_match_query)
 
       claims_to_compare.merge(match_queries)

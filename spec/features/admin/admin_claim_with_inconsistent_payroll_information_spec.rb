@@ -22,7 +22,17 @@ RSpec.feature "Admin checking a claim with inconsistent payroll information" do
 
   scenario "cannot approve a second claim from an individual whilst the payroll information on the claims is inconsistent" do
     approved_claim = create(:claim, :approved, personal_details.merge(bank_sort_code: "112233", bank_account_number: "29482823"))
-    second_inconsistent_claim = create(:claim, :submitted, personal_details.merge(bank_sort_code: "582939", bank_account_number: "74727752"))
+
+    # second claim can't be the same policy in order to be approved
+    second_inconsistent_claim = create(
+      :claim,
+      :submitted,
+      personal_details.merge(
+        bank_sort_code: "582939",
+        bank_account_number: "74727752",
+        policy: Policies::TargetedRetentionIncentivePayments
+      )
+    )
 
     click_on "Claims"
     find("a[href='#{admin_claim_tasks_path(second_inconsistent_claim)}']").click

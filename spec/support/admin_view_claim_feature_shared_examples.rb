@@ -20,28 +20,53 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     )
   }
 
+  let(:multiple_claim_policy) do
+    Policies.all.reject { |p| p == policy }.sample
+  end
+
+  let(:multiple_eligibility_trait) do
+    if multiple_claim_policy == Policies::FurtherEducationPayments
+      [:eligible, :with_trn, :provider_verification_completed]
+    else
+      :eligible
+    end
+  end
+
   let!(:multiple_claim) {
     create(
       :claim,
       :submitted,
-      policy: policy,
-      eligibility_trait: eligibility_trait
+      policy: multiple_claim_policy,
+      eligibility_trait: multiple_eligibility_trait
     )
   }
 
   let!(:similar_claim) {
-    duplicate_attribute = if policy == Policies::InternationalRelocationPayments
-      {passport_number: multiple_claim.eligibility.passport_number}
+    if multiple_claim_policy == Policies::EarlyYearsPayments
+      # EY doesn't have any eligibility attributes that are considered for duplicate checks
+      # Use NINO
+      create(
+        :claim,
+        :submitted,
+        policy: multiple_claim_policy,
+        eligibility_trait: multiple_eligibility_trait,
+        national_insurance_number: multiple_claim.national_insurance_number
+      )
     else
-      {teacher_reference_number: multiple_claim.eligibility.teacher_reference_number}
+      duplicate_attribute = if multiple_claim_policy == Policies::InternationalRelocationPayments
+        {passport_number: multiple_claim.eligibility.passport_number}
+      else
+        {teacher_reference_number: multiple_claim.eligibility.teacher_reference_number}
+      end
+
+      create(
+        :claim,
+        :submitted,
+        policy: multiple_claim_policy,
+        eligibility_trait: multiple_eligibility_trait,
+        eligibility_attributes: duplicate_attribute
+      )
     end
-    create(
-      :claim,
-      :submitted,
-      policy: policy,
-      eligibility_trait: eligibility_trait,
-      eligibility_attributes: duplicate_attribute
-    )
   }
 
   let!(:approved_awaiting_payroll_claim) {
