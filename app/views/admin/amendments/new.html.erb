@@ -44,6 +44,33 @@
     </div>
   </div>
 
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+      <div class="govuk-body">
+        <%= label_tag "amendment-email-address-field", "Email address" %>
+      </div>
+    </div>
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_text_field :email_address,
+        label: nil,
+        width: 10 %>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+      <div class="govuk-body">
+        <%= label_tag "amendment-mobile-number-field", "Mobile number" %>
+      </div>
+    </div>
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_text_field :mobile_number,
+        label: nil,
+        width: 10 %>
+    </div>
+  </div>
+
+
   <fieldset class="govuk-fieldset">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-third">
@@ -183,7 +210,7 @@
 
   <% if lookup_context.exists?("admin/amendments/_#{f.object.claim.policy.locale_key}") %>
     <%= render(
-      partial: "further_education_payments",
+      partial: f.object.claim.policy.locale_key,
       locals: { f: f }
     ) %>
   <% end %>

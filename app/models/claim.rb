@@ -7,6 +7,8 @@ class Claim < ApplicationRecord
   AMENDABLE_ATTRIBUTES = %i[
     national_insurance_number
     date_of_birth
+    email_address
+    mobile_number
     student_loan_plan
     has_student_loan
     bank_sort_code
@@ -17,6 +19,7 @@ class Claim < ApplicationRecord
     address_line_3
     address_line_4
     postcode
+    practitioner_email_address
   ].freeze
   DECISION_DEADLINE = 19.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
@@ -338,7 +341,7 @@ class Claim < ApplicationRecord
   end
 
   def amendable?
-    submitted? && !payrolled? && !personal_data_removed?
+    !payrolled? && !personal_data_removed?
   end
 
   def decision_undoable?
