@@ -225,6 +225,12 @@ Rails.application.routes.draw do
     end
   end
 
+  match(
+    "/further-education-payment-providers/landing-page",
+    to: "further_education_payments/providers/claims#index",
+    via: :all
+  )
+
   # We still want to know about 404s in case of missing a route, but silence a whitelist instead to reduce error noise
   # This is not exhastive, so add more if there are obvious requests to ignore
 
