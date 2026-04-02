@@ -11,6 +11,7 @@ module AutomatedChecks
       end
 
       def perform
+        return if claim.policy == Policies::StudentLoans # disabled as algorithm has errors and should be redesigned and mapped to current service logic
         return unless required?
         return unless awaiting_task?
 

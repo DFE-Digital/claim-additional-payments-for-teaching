@@ -136,31 +136,12 @@ module AutomatedChecks
 
             before { claim_arg.eligibility.update!(claim_school: school) }
 
-            describe "#note" do
-              subject(:note) { claim_arg.notes.last }
-              let!(:journey_configuration) { create(:journey_configuration, policy.to_s.underscore, current_academic_year: "2022/2023") }
+            it "returns early and does not create an employment task or note" do
+              verifier = described_class.new(claim: claim_arg)
 
-              before { perform }
-
-              describe "#body" do
-                subject(:body) { note.body }
-
-                it "returns 'Eligible' with the schools of employment" do
-                  expect(body).to eq("[Employment] - Eligible:\n<pre>Current school: LA Code: 202 / Establishment Number: 8091\nClaim school: LA Code: 202 / Establishment Number: 8091\nClaim school: LA Code: 370 / Establishment Number: 4027\n</pre>\n")
-                end
-              end
-
-              describe "#label" do
-                subject(:label) { note.label }
-
-                it { is_expected.to eq("employment") }
-              end
-
-              describe "#created_by" do
-                subject(:created_by) { note.created_by }
-
-                it { is_expected.to eq(nil) }
-              end
+              expect { verifier.perform }
+                .to not_change { claim_arg.tasks.where(name: "employment").count }
+                .and not_change { claim_arg.notes.where(label: "employment").count }
             end
           end
         end
