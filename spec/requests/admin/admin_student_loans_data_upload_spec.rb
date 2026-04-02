@@ -36,14 +36,6 @@ RSpec.describe "SLC (Student Loans Company) data upload " do
       end
     end
 
-    it "returns a unauthorized response for support agents" do
-      sign_in_to_admin_with_role(DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
-
-      post admin_student_loans_data_uploads_path
-
-      expect(response).to have_http_status(:unauthorized)
-    end
-
     context "when a valid CSV is uploaded" do
       subject(:upload) do
         post admin_student_loans_data_uploads_path, params: {student_loans_data_upload: {file: file}}

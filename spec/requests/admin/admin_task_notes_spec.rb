@@ -27,14 +27,5 @@ RSpec.describe "admin/notes controller for task notes" do
       expect(flash[:alert]).to eq("Enter a note")
       expect(claim.notes.count).to eq 0
     end
-
-    it "refuses requests from users without the service operator role" do
-      sign_in_to_admin_with_role(DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
-
-      post admin_claim_task_notes_path(claim, task_name), params: {note: {body: "Some note"}}
-
-      expect(response).to have_http_status(:unauthorized)
-      expect(response.body).to include("Not authorised")
-    end
   end
 end

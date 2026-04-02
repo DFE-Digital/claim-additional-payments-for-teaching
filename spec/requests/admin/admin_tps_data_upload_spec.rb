@@ -39,14 +39,6 @@ RSpec.describe "TPS data upload" do
       end
     end
 
-    it "returns a unauthorized response for support agents" do
-      sign_in_to_admin_with_role(DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
-
-      post admin_tps_data_uploads_path
-
-      expect(response).to have_http_status(:unauthorized)
-    end
-
     context "when a valid CSV is uploaded" do
       def upload_tps_data_csm_file(file)
         perform_enqueued_jobs do

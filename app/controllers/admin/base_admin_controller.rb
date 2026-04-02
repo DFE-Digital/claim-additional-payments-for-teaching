@@ -35,14 +35,6 @@ module Admin
       admin_user.is_service_operator?
     end
 
-    def support_agent_signed_in?
-      admin_user.is_support_agent?
-    end
-
-    def ensure_service_team
-      render "admin/auth/failure", status: :unauthorized unless service_operator_signed_in? || support_agent_signed_in?
-    end
-
     def ensure_service_operator
       render "admin/auth/failure", status: :unauthorized unless service_operator_signed_in?
     end

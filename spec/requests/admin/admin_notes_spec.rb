@@ -15,15 +15,6 @@ RSpec.describe "admin/notes controller" do
       expect(response.body).to include("Need to verify the student loan amount")
       expect(response.body).to include("by #{user.full_name}")
     end
-
-    it "refuses requests from users without the service operator role" do
-      sign_in_to_admin_with_role(DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
-
-      get admin_claim_notes_path(claim)
-
-      expect(response).to have_http_status(:unauthorized)
-      expect(response.body).to include("Not authorised")
-    end
   end
 
   describe "admin/notes#create" do
@@ -39,15 +30,6 @@ RSpec.describe "admin/notes controller" do
       note = claim.notes.last
       expect(note.body).to eq("Some note")
       expect(note.created_by).to eq(@signed_in_user)
-    end
-
-    it "refuses requests from users without the service operator role" do
-      sign_in_to_admin_with_role(DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
-
-      post admin_claim_notes_path(claim), params: {note: {body: "Some note"}}
-
-      expect(response).to have_http_status(:unauthorized)
-      expect(response.body).to include("Not authorised")
     end
   end
 end

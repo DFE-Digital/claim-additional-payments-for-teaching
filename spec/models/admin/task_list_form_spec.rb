@@ -226,9 +226,9 @@ RSpec.describe Admin::TaskListForm do
 
     context "when assignee filters are applied" do
       it "returns ClaimPresenters matching the filters" do
-        assignee_1 = create(:dfe_signin_user, :support_agent)
+        assignee_1 = create(:dfe_signin_user, :service_operator)
 
-        assignee_2 = create(:dfe_signin_user, :support_agent)
+        assignee_2 = create(:dfe_signin_user, :service_operator)
 
         claim_1 = create(
           :claim,
