@@ -297,6 +297,182 @@ module AutomatedChecks
             expect { perform }.not_to change { [claim_arg.reload.notes.count, claim_arg.tasks.count] }
           end
         end
+
+        # With current_academic_year "2022/2023":
+        # Previous financial year: Apr 6 2021 to Apr 5 2022
+        context "when checking Student Loans claim school employment in previous financial year" do
+          it "passes when the claimant was employed at the claim school during the previous financial year" do
+            create(
+              :journey_configuration, :student_loans, current_academic_year: "2022/2023"
+            )
+
+            current_school = create(
+              :school, :student_loans_eligible,
+              establishment_number: 1234,
+              local_authority: local_authority_camden
+            )
+
+            claim_school = create(
+              :school, :student_loans_eligible,
+              establishment_number: 5678,
+              local_authority: local_authority_barnsley
+            )
+
+            claim = create(
+              :claim, :submitted,
+              policy: Policies::StudentLoans,
+              submitted_at: DateTime.new(2022, 1, 12, 13, 0, 0)
+            )
+
+            claim.eligibility.update!(
+              attributes_for(
+                :student_loans_eligibility, :eligible,
+                current_school_id: current_school.id,
+                teacher_reference_number: 1334426
+              )
+            )
+            claim.eligibility.update!(claim_school: claim_school)
+
+            # TPS record at current school within submission month window (Dec 2021 - Jan 2022)
+            create(
+              :teachers_pensions_service,
+              teacher_reference_number: 1334426,
+              la_urn: 202,
+              school_urn: 1234,
+              start_date: DateTime.new(2022, 1, 1, 16, 0, 0)
+            )
+
+            # TPS record at claim school during the previous financial year
+            create(
+              :teachers_pensions_service,
+              teacher_reference_number: 1334426,
+              la_urn: 370,
+              school_urn: 5678,
+              start_date: DateTime.new(2021, 9, 1, 16, 0, 0),
+              end_date: DateTime.new(2022, 2, 1, 16, 0, 0)
+            )
+
+            described_class.new(claim: claim).perform
+            task = claim.tasks.find_by(name: "employment")
+
+            expect(task.claim_verifier_match).to eq("all")
+            expect(task.passed).to eq(true)
+          end
+
+          it "does not pass when the claimant's employment at the claim school ended before the previous financial year" do
+            create(:journey_configuration, :student_loans, current_academic_year: "2022/2023")
+
+            current_school = create(
+              :school, :student_loans_eligible,
+              establishment_number: 1234,
+              local_authority: local_authority_camden
+            )
+
+            claim_school = create(
+              :school, :student_loans_eligible,
+              establishment_number: 5678,
+              local_authority: local_authority_barnsley
+            )
+
+            claim = create(
+              :claim, :submitted,
+              policy: Policies::StudentLoans,
+              submitted_at: DateTime.new(2022, 1, 12, 13, 0, 0)
+            )
+
+            claim.eligibility.update!(
+              attributes_for(
+                :student_loans_eligibility, :eligible,
+                current_school_id: current_school.id,
+                teacher_reference_number: 1334426
+              )
+            )
+            claim.eligibility.update!(claim_school: claim_school)
+
+            # TPS record at current school within submission month window (Dec 2021 - Jan 2022)
+            create(
+              :teachers_pensions_service,
+              teacher_reference_number: 1334426,
+              la_urn: 202,
+              school_urn: 1234,
+              start_date: DateTime.new(2022, 1, 1, 16, 0, 0)
+            )
+
+            # TPS record at claim school that ENDED BEFORE the previous financial year (before Apr 6 2021)
+            create(
+              :teachers_pensions_service,
+              teacher_reference_number: 1334426,
+              la_urn: 370,
+              school_urn: 5678,
+              start_date: DateTime.new(2020, 6, 1, 16, 0, 0),
+              end_date: DateTime.new(2021, 3, 1, 16, 0, 0)
+            )
+
+            described_class.new(claim: claim).perform
+            task = claim.tasks.find_by(name: "employment")
+
+            expect(task.claim_verifier_match).to eq("none")
+            expect(task.passed).to be_nil
+          end
+
+          it "does not pass when the claimant's employment at the claim school started after the previous financial year" do
+            create(
+              :journey_configuration, :student_loans, current_academic_year: "2022/2023"
+            )
+
+            current_school = create(
+              :school, :student_loans_eligible,
+              establishment_number: 1234,
+              local_authority: local_authority_camden
+            )
+
+            claim_school = create(
+              :school, :student_loans_eligible,
+              establishment_number: 5678,
+              local_authority: local_authority_barnsley
+            )
+
+            claim = create(
+              :claim, :submitted,
+              policy: Policies::StudentLoans,
+              submitted_at: DateTime.new(2022, 1, 12, 13, 0, 0)
+            )
+
+            claim.eligibility.update!(
+              attributes_for(
+                :student_loans_eligibility, :eligible,
+                current_school_id: current_school.id,
+                teacher_reference_number: 1334426
+              )
+            )
+            claim.eligibility.update!(claim_school: claim_school)
+
+            # TPS record at current school within submission month window (Dec 2021 - Jan 2022)
+            create(
+              :teachers_pensions_service,
+              teacher_reference_number: 1334426,
+              la_urn: 202,
+              school_urn: 1234,
+              start_date: DateTime.new(2022, 1, 1, 16, 0, 0)
+            )
+
+            # TPS record at claim school that STARTED AFTER the previous financial year (after Apr 5 2022)
+            create(
+              :teachers_pensions_service,
+              teacher_reference_number: 1334426,
+              la_urn: 370,
+              school_urn: 5678,
+              start_date: DateTime.new(2022, 5, 1, 16, 0, 0),
+              end_date: DateTime.new(2022, 8, 1, 16, 0, 0)
+            )
+
+            described_class.new(claim: claim).perform
+            task = claim.tasks.find_by(name: "employment")
+
+            expect(task.claim_verifier_match).to eq("none")
+            expect(task.passed).to be_nil
+          end
+        end
       end
     end
   end
