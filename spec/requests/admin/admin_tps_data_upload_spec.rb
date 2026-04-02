@@ -203,27 +203,18 @@ RSpec.describe "TPS data upload" do
           )
         end
 
-        it "runs the tasks, adds notes and redirects to the right page" do
-          aggregate_failures "testing tasks and notes" do
-            expect { upload_tps_data_csm_file(file) }.to(
-              change do
-                [
-                  claim_matched.reload.tasks.size,
-                  claim_no_match.reload.tasks.size,
-                  claim_no_data.reload.tasks.size,
-                  claim_matched.reload.notes.size,
-                  claim_no_match.reload.notes.size,
-                  claim_no_data.reload.notes.size
-                ]
-              end
-            )
-
-            expect(claim_matched.tasks.last.claim_verifier_match).to eq "all"
-            expect(claim_no_match.tasks.last.claim_verifier_match).to eq "none"
-            expect(claim_no_data.tasks.last.claim_verifier_match).to be_nil
-            expect(claim_matched.notes.last[:body]).to eq "[Employment] - Eligible:\n<pre>Current school: LA Code: #{school.local_authority.code} / Establishment Number: #{school.establishment_number}\nClaim school: LA Code: #{school.local_authority.code} / Establishment Number: #{school.establishment_number}\n</pre>\n"
-            expect(claim_no_match.notes.last[:body]).to eq "[Employment] - Ineligible:\n<pre>Current school: LA Code: 111 / Establishment Number: 2222\nClaim school: LA Code: 111 / Establishment Number: 2222\n</pre>\n"
-            expect(claim_no_data.notes.last[:body]).to eq "[Employment] - No data"
+        it "does not create employment tasks or notes and redirects to the right page" do
+          aggregate_failures "no tasks or notes created for TSLR" do
+            expect { upload_tps_data_csm_file(file) }.to not_change {
+              [
+                claim_matched.reload.tasks.size,
+                claim_no_match.reload.tasks.size,
+                claim_no_data.reload.tasks.size,
+                claim_matched.reload.notes.size,
+                claim_no_match.reload.notes.size,
+                claim_no_data.reload.notes.size
+              ]
+            }
 
             expect(response).to redirect_to(admin_claims_path)
           end
@@ -238,18 +229,14 @@ RSpec.describe "TPS data upload" do
             CSV
           end
 
-          it "runs the tasks, adds notes and redirects to the right page", flaky: true do
-            aggregate_failures "testing tasks and notes" do
-              expect { upload_tps_data_csm_file(file) }.to(
-                change do
-                  [
-                    claim_matched.reload.tasks.size,
-                    claim_matched.reload.notes.size
-                  ]
-                end
-              )
-              expect(claim_matched.tasks.last.claim_verifier_match).to eq "none"
-              expect(claim_matched.notes.last[:body]).to eq "[Employment] - Ineligible:\n<pre>Current school: LA Code: 371 / Establishment Number: #{school.establishment_number}\nClaim school: LA Code: 371 / Establishment Number: #{school.establishment_number}\nClaim school: LA Code: #{school.local_authority.code} / Establishment Number: #{school.establishment_number}\n</pre>\n"
+          it "does not create employment tasks or notes and redirects to the right page", flaky: true do
+            aggregate_failures "no tasks or notes created for TSLR" do
+              expect { upload_tps_data_csm_file(file) }.to not_change {
+                [
+                  claim_matched.reload.tasks.size,
+                  claim_matched.reload.notes.size
+                ]
+              }
 
               expect(response).to redirect_to(admin_claims_path)
             end
