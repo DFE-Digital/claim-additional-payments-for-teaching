@@ -11,10 +11,17 @@ class TeachersPensionsService < ApplicationRecord
   # Be careful with boundary comparisons and time zones.
 
   scope :by_teacher_reference_number, ->(teacher_reference_number) { where(teacher_reference_number: teacher_reference_number) }
-  scope :between_claim_dates, ->(start_date, end_date) { where(start_date: start_date..end_date) }
-  scope :claim_dates_interval, ->(latest_start_date, earliest_end_date) { where(start_date: ..latest_start_date).or(where(end_date: earliest_end_date..)) }
   scope :ended_on_or_after, ->(earliest_end_date) { where(end_date: earliest_end_date..) }
   scope :employed_between, ->(start_date, end_date) { where(end_date: start_date..).and(where(start_date: ..end_date)) }
+
+  scope :covering_dates, ->(first_date, last_date) do
+    where(
+      <<~SQL, last_date: last_date, first_date: first_date
+        start_date < :last_date
+        AND (end_date >= :first_date OR end_date IS NULL)
+      SQL
+    )
+  end
 
   def self.recent_tps_school(claim_date:, teacher_reference_number:)
     earliest_end_date = (claim_date - RECENT_TPS_FULL_MONTHS).beginning_of_month
@@ -55,5 +62,10 @@ class TeachersPensionsService < ApplicationRecord
   def self.school_for_tps_record(tps_record)
     # The TPS data is labelled 'URN' but is actually the DfE establishment number
     School.open.joins(:local_authority).find_by(establishment_number: tps_record.school_urn, local_authority: {code: tps_record.la_urn})
+  end
+
+  def for_school?(school)
+    school_urn == school.establishment_number &&
+      la_urn == school.local_authority.code
   end
 end

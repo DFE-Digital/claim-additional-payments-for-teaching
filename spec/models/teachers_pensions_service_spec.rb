@@ -120,4 +120,166 @@ RSpec.describe TeachersPensionsService do
       end
     end
   end
+
+  describe ".covering_dates" do
+    it "includes a record fully within the date range" do
+      record = create(
+        :teachers_pensions_service,
+        teacher_reference_number: "1234567",
+        start_date: Date.new(2023, 3, 1),
+        end_date: Date.new(2023, 3, 31)
+      )
+
+      result = described_class.covering_dates(
+        Date.new(2023, 1, 1),
+        Date.new(2023, 6, 1)
+      )
+
+      expect(result).to include(record)
+    end
+
+    it "includes a record that starts before and ends within the date range" do
+      record = create(
+        :teachers_pensions_service,
+        teacher_reference_number: "1234567",
+        start_date: Date.new(2022, 11, 1),
+        end_date: Date.new(2023, 2, 15)
+      )
+
+      result = described_class.covering_dates(
+        Date.new(2023, 1, 1),
+        Date.new(2023, 6, 1)
+      )
+
+      expect(result).to include(record)
+    end
+
+    it "includes a record that starts within and ends after the date range" do
+      record = create(
+        :teachers_pensions_service,
+        teacher_reference_number: "1234567",
+        start_date: Date.new(2023, 5, 1),
+        end_date: Date.new(2023, 8, 31)
+      )
+
+      result = described_class.covering_dates(
+        Date.new(2023, 1, 1),
+        Date.new(2023, 6, 1)
+      )
+
+      expect(result).to include(record)
+    end
+
+    it "includes a record that completely spans the date range" do
+      record = create(
+        :teachers_pensions_service,
+        teacher_reference_number: "1234567",
+        start_date: Date.new(2022, 6, 1),
+        end_date: Date.new(2023, 12, 31)
+      )
+
+      result = described_class.covering_dates(
+        Date.new(2023, 1, 1),
+        Date.new(2023, 6, 1)
+      )
+
+      expect(result).to include(record)
+    end
+
+    it "includes a record with a nil end_date when start_date is before last_date" do
+      record = create(
+        :teachers_pensions_service,
+        teacher_reference_number: "1234567",
+        start_date: Date.new(2023, 3, 1),
+        end_date: nil
+      )
+
+      result = described_class.covering_dates(
+        Date.new(2023, 1, 1),
+        Date.new(2023, 6, 1)
+      )
+
+      expect(result).to include(record)
+    end
+
+    it "excludes a record that ends before the date range starts" do
+      record = create(
+        :teachers_pensions_service,
+        teacher_reference_number: "1234567",
+        start_date: Date.new(2022, 6, 1),
+        end_date: Date.new(2022, 12, 31)
+      )
+
+      result = described_class.covering_dates(
+        Date.new(2023, 1, 1),
+        Date.new(2023, 6, 1)
+      )
+
+      expect(result).not_to include(record)
+    end
+
+    it "excludes a record that starts on or after the last_date" do
+      record = create(
+        :teachers_pensions_service,
+        teacher_reference_number: "1234567",
+        start_date: Date.new(2023, 7, 1),
+        end_date: Date.new(2023, 8, 31)
+      )
+
+      result = described_class.covering_dates(
+        Date.new(2023, 1, 1),
+        Date.new(2023, 6, 1)
+      )
+
+      expect(result).not_to include(record)
+    end
+
+    it "includes a record whose end_date equals the first_date exactly" do
+      record = create(
+        :teachers_pensions_service,
+        teacher_reference_number: "1234567",
+        start_date: Date.new(2022, 11, 1),
+        end_date: Date.new(2023, 1, 1)
+      )
+
+      result = described_class.covering_dates(
+        Date.new(2023, 1, 1),
+        Date.new(2023, 6, 1)
+      )
+
+      expect(result).to include(record)
+    end
+
+    it "excludes a record whose end_date is one day before the first_date" do
+      record = create(
+        :teachers_pensions_service,
+        teacher_reference_number: "1234567",
+        start_date: Date.new(2022, 11, 1),
+        end_date: Date.new(2022, 12, 31)
+      )
+
+      result = described_class.covering_dates(
+        Date.new(2023, 1, 1),
+        Date.new(2023, 6, 1)
+      )
+
+      expect(result).not_to include(record)
+    end
+
+    it "excludes a record with a nil end_date when start_date is on or after last_date" do
+      record = create(
+        :teachers_pensions_service,
+        teacher_reference_number: "1234567",
+        start_date: Date.new(2023, 7, 1),
+        end_date: nil
+      )
+
+      result = described_class.covering_dates(
+        Date.new(2023, 1, 1),
+        Date.new(2023, 6, 1)
+      )
+
+      expect(result).not_to include(record)
+    end
+  end
 end
