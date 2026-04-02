@@ -44,13 +44,21 @@ module AutomatedChecks
       end
 
       def no_match
-        return unless claimant_tps_records.empty? || !eligible?
+        if claimant_tps_records.empty?
+          # call no_data first
+          raise "Attempting to create a no match when no tps records exist"
+        end
+
+        return if eligible?
 
         create_task(match: :none)
       end
 
       def matched
-        return unless eligible?
+        unless eligible?
+          # call no_match first
+          raise "Attempting to create a match when the claim is not eligible"
+        end
 
         create_task(match: :all, passed: true)
       end
@@ -115,7 +123,8 @@ module AutomatedChecks
       end
 
       def note_body(match:)
-        return "[Employment] - No data" if claimant_tps_records.empty?
+        return "[Employment] - No data" if match.nil?
+
         notes = []
 
         uniq_tps_schools_in_month_of_claim = tps_records_during_month_of_claim
