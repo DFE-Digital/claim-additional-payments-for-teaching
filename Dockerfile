@@ -13,7 +13,8 @@ RUN apk update
 RUN apk add icu=~76.1-r1 # force vulnerability fix
 RUN apk add pcre2=~10.47-r0 # force vulnerability fix
 RUN apk add zlib=~1.3.2-r0 # force vulnerability fix
-RUN apk add bash postgresql-dev tzdata nodejs curl libc6-compat shared-mime-info
+RUN apk add nodejs=~24.14.1-r0 # force vulnerability fix
+RUN apk add bash postgresql-dev tzdata curl libc6-compat shared-mime-info
 
 # ------------------------------------------------------------------------------
 # dependencies
