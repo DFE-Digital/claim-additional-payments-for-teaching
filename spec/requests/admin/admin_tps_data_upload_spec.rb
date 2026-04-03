@@ -171,9 +171,9 @@ RSpec.describe "TPS data upload" do
         let(:csv) do
           <<~CSV
             Teacher reference number,NINO,Start Date,End Date,LA URN,School URN,Employer ID
-            1000106,ZX043155C,01/07/2022,30/09/2022,#{school.local_authority.code},#{school.establishment_number},1122
+            1000106,ZX043155C,01/07/2022,30/09/2022,371,111123,1122
             1000107,ZX043155C,01/07/2022,30/09/2022,111,2222,1122
-            1000106,ZX043155C,01/07/2021,30/03/2022,#{school.local_authority.code},#{school.establishment_number},1122
+            1000106,ZX043155C,01/04/2021,30/03/2022,371,111123,1122
           CSV
         end
 
@@ -229,9 +229,27 @@ RSpec.describe "TPS data upload" do
             expect(claim_matched.tasks.last.claim_verifier_match).to eq "all"
             expect(claim_no_match.tasks.last.claim_verifier_match).to eq "none"
             expect(claim_no_data.tasks.last.claim_verifier_match).to be_nil
-            expect(claim_matched.notes.last[:body]).to eq "[Employment] - Eligible:\n<pre>Current school: LA Code: #{school.local_authority.code} / Establishment Number: #{school.establishment_number}\nClaim school: LA Code: #{school.local_authority.code} / Establishment Number: #{school.establishment_number}\n</pre>\n"
-            expect(claim_no_match.notes.last[:body]).to eq "[Employment] - Ineligible:\n<pre>Current school: LA Code: 111 / Establishment Number: 2222\nClaim school: LA Code: 111 / Establishment Number: 2222\n</pre>\n"
-            expect(claim_no_data.notes.last[:body]).to eq "[Employment] - No data"
+
+            expect(claim_matched.notes.last[:body]).to eq(
+              <<~TEXT
+                [Employment] - Eligible:
+                <pre>Current school: LA Code: 371 / Establishment Number: 111123
+                Claim school: LA Code: 371 / Establishment Number: 111123
+                </pre>
+              TEXT
+            )
+
+            expect(claim_no_match.notes.last[:body]).to eq(
+              <<~TEXT
+                [Employment] - Ineligible:
+                <pre>Current school: LA Code: 111 / Establishment Number: 2222
+                </pre>
+              TEXT
+            )
+
+            expect(claim_no_data.notes.last[:body]).to eq(
+              "[Employment] - No data"
+            )
 
             expect(response).to redirect_to(admin_claims_path)
           end
