@@ -389,6 +389,90 @@ module AutomatedChecks
             expect(task.claim_verifier_match).to eq("none")
             expect(task.passed).to be_nil
           end
+
+          it "passes when claim school employment starts exactly on 6 April (previous FY start boundary)" do
+            create(:journey_configuration, :student_loans, current_academic_year: "2025/2026")
+
+            current_school = create(:school, :student_loans_eligible,
+              establishment_number: 1234,
+              local_authority: local_authority_camden)
+
+            claim_school = create(:school, :student_loans_eligible,
+              establishment_number: 5678,
+              local_authority: local_authority_barnsley)
+
+            claim = create(:claim, :submitted,
+              policy: Policies::StudentLoans,
+              submitted_at: DateTime.new(2025, 1, 12, 13, 0, 0))
+
+            claim.eligibility.update!(
+              attributes_for(:student_loans_eligibility, :eligible,
+                current_school_id: current_school.id,
+                teacher_reference_number: 1334426)
+            )
+            claim.eligibility.update!(claim_school: claim_school)
+
+            create(:teachers_pensions_service,
+              teacher_reference_number: 1334426,
+              la_urn: 202,
+              school_urn: 1234,
+              start_date: DateTime.new(2025, 1, 1, 16, 0, 0))
+
+            create(:teachers_pensions_service,
+              teacher_reference_number: 1334426,
+              la_urn: 370,
+              school_urn: 5678,
+              start_date: DateTime.new(2024, 4, 6, 0, 0, 0),
+              end_date: DateTime.new(2024, 6, 1, 16, 0, 0))
+
+            described_class.new(claim: claim).perform
+            task = claim.tasks.find_by(name: "employment")
+
+            expect(task.claim_verifier_match).to eq("all")
+            expect(task.passed).to eq(true)
+          end
+
+          it "passes when claim school employment ends exactly on 5 April (previous FY end boundary)" do
+            create(:journey_configuration, :student_loans, current_academic_year: "2025/2026")
+
+            current_school = create(:school, :student_loans_eligible,
+              establishment_number: 1234,
+              local_authority: local_authority_camden)
+
+            claim_school = create(:school, :student_loans_eligible,
+              establishment_number: 5678,
+              local_authority: local_authority_barnsley)
+
+            claim = create(:claim, :submitted,
+              policy: Policies::StudentLoans,
+              submitted_at: DateTime.new(2025, 1, 12, 13, 0, 0))
+
+            claim.eligibility.update!(
+              attributes_for(:student_loans_eligibility, :eligible,
+                current_school_id: current_school.id,
+                teacher_reference_number: 1334426)
+            )
+            claim.eligibility.update!(claim_school: claim_school)
+
+            create(:teachers_pensions_service,
+              teacher_reference_number: 1334426,
+              la_urn: 202,
+              school_urn: 1234,
+              start_date: DateTime.new(2025, 1, 1, 16, 0, 0))
+
+            create(:teachers_pensions_service,
+              teacher_reference_number: 1334426,
+              la_urn: 370,
+              school_urn: 5678,
+              start_date: DateTime.new(2025, 3, 1, 16, 0, 0),
+              end_date: DateTime.new(2025, 4, 5, 0, 0, 0))
+
+            described_class.new(claim: claim).perform
+            task = claim.tasks.find_by(name: "employment")
+
+            expect(task.claim_verifier_match).to eq("all")
+            expect(task.passed).to eq(true)
+          end
         end
       end
     end
