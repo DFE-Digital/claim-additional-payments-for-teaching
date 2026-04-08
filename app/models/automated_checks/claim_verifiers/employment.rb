@@ -7,11 +7,9 @@ module AutomatedChecks
       def initialize(claim:, admin_user: nil)
         self.admin_user = admin_user
         self.claim = claim
-        self.teachers_pensions_service = TeachersPensionsService.by_teacher_reference_number(claim.eligibility.teacher_reference_number)
       end
 
       def perform
-        return if claim.policy == Policies::StudentLoans # disabled as algorithm has errors and should be redesigned and mapped to current service logic
         return unless required?
         return unless awaiting_task?
 
@@ -24,38 +22,10 @@ module AutomatedChecks
         claim.eligibility.teacher_reference_number.present?
       end
 
-      attr_accessor :admin_user, :claim, :teachers_pensions_service
+      attr_accessor :admin_user, :claim
 
       def awaiting_task?
         claim.tasks.where(name: TASK_NAME).count.zero?
-      end
-
-      def teachers_pensions_service_schools
-        return [] if teachers_pensions_service.empty?
-
-        @teachers_pensions_service_schools ||= begin
-          from = claim.submitted_at.beginning_of_month.prev_month
-          to = claim.submitted_at.end_of_month
-
-          teachers_pensions_service
-            .between_claim_dates(from, to)
-            .map { |r| [r.la_urn, r.school_urn] }
-            .uniq
-        end
-      end
-
-      def teachers_pensions_service_claim_schools
-        return [] unless teachers_pensions_service.any? && claim.policy == Policies::StudentLoans
-
-        @teachers_pensions_service_claim_schools ||= begin
-          latest_start_date = end_of_previous_financial_year - 1.month
-          earliest_end_date = start_of_previous_financial_year + 1.month
-
-          teachers_pensions_service
-            .claim_dates_interval(latest_start_date, earliest_end_date)
-            .map { |r| [r.la_urn, r.school_urn] }
-            .uniq
-        end
       end
 
       def start_of_previous_financial_year
@@ -68,35 +38,74 @@ module AutomatedChecks
       end
 
       def no_data
-        return unless teachers_pensions_service.empty?
+        return unless claimant_tps_records.empty?
 
         create_task(match: nil)
       end
 
       def no_match
-        return unless teachers_pensions_service.empty? || !eligible?
+        if claimant_tps_records.empty?
+          # call no_data first
+          raise "Attempting to create a no match when no tps records exist"
+        end
+
+        return if eligible?
 
         create_task(match: :none)
       end
 
       def matched
-        return unless eligible?
+        unless eligible?
+          # call no_match first
+          raise "Attempting to create a match when the claim is not eligible"
+        end
 
         create_task(match: :all, passed: true)
       end
 
       def eligible?
-        eligible_current_school = eligible_school?(teachers_pensions_service_schools, claim.eligibility.current_school)
-
-        return eligible_current_school unless claim.policy == Policies::StudentLoans && eligible_current_school
-
-        eligible_school?(teachers_pensions_service_claim_schools, claim.eligibility.claim_school)
+        if claim.policy == Policies::StudentLoans
+          worked_at_eligible_school_during_month_of_making_claim? &&
+            worked_at_eligible_school_during_previous_financial_year?
+        else
+          worked_at_eligible_school_during_month_of_making_claim?
+        end
       end
 
-      def eligible_school?(tps_schools, school)
-        tps_schools.select do |code, establishment_number|
-          school.local_authority.code == code && school.establishment_number == establishment_number
-        end.any?
+      def worked_at_eligible_school_during_month_of_making_claim?
+        school_during_claim_month = claim.eligibility.current_school
+
+        tps_records_during_month_of_claim.any? do |tps_record|
+          tps_record.for_school?(school_during_claim_month)
+        end
+      end
+
+      def tps_records_during_month_of_claim
+        previous_month_start = claim.submitted_at.beginning_of_month.prev_month
+        end_of_month = claim.submitted_at.end_of_month
+
+        claimant_tps_records.covering_dates(previous_month_start, end_of_month)
+      end
+
+      def worked_at_eligible_school_during_previous_financial_year?
+        school_during_previous_financial_year = claim.eligibility.claim_school
+
+        tps_records_during_previous_financial_year.any? do |tps_record|
+          tps_record.for_school?(school_during_previous_financial_year)
+        end
+      end
+
+      def tps_records_during_previous_financial_year
+        claimant_tps_records.covering_dates(
+          start_of_previous_financial_year,
+          end_of_previous_financial_year
+        )
+      end
+
+      def claimant_tps_records
+        TeachersPensionsService.where(
+          teacher_reference_number: claim.eligibility.teacher_reference_number
+        )
       end
 
       def create_task(match:, passed: nil)
@@ -113,28 +122,45 @@ module AutomatedChecks
         task
       end
 
-      def create_note(match:)
-        body = if teachers_pensions_service.empty?
-          "[Employment] - No data"
-        else
-          schools_details = ""
-          teachers_pensions_service_schools.each do |school|
-            schools_details += "Current school: LA Code: #{school[0]} / Establishment Number: #{school[1]}\n"
-          end
+      def note_body(match:)
+        return "[Employment] - No data" if match.nil?
 
-          teachers_pensions_service_claim_schools.each do |school|
-            schools_details += "Claim school: LA Code: #{school[0]} / Establishment Number: #{school[1]}\n"
-          end
+        notes = []
 
-          <<~HTML
-            [Employment] - #{(match == :none) ? "Ine" : "E"}ligible:
-            <pre>#{schools_details}</pre>
-          HTML
+        uniq_tps_schools_in_month_of_claim = tps_records_during_month_of_claim
+          .map { |tps_record| [tps_record.la_urn, tps_record.school_urn] }
+          .uniq
+
+        uniq_tps_schools_in_month_of_claim.each do |la_urn, school_urn|
+          notes << "Current school: LA Code: #{la_urn} / Establishment Number: #{school_urn}"
         end
 
+        if claim.policy == Policies::StudentLoans
+          uniq_tps_schools_in_previous_financial_year = tps_records_during_previous_financial_year
+            .map { |tps_record| [tps_record.la_urn, tps_record.school_urn] }
+            .uniq
+
+          uniq_tps_schools_in_previous_financial_year.each do |la_urn, school_urn|
+            notes << "Claim school: LA Code: #{la_urn} / Establishment Number: #{school_urn}"
+          end
+        end
+
+        eligible_state = ((match == :all) ? "Eligible" : "Ineligible")
+
+        prefix = "[Employment] - #{eligible_state}:"
+
+        schools_details = notes.join("\n")
+
+        <<~HTML
+          #{prefix}
+          <pre>#{schools_details}\n</pre>
+        HTML
+      end
+
+      def create_note(match:)
         claim.notes.create!(
           {
-            body: body,
+            body: note_body(match: match),
             label: TASK_NAME,
             created_by: admin_user
           }
