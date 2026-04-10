@@ -8,6 +8,6 @@
     "govuk-frontend": "^5.13.0"
   },
   "devDependencies": {
-    "prettier": "^3.8.1"
+    "prettier": "^3.8.2"
   }
 }
