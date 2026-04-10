@@ -161,4 +161,113 @@ RSpec.feature "Admin task list filtering" do
     expect(page).not_to have_content("CLAIM001")
     expect(page).not_to have_content("CLAIM003")
   end
+
+  scenario "filters claims by employment match statuses" do
+    claim_passed = create(
+      :claim,
+      :submitted,
+      :current_academic_year,
+      policy: Policies::StudentLoans,
+      reference: "EMPMATCH"
+    )
+
+    create(
+      :task,
+      name: "employment",
+      claim: claim_passed,
+      passed: true,
+      claim_verifier_match: :all,
+      manual: false
+    )
+
+    claim_no_match = create(
+      :claim,
+      :submitted,
+      :current_academic_year,
+      policy: Policies::StudentLoans,
+      reference: "EMPNONE"
+    )
+
+    create(
+      :task, :claim_verifier_context,
+      name: "employment",
+      claim: claim_no_match,
+      passed: nil,
+      claim_verifier_match: :none,
+      manual: false,
+      created_by: nil
+    )
+
+    claim_no_data = create(
+      :claim,
+      :submitted,
+      :current_academic_year,
+      policy: Policies::StudentLoans,
+      reference: "EMPNODAT"
+    )
+
+    create(
+      :task, :claim_verifier_context,
+      name: "employment",
+      claim: claim_no_data,
+      passed: nil,
+      claim_verifier_match: nil,
+      manual: false,
+      created_by: nil
+    )
+
+    sign_in_as_service_operator
+
+    visit admin_task_lists_path
+
+    click_on "Student Loans"
+
+    expect(page).to have_content("3 claims found")
+    expect(page).to have_content("EMPMATCH")
+    expect(page).to have_content("EMPNONE")
+    expect(page).to have_content("EMPNODAT")
+
+    click_on "Show filters"
+
+    # Filter to only show "No match" employment tasks
+    within_fieldset "Employment" do
+      uncheck "Passed"
+      uncheck "Failed"
+      uncheck "No data"
+      uncheck "Incomplete"
+    end
+
+    click_on "Apply"
+
+    expect(page).to have_content("1 claims found")
+    expect(page).to have_content("EMPNONE")
+    expect(page).not_to have_content("EMPMATCH")
+    expect(page).not_to have_content("EMPNODAT")
+
+    # Filter to only show "No data" employment tasks
+    within_fieldset "Employment" do
+      uncheck "No match"
+      check "No data"
+    end
+
+    click_on "Apply"
+
+    expect(page).to have_content("1 claims found")
+    expect(page).to have_content("EMPNODAT")
+    expect(page).not_to have_content("EMPMATCH")
+    expect(page).not_to have_content("EMPNONE")
+
+    # Filter to only show "Passed" employment tasks
+    within_fieldset "Employment" do
+      uncheck "No data"
+      check "Passed"
+    end
+
+    click_on "Apply"
+
+    expect(page).to have_content("1 claims found")
+    expect(page).to have_content("EMPMATCH")
+    expect(page).not_to have_content("EMPNONE")
+    expect(page).not_to have_content("EMPNODAT")
+  end
 end

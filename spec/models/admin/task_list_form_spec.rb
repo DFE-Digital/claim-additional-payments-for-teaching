@@ -224,6 +224,190 @@ RSpec.describe Admin::TaskListForm do
       end
     end
 
+    context "when filtering by employment match statuses" do
+      it "filters claims by no_match employment status" do
+        claim_with_no_match = create(
+          :claim,
+          policy: Policies::EarlyYearsPayments,
+          academic_year: AcademicYear.current
+        )
+
+        create(
+          :task, :claim_verifier_context,
+          name: "employment",
+          claim: claim_with_no_match,
+          passed: nil,
+          claim_verifier_match: :none,
+          manual: false,
+          created_by: nil
+        )
+
+        claim_with_no_data = create(
+          :claim,
+          policy: Policies::EarlyYearsPayments,
+          academic_year: AcademicYear.current
+        )
+
+        create(
+          :task, :claim_verifier_context,
+          name: "employment",
+          claim: claim_with_no_data,
+          passed: nil,
+          claim_verifier_match: nil,
+          manual: false,
+          created_by: nil
+        )
+
+        claim_with_match = create(
+          :claim,
+          policy: Policies::EarlyYearsPayments,
+          academic_year: AcademicYear.current
+        )
+
+        create(
+          :task,
+          name: "employment",
+          claim: claim_with_match,
+          passed: true,
+          claim_verifier_match: :all,
+          manual: false
+        )
+
+        form = described_class.new(
+          policy_name: "early_years_payments",
+          statuses: {"employment" => ["no_match"]}
+        )
+
+        expect(form.claims.map(&:reference)).to contain_exactly(
+          claim_with_no_match.reference
+        )
+      end
+
+      it "filters claims by no_data employment status" do
+        claim_with_no_match = create(
+          :claim,
+          policy: Policies::EarlyYearsPayments,
+          academic_year: AcademicYear.current
+        )
+
+        create(
+          :task, :claim_verifier_context,
+          name: "employment",
+          claim: claim_with_no_match,
+          passed: nil,
+          claim_verifier_match: :none,
+          manual: false,
+          created_by: nil
+        )
+
+        claim_with_no_data = create(
+          :claim,
+          policy: Policies::EarlyYearsPayments,
+          academic_year: AcademicYear.current
+        )
+
+        create(
+          :task, :claim_verifier_context,
+          name: "employment",
+          claim: claim_with_no_data,
+          passed: nil,
+          claim_verifier_match: nil,
+          manual: false,
+          created_by: nil
+        )
+
+        claim_with_match = create(
+          :claim,
+          policy: Policies::EarlyYearsPayments,
+          academic_year: AcademicYear.current
+        )
+
+        create(
+          :task,
+          name: "employment",
+          claim: claim_with_match,
+          passed: true,
+          claim_verifier_match: :all,
+          manual: false
+        )
+
+        form = described_class.new(
+          policy_name: "early_years_payments",
+          statuses: {"employment" => ["no_data"]}
+        )
+
+        expect(form.claims.map(&:reference)).to contain_exactly(
+          claim_with_no_data.reference
+        )
+      end
+
+      it "filters claims by passed employment status" do
+        claim_with_no_match = create(
+          :claim,
+          policy: Policies::EarlyYearsPayments,
+          academic_year: AcademicYear.current
+        )
+
+        create(
+          :task, :claim_verifier_context,
+          name: "employment",
+          claim: claim_with_no_match,
+          passed: nil,
+          claim_verifier_match: :none,
+          manual: false,
+          created_by: nil
+        )
+
+        claim_with_match = create(
+          :claim,
+          policy: Policies::EarlyYearsPayments,
+          academic_year: AcademicYear.current
+        )
+
+        create(
+          :task,
+          name: "employment",
+          claim: claim_with_match,
+          passed: true,
+          claim_verifier_match: :all,
+          manual: false
+        )
+
+        form = described_class.new(
+          policy_name: "early_years_payments",
+          statuses: {"employment" => ["passed"]}
+        )
+
+        expect(form.claims.map(&:reference)).to contain_exactly(
+          claim_with_match.reference
+        )
+      end
+    end
+
+    context "when employment task has no_match status and all default filters are applied" do
+      it "includes the claim in results" do
+        claim = create(
+          :claim,
+          policy: Policies::EarlyYearsPayments,
+          academic_year: AcademicYear.current
+        )
+
+        create(
+          :task, :claim_verifier_context,
+          name: "employment",
+          claim: claim,
+          passed: nil,
+          claim_verifier_match: :none,
+          manual: false,
+          created_by: nil
+        )
+
+        form = described_class.new(policy_name: "early_years_payments")
+
+        expect(form.claims.map(&:reference)).to include(claim.reference)
+      end
+    end
+
     context "when assignee filters are applied" do
       it "returns ClaimPresenters matching the filters" do
         assignee_1 = create(:dfe_signin_user, :service_operator)
@@ -280,6 +464,61 @@ RSpec.describe Admin::TaskListForm do
         expect(form.claims.map(&:reference)).to contain_exactly(
           claim_1.reference
         )
+      end
+    end
+  end
+
+  describe "#task_statuses" do
+    it "returns match-based statuses for employment" do
+      form = described_class.new(policy_name: "early_years_payments")
+      expect(form.task_statuses("employment")).to eq(
+        %w[passed failed no_match no_data incomplete]
+      )
+    end
+
+    it "returns standard statuses for non-employment tasks" do
+      form = described_class.new(policy_name: "early_years_payments")
+      expect(form.task_statuses("ey_eoi_cross_reference")).to eq(
+        %w[passed failed incomplete]
+      )
+    end
+  end
+
+  describe Admin::TaskListForm::ClaimPresenter::Task do
+    describe "#filter_status" do
+      it "returns 'no_match' for employment tasks with 'no match' status" do
+        task = described_class.new("employment", "No match", "red")
+        expect(task.filter_status).to eq("no_match")
+      end
+
+      it "returns 'no_data' for employment tasks with 'no data' status" do
+        task = described_class.new("employment", "No data", "red")
+        expect(task.filter_status).to eq("no_data")
+      end
+
+      it "returns 'passed' for employment tasks with 'passed' status" do
+        task = described_class.new("employment", "Passed", "green")
+        expect(task.filter_status).to eq("passed")
+      end
+
+      it "returns 'failed' for employment tasks with 'failed' status" do
+        task = described_class.new("employment", "Failed", "red")
+        expect(task.filter_status).to eq("failed")
+      end
+
+      it "returns 'incomplete' for employment tasks with 'na' status" do
+        task = described_class.new("employment", "na", "blue")
+        expect(task.filter_status).to eq("incomplete")
+      end
+
+      it "returns 'incomplete' for non-employment tasks with 'no data' status" do
+        task = described_class.new("census_subjects_taught", "No data", "red")
+        expect(task.filter_status).to eq("incomplete")
+      end
+
+      it "returns 'incomplete' for non-employment tasks with 'na' status" do
+        task = described_class.new("identity_confirmation", "na", "blue")
+        expect(task.filter_status).to eq("incomplete")
       end
     end
   end
