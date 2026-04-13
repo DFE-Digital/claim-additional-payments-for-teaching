@@ -226,7 +226,7 @@ Rails.application.routes.draw do
   end
 
   match(
-    "/further-education-payment-providers/landing-page",
+    "/further-education-payments-provider/landing-page",
     to: "further_education_payments/providers/claims#index",
     via: :all
   )
