@@ -37,7 +37,7 @@ module TeacherAuth
     end
 
     def redirect_uri
-      @redirect_uri ||= "#{redirect_base_url}#{path_prefix}"
+      @redirect_uri ||= "#{redirect_base_url}#{callback_path}"
     end
 
     def jwks_uri
