@@ -12,6 +12,13 @@ ONELOGIN_REDIRECT_BASE_URL: https://www.claim-additional-teaching-payment.servic
 ONELOGIN_DID_URL: https://identity.account.gov.uk/.well-known/did.json
 ONELOGIN_JWKS_URL: https://oidc.account.gov.uk/.well-known/jwks.json
 
+BYPASS_TEACHER_AUTH: false
+TEACHER_AUTH_ISSUER: https://preprod.authorise-access-to-a-teaching-record.education.gov.uk/
+TEACHER_AUTH_JWKS_URI: https://preprod.authorise-access-to-a-teaching-record.education.gov.uk/.well-known/jwks
+
+TEACHER_AUTH_CLIENT_ID: teacher-auth-client-id
+TEACHER_AUTH_SECRET: teacher-auth-secret
+
 DQT_API_URL: https://teacher-qualifications-api.education.gov.uk/v3/
 DQT_BASE_URL: https://api-customerengagement.platform.education.gov.uk/dqt-crm/v1/
 
