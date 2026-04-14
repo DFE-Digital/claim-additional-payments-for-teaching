@@ -2,7 +2,7 @@ module FurtherEducationPayments
   module Providers
     class OverdueChaserEmailJob < ApplicationJob
       def perform
-        return unless FeatureFlag.enabled?("fe_provider_dashboard")
+        return unless FeatureFlag.enabled?("fe_overdue_chaser")
 
         base_scope = Policies::FurtherEducationPayments::Eligibility
           .awaiting_provider_verification_year_2

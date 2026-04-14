@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe FurtherEducationPayments::Providers::OverdueChaserEmailJob, type: :job, feature_flag: [:fe_provider_dashboard] do
+RSpec.describe FurtherEducationPayments::Providers::OverdueChaserEmailJob, type: :job, feature_flag: [:fe_overdue_chaser] do
   let(:provider) { create(:eligible_fe_provider) }
 
   let(:school) { create(:school, :further_education, ukprn: provider.ukprn) }
