@@ -3,6 +3,7 @@ module Journeys
     class SlugSequence
       SLUGS = %w[
         sign-in
+        trn-found
       ].freeze
 
       SLUGS_HASH = SLUGS.to_h { |slug| [slug, slug] }.freeze
@@ -31,6 +32,7 @@ module Journeys
         array = []
 
         array << SLUGS_HASH["sign-in"]
+        array << SLUGS_HASH["trn-found"]
 
         array
       end

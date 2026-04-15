@@ -6,6 +6,19 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
       :journey_configuration,
       :early_years_teachers_financial_incentive_payments
     )
+
+    OmniAuth.config.mock_auth[:teacher] = OmniAuth::AuthHash.new({
+      provider: "teacher",
+      extra: {
+        raw_info: {
+          sub: "urn:fdc:gov.uk:2022:#{SecureRandom.base64(30)}",
+          trn: "1234567",
+          email: "john.doe@example.com",
+          verified_name: ["John", "Doe"],
+          verified_date_of_birth: "1970-12-13"
+        }
+      }
+    })
   end
 
   scenario "happy path" do
@@ -13,5 +26,8 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     click_link "Start now"
 
     expect(page).to have_text "sign in page goes here"
+    click_button "/early-years-teachers-financial-incentive-payments/auth/teacher"
+
+    expect(page).to have_text "TRN found"
   end
 end

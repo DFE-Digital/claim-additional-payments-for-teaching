@@ -88,6 +88,11 @@ RUN DFE_SIGN_IN_API_CLIENT_ID= \
   GOVUK_APP_DOMAIN= \
   GOVUK_WEBSITE_ROOT= \
   SECRET_KEY_BASE_DUMMY=1 \
+  TEACHER_AUTH_CLIENT_ID="teacher-auth-client-id" \
+  TEACHER_AUTH_SECRET="teacher-auth-secret" \
+  TEACHER_AUTH_ISSUER="https://preprod.authorise-access-to-a-teaching-record.education.gov.uk/" \
+  TEACHER_AUTH_REDIRECT_BASE_URL="http://localhost:3000" \
+  TEACHER_AUTH_JWKS_URI="https://preprod.authorise-access-to-a-teaching-record.education.gov.uk/.well-known/jwks" \
   bundle exec rake assets:precompile
 
 RUN chown -hR appuser:appgroup ${APP_HOME}

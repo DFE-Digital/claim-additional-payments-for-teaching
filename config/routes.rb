@@ -92,6 +92,10 @@ Rails.application.routes.draw do
       get "auth/sign-out", to: "omniauth_callbacks#sign_out"
     end
 
+    scope constraints: {journey: "early-years-teachers-financial-incentive-payments"} do
+      get "auth/teacher/callback", to: "journeys/early_years_teachers_financial_incentive_payments/auth#callback"
+    end
+
     scope path: "/", constraints: {journey: Regexp.new(Journeys.all_routing_names.join("|"))} do
       get "landing-page", to: "static_pages#landing_page", as: :landing_page
     end

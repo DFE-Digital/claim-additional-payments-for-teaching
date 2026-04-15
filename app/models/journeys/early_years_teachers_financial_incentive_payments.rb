@@ -5,7 +5,8 @@ module Journeys
 
     POLICIES = [Policies::EarlyYearsTeachersFinancialIncentivePayments]
     FORMS = [
-      SignInForm
+      SignInForm,
+      TrnFoundForm
     ]
 
     def available?
