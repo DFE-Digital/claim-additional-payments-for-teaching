@@ -19,7 +19,12 @@ module Admin
         end
 
         def filter_status
-          if status == "no data" || status == "na"
+          if name == "employment"
+            case status
+            when "na" then "incomplete"
+            else status.tr(" ", "_")
+            end
+          elsif status == "no data" || status == "na"
             "incomplete"
           else
             status
@@ -182,8 +187,14 @@ module Admin
       statuses.fetch(task_key.to_s, []).compact_blank
     end
 
+    DEFAULT_STATUSES = %w[passed failed incomplete].freeze
+
+    TASK_STATUSES = {
+      "employment" => %w[passed failed no_match no_data incomplete]
+    }
+
     def task_statuses(task_key)
-      %w[passed failed incomplete]
+      TASK_STATUSES.fetch(task_key, DEFAULT_STATUSES)
     end
 
     def applied_params(merge = {})
