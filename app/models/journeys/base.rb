@@ -94,6 +94,10 @@ module Journeys
       all_forms_mapping[slug]
     end
 
+    def available?
+      true
+    end
+
     private
 
     def all_forms_mapping

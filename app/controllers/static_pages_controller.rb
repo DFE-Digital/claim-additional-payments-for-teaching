@@ -23,10 +23,22 @@ class StaticPagesController < BasePublicController
 
     @journey_open = journey.accessible?(params[:service_access_code])
 
-    render "#{journey.view_path}/landing_page"
+    if journey_available?
+      render "#{journey.view_path}/landing_page"
+    else
+      render file: Rails.root.join("public", "404.html"),
+        status: :not_found,
+        layout: false
+    end
   end
 
   private
+
+  def journey_available?
+    return true unless journey
+
+    journey.available?
+  end
 
   def current_user
     DfeSignIn::NullUser.new
