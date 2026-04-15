@@ -220,7 +220,7 @@ class OmniauthCallbacksController < ApplicationController
       dfe_sign_in_session = DfeSignIn::AuthenticatedSession.from_auth_hash(auth, user_type: "provider")
     end
 
-    dfe_sign_in_user = DfeSignIn::User.from_session(dfe_sign_in_session)
+    dfe_sign_in_user = DfeSignIn::User.from_session(session: dfe_sign_in_session, user_type: "provider")
 
     # If from_session returns nil, it means the user is deleted
     unless dfe_sign_in_user.present?

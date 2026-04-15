@@ -13,7 +13,7 @@ module Admin
     end
 
     def callback
-      dfe_sign_in_user = DfeSignIn::User.admin.from_session(admin_session)
+      dfe_sign_in_user = DfeSignIn::User.admin.from_session(session: admin_session, user_type: "admin")
 
       if dfe_sign_in_user&.has_admin_access?
         dfe_sign_in_user.regenerate_session_token
