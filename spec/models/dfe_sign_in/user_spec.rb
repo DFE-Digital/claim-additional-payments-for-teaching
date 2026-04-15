@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe DfeSignIn::User, type: :model do
   let(:user) { build(:dfe_signin_user) }
+  let(:user_type) { "admin" }
 
   describe ".from_session" do
     let(:session) do
@@ -12,11 +13,9 @@ RSpec.describe DfeSignIn::User, type: :model do
         role_codes: ["some-role"]
       )
     end
-    let(:user) { DfeSignIn::User.from_session(session) }
+    let(:user) { DfeSignIn::User.from_session(session:, user_type:) }
 
     it "initializes a user when the user does not exist" do
-      user = DfeSignIn::User.from_session(session)
-
       expect(user.id).to be_nil
       expect(user.dfe_sign_in_id).to eq("123")
       expect(user.role_codes).to eq(["some-role"])

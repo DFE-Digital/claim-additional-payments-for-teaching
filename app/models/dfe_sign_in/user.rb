@@ -24,8 +24,8 @@ module DfeSignIn
       inverse_of: :assigned_to,
       dependent: :nullify
 
-    def self.from_session(session)
-      user = where(dfe_sign_in_id: session.user_id, user_type: "admin").first_or_initialize
+    def self.from_session(session:, user_type:)
+      user = where(dfe_sign_in_id: session.user_id, user_type:).first_or_initialize
 
       return if user.deleted?
 

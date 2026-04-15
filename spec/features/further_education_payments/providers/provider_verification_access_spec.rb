@@ -280,7 +280,8 @@ RSpec.feature "Provider verification access control", feature_flag: [:fe_provide
       create(
         :dfe_signin_user,
         dfe_sign_in_id: "11111",
-        deleted_at: Time.zone.now
+        deleted_at: Time.zone.now,
+        user_type: "provider"
       )
 
       mock_dfe_sign_in_auth_session(
