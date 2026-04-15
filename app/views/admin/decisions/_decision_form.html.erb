@@ -35,22 +35,6 @@
   <% end %>
 <% end %>
 
-<%# Once the feature flag is enabled on production, create a PR to remove this block %>
-<% case claim.policy %>
-<% when Policies::FurtherEducationPayments %>
-  <% unless FeatureFlag.enabled?(:fe_claims_approvable) %>
-    <%= govuk_warning_text(text: "Approving FE claims is currently disabled") %>
-  <% end %>
-<% when Policies::TargetedRetentionIncentivePayments %>
-  <% unless FeatureFlag.enabled?(:schools_claims_approvable) %>
-    <%= govuk_warning_text(text: "Approving TRI claims is currently disabled") %>
-  <% end %>
-<% when Policies::StudentLoans %>
-  <% unless FeatureFlag.enabled?(:schools_claims_approvable) %>
-    <%= govuk_warning_text(text: "Approving TSLR claims is currently disabled") %>
-  <% end %>
-<% end %>
-
 <%= form_with model: decision_form,
   url: admin_claim_decisions_path(claim),
   scope: "decision",

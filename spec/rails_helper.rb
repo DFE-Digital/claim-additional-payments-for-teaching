@@ -85,8 +85,6 @@ RSpec.configure do |config|
     OmniAuth.config.mock_auth[:dfe] = nil
     OmniAuth.config.mock_auth[:tid] = nil
     OmniAuth.config.mock_auth[:default] = nil
-    FeatureFlag.enable!(:schools_claims_approvable)
-    FeatureFlag.enable!(:fe_claims_approvable)
   end
 
   config.filter_run_excluding :smoke
