@@ -9,6 +9,7 @@ module Admin
     before_action :end_expired_admin_sessions
     before_action :ensure_authenticated_user
     before_action :set_cache_headers
+    before_action :set_sentry_user_context
     after_action :update_last_seen_at
     helper_method :admin_signed_in?, :admin_timeout_in_minutes, :service_operator_signed_in?
 
@@ -71,6 +72,10 @@ module Admin
         clear_session
         flash[:notice] = "Your session has timed out due to inactivity, please sign-in again"
       end
+    end
+
+    def set_sentry_user_context
+      Sentry.set_user(id: session[:user_id])
     end
 
     def admin_signed_in?
