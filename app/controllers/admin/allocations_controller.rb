@@ -17,13 +17,14 @@ class Admin::AllocationsController < Admin::BaseAdminController
   end
 
   def bulk_allocate
-    claims = Claim
-      .where(assigned_to: nil)
-      .includes(:eligibility)
-      .awaiting_decision
-      .order(:submitted_at)
-      .limit(params[:allocate_claim_count])
-    claims = claims.by_policy(filtered_policy) if filtered_policy
+    claims = Admin::ClaimsFilterForm.new(
+      filters: {
+        team_member: "unassigned",
+        status: "awaiting_decision",
+        policy: filtered_policy.presence&.policy_type || "all"
+      },
+      session: {}
+    ).claims.limit(params[:allocate_claim_count])
 
     if claims.size.zero?
       redirect_to admin_claims_path,
