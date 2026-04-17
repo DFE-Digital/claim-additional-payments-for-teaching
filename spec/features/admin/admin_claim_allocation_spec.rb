@@ -22,28 +22,28 @@ RSpec.feature "Claims awaiting a decision" do
     @signed_in_user = sign_in_as_service_operator
 
     # index: 0-1
-    submitted_claims << create_list(:claim, 2, :submitted, policy: Policies::StudentLoans)
+    submitted_claims << create_list(:claim, 2, :submitted, policy: Policies::StudentLoans, academic_year: AcademicYear.current)
 
     # index: 2-14
-    submitted_claims << create_list(:claim, 13, :submitted, policy: Policies::EarlyCareerPayments)
+    submitted_claims << create_list(:claim, 13, :submitted, policy: Policies::EarlyCareerPayments, academic_year: AcademicYear.current)
 
     # index: 15-18
-    submitted_claims << create_list(:claim, 4, :submitted, policy: Policies::StudentLoans)
+    submitted_claims << create_list(:claim, 4, :submitted, policy: Policies::StudentLoans, academic_year: AcademicYear.current)
 
     # index: 19
-    submitted_claims << create_list(:claim, 1, :submitted, policy: Policies::EarlyCareerPayments)
+    submitted_claims << create_list(:claim, 1, :submitted, policy: Policies::EarlyCareerPayments, academic_year: AcademicYear.current)
 
     # index: 20-22
-    submitted_claims << create_list(:claim, 3, :submitted, policy: Policies::StudentLoans)
+    submitted_claims << create_list(:claim, 3, :submitted, policy: Policies::StudentLoans, academic_year: AcademicYear.current)
 
     # index: 23-34
-    submitted_claims << create_list(:claim, 12, :submitted, policy: Policies::EarlyCareerPayments)
+    submitted_claims << create_list(:claim, 12, :submitted, policy: Policies::EarlyCareerPayments, academic_year: AcademicYear.current)
 
     # index: 35-38
-    submitted_claims << create_list(:claim, 4, :submitted, policy: Policies::TargetedRetentionIncentivePayments)
+    submitted_claims << create_list(:claim, 4, :submitted, policy: Policies::TargetedRetentionIncentivePayments, academic_year: AcademicYear.current)
 
     # index: 39
-    submitted_claims << create_list(:claim, 1, :submitted, policy: Policies::InternationalRelocationPayments)
+    submitted_claims << create_list(:claim, 1, :submitted, policy: Policies::InternationalRelocationPayments, academic_year: AcademicYear.current)
 
     @submitted_claims = submitted_claims.flatten
   end
@@ -426,6 +426,25 @@ RSpec.feature "Claims awaiting a decision" do
       student_loan_claims.each do |claim|
         expect(claim.reload.assigned_to.full_name).to eq "Sarah Strawbridge"
       end
+    end
+
+    scenario "Assigning claims by status" do
+      claim = Claim.last
+
+      create(:decision, :rejected, claim: claim)
+
+      click_on "Claims"
+
+      select "Sarah Strawbridge", from: "allocate_to_team_member"
+      select "Rejected", from: "status"
+
+      click_on "Allocate claims"
+
+      expect(claim.reload.assigned_to.full_name).to eq "Sarah Strawbridge"
+
+      other_assigned_claims = Claim.where.not(id: claim.id).where.not(assigned_to_id: nil)
+
+      expect(other_assigned_claims).to be_empty
     end
   end
 end

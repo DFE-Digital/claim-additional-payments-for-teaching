@@ -27,7 +27,7 @@
       <%= link_to("Tasks", admin_task_lists_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button) %>
     <% end %>
 
-    <%= render "allocations_form" %>
+    <%= render partial: "allocations_form", locals: { filter_form: @filter_form } %>
 
     <h2 id="filter" class="govuk-heading-m">Filter claims</h2>
 

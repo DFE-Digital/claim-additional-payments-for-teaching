@@ -20,7 +20,7 @@ class Admin::AllocationsController < Admin::BaseAdminController
     claims = Admin::ClaimsFilterForm.new(
       filters: {
         team_member: "unassigned",
-        status: "awaiting_decision",
+        status: params[:status] || "awaiting_decision",
         policy: filtered_policy.presence&.policy_type || "all"
       },
       session: {}
