@@ -190,6 +190,10 @@ class Admin::ClaimsFilterForm
     }
   end
 
+  def label_for_status(status)
+    status_grouped_select_options.values.reduce(&:merge).invert[status]
+  end
+
   def team_member_select_options
     array = [["All", "all"], ["Unassigned", "unassigned"]]
     array += DfeSignIn::User.options_for_select

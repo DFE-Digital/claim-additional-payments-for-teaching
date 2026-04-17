@@ -294,7 +294,9 @@ RSpec.feature "Claims awaiting a decision" do
       click_on "Allocate"
 
       within(".govuk-flash__notice") do
-        expect(page).to have_text I18n.t("admin.allocations.bulk_allocate.info", allocate_to_policy: "Student Loans", dfe_user: sarah.full_name)
+        expect(page).to have_text(
+          "No additional claims were assigned to Sarah Strawbridge. There are not any Student Loans which are awaiting decision - not on hold."
+        )
       end
 
       student_loan_claims.each do |claim|

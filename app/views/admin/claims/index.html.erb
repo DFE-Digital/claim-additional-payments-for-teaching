@@ -29,38 +29,40 @@
 
     <%= render partial: "allocations_form", locals: { filter_form: @filter_form } %>
 
-    <h2 id="filter" class="govuk-heading-m">Filter claims</h2>
+    <div id="filters">
+      <h2 id="filter" class="govuk-heading-m">Filter claims</h2>
 
-    <%= form_with model: @filter_form, scope: "filter", url: admin_claims_path(anchor: "filter"), method: :get, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
-      <div class="admin-filter-group">
-        <div>
-          <%= f.govuk_collection_select :team_member, @filter_form.team_member_select_options, :id, :name, label: { text: "Team member" } %>
-        </div>
+      <%= form_with model: @filter_form, scope: "filter", url: admin_claims_path(anchor: "filter"), method: :get, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+        <div class="admin-filter-group">
+          <div>
+            <%= f.govuk_collection_select :team_member, @filter_form.team_member_select_options, :id, :name, label: { text: "Team member" } %>
+          </div>
 
-        <div>
-          <%= f.govuk_collection_select :policy, @filter_form.policy_select_options, :id, :name %>
-        </div>
+          <div>
+            <%= f.govuk_collection_select :policy, @filter_form.policy_select_options, :id, :name %>
+          </div>
 
-        <div>
-          <%= f.govuk_select(:status, label: { text: "Status" }) do %>
-            <% @filter_form.status_grouped_select_options.each do |group_name, menu_items| %>
-              <optgroup label="<%= group_name %>">
-                <% menu_items.each do |name, value| %>
-                  <option value="<%= value %>" <%= "selected" if @filter_form.status == value %>>
-                    <%= name %>
-                  </option>
-                <% end %>
-              </optgroup>
+          <div>
+            <%= f.govuk_select(:status, label: { text: "Status" }) do %>
+              <% @filter_form.status_grouped_select_options.each do |group_name, menu_items| %>
+                <optgroup label="<%= group_name %>">
+                  <% menu_items.each do |name, value| %>
+                    <option value="<%= value %>" <%= "selected" if @filter_form.status == value %>>
+                      <%= name %>
+                    </option>
+                  <% end %>
+                </optgroup>
+              <% end %>
             <% end %>
-          <% end %>
-        </div>
+          </div>
 
-        <div>
-          <%= f.govuk_submit "Apply filters", secondary: true, class: "admin-filter-group__button" %>
-          <%= govuk_link_to "Clear filters", admin_claims_path(filter: {reset: true}, anchor: "filter"), class: "button-link admin-filter-group__button" %>
+          <div>
+            <%= f.govuk_submit "Apply filters", secondary: true, class: "admin-filter-group__button" %>
+            <%= govuk_link_to "Clear filters", admin_claims_path(filter: {reset: true}, anchor: "filter"), class: "button-link admin-filter-group__button" %>
+          </div>
         </div>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
 
     <% if @claims.any? %>
       <h2 class="govuk-heading-m"><%= pluralize(@filter_form.count, "claim") %> <%= index_status_filter(@filter_form.status) %></h2>
