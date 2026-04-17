@@ -4,17 +4,23 @@ module FurtherEducationPayments
       def perform
         return unless FeatureFlag.enabled?("fe_provider_dashboard")
 
+        relevant_academic_year = Journeys::FurtherEducationPayments
+          .configuration
+          .current_academic_year
+
         providers_with_unverified_claims =
-          Policies::FurtherEducationPayments::EligibleFeProvider.joins(
-            "JOIN schools ON " \
-            "schools.ukprn::integer = eligible_fe_providers.ukprn::integer"
-          ).joins(
-            "JOIN further_education_payments_eligibilities " \
-            "ON further_education_payments_eligibilities.school_id = schools.id"
-          ).merge(
-            Policies::FurtherEducationPayments::Eligibility
-              .awaiting_provider_verification_year_2
-          ).distinct
+          Policies::FurtherEducationPayments::EligibleFeProvider
+            .by_academic_year(relevant_academic_year)
+            .joins(
+              "JOIN schools ON " \
+              "schools.ukprn::integer = eligible_fe_providers.ukprn::integer"
+            ).joins(
+              "JOIN further_education_payments_eligibilities " \
+              "ON further_education_payments_eligibilities.school_id = schools.id"
+            ).merge(
+              Policies::FurtherEducationPayments::Eligibility
+                .awaiting_provider_verification_year_2
+            )
 
         providers_with_unverified_claims.each do |provider|
           FurtherEducationPaymentsMailer

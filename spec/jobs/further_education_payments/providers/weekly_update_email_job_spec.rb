@@ -117,4 +117,55 @@ RSpec.describe FurtherEducationPayments::Providers::WeeklyUpdateEmailJob, type: 
       "7e019ad7-f2d8-43fe-8adc-a5c8609926ff"
     )
   end
+
+  context "when there are versioned eligible FE providers" do
+    let(:provider) { create(:eligible_fe_provider, :with_school) }
+
+    let(:new_file_upload) do
+      create(
+        :file_upload,
+        target_data_model: Policies::FurtherEducationPayments::EligibleFeProvider.to_s,
+        academic_year: AcademicYear.current
+      )
+    end
+
+    let!(:updated_provider) do
+      create(
+        :eligible_fe_provider,
+        ukprn: provider.school.ukprn,
+        file_upload: new_file_upload
+      )
+    end
+
+    before do
+      create(
+        :further_education_payments_eligibility,
+        :eligible,
+        school: provider.school,
+        claim: create(
+          :claim,
+          :further_education,
+          :submitted
+        )
+      )
+    end
+
+    it "sends to new version of eligible FE provider" do
+      described_class.new.perform
+
+      expect(provider.primary_key_contact_email_address).not_to have_received_email(
+        "7e019ad7-f2d8-43fe-8adc-a5c8609926ff"
+      )
+
+      expect(updated_provider.primary_key_contact_email_address).to have_received_email(
+        "7e019ad7-f2d8-43fe-8adc-a5c8609926ff",
+        provider_name: updated_provider.name,
+        number_overdue: 0,
+        number_in_progress: 0,
+        number_not_started: 1,
+        number_overall: 1,
+        link_to_provider_dashboard: "http://www.example.com/further-education-payments/providers/claims"
+      )
+    end
+  end
 end
