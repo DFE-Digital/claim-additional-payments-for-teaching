@@ -12,7 +12,7 @@ DFE_SIGN_IN_REDIRECT_BASE_URL: https://claim-additional-payments-for-teaching-re
 
 DFE_SIGN_IN_INTERNAL_CLIENT_ID: teacherpaymentsadmin
 
-BYPASS_TEACHER_AUTH: false
+BYPASS_TEACHER_AUTH: true
 TEACHER_AUTH_ISSUER: https://preprod.authorise-access-to-a-teaching-record.education.gov.uk/
 TEACHER_AUTH_JWKS_URI: https://preprod.authorise-access-to-a-teaching-record.education.gov.uk/.well-known/jwks
 

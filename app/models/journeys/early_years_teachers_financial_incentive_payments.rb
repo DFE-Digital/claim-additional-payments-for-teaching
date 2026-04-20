@@ -4,10 +4,24 @@ module Journeys
     extend self
 
     POLICIES = [Policies::EarlyYearsTeachersFinancialIncentivePayments]
-    FORMS = [
-      SignInForm,
-      TrnFoundForm
-    ]
+
+    def forms
+      return @forms if @forms
+
+      array = []
+
+      array << if TeacherAuth::Config.instance.bypass?
+        Debug::TeacherAuth::SignInForm
+      else
+        SignInForm
+      end
+
+      array += [
+        TrnFoundForm
+      ]
+
+      @forms = array
+    end
 
     def available?
       FeatureFlag.enabled?(:eytfi_journey)

@@ -1,5 +1,19 @@
 sign in page goes here
 
-<p class="govuk-body">
-  <%= govuk_button_to "/early-years-teachers-financial-incentive-payments/auth/teacher", "/early-years-teachers-financial-incentive-payments/auth/teacher" %>
-</p>
+<% if !TeacherAuth::Config.instance.bypass? %>
+  <p class="govuk-body">
+    <%= govuk_button_to "/early-years-teachers-financial-incentive-payments/auth/teacher", "/early-years-teachers-financial-incentive-payments/auth/teacher" %>
+  </p>
+<% else %>
+  <h2 class="govuk-heading-l">Bypass Teacher Auth</h2>
+
+  <%= form_with model: @form, url: "/early-years-teachers-financial-incentive-payments/auth/teacher", method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+    <%= f.govuk_text_field :verified_name, label: { text: "Full name" }, width: 20 %>
+    <%= f.govuk_date_field :verified_date_of_birth, date_of_birth: true, legend: { text: "Date of Birth" } %>
+    <%= f.govuk_text_field :email, width: 20 %>
+    <%= f.govuk_text_field :trn, width: 10, label: { text: "TRN" } %>
+    <%= f.govuk_text_field :sub, label: { text: "One Login UID" } %>
+
+    <%= f.govuk_submit %>
+  <% end %>
+<% end %>
