@@ -27,15 +27,6 @@
 
       <div class="govuk-grid-column-one-quarter">
         <%= form.govuk_select(
-          :allocate_claim_count,
-          options_for_select([1, 5, 10, 25], params[:allocate_claim_count] || 25),
-          label: { text: "Number of claims:" },
-          class: "govuk-!-width-full"
-        ) %>
-      </div>
-
-      <div class="govuk-grid-column-one-quarter">
-        <%= form.govuk_select(
           :status,
           label: { text: "Status" },
           class: "govuk-!-width-full"
@@ -50,6 +41,15 @@
             </optgroup>
           <% end %>
         <% end %>
+      </div>
+
+      <div class="govuk-grid-column-one-quarter">
+        <%= form.govuk_select(
+          :allocate_claim_count,
+          options_for_select([1, 5, 10, 25], params[:allocate_claim_count] || 25),
+          label: { text: "Number of claims:" },
+          class: "govuk-!-width-full"
+        ) %>
       </div>
     </div>
 
