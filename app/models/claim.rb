@@ -310,12 +310,6 @@ class Claim < ApplicationRecord
     Claim::ADDRESS_ATTRIBUTES.map { |attr| send(attr) }.reject(&:blank?).join(separator)
   end
 
-  # Returns true if the claim has a verified identity received from GOV.UK Verify.
-  # TODO: We no longer use GOV.UK Verify these verified? methods aren't used anymore.
-  def identity_verified?
-    govuk_verify_fields.any?
-  end
-
   def personal_data_removed?
     personal_data_removed_at.present?
   end

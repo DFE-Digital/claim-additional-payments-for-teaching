@@ -586,17 +586,6 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe "#identity_verified?" do
-    it "returns true if the claim has any GOV.UK Verify fields" do
-      expect(Claim.new(govuk_verify_fields: ["payroll_gender"]).identity_verified?).to eq true
-    end
-
-    it "returns false if the claim doesn't have any GOV.UK Verify fields" do
-      expect(Claim.new.identity_verified?).to eq false
-      expect(Claim.new(govuk_verify_fields: []).identity_verified?).to eq false
-    end
-  end
-
   describe "#personal_data_removed?" do
     it "returns false if a claim has not had its personal data removed" do
       claim = create(:claim, :approved)

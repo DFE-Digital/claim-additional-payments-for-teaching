@@ -166,16 +166,6 @@ FactoryBot.define do
       }
     end
 
-    trait :verified do
-      govuk_verify_fields { %w[first_name surname address_line_1 postcode date_of_birth payroll_gender] }
-    end
-
-    trait :unverified do
-      submitted
-
-      govuk_verify_fields { [] }
-    end
-
     trait :auto_approved do
       submitted
       after(:build) do |claim, _|

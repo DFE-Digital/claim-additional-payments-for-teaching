@@ -54,7 +54,6 @@ shared:
     - student_loan_courses # integer, ???
     - student_loan_start_date # integer, ???
     - student_loan_plan # string, plan type of their student loan
-    - govuk_verify_fields # string, DEPRECATED
     - eligibility_type # string, used to identify type of eligibility
     - eligibility_id # uuid, references associated eligibility
     - personal_data_removed_at # datetime, when pii was stripped

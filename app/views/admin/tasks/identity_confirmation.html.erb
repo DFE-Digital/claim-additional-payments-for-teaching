@@ -15,7 +15,7 @@
     <h2 class="govuk-heading-l"><%= @form.task.name.humanize %></h2>
   </div>
 
-  <% unless @claim.identity_verified? || @tasks_presenter.identity_confirmation.empty? %>
+  <% unless @tasks_presenter.identity_confirmation.empty? %>
     <div class="govuk-grid-column-two-thirds">
       <%= render "admin/claims/answers", answers: @tasks_presenter.identity_confirmation %>
     </div>
