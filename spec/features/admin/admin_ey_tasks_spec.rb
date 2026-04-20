@@ -235,6 +235,8 @@ RSpec.describe "Admin EY tasks" do
           choose "Male"
           click_on "Save and continue"
 
+          expect(claim.tasks.find_by(name: "payroll_gender").created_by).to be_present
+
           visit admin_claim_tasks_path(claim)
           expect(task_status("Payroll gender")).to eq("Passed")
         end
