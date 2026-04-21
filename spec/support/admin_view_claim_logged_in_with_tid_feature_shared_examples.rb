@@ -61,8 +61,10 @@ RSpec.shared_examples "Admin View Claim logged in with tid" do |policy|
     travel_to(@within_academic_year) do
       visit admin_claims_path
 
-      select "Approved awaiting payroll", from: "Status"
-      click_on "Apply filters"
+      within "#filters" do
+        select "Approved awaiting payroll", from: "Status"
+        click_on "Apply filters"
+      end
 
       find("a[href='#{admin_claim_tasks_path(approved_awaiting_payroll_claim)}']").click
 

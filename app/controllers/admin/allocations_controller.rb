@@ -17,20 +17,24 @@ class Admin::AllocationsController < Admin::BaseAdminController
   end
 
   def bulk_allocate
-    claims = Claim
-      .where(assigned_to: nil)
-      .includes(:eligibility)
-      .awaiting_decision
-      .order(:submitted_at)
-      .limit(params[:allocate_claim_count])
-    claims = claims.by_policy(filtered_policy) if filtered_policy
+    form = Admin::ClaimsFilterForm.new(
+      filters: {
+        team_member: "unassigned",
+        status: params[:status] || "awaiting_decision",
+        policy: filtered_policy.presence&.policy_type || "all"
+      },
+      session: {}
+    )
+
+    claims = form.claims.limit(params[:allocate_claim_count])
 
     if claims.size.zero?
       redirect_to admin_claims_path,
         notice: I18n.t(
           "admin.allocations.bulk_allocate.info",
           allocate_to_policy: policy_name,
-          dfe_user: @team_member.full_name.titleize
+          dfe_user: @team_member.full_name.titleize,
+          allocation_status: form.label_for_status(form.status).downcase
         ) and return
     end
 
