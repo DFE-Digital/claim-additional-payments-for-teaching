@@ -1237,22 +1237,40 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "#destroy" do
-    let(:claim) { create(:claim, :submitted, policy: Policies::EarlyCareerPayments) }
+    let(:journey_session) { create(:targeted_retention_incentive_payments_session) }
+    let(:claim) { create(:claim, :submitted, policy: Policies::EarlyCareerPayments, journey_session: journey_session) }
+    let(:payment) { create(:payment, claim_policies: []) }
 
     before do
       create(:note, claim: claim)
       create(:task, claim: claim)
       create(:amendment, claim: claim)
       create(:decision, :approved, claim: claim)
+      create(:topup, claim: claim)
+      Event.create!(claim: claim, name: "claim_submitted")
+      ClaimPayment.create!(claim: claim, payment: payment)
     end
 
     it "destroys associated records" do
+      claim_id = claim.id
+      eligibility_id = claim.eligibility_id
+      journey_session_id = journey_session.id
+      payment_id = payment.id
+
       claim.reload.destroy!
-      expect(Policies::EarlyCareerPayments::Eligibility.count).to be_zero
-      expect(Note.count).to be_zero
-      expect(Task.count).to be_zero
-      expect(Amendment.count).to be_zero
-      expect(Decision.count).to be_zero
+
+      aggregate_failures do
+        expect(Policies::EarlyCareerPayments::Eligibility.where(id: eligibility_id)).to be_empty
+        expect(Note.where(claim_id: claim_id)).to be_empty
+        expect(Task.where(claim_id: claim_id)).to be_empty
+        expect(Amendment.where(claim_id: claim_id)).to be_empty
+        expect(Decision.where(claim_id: claim_id)).to be_empty
+        expect(Event.where(claim_id: claim_id)).to be_empty
+        expect(Topup.where(claim_id: claim_id)).to be_empty
+        expect(ClaimPayment.where(claim_id: claim_id)).to be_empty
+        expect(Payment.where(id: payment_id)).to exist
+        expect(Journeys::TargetedRetentionIncentivePayments::Session.where(id: journey_session_id)).to exist
+      end
     end
   end
 
