@@ -25,8 +25,8 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     visit landing_page_path(Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name)
     click_link "Start now"
 
-    expect(page).to have_text "sign in page goes here"
-    click_button "/early-years-teachers-financial-incentive-payments/auth/teacher"
+    expect(page).to have_text "Sign in with GOV.UK One Login"
+    click_button "Continue"
 
     expect(page).to have_text "TRN found"
   end

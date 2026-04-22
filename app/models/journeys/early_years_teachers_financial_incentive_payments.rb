@@ -6,8 +6,6 @@ module Journeys
     POLICIES = [Policies::EarlyYearsTeachersFinancialIncentivePayments]
 
     def forms
-      return @forms if @forms
-
       array = []
 
       array << if TeacherAuth::Config.instance.bypass?
@@ -20,7 +18,7 @@ module Journeys
         TrnFoundForm
       ]
 
-      @forms = array
+      array
     end
 
     def available?
