@@ -473,3 +473,24 @@ shared:
   - entity_id # uuid, references associated entity
   - created_at # datetime, when the event was created
   - updated_at # datetime, when the event was last updated
+  :active_storage_variant_records:
+  - id # uuid, uniquely identifies this variant record
+  - blob_id # uuid, the blob this variant was derived from
+  - variation_digest # string, hash of the transformation applied to produce this variant
+  :active_storage_blobs:
+  - id # uuid, uniquely identifies this blob
+  - byte_size # integer, size of the file in bytes
+  - checksum # string, integrity checksum of the file content
+  - content_type # string, MIME type of the file (e.g. application/pdf)
+  - created_at # datetime, when this blob was created
+  - filename # string, original filename as uploaded by the user
+  - key # string, storage key used to locate the file in the storage backend
+  - metadata # jsonb, additional metadata stored alongside the blob
+  - service_name # string, which storage service holds this blob (e.g. azure)
+  :active_storage_attachments:
+  - id # uuid, uniquely identifies this attachment record
+  - blob_id # uuid, the blob this attachment points to
+  - created_at # datetime, when this attachment was created
+  - name # string, the name of the has_one/has_many_attached association (e.g. employment_proofs)
+  - record_id # uuid, the id of the record this file is attached to
+  - record_type # string, the model class this file is attached to (e.g. Journeys::TeacherStudentLoanReimbursement::Session)

@@ -53,3 +53,5 @@
   :reminders:
     - full_name
     - email_address
+  :active_storage_blobs:
+    - filename
