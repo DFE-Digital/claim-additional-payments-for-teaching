@@ -76,6 +76,7 @@ RSpec.feature "Backlinking during a claim" do
 
     expect(page).to have_link("Back")
     choose_qts_year
+    upload_employment_proof
 
     expect(page).to have_link("Back")
     choose_school school
@@ -86,6 +87,17 @@ RSpec.feature "Backlinking during a claim" do
     click_on "Back"
 
     expect(page).to have_current_path("/student-loans/claim-school", ignore_query: true)
+    click_on "Back"
+
+    expect(page).to have_current_path("/student-loans/upload-employment-proof-success", ignore_query: true)
+    click_on "Back"
+
+    expect(page).to have_current_path("/student-loans/uploaded-employment-proof", ignore_query: true)
+    click_on "Back"
+
+    click_on "Back"
+
+    expect(page).to have_current_path("/student-loans/upload-employment-proof", ignore_query: true)
     click_on "Back"
 
     expect(page).to have_text(I18n.t("student_loans.forms.qts_year.questions.qts_award_year"))

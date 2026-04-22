@@ -41,11 +41,12 @@ RSpec.feature "TSLR journey with Teacher ID" do
     expect(session.answers.qts_award_year).to eq("on_or_after_cut_off_date")
 
     # Qualification pages are skipped
+    upload_employment_proof
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("student_loans.forms.claim_school.questions.claim_school", financial_year: Policies::StudentLoans.current_financial_year))
-    click_link "Back"
 
+    visit claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name, "qualification-details")
     expect(page).to have_text(I18n.t("questions.check_and_confirm_qualification_details"))
     choose "No"
     click_on "Continue"

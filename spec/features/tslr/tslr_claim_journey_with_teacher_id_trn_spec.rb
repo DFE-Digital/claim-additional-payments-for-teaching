@@ -47,7 +47,7 @@ RSpec.feature "TSLR journey with Teacher ID teacher reference number page remova
     # - Select qts year
     expect(page).to have_text(I18n.t("student_loans.forms.qts_year.questions.qts_award_year"))
     choose_qts_year
-    click_on "Continue"
+    upload_employment_proof
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("student_loans.forms.claim_school.questions.claim_school", financial_year: Policies::StudentLoans.current_financial_year))

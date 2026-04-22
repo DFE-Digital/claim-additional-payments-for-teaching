@@ -236,13 +236,14 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     before do
       start_student_loans_claim
-      journey_session.update!(
-        answers: attributes_for(
+      journey_session.answers.assign_attributes(
+        attributes_for(
           :student_loans_answers,
           :submittable,
           middle_name: "Jay"
         )
       )
+      journey_session.save!
       jump_to_claim_journey_page(
         slug: "check-your-answers",
         journey_session: journey_session

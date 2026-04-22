@@ -44,6 +44,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     expect(page).to have_current_path("/#{Journeys::TeacherStudentLoanReimbursement.routing_name}/qts-year")
 
     choose_qts_year
+    upload_employment_proof
 
     expect(page).to have_current_path("/#{Journeys::TeacherStudentLoanReimbursement.routing_name}/claim-school")
   end
@@ -206,6 +207,8 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     choose "Yes"
     click_on "Continue"
 
+    upload_employment_proof
+
     # - Which school do you teach at
     choose_school school
     click_on "Continue"
@@ -253,6 +256,8 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     choose "Yes"
     click_on "Continue"
 
+    upload_employment_proof
+
     # - Which school do you teach at
     choose_school school
     click_on "Continue"
@@ -294,6 +299,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     expect(page).to have_content("When did you complete your initial teacher training (ITT)?")
     expect(page).not_to have_css("input[checked]")
     choose_qts_year
+    upload_employment_proof
 
     choose_school school
 
