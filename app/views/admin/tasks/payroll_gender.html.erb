@@ -17,7 +17,7 @@
     <% if @form.task.persisted? %>
       <%= render "task_outcome", task: @form.task %>
     <% elsif @claim.policy.task_available?(@form.task) %>
-      <%= form_with model: @form, url: admin_claim_payroll_gender_tasks_path(@claim), scope: :form, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= form_with model: @form, url: admin_claim_tasks_path(@claim), scope: :form, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
         <%= hidden_field_tag "form[passed]", "true" %>
         <%= hidden_field_tag "form[name]", "payroll_gender" %>
 
