@@ -15,6 +15,11 @@ module Journeys
         "reset-claim",
         "qualification-details",
         "qts-year",
+        "upload-employment-proof",
+        "review-employment-proof",
+        "uploaded-employment-proof",
+        "delete-employment-proof",
+        "upload-employment-proof-success",
         "select-claim-school",
         "claim-school",
         "claim-school-results",
@@ -95,6 +100,13 @@ module Journeys
           # We've got the qts-year from the confirmed dqt data, no need to ask
           # for it again.
           slugs << "qts-year" unless answers.qualifications_details_check? && answers.dqt_teacher_record&.qts_award_date
+
+          slugs << "upload-employment-proof"
+          slugs << "review-employment-proof"
+          slugs << "uploaded-employment-proof"
+          slugs << "delete-employment-proof"
+          slugs << "upload-employment-proof-success"
+
           # Show them the school we've found based on their tid info
           slugs << "select-claim-school" if answers.trn_from_tid? && answers.has_tps_school_for_student_loan_in_previous_financial_year?
           # Don't show the select school page if they confirmed the school

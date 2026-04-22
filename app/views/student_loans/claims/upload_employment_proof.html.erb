@@ -1,0 +1,19 @@
+<% content_for(:page_title, page_title("Upload proof of employment", journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false, multipart: true } do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_file_field :file,
+        label: { text: "Upload proof of employment", tag: "h1", size: "l" },
+        hint: { text: "Upload a document showing you were employed at your claim school." } %>
+
+      <%= f.govuk_submit %>
+
+      <% if @form.has_confirmed_blobs? %>
+        <%= link_to "I do not want to upload another file", claim_path(current_journey_routing_name, "uploaded-employment-proof"), class: "govuk-link govuk-!-display-block govuk-!-margin-top-3" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<% content_for(:page_title, page_title("Delete document", journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+      <%= f.govuk_error_summary %>
+      <%= f.hidden_field :blob_id, value: @form.blob_id.presence || params[:blob_id] %>
+
+      <% if @form.blob_to_delete %>
+        <p class="govuk-body">
+          <%= link_to @form.blob_to_delete.filename.to_s, rails_storage_proxy_path(@form.blob_to_delete), target: "_blank", rel: "noopener noreferrer", class: "govuk-link" %>
+        </p>
+      <% end %>
+
+      <%= f.govuk_collection_radio_buttons :confirmed, [
+            OpenStruct.new(id: "yes", name: "Yes"),
+            OpenStruct.new(id: "no", name: "No")
+          ], :id, :name,
+          legend: { text: "Are you sure you want to delete this file?", tag: "h1", size: "l" },
+          hint: nil %>
+
+      <%= f.govuk_submit "Continue" %>
+    <% end %>
+  </div>
+</div>

@@ -13,6 +13,11 @@ module Journeys
     FORMS = [
       ClaimSchoolForm,
       ClaimSchoolResultsForm,
+      UploadEmploymentProofForm,
+      ReviewEmploymentProofForm,
+      UploadedEmploymentProofForm,
+      DeleteEmploymentProofForm,
+      UploadEmploymentProofSuccessForm,
       QualificationDetailsForm,
       QtsYearForm,
       SubjectsTaughtForm,

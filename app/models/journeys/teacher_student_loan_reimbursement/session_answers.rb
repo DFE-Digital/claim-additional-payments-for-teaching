@@ -17,6 +17,7 @@ module Journeys
       attribute :mostly_performed_leadership_duties, :boolean, pii: false
       attribute :claim_school_somewhere_else, :boolean, pii: false
       attribute :student_loan_amount_seen, :boolean, pii: false
+      attribute :confirmed_employment_proof_blob_ids, default: [], pii: true
 
       def dqt_teacher_record
         return unless dqt_teacher_status.present?
