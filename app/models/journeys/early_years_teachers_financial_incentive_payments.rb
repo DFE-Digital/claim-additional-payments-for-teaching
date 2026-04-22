@@ -8,6 +8,10 @@ module Journeys
     def forms
       array = []
 
+      array += [
+        NurserySearchForm
+      ]
+
       array << if TeacherAuth::Config.instance.bypass?
         Debug::TeacherAuth::SignInForm
       else

@@ -1,0 +1,24 @@
+<% @backlink_path = landing_page_path %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Which nursery do you teach in?</h1>
+
+    <p class="govuk-body">
+      If you work in more than one setting, chose the one you spend most of your time in.
+    </p>
+
+    <%= form_with model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_text_field :nursery_search_query,
+        label: {
+          text: "Enter nursery name or postcode",
+          size: "m"
+        },
+        hint: {
+          text: "Search by name or postcode."
+        } %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

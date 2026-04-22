@@ -2,6 +2,7 @@ module Journeys
   module EarlyYearsTeachersFinancialIncentivePayments
     class SlugSequence
       SLUGS = %w[
+        nursery-search
         sign-in
         trn-found
       ].freeze
@@ -31,6 +32,7 @@ module Journeys
       def slugs
         array = []
 
+        array << SLUGS_HASH["nursery-search"]
         array << SLUGS_HASH["sign-in"]
         array << SLUGS_HASH["trn-found"]
 

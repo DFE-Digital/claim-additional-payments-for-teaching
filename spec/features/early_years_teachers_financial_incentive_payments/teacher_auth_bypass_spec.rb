@@ -15,6 +15,9 @@ RSpec.describe "EYTFIP with teacher auth bypass", feature_flag: [:eytfi_journey]
     expect(page).to have_text "Claim an early years teacher recognition payment"
     click_link "Start now"
 
+    expect(page).to have_text "Which nursery do you teach in?"
+    click_button "Continue"
+
     expect(page).to have_text "Bypass Teacher Auth"
     expect(find_field("Full name").value).to be_present
     expect(find_field("Day").value).to be_present
