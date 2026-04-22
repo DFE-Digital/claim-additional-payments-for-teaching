@@ -3,3 +3,8 @@ en:
     journey_name: Early Years Teachers Financial Incentive Payments
     feedback_email: "feedback@example.com"
     support_email_address: "EYTrecognitionpayment@education.gov.uk"
+    forms:
+      teaching_qualification_confirmation:
+        options:
+          true: "Yes"
+          false: "No"

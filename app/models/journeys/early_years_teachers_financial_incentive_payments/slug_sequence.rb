@@ -3,6 +3,7 @@ module Journeys
     class SlugSequence
       SLUGS = %w[
         nursery-search
+        teaching-qualification-confirmation
         sign-in
         trn-found
       ].freeze
@@ -33,6 +34,7 @@ module Journeys
         array = []
 
         array << SLUGS_HASH["nursery-search"]
+        array << SLUGS_HASH["teaching-qualification-confirmation"]
         array << SLUGS_HASH["sign-in"]
         array << SLUGS_HASH["trn-found"]
 

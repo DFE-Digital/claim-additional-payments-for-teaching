@@ -9,7 +9,8 @@ module Journeys
       array = []
 
       array += [
-        NurserySearchForm
+        NurserySearchForm,
+        TeachingQualificationConfirmationForm
       ]
 
       array << if TeacherAuth::Config.instance.bypass?
