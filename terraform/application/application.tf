@@ -21,9 +21,12 @@ module "application_configuration" {
       BIGQUERY_TABLE_NAME = "events"
   })
   secret_variables = {
-    DATABASE_URL        = module.postgres.url
-    HEARTBEAT_CHECK_URL = var.enable_monitoring ? module.statuscake[0].heartbeat_check_urls[local.heartbeat_check_name] : null
-    GOOGLE_CLOUD_CREDENTIALS = var.enable_dfe_analytics_federated_auth ? module.dfe_analytics[0].google_cloud_credentials : null
+    DATABASE_URL               = module.postgres.url
+    AZURE_STORAGE_ACCOUNT_NAME = local.azure_storage_account_name
+    AZURE_STORAGE_ACCESS_KEY   = local.azure_storage_access_key
+    AZURE_STORAGE_CONTAINER    = local.azure_storage_container
+    HEARTBEAT_CHECK_URL        = var.enable_monitoring ? module.statuscake[0].heartbeat_check_urls[local.heartbeat_check_name] : null
+    GOOGLE_CLOUD_CREDENTIALS   = var.enable_dfe_analytics_federated_auth ? module.dfe_analytics[0].google_cloud_credentials : null
   }
 }
 
@@ -71,6 +74,6 @@ module "worker_application" {
   replicas   = var.worker_replicas
   max_memory = var.worker_memory
 
-  enable_logit = var.enable_logit
+  enable_logit   = var.enable_logit
   enable_gcp_wif = true
 }
