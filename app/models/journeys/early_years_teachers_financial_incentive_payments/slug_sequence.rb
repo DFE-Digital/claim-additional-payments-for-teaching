@@ -4,6 +4,7 @@ module Journeys
       SLUGS = %w[
         nursery-search
         teaching-qualification-confirmation
+        eligible-teaching-qualification-held
         sign-in
         trn-found
       ].freeze
@@ -35,6 +36,7 @@ module Journeys
 
         array << SLUGS_HASH["nursery-search"]
         array << SLUGS_HASH["teaching-qualification-confirmation"]
+        array << SLUGS_HASH["eligible-teaching-qualification-held"]
         array << SLUGS_HASH["sign-in"]
         array << SLUGS_HASH["trn-found"]
 
