@@ -4,13 +4,13 @@ module Journeys
       def callback
         persist_callback_to_session
 
-        redirect_to claim_path(current_journey_routing_name, "trn-found")
+        redirect_to claim_path(current_journey_routing_name, "eligibile-qualification-confirmed")
       end
 
       def callback_bypass
         persist_callback_to_session
 
-        redirect_to claim_path(current_journey_routing_name, "trn-found")
+        redirect_to claim_path(current_journey_routing_name, "eligibile-qualification-confirmed")
       end
 
       private

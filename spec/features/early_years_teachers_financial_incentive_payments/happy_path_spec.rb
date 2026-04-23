@@ -37,6 +37,6 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     expect(page).to have_text "Sign in with GOV.UK One Login"
     click_button "Continue"
 
-    expect(page).to have_text "TRN found"
+    expect(page).to have_text "You hold an eligible qualification"
   end
 end

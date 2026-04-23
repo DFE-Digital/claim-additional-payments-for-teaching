@@ -21,7 +21,7 @@ module Journeys
       end
 
       array += [
-        TrnFoundForm
+        EligibileQualificationConfirmedForm
       ]
 
       array

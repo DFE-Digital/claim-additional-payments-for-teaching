@@ -6,7 +6,7 @@ module Journeys
         teaching-qualification-confirmation
         eligible-teaching-qualification-held
         sign-in
-        trn-found
+        eligibile-qualification-confirmed
       ].freeze
 
       SLUGS_HASH = SLUGS.to_h { |slug| [slug, slug] }.freeze
@@ -38,7 +38,7 @@ module Journeys
         array << SLUGS_HASH["teaching-qualification-confirmation"]
         array << SLUGS_HASH["eligible-teaching-qualification-held"]
         array << SLUGS_HASH["sign-in"]
-        array << SLUGS_HASH["trn-found"]
+        array << SLUGS_HASH["eligibile-qualification-confirmed"]
 
         array
       end
