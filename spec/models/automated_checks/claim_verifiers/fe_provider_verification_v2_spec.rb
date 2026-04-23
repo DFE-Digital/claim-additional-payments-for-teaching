@@ -235,7 +235,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
             :further_education_payments_eligibility,
             :eligible,
             :provider_verification_completed,
-            provider_verification_teaching_hours_per_week: "fewer_than_2_and_a_half_hours_per_week"
+            provider_verification_teaching_hours_per_week: "less_than_2_5"
           )
         end
 
@@ -259,7 +259,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
               :further_education_payments_eligibility,
               :eligible,
               :provider_verification_completed,
-              provider_verification_teaching_hours_per_week: "2_and_a_half_to_12_hours_per_week",
+              provider_verification_teaching_hours_per_week: "between_2_5_and_12",
               teaching_hours_per_week: "more_than_12"
             )
           end
@@ -283,7 +283,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
               :further_education_payments_eligibility,
               :eligible,
               :provider_verification_completed,
-              provider_verification_teaching_hours_per_week: "2_and_a_half_to_12_hours_per_week",
+              provider_verification_teaching_hours_per_week: "between_2_5_and_12",
               teaching_hours_per_week: "more_than_20"
             )
           end
@@ -309,7 +309,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
               :further_education_payments_eligibility,
               :eligible,
               :provider_verification_completed,
-              provider_verification_teaching_hours_per_week: "12_to_20_hours_per_week",
+              provider_verification_teaching_hours_per_week: "more_than_12",
               teaching_hours_per_week: "between_2_5_and_12"
             )
           end
@@ -333,7 +333,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
               :further_education_payments_eligibility,
               :eligible,
               :provider_verification_completed,
-              provider_verification_teaching_hours_per_week: "20_or_more_hours_per_week",
+              provider_verification_teaching_hours_per_week: "more_than_20",
               teaching_hours_per_week: "between_2_5_and_12"
             )
           end
@@ -414,7 +414,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
           contract_type: "permanent",
           provider_verification_teaching_qualification: "yes",
           provider_verification_continued_employment: true,
-          provider_verification_teaching_hours_per_week: "20_or_more_hours_per_week",
+          provider_verification_teaching_hours_per_week: "more_than_20",
           teaching_hours_per_week: "more_than_20"
         )
       end
