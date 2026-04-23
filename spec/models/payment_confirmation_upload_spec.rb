@@ -173,6 +173,27 @@ RSpec.describe PaymentConfirmationUpload do
           end
         end
       end
+
+      it "staggers confirmation emails due to Notify API 3000 per 60 seconds limit" do
+        deliver_later_calls = []
+        mail_double_template = double("mail")
+
+        allow(mail_double_template).to receive(:deliver_later) do |wait: nil|
+          deliver_later_calls << wait
+        end
+
+        allow(PaymentMailer).to receive(:confirmation).and_return(mail_double_template)
+
+        payment_confirmation_upload.ingest
+
+        confirmed_count = (payroll_run.payments - [skipped_payment]).count
+        expect(deliver_later_calls.length).to eq(confirmed_count)
+
+        deliver_later_calls.each_with_index do |wait_arg, index|
+          expected_wait = (index / 10.0).seconds
+          expect(wait_arg).to eq(expected_wait)
+        end
+      end
     end
 
     context "when one payment in the CSV does not belong to the payroll run" do
