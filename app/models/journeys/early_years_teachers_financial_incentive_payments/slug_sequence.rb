@@ -9,6 +9,7 @@ module Journeys
         eligibile-qualification-confirmed
         confirm-eligibility
         accept-payment
+        information-provided
       ].freeze
 
       SLUGS_HASH = SLUGS.to_h { |slug| [slug, slug] }.freeze
@@ -43,6 +44,7 @@ module Journeys
         array << SLUGS_HASH["eligibile-qualification-confirmed"]
         array << SLUGS_HASH["confirm-eligibility"]
         array << SLUGS_HASH["accept-payment"]
+        array << SLUGS_HASH["information-provided"]
 
         array
       end

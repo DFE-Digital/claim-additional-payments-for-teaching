@@ -38,5 +38,14 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     click_button "Continue"
 
     expect(page).to have_text "You hold an eligible qualification"
+    click_button "Continue"
+
+    expect(page).to have_text "Confirm you are eligible"
+    click_button "Continue"
+
+    expect(page).to have_text "Before you accept the claim"
+    click_button "Continue"
+
+    expect(page).to have_text "How we’ll use your information"
   end
 end
