@@ -1,0 +1,59 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= govuk_panel(
+      title_text: "You’re eligible for a recognition payment",
+      classes: "govuk-panel--informational"
+    ) %>
+
+    <div class="govuk-body">
+      Congratulations, you’re eligible for an early years teacher recognition payment of £4,500.
+    </div>
+
+    <h1 class="govuk-heading-l">Before you accept the claim</h1>
+
+    <p class="govuk-body">
+      The payment may affect your finances. You should check how it could impact you
+      before you decide whether to accept it.
+    </p>
+
+    <h2 class="govuk-heading-m">Student loan deductions</h2>
+
+    <p class="govuk-body">
+      If you are currently repaying a student loan, a deduction from your payment
+      will go towards repaying it.
+    </p>
+
+    <h2 class="govuk-heading-m">Income tax</h2>
+
+    <p class="govuk-body">
+      If you pay <%= govuk_link_to "the basic rate of Income Tax", "https://www.gov.uk/income-tax-rates#income-tax-rates-and-bands" %>,
+      we will pay tax and National Insurance for you and you will receive the full
+      amount. You may have to pay additional Income Tax if you pay the higher rate.
+    </p>
+
+    <h2 class="govuk-heading-m">Benefits</h2>
+
+    <p class="govuk-body govuk-!-margin-bottom-8">
+      The payment may affect any benefits you receive. You should
+      <%= govuk_link_to "check how they might be affected", "https://www.gov.uk/benefits-calculators" %> before
+      you accept the payment
+    </p>
+
+    <%= form_with model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_collection_radio_buttons :wednesday_lunch_id,
+        @form.radio_options,
+        :id,
+        :name,
+        :description,
+        inline: true,
+        legend: {
+          text: "Do you want to accept the payment?"
+        },
+        hint: {
+          text: "If you click no, you’ll cancel your claim and exit the service."
+        } %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

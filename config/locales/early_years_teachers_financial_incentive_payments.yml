@@ -8,3 +8,7 @@ en:
         options:
           true: "Yes"
           false: "No"
+      accept_payment:
+        options:
+          true: "Yes"
+          false: "No"

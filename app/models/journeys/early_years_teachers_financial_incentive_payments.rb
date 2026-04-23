@@ -22,7 +22,8 @@ module Journeys
 
       array += [
         EligibileQualificationConfirmedForm,
-        ConfirmEligibilityForm
+        ConfirmEligibilityForm,
+        AcceptPaymentForm
       ]
 
       array
