@@ -64,15 +64,15 @@ RSpec.feature "Payroll" do
     end
   end
 
-  scenario "Any claims approved in the meantime are not included" do
+  scenario "All claims approved are included" do
     click_on "Payroll"
 
-    expected_claims = create_list(:claim, 3, :approved)
+    initial_claims = create_list(:claim, 3, :approved)
 
     month_name = Date.today.strftime("%B")
     click_on "Run #{month_name} payroll"
 
-    create_list(:claim, 3, :approved)
+    additional_claims = create_list(:claim, 3, :approved)
 
     click_on "Confirm and submit"
 
@@ -80,10 +80,10 @@ RSpec.feature "Payroll" do
 
     click_on "Refresh"
 
-    expect(page).to have_content("Approved claims 3")
+    expect(page).to have_content("Approved claims 6")
 
     payroll_run = PayrollRun.order(:created_at).last
-    expect(payroll_run.claims).to match_array(expected_claims)
+    expect(payroll_run.claims).to match_array(initial_claims + additional_claims)
   end
 
   scenario "Service admin can view a list of previous payroll runs" do

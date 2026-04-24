@@ -21,8 +21,11 @@ module Admin
     end
 
     def create
-      claims = Claim.where(id: params[:claim_ids])
-      topups = Topup.where(id: params[:topup_ids])
+      claims = Claim
+        .payrollable
+        .order(submitted_at: :asc)
+
+      topups = Topup.payrollable
 
       if claims.empty? && topups.empty?
         redirect_to new_admin_payroll_run_path, alert: "Payroll not run, no claims or top ups"

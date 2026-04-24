@@ -46,11 +46,5 @@
 </div>
 
 <%= form_with url: admin_payroll_runs_path do |form| %>
-  <% @claims.each do |claim| %>
-    <%= hidden_field_tag "claim_ids[]", claim.id %>
-  <% end %>
-  <% @topups.each do |topup| %>
-    <%= hidden_field_tag "topup_ids[]", topup.id %>
-  <% end %>
   <%= form.submit "Confirm and submit", class: "govuk-button", data: {module: "govuk-button"} %>
 <% end %>
