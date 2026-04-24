@@ -42,8 +42,8 @@ class PaymentConfirmationUpload
 
       raise ActiveRecord::Rollback if errors.any?
 
-      payments.each do |payment|
-        PaymentMailer.confirmation(payment).deliver_later
+      payments.each_with_index do |payment, index|
+        PaymentMailer.confirmation(payment).deliver_later(wait: (index / 10.0).seconds)
       end
     end
   end
