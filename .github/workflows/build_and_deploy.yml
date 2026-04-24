@@ -150,16 +150,16 @@ jobs:
           BASIC_AUTH_USERNAME: ${{ secrets.BASIC_AUTH_USERNAME }}
           BASIC_AUTH_PASSWORD: ${{ secrets.BASIC_AUTH_PASSWORD }}
 
-      - name: Notify on failure
-        if: failure()
-        uses: rtCamp/action-slack-notify@e31e87e03dd19038e411e38ae27cbad084a90661 # Pinned at 2.3.3
-        env:
-          SLACK_COLOR: failure
-          SLACK_TITLE: Failure deploying release to ${{ matrix.environment }}
-          SLACK_MESSAGE:
+      - name: Notify teams channel failure
+        if: ${{ failure() }}
+        uses: DFE-Digital/github-actions/send-to-teams-channel@master
+        with:
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          title: Failure deploying release to ${{ matrix.environment }}
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
+          message: |
             Failure deploying release to ${{ matrix.environment }} - Docker tag ${{ needs.build.outputs.docker-image-tag
             }}
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   manual_deploy:
     name: Deploy to ${{ inputs.environment }}
@@ -250,7 +250,8 @@ jobs:
           azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          slack-webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
 
   deploy_domains_env:
     name: Deploy Domains to ${{ matrix.domain_environment }} environment
@@ -283,4 +284,5 @@ jobs:
           azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           environment: ${{ matrix.domain_environment }}
           healthcheck: healthcheck
-          slack-webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
