@@ -1,0 +1,3 @@
+Provider URN,Provider name,Provider address line 1,Provider address line 2,Provider address line 3,Provider town,Postcode,Eligible
+123456,Nursery 123456,1 Some Road,,,London,EC1N 2TD,TRUE
+EY234567,Nursery EY234567,2 Some Street,,,London,EC1N 2TD,FALSE
