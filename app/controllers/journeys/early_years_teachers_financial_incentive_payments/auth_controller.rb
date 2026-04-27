@@ -19,24 +19,28 @@ module Journeys
         @omniauth_hash ||= if !TeacherAuth::Config.instance.bypass?
           request.env["omniauth.auth"]
         else
-          form = Debug::TeacherAuth::SignInForm.new(
-            journey_session: nil,
-            journey: nil,
-            params:
-          )
+          omniauth_bypass_hash
+        end
+      end
 
-          OpenStruct.new(
-            extra: OpenStruct.new(
-              raw_info: OpenStruct.new(
-                trn: form.trn,
-                email: form.email,
-                verified_name: form.verified_name.split(" "),
-                verified_date_of_birth: form.verified_date_of_birth.to_s,
-                sub: form.sub
-              )
+      def omniauth_bypass_hash
+        form = Debug::TeacherAuth::SignInForm.new(
+          journey_session: nil,
+          journey: nil,
+          params:
+        )
+
+        OpenStruct.new(
+          extra: OpenStruct.new(
+            raw_info: OpenStruct.new(
+              trn: form.trn,
+              email: form.email,
+              verified_name: form.verified_name.split(" "),
+              verified_date_of_birth: form.verified_date_of_birth.to_s,
+              sub: form.sub
             )
           )
-        end
+        )
       end
 
       def persist_callback_to_session
