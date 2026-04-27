@@ -25,7 +25,8 @@ module Policies
         policy = data_retention.module_parent #=> Policies::<PolicyName> eg tri
 
         claim_scope = Claim
-          .by_academic_year(AcademicYear.previous)
+          .after_academic_year(AcademicYear.new(2023)) # Don't try and scrub very old claims
+          .before_academic_year(AcademicYear.current)
           .joins(
             <<~SQL
               JOIN #{policy::Eligibility.table_name}
