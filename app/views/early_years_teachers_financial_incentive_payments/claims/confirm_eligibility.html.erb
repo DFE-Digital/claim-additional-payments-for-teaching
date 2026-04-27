@@ -1,0 +1,32 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_check_boxes_fieldset :confirm_eligibility,
+        multiple: false,
+        legend: {
+          text: "Confirm you are eligible",
+          tag: "h1",
+          size: "l"
+        } do %>
+        <p class="govuk-body">
+          By continuing, you confirm that the information you’ve given is true and accurate, and that you meet all the eligibility criteria in the guidance.
+        </p>
+
+        <p class="govuk-body">
+          We may check your details with your employer or other official records.
+        </p>
+
+        <%= f.govuk_check_box :confirm_eligibility,
+          1,
+          0,
+          multiple: false,
+          link_errors: true,
+          label: {
+            text: "I confirm that I understand and accept these conditions."
+          } %>
+      <% end %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

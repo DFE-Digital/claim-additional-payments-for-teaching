@@ -1,6 +1,6 @@
 module Journeys
   module EarlyYearsTeachersFinancialIncentivePayments
-    class TrnFoundForm < Form
+    class ConfirmEligibilityForm < Form
       def save
         true
       end

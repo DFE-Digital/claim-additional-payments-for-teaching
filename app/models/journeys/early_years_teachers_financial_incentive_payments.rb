@@ -8,6 +8,12 @@ module Journeys
     def forms
       array = []
 
+      array += [
+        NurserySearchForm,
+        TeachingQualificationConfirmationForm,
+        EligibleTeachingQualificationHeldForm
+      ]
+
       array << if TeacherAuth::Config.instance.bypass?
         Debug::TeacherAuth::SignInForm
       else
@@ -15,7 +21,10 @@ module Journeys
       end
 
       array += [
-        TrnFoundForm
+        EligibleQualificationConfirmedForm,
+        ConfirmEligibilityForm,
+        AcceptPaymentForm,
+        InformationProvidedForm
       ]
 
       array

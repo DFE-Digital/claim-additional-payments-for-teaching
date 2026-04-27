@@ -25,9 +25,27 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     visit landing_page_path(Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name)
     click_link "Start now"
 
-    expect(page).to have_text "sign in page goes here"
-    click_button "/early-years-teachers-financial-incentive-payments/auth/teacher"
+    expect(page).to have_text "Which nursery do you teach in?"
+    click_button "Continue"
 
-    expect(page).to have_text "TRN found"
+    expect(page).to have_text "Do you hold one of these teaching qualifications?"
+    click_button "Continue"
+
+    expect(page).to have_text "You are eligible to apply"
+    click_button "Continue"
+
+    expect(page).to have_text "Sign in with GOV.UK One Login"
+    click_button "Continue"
+
+    expect(page).to have_text "You hold an eligible qualification"
+    click_button "Continue"
+
+    expect(page).to have_text "Confirm you are eligible"
+    click_button "Continue"
+
+    expect(page).to have_text "Before you accept the claim"
+    click_button "Continue"
+
+    expect(page).to have_text "How we’ll use your information"
   end
 end

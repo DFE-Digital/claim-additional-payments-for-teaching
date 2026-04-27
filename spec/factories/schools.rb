@@ -64,7 +64,7 @@ FactoryBot.define do
       sequence(:urn, 170000)
     end
 
-    trait :combined_journey_eligibile_for_all do
+    trait :combined_journey_eligible_for_all do
       early_career_payments_eligible
       targeted_retention_incentive_payments_eligible
     end

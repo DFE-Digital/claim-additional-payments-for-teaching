@@ -1,0 +1,23 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">You hold an eligible qualification</h1>
+
+    <p class="govuk-body">
+      We’ve confirmed that you hold one of the following teaching qualifications:
+    </p>
+
+    <%= govuk_list [
+      "Qualified Teacher Status (QTS)",
+      "Early Years Teacher Status (EYTS)",
+      "Early Years Professional Status (EYPS)"
+    ], type: :bullet %>
+
+    <p class="govuk-body">
+      This means you meet the qualification requirement for the early years teacher recognition payment.
+    </p>
+
+    <%= form_with model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

@@ -2,8 +2,14 @@ module Journeys
   module EarlyYearsTeachersFinancialIncentivePayments
     class SlugSequence
       SLUGS = %w[
+        nursery-search
+        teaching-qualification-confirmation
+        eligible-teaching-qualification-held
         sign-in
-        trn-found
+        eligible-qualification-confirmed
+        confirm-eligibility
+        accept-payment
+        information-provided
       ].freeze
 
       SLUGS_HASH = SLUGS.to_h { |slug| [slug, slug] }.freeze
@@ -31,8 +37,14 @@ module Journeys
       def slugs
         array = []
 
+        array << SLUGS_HASH["nursery-search"]
+        array << SLUGS_HASH["teaching-qualification-confirmation"]
+        array << SLUGS_HASH["eligible-teaching-qualification-held"]
         array << SLUGS_HASH["sign-in"]
-        array << SLUGS_HASH["trn-found"]
+        array << SLUGS_HASH["eligible-qualification-confirmed"]
+        array << SLUGS_HASH["confirm-eligibility"]
+        array << SLUGS_HASH["accept-payment"]
+        array << SLUGS_HASH["information-provided"]
 
         array
       end

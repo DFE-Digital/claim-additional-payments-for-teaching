@@ -12,8 +12,17 @@ RSpec.describe "EYTFIP with teacher auth bypass", feature_flag: [:eytfi_journey]
 
   scenario "it auto generates dummy data to by pass teacher auth" do
     visit landing_page_path(Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name)
-    expect(page).to have_text "EYTFI landing page goes here"
+    expect(page).to have_text "Claim an early years teacher recognition payment"
     click_link "Start now"
+
+    expect(page).to have_text "Which nursery do you teach in?"
+    click_button "Continue"
+
+    expect(page).to have_text "Do you hold one of these teaching qualifications?"
+    click_button "Continue"
+
+    expect(page).to have_text "You are eligible to apply"
+    click_button "Continue"
 
     expect(page).to have_text "Bypass Teacher Auth"
     expect(find_field("Full name").value).to be_present
