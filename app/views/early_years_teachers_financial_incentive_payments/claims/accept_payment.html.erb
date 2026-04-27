@@ -40,7 +40,7 @@
     </p>
 
     <%= form_with model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
-      <%= f.govuk_collection_radio_buttons :wednesday_lunch_id,
+      <%= f.govuk_collection_radio_buttons :accept_payment,
         @form.radio_options,
         :id,
         :name,

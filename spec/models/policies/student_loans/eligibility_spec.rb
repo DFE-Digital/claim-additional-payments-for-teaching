@@ -301,7 +301,7 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
   describe "#ineligible_qts_award_year?" do
     subject { described_class.new(qts_award_year:).ineligible_qts_award_year? }
 
-    context "when the qts award year is eligibile" do
+    context "when the qts award year is eligible" do
       let(:qts_award_year) { "on_or_after_cut_off_date" }
 
       it { is_expected.to eq(false) }

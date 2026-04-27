@@ -21,7 +21,7 @@ module Journeys
       end
 
       array += [
-        EligibileQualificationConfirmedForm,
+        EligibleQualificationConfirmedForm,
         ConfirmEligibilityForm,
         AcceptPaymentForm,
         InformationProvidedForm

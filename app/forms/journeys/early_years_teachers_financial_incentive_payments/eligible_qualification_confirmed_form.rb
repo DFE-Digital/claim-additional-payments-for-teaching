@@ -1,6 +1,6 @@
 module Journeys
   module EarlyYearsTeachersFinancialIncentivePayments
-    class EligibileQualificationConfirmedForm < Form
+    class EligibleQualificationConfirmedForm < Form
       def save
         true
       end

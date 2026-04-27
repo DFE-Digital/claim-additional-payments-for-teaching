@@ -262,7 +262,7 @@ RSpec.describe Reports::FailedQualificationClaims do
       )
 
       # included "Ineligible" DQT status - task passed
-      ecp_claim_approved_ineligibile_note = create(
+      ecp_claim_approved_ineligible_note = create(
         :claim,
         :approved,
         policy: Policies::EarlyCareerPayments,
@@ -285,13 +285,13 @@ RSpec.describe Reports::FailedQualificationClaims do
         claim_verifier_match: :none,
         passed: true,
         name: "qualifications",
-        claim: ecp_claim_approved_ineligibile_note
+        claim: ecp_claim_approved_ineligible_note
       )
 
       create(
         :note,
         label: "qualifications",
-        claim: ecp_claim_approved_ineligibile_note,
+        claim: ecp_claim_approved_ineligible_note,
         body: <<~HTML
           [DQT Qualification] - Ineligible:
           <pre>
@@ -307,7 +307,7 @@ RSpec.describe Reports::FailedQualificationClaims do
 
       payment_2 = create(
         :payment,
-        claims: [ecp_claim_approved_ineligibile_note],
+        claims: [ecp_claim_approved_ineligible_note],
         payroll_run: payroll_run_1
       )
 
@@ -441,7 +441,7 @@ RSpec.describe Reports::FailedQualificationClaims do
           "Core"
         ],
         [
-          ecp_claim_approved_ineligibile_note.reference,
+          ecp_claim_approved_ineligible_note.reference,
           "5555555",
           "ECP",
           "Payrolled",

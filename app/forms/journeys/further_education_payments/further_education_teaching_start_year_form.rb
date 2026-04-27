@@ -9,7 +9,7 @@ module Journeys
         }
 
       def radio_options
-        academic_years = eligibile_academic_years.reverse
+        academic_years = eligible_academic_years.reverse
 
         array = academic_years.map do |academic_year|
           Option.new(
@@ -34,12 +34,12 @@ module Journeys
       end
 
       def before_year
-        eligibile_academic_years.first.start_year
+        eligible_academic_years.first.start_year
       end
 
       private
 
-      def eligibile_academic_years
+      def eligible_academic_years
         Policies::FurtherEducationPayments
           .selectable_teaching_start_academic_years(AcademicYear.current)
       end

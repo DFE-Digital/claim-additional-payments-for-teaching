@@ -34,7 +34,7 @@ RSpec.feature "Further education payments" do
   # user reaches an ineligible state
   # hits back button more than once
   # changes an answer that does not change pathway
-  # ie they are still inelgibile
+  # ie they are still ineligible
   # we remove the ineligible answer
   # so they can continue with their current journey
   # rather than still showing an ineligible page again
