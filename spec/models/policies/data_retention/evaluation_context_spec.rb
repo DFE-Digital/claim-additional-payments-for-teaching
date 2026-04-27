@@ -173,4 +173,46 @@ RSpec.describe Policies::DataRetention::EvaluationContext do
       end
     end
   end
+
+  describe "#inactive_claim_over_five_years_old?" do
+    subject { evaluation_context.inactive_claim_over_five_years_old? }
+
+    let(:claim) { create(:claim, academic_year: academic_year) }
+
+    context "when the claim is less than five academic years old" do
+      let(:academic_year) { AcademicYear.current - 4 }
+
+      before do
+        create(
+          :decision,
+          :rejected,
+          claim: claim,
+          created_at: academic_year.start_of_autumn_term + 1.second
+        )
+      end
+
+      it { is_expected.to be false }
+    end
+
+    context "when the claim is five or more academic years old" do
+      let(:academic_year) { AcademicYear.current - 5 }
+
+      context "when the claim is active" do
+        it { is_expected.to be false }
+      end
+
+      context "when the claim is not active" do
+        before do
+          create(
+            :decision,
+            :rejected,
+            claim: claim,
+            created_at: academic_year.start_of_autumn_term - 1.second
+          )
+        end
+
+        it { is_expected.to be true }
+      end
+    end
+  end
 end
