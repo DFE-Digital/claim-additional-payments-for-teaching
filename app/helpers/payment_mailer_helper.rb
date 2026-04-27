@@ -1,4 +1,9 @@
 module PaymentMailerHelper
+  def tax_year_for(date)
+    year = (date.month < 4 || (date.month == 4 && date.day < 6)) ? date.year - 1 : date.year
+    "#{year} to #{year + 1}"
+  end
+
   def breakdown_of_payment_bullets(payment)
     bullets = []
 

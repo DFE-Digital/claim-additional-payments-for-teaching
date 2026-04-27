@@ -40,6 +40,10 @@ RSpec.describe PaymentMailer, type: :mailer do
           expect(mail.body).to include("You will receive £500.00 on Tuesday 1st January 2019")
         end
 
+        it "includes the tax year derived from the payment date" do
+          expect(mail.body).to include("current 2018 to 2019 tax year")
+        end
+
         it "creates an event" do
           expect { mail.body }.to change {
             Event.where(claim:, name: "email_confirmation_single_sent").count
@@ -145,6 +149,10 @@ RSpec.describe PaymentMailer, type: :mailer do
 
         it "includes the NET pay amount and payment date in the body" do
           expect(mail.body).to include("You will receive £2,500.00 on Tuesday 1st January 2019")
+        end
+
+        it "includes the tax year derived from the payment date" do
+          expect(mail.body).to include("current 2018 to 2019 tax year")
         end
 
         it "mentions the type of claim in the body" do
