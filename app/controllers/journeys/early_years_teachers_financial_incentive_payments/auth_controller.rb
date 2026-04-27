@@ -7,10 +7,40 @@ module Journeys
         redirect_to claim_path(current_journey_routing_name, "trn-found")
       end
 
+      def callback_bypass
+        persist_callback_to_session
+
+        redirect_to claim_path(current_journey_routing_name, "trn-found")
+      end
+
       private
 
       def omniauth_hash
-        @omniauth_hash ||= request.env["omniauth.auth"]
+        @omniauth_hash ||= if !TeacherAuth::Config.instance.bypass?
+          request.env["omniauth.auth"]
+        else
+          omniauth_bypass_hash
+        end
+      end
+
+      def omniauth_bypass_hash
+        form = Debug::TeacherAuth::SignInForm.new(
+          journey_session: nil,
+          journey: nil,
+          params:
+        )
+
+        OpenStruct.new(
+          extra: OpenStruct.new(
+            raw_info: OpenStruct.new(
+              trn: form.trn,
+              email: form.email,
+              verified_name: form.verified_name.split(" "),
+              verified_date_of_birth: form.verified_date_of_birth.to_s,
+              sub: form.sub
+            )
+          )
+        )
       end
 
       def persist_callback_to_session
