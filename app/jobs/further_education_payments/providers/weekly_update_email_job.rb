@@ -22,11 +22,13 @@ module FurtherEducationPayments
                 .awaiting_provider_verification_year_2
             )
 
-        providers_with_unverified_claims.each do |provider|
-          FurtherEducationPaymentsMailer
-            .with(provider: provider)
-            .provider_weekly_update_email
-            .deliver_later
+        providers_with_unverified_claims.each_with_index do |provider, index|
+          ApplicationMailer.deliver_later_with_throttling(
+            FurtherEducationPaymentsMailer
+              .with(provider: provider)
+              .provider_weekly_update_email,
+            index:
+          )
         end
       end
     end
