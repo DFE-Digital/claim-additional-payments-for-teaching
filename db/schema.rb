@@ -476,6 +476,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_12_141454) do
     t.string "provider_verification_teaching_start_year"
     t.uuid "provider_verification_verified_by_id"
     t.text "provision_search"
+    t.jsonb "redacted_attributes", default: {}
     t.uuid "school_id"
     t.boolean "subject_to_disciplinary_action"
     t.boolean "subject_to_formal_performance_action"

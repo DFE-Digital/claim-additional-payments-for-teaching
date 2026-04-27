@@ -4,7 +4,10 @@ RSpec.describe "All policies have a data retention policy for all attributes" do
   Policies.all.each do |policy|
     describe "#{policy} data retention policy" do
       it "has a data retention policy for all attributes" do
-        skip unless policy == Policies::TargetedRetentionIncentivePayments
+        skip unless policy.in?([
+          Policies::TargetedRetentionIncentivePayments,
+          Policies::FurtherEducationPayments
+        ])
 
         expect(
           Object.const_defined?("Policies::#{policy}::DataRetention::Policy")
