@@ -57,8 +57,14 @@ module Journeys
         !further_education_teaching_start_year&.start_with?("pre-")
       end
 
+      def teaching_hours_per_week
+        return unless super
+
+        ::FurtherEducationPayments::TeachingHours.new(super)
+      end
+
       def teaching_less_than_2_5_hours_per_week?
-        teaching_hours_per_week == "less_than_2_5"
+        teaching_hours_per_week&.less_than_2_5?
       end
 
       def teaching_less_than_2_5_hours_per_week_next_term?
@@ -113,10 +119,9 @@ module Journeys
       end
 
       def calculate_award_amount
-        case teaching_hours_per_week
-        when "more_than_12", "more_than_20"
+        if teaching_hours_per_week.upperband?
           school.eligible_fe_provider.max_award_amount
-        when "between_2_5_and_12"
+        elsif teaching_hours_per_week.between_2_5_and_12?
           school.eligible_fe_provider.lower_award_amount
         else
           0

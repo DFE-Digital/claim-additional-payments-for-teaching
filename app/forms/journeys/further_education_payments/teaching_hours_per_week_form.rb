@@ -12,19 +12,19 @@ module Journeys
       def radio_options
         @radio_options ||= [
           Option.new(
-            id: "more_than_20",
+            id: ::FurtherEducationPayments::TeachingHours.more_than_20,
             name: t("options.more_than_20")
           ),
           Option.new(
-            id: "more_than_12",
+            id: ::FurtherEducationPayments::TeachingHours.more_than_12,
             name: t("options.more_than_12")
           ),
           Option.new(
-            id: "between_2_5_and_12",
+            id: ::FurtherEducationPayments::TeachingHours.between_2_5_and_12,
             name: t("options.between_2_5_and_12")
           ),
           Option.new(
-            id: "less_than_2_5",
+            id: ::FurtherEducationPayments::TeachingHours.less_than_2_5,
             name: t("options.less_than_2_5")
           )
         ]
