@@ -13,3 +13,7 @@ end
 def when_early_years_payment_practitioner_journey_configuration_exists
   create(:journey_configuration, :early_years_payment_practitioner)
 end
+
+def when_eytfi_journey_configuration_exists
+  create(:journey_configuration, :early_years_teachers_financial_incentive_payments)
+end

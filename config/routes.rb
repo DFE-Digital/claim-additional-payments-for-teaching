@@ -191,6 +191,7 @@ Rails.application.routes.draw do
     resources :targeted_retention_incentive_payments_awards, only: [:index, :create]
     resource :eligible_ey_providers, only: [:create, :show], path: "eligible-early-years-providers"
     resource :eligible_fe_providers, only: [:create, :show], path: "eligible-further-education-providers"
+    resource :eligible_eytfi_providers, only: [:create, :show]
     resources :reports, only: [:index, :show]
 
     resources :early_years_providers, only: [:index]

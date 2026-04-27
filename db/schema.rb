@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_16_122045) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_27_100232) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -258,6 +258,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_16_122045) do
     t.index ["primary_key_contact_email_address"], name: "index_eligible_ey_providers_on_primary_contact_email_address"
     t.index ["secondary_contact_email_address"], name: "index_eligible_ey_providers_on_secondary_contact_email_address"
     t.index ["urn", "file_upload_id"], name: "index_eligible_ey_providers_on_urn_and_file_upload_id", unique: true
+  end
+
+  create_table "eligible_eytfi_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "address_line_1"
+    t.text "address_line_2"
+    t.text "address_line_3"
+    t.datetime "created_at", null: false
+    t.boolean "eligible", null: false
+    t.uuid "file_upload_id", null: false
+    t.text "name", null: false
+    t.text "postcode", null: false
+    t.text "town"
+    t.datetime "updated_at", null: false
+    t.text "urn", null: false
+    t.index ["urn", "file_upload_id"], name: "index_eligible_eytfi_providers_on_urn_and_file_upload_id"
   end
 
   create_table "eligible_fe_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
