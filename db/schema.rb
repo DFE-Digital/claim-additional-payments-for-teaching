@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_28_141408) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_28_151451) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -414,6 +414,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_141408) do
     t.boolean "one_year"
     t.string "passport_number"
     t.text "previous_year_claim_ids", default: [], array: true
+    t.jsonb "redacted_attributes", default: {}
     t.string "school_headteacher_name"
     t.date "start_date"
     t.boolean "state_funded_secondary_school"
