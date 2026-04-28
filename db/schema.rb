@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_27_135132) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_28_133317) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -759,6 +759,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_27_135132) do
     t.boolean "mostly_performed_leadership_duties"
     t.boolean "physics_taught"
     t.string "qts_award_year"
+    t.jsonb "redacted_attributes", default: {}
     t.decimal "student_loan_repayment_amount", precision: 7, scale: 2
     t.boolean "taught_eligible_subjects"
     t.string "teacher_reference_number", limit: 11
