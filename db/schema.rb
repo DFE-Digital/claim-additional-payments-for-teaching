@@ -276,6 +276,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_02_144451) do
     t.string "provider_email_address"
     t.string "provider_entered_contract_type"
     t.datetime "provider_six_month_employment_reminder_sent_at"
+    t.jsonb "redacted_attributes", default: {}
     t.string "returner_contract_type"
     t.boolean "returner_worked_with_children"
     t.boolean "returning_within_6_months"
