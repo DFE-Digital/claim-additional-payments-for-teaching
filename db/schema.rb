@@ -868,6 +868,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_02_144451) do
     t.boolean "mostly_performed_leadership_duties"
     t.boolean "physics_taught"
     t.string "qts_award_year"
+    t.jsonb "redacted_attributes", default: {}
     t.decimal "student_loan_repayment_amount", precision: 7, scale: 2
     t.boolean "taught_eligible_subjects"
     t.string "teacher_reference_number", limit: 11
