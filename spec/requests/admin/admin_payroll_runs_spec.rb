@@ -20,7 +20,7 @@ RSpec.describe "Admin payroll runs" do
         claims = create_list(:claim, 2, :approved)
 
         perform_enqueued_jobs do
-          expect { post admin_payroll_runs_path(claim_ids: claims.map(&:id)) }.to change { PayrollRun.count }.by(1)
+          expect { post admin_payroll_runs_path }.to change { PayrollRun.count }.by(1)
         end
 
         payroll_run = PayrollRun.order(:created_at).last
