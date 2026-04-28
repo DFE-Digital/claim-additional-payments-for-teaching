@@ -243,6 +243,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_02_144451) do
     t.string "itt_academic_year", limit: 9
     t.boolean "nqt_in_academic_year_after_itt"
     t.string "qualification"
+    t.jsonb "redacted_attributes", default: {}
     t.boolean "school_somewhere_else"
     t.boolean "subject_to_disciplinary_action"
     t.boolean "subject_to_formal_performance_action"
