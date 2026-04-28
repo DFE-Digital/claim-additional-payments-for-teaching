@@ -7,7 +7,8 @@ module Policies
           next unless policy.in?([
             Policies::TargetedRetentionIncentivePayments,
             Policies::FurtherEducationPayments,
-            Policies::StudentLoans
+            Policies::StudentLoans,
+            Policies::EarlyYearsPayments
           ])
 
           policy::DataRetention::Policy.claims_to_scrub.find_each do |claim|

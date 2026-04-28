@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_28_133317) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_28_141408) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -232,6 +232,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_133317) do
     t.string "provider_email_address"
     t.string "provider_entered_contract_type"
     t.datetime "provider_six_month_employment_reminder_sent_at"
+    t.jsonb "redacted_attributes", default: {}
     t.string "returner_contract_type"
     t.boolean "returner_worked_with_children"
     t.boolean "returning_within_6_months"
