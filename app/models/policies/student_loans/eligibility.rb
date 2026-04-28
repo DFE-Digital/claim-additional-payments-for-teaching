@@ -16,6 +16,8 @@ module Policies
 
       self.table_name = "student_loans_eligibilities"
 
+      has_many_attached :employment_proofs
+
       # Note: these mapped values for the `qts_award_year` values are symbolic and not to be taken literally,
       # in particular the "cut off date" is to be considered dynamic and based on the current financial/claim year.
       # You should simply consider 'before_cut_off_date' as the ineligible value and 'on_or_after_cut_off_date' as the eligible one.

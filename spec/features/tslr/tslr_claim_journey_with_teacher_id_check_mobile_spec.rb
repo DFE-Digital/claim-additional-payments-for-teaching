@@ -110,7 +110,7 @@ RSpec.feature "TSLR journey with Teacher ID mobile check" do
 
     # - Select qts year
     choose_qts_year
-    click_on "Continue"
+    upload_employment_proof
 
     # - Which school do you teach at
     choose_school school

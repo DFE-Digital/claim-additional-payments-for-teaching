@@ -4,7 +4,103 @@ module FeatureHelpers
     click_on "Start now"
     skip_tid
     choose_qts_year
+    upload_employment_proof
     Claim.by_policy(Policies::StudentLoans).order(:created_at).last
+  end
+
+  def upload_employment_proof
+    expect(page).to have_text("Upload proof of employment")
+    attach_file "Upload proof of employment", Rails.root.join("spec/fixtures/files/employment_proof.pdf")
+    click_on "Continue"
+
+    expect(page).to have_text("Is this file correct?")
+    choose "Yes"
+    click_on "Continue"
+
+    expect(page).to have_text("Uploaded employment proof")
+    choose "No"
+    click_on "Continue"
+
+    expect(page).to have_text("Upload employment proof success")
+    click_on "Continue"
+  end
+
+  def upload_employment_proof_multiple_with_delete
+    # Upload file 1 (employment_proof.pdf) and confirm it
+    expect(page).to have_text("Upload proof of employment")
+    attach_file "Upload proof of employment", Rails.root.join("spec/fixtures/files/employment_proof.pdf")
+    click_on "Continue"
+
+    expect(page).to have_text("Is this file correct?")
+    expect(page).to have_text("employment_proof.pdf")
+    choose "Yes"
+    click_on "Continue"
+
+    # File 1 confirmed — upload another
+    expect(page).to have_text("Uploaded employment proof")
+    expect(page).to have_text("employment_proof.pdf")
+    choose "Yes"
+    click_on "Continue"
+
+    # Upload file 2 (employment_proof2.pdf) but reject it on review
+    expect(page).to have_text("Upload proof of employment")
+    attach_file "Upload proof of employment", Rails.root.join("spec/fixtures/files/employment_proof2.pdf")
+    click_on "Continue"
+
+    expect(page).to have_text("Is this file correct?")
+    expect(page).to have_text("employment_proof2.pdf")
+    choose "No"
+    click_on "Continue"
+
+    # File 2 rejected and purged — uploaded list shows only file 1
+    expect(page).to have_text("Uploaded employment proof")
+    expect(page).to have_text("employment_proof.pdf")
+    expect(page).not_to have_text("employment_proof2.pdf")
+    choose "Yes"
+    click_on "Continue"
+
+    # Upload file 3 (employment_proof3.pdf) and confirm it
+    expect(page).to have_text("Upload proof of employment")
+    attach_file "Upload proof of employment", Rails.root.join("spec/fixtures/files/employment_proof3.pdf")
+    click_on "Continue"
+
+    expect(page).to have_text("Is this file correct?")
+    expect(page).to have_text("employment_proof3.pdf")
+    choose "Yes"
+    click_on "Continue"
+
+    # File 1 and file 3 both confirmed — delete file 1
+    expect(page).to have_text("Uploaded employment proof")
+    expect(page).to have_text("employment_proof.pdf")
+    expect(page).to have_text("employment_proof3.pdf")
+    within(find("tr.govuk-table__row", text: "employment_proof.pdf")) do
+      click_on "Delete"
+    end
+
+    expect(page).to have_text("Are you sure you want to delete this file?")
+    expect(page).to have_text("employment_proof.pdf")
+    choose "Yes"
+    click_on "Continue"
+
+    # Only file 3 remains — choose to upload another then use the skip link
+    expect(page).to have_text("Uploaded employment proof")
+    expect(page).to have_text("employment_proof3.pdf")
+    expect(page).not_to have_text("employment_proof.pdf")
+    choose "Yes"
+    click_on "Continue"
+
+    expect(page).to have_text("Upload proof of employment")
+    click_on "I do not want to upload another file"
+
+    # Skip link returns to list — proceed without uploading another
+    expect(page).to have_text("Uploaded employment proof")
+    expect(page).to have_text("employment_proof3.pdf")
+    expect(page).not_to have_text("employment_proof.pdf")
+    choose "No"
+    click_on "Continue"
+
+    expect(page).to have_text("Upload employment proof success")
+    click_on "Continue"
   end
 
   def choose_qts_year(option = :on_or_after_cut_off_date)

@@ -1,0 +1,25 @@
+<% content_for(:page_title, page_title("Check your document", journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+      <%= f.govuk_error_summary %>
+      <%= f.hidden_field :blob_id, value: @form.latest_blob&.id %>
+
+      <% if @form.latest_blob %>
+        <p class="govuk-body">
+          <%= link_to @form.latest_blob.filename.to_s, rails_storage_proxy_path(@form.latest_blob), target: "_blank", rel: "noopener noreferrer", class: "govuk-link" %>
+        </p>
+      <% end %>
+
+      <%= f.govuk_collection_radio_buttons :confirmed, [
+            OpenStruct.new(id: "yes", name: "Yes"),
+            OpenStruct.new(id: "no", name: "No")
+          ], :id, :name,
+          legend: { text: "Is this file correct?", tag: "h1", size: "l" },
+          hint: { text: @form.latest_blob&.filename } %>
+
+      <%= f.govuk_submit "Continue" %>
+    <% end %>
+  </div>
+</div>

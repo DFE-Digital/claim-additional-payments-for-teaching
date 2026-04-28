@@ -93,4 +93,7 @@ Rails.application.configure do
   config.semantic_logger.backtrace_level = :debug # Show file and line number (expensive: not for production)
 
   config.active_job.queue_adapter = :async
+
+  config.active_storage.service = :local
+  config.active_storage.resolve_model_to_route = :rails_storage_proxy
 end

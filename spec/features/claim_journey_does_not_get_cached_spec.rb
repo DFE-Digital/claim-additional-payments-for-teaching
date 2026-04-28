@@ -6,9 +6,10 @@ RSpec.feature "Claim journey does not get cached" do
   it "redirects the user to the start of the claim journey if they go back after the claim is completed" do
     start_student_loans_claim
     journey_session = Journeys::TeacherStudentLoanReimbursement::Session.last
-    journey_session.update!(
-      answers: attributes_for(:student_loans_answers, :submittable)
+    journey_session.answers.assign_attributes(
+      attributes_for(:student_loans_answers, :submittable)
     )
+    journey_session.save!
 
     jump_to_claim_journey_page(
       slug: "check-your-answers",

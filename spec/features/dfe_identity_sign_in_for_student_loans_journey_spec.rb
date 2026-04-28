@@ -37,6 +37,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     expect(page).to have_text(I18n.t("student_loans.forms.qts_year.questions.qts_award_year"))
 
     choose_qts_year
+    upload_employment_proof
     expect(page).to have_text(claim_school_question)
 
     choose_school school
@@ -186,6 +187,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     choose "Yes"
     click_on "Continue"
     choose_qts_year
+    upload_employment_proof
     choose_school school
     check "Physics"
     click_on "Continue"

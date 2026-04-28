@@ -27,6 +27,8 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(session.reload.answers.qts_award_year).to eql("on_or_after_cut_off_date")
 
+    upload_employment_proof
+
     expect(page).to have_text(claim_school_question)
 
     choose_school school
@@ -253,6 +255,8 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
         session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
 
         expect(session.reload.answers.qts_award_year).to eql("on_or_after_cut_off_date")
+
+        upload_employment_proof
 
         expect(page).to have_text(claim_school_question)
 

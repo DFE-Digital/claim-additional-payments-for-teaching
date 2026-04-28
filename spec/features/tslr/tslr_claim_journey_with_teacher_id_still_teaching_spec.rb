@@ -101,6 +101,8 @@ RSpec.feature "TSLR journey with Teacher ID still teaching school playback" do
     expect(page).to have_text(I18n.t("student_loans.forms.qts_year.questions.qts_award_year"))
     choose_qts_year
 
+    upload_employment_proof
+
     # - Claim school
     choose(eligible_claim_school.name)
     click_on "Continue"

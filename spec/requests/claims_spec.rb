@@ -96,6 +96,14 @@ RSpec.describe "Claims", type: :request do
                 :submittable
               )
             )
+          journey_session.employment_proofs.attach(
+            io: Rails.root.join("spec/fixtures/files/employment_proof.pdf").open,
+            filename: "employment_proof.pdf",
+            content_type: "application/pdf"
+          )
+          blob_id = journey_session.employment_proofs.blobs.last.id.to_s
+          journey_session.answers.assign_attributes(confirmed_employment_proof_blob_ids: [blob_id])
+          journey_session.steps = ["upload-employment-proof-success"]
           journey_session.save!
         end
 
@@ -148,12 +156,14 @@ RSpec.describe "Claims", type: :request do
         Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
       end
 
-      before { start_student_loans_claim }
+      before do
+        start_student_loans_claim
+      end
 
       it "updates the claim with the submitted form data" do
         put claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name, "qts-year"), params: {claim: {qts_award_year: "on_or_after_cut_off_date"}}
 
-        expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name, "claim-school"))
+        expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name, "upload-employment-proof"))
         expect(journey_session.reload.answers.qts_award_year).to eq "on_or_after_cut_off_date"
       end
 

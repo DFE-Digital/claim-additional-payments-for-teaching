@@ -26,6 +26,7 @@ module Journeys
           a << subjects_taught
           a << leadership_position
           a << mostly_performed_leadership_duties if answers.had_leadership_position?
+          a << employment_proofs if answers.confirmed_employment_proof_blob_ids.any?
         end
       end
 
@@ -77,6 +78,16 @@ module Journeys
           (answers.mostly_performed_leadership_duties? ? "Yes" : "No"),
           "mostly-performed-leadership-duties"
         ]
+      end
+
+      def employment_proofs
+        filenames = journey_session.employment_proofs.attachments
+          .where(blob_id: answers.confirmed_employment_proof_blob_ids)
+          .order(created_at: :asc)
+          .map { |a| a.blob.filename.to_s }
+          .join(", ")
+
+        ["Files", filenames, "uploaded-employment-proof"]
       end
     end
   end

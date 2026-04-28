@@ -1,0 +1,14 @@
+<% content_for(:page_title, page_title("Upload employment proof success", journey: current_journey_routing_name)) %>
+<% @backlink_path = claim_path(current_journey_routing_name, "uploaded-employment-proof") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Upload employment proof success</h1>
+
+    <p class="govuk-body">Placeholder page.</p>
+
+    <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_submit "Continue" %>
+    <% end %>
+  </div>
+</div>

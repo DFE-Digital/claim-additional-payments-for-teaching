@@ -11,6 +11,7 @@ module Journeys
         ApplicationRecord.transaction do
           set_attributes_for_claim_submission
           claim.save!
+          associate_confirmed_employment_proof_files
           mark_service_access_code_as_used!
           Event.create(claim:, name: "claim_submitted")
         end
@@ -80,6 +81,23 @@ module Journeys
           ref = Reference.new.to_s
           break ref unless Claim.exists?(reference: ref)
         }
+      end
+
+      def associate_confirmed_employment_proof_files
+        confirmed_ids = journey_session.answers.confirmed_employment_proof_blob_ids
+
+        journey_session.employment_proofs.attachments.each do |attachment|
+          if confirmed_ids.include?(attachment.blob_id.to_s)
+            claim.eligibility.employment_proofs.attach(attachment.blob)
+          else
+            # Any unconfirmed files are queued to be removed from the session
+            # Since only confirmed files are associated with the Eligibility
+            # As this method is in a transaction this:
+            # - doesn't manipulate the session in this transaction
+            # - doesn't make Azure Blob Storage calls in the transaction
+            attachment.purge_later
+          end
+        end
       end
 
       def mark_service_access_code_as_used!
