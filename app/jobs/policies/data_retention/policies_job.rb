@@ -8,7 +8,8 @@ module Policies
             Policies::TargetedRetentionIncentivePayments,
             Policies::FurtherEducationPayments,
             Policies::StudentLoans,
-            Policies::EarlyYearsPayments
+            Policies::EarlyYearsPayments,
+            Policies::InternationalRelocationPayments
           ])
 
           policy::DataRetention::Policy.claims_to_scrub.find_each do |claim|
