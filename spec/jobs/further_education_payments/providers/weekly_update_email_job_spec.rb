@@ -118,6 +118,41 @@ RSpec.describe FurtherEducationPayments::Providers::WeeklyUpdateEmailJob, type: 
     )
   end
 
+  it "staggers weekly update emails due to Notify API 3000 per 60 seconds limit" do
+    third_provider = create(:eligible_fe_provider, :with_school)
+
+    [provider, other_provider, third_provider].each do |fe_provider|
+      create(
+        :further_education_payments_eligibility,
+        :eligible,
+        school: fe_provider.school,
+        claim: create(
+          :claim,
+          :further_education,
+          :submitted
+        )
+      )
+    end
+
+    deliver_later_calls = []
+    mail_double = double("mail")
+    mailer_scope_double = double("mailer scope", provider_weekly_update_email: mail_double)
+
+    allow(mail_double).to receive(:deliver_later) do |wait: nil|
+      deliver_later_calls << wait
+    end
+
+    allow(FurtherEducationPaymentsMailer).to receive(:with).and_return(mailer_scope_double)
+
+    described_class.new.perform
+
+    expect(deliver_later_calls).to eq([
+      0.seconds,
+      0.1.seconds,
+      0.2.seconds
+    ])
+  end
+
   context "when there are versioned eligible FE providers" do
     let(:provider) { create(:eligible_fe_provider, :with_school) }
 

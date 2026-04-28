@@ -58,4 +58,9 @@ class ApplicationMailer < Mail::Notify::Mailer
     PROVIDER_SIX_MONTH_EMPLOYMENT_REMINDER_TEMPLATE_ID: "bc7faa96-8a19-4765-9d7a-6a6fd02aee9e".freeze,
     PRACTITIONER_CLAIM_REMINDER_TEMPLATE_ID: "cf03a3c7-587a-48c4-83b9-0cd762d103f6".freeze
   }
+
+  def self.deliver_later_with_throttling(mail_delivery, index:, **options)
+    options[:wait] ||= (index / 10.0).seconds
+    mail_delivery.deliver_later(**options)
+  end
 end
