@@ -84,6 +84,7 @@ module Policies
         }
 
         self.eligibility_attributes = {
+          id: :retained,
           award_amount: :retained,
           building_construction_courses: :retained,
           chemistry_courses: :retained,
