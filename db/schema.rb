@@ -513,6 +513,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_02_144451) do
     t.boolean "one_year"
     t.string "passport_number"
     t.text "previous_year_claim_ids", default: [], array: true
+    t.jsonb "redacted_attributes", default: {}
     t.string "school_headteacher_name"
     t.date "start_date"
     t.boolean "state_funded_secondary_school"
