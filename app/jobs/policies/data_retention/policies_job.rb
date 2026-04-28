@@ -4,12 +4,8 @@ module Policies
       def perform
         Policies.all.each do |policy|
           # Remove this guard once we have data retention set up for all polcies
-          next unless policy.in?([
-            Policies::TargetedRetentionIncentivePayments,
-            Policies::FurtherEducationPayments,
-            Policies::StudentLoans,
-            Policies::EarlyYearsPayments,
-            Policies::InternationalRelocationPayments
+          next if policy.in?([
+            Policies::EarlyYearsTeachersFinancialIncentivePayments
           ])
 
           policy::DataRetention::Policy.claims_to_scrub.find_each do |claim|

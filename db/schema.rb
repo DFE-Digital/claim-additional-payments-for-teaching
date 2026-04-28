@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_28_151451) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_28_153527) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -199,6 +199,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_151451) do
     t.string "itt_academic_year", limit: 9
     t.boolean "nqt_in_academic_year_after_itt"
     t.string "qualification"
+    t.jsonb "redacted_attributes", default: {}
     t.boolean "school_somewhere_else"
     t.boolean "subject_to_disciplinary_action"
     t.boolean "subject_to_formal_performance_action"
