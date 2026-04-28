@@ -1,12 +1,17 @@
 require "rails_helper"
 
 RSpec.describe "All policies have a data retention policy for all attributes" do
+  let(:depricated_attributes) do
+    {
+      Policies::StudentLoans => ["student_loan_repayment_amount"]
+    }
+  end
+
   Policies.all.each do |policy|
     describe "#{policy} data retention policy" do
       it "has a data retention policy for all attributes" do
-        skip unless policy.in?([
-          Policies::TargetedRetentionIncentivePayments,
-          Policies::FurtherEducationPayments
+        next if policy.in?([
+          Policies::EarlyYearsTeachersFinancialIncentivePayments
         ])
 
         expect(
@@ -20,6 +25,8 @@ RSpec.describe "All policies have a data retention policy for all attributes" do
         data_retention_policy = policy::DataRetention::Policy
 
         Claim.column_names.each do |name|
+          next if depricated_attributes[policy]&.include?(name)
+
           expect(
             data_retention_policy.claim_attributes.keys
           ).to include(name.to_sym), <<~TEXT
@@ -31,6 +38,8 @@ RSpec.describe "All policies have a data retention policy for all attributes" do
         end
 
         policy::Eligibility.column_names.each do |name|
+          next if depricated_attributes[policy]&.include?(name)
+
           expect(
             data_retention_policy.eligibility_attributes.keys
           ).to include(name.to_sym), <<~TEXT
