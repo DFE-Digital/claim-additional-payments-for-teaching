@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_27_100232) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_29_114412) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -326,6 +326,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_27_100232) do
     t.datetime "created_at", null: false
     t.string "target_data_model"
     t.datetime "updated_at", null: false
+    t.text "upload_errors", default: [], array: true
     t.uuid "uploaded_by_id"
   end
 

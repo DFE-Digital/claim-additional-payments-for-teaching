@@ -52,17 +52,27 @@ module EarlyYearsTeachersFinancialIncentivePayments
     def perform(file_upload)
       invalid = false
       body_io = StringIO.new(file_upload.body)
+      errors = []
 
       CSV.foreach(body_io, headers: true).with_index do |row, index|
+        row_counter = index + 2
         parser = RowParser.new(row:)
 
         if parser.invalid?
           invalid = true
+
+          parser.errors.full_messages.each do |message|
+            errors << "Row #{row_counter}: #{message}"
+          end
         end
       end
 
       if invalid
-        file_upload.update completed_processing_at: Time.zone.now
+        file_upload.update(
+          upload_errors: errors,
+          completed_processing_at: Time.zone.now
+        )
+
         return
       end
 

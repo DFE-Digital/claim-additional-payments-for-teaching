@@ -74,6 +74,18 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
           subject.perform(file_upload)
         }.not_to change(Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider, :count)
       end
+
+      it "touches file upload completed_processing_at" do
+        subject.perform(file_upload)
+
+        expect(file_upload.reload.completed_processing_at).to be_present
+      end
+
+      it "saves errors on file upload" do
+        subject.perform(file_upload)
+
+        expect(file_upload.reload.upload_errors).to eql(["Row 4: Eligible must be TRUE or FALSE"])
+      end
     end
   end
 end
