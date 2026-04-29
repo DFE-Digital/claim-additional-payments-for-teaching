@@ -326,7 +326,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_29_114412) do
     t.datetime "created_at", null: false
     t.string "target_data_model"
     t.datetime "updated_at", null: false
-    t.text "upload_errors", default: [], array: true
+    t.jsonb "upload_errors", default: []
     t.uuid "uploaded_by_id"
   end
 
