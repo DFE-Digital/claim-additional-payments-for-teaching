@@ -114,6 +114,9 @@ class Claim < ApplicationRecord
   scope :after_academic_year, ->(academic_year) do
     where("claims.academic_year > ?", academic_year.to_s)
   end
+  scope :before_academic_year, ->(academic_year) do
+    where("claims.academic_year < ?", academic_year.to_s)
+  end
   scope :assigned_to_team_member, ->(service_operator_id) { where(assigned_to_id: service_operator_id) }
   scope :by_claims_team_member, ->(service_operator_id, status) do
     if %w[approved approved_awaiting_payroll rejected].include?(status)
@@ -448,6 +451,17 @@ class Claim < ApplicationRecord
 
   def claim_checking_tasks
     @claim_checking_tasks ||= policy::ClaimCheckingTasks.new(self)
+  end
+
+  def most_recent_scheduled_payment_date
+    [
+      payments.maximum("scheduled_payment_date"),
+      topups.joins(:payment).maximum("scheduled_payment_date")
+    ].compact.max
+  end
+
+  def paid?
+    most_recent_scheduled_payment_date.present?
   end
 
   private
