@@ -106,6 +106,7 @@ shared:
     - practitioner_email_address # string, EY journey, practitioner email as entered by provider
     - provider_contact_name # string, EY journey, persona that complete provider journey
     - onelogin_uid # string, identifier given by OL
+    - redacted_attributes # jsonb, hash of attributes we've scrubbed along with the data removed
   :claimant_flags:
     - id # uuid, identifies the claimant flag
     - created_at # datetime, when the flag was created
@@ -194,6 +195,7 @@ shared:
     - mostly_performed_leadership_duties # boolean, was the claimant mostly fulfilling leadship duties
     - claim_school_somewhere_else # boolean, are they claiming against another school
     - teacher_reference_number # string, TRN external identifier
+    - redacted_attributes # jsonb, hash of attributes we've scrubbed along with the data removed
   :early_career_payments_eligibilities:
     - id # uuid, that identifies the eligiblity
     - nqt_in_academic_year_after_itt # boolean, is claimant teaching as newly qualified teacher
@@ -213,6 +215,7 @@ shared:
     - induction_completed # boolean, has claimant completed the ITT
     - school_somewhere_else # boolean, is claimant teaching at a different school
     - teacher_reference_number # string, external identifier
+    - redacted_attributes # jsonb, hash of attributes we've scrubbed along with the data removed
   :targeted_retention_incentive_payments_eligibilities:
     - id # uuid, that identifies the eligiblity
     - created_at # datetime, timestamp when eligibility was created
@@ -233,6 +236,7 @@ shared:
     - induction_completed # boolean, has claimaint completed their ITT
     - school_somewhere_else # boolean, is claimant teaching at a different school
     - teacher_reference_number # string, external identifier
+    - redacted_attributes # jsonb, hash of attributes we've scrubbed along with the data removed
   :international_relocation_payments_eligibilities:
     - id # uuid, that identifies the eligiblity
     - created_at # datetime, timestamp when eligibility was created
@@ -251,6 +255,7 @@ shared:
     - previous_year_claim_ids # uuid, references previous claims from claimant
     - breaks_in_employment # boolean, did claimant have any large gaps in employment
     - employment_history # jsonb, claimants employment history
+    - redacted_attributes # jsonb, hash of attributes we've scrubbed along with the data removed
   :schools:
     - id # uuid, that internally idenitfies the school
     - urn # string, external school identifier
@@ -381,6 +386,7 @@ shared:
     - provider_verification_claimant_national_insurance_number # string, national insurance number given by provider
     - provider_verification_claimant_postcode # string, postcode given by provider
     - work_email # string, email entered by claimant where IDV fails
+    - redacted_attributes # jsonb, hash of attributes we've scrubbed along with the data removed
   :further_education_payments_provider_flags:
     - id # uuid, not used for anything
     - reason # string, reason for flagging claims from this provider, for 25/26 AY this will always be clawbacks
@@ -434,6 +440,7 @@ shared:
     - alternative_idv_claimant_postcode # string, postcode for alt idv
     - alternative_idv_claimant_national_insurance_number # string, national insurance number for alt idv
     - alternative_idv_claimant_email # string, email for alt idv
+    - redacted_attributes # jsonb, hash of attributes we've scrubbed along with the data removed
   :school_workforce_censuses:
     - id # uuid, identifies the school workforce census record
     - teacher_reference_number # string, external identifier for teacher
