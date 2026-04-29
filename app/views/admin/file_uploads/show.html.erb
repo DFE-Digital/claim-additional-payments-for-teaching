@@ -33,4 +33,16 @@
   Errors
 </h2>
 
-<%= govuk_list @file_upload.upload_errors, type: :bullet %>
+<% if @file_upload.completed_processing_at %>
+  <% if @file_upload.upload_errors.any? %>
+    <%= govuk_list @file_upload.upload_errors, type: :bullet %>
+  <% else %>
+    <p class="govuk-body">
+      No errors found
+    </p>
+  <% end %>
+<% else %>
+  <p class="govuk-body">
+    Please wait for file to finish processing
+  </p>
+<% end %>
