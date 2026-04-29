@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.shared_examples_for "a journey session" do |journey|
   let(:factory_name) { :"#{journey.i18n_namespace}_session" }
+  let(:policy) { journey.policies.first }
 
   describe "validations" do
     describe "journey" do
@@ -57,6 +58,21 @@ RSpec.shared_examples_for "a journey session" do |journey|
         expect(session.answers.surname).to eq("Thompson")
         expect(session.answers.address_line_1).to eq("742")
         expect(session.answers.address_line_2).to eq("Terror Lake")
+      end
+    end
+  end
+
+  describe "when a linked claim is destroyed" do
+    let(:session) { create(factory_name) }
+    let!(:claim) { create(:claim, :submitted, policy: policy, journey_session: session) }
+
+    it "keeps the session and nullifies the claim association" do
+      claim.destroy!
+
+      aggregate_failures do
+        expect(described_class.where(id: session.id)).to exist
+        expect(session.reload.claim).to be_nil
+        expect(session).not_to be_submitted
       end
     end
   end
