@@ -1,7 +1,6 @@
 module Policies
   module EarlyYearsTeachersFinancialIncentivePayments
     class EligibleEytfiProvider < ApplicationRecord
-      attribute :academic_year, AcademicYear::Type.new
       belongs_to :file_upload
 
       scope :by_academic_year, ->(academic_year) {
