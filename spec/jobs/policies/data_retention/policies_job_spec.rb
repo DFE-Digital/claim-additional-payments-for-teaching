@@ -512,7 +512,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
 
     context "when the claim is more than 5 academic years old" do
       before do |example|
-        travel_to(AcademicYear.new(2030).start_of_autumn_term.beginning_of_day) do
+        travel_to(Time.utc(2030, 9, 1, 12, 0, 0)) do
           claim
 
           perform_enqueued_jobs do
@@ -627,7 +627,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
     context "when the claim is not more than 5 academic years old" do
       context "when the claim is an inactive claim in the prior academic term" do
         before do |example|
-          travel_to(AcademicYear.new(2026).start_of_autumn_term.beginning_of_day) do
+          travel_to(Time.utc(2026, 9, 1, 12, 0, 0)) do
             claim
 
             perform_enqueued_jobs do
@@ -894,7 +894,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
     context "when the claim is from a prior academic year" do
       context "when the claim is inactive" do
         before do |example|
-          travel_to(AcademicYear.new(2026).start_of_autumn_term.beginning_of_day) do
+          travel_to(Time.utc(2026, 9, 1, 12, 0, 0)) do
             create(
               :decision,
               :rejected,
@@ -970,7 +970,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
 
       context "when the claim is active" do
         before do |example|
-          travel_to(AcademicYear.new(2026).start_of_autumn_term.beginning_of_day) do
+          travel_to(Time.utc(2026, 9, 1, 12, 0, 0)) do
             claim
 
             perform_enqueued_jobs do
@@ -1142,7 +1142,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
         before do |example|
           claim
 
-          travel_to(AcademicYear.new(2026).start_of_autumn_term.beginning_of_day) do
+          travel_to(Time.utc(2026, 9, 1, 12, 0, 0)) do
             perform_enqueued_jobs do
               described_class.perform_now
             end
@@ -1180,7 +1180,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
             scheduled_payment_date: DateTime.new(2025, 9, 15, 0, 0, 0)
           )
 
-          travel_to(AcademicYear.new(2026).start_of_autumn_term.beginning_of_day) do
+          travel_to(Time.utc(2026, 9, 1, 12, 0, 0)) do
             perform_enqueued_jobs do
               described_class.perform_now
             end
@@ -1405,7 +1405,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
         before do |example|
           claim
 
-          travel_to(AcademicYear.new(2026).start_of_autumn_term.beginning_of_day) do
+          travel_to(Time.utc(2026, 9, 1, 12, 0, 0)) do
             perform_enqueued_jobs do
               described_class.perform_now
             end
@@ -1440,7 +1440,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
             scheduled_payment_date: DateTime.new(2025, 9, 15, 0, 0, 0)
           )
 
-          travel_to(AcademicYear.new(2026).start_of_autumn_term.beginning_of_day) do
+          travel_to(Time.utc(2026, 9, 1, 12, 0, 0)) do
             perform_enqueued_jobs do
               described_class.perform_now
             end
@@ -1525,7 +1525,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
             scheduled_payment_date: DateTime.new(2025, 9, 15, 0, 0, 0)
           )
 
-          travel_to(AcademicYear.new(2027).start_of_autumn_term.beginning_of_day) do
+          travel_to(Time.utc(2027, 9, 1, 12, 0, 0)) do
             perform_enqueued_jobs do
               described_class.perform_now
             end
@@ -1681,7 +1681,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
             scheduled_payment_date: DateTime.new(2025, 9, 15, 0, 0, 0)
           )
 
-          travel_to(AcademicYear.new(2027).start_of_autumn_term.beginning_of_day) do
+          travel_to(Time.utc(2027, 9, 1, 12, 0, 0)) do
             perform_enqueued_jobs do
               described_class.perform_now
             end
