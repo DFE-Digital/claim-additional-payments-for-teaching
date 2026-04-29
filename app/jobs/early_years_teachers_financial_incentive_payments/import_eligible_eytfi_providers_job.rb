@@ -76,13 +76,15 @@ module EarlyYearsTeachersFinancialIncentivePayments
         return
       end
 
-      CSV.foreach(body_io, headers: true) do |row|
-        parser = RowParser.new(row:)
-        provider = parser.to_provider(file_upload:)
-        provider.save!
-      end
+      ApplicationRecord.transaction do
+        CSV.foreach(body_io, headers: true) do |row|
+          parser = RowParser.new(row:)
+          provider = parser.to_provider(file_upload:)
+          provider.save!
+        end
 
-      file_upload.update completed_processing_at: Time.zone.now
+        file_upload.update completed_processing_at: Time.zone.now
+      end
     end
   end
 end
