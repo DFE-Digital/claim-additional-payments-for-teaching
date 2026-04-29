@@ -59,14 +59,17 @@ RSpec.describe "Admin payroll run downloads" do
         expect { get admin_payroll_run_download_path(payroll_run, format: :csv) }.to change { FileDownload.count }.from(0).to(1)
 
         expect(response.headers["Content-Type"]).to eq("text/csv")
+        expect(response.headers["Content-Disposition"]).to match(/attachment;.*filename="payroll_data_\d{4}-\d\d-\d\d_[A-Za-z0-9]{6}\.csv"/)
 
         file_download = FileDownload.first
         expect(file_download.downloaded_by).to eq(admin)
         expect(file_download.body).to eq(response.body)
         expect(file_download.filename).to match(/payroll_data_\d{4}-\d\d-\d\d_[A-Za-z0-9]{6}.csv/)
+        expect(File.extname(file_download.filename)).to eq(".csv")
         expect(file_download.content_type).to eq("text/csv")
         expect(file_download.source_data_model).to eq("PayrollRun")
         expect(file_download.source_data_model_id).to eq(payroll_run.id)
+        expect(response.body).to eq(Payroll::PaymentsCsv.new(payroll_run).data)
       end
     end
   end

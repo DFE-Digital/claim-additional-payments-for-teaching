@@ -121,7 +121,7 @@
     <section id="csv-export">
       <%= govuk_button_link_to(
         "Export CSV",
-        admin_task_lists_path(@presenter.applied_params(format: :csv)),
+        admin_task_lists_path(format: :csv, **@presenter.applied_params),
         secondary: true,
       ) %>
     </section>
