@@ -1,0 +1,56 @@
+<% content_for(:phase) { "Alpha" } %>
+
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:title, teacher_name: @form.teacher_name),
+    journey: current_journey_routing_name,
+    show_error: false
+  )
+) %>
+
+<%= button_to(
+  "Back",
+  "/#{current_journey_routing_name}/provide-teacher-details",
+  params: {
+    :claim => @form.teacher.attributes.merge(performance_or_discipline: nil)
+  },
+  method: :patch,
+  class: "button-to-as-back-link",
+) %>
+
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <%= @form.t(:title, teacher_name: @form.teacher_name) %>
+    </h1>
+
+    <p class="govuk-body">
+      <%= @form.t(:paragraph_one) %>
+    </p>
+
+    <p class="govuk-body">
+      <%= @form.t(:paragraph_two, teacher_name: @form.teacher_name) %>
+    </p>
+
+    <%= govuk_button_link_to(
+      @form.t(:sign_out),
+      "/#{current_journey_routing_name}/signed-out"
+    ) %>
+
+    <p class="govuk-body">
+      <%= form_with(
+        model: @form,
+        url: @form.url,
+        method: :patch,
+        class: "inline"
+      ) do |f| %>
+        <%= f.submit(
+          @form.t(:view_added_teachers),
+          class: "button-to-as-link govuk-link govuk-link--no-visited-state"
+        ) %>
+      <% end %>
+    </p>
+  </div>
+</div>

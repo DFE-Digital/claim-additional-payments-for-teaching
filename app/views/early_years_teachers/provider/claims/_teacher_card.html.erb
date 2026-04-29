@@ -1,0 +1,47 @@
+<%= govuk_summary_card(title: teacher.teacher_full_name) do |card| %>
+  <% card.with_action do %>
+    <% govuk_link_to(
+      "Change",
+      answers.edit_teacher_path(teacher, return_to_slug: "check-your-answers")
+    ) %>
+  <% end %>
+
+  <% card.with_action do %>
+    <%= govuk_link_to(
+      "Remove",
+      answers.delete_teacher_path(teacher, return_to_slug: "check-your-answers"),
+    ) %>
+  <% end %>
+
+  <% card.with_summary_list do |list| %>
+    <% list.with_row do |row| %>
+      <% row.with_key { "Full name" } %>
+      <% row.with_value { teacher.teacher_full_name } %>
+    <% end %>
+
+    <% list.with_row do |row| %>
+      <% row.with_key { "Email address" } %>
+      <% row.with_value { teacher.teacher_email_address } %>
+    <% end %>
+
+    <% list.with_row do |row| %>
+      <% row.with_key { "Mobile phone number" } %>
+      <% row.with_value { teacher.teacher_mobile_phone_number } %>
+    <% end %>
+
+    <% list.with_row do |row| %>
+      <% row.with_key { "National Insurance number" } %>
+      <% row.with_value { teacher.teacher_national_insurance_number } %>
+    <% end %>
+
+    <% list.with_row do |row| %>
+      <% row.with_key { "Teacher reference number (TRN)" } %>
+      <% row.with_value { teacher.teacher_reference_number } %>
+    <% end %>
+
+    <% list.with_row do |row| %>
+      <% row.with_key { "Performance or discipline" } %>
+      <% row.with_value { I18n.t(teacher.performance_or_discipline, scope: :boolean) } %>
+    <% end %>
+  <% end %>
+<% end %>
