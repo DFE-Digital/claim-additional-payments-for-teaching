@@ -15,6 +15,6 @@ class CreateEligibleEytfiProviders < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :eligible_eytfi_providers, [:urn, :file_upload_id]
+    add_index :eligible_eytfi_providers, [:urn, :file_upload_id], unique: true
   end
 end

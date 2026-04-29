@@ -271,7 +271,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_27_100232) do
     t.text "town"
     t.datetime "updated_at", null: false
     t.text "urn", null: false
-    t.index ["urn", "file_upload_id"], name: "index_eligible_eytfi_providers_on_urn_and_file_upload_id"
+    t.index ["urn", "file_upload_id"], name: "index_eligible_eytfi_providers_on_urn_and_file_upload_id", unique: true
   end
 
   create_table "eligible_fe_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
