@@ -22,7 +22,7 @@ module Admin
       @upload_form = EligibleEytfiProvidersForm.new(upload_params, admin_user)
 
       if @upload_form.valid? && @upload_form.save
-        redirect_to edit_admin_journey_configuration_path(Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name, eligible_fe_providers_upload: {academic_year: @upload_form.academic_year})
+        redirect_to admin_file_upload_path(@upload_form.file_upload)
       else
         render "admin/journey_configurations/edit"
       end

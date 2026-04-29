@@ -18,5 +18,9 @@ RSpec.feature "Admin of eligible EYTFI providers" do
     expect {
       click_button "Upload CSV"
     }.to change(FileUpload, :count).by(1)
+
+    file_upload = FileUpload.last
+
+    expect(page.current_path).to eql(admin_file_upload_path(file_upload))
   end
 end
