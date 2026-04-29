@@ -15,7 +15,7 @@
     <h2 class="govuk-heading-l"><%= @form.task.name.humanize %></h2>
 
     <% if @claim.policy.task_available?(@form.task) %>
-      <%= render("admin/claims/claims_with_matching_details", {matching_claims: @matching_claims, claim: @claim, show_caption: false}) %>
+      <%= render("admin/claims/claims_with_matching_details", {matches: @matches, claim: @claim, show_caption: false}) %>
     <% end %>
   </div>
 
