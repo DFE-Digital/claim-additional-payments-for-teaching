@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_16_122045) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_20_103432) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -77,7 +77,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_16_122045) do
     t.boolean "email_address_check"
     t.boolean "email_verified", default: false
     t.string "first_name", limit: 100
-    t.text "govuk_verify_fields", default: [], array: true
     t.boolean "has_masters_doctoral_loan"
     t.boolean "has_student_loan"
     t.boolean "held", default: false

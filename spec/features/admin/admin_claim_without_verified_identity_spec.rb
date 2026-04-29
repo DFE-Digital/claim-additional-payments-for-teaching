@@ -7,7 +7,7 @@ RSpec.feature "Admin checking a claim without a verified identity" do
   end
 
   scenario "the service operator can do a manual identity check and approve the claim" do
-    unverified_claim = create(:claim, :unverified)
+    unverified_claim = create(:claim, :submitted)
 
     click_on "Claims"
     find("a[href='#{admin_claim_tasks_path(unverified_claim)}']").click

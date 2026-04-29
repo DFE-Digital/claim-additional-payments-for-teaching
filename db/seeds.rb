@@ -165,7 +165,6 @@ def claim_attrs
     email_address: email,
     email_verified: true,
     first_name: first_name,
-    govuk_verify_fields: [],
     held: false,
     hmrc_bank_validation_responses: [],
     hmrc_bank_validation_succeeded: false,
