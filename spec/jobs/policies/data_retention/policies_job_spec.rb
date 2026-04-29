@@ -511,7 +511,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
     end
 
     context "when the claim is more than 5 academic years old" do
-      around do |example|
+      before do |example|
         travel_to(AcademicYear.new(2030).start_of_autumn_term.beginning_of_day) do
           claim
 
@@ -520,8 +520,6 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
           end
 
           claim.reload
-
-          example.run
         end
       end
 
@@ -628,7 +626,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
 
     context "when the claim is not more than 5 academic years old" do
       context "when the claim is an inactive claim in the prior academic term" do
-        around do |example|
+        before do |example|
           travel_to(AcademicYear.new(2026).start_of_autumn_term.beginning_of_day) do
             claim
 
@@ -637,8 +635,6 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
             end
 
             claim.reload
-
-            example.run
           end
         end
 
@@ -745,7 +741,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
       end
 
       context "when the claim is not an inactive claim in the prior academic term" do
-        around do |example|
+        before do |example|
           travel_to(AcademicYear.new(2025).start_of_autumn_term + 20.weeks) do
             claim
 
@@ -754,8 +750,6 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
             end
 
             claim.reload
-
-            example.run
           end
         end
 
@@ -844,7 +838,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
 
     context "when the claim is for the current academic year" do
       context "when the claim is inactive" do
-        around do |example|
+        before do |example|
           travel_to(AcademicYear.new(2025).start_of_autumn_term + 20.weeks) do
             create(
               :decision,
@@ -858,8 +852,6 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
             end
 
             claim.reload
-
-            example.run
           end
         end
 
@@ -875,7 +867,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
       end
 
       context "when the claim is active" do
-        around do |example|
+        before do |example|
           travel_to(AcademicYear.new(2025).start_of_autumn_term + 20.weeks) do
             claim
 
@@ -884,8 +876,6 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
             end
 
             claim.reload
-
-            example.run
           end
         end
 
@@ -903,7 +893,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
 
     context "when the claim is from a prior academic year" do
       context "when the claim is inactive" do
-        around do |example|
+        before do |example|
           travel_to(AcademicYear.new(2026).start_of_autumn_term.beginning_of_day) do
             create(
               :decision,
@@ -917,8 +907,6 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
             end
 
             claim.reload
-
-            example.run
           end
         end
 
@@ -981,7 +969,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
       end
 
       context "when the claim is active" do
-        around do |example|
+        before do |example|
           travel_to(AcademicYear.new(2026).start_of_autumn_term.beginning_of_day) do
             claim
 
@@ -990,8 +978,6 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
             end
 
             claim.reload
-
-            example.run
           end
         end
 
@@ -1090,7 +1076,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
 
     context "when the claim is for the current academic year" do
       context "when the claim is inactive" do
-        around do |example|
+        before do |example|
           create(:task, name: "employment", passed: true, claim: claim)
 
           create(
@@ -1112,8 +1098,6 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
             end
 
             claim.reload
-
-            example.run
           end
         end
 
@@ -1129,7 +1113,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
       end
 
       context "when the claim is active" do
-        around do |example|
+        before do |example|
           claim
 
           travel_to(AcademicYear.new(2025).start_of_autumn_term + 20.weeks) do
@@ -1138,8 +1122,6 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
             end
 
             claim.reload
-
-            example.run
           end
         end
 
@@ -1157,7 +1139,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
 
     context "when the claim is from a prior academic year" do
       context "when the claim is active" do
-        around do |example|
+        before do |example|
           claim
 
           travel_to(AcademicYear.new(2026).start_of_autumn_term.beginning_of_day) do
@@ -1166,8 +1148,6 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
             end
 
             claim.reload
-
-            example.run
           end
         end
 
@@ -1183,7 +1163,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
       end
 
       context "when the claim is inactive" do
-        around do |example|
+        before do |example|
           create(:task, name: "employment", passed: true, claim: claim)
 
           create(
@@ -1206,8 +1186,6 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
             end
 
             claim.reload
-
-            example.run
           end
         end
 
@@ -1363,7 +1341,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
 
     context "when the claim is for the current academic year" do
       context "when the claim is inactive" do
-        around do |example|
+        before do |example|
           create(
             :decision,
             :approved,
@@ -1383,8 +1361,6 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
             end
 
             claim.reload
-
-            example.run
           end
         end
 
@@ -1400,7 +1376,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
       end
 
       context "when the claim is active" do
-        around do |example|
+        before do |example|
           claim
 
           travel_to(AcademicYear.new(2025).start_of_autumn_term + 20.weeks) do
@@ -1409,8 +1385,6 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
             end
 
             claim.reload
-
-            example.run
           end
         end
 
@@ -1428,7 +1402,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
 
     context "when the claim is from a prior academic year" do
       context "when the claim is active" do
-        around do |example|
+        before do |example|
           claim
 
           travel_to(AcademicYear.new(2026).start_of_autumn_term.beginning_of_day) do
@@ -1437,8 +1411,6 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
             end
 
             claim.reload
-
-            example.run
           end
         end
 
@@ -1454,7 +1426,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
       end
 
       context "when the claim is inactive" do
-        around do |example|
+        before do |example|
           create(
             :decision,
             :approved,
@@ -1474,8 +1446,6 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
             end
 
             claim.reload
-
-            example.run
           end
         end
 
@@ -1541,7 +1511,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
 
     context "when the claim is more than 2 years old" do
       context "when the claim is inactive" do
-        around do |example|
+        before do |example|
           create(
             :decision,
             :approved,
@@ -1561,8 +1531,6 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
             end
 
             claim.reload
-
-            example.run
           end
         end
 
@@ -1699,7 +1667,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
 
     context "when the claim is from a prior academic year" do
       context "when the claim is inactive" do
-        around do |example|
+        before do |example|
           create(
             :decision,
             :approved,
@@ -1719,8 +1687,6 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
             end
 
             claim.reload
-
-            example.run
           end
         end
 
