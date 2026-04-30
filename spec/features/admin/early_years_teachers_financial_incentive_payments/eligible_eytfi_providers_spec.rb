@@ -18,6 +18,7 @@ RSpec.feature "Admin of eligible EYTFI providers" do
     expect {
       click_button "Upload CSV"
     }.to change(FileUpload, :count).by(1)
+      .and have_enqueued_job(EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfiProvidersJob)
 
     file_upload = FileUpload.last
 
