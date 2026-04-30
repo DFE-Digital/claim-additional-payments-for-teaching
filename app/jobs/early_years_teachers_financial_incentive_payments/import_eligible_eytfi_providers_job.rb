@@ -3,11 +3,40 @@ require "csv"
 module EarlyYearsTeachersFinancialIncentivePayments
   class ImportEligibleEytfiProvidersJob < ApplicationJob
     class RowParser
+      HEADERS = [
+        "Provider URN",
+        "Provider name",
+        "Provider address line 1",
+        "Provider address line 2",
+        "Provider address line 3",
+        "Provider town",
+        "Postcode",
+        "Eligible"
+      ]
+
       include ActiveModel::Validations
 
       attr_reader :row
 
-      validate :validate_eligible_input
+      validates "Provider URN",
+        presence: true,
+        length: {in: 6..8}
+
+      validates "Provider name",
+        presence: true
+
+      validates "Provider address line 1",
+        presence: true
+
+      validates "Provider town",
+        presence: true
+
+      validates "Postcode",
+        presence: true
+
+      validates "Eligible",
+        presence: true,
+        inclusion: {in: %w[TRUE FALSE], message: "must be TRUE or FALSE"}
 
       def initialize(row:)
         @row = row
@@ -29,13 +58,11 @@ module EarlyYearsTeachersFinancialIncentivePayments
           )
       end
 
-      private
-
-      def validate_eligible_input
-        return if ["TRUE", "FALSE"].include?(row["Eligible"])
-
-        errors.add(:eligible, "must be TRUE or FALSE")
+      def read_attribute_for_validation(key)
+        row[key]
       end
+
+      private
 
       def cast_bool(value)
         case value

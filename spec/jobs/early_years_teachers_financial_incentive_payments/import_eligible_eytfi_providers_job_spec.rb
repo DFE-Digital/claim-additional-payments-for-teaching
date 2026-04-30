@@ -83,3 +83,210 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
     end
   end
 end
+
+RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfiProvidersJob::RowParser, type: :model do
+  let(:file_upload) do
+    create(:file_upload)
+  end
+
+  subject { described_class.new(row:) }
+
+  describe "#validations" do
+    context "urn" do
+      context "when urn missing" do
+        let(:row) do
+          CSV::Row.new(
+            described_class::HEADERS,
+            [
+              ""
+            ],
+            true
+          )
+        end
+
+        it "is not valid" do
+          subject.valid?
+          expect(subject.errors["Provider URN"]).to be_present
+        end
+      end
+
+      context "when urn too short" do
+        let(:row) do
+          CSV::Row.new(
+            described_class::HEADERS,
+            [
+              "12345"
+            ],
+            true
+          )
+        end
+
+        it "is not valid" do
+          subject.valid?
+          expect(subject.errors["Provider URN"]).to be_present
+        end
+      end
+
+      context "when urn too long" do
+        let(:row) do
+          CSV::Row.new(
+            described_class::HEADERS,
+            [
+              "123456789"
+            ],
+            true
+          )
+        end
+
+        it "is not valid" do
+          subject.valid?
+          expect(subject.errors["Provider URN"]).to be_present
+        end
+      end
+    end
+
+    context "name" do
+      context "name missing" do
+        let(:row) do
+          CSV::Row.new(
+            described_class::HEADERS,
+            [
+              "",
+              ""
+            ],
+            true
+          )
+        end
+
+        it "is not valid" do
+          subject.valid?
+          expect(subject.errors["Provider name"]).to be_present
+        end
+      end
+    end
+
+    context "adress line 1" do
+      context "is missing" do
+        let(:row) do
+          CSV::Row.new(
+            described_class::HEADERS,
+            [
+              "",
+              "",
+              ""
+            ],
+            true
+          )
+        end
+
+        it "is not valid" do
+          subject.valid?
+          expect(subject.errors["Provider address line 1"]).to be_present
+        end
+      end
+    end
+
+    context "town" do
+      context "is missing" do
+        let(:row) do
+          CSV::Row.new(
+            described_class::HEADERS,
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            true
+          )
+        end
+
+        it "is not valid" do
+          subject.valid?
+          expect(subject.errors["Provider town"]).to be_present
+        end
+      end
+    end
+
+    context "postcode" do
+      context "is missing" do
+        let(:row) do
+          CSV::Row.new(
+            described_class::HEADERS,
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            true
+          )
+        end
+
+        it "is not valid" do
+          subject.valid?
+          expect(subject.errors["Postcode"]).to be_present
+        end
+      end
+    end
+
+    context "eligible" do
+      context "is missing" do
+        let(:row) do
+          CSV::Row.new(
+            described_class::HEADERS,
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            true
+          )
+        end
+
+        it "is not valid" do
+          subject.valid?
+          expect(subject.errors["Eligible"]).to be_present
+        end
+      end
+
+      context "is malformatted" do
+        let(:row) do
+          CSV::Row.new(
+            described_class::HEADERS,
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "foo"
+            ],
+            true
+          )
+        end
+
+        it "is not valid" do
+          subject.valid?
+          expect(subject.errors["Eligible"]).to be_present
+        end
+      end
+    end
+  end
+
+  describe "#to_provider" do
+    it "returns provider object"
+  end
+end
