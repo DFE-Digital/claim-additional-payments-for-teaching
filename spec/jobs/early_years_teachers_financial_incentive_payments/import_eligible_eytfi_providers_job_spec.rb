@@ -81,6 +81,30 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
         expect(file_upload.reload.upload_errors).to eql(["Row 4: Eligible must be TRUE or FALSE"])
       end
     end
+
+    context "when incorrect headers" do
+      let(:file_upload) do
+        create(
+          :file_upload,
+          :with_current_academic_year,
+          :not_completed_processing,
+          target_data_model: Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider,
+          body: "wrong,headers,here"
+        )
+      end
+
+      it "does not create any records" do
+        expect {
+          subject.perform(file_upload)
+        }.not_to change(Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider, :count)
+      end
+
+      it "saves errors on file upload" do
+        subject.perform(file_upload)
+
+        expect(file_upload.reload.upload_errors).to eql(["Headers must be Provider URN, Provider name, Provider address line 1, Provider address line 2, Provider address line 3, Provider town, Postcode, Eligible"])
+      end
+    end
   end
 end
 

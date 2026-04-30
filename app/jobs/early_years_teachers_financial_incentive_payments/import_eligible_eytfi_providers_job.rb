@@ -81,6 +81,18 @@ module EarlyYearsTeachersFinancialIncentivePayments
       body_io = StringIO.new(file_upload.body)
       errors = []
 
+      headers = CSV.foreach(body_io).first
+
+      if headers != RowParser::HEADERS
+        file_upload.update(
+          upload_errors: [
+            "Headers must be #{RowParser::HEADERS.join(", ")}"
+          ]
+        )
+
+        return
+      end
+
       CSV.foreach(body_io, headers: true).with_index do |row, index|
         row_counter = index + 2
         parser = RowParser.new(row:)
