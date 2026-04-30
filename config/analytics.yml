@@ -464,24 +464,24 @@ shared:
     - updated_at # datetime, when this datapoint was last updated
     - type # string, type of datapoint
   :events:
-  - id # uuid, identifies this event occurrence
-  - name # string, describes what this event is
-  - claim_id # uuid, references the associated claim
-  - actor_id # uuid, admin that created triggered this event
-  - entity_type # string, used to identify the entity type this event relates to
-  - entity_id # uuid, references associated entity
-  - created_at # datetime, when the event was created
-  - updated_at # datetime, when the event was last updated
+    - id # uuid, identifies this event occurrence
+    - name # string, describes what this event is
+    - claim_id # uuid, references the associated claim
+    - actor_id # uuid, admin that created triggered this event
+    - entity_type # string, used to identify the entity type this event relates to
+    - entity_id # uuid, references associated entity
+    - created_at # datetime, when the event was created
+    - updated_at # datetime, when the event was last updated
   :eligible_eytfi_providers:
-  - id # uuid, identifies the eligible EYTFI provider
-  - urn # string, identifier of the provider
-  - name # string, name of the provider
-  - address_line_1 # string, address line 1 of the provider
-  - address_line_2 # string, address line 2 of the provider
-  - address_line_3 # string, address line 3 of the provider
-  - town # string, town of the provider
-  - postcode # string, postcode of the provider
-  - created_at # datetime, when this provider was uploaded
-  - updated_at # datetime, when this provider was last updated
-  - eligible # boolean, whether or not this provider is eligible for payment
-  - file_upload_id # uuid, associated file upload. use this to work out academic year and latest version as this table is append only
+    - id # uuid, identifies the eligible EYTFI provider
+    - urn # string, identifier of the provider
+    - name # string, name of the provider
+    - address_line_1 # string, address line 1 of the provider
+    - address_line_2 # string, address line 2 of the provider
+    - address_line_3 # string, address line 3 of the provider
+    - town # string, town of the provider
+    - postcode # string, postcode of the provider
+    - created_at # datetime, when this provider was uploaded
+    - updated_at # datetime, when this provider was last updated
+    - eligible # boolean, whether or not this provider is eligible for payment
+    - file_upload_id # uuid, associated file upload. use this to work out academic year and latest version as this table is append only
