@@ -465,7 +465,7 @@ class Claim < ApplicationRecord
   end
 
   def most_recent_scheduled_payment_date
-    [
+    @most_recent_scheduled_payment_date ||= [
       payments.maximum("scheduled_payment_date"),
       topups.joins(:payment).maximum("scheduled_payment_date")
     ].compact.max
