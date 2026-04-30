@@ -69,8 +69,7 @@ module EarlyYearsTeachersFinancialIncentivePayments
 
       if invalid
         file_upload.update(
-          upload_errors: errors,
-          completed_processing_at: Time.zone.now
+          upload_errors: errors
         )
 
         return

@@ -5,7 +5,7 @@ module Admin
     def show
       @file_upload = FileUpload.find(params[:id])
 
-      if @file_upload.completed_processing_at.nil?
+      if @file_upload.completed_processing_at.nil? && @file_upload.upload_errors.blank?
         response.headers["Refresh"] = "5"
       end
     end

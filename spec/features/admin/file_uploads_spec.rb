@@ -5,7 +5,7 @@ RSpec.describe "Admin viewing file uploads" do
     sign_in_as_service_operator
   end
 
-  context "when file upload is not yet processed" do
+  context "when file upload is not yet processed without errors" do
     let(:file_upload) do
       create(
         :file_upload,
