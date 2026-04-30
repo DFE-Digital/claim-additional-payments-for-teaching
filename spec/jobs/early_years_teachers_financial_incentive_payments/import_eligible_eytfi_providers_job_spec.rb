@@ -311,6 +311,39 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
   end
 
   describe "#to_provider" do
-    it "returns provider object"
+    let(:row) do
+      CSV::Row.new(
+        described_class::HEADERS,
+        [
+          "EY123456",
+          "Some nursery",
+          "Some Road",
+          "Somewhere",
+          "Somewhere Else",
+          "London",
+          "EC1N 2TD",
+          "TRUE"
+        ],
+        true
+      )
+    end
+
+    it "returns provider object" do
+      expected = Policies::
+        EarlyYearsTeachersFinancialIncentivePayments::
+        EligibleEytfiProvider.new(
+          urn: "EY123456",
+          name: "Some nursery",
+          address_line_1: "Some Road",
+          address_line_2: "Somewhere",
+          address_line_3: "Somewhere Else",
+          town: "London",
+          postcode: "EC1N 2TD",
+          eligible: true,
+          file_upload:
+        )
+
+      expect(subject.to_provider(file_upload:).attributes).to eql(expected.attributes)
+    end
   end
 end
