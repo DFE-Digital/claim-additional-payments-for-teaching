@@ -5,7 +5,8 @@ module Policies
     TargetedRetentionIncentivePayments,
     InternationalRelocationPayments,
     FurtherEducationPayments,
-    EarlyYearsPayments
+    EarlyYearsPayments,
+    EarlyYearsTeachersFinancialIncentivePayments
   ].freeze
 
   AMENDABLE_ELIGIBILITY_ATTRIBUTES = POLICIES.map do |policy|
@@ -13,7 +14,7 @@ module Policies
   end.flatten.uniq.freeze
 
   def self.all
-    POLICIES
+    POLICIES.reject(&:hidden?)
   end
 
   def self.options_for_select

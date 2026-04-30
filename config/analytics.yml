@@ -434,6 +434,11 @@ shared:
     - alternative_idv_claimant_postcode # string, postcode for alt idv
     - alternative_idv_claimant_national_insurance_number # string, national insurance number for alt idv
     - alternative_idv_claimant_email # string, email for alt idv
+  :early_years_teachers_financial_incentive_payments_eligibilities:
+    - id # uuid, identifies the EYTFI eligibility record
+    - created_at # datetime, timestamp when eligibility was created
+    - updated_at # datetime, timestamp when eligibility was last updated
+    - award_amount # decimal, amount being awarded
   :school_workforce_censuses:
     - id # uuid, identifies the school workforce census record
     - teacher_reference_number # string, external identifier for teacher
