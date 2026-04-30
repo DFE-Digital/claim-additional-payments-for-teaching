@@ -1,3 +1,9 @@
+<% if @file_upload.back_link %>
+  <% content_for :back_link do %>
+    <%= govuk_back_link href: @file_upload.back_link %>
+  <% end %>
+<% end %>
+
 <h1 class="govuk-heading-l">
   File upload
 </h1>

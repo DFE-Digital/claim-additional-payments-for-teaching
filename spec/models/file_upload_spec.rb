@@ -46,4 +46,26 @@ RSpec.describe FileUpload, type: :model do
       expect { some_unrelated_file_upload.reload }.not_to raise_error
     end
   end
+
+  describe "#back_link" do
+    context "when EligibleEytfiProvider upload" do
+      before do
+        subject.target_data_model = "Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider"
+      end
+
+      it "returns link to edit journey config" do
+        expect(subject.back_link).to eql("/admin/journey-configurations/early-years-teachers-financial-incentive-payments/edit")
+      end
+    end
+
+    context "when something else" do
+      before do
+        subject.target_data_model = "foo"
+      end
+
+      it "returns nil" do
+        expect(subject.back_link).to be_nil
+      end
+    end
+  end
 end
