@@ -8,6 +8,8 @@ module Admin
         "claim_summary_further_education_payments"
       when Policies::InternationalRelocationPayments
         "claim_summary_international_relocation_payments"
+      when Policies::EarlyYearsTeachersFinancialIncentivePayments
+        "claim_summary_early_years_teachers_financial_incentive_payments"
       else
         "claim_summary"
       end

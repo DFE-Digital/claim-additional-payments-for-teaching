@@ -9,7 +9,8 @@ RSpec.describe Policies, type: :model do
         Policies::TargetedRetentionIncentivePayments,
         Policies::InternationalRelocationPayments,
         Policies::FurtherEducationPayments,
-        Policies::EarlyYearsPayments
+        Policies::EarlyYearsPayments,
+        Policies::EarlyYearsTeachersFinancialIncentivePayments
       ])
     end
   end
@@ -24,7 +25,9 @@ RSpec.describe Policies, type: :model do
 
   describe "::all" do
     it do
-      expect(described_class.all).to eq(described_class::POLICIES)
+      expect(described_class.all).to eq(described_class::POLICIES.excluding(
+        Policies::EarlyYearsTeachersFinancialIncentivePayments
+      ))
     end
   end
 
