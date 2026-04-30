@@ -38,16 +38,20 @@ module Policies
       end
 
       def old_rejected_claim?
-        claim.rejected? && claim.latest_decision.created_at < start_of_current_academic_year.beginning_of_day
+        @old_rejected_claim ||= claim.rejected? && latest_decision.created_at < start_of_current_academic_year.beginning_of_day
       end
 
       def old_paid_claim?
-        claim.paid? && claim.most_recent_scheduled_payment_date < start_of_current_academic_year.beginning_of_day
+        @old_paid_claim ||= claim.paid? && claim.most_recent_scheduled_payment_date < start_of_current_academic_year.beginning_of_day
       end
 
       private
 
       attr_reader :claim
+
+      def latest_decision
+        @latest_decision ||= claim.latest_decision
+      end
 
       def start_of_current_academic_year
         AcademicYear.current.start_of_autumn_term
