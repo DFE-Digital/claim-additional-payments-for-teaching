@@ -1,6 +1,8 @@
 module Policies
   module FurtherEducationPayments
     class AdminTasksPresenter
+      include Admin::PresenterMethods
+
       attr_reader :claim, :eligibility
 
       def initialize(claim)
@@ -61,6 +63,12 @@ module Policies
           ["Provider email", provider_email],
           ["Claimant name", claim.full_name],
           ["Claimant email", claim.email_address]
+        ]
+      end
+
+      def employment
+        [
+          [translate("admin.current_school"), display_school(eligibility.current_school)]
         ]
       end
 
