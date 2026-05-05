@@ -11,6 +11,10 @@ module Policies
           )
         )
       end
+
+      before_save do
+        self.sanitised_postcode = postcode&.downcase&.delete(" ").presence
+      end
     end
   end
 end
