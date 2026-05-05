@@ -22,13 +22,27 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
   end
 
   scenario "happy path" do
-    visit landing_page_path(Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name)
+    create(
+      :eligible_eytfi_provider,
+      name: "Springfield nursery"
+    )
+
+    visit landing_page_path(
+      Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
+    )
+
     click_link "Start now"
 
     expect(page).to have_text "Which nursery do you teach in?"
+    find_field("claim[nursery_search_query]").set("Springfield nursery")
+    click_button "Continue"
+
+    expect(page).to have_text "Which nursery do you teach in?"
+    choose "Springfield nursery"
     click_button "Continue"
 
     expect(page).to have_text "Do you hold one of these teaching qualifications?"
+    choose "Yes"
     click_button "Continue"
 
     expect(page).to have_text "You are eligible to apply"
@@ -69,5 +83,89 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     click_button "Continue"
 
     expect(page).to have_text "Do you hold one of these teaching qualifications?"
+  end
+
+  scenario "not using auto complete - js", js: true do
+    create(
+      :eligible_eytfi_provider,
+      name: "Springfield nursery"
+    )
+
+    visit landing_page_path(
+      Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
+    )
+
+    click_link "Start now"
+
+    expect(page).to have_text "Which nursery do you teach in?"
+
+    find_field("claim[nursery_search_query]").send_keys("Spr")
+    find("h1").click # click somewhere else to disimiss the autocomplete dropdown
+    click_button "Continue"
+
+    expect(page).to have_text "Which nursery do you teach in?"
+    choose("Springfield nursery")
+    click_button "Continue"
+
+    expect(page).to have_text "Do you hold one of these teaching qualifications?"
+  end
+
+  scenario "ineligible nursery chosen" do
+    create(
+      :eligible_eytfi_provider,
+      name: "Shelbyvile nursery",
+      eligible: false
+    )
+
+    visit landing_page_path(
+      Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
+    )
+
+    click_link "Start now"
+
+    expect(page).to have_text "Which nursery do you teach in?"
+    find_field("claim[nursery_search_query]").set("Shelbyvile nursery")
+    click_button "Continue"
+
+    expect(page).to have_text "Which nursery do you teach in?"
+    choose "Shelbyvile nursery"
+    click_button "Continue"
+
+    expect(page).to have_text("You are not eligible for this payment")
+
+    expect(page).to have_text(
+      "To be eligible for the early years teacher recognition payment you must be a qualified early years teacher in an eligible local authority area."
+    )
+  end
+
+  scenario "ineligible qualification option" do
+    create(
+      :eligible_eytfi_provider,
+      name: "Springfield nursery"
+    )
+
+    visit landing_page_path(
+      Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
+    )
+
+    click_link "Start now"
+
+    expect(page).to have_text "Which nursery do you teach in?"
+    find_field("claim[nursery_search_query]").set("Springfield nursery")
+    click_button "Continue"
+
+    expect(page).to have_text "Which nursery do you teach in?"
+    choose "Springfield nursery"
+    click_button "Continue"
+
+    expect(page).to have_text "Do you hold one of these teaching qualifications?"
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_text("You are not eligible for this payment")
+
+    expect(page).to have_text(
+      "To be eligible for the early years teacher recognition payment you must be a qualified early years teacher in an eligible local authority area."
+    )
   end
 end

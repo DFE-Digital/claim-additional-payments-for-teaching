@@ -1,8 +1,9 @@
 module Journeys
   module EarlyYearsTeachersFinancialIncentivePayments
     class SlugSequence
-      SLUGS = %w[
+      ELIGIBILITY_SLUGS = %w[
         nursery-search
+        nursery-select
         teaching-qualification-confirmation
         eligible-teaching-qualification-held
         sign-in
@@ -12,11 +13,13 @@ module Journeys
         information-provided
       ].freeze
 
-      SLUGS_HASH = SLUGS.to_h { |slug| [slug, slug] }.freeze
-
       RESTRICTED_SLUGS = [].freeze
 
-      DEAD_END_SLUGS = [].freeze
+      DEAD_END_SLUGS = %w[ineligible].freeze
+
+      SLUGS = (ELIGIBILITY_SLUGS + RESTRICTED_SLUGS + DEAD_END_SLUGS).freeze
+
+      SLUGS_HASH = SLUGS.to_h { |slug| [slug, slug] }.freeze
 
       def self.start_page_url
         Rails.application.routes.url_helpers.landing_page_path("early-years-teachers-financial-incentive-payments")
@@ -38,6 +41,11 @@ module Journeys
         array = []
 
         array << SLUGS_HASH["nursery-search"]
+
+        if answers.nursery_id.blank?
+          array << SLUGS_HASH["nursery-select"]
+        end
+
         array << SLUGS_HASH["teaching-qualification-confirmation"]
         array << SLUGS_HASH["eligible-teaching-qualification-held"]
         array << SLUGS_HASH["sign-in"]
