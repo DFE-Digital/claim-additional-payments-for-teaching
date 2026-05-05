@@ -32,6 +32,20 @@ class StaticPagesController < BasePublicController
     end
   end
 
+  def guidance_page
+    guidance_page = "#{journey.view_path}/guidance"
+
+    if lookup_context.template_exists?(guidance_page, [], false)
+      render guidance_page
+    else
+      render(
+        file: Rails.root.join("public", "404.html"),
+        status: :not_found,
+        layout: false
+      )
+    end
+  end
+
   private
 
   def journey_available?
