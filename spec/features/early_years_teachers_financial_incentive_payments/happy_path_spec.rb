@@ -48,4 +48,26 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
 
     expect(page).to have_text "How we’ll use your information"
   end
+
+  scenario "using nursery auto complete - js", js: true do
+    create(
+      :eligible_eytfi_provider,
+      name: "Springfield nursery"
+    )
+
+    visit landing_page_path(
+      Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
+    )
+
+    click_link "Start now"
+
+    expect(page).to have_text "Which nursery do you teach in?"
+
+    find_field("claim[nursery_search_query]").send_keys("Spr")
+    find("li", text: "Springfield nursery").click
+
+    click_button "Continue"
+
+    expect(page).to have_text "Do you hold one of these teaching qualifications?"
+  end
 end

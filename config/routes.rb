@@ -108,6 +108,12 @@ Rails.application.routes.draw do
   constraints lambda { |req| req.format == :json } do
     defaults format: :json do
       resources :school_search, only: [:create]
+
+      namespace :journeys do
+        namespace :early_years_teachers_financial_incentive_payments do
+          resources :nursery_searches, only: [:create]
+        end
+      end
     end
   end
 

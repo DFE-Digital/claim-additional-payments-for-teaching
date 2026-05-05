@@ -10,6 +10,7 @@ module Journeys
 
       array += [
         NurserySearchForm,
+        NurserySelectForm,
         TeachingQualificationConfirmationForm,
         EligibleTeachingQualificationHeldForm
       ]
