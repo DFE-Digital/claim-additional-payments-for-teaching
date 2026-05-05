@@ -24,7 +24,8 @@ module Journeys
         EligibleQualificationConfirmedForm,
         ConfirmEligibilityForm,
         AcceptPaymentForm,
-        InformationProvidedForm
+        InformationProvidedForm,
+        IneligibleForm
       ]
 
       array

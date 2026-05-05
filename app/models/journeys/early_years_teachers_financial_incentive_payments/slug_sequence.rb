@@ -10,13 +10,16 @@ module Journeys
         confirm-eligibility
         accept-payment
         information-provided
+        ineligible
+      ].freeze
+
+      DEAD_END_SLUGS = %w[
+        ineligible
       ].freeze
 
       SLUGS_HASH = SLUGS.to_h { |slug| [slug, slug] }.freeze
 
       RESTRICTED_SLUGS = [].freeze
-
-      DEAD_END_SLUGS = [].freeze
 
       def self.start_page_url
         Rails.application.routes.url_helpers.landing_page_path("early-years-teachers-financial-incentive-payments")

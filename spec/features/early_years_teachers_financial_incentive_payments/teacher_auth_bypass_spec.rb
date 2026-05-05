@@ -19,6 +19,7 @@ RSpec.describe "EYTFIP with teacher auth bypass", feature_flag: [:eytfi_journey]
     click_button "Continue"
 
     expect(page).to have_text "Do you hold one of these teaching qualifications?"
+    choose "Yes"
     click_button "Continue"
 
     expect(page).to have_text "You are eligible to apply"
