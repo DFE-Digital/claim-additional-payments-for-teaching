@@ -88,6 +88,11 @@ module Journeys
     attribute :possible_school_id, :string, pii: false
     attribute :provision_search, :string, pii: false
 
+    def update!(attributes)
+      assign_attributes(attributes)
+      session.save!
+    end
+
     def increment_hmrc_validation_attempt_count
       self.hmrc_validation_attempt_count = attributes["hmrc_validation_attempt_count"] + 1
     end
