@@ -1,6 +1,25 @@
 require "rails_helper"
 
 RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
+  describe "#employment" do
+    let(:claim) do
+      create(
+        :claim,
+        :submitted,
+        policy: Policies::FurtherEducationPayments,
+        eligibility_trait: :eligible
+      )
+    end
+
+    it "displays the current school with a link and DfE number" do
+      row = described_class.new(claim).employment.first
+
+      expect(row[0]).to eql("Current school")
+      expect(row[1]).to include("href")
+      expect(row[1]).to include(claim.school.dfe_number)
+    end
+  end
+
   describe "#provider_verification_rows" do
     context "continued_employment" do
       subject do
