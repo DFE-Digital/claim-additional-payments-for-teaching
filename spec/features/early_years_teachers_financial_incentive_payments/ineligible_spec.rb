@@ -22,10 +22,20 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
   end
 
   scenario "claimant states they do not have relevant qualification" do
+    create(
+      :eligible_eytfi_provider,
+      name: "Springfield nursery"
+    )
+
     visit landing_page_path(Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name)
     click_link "Start now"
 
     expect(page).to have_text "Which nursery do you teach in?"
+    find_field("claim[nursery_search_query]").set("Springfield nursery")
+    click_button "Continue"
+
+    expect(page).to have_text "Which nursery do you teach in?"
+    choose "Springfield nursery"
     click_button "Continue"
 
     expect(page).to have_text "Do you hold one of these teaching qualifications?"

@@ -14,7 +14,9 @@ module Policies
       end
 
       def ineligibility_reason
-        if answers.teaching_qualification_confirmation == false
+        if answers.nursery&.ineligible?
+          :ineligible_provider
+        elsif answers.teaching_qualification_confirmation == false
           :teaching_qualification_not_confirmed
         end
       end

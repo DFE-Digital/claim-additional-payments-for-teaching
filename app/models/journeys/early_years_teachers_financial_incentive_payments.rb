@@ -9,6 +9,7 @@ module Journeys
       array = []
 
       array += [
+        IneligibleForm,
         NurserySearchForm,
         NurserySelectForm,
         TeachingQualificationConfirmationForm,
