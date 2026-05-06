@@ -34,7 +34,7 @@ class Admin::EligibleEytfiProvidersForm
 
   def save
     ApplicationRecord.transaction do
-      file_upload.save
+      file_upload.save!
       EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfiProvidersJob.perform_later(file_upload)
     end
   end
