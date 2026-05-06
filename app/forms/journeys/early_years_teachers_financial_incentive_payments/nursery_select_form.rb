@@ -28,6 +28,7 @@ module Journeys
 
       def results
         @results ||= Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider
+          .by_academic_year(Journeys::EarlyYearsTeachersFinancialIncentivePayments.configuration.current_academic_year)
           .search(answers.nursery_search_query)
       end
     end
