@@ -55,6 +55,7 @@ module Journeys
 
       def results
         @results ||= Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider
+          .by_academic_year(Journeys::EarlyYearsTeachersFinancialIncentivePayments.configuration.current_academic_year)
           .search(nursery_search_query)
           .map(&NuseryJsonPresenter.method(:new))
           .map(&:as_json)
