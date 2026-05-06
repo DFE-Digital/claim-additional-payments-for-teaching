@@ -43,7 +43,7 @@ module Journeys
 
         journey_session.answers.update!(
           nursery_search_query: nursery_search_query,
-          nursery_id: nursery_id
+          nursery_id: nursery_id.presence
         )
 
         true
