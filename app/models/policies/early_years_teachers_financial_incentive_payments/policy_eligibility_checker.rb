@@ -10,7 +10,13 @@ module Policies
       end
 
       def ineligible?
-        false
+        ineligibility_reason.present?
+      end
+
+      def ineligibility_reason
+        if answers.teaching_qualification_confirmation == false
+          :teaching_qualification_not_confirmed
+        end
       end
     end
   end

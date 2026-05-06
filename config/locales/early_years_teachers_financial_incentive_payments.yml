@@ -8,7 +8,12 @@ en:
         options:
           true: "Yes"
           false: "No"
+        errors:
+          inclusion: Select yes if you hold one of the listed qualifications
       accept_payment:
         options:
           true: "Yes"
           false: "No"
+      ineligible:
+        teaching_qualification_not_confirmed:
+          heading: You are not eligible for this payment

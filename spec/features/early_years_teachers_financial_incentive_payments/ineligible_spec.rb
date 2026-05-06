@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
+RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] do
   before do
     create(
       :journey_configuration,
@@ -21,7 +21,7 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     })
   end
 
-  scenario "happy path" do
+  scenario "claimant states they do not have relevant qualification" do
     visit landing_page_path(Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name)
     click_link "Start now"
 
@@ -29,24 +29,9 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     click_button "Continue"
 
     expect(page).to have_text "Do you hold one of these teaching qualifications?"
-    choose "Yes"
+    choose "No"
     click_button "Continue"
 
-    expect(page).to have_text "You are eligible to apply"
-    click_button "Continue"
-
-    expect(page).to have_text "Sign in with GOV.UK One Login"
-    click_button "Continue"
-
-    expect(page).to have_text "You hold an eligible qualification"
-    click_button "Continue"
-
-    expect(page).to have_text "Confirm you are eligible"
-    click_button "Continue"
-
-    expect(page).to have_text "Before you accept the claim"
-    click_button "Continue"
-
-    expect(page).to have_text "How we’ll use your information"
+    expect(page).to have_text "You are not eligible for this payment"
   end
 end
