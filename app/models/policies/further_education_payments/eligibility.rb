@@ -76,6 +76,26 @@ module Policies
       # Claim#school expects this
       alias_method :current_school, :school
 
+      composed_of(
+        :teaching_hours_per_week,
+        class_name: "::FurtherEducationPayments::TeachingHours",
+        mapping: {
+          teaching_hours_per_week: :__value
+        },
+        converter: proc { |value| ::FurtherEducationPayments::TeachingHours.new(value) },
+        allow_nil: true
+      )
+
+      composed_of(
+        :provider_verification_teaching_hours_per_week,
+        class_name: "::FurtherEducationPayments::TeachingHours",
+        mapping: {
+          provider_verification_teaching_hours_per_week: :__value
+        },
+        converter: proc { |value| ::FurtherEducationPayments::TeachingHours.new(value) },
+        allow_nil: true
+      )
+
       def policy
         Policies::FurtherEducationPayments
       end
@@ -232,18 +252,23 @@ module Policies
       end
 
       def insufficient_teaching_hours_per_week?
-        provider_verification_teaching_hours_per_week == "less_than_2_5"
+        provider_verification_teaching_hours_per_week&.less_than_2_5?
       end
 
       def teaching_hours_mismatch?
-        (
-          provider_verification_teaching_hours_per_week == "between_2_5_and_12" &&
-          teaching_hours_per_week.in?(%w[more_than_20 more_than_12])
-        ) ||
-          (
-            teaching_hours_per_week == "between_2_5_and_12" &&
-            provider_verification_teaching_hours_per_week.in?(%w[more_than_12 more_than_20])
-          )
+        return unless provider_verification_teaching_hours_per_week && teaching_hours_per_week
+
+        claimant_hours_more_than_provider_hours? || provider_hours_more_than_claimant_hours?
+      end
+
+      def provider_hours_more_than_claimant_hours?
+        provider_verification_teaching_hours_per_week.upperband? &&
+          teaching_hours_per_week.between_2_5_and_12?
+      end
+
+      def claimant_hours_more_than_provider_hours?
+        provider_verification_teaching_hours_per_week.between_2_5_and_12? &&
+          teaching_hours_per_week.upperband?
       end
 
       def previous_approved_claim
