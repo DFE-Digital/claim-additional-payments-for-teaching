@@ -4,10 +4,20 @@ en:
     feedback_email: "feedback@example.com"
     support_email_address: "EYTrecognitionpayment@education.gov.uk"
     forms:
+      ineligible:
+        ineligible_provider:
+          heading: "The setting you work in is not eligible for the Early Years Teachers Financial Incentive Payment"
+        teaching_qualification_not_held:
+          heading: "You do not hold a relevant teaching qualification"
+      nursery_select:
+        errors:
+          blank: "Select the setting you work in"
       teaching_qualification_confirmation:
         options:
           true: "Yes"
           false: "No"
+        errors:
+          blank: "Select whether or not you hold a relevant teaching qualification"
       accept_payment:
         options:
           true: "Yes"

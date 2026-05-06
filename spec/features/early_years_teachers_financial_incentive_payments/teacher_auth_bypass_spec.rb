@@ -7,6 +7,11 @@ RSpec.describe "EYTFIP with teacher auth bypass", feature_flag: [:eytfi_journey]
       :early_years_teachers_financial_incentive_payments
     )
 
+    create(
+      :eligible_eytfi_provider,
+      name: "Springfield nursery"
+    )
+
     allow(TeacherAuth::Config.instance).to receive(:bypass?).and_return(true)
   end
 
@@ -15,10 +20,15 @@ RSpec.describe "EYTFIP with teacher auth bypass", feature_flag: [:eytfi_journey]
     expect(page).to have_text "Claim an early years teacher recognition payment"
     click_link "Start now"
 
+    find_field("claim[nursery_search_query]").set("Springfield nursery")
+    click_button "Continue"
+
     expect(page).to have_text "Which nursery do you teach in?"
+    choose "Springfield nursery"
     click_button "Continue"
 
     expect(page).to have_text "Do you hold one of these teaching qualifications?"
+    choose "Yes"
     click_button "Continue"
 
     expect(page).to have_text "You are eligible to apply"
