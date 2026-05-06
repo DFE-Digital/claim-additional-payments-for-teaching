@@ -1,6 +1,52 @@
+<% content_for(:phase) { "Alpha" } %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl"><%= t("early_years_teachers_practitioner.landing_page.title") %></h1>
+    <h1 class="govuk-heading-xl">
+      <%= t("early_years_teachers_practitioner.landing_page.title") %>
+    </h1>
+
+    <p class="govuk-body">
+      Use this service to claim a recognition payment if you’re an eligible early
+      years teacher.
+    </p>
+
+    <p class="govuk-body">
+      You can check our eligibility guidelines by visiting
+      <%= govuk_link_to("our guidance page", "#") %>
+    </p>
+
+    <p class="govuk-body">
+      Submitting a claim should take no more than 10 minutes
+    </p>
+
+    <%= govuk_accordion do |accordion| %>
+      <% accordion.with_section(heading_text: "Confirm your identity") do %>
+        <%= govuk_list([
+          "Create (or sign in to) GOV.UK One Login",
+          "You’ll need your national insurance number and teacher reference number."
+        ], type: :bullet) %>
+      <% end %>
+
+      <% accordion.with_section(heading_text: "Confirm you want to receive the payment") do %>
+        <%= govuk_list([
+          "The incentive payment might impact your benefits so you #{govuk_link_to('should check this', 'https://www.gov.uk/benefits-calculators')} before you make a claim".html_safe,
+          "Choose if you want the payment as one lump sum or monthly instalments"
+        ], type: :bullet) %>
+      <% end %>
+
+      <% accordion.with_section(heading_text: "Provide your bank details") do %>
+        <%= govuk_list([
+          "missing copy"
+        ], type: :bullet) %>
+      <% end %>
+
+      <% accordion.with_section(heading_text: "Submit your claim") do %>
+        <%= govuk_list([
+          "We’ll notify you 3 working days before you’re due to receive payment"
+        ], type: :bullet) %>
+      <% end %>
+    <% end %>
 
     <% if @journey_open %>
       <p class="govuk-!-margin-top-8">
