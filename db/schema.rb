@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_20_103432) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_29_153731) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -239,6 +239,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_20_103432) do
     t.index ["alternative_idv_reference"], name: "idx_on_alternative_idv_reference_1053f9bce9", unique: true
     t.index ["practitioner_reminder_email_last_sent_at"], name: "index_ey_eligibilities_on_pract_reminder_last_sent"
     t.index ["practitioner_reminder_email_sent_count"], name: "index_ey_eligibilities_on_pract_reminder_count"
+  end
+
+  create_table "early_years_teachers_financial_incentive_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.decimal "award_amount", precision: 7, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "eligible_ey_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

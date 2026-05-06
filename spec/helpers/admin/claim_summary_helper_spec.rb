@@ -8,7 +8,12 @@ RSpec.describe Admin::ClaimsHelper do
 
     before { assign(:claim, claim) }
 
-    Policies.all.excluding(Policies::FurtherEducationPayments, Policies::InternationalRelocationPayments, Policies::EarlyYearsPayments).each do |policy|
+    Policies.all.excluding(
+      Policies::FurtherEducationPayments,
+      Policies::InternationalRelocationPayments,
+      Policies::EarlyYearsPayments,
+      Policies::EarlyYearsTeachersFinancialIncentivePayments
+    ).each do |policy|
       context "for policy #{policy}" do
         let(:policy) { policy }
 

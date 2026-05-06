@@ -102,6 +102,10 @@ module BasePolicy
     true
   end
 
+  def hidden?
+    false
+  end
+
   def admin_tasks_presenter(claim)
     self::AdminTasksPresenter.new(claim)
   end

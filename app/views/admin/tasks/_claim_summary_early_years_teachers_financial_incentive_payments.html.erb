@@ -1,0 +1,81 @@
+<div class="govuk-grid-column-full">
+  <span class="govuk-caption-xl"><%= claim.policy.short_name %> (<%= claim.academic_year %>)</span>
+  <h1 class="govuk-heading-xl govuk-heading--navigation">
+    <span id="claim-heading">
+      <%= claim_summary_heading(claim) %>
+    </span>
+    <span class="govuk-body-m">
+      <%= link_to "View tasks", admin_claim_tasks_path(claim), class: "govuk-link" %>
+      <%= link_to "View full claim", admin_claim_path(claim), class: "govuk-link" %>
+      <%= link_to "Amend claim", new_admin_claim_amendment_path(claim), class: "govuk-link" if claim.amendable? %>
+      <%= link_to "Top up claim", new_admin_claim_topup_path(claim), class: "govuk-link" if claim.topupable? %>
+    </span>
+  </h1>
+</div>
+
+<div class="govuk-grid-column-full">
+  <%= render("admin/claims/banner", important_notes: claim.important_notes) if claim.important_notes.any? %>
+</div>
+
+<%= render "shared/assignment_banner", claim: claim %>
+
+<div class="govuk-summary-list govuk-!-margin-bottom-9">
+  <div class="govuk-grid-column-one-half">
+    <%= govuk_summary_list(actions: false) do |summary_list| %>
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "NI number" } %>
+        <% row.with_value { personal_data(claim, :national_insurance_number) } %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Full name" } %>
+        <% row.with_value { personal_data(claim, :full_name) } %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Date of birth" } %>
+        <% row.with_value { personal_data(claim, :date_of_birth) { |date| l(date) } } %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Email address" } %>
+        <% row.with_value { claim.email_address } %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Mobile number" } %>
+        <% row.with_value { claim.mobile_number } %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="govuk-grid-column-one-half">
+    <%= govuk_summary_list(actions: false) do |summary_list| %>
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Reference" } %>
+        <% row.with_value { claim.reference } %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Submitted" } %>
+        <% row.with_value { l(claim.submitted_at) } %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Decision due" } %>
+        <% row.with_value { (l(claim.decision_deadline) + decision_deadline_warning(claim, {na_text: ""})).html_safe } %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Status" } %>
+        <% row.with_value { status(claim) } %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Claim amount" } %>
+        <% row.with_value { number_to_currency(claim.award_amount_with_topups)} %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
