@@ -31,4 +31,12 @@ class FileUpload < ApplicationRecord
   def completed_processing!
     update!(completed_processing_at: Time.zone.now)
   end
+
+  def back_link
+    case target_data_model
+    when "Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider"
+      journey = Journeys::EarlyYearsTeachersFinancialIncentivePayments
+      Rails.application.routes.url_helpers.edit_admin_journey_configuration_path(journey.routing_name)
+    end
+  end
 end
