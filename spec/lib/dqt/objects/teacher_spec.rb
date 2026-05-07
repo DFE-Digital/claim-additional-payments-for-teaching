@@ -480,4 +480,244 @@ RSpec.describe Dqt::Teacher do
 
     specify { expect(degree_names).to contain_exactly("mathematics", "accounting") }
   end
+
+  describe "#has_valid_eyts?" do
+    subject { described_class.new(response) }
+
+    context "when valid eyts present?" do
+      let(:response) do
+        {
+          eyts: {
+            holdsFrom: "2020-04-03",
+            routes: [
+              {
+                routeToProfessionalStatusType: {
+                  routeToProfessionalStatusTypeId: "11b66de5-4670-4c82-86aa-20e42df723b7",
+                  name: "Early Years Teacher Degree Apprenticeship",
+                  professionalStatusType: "EarlyYearsTeacherStatus"
+                }
+              }
+            ]
+          },
+          trn: teacher_reference_number_str,
+          alerts: [],
+          lastName: "Doe",
+          firstName: "John",
+          dateOfBirth: date_of_birth_str,
+          nationalInsuranceNumber: "JR501209A"
+        }
+      end
+
+      it "returns true" do
+        expect(subject).to have_valid_eyts
+      end
+    end
+
+    context "when eyts missing" do
+      let(:response) do
+        {
+          eyts: nil,
+          trn: teacher_reference_number_str,
+          alerts: [],
+          lastName: "Doe",
+          firstName: "John",
+          dateOfBirth: date_of_birth_str,
+          nationalInsuranceNumber: "JR501209A"
+        }
+      end
+
+      it "returns false" do
+        expect(subject).not_to have_valid_eyts
+      end
+    end
+
+    context "when eyts in the future" do
+      let(:response) do
+        {
+          eyts: {
+            holdsFrom: "3000-04-03",
+            routes: [
+              {
+                routeToProfessionalStatusType: {
+                  routeToProfessionalStatusTypeId: "11b66de5-4670-4c82-86aa-20e42df723b7",
+                  name: "Early Years Teacher Degree Apprenticeship",
+                  professionalStatusType: "EarlyYearsTeacherStatus"
+                }
+              }
+            ]
+          },
+          trn: teacher_reference_number_str,
+          alerts: [],
+          lastName: "Doe",
+          firstName: "John",
+          dateOfBirth: date_of_birth_str,
+          nationalInsuranceNumber: "JR501209A"
+        }
+      end
+
+      it "returns false" do
+        expect(subject).not_to have_valid_eyts
+      end
+    end
+  end
+
+  describe "#has_valid_eyps?" do
+    subject { described_class.new(response) }
+
+    context "when valid eyps present?" do
+      let(:response) do
+        {
+          eyts: {
+            holdsFrom: "2020-04-03",
+            routes: [
+              {
+                routeToProfessionalStatusType: {
+                  routeToProfessionalStatusTypeId: "11b66de5-4670-4c82-86aa-20e42df723b7",
+                  name: "Early Years Teacher Degree Apprenticeship",
+                  professionalStatusType: "EarlyYearsProfessionalStatus"
+                }
+              }
+            ]
+          },
+          trn: teacher_reference_number_str,
+          alerts: [],
+          lastName: "Doe",
+          firstName: "John",
+          dateOfBirth: date_of_birth_str,
+          nationalInsuranceNumber: "JR501209A"
+        }
+      end
+
+      it "returns true" do
+        expect(subject).to have_valid_eyps
+      end
+    end
+
+    context "when eyps missing" do
+      let(:response) do
+        {
+          eyts: nil,
+          trn: teacher_reference_number_str,
+          alerts: [],
+          lastName: "Doe",
+          firstName: "John",
+          dateOfBirth: date_of_birth_str,
+          nationalInsuranceNumber: "JR501209A"
+        }
+      end
+
+      it "returns false" do
+        expect(subject).not_to have_valid_eyps
+      end
+    end
+
+    context "when eyps in the future" do
+      let(:response) do
+        {
+          eyts: {
+            holdsFrom: "3000-04-03",
+            routes: [
+              {
+                routeToProfessionalStatusType: {
+                  routeToProfessionalStatusTypeId: "11b66de5-4670-4c82-86aa-20e42df723b7",
+                  name: "Early Years Teacher Degree Apprenticeship",
+                  professionalStatusType: "EarlyYearsTeacherStatus"
+                }
+              }
+            ]
+          },
+          trn: teacher_reference_number_str,
+          alerts: [],
+          lastName: "Doe",
+          firstName: "John",
+          dateOfBirth: date_of_birth_str,
+          nationalInsuranceNumber: "JR501209A"
+        }
+      end
+
+      it "returns false" do
+        expect(subject).not_to have_valid_eyps
+      end
+    end
+  end
+
+  describe "#has_valid_qts?" do
+    subject { described_class.new(response) }
+
+    context "when valid qts present?" do
+      let(:response) do
+        {
+          qts: {
+            holdsFrom: "2020-04-03",
+            routes: [
+              {
+                routeToProfessionalStatusType: {
+                  routeToProfessionalStatusTypeId: "11b66de5-4670-4c82-86aa-20e42df723b7",
+                  name: "Early Years Teacher Degree Apprenticeship",
+                  professionalStatusType: "QualifiedTeacherStatus"
+                }
+              }
+            ]
+          },
+          trn: teacher_reference_number_str,
+          alerts: [],
+          lastName: "Doe",
+          firstName: "John",
+          dateOfBirth: date_of_birth_str,
+          nationalInsuranceNumber: "JR501209A"
+        }
+      end
+
+      it "returns true" do
+        expect(subject).to have_valid_qts
+      end
+    end
+
+    context "when qts missing" do
+      let(:response) do
+        {
+          qts: nil,
+          trn: teacher_reference_number_str,
+          alerts: [],
+          lastName: "Doe",
+          firstName: "John",
+          dateOfBirth: date_of_birth_str,
+          nationalInsuranceNumber: "JR501209A"
+        }
+      end
+
+      it "returns false" do
+        expect(subject).not_to have_valid_qts
+      end
+    end
+
+    context "when qts in the future" do
+      let(:response) do
+        {
+          qts: {
+            holdsFrom: "3000-04-03",
+            routes: [
+              {
+                routeToProfessionalStatusType: {
+                  routeToProfessionalStatusTypeId: "11b66de5-4670-4c82-86aa-20e42df723b7",
+                  name: "Early Years Teacher Degree Apprenticeship",
+                  professionalStatusType: "QualifiedTeacherStatus"
+                }
+              }
+            ]
+          },
+          trn: teacher_reference_number_str,
+          alerts: [],
+          lastName: "Doe",
+          firstName: "John",
+          dateOfBirth: date_of_birth_str,
+          nationalInsuranceNumber: "JR501209A"
+        }
+      end
+
+      it "returns false" do
+        expect(subject).not_to have_valid_qts
+      end
+    end
+  end
 end
