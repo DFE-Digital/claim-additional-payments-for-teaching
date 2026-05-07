@@ -4,7 +4,7 @@ module Policies
       def applicable_task_names
         tasks = []
 
-        tasks << "identity_confirmation"
+        tasks << "one_login_identity"
         tasks << "qualifications"
         tasks << "employment"
         tasks << "student_loan_plan" if claim.submitted_without_slc_data?
@@ -13,6 +13,14 @@ module Policies
         tasks << "matching_details" if matching_claims.exists?
 
         tasks
+      end
+
+      def applicable_task_objects
+        applicable_task_names.map do |name|
+          # The desings call for us to display "Identity confirmation"
+          locale_key = (name == "one_login_identity") ? "identity_confirmation" : name
+          OpenStruct.new(name:, locale_key:)
+        end
       end
     end
   end

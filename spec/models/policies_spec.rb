@@ -25,9 +25,7 @@ RSpec.describe Policies, type: :model do
 
   describe "::all" do
     it do
-      expect(described_class.all).to eq(described_class::POLICIES.excluding(
-        Policies::EarlyYearsTeachersFinancialIncentivePayments
-      ))
+      expect(described_class.all).to eq(described_class::POLICIES)
     end
   end
 
@@ -39,7 +37,8 @@ RSpec.describe Policies, type: :model do
         ["School Targeted Retention Incentive", "targeted-retention-incentive-payments"],
         ["International Relocation Payments", "international-relocation-payments"],
         ["Further Education Targeted Retention Incentive", "further-education-payments"],
-        ["Early Years Financial Incentive Payments", "early-years-payments"]
+        ["Early Years Financial Incentive Payments", "early-years-payments"],
+        ["Early Years Teachers Financial Incentive Payments", "early-years-teachers-financial-incentive-payments"]
       ])
     end
   end

@@ -1,9 +1,12 @@
 en:
   early_years_teachers_financial_incentive_payments:
     policy_short_name: Early Years Teachers Financial Incentive Payments
+    policy_acronym: EYTFI
     journey_name: Early Years Teachers Financial Incentive Payments
     feedback_email: "feedback@example.com"
     support_email_address: "EYTrecognitionpayment@education.gov.uk"
+    claim_subject: "Early Years Recognition Payment"
+    claim_description: for an early years teachers recognition payment
     forms:
       nursery_select:
         errors:

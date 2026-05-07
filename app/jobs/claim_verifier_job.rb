@@ -9,7 +9,10 @@ class ClaimVerifierJob < ApplicationJob
   private
 
   def dqt_teacher_status(claim)
-    return if claim.policy == Policies::EarlyYearsPayments
+    return if claim.policy.in?([
+      Policies::EarlyYearsPayments,
+      Policies::EarlyYearsTeachersFinancialIncentivePayments
+    ])
 
     if claim.has_dqt_record?
       Dqt::Teacher.new(claim.dqt_teacher_status)
