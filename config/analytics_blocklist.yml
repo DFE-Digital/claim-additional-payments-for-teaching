@@ -44,6 +44,7 @@
   - target_data_model
   - completed_processing_at
   - academic_year
+  - upload_errors
   :reminders:
   - one_time_password
   :student_loans_data:

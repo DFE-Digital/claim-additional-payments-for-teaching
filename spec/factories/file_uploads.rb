@@ -29,6 +29,10 @@ FactoryBot.define do
       end
     end
 
+    trait :with_current_academic_year do
+      academic_year { AcademicYear.current }
+    end
+
     body do
       string = ""
 

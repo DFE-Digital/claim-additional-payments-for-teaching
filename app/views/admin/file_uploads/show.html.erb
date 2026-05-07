@@ -1,0 +1,58 @@
+<% if @file_upload.back_link %>
+  <% content_for :back_link do %>
+    <%= govuk_back_link href: @file_upload.back_link %>
+  <% end %>
+<% end %>
+
+<h1 class="govuk-heading-l">
+  File upload
+</h1>
+
+<%= govuk_summary_list(actions: false) do |summary_list| %>
+  <%= summary_list.with_row do |row| %>
+    <%= row.with_key { "Target" } %>
+    <%= row.with_value { @file_upload.target_data_model.split("::").last } %>
+  <% end %>
+
+  <%= summary_list.with_row do |row| %>
+    <%= row.with_key { "Academic year" } %>
+    <%= row.with_value { @file_upload.academic_year } %>
+  <% end %>
+
+  <%= summary_list.with_row do |row| %>
+    <%= row.with_key { "Uploaded at" } %>
+    <%= row.with_value { l(@file_upload.created_at) } %>
+  <% end %>
+
+  <%= summary_list.with_row do |row| %>
+    <%= row.with_key { "Uploaded by" } %>
+    <%= row.with_value { @file_upload.uploaded_by.full_name } %>
+  <% end %>
+
+  <%= summary_list.with_row do |row| %>
+    <%= row.with_key { "Completed processing at" } %>
+    <%= row.with_value { @file_upload.completed_processing_at.present? ? l(@file_upload.completed_processing_at) : "Not yet processed" } %>
+  <% end %>
+<% end %>
+
+<h2 class="govuk-heading-m">
+  Errors
+</h2>
+
+<% if @file_upload.completed_processing_at %>
+  <% if @file_upload.upload_errors.any? %>
+    <%= govuk_list @file_upload.upload_errors, type: :bullet %>
+  <% else %>
+    <p class="govuk-body">
+      No errors found
+    </p>
+  <% end %>
+<% else %>
+  <% if @file_upload.upload_errors.any? %>
+    <%= govuk_list @file_upload.upload_errors, type: :bullet %>
+  <% else %>
+    <p class="govuk-body">
+      Please wait for file to finish processing
+    </p>
+  <% end %>
+<% end %>
