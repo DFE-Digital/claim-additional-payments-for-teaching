@@ -191,6 +191,8 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
       ["Identity confirmation", "Previous claim mismatch", "Provider verification", "Employment", "Student loan plan", "Decision"]
     when Policies::EarlyYearsPayments
       ["EOI cross reference", "One Login identity check", "Employment", "Student loan plan", "Decision"]
+    when Policies::EarlyYearsTeachersFinancialIncentivePayments
+      ["Identity confirmation", "Qualifications", "Employment", "Student loan plan", "Decision"]
     else
       raise "Unimplemented policy: #{policy}"
     end
