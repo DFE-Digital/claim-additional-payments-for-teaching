@@ -17,9 +17,10 @@
   - data-school-search-school-id-target="#some-id"
     the element the school id will be written to
 
-  - data-school-search-search-box-target="#some-id"
+  - data-school-search-search-box-target="#some-id" (optional)
     the text box we get the initial search term from, will be replaced by the
-    autocomplete
+    autocomplete. If omitted, the first non-hidden <input> inside the
+    container is used.
 
   - data-school-search-min_length="3"
     minimum number of characters before we start searching
@@ -60,7 +61,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (!schoolIdTarget) { return }
 
-  var searchBoxTarget = document.querySelector(searchContainer.dataset.schoolSearchSearchBoxTarget);
+  var searchBoxTarget = searchContainer.dataset.schoolSearchSearchBoxTarget
+    ? document.querySelector(searchContainer.dataset.schoolSearchSearchBoxTarget)
+    : searchContainer.querySelector("input:not([type='hidden'])");
 
   if (!searchBoxTarget) { return }
 

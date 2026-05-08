@@ -5,6 +5,9 @@ en:
     feedback_email: "feedback@example.com"
     support_email_address: "EYTrecognitionpayment@education.gov.uk"
     forms:
+      nursery_select:
+        errors:
+          blank: "Select the setting you work in"
       teaching_qualification_confirmation:
         options:
           true: "Yes"
@@ -17,4 +20,6 @@ en:
           false: "No"
       ineligible:
         teaching_qualification_not_confirmed:
+          heading: You are not eligible for this payment
+        ineligible_provider:
           heading: You are not eligible for this payment

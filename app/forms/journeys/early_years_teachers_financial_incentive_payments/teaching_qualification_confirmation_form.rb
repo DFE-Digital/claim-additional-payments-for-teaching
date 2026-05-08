@@ -13,8 +13,7 @@ module Journeys
       def save
         return false if invalid?
 
-        journey_session.answers.assign_attributes(teaching_qualification_confirmation:)
-        journey_session.save!
+        journey_session.answers.update!(teaching_qualification_confirmation:)
       end
 
       def radio_options
