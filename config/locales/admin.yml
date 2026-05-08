@@ -499,3 +499,8 @@ en:
         matching_details:
           title: Is this claim still valid despite having matching details with other claims?
           unavailable: This task is not available until the claimant has submitted their claim
+  early_years_teachers_financial_incentive_payments:
+    admin:
+      task_questions:
+        payroll_details:
+          title: "The claimant’s personal bank account details have not been automatically validated. Has the claimant confirmed their personal bank account details?"
