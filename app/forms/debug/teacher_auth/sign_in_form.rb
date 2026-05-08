@@ -12,6 +12,7 @@ module Debug
       attribute :email, :string
       attribute :trn, :string
       attribute :sub, :string
+      attribute :has_eligible_qualification, :boolean
 
       def default_email
         "#{@default_verified_name.downcase.tr(" ", ".")}@example.com"
@@ -31,6 +32,10 @@ module Debug
 
       def default_sub
         "urn:fdc:gov.uk:2022:#{SecureRandom.base64(30)}"
+      end
+
+      def default_has_eligible_qualification
+        true
       end
 
       def journey

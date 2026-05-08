@@ -37,6 +37,17 @@
         <%= f.govuk_text_field :trn, width: 10, label: { text: "TRN" } %>
         <%= f.govuk_text_field :sub, label: { text: "One Login UID" } %>
 
+        <%= f.govuk_check_boxes_fieldset :has_eligible_qualification, multiple: false, legend: nil do %>
+          <%= f.govuk_check_box :has_eligible_qualification,
+            true,
+            false,
+            multiple: false,
+            link_errors: true,
+            label: {
+              text: "Has eligible qualification?"
+            } %>
+        <% end %>
+
         <%= f.govuk_submit %>
       <% end %>
     <% end %>
