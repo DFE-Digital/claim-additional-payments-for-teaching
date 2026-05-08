@@ -11,6 +11,10 @@ module Journeys
       attribute :nursery_id, :string, pii: false
       attribute :teaching_qualification_confirmation, :boolean, pii: false
 
+      attribute :trs_data, pii: true
+      attribute :trs_data_fetched_at, :datetime, pii: false
+      attribute :has_eligible_qualification, :boolean, pii: false
+
       def nursery
         @nursery ||= Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider.find_by(
           id: nursery_id
