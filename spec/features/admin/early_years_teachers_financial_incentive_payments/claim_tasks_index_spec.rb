@@ -38,4 +38,30 @@ RSpec.describe "Task index page for EYTFI claims" do
 
     expect(page).to have_text("Identity confirmed by One login on 1/5/2026")
   end
+
+  it "shows the student loan plan" do
+    claim = create(
+      :claim,
+      :submitted,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+      national_insurance_number: "ab123456c",
+      date_of_birth: Date.new(1970, 1, 1)
+    )
+
+    create(
+      :student_loans_data,
+      nino: "ab123456c",
+      date_of_birth: Date.new(1970, 1, 1)
+    )
+
+    ClaimVerifierJob.perform_now(claim)
+
+    sign_in_as_service_admin
+
+    visit admin_claim_tasks_path(claim)
+
+    click_on "Check student loan plan"
+
+    expect(page).to have_text("Student loan plan Plan 1")
+  end
 end
