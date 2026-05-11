@@ -38,4 +38,59 @@ RSpec.describe "Task index page for EYTFI claims" do
 
     expect(page).to have_text("Identity confirmed by One login on 1/5/2026")
   end
+
+  it "shows the student loan plan" do
+    claim = create(
+      :claim,
+      :submitted,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+      national_insurance_number: "ab123456c",
+      date_of_birth: Date.new(1970, 1, 1)
+    )
+
+    create(
+      :student_loans_data,
+      nino: "ab123456c",
+      date_of_birth: Date.new(1970, 1, 1)
+    )
+
+    ClaimVerifierJob.perform_now(claim)
+
+    sign_in_as_service_admin
+
+    visit admin_claim_tasks_path(claim)
+
+    click_on "Check student loan plan"
+
+    expect(page).to have_text("Student loan plan Plan 1")
+  end
+
+  it "shows the payroll details" do
+    claim = create(
+      :claim,
+      :submitted,
+      :bank_details_not_validated,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+      payroll_gender: "dont_know"
+    )
+
+    sign_in_as_service_admin
+
+    visit admin_claim_tasks_path(claim)
+
+    click_on "Check bank account details"
+
+    expect(page).to have_text(
+      "The claimant’s personal bank account details have not been automatically validated. Has the claimant confirmed their personal bank account details?"
+    )
+
+    choose "Yes"
+
+    click_on "Save and continue"
+
+    visit admin_claim_task_path(claim, "payroll_details")
+
+    expect(page).to have_text("Passed")
+    expect(page).to have_text("This task was performed by Aaron Admin")
+  end
 end

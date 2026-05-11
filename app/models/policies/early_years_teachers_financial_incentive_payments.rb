@@ -4,7 +4,8 @@ module Policies
     extend self
 
     VERIFIERS = [
-      AutomatedChecks::ClaimVerifiers::OneLoginIdentity
+      AutomatedChecks::ClaimVerifiers::OneLoginIdentity,
+      AutomatedChecks::ClaimVerifiers::StudentLoanPlan
     ]
 
     ADMIN_DECISION_REJECTED_REASONS = [
@@ -17,6 +18,10 @@ module Policies
 
     def notify_reply_to_id
       # TODO find out what this needs to be
+    end
+
+    def auto_check_student_loan_plan_task?
+      true
     end
   end
 end
