@@ -16,6 +16,7 @@
     - practitioner_email_address
     - provider_contact_name
     - onelogin_uid
+    - onelogin_idv_return_codes
   :levelling_up_premium_payments_eligibilities:
     - teacher_reference_number
   :targeted_retention_incentive_payments_eligibilities:

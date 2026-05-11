@@ -45,6 +45,7 @@ RSpec.describe AnalyticsImporter do
             "data" => a_hash_including({"key" => "id", "value" => [claim.id]}),
             "hidden_data" => [
               {"key" => "onelogin_uid", "value" => []},
+              {"key" => "onelogin_idv_return_codes", "value" => []},
               {"key" => "first_name", "value" => []},
               {"key" => "middle_name", "value" => []},
               {"key" => "surname", "value" => []},
