@@ -26,6 +26,7 @@ module Journeys
           teacher_auth_verified_name: form.verified_name,
           teacher_auth_verified_date_of_birth: form.verified_date_of_birth,
           teacher_auth_one_login_uid: form.sub,
+          teacher_auth_completed_at: Time.zone.now,
           trs_data: {},
           trs_data_fetched_at: Time.zone.now,
           has_eligible_qualification: form.has_eligible_qualification
