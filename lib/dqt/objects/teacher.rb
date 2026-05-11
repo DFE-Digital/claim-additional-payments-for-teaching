@@ -129,5 +129,9 @@ module Dqt
 
       qts.routes.any? { |route| route.routeToProfessionalStatusType.professionalStatusType == "QualifiedTeacherStatus" }
     end
+
+    def has_eligible_eytfi_qualification?
+      has_valid_qts? || has_valid_eyts? || has_valid_eyps?
+    end
   end
 end

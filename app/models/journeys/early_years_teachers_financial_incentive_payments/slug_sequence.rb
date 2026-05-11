@@ -7,6 +7,7 @@ module Journeys
         teaching-qualification-confirmation
         eligible-teaching-qualification-held
         sign-in
+        qualifications-check
         eligible-qualification-confirmed
         upload-employment-proof
         review-employment-proof
@@ -57,6 +58,7 @@ module Journeys
         array << SLUGS_HASH["teaching-qualification-confirmation"]
         array << SLUGS_HASH["eligible-teaching-qualification-held"]
         array << SLUGS_HASH["sign-in"]
+        array << SLUGS_HASH["qualifications-check"]
         array << SLUGS_HASH["eligible-qualification-confirmed"]
         array << SLUGS_HASH["upload-employment-proof"]
         array << SLUGS_HASH["review-employment-proof"]

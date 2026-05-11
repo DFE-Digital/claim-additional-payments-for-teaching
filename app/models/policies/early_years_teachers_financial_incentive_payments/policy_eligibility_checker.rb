@@ -18,6 +18,8 @@ module Policies
           :ineligible_provider
         elsif answers.teaching_qualification_confirmation == false
           :teaching_qualification_not_confirmed
+        elsif answers.has_eligible_qualification == false
+          :teaching_qualification_ineligible
         end
       end
     end

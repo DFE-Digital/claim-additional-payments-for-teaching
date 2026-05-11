@@ -106,6 +106,12 @@ class Form
     nil
   end
 
+  # returns an integer which represents number of seconds for browser refresh
+  # can return falsey if feature not enabled
+  def auto_refresh
+    false
+  end
+
   private
 
   def permitted_attributes
