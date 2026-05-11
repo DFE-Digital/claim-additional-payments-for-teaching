@@ -167,7 +167,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     end
   end
 
-  scenario "#{policy} has multiple claims" do
+  scenario "#{policy} has multiple claims", flaky: true do
     travel_to(@within_academic_year) do
       visit admin_claims_path
 

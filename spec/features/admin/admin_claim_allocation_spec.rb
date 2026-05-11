@@ -9,7 +9,8 @@ RSpec.feature "Claims awaiting a decision" do
       "School Targeted Retention Incentive",
       "International Relocation Payments",
       "Further Education Targeted Retention Incentive",
-      "Early Years Financial Incentive Payments"
+      "Early Years Financial Incentive Payments",
+      "Early Years Teachers Financial Incentive Payments"
     ]
   end
 
