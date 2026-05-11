@@ -7,7 +7,6 @@ RSpec.feature "Admin view claim" do
 
   Policies
     .all
-    .excluding(Policies::EarlyYearsTeachersFinancialIncentivePayments)
     .each { |policy| it_behaves_like "Admin View Claim Feature", policy }
 
   Policies
