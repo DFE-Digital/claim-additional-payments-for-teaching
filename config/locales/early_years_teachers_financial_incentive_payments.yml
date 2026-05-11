@@ -23,3 +23,5 @@ en:
           heading: You are not eligible for this payment
         ineligible_provider:
           heading: You are not eligible for this payment
+        teaching_qualification_ineligible:
+          heading: You’re not eligible based on your qualification

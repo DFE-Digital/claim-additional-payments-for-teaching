@@ -93,7 +93,7 @@ Rails.application.routes.draw do
     end
 
     scope constraints: {journey: "early-years-teachers-financial-incentive-payments"} do
-      if TeacherAuth::Config.instance.bypass?
+      if TeacherAuth::Config.instance.bypass? || Rails.env.test?
         post "auth/teacher", to: "journeys/early_years_teachers_financial_incentive_payments/bypass_auth#callback"
       end
 

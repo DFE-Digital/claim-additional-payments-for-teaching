@@ -72,4 +72,63 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
 
     expect(page).to have_text "You are not eligible for this payment"
   end
+
+  context do
+    let(:mock_teacher) do
+      instance_double(
+        "Dqt::Teacher",
+        has_eligible_eytfi_qualification?: false
+      )
+    end
+
+    let(:mock_teacher_resource) do
+      instance_double(
+        "Dqt::TeacherResource",
+        find: mock_teacher
+      )
+    end
+
+    let(:mock_client) do
+      instance_double(
+        "Dqt::Client",
+        teacher: mock_teacher_resource
+      )
+    end
+
+    before do
+      allow(Dqt::Client).to receive(:new).and_return(mock_client)
+    end
+
+    scenario "claimant does not have eligible qualification from TRS lookup" do
+      create(
+        :eligible_eytfi_provider,
+        name: "Springfield nursery"
+      )
+
+      visit landing_page_path(Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name)
+      click_link "Start now"
+
+      expect(page).to have_text "Which nursery do you teach in?"
+      find_field("claim[nursery_search_query]").set("Springfield nursery")
+      click_button "Continue"
+
+      expect(page).to have_text "Which nursery do you teach in?"
+      choose "Springfield nursery"
+      click_button "Continue"
+
+      expect(page).to have_text "Do you hold one of these teaching qualifications?"
+      choose "Yes"
+      click_button "Continue"
+
+      expect(page).to have_text "You are eligible to apply"
+      click_button "Continue"
+
+      expect(page).to have_text "Sign in with GOV.UK One Login"
+      perform_enqueued_jobs do
+        click_button "Continue"
+      end
+
+      expect(page).to have_text "not eligible"
+    end
+  end
 end

@@ -7,6 +7,7 @@ module Journeys
         teaching-qualification-confirmation
         eligible-teaching-qualification-held
         sign-in
+        qualifications-check
         eligible-qualification-confirmed
         confirm-eligibility
         accept-payment
@@ -52,6 +53,7 @@ module Journeys
         array << SLUGS_HASH["teaching-qualification-confirmation"]
         array << SLUGS_HASH["eligible-teaching-qualification-held"]
         array << SLUGS_HASH["sign-in"]
+        array << SLUGS_HASH["qualifications-check"]
         array << SLUGS_HASH["eligible-qualification-confirmed"]
         array << SLUGS_HASH["confirm-eligibility"]
         array << SLUGS_HASH["accept-payment"]

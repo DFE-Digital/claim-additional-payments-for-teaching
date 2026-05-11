@@ -10,6 +10,10 @@ OmniAuth.config.on_failure = proc { |env|
 }
 
 Rails.application.config.middleware.use OmniAuth::Builder do
+  if Rails.env.test?
+    provider :developer
+  end
+
   if DfeSignIn::Config.instance.bypass?
     provider :developer
   else

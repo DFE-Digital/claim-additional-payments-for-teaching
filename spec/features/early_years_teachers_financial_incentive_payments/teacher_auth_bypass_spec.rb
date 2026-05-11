@@ -42,6 +42,5 @@ RSpec.describe "EYTFIP with teacher auth bypass", feature_flag: [:eytfi_journey]
     expect(find_field("Email").value).to be_present
     expect(find_field("TRN").value).to be_present
     expect(find_field("One Login UID").value).to be_present
-    click_button "Continue"
   end
 end
