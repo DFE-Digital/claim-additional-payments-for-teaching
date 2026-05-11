@@ -10,13 +10,12 @@ module EarlyYearsTeachersFinancialIncentivePayments
         .teacher
         .find(journey_session.answers.teacher_auth_teacher_reference_number)
 
-      has_eligible_qualification = trs_data.has_valid_qts? || trs_data.has_valid_eyts? || trs_data.has_valid_eyps?
-
       journey_session.answers.assign_attributes(
         trs_data: trs_data.as_json(without_table: true),
         trs_data_fetched_at: Time.zone.now,
-        has_eligible_qualification:
+        has_eligible_qualification: trs_data.has_eligible_eytfi_qualification?
       )
+
       journey_session.save!
     end
   end

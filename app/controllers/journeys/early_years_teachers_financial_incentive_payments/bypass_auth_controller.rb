@@ -4,7 +4,9 @@ module Journeys
       def callback
         persist_callback_to_session
 
-        redirect_to claim_path(current_journey_routing_name, "eligible-qualification-confirmed")
+        ::EarlyYearsTeachersFinancialIncentivePayments::FetchQualificationsJob.perform_later(journey_session)
+
+        redirect_to claim_path(current_journey_routing_name, "qualifications-check")
       end
 
       private

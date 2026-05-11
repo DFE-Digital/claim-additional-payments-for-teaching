@@ -1,6 +1,27 @@
 require "rails_helper"
 
 RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
+  let(:mock_teacher) do
+    instance_double(
+      "Dqt::Teacher",
+      has_eligible_eytfi_qualification?: true
+    )
+  end
+
+  let(:mock_teacher_resource) do
+    instance_double(
+      "Dqt::TeacherResource",
+      find: mock_teacher
+    )
+  end
+
+  let(:mock_client) do
+    instance_double(
+      "Dqt::Client",
+      teacher: mock_teacher_resource
+    )
+  end
+
   before do
     create(
       :journey_configuration,
@@ -19,6 +40,8 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         }
       }
     })
+
+    allow(Dqt::Client).to receive(:new).and_return(mock_client)
   end
 
   scenario "happy path" do
@@ -49,7 +72,9 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     click_button "Continue"
 
     expect(page).to have_text "Sign in with GOV.UK One Login"
-    click_button "Continue"
+    perform_enqueued_jobs do
+      click_button "Continue"
+    end
 
     expect(page).to have_text "You hold an eligible qualification"
     click_button "Continue"
