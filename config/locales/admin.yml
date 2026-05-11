@@ -501,6 +501,11 @@ en:
           unavailable: This task is not available until the claimant has submitted their claim
   early_years_teachers_financial_incentive_payments:
     admin:
+      decision:
+        rejected_reasons:
+          other_reason_only_used_in_exceptional_circumstances: "Other reason only used in exceptional circumstances"
       task_questions:
         payroll_details:
           title: "The claimant’s personal bank account details have not been automatically validated. Has the claimant confirmed their personal bank account details?"
+        matching_details:
+          title: "Is this claim still valid despite having matching details with other claims?"
