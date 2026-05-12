@@ -54,6 +54,8 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     expect(page).to have_text "You hold an eligible qualification"
     click_button "Continue"
 
+    upload_employment_proof_multiple_with_delete
+
     expect(page).to have_text "Confirm you are eligible"
     click_button "Continue"
 

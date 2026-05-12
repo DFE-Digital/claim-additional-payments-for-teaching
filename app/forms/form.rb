@@ -102,6 +102,10 @@ class Form
     false
   end
 
+  def flash_message
+    nil
+  end
+
   private
 
   def permitted_attributes

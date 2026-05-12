@@ -7,6 +7,8 @@ ruby "3.4.7"
 gem "rails", "~> 8.1"
 # Use postgresql as the database for Active Record
 gem "pg", ">= 0.18", "< 2.0"
+# Azure Blob Storage for Active Storage
+gem "azure-blob"
 # Use Puma as the app server
 gem "puma", "~> 7.1"
 # Use SCSS for stylesheets

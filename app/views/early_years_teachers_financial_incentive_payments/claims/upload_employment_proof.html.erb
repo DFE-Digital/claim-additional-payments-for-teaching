@@ -1,0 +1,41 @@
+<% content_for(:page_title, page_title("Upload proof of employment", journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false, multipart: true } do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">Confirm where you work</h1>
+
+      <p class="govuk-body">
+        Upload a recent document to show that you work at [nursery name].
+      </p>
+
+      <p class="govuk-body">The document must:</p>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <li>show your full name</li>
+        <li>show the name of your workplace</li>
+        <li>be dated within the last 2 months</li>
+      </ul>
+
+      <p class="govuk-body">For example, you can upload:</p>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <li>a recent payslip</li>
+        <li>a letter from your employer</li>
+        <li>a P60</li>
+      </ul>
+
+      <p class="govuk-body">You upload a clear photo or a scanned copy of the document.</p>
+
+      <%= f.govuk_file_field :file, label: { hidden: true } %>
+
+      <%= f.govuk_submit "Upload" %>
+
+      <% if @form.has_confirmed_blobs? %>
+        <%= link_to "I do not want to upload another file", claim_path(current_journey_routing_name, "uploaded-employment-proof"), class: "govuk-link govuk-!-display-block govuk-!-margin-top-3" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

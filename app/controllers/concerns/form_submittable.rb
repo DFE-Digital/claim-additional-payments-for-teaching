@@ -77,6 +77,7 @@ module FormSubmittable
 
           redirect_to_next_slug
         elsif @form.redirect?
+          flash[:notice] = @form.flash_message if @form.flash_message
           redirect_to @form.redirect_to
         else
           render_template_for_current_slug
