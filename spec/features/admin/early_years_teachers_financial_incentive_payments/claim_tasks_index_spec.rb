@@ -94,6 +94,76 @@ RSpec.describe "Task index page for EYTFI claims" do
     expect(page).to have_text("This task was performed by Aaron Admin")
   end
 
+  it "shows the employment" do
+    eligible_eytfi_provider = create(
+      :eligible_eytfi_provider,
+      urn: "EY123456",
+      name: "Sunny Days Nursery",
+      address_line_1: "1 Nursery Lane",
+      address_line_2: "Childcare Park",
+      address_line_3: "Sunny Side",
+      town: "Townsville",
+      postcode: "TS1 2AB"
+    )
+
+    claim = create(
+      :claim,
+      :submitted,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+      submitted_at: DateTime.new(2026, 5, 1, 9, 30, 0),
+      eligibility_attributes: {
+        eligible_eytfi_provider: eligible_eytfi_provider
+      }
+    )
+
+    claim.eligibility.employment_proofs.attach(
+      io: File.open(Rails.root.join("spec/fixtures/files/employment_proof.pdf")),
+      filename: "employment_proof.pdf",
+      content_type: "application/pdf"
+    )
+
+    claim.eligibility.employment_proofs.attach(
+      io: File.open(Rails.root.join("spec/fixtures/files/employment_proof2.pdf")),
+      filename: "employment_proof2.pdf",
+      content_type: "application/pdf"
+    )
+
+    sign_in_as_service_admin
+
+    visit admin_claim_tasks_path(claim)
+
+    click_on "Check employment information"
+
+    expect(page).to have_text("Employment evidence uploaded by claimant on 1/5/2026")
+
+    expect(page).to have_text("Selected nursery")
+    expect(page).to have_text("EY123456")
+    expect(page).to have_text("Sunny Days Nursery")
+    expect(page).to have_text("1 Nursery Lane")
+    expect(page).to have_text("Childcare Park")
+    expect(page).to have_text("Sunny Side")
+    expect(page).to have_text("Townsville")
+    expect(page).to have_text("TS1 2AB")
+
+    expect(page).to have_text("Uploaded evidence")
+    expect(page).to have_link("employment_proof.pdf", target: "_blank")
+    expect(page).to have_link("employment_proof2.pdf", target: "_blank")
+
+    expect(page).to have_text("Do you want to accept this evidence?")
+
+    click_on "Save and continue"
+
+    expect(page).to have_text("You must select ‘Yes’ or ‘No’")
+
+    choose "Yes"
+    click_on "Save and continue"
+
+    visit admin_claim_task_path(claim, "employment")
+
+    expect(page).to have_text("Passed")
+    expect(page).to have_text("This task was performed by Aaron Admin")
+  end
+
   it "shows the matching details" do
     claim = create(
       :claim,

@@ -32,7 +32,7 @@ class Admin::TasksController < Admin::BaseAdminController
       @tasks_presenter = @claim.policy.admin_tasks_presenter(@claim)
       @notes = @claim.notes.by_label(name)
       @task_note = Note.new
-      render name
+      render task_view(@form.task)
     end
   end
 
@@ -47,7 +47,7 @@ class Admin::TasksController < Admin::BaseAdminController
       @tasks_presenter = @claim.policy.admin_tasks_presenter(@claim)
       @notes = @claim.notes.by_label(name)
       @task_note = Note.new
-      render name
+      render task_view(@form.task)
     end
   end
 

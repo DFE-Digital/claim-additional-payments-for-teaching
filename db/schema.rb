@@ -275,7 +275,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_13_120000) do
   create_table "early_years_teachers_financial_incentive_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.decimal "award_amount", precision: 7, scale: 2
     t.datetime "created_at", null: false
+    t.uuid "eligible_eytfi_provider_id", null: false
     t.datetime "updated_at", null: false
+    t.index ["eligible_eytfi_provider_id"], name: "idx_on_eligible_eytfi_provider_id_63d2993c55"
   end
 
   create_table "eligible_ey_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -914,6 +916,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_13_120000) do
   add_foreign_key "claims", "journeys_sessions"
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "early_career_payments_eligibilities", "schools", column: "current_school_id"
+  add_foreign_key "early_years_teachers_financial_incentive_payments_eligibilities", "eligible_eytfi_providers"
   add_foreign_key "eligible_ey_providers", "file_uploads"
   add_foreign_key "eligible_ey_providers", "local_authorities"
   add_foreign_key "eligible_fe_providers", "file_uploads"
