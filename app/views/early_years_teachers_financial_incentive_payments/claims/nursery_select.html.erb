@@ -8,21 +8,35 @@
     ) do |f| %>
       <%= f.govuk_error_summary %>
 
-      <%= f.govuk_collection_radio_buttons(
-        :nursery_id,
-        f.object.radio_options,
-        :id, ->(option) { "#{option.name} #{' (closed)' if option.closed?}" },
-        :address,
-        legend: {
-          text: "Which nursery do you teach in?",
-          tag: "h1",
-          size: "l"
-        },
-        hint: {
-          text: "Select your nursery from the search results."
-        }
-      ) %>
-      <%= f.govuk_submit %>
+      <% if f.object.radio_options.none? %>
+        <h1 class="govuk-heading-l">
+          No results match your search term
+        </h1>
+
+        <p class="govuk-body">
+          No nurseries match your search term, you can try to
+          <%= govuk_link_to(
+            "search again",
+            @backlink_path
+          ) %>
+        </p>
+      <% else %>
+        <%= f.govuk_collection_radio_buttons(
+          :nursery_id,
+          f.object.radio_options,
+          :id, ->(option) { "#{option.name} #{' (closed)' if option.closed?}" },
+          :address,
+          legend: {
+            text: "Which nursery do you teach in?",
+            tag: "h1",
+            size: "l"
+          },
+          hint: {
+            text: "Select your nursery from the search results."
+          }
+        ) %>
+        <%= f.govuk_submit %>
+      <% end %>
     <% end %>
   </div>
 </div>
