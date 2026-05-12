@@ -42,5 +42,32 @@ RSpec.describe "EYTFIP with teacher auth bypass", feature_flag: [:eytfi_journey]
     expect(find_field("Email").value).to be_present
     expect(find_field("TRN").value).to be_present
     expect(find_field("One Login UID").value).to be_present
+    click_button "Continue"
+  end
+
+  scenario "can emulate no eligible qualification pathway" do
+    visit landing_page_path(Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name)
+    expect(page).to have_text "Claim an early years teacher recognition payment"
+    click_link "Start now"
+
+    find_field("claim[nursery_search_query]").set("Springfield nursery")
+    click_button "Continue"
+
+    expect(page).to have_text "Which nursery do you teach in?"
+    choose "Springfield nursery"
+    click_button "Continue"
+
+    expect(page).to have_text "Do you hold one of these teaching qualifications?"
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_text "You are eligible to apply"
+    click_button "Continue"
+
+    expect(page).to have_text "Bypass Teacher Auth"
+    uncheck "Has eligible qualification?"
+    click_button "Continue"
+
+    expect(page).to have_text "not eligible"
   end
 end
