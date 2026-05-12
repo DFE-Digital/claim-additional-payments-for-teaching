@@ -93,4 +93,37 @@ RSpec.describe "Task index page for EYTFI claims" do
     expect(page).to have_text("Passed")
     expect(page).to have_text("This task was performed by Aaron Admin")
   end
+
+  it "shows the matching details" do
+    claim = create(
+      :claim,
+      :submitted,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments
+    )
+
+    duplicate_claim = create(
+      :claim,
+      :submitted,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+      email_address: claim.email_address
+    )
+
+    sign_in_as_service_admin
+
+    visit admin_claim_tasks_path(claim)
+
+    click_on "Review matching details from other claims"
+
+    expect(page).to have_text("Is this claim still valid despite having matching details with other claims?")
+    expect(page).to have_text(duplicate_claim.reference)
+
+    choose "Yes"
+
+    click_on "Save and continue"
+
+    visit admin_claim_task_path(claim, "matching_details")
+
+    expect(page).to have_text("Passed")
+    expect(page).to have_text("This task was performed by Aaron Admin")
+  end
 end
