@@ -505,6 +505,9 @@ shared:
     - key # string, storage key used to locate the file in the storage backend
     - metadata # jsonb, additional metadata stored alongside the blob
     - service_name # string, which storage service holds this blob (e.g. azure)
+    - malware_scan_result # string, raw Azure Defender scan result tag value
+    - malware_scanned_at # datetime, when the malware scan completed
+    - malware_scan_attempts # integer, number of times the scan result job has been attempted
   :active_storage_attachments:
     - id # uuid, uniquely identifies this attachment record
     - blob_id # uuid, the blob this attachment points to
