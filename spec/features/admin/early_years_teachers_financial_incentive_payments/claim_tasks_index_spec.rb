@@ -1,6 +1,102 @@
 require "rails_helper"
 
 RSpec.describe "Task index page for EYTFI claims" do
+  it "shows an overview of the claim" do
+    eligible_eytfi_provider = create(
+      :eligible_eytfi_provider,
+      urn: "EY123456",
+      name: "Sunny Days Nursery"
+    )
+
+    claim = create(
+      :claim,
+      :submitted,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+      submitted_at: DateTime.new(2026, 5, 13, 13, 30, 0),
+      first_name: "Edna",
+      surname: "Krabappel",
+      date_of_birth: Date.new(1970, 1, 1),
+      national_insurance_number: "ab123456c",
+      email_address: "e.krabappel@springfield-elementary.edu",
+      eligibility_attributes: {
+        teacher_reference_number: "T1234567",
+        eligible_eytfi_provider_urn: eligible_eytfi_provider.urn,
+        award_amount: 4500
+      }
+    )
+
+    sign_in_as_service_admin
+
+    visit admin_claim_tasks_path(claim)
+
+    within("#claim-summary") do
+      expect(page).to have_summary_item(
+        key: "TRN",
+        value: "T1234567"
+      )
+
+      expect(page).to have_summary_item(
+        key: "NI number",
+        value: "AB123456C"
+      )
+
+      expect(page).to have_summary_item(
+        key: "Full name",
+        value: "Edna Krabappel"
+      )
+
+      expect(page).to have_summary_item(
+        key: "Date of birth",
+        value: "1 January 1970"
+      )
+
+      expect(page).to have_summary_item(
+        key: "Email address",
+        value: "e.krabappel@springfield-elementary.edu"
+      )
+
+      expect(page).to have_summary_item(
+        key: "Mobile number",
+        value: "N/A"
+      )
+
+      expect(page).to have_summary_item(
+        key: "Reference",
+        value: claim.reference
+      )
+
+      expect(page).to have_summary_item(
+        key: "Submitted",
+        value: "13 May 2026 2:30pm"
+      )
+
+      expect(page).to have_summary_item(
+        key: "Decision due",
+        value: "22 July 2026"
+      )
+
+      expect(page).to have_summary_item(
+        key: "Status",
+        value: "Awaiting decision - not on hold"
+      )
+
+      expect(page).to have_summary_item(
+        key: "Claim amount",
+        value: "£4,500.00"
+      )
+
+      expect(page).to have_summary_item(
+        key: "Provider name",
+        value: "Sunny Days Nursery"
+      )
+
+      expect(page).to have_summary_item(
+        key: "Provider URN",
+        value: "EY123456"
+      )
+    end
+  end
+
   it "shows the list of tasks" do
     sign_in_as_service_admin
 

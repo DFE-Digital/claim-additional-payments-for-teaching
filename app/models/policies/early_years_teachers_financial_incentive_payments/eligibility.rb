@@ -6,9 +6,6 @@ module Policies
       has_one :claim, as: :eligibility, inverse_of: :eligibility
       has_many_attached :employment_proofs
 
-      # does nothing, simply here for duck typing compatability
-      attr_accessor :teacher_reference_number
-
       AMENDABLE_ATTRIBUTES = []
 
       def policy
@@ -16,7 +13,7 @@ module Policies
       end
 
       def eligible_eytfi_provider
-        EligibleEytfiProvider
+        @eligible_eytfi_provider ||= EligibleEytfiProvider
           .by_academic_year(claim.academic_year)
           .find_by!(urn: eligible_eytfi_provider_urn)
       end
