@@ -16,5 +16,5 @@ RSpec.feature "Admin view claim" do
       Policies::FurtherEducationPayments,
       Policies::EarlyYearsTeachersFinancialIncentivePayments
     )
-  [].each { |policy| it_behaves_like "Admin View Claim logged in with tid", policy }
+    .each { |policy| it_behaves_like "Admin View Claim logged in with tid", policy }
 end

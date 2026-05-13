@@ -23,5 +23,9 @@ module Policies
     def auto_check_student_loan_plan_task?
       true
     end
+
+    def decision_deadline_in_weeks
+      10.weeks
+    end
   end
 end
