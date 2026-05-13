@@ -20,7 +20,7 @@ module FurtherEducationPayments
             ).merge(
               Policies::FurtherEducationPayments::Eligibility
                 .awaiting_provider_verification_year_2
-            )
+            ).distinct
 
         providers_with_unverified_claims.each_with_index do |provider, index|
           ApplicationMailer.deliver_later_with_throttling(
