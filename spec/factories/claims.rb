@@ -48,6 +48,8 @@ FactoryBot.define do
           Journeys::TargetedRetentionIncentivePayments.configuration.current_academic_year
         elsif evaluator.policy == Policies::FurtherEducationPayments
           Journeys::FurtherEducationPayments.configuration.current_academic_year
+        elsif evaluator.policy == Policies::EarlyYearsTeachersFinancialIncentivePayments
+          Journeys::EarlyYearsTeachersFinancialIncentivePayments.configuration.current_academic_year
         else
           AcademicYear::Type.new.serialize(AcademicYear.new(2019))
         end

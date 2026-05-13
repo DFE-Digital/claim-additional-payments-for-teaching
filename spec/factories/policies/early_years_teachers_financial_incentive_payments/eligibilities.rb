@@ -3,8 +3,6 @@ FactoryBot.define do
     :early_years_teachers_financial_incentive_payments_eligibility,
     class: "Policies::EarlyYearsTeachersFinancialIncentivePayments::Eligibility"
   ) do
-    eligible_eytfi_provider
-
     trait :eligible do
     end
   end

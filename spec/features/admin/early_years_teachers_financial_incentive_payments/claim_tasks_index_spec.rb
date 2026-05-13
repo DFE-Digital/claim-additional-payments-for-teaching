@@ -112,7 +112,7 @@ RSpec.describe "Task index page for EYTFI claims" do
       policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
       submitted_at: DateTime.new(2026, 5, 1, 9, 30, 0),
       eligibility_attributes: {
-        eligible_eytfi_provider: eligible_eytfi_provider
+        eligible_eytfi_provider_urn: eligible_eytfi_provider.urn
       }
     )
 
