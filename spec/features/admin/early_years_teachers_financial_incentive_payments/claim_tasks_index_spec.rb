@@ -98,7 +98,11 @@ RSpec.describe "Task index page for EYTFI claims" do
   end
 
   it "shows the list of tasks" do
-    sign_in_as_service_admin
+    eligible_eytfi_provider = create(
+      :eligible_eytfi_provider,
+      urn: "EY123456",
+      name: "Sunny Days Nursery"
+    )
 
     claim = create(
       :claim,
@@ -107,17 +111,25 @@ RSpec.describe "Task index page for EYTFI claims" do
       hmrc_bank_validation_succeeded: false,
       payroll_gender: "dont_know",
       onelogin_idv_at: DateTime.new(2026, 5, 1, 9, 30, 0),
-      identity_confirmed_with_onelogin: true
+      identity_confirmed_with_onelogin: true,
+      eligibility_attributes: {
+        eligible_eytfi_provider_urn: eligible_eytfi_provider.urn
+      }
     )
 
     _duplicate_claim = create(
       :claim,
       :submitted,
       policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
-      email_address: claim.email_address
+      email_address: claim.email_address,
+      eligibility_attributes: {
+        eligible_eytfi_provider_urn: eligible_eytfi_provider.urn
+      }
     )
 
     ClaimVerifierJob.perform_now(claim)
+
+    sign_in_as_service_admin
 
     visit admin_claim_tasks_path(claim)
 
@@ -136,12 +148,21 @@ RSpec.describe "Task index page for EYTFI claims" do
   end
 
   it "shows the student loan plan" do
+    eligible_eytfi_provider = create(
+      :eligible_eytfi_provider,
+      urn: "EY123456",
+      name: "Sunny Days Nursery"
+    )
+
     claim = create(
       :claim,
       :submitted,
       policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
       national_insurance_number: "ab123456c",
-      date_of_birth: Date.new(1970, 1, 1)
+      date_of_birth: Date.new(1970, 1, 1),
+      eligibility_attributes: {
+        eligible_eytfi_provider_urn: eligible_eytfi_provider.urn
+      }
     )
 
     create(
@@ -162,12 +183,21 @@ RSpec.describe "Task index page for EYTFI claims" do
   end
 
   it "shows the payroll details" do
+    eligible_eytfi_provider = create(
+      :eligible_eytfi_provider,
+      urn: "EY123456",
+      name: "Sunny Days Nursery"
+    )
+
     claim = create(
       :claim,
       :submitted,
       :bank_details_not_validated,
       policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
-      payroll_gender: "dont_know"
+      payroll_gender: "dont_know",
+      eligibility_attributes: {
+        eligible_eytfi_provider_urn: eligible_eytfi_provider.urn
+      }
     )
 
     sign_in_as_service_admin
@@ -261,17 +291,29 @@ RSpec.describe "Task index page for EYTFI claims" do
   end
 
   it "shows the matching details" do
+    eligible_eytfi_provider = create(
+      :eligible_eytfi_provider,
+      urn: "EY123456",
+      name: "Sunny Days Nursery"
+    )
+
     claim = create(
       :claim,
       :submitted,
-      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+      eligibility_attributes: {
+        eligible_eytfi_provider_urn: eligible_eytfi_provider.urn
+      }
     )
 
     duplicate_claim = create(
       :claim,
       :submitted,
       policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
-      email_address: claim.email_address
+      email_address: claim.email_address,
+      eligibility_attributes: {
+        eligible_eytfi_provider_urn: eligible_eytfi_provider.urn
+      }
     )
 
     sign_in_as_service_admin
