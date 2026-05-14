@@ -30,12 +30,23 @@
     <% else %>
       <h2 class="govuk-heading-l">Bypass Teacher Auth</h2>
 
-      <%= form_with model: @form, url: "/early-years-teachers-financial-incentive-payments/auth/teacher", method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= form_with model: @form, url: "/early-years-teachers-financial-incentive-payments/bypass-auth/teacher", method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
         <%= f.govuk_text_field :verified_name, label: { text: "Full name" }, width: 20 %>
         <%= f.govuk_date_field :verified_date_of_birth, date_of_birth: true, legend: { text: "Date of Birth" } %>
         <%= f.govuk_text_field :email, width: 20 %>
         <%= f.govuk_text_field :trn, width: 10, label: { text: "TRN" } %>
         <%= f.govuk_text_field :sub, label: { text: "One Login UID" } %>
+
+        <%= f.govuk_check_boxes_fieldset :has_eligible_qualification, multiple: false, legend: nil do %>
+          <%= f.govuk_check_box :has_eligible_qualification,
+            1,
+            0,
+            multiple: false,
+            link_errors: true,
+            label: {
+              text: "Has eligible qualification?"
+            } %>
+        <% end %>
 
         <%= f.govuk_submit %>
       <% end %>

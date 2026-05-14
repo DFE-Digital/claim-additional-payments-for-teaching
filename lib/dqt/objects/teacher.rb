@@ -108,5 +108,30 @@ module Dqt
         .reject { |a| a.endDate.present? }
         .any?
     end
+
+    def has_valid_eyts?
+      return false if eyts.blank?
+      return false if date_reader(eyts.holdsFrom) > Date.today
+
+      eyts.routes.any? { |route| route.routeToProfessionalStatusType.professionalStatusType == "EarlyYearsTeacherStatus" }
+    end
+
+    def has_valid_eyps?
+      return false if eyts.blank?
+      return false if date_reader(eyts.holdsFrom) > Date.today
+
+      eyts.routes.any? { |route| route.routeToProfessionalStatusType.professionalStatusType == "EarlyYearsProfessionalStatus" }
+    end
+
+    def has_valid_qts?
+      return false if qts.blank?
+      return false if date_reader(qts.holdsFrom) > Date.today
+
+      qts.routes.any? { |route| route.routeToProfessionalStatusType.professionalStatusType == "QualifiedTeacherStatus" }
+    end
+
+    def has_eligible_eytfi_qualification?
+      has_valid_qts? || has_valid_eyts? || has_valid_eyps?
+    end
   end
 end

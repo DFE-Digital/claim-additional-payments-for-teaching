@@ -4,43 +4,15 @@ module Journeys
       def callback
         persist_callback_to_session
 
-        redirect_to claim_path(current_journey_routing_name, "eligible-qualification-confirmed")
-      end
+        ::EarlyYearsTeachersFinancialIncentivePayments::FetchQualificationsJob.perform_later(journey_session)
 
-      def callback_bypass
-        persist_callback_to_session
-
-        redirect_to claim_path(current_journey_routing_name, "eligible-qualification-confirmed")
+        redirect_to claim_path(current_journey_routing_name, "qualifications-check")
       end
 
       private
 
       def omniauth_hash
-        @omniauth_hash ||= if !TeacherAuth::Config.instance.bypass?
-          request.env["omniauth.auth"]
-        else
-          omniauth_bypass_hash
-        end
-      end
-
-      def omniauth_bypass_hash
-        form = Debug::TeacherAuth::SignInForm.new(
-          journey_session: nil,
-          journey: nil,
-          params:
-        )
-
-        OpenStruct.new(
-          extra: OpenStruct.new(
-            raw_info: OpenStruct.new(
-              trn: form.trn,
-              email: form.email,
-              verified_name: form.verified_name.split(" "),
-              verified_date_of_birth: form.verified_date_of_birth.to_s,
-              sub: form.sub
-            )
-          )
-        )
+        @omniauth_hash ||= request.env["omniauth.auth"]
       end
 
       def persist_callback_to_session
@@ -49,7 +21,8 @@ module Journeys
           teacher_auth_email: omniauth_hash.extra.raw_info.email,
           teacher_auth_verified_name: omniauth_hash.extra.raw_info.verified_name.join(" "),
           teacher_auth_verified_date_of_birth: Date.parse(omniauth_hash.extra.raw_info.verified_date_of_birth),
-          teacher_auth_one_login_uid: omniauth_hash.extra.raw_info.sub
+          teacher_auth_one_login_uid: omniauth_hash.extra.raw_info.sub,
+          teacher_auth_completed_at: Time.zone.now
         )
         journey_session.save!
       end

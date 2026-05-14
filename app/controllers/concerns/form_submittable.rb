@@ -3,6 +3,7 @@ module FormSubmittable
 
   included do
     before_action :load_form_if_exists, only: [:show, :update, :create]
+    before_action :set_auto_refresh_headers
 
     def new
       redirect_to_next_slug
@@ -99,5 +100,12 @@ module FormSubmittable
       DfeSignIn::NullUser.new
     end
     helper_method :current_user
+
+    def set_auto_refresh_headers
+      return if @form.blank?
+      return if @form.auto_refresh.blank?
+
+      response.headers["Refresh"] = @form.auto_refresh
+    end
   end
 end

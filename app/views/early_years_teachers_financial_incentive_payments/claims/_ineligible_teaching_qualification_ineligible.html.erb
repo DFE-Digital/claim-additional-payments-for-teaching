@@ -1,0 +1,26 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <%= @form.t([@form.ineligibility_reason, "heading"]) %>
+    </h1>
+
+    <p class="govuk-body">
+      We’ve checked your details and you do not hold one of the following teaching qualifications:
+    </p>
+
+    <%= govuk_list [
+      "Qualified Teacher Status (QTS)",
+      "Early Years Teacher Status (EYTS)",
+      "Early Years Professional Status (EYPS)"
+    ], type: :bullet %>
+
+    <p class="govuk-body">
+      Unfortunately, this means you’re not eligible for an early years teacher recognition payment. You may be eligible in the future if your circumstances change. Check the guidance again if you gain one of these qualifications.
+    </p>
+
+    <p class="govuk-body">
+      If you think this is a mistake, please check your answers or contact us at
+      <%= govuk_mail_to t("early_years_teachers_financial_incentive_payments.support_email_address") %>.
+    </p>
+  </div>
+</div>

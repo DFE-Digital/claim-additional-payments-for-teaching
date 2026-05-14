@@ -1,6 +1,27 @@
 require "rails_helper"
 
 RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
+  let(:mock_teacher) do
+    instance_double(
+      "Dqt::Teacher",
+      has_eligible_eytfi_qualification?: true
+    )
+  end
+
+  let(:mock_teacher_resource) do
+    instance_double(
+      "Dqt::TeacherResource",
+      find: mock_teacher
+    )
+  end
+
+  let(:mock_client) do
+    instance_double(
+      "Dqt::Client",
+      teacher: mock_teacher_resource
+    )
+  end
+
   before do
     create(
       :journey_configuration,
@@ -19,6 +40,8 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         }
       }
     })
+
+    allow(Dqt::Client).to receive(:new).and_return(mock_client)
   end
 
   scenario "happy path" do
@@ -49,7 +72,22 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     click_button "Continue"
 
     expect(page).to have_text "Sign in with GOV.UK One Login"
-    click_button "Continue"
+    perform_enqueued_jobs do
+      click_button "Continue"
+    end
+
+    journey_session = Journeys::EarlyYearsTeachersFinancialIncentivePayments::Session.last
+
+    expect(journey_session.answers.teacher_auth_teacher_reference_number).to eql("1234567")
+    expect(journey_session.answers.teacher_auth_email).to eql("john.doe@example.com")
+    expect(journey_session.answers.teacher_auth_verified_name).to eql("John Doe")
+    expect(journey_session.answers.teacher_auth_verified_date_of_birth).to eql(Date.new(1970, 12, 13))
+    expect(journey_session.answers.teacher_auth_one_login_uid).to be_present
+    expect(journey_session.answers.teacher_auth_completed_at).to be_within(1.minute).of(Time.zone.now)
+
+    expect(journey_session.answers.trs_data).to be_present
+    expect(journey_session.answers.trs_data_fetched_at).to be_within(1.minute).of(Time.zone.now)
+    expect(journey_session.answers.has_eligible_qualification).to be_truthy
 
     expect(page).to have_text "You hold an eligible qualification"
     click_button "Continue"
