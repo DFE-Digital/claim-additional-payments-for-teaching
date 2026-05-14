@@ -105,7 +105,7 @@ module FormSubmittable
       return if @form.blank?
       return if @form.auto_refresh.blank?
 
-      response.headers["Refresh"] = "5"
+      response.headers["Refresh"] = @form.auto_refresh
     end
   end
 end
