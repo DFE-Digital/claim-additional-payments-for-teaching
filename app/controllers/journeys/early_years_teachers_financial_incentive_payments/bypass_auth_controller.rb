@@ -4,7 +4,9 @@ module Journeys
       def callback
         persist_callback_to_session
 
-        ::EarlyYearsTeachersFinancialIncentivePayments::FetchQualificationsJob.perform_later(journey_session)
+        ::EarlyYearsTeachersFinancialIncentivePayments::FetchQualificationsBypassJob
+          .set(wait: 2.seconds)
+          .perform_later(journey_session)
 
         redirect_to claim_path(current_journey_routing_name, "qualifications-check")
       end
@@ -27,8 +29,6 @@ module Journeys
           teacher_auth_verified_date_of_birth: form.verified_date_of_birth,
           teacher_auth_one_login_uid: form.sub,
           teacher_auth_completed_at: Time.zone.now,
-          trs_data: {},
-          trs_data_fetched_at: Time.zone.now,
           has_eligible_qualification: form.has_eligible_qualification
         )
         journey_session.save!

@@ -66,7 +66,9 @@ RSpec.describe "EYTFIP with teacher auth bypass", feature_flag: [:eytfi_journey]
 
     expect(page).to have_text "Bypass Teacher Auth"
     uncheck "Has eligible qualification?"
-    click_button "Continue"
+    perform_enqueued_jobs do
+      click_button "Continue"
+    end
 
     expect(page).to have_text "not eligible"
   end
