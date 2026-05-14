@@ -10,7 +10,7 @@ module Journeys
       end
 
       def auto_refresh
-        5
+        1
       end
     end
   end
