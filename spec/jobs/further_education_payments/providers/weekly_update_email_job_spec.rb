@@ -94,6 +94,13 @@ RSpec.describe FurtherEducationPayments::Providers::WeeklyUpdateEmailJob, type: 
       number_overall: 15,
       link_to_provider_dashboard: "http://www.example.com/further-education-payments/providers/claims"
     )
+
+    # expect the provider to have only received one email
+    provider_email_count = ActionMailer::Base.deliveries.count do |email|
+      email.to.include?(provider.primary_key_contact_email_address)
+    end
+
+    expect(provider_email_count).to eq(1)
   end
 
   it "doesn't send an email if there are no unverified claims" do
