@@ -1,0 +1,18 @@
+<% content_for(
+  :page_title,
+  page_title(
+    "Check your answers before sending your application",
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <h1 class="govuk-heading-xl">
+        Check your answers before sending your application
+      </h1>
+    <% end %>
+  </div>
+</div>

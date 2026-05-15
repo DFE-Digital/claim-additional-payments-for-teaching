@@ -17,6 +17,13 @@ module Journeys
         confirm-eligibility
         accept-payment
         information-provided
+        postcode-search
+        select-home-address
+        address
+        gender
+        national-insurance-number
+        personal-bank-account
+        check-your-answers
         ineligible
       ].freeze
 
@@ -68,12 +75,39 @@ module Journeys
         array << SLUGS_HASH["confirm-eligibility"]
         array << SLUGS_HASH["accept-payment"]
         array << SLUGS_HASH["information-provided"]
+        array << SLUGS_HASH["postcode-search"]
+
+        postcode_search_form = form_for_slug(SLUGS_HASH["postcode-search"])
+        if answers.postcode.present? && postcode_search_form.completed_or_valid? && !answers.skip_postcode_search? && !answers.ordnance_survey_error
+          array << SLUGS_HASH["select-home-address"]
+        end
+
+        array << SLUGS_HASH["address"]
+        array << SLUGS_HASH["gender"]
+        array << SLUGS_HASH["national-insurance-number"]
+        array << SLUGS_HASH["personal-bank-account"]
+        array << SLUGS_HASH["check-your-answers"]
 
         array
       end
 
       def journey
         Journeys::EarlyYearsTeachersFinancialIncentivePayments
+      end
+
+      private
+
+      def form_for_slug(slug)
+        form_class = journey.form_class_for_slug(slug:)
+
+        raise "Form not found for journey: #{journey} slug: #{slug}" if form_class.nil?
+
+        form_class.new(
+          journey:,
+          journey_session:,
+          params: ActionController::Parameters.new,
+          session: {}
+        )
       end
     end
   end

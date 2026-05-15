@@ -101,6 +101,33 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     click_button "Continue"
 
     expect(page).to have_text "How we’ll use your information"
+    click_button "Continue"
+
+    expect(page).to have_text "What is your home address?"
+    click_button "Enter your address manually"
+
+    fill_in "House number or name", with: "1"
+    fill_in "Building and street", with: "Grey Street"
+    fill_in "Town or city", with: "Newcastle upon Tyne"
+    fill_in "County", with: "Tyne and Wear"
+    fill_in "Postcode", with: "NE1 6EE"
+    click_button "Continue"
+
+    expect(page).to have_text "How is your gender recorded"
+    choose "I don’t know"
+    click_button "Continue"
+
+    expect(page).to have_text "Enter your National Insurance number"
+    fill_in "Enter your National Insurance number", with: "AB123456C"
+    click_button "Continue"
+
+    expect(page).to have_text "Enter your personal bank account details"
+    fill_in "Name on your account", with: "John Doe"
+    fill_in "Sort code", with: "123456"
+    fill_in "Account number", with: "12345678"
+    click_button "Continue"
+
+    expect(page).to have_text "Check your answers before sending your application"
   end
 
   scenario "using nursery auto complete - js", js: true do
