@@ -74,13 +74,19 @@
     <ul class="govuk-list">
       <% @claim.eligibility.employment_proofs.each do |proof| %>
         <li>
-          <%= link_to(
-            proof.filename.to_s,
-            rails_blob_url(proof),
-            class: "govuk-link",
-            target: "_blank",
-            rel: "noopener"
-          ) %>
+          <% if proof.blob.malware_scan_passed? %>
+            <%= link_to(
+              proof.filename.to_s,
+              rails_blob_url(proof),
+              class: "govuk-link",
+              target: "_blank",
+              rel: "noopener"
+            ) %>
+          <% elsif proof.blob.malware_scan_failed? %>
+            <%= "#{proof.filename} (malware scan failed)" %>
+          <% else %>
+            <%= "#{proof.filename} (malware scan pending)" %>
+          <% end %>
         </li>
       <% end %>
     </ul>
