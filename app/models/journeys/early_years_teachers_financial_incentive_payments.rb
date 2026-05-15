@@ -24,7 +24,7 @@ module Journeys
 
       array += [
         QualificationsCheckForm,
-        EligibleQualificationConfirmedForm,
+        ContinueClaimForm,
         ClaimCancelledForm,
         UploadEmploymentProofForm,
         ReviewEmploymentProofForm,

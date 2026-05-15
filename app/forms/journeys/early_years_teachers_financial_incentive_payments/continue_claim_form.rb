@@ -1,6 +1,6 @@
 module Journeys
   module EarlyYearsTeachersFinancialIncentivePayments
-    class EligibleQualificationConfirmedForm < Form
+    class ContinueClaimForm < Form
       attribute :continue_claim, :boolean
 
       validates :continue_claim,
