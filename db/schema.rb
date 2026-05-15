@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_01_123642) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_13_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -34,6 +34,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_01_123642) do
     t.datetime "created_at", null: false
     t.string "filename", null: false
     t.string "key", null: false
+    t.integer "malware_scan_attempts", default: 0, null: false
+    t.string "malware_scan_result"
+    t.datetime "malware_scanned_at"
     t.text "metadata"
     t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
