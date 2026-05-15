@@ -28,3 +28,9 @@ en:
           heading: You are not eligible for this payment
         teaching_qualification_ineligible:
           heading: You’re not eligible based on your qualification
+      eligible_qualification_confirmed:
+        options:
+          true: "Yes"
+          false: "No"
+        errors:
+          blank: Select yes if you would like to continue with your claim

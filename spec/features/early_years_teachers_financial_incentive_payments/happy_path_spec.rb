@@ -89,7 +89,8 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     expect(journey_session.answers.trs_data_fetched_at).to be_within(1.minute).of(Time.zone.now)
     expect(journey_session.answers.has_eligible_qualification).to be_truthy
 
-    expect(page).to have_text "You hold an eligible qualification"
+    expect(page).to have_text "You may be eligible for a recognition payment"
+    choose "Yes"
     click_button "Continue"
 
     upload_employment_proof_multiple_with_delete

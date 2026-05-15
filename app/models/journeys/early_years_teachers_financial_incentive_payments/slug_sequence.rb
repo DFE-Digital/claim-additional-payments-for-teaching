@@ -9,6 +9,7 @@ module Journeys
         sign-in
         qualifications-check
         eligible-qualification-confirmed
+        claim-cancelled
         upload-employment-proof
         review-employment-proof
         uploaded-employment-proof
@@ -29,6 +30,7 @@ module Journeys
 
       DEAD_END_SLUGS = %w[
         ineligible
+        claim-cancelled
       ].freeze
 
       RESTRICTED_SLUGS = [].freeze
@@ -67,6 +69,11 @@ module Journeys
         array << SLUGS_HASH["sign-in"]
         array << SLUGS_HASH["qualifications-check"]
         array << SLUGS_HASH["eligible-qualification-confirmed"]
+
+        if answers.continue_claim == false
+          array << SLUGS_HASH["claim-cancelled"]
+        end
+
         array << SLUGS_HASH["upload-employment-proof"]
         array << SLUGS_HASH["review-employment-proof"]
         array << SLUGS_HASH["uploaded-employment-proof"]
