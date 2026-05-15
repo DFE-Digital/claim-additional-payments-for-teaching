@@ -29,14 +29,9 @@ class FurtherEducationPaymentsMailer < ApplicationMailer
     provider_email = provider.primary_key_contact_email_address
     provider_name = provider.name
 
-    claims = provider.claims.by_academic_year(
-      Journeys::FurtherEducationPayments.configuration.current_academic_year
-    )
+    stats = FurtherEducationPayments::Providers::Claims::Stats.new(provider: provider)
 
-    number_overdue = claims.unverified.not_rejected.verification_overdue.count
-    number_in_progress = claims.unverified.not_rejected.verification_in_progress.count
-    number_not_started = claims.unverified.not_rejected.verification_not_started.count
-    number_overall = claims.unverified.not_rejected.count
+    number_overall = stats.unverified_overall_count
 
     return if number_overall.zero?
 
@@ -46,9 +41,9 @@ class FurtherEducationPaymentsMailer < ApplicationMailer
       reply_to_id: Policies::FurtherEducationPayments.notify_reply_to_id,
       personalisation: {
         provider_name: provider_name,
-        number_overdue: number_overdue,
-        number_in_progress: number_in_progress,
-        number_not_started: number_not_started,
+        number_overdue: stats.unverified_overdue_count,
+        number_in_progress: stats.unverified_in_progress_count,
+        number_not_started: stats.unverified_not_started_count,
         number_overall: number_overall,
         link_to_provider_dashboard: further_education_payments_providers_claims_url(
           host: ENV.fetch("CANONICAL_HOSTNAME")

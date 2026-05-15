@@ -284,6 +284,47 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
     end
   end
 
+  describe "weekly email counts" do
+    before do
+      [
+        [{}, %i[further_education submitted]],
+        [{provider_verification_started_at: 1.day.ago}, %i[further_education submitted]],
+        [{provider_verification_deadline: 1.day.ago}, %i[further_education submitted]],
+        [{}, %i[further_education rejected]],
+        [{provider_verification_started_at: 1.day.ago}, %i[further_education rejected]],
+        [{provider_verification_deadline: 1.day.ago}, %i[further_education rejected]]
+      ].each do |eligibility_attributes, claim_traits|
+        create(
+          :further_education_payments_eligibility,
+          :eligible,
+          school: provider.school,
+          **eligibility_attributes,
+          claim: create(
+            :claim,
+            *claim_traits,
+            academic_year: journey_configuration.current_academic_year
+          )
+        )
+      end
+    end
+
+    it "counts overdue unverified, not rejected claims" do
+      expect(subject.unverified_overdue_count).to eq(1)
+    end
+
+    it "counts in progress unverified, not rejected claims" do
+      expect(subject.unverified_in_progress_count).to eq(1)
+    end
+
+    it "counts not started unverified, not rejected claims" do
+      expect(subject.unverified_not_started_count).to eq(2)
+    end
+
+    it "counts all unverified, not rejected claims" do
+      expect(subject.unverified_overall_count).to eq(3)
+    end
+  end
+
   describe "#amount" do
     context "when no claims" do
       it "returns zero" do
