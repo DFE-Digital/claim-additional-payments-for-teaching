@@ -125,6 +125,40 @@ RSpec.describe FurtherEducationPayments::Providers::WeeklyUpdateEmailJob, type: 
     )
   end
 
+  it "generates the weekly email counts" do
+    [
+      [{}, %i[further_education submitted]],
+      [{provider_verification_started_at: 1.day.ago}, %i[further_education submitted]],
+      [{provider_verification_deadline: 1.day.ago}, %i[further_education submitted]],
+      [{}, %i[further_education rejected]],
+      [{provider_verification_started_at: 1.day.ago}, %i[further_education rejected]],
+      [{provider_verification_deadline: 1.day.ago}, %i[further_education rejected]]
+    ].each do |eligibility_attributes, claim_traits|
+      create(
+        :further_education_payments_eligibility,
+        :eligible,
+        school: provider.school,
+        **eligibility_attributes,
+        claim: create(
+          :claim,
+          *claim_traits
+        )
+      )
+    end
+
+    described_class.new.perform
+
+    expect(provider.primary_key_contact_email_address).to have_received_email(
+      "7e019ad7-f2d8-43fe-8adc-a5c8609926ff",
+      provider_name: provider.name,
+      number_overdue: 1,
+      number_in_progress: 1,
+      number_not_started: 2,
+      number_overall: 3,
+      link_to_provider_dashboard: "http://www.example.com/further-education-payments/providers/claims"
+    )
+  end
+
   it "staggers weekly update emails due to Notify API 3000 per 60 seconds limit" do
     third_provider = create(:eligible_fe_provider, :with_school)
 

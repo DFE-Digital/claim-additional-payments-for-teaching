@@ -33,10 +33,10 @@ class FurtherEducationPaymentsMailer < ApplicationMailer
       Journeys::FurtherEducationPayments.configuration.current_academic_year
     )
 
-    number_overdue = claims.unverified.verification_overdue.count
-    number_in_progress = claims.unverified.verification_in_progress.count
-    number_not_started = claims.unverified.verification_not_started.count
-    number_overall = claims.unverified.count
+    number_overdue = claims.unverified.not_rejected.verification_overdue.count
+    number_in_progress = claims.unverified.not_rejected.verification_in_progress.count
+    number_not_started = claims.unverified.not_rejected.verification_not_started.count
+    number_overall = claims.unverified.not_rejected.count
 
     return if number_overall.zero?
 
