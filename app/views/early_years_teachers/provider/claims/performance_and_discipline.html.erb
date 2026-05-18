@@ -1,0 +1,46 @@
+<% content_for(:phase) { "Alpha" } %>
+
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:title),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<%= govuk_back_link(
+   href: claim_path(
+     current_journey_routing_name,
+     navigator.previous_slug,
+     @form.model_name.param_key => { teacher_id: @form.answers.current_teacher_id }
+   )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      method: :patch,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_collection_radio_buttons(
+        :performance_or_discipline,
+        f.object.radio_options,
+        :id,
+        :name,
+        legend: {
+          text: f.object.t(:question, teacher_name: f.object.teacher_name),
+          size: "l",
+          tag: "h1"
+        },
+        inline: true,
+      ) %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

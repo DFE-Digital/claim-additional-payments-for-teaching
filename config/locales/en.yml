@@ -166,26 +166,6 @@ en:
         already_submitted: "You have already submitted this claim"
   additional_payments:
     support_email_address: "additionalteachingpayment@digital.education.gov.uk"
-  early_years_teachers_provider:
-    journey_name: "Early years teachers - provider"
-    feedback_email: "EY.Financial-Incentives@education.gov.uk"
-    landing_page:
-      title: "Early years teachers - Prototype"
-    forms:
-      favourite_colour:
-        question: "What is your favourite colour?"
-        errors:
-          presence: "Enter your favourite colour"
-  early_years_teachers_practitioner:
-    journey_name: "Early years teachers - practitioner"
-    feedback_email: "EY.Financial-Incentives@education.gov.uk"
-    landing_page:
-      title: "Early years teachers - Prototype"
-    forms:
-      favourite_colour:
-        question: "What is your favourite colour?"
-        errors:
-          presence: "Enter your favourite colour"
   activerecord:
     errors:
       models:

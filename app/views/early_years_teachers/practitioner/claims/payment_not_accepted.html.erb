@@ -1,0 +1,28 @@
+<% content_for(:phase) { "Alpha" } %>
+
+<% content_for(
+  :page_title,
+  page_title(
+    "Payment not accepted",
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Payment not accepted
+    </h1>
+
+    <p class="govuk-body">
+      TODO add copy
+    </p>
+
+    <%= govuk_button_link_to(
+      "Restart",
+      landing_page_path("early-years-teachers-practitioner")
+    ) %>
+  </div>
+</div>
+

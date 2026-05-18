@@ -1,0 +1,42 @@
+<% content_for(:phase) { "Alpha" } %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Sign in with GOV.UK One Login
+    </h1>
+
+    <p class="govuk-body">
+      You will need to sign in to your GOV.UK One Login account to apply. If you don't
+      have an account yet, we will help you create one.
+    </p>
+
+    <p class="govuk-body">
+      To create a GOV.UK One Login account, you will need:
+    </p>
+
+    <%= govuk_list [
+      "an email address",
+      "a way to get security codes - this can be a mobile phone number or an authenticator app"
+    ], type: :bullet %>
+
+    <p class="govuk-body">
+      When you have signed in to GOV.UK One Login, you will return to this service to
+      complete your application.
+    </p>
+
+    <p class="govuk-body">
+      You must prove your identity using the GOV.UK One Login service in order to
+      submit a claim for an incentive payment.
+    </p>
+
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      method: :patch,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_submit "Continue" %>
+    <% end %>
+  </div>
+</div>
