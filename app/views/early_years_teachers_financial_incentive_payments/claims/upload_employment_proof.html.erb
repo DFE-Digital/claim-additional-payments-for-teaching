@@ -29,7 +29,8 @@
 
       <p class="govuk-body">You upload a clear photo or a scanned copy of the document.</p>
 
-      <%= f.govuk_file_field :file, label: { hidden: true } %>
+      <%= f.govuk_file_field :file, label: { hidden: true },
+            accept: f.object.class::ALLOWED_CONTENT_TYPES.join(",") %>
 
       <%= f.govuk_submit "Upload" %>
 
