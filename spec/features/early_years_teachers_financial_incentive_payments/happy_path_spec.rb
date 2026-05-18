@@ -95,12 +95,6 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
 
     upload_employment_proof_multiple_with_delete
 
-    expect(page).to have_text "Confirm you are eligible"
-    click_button "Continue"
-
-    expect(page).to have_text "Before you accept the claim"
-    click_button "Continue"
-
     expect(page).to have_text "How we’ll use your information"
     click_button "Continue"
 

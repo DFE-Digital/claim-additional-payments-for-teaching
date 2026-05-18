@@ -31,8 +31,6 @@ module Journeys
         UploadedEmploymentProofForm,
         DeleteEmploymentProofForm,
         UploadEmploymentProofSuccessForm,
-        ConfirmEligibilityForm,
-        AcceptPaymentForm,
         InformationProvidedForm,
         IneligibleForm
       ]
