@@ -94,6 +94,151 @@ RSpec.describe "Task index page for EYTFI claims" do
     expect(page).to have_text("This task was performed by Aaron Admin")
   end
 
+  it "shows the employment" do
+    eligible_eytfi_provider = create(
+      :eligible_eytfi_provider,
+      urn: "EY123456",
+      name: "Sunny Days Nursery",
+      address_line_1: "1 Nursery Lane",
+      address_line_2: "Childcare Park",
+      address_line_3: "Sunny Side",
+      town: "Townsville",
+      postcode: "TS1 2AB"
+    )
+
+    claim = create(
+      :claim,
+      :submitted,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+      submitted_at: DateTime.new(2026, 5, 1, 9, 30, 0),
+      eligibility_attributes: {
+        eligible_eytfi_provider_urn: eligible_eytfi_provider.urn
+      }
+    )
+
+    claim.eligibility.employment_proofs.attach(
+      io: File.open(Rails.root.join("spec/fixtures/files/employment_proof.pdf")),
+      filename: "employment_proof.pdf",
+      content_type: "application/pdf"
+    )
+
+    claim.eligibility.employment_proofs.attach(
+      io: File.open(Rails.root.join("spec/fixtures/files/employment_proof2.pdf")),
+      filename: "employment_proof2.pdf",
+      content_type: "application/pdf"
+    )
+
+    claim.eligibility.employment_proofs.map(&:blob).each do |blob|
+      blob.update!(
+        malware_scan_result: ActiveStorage::Blob::MALWARE_SCAN_RESULT_PASSED,
+        malware_scanned_at: Time.zone.now
+      )
+    end
+
+    sign_in_as_service_admin
+
+    visit admin_claim_tasks_path(claim)
+
+    click_on "Check employment information"
+
+    expect(page).to have_text("Employment evidence uploaded by claimant on 1/5/2026")
+
+    expect(page).to have_text("Selected nursery")
+    expect(page).to have_text("EY123456")
+    expect(page).to have_text("Sunny Days Nursery")
+    expect(page).to have_text("1 Nursery Lane")
+    expect(page).to have_text("Childcare Park")
+    expect(page).to have_text("Sunny Side")
+    expect(page).to have_text("Townsville")
+    expect(page).to have_text("TS1 2AB")
+
+    expect(page).to have_text("Uploaded evidence")
+    expect(page).to have_link("employment_proof.pdf", target: "_blank")
+    expect(page).to have_link("employment_proof2.pdf", target: "_blank")
+
+    expect(page).to have_text("Do you want to accept this evidence?")
+
+    click_on "Save and continue"
+
+    expect(page).to have_text("You must select ‘Yes’ or ‘No’")
+
+    choose "Yes"
+    click_on "Save and continue"
+
+    visit admin_claim_task_path(claim, "employment")
+
+    expect(page).to have_text("Passed")
+    expect(page).to have_text("This task was performed by Aaron Admin")
+  end
+
+  it "only links employment evidence once its malware scan has passed" do
+    eligible_eytfi_provider = create(
+      :eligible_eytfi_provider,
+      urn: "EY123456",
+      name: "Sunny Days Nursery"
+    )
+
+    claim = create(
+      :claim,
+      :submitted,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+      submitted_at: DateTime.new(2026, 5, 1, 9, 30, 0),
+      eligibility_attributes: {
+        eligible_eytfi_provider_urn: eligible_eytfi_provider.urn
+      }
+    )
+
+    claim.eligibility.employment_proofs.attach(
+      io: File.open(Rails.root.join("spec/fixtures/files/employment_proof.pdf")),
+      filename: "employment_proof.pdf",
+      content_type: "application/pdf"
+    )
+
+    claim.eligibility.employment_proofs.attach(
+      io: File.open(Rails.root.join("spec/fixtures/files/employment_proof2.pdf")),
+      filename: "employment_proof2.pdf",
+      content_type: "application/pdf"
+    )
+
+    passing_proof = claim.eligibility.employment_proofs.find do |proof|
+      proof.filename.to_s == "employment_proof.pdf"
+    end
+
+    failing_proof = claim.eligibility.employment_proofs.find do |proof|
+      proof.filename.to_s == "employment_proof2.pdf"
+    end
+
+    sign_in_as_service_admin
+
+    # Both scans pending: neither attachment is clickable
+    visit admin_claim_task_path(claim, "employment")
+
+    expect(page).to have_text("employment_proof.pdf (malware scan pending)")
+    expect(page).to have_text("employment_proof2.pdf (malware scan pending)")
+    expect(page).to have_no_link("employment_proof.pdf")
+    expect(page).to have_no_link("employment_proof2.pdf")
+
+    # One scan passes, one fails
+    passing_proof.blob.update!(
+      malware_scan_result: ActiveStorage::Blob::MALWARE_SCAN_RESULT_PASSED,
+      malware_scanned_at: Time.zone.now
+    )
+
+    failing_proof.blob.update!(
+      malware_scan_result: ActiveStorage::Blob::MALWARE_SCAN_RESULT_FAILED,
+      malware_scanned_at: Time.zone.now
+    )
+
+    visit admin_claim_task_path(claim, "employment")
+
+    # Passed scan: now clickable
+    expect(page).to have_link("employment_proof.pdf", target: "_blank")
+
+    # Failed scan: remains unclickable
+    expect(page).to have_text("employment_proof2.pdf (malware scan failed)")
+    expect(page).to have_no_link("employment_proof2.pdf")
+  end
+
   it "shows the matching details" do
     claim = create(
       :claim,
