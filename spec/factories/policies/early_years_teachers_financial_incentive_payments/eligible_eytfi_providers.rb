@@ -1,7 +1,10 @@
 FactoryBot.define do
   factory :eligible_eytfi_provider, class: "Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider" do
     file_upload {
-      FileUpload.latest_version_for(Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider).first ||
+      FileUpload.latest_version_for(
+        Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider,
+        AcademicYear.current
+      ).first ||
         create(
           :file_upload,
           :with_current_academic_year,

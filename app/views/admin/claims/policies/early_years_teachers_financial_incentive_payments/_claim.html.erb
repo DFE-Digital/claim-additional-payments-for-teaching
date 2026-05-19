@@ -1,5 +1,77 @@
+<% admin_answers_presenter = Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibilityAdminAnswersPresenter.new(@claim.eligibility) %>
+
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render(
+      "admin/claims/answer_section",
+      {
+        heading: "Personal details",
+        answers: admin_personal_details(@claim)
+      }
+    ) %>
+
+    <%= render(
+      "admin/claims/answer_section",
+      {
+        heading: "Provider details",
+        answers: admin_answers_presenter.provider_details
+      }
+    ) %>
+
+    <%= render(
+      "admin/claims/answer_section",
+      {
+        heading: "Employment evidence",
+        answers: [
+          [
+            "Uploaded evidence",
+            @claim.eligibility.employment_proofs.map do |proof|
+              link_to(
+                proof.filename.to_s,
+                rails_blob_url(proof),
+                class: "govuk-link",
+                target: "_blank",
+                rel: "noopener"
+              )
+            end
+          ]
+        ]
+      }
+    ) %>
+
+    <%= render(
+      "admin/claims/answer_section",
+      {
+        heading: "Policy options provided",
+        answers: admin_answers_presenter.policy_options_provided
+      }
+    ) %>
+
+    <%= render(
+      "admin/claims/answer_section",
+      {
+        heading: "Student loan details",
+        answers: admin_student_loan_details(@claim)
+      }
+    ) %>
+
+    <%= render(
+      "admin/claims/answer_section",
+      {
+        heading: "Submission details",
+        answers: admin_submission_details(@claim)
+      }
+    ) %>
+
+    <%= render(
+      "claims_with_matching_details",
+      {
+        matching_claims: @matching_claims,
+        claim: @claim,
+        show_caption: true
+      }
+    ) if @matching_claims.any? %>
+
     <% (decisions = @claim.decisions.order(created_at: :asc)).each do |decision| %>
       <% heading = (decisions.first == decision ? "Claim decision details" : nil) %>
       <%= render "admin/claims/answer_section", {heading:, answers: admin_decision_details(decision)} %>

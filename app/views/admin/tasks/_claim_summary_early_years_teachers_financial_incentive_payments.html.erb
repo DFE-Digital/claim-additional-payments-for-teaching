@@ -19,9 +19,14 @@
 
 <%= render "shared/assignment_banner", claim: claim %>
 
-<div class="govuk-summary-list govuk-!-margin-bottom-9">
+<div class="govuk-summary-list govuk-!-margin-bottom-9" id="claim-summary">
   <div class="govuk-grid-column-one-half">
     <%= govuk_summary_list(actions: false) do |summary_list| %>
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "TRN" } %>
+        <% row.with_value { claim.eligibility.teacher_reference_number } %>
+      <% end %>
+
       <% summary_list.with_row do |row| %>
         <% row.with_key { "NI number" } %>
         <% row.with_value { personal_data(claim, :national_insurance_number) } %>
@@ -44,18 +49,18 @@
 
       <% summary_list.with_row do |row| %>
         <% row.with_key { "Mobile number" } %>
-        <% row.with_value { claim.mobile_number } %>
+        <% row.with_value { "N/A" } %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Reference" } %>
+        <% row.with_value { claim.reference } %>
       <% end %>
     <% end %>
   </div>
 
   <div class="govuk-grid-column-one-half">
     <%= govuk_summary_list(actions: false) do |summary_list| %>
-      <% summary_list.with_row do |row| %>
-        <% row.with_key { "Reference" } %>
-        <% row.with_value { claim.reference } %>
-      <% end %>
-
       <% summary_list.with_row do |row| %>
         <% row.with_key { "Submitted" } %>
         <% row.with_value { l(claim.submitted_at) } %>
@@ -74,6 +79,16 @@
       <% summary_list.with_row do |row| %>
         <% row.with_key { "Claim amount" } %>
         <% row.with_value { number_to_currency(claim.award_amount_with_topups)} %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Provider name" } %>
+        <% row.with_value { claim.eligibility.eligible_eytfi_provider.name } %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Provider URN" } %>
+        <% row.with_value { claim.eligibility.eligible_eytfi_provider.urn } %>
       <% end %>
     <% end %>
   </div>

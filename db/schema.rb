@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_13_120149) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_13_152936) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -276,6 +276,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_13_120149) do
     t.decimal "award_amount", precision: 7, scale: 2
     t.datetime "created_at", null: false
     t.string "eligible_eytfi_provider_urn"
+    t.string "teacher_reference_number"
     t.datetime "updated_at", null: false
   end
 
