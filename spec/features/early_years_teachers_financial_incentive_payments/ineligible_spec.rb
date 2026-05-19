@@ -42,10 +42,10 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
     choose "Shelbyvile nursery"
     click_button "Continue"
 
-    expect(page).to have_text("You are not eligible for this payment")
+    expect(page).to have_text("The nursery you selected may not be eligible")
 
     expect(page).to have_text(
-      "To be eligible for the early years teacher recognition payment you must be a qualified early years teacher in an eligible local authority area."
+      "Based on our records, the nursery you selected is not currently eligible for the early years teacher recognition payment."
     )
   end
 

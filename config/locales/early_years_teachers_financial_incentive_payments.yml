@@ -4,7 +4,7 @@ en:
     policy_acronym: EYTFI
     journey_name: Early Years Teachers Financial Incentive Payments
     feedback_email: "feedback@example.com"
-    support_email_address: "EYTrecognitionpayment@education.gov.uk"
+    support_email_address: "EY-teacher.recognitionpayment@education.gov.uk"
     claim_subject: "Early Years Recognition Payment"
     claim_description: for an early years teachers recognition payment
     forms:
@@ -21,7 +21,7 @@ en:
         teaching_qualification_not_confirmed:
           heading: You are not eligible for this payment
         ineligible_provider:
-          heading: You are not eligible for this payment
+          heading: The nursery you selected may not be eligible
         teaching_qualification_ineligible:
           heading: You’re not eligible based on your qualification
       continue_claim:
