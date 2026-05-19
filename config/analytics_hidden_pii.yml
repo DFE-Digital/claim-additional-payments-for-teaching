@@ -43,6 +43,8 @@
     - alternative_idv_claimant_postcode
     - alternative_idv_claimant_national_insurance_number
     - alternative_idv_claimant_email
+  :early_years_teachers_financial_incentive_payments_eligibilities:
+    - trs_data
   :school_workforce_censuses:
     - teacher_reference_number
   :teachers_pensions_service:
