@@ -18,6 +18,7 @@ module Journeys
       attribute :has_eligible_qualification, :boolean, pii: false
 
       attribute :continue_claim, :boolean, pii: false
+      attribute :claimant_declaration, :boolean, pii: false
 
       def nursery
         @nursery ||= Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider.find_by(

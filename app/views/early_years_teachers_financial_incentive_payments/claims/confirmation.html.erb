@@ -1,0 +1,22 @@
+<% content_for(:page_title, page_title("Claim submitted", journey: current_journey_routing_name)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= govuk_panel(title_text: "Claim complete") do %>
+      Your reference number<br>
+      <strong><%= @form.reference %></strong>
+    <% end %>
+
+    <p class="govuk-body">
+      We have sent you an email to confirm we’ve received your claim.
+    </p>
+
+    <h2 class="govuk-heading-m">
+      What happens next
+    </h2>
+
+    <p class="govuk-body">
+      We’ll send you an email to let you know whether your claim has been approved or rejected.
+    </p>
+  </div>
+</div>
