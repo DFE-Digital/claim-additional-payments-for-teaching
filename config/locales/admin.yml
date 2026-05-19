@@ -505,6 +505,8 @@ en:
         rejected_reasons:
           other_reason_only_used_in_exceptional_circumstances: "Other reason only used in exceptional circumstances"
       task_questions:
+        employment:
+          title: "Do you want to accept this evidence?"
         payroll_details:
           title: "The claimant’s personal bank account details have not been automatically validated. Has the claimant confirmed their personal bank account details?"
         matching_details:
