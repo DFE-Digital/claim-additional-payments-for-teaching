@@ -23,12 +23,14 @@ module Journeys
         national-insurance-number
         personal-bank-account
         check-your-answers
+        confirmation
         ineligible
       ].freeze
 
       DEAD_END_SLUGS = %w[
         ineligible
         claim-cancelled
+        confirmation
       ].freeze
 
       RESTRICTED_SLUGS = [].freeze
@@ -90,6 +92,7 @@ module Journeys
         array << SLUGS_HASH["national-insurance-number"]
         array << SLUGS_HASH["personal-bank-account"]
         array << SLUGS_HASH["check-your-answers"]
+        array << SLUGS_HASH["confirmation"]
 
         array
       end

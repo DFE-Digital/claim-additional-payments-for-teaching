@@ -10,9 +10,56 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
-      <h1 class="govuk-heading-xl">
-        Check your answers before sending your application
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        Confirm your details and complete your claim
       </h1>
+
+      <%= render partial: "claims/check_your_answers_section",
+        locals: {
+          heading: "Nursery",
+          answers: journey.answers_for_claim(@form.journey_session).nursery_answers
+        } %>
+
+      <%= render partial: "claims/check_your_answers_section",
+        locals: {
+          heading: "Personal details",
+          answers: journey.answers_for_claim(@form.journey_session).identity_answers
+        } %>
+
+      <%= render partial: "claims/check_your_answers_section",
+        locals: {
+          heading: "Bank details",
+          answers: journey.answers_for_claim(@form.journey_session).banking_answers
+        } %>
+
+      <%= render partial: "claims/check_your_answers_section",
+        locals: {
+          heading: "Uploaded document",
+          answers: journey.answers_for_claim(@form.journey_session).upload_answers
+        } %>
+
+      <%= f.govuk_check_boxes_fieldset :claimant_declaration, multiple: false, legend: { text: "Confirm you are eligible" } do %>
+        <p class="govuk-body">
+          By continuing, you confirm that the information you’ve given is accurate, and that you meet all the eligibility criteria and expectations in the <%= govuk_link_to "guidance", eytfi_guidance_path, new_tab: true %>.
+        </p>
+
+        <p class="govuk-body">
+          We may check your details with your employer or other official records.
+        </p>
+
+        <%= f.govuk_check_box :claimant_declaration,
+          1,
+          0,
+          multiple: false,
+          link_errors: true,
+          label: {
+            text: "I confirm that I understand and accept these conditions."
+          } %>
+      <% end %>
+
+      <%= f.govuk_submit "Confirm and claim" %>
     <% end %>
   </div>
 </div>

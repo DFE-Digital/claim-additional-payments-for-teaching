@@ -30,3 +30,6 @@ en:
           false: "No"
         errors:
           blank: Select yes if you would like to continue with your claim
+      gender:
+        questions:
+          payroll_gender: "How is your gender recorded on your school’s payroll system?"
