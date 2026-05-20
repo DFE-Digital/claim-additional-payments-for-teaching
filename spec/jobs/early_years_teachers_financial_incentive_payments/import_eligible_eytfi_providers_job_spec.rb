@@ -102,7 +102,7 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
       it "saves errors on file upload" do
         subject.perform(file_upload)
 
-        expect(file_upload.reload.upload_errors).to eql(["Headers must be Provider URN, Provider name, Provider address line 1, Provider address line 2, Provider address line 3, Provider town, Postcode, Eligible"])
+        expect(file_upload.reload.upload_errors).to eql(["Headers must be Provider URN, Provider name, Provider address line 1, Provider address line 2, Provider address line 3, Provider town, Postcode, Eligible, Max claims"])
       end
     end
   end
@@ -308,6 +308,83 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
         end
       end
     end
+
+    context "max claims" do
+      context "is missing" do
+        let(:row) do
+          CSV::Row.new(
+            described_class::HEADERS,
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            true
+          )
+        end
+
+        it "is not valid" do
+          subject.valid?
+          expect(subject.errors["Max claims"]).to be_present
+        end
+      end
+
+      context "is not a positive integer" do
+        let(:row) do
+          CSV::Row.new(
+            described_class::HEADERS,
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "0"
+            ],
+            true
+          )
+        end
+
+        it "is not valid" do
+          subject.valid?
+          expect(subject.errors["Max claims"]).to be_present
+        end
+      end
+
+      context "is not an integer" do
+        let(:row) do
+          CSV::Row.new(
+            described_class::HEADERS,
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "foo"
+            ],
+            true
+          )
+        end
+
+        it "is not valid" do
+          subject.valid?
+          expect(subject.errors["Max claims"]).to be_present
+        end
+      end
+    end
   end
 
   describe "#to_provider" do
@@ -322,7 +399,8 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
           "Somewhere Else",
           "London",
           "EC1N 2TD",
-          "TRUE"
+          "TRUE",
+          "5"
         ],
         true
       )
@@ -340,6 +418,7 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
           town: "London",
           postcode: "EC1N 2TD",
           eligible: true,
+          max_claims: 5,
           file_upload:
         )
 
