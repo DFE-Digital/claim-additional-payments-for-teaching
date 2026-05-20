@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_19_143355) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_20_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -318,6 +318,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_19_143355) do
     t.datetime "created_at", null: false
     t.boolean "eligible", null: false
     t.uuid "file_upload_id", null: false
+    t.integer "max_claims", null: false
     t.text "name", null: false
     t.text "postcode", null: false
     t.text "sanitised_postcode"
