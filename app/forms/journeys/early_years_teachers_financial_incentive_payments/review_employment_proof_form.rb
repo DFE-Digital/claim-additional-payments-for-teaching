@@ -42,6 +42,10 @@ module Journeys
         journey_session.answers.confirmed_employment_proof_blob_ids.any?
       end
 
+      def inline_previewable?(blob)
+        UploadEmploymentProofForm::INLINE_PREVIEWABLE_CONTENT_TYPES.include?(blob.content_type)
+      end
+
       def radio_options
         [
           Option.new(id: "yes", name: "Yes, add this file"),
