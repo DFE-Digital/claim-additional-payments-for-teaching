@@ -504,6 +504,10 @@ en:
       decision:
         rejected_reasons:
           other_reason_only_used_in_exceptional_circumstances: "Other reason only used in exceptional circumstances"
+          claimant_withdrew_application: "Claimant withdrew application"
+          cant_verify_claimant_is_employed_at_setting: "Can't verify claimant is employed at setting"
+          duplicate_claim: "Duplicate claim"
+          no_response: "No response"
       task_questions:
         employment:
           title: "Do you want to accept this evidence?"

@@ -10,6 +10,10 @@ module Policies
     ]
 
     ADMIN_DECISION_REJECTED_REASONS = [
+      :no_response,
+      :claimant_withdrew_application,
+      :cant_verify_claimant_is_employed_at_setting,
+      :duplicate_claim,
       :other_reason_only_used_in_exceptional_circumstances
     ]
 

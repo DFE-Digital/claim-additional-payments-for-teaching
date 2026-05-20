@@ -59,6 +59,13 @@ class ApplicationMailer < Mail::Notify::Mailer
     PRACTITIONER_CLAIM_REMINDER_TEMPLATE_ID: "cf03a3c7-587a-48c4-83b9-0cd762d103f6".freeze
   }
 
+  EARLY_YEARS_TEACHERS_FINANCIAL_INCENTIVE_PAYMENTS = {
+    CLAIM_RECEIVED_NOTIFY_TEMPLATE_ID: "9268f6ef-810a-450e-a6be-9fb76a39e94a".freeze,
+    CLAIM_APPROVED_NOTIFY_TEMPLATE_ID: "a32cc7ec-7088-464e-bda6-5f3747b8d8c1".freeze,
+    CLAIM_UPDATE_AFTER_THREE_WEEKS_NOTIFY_TEMPLATE_ID: "f8c0722e-9536-4651-ac26-e89578c7fb0a".freeze,
+    CLAIM_REJECTED_NOTIFY_TEMPLATE_ID: "b82c512e-298a-4de7-8f1b-d1ed02ce93a0".freeze
+  }
+
   def self.deliver_later_with_throttling(mail_delivery, index:, **options)
     options[:wait] ||= (index / 10.0).seconds
     mail_delivery.deliver_later(**options)

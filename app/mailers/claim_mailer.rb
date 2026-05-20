@@ -185,6 +185,7 @@ class ClaimMailer < ApplicationMailer
       Policies::TargetedRetentionIncentivePayments,
       Policies::InternationalRelocationPayments,
       Policies::FurtherEducationPayments,
+      Policies::EarlyYearsTeachersFinancialIncentivePayments,
       Policies::EarlyYearsPayments
     ].include?(claim.policy)
     raise ArgumentError, "Unknown claim policy: #{claim.policy}"

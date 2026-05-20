@@ -56,7 +56,7 @@ RSpec.describe ClaimMailer, type: :mailer do
   end
 
   # Characteristics common to all policies
-  [Policies::FurtherEducationPayments, Policies::StudentLoans, Policies::TargetedRetentionIncentivePayments, Policies::InternationalRelocationPayments].each do |policy|
+  [Policies::EarlyYearsTeachersFinancialIncentivePayments, Policies::FurtherEducationPayments, Policies::StudentLoans, Policies::TargetedRetentionIncentivePayments, Policies::InternationalRelocationPayments].each do |policy|
     context "with a #{policy} claim" do
       let!(:journey_configuration) { create(:journey_configuration, policy.to_s.underscore) }
 
@@ -89,6 +89,12 @@ RSpec.describe ClaimMailer, type: :mailer do
             expect(mail.template_id).to eq "316d6c56-2354-4cb7-9d1d-3b61bc7e8c59"
           end
         end
+
+        context "when EarlyYearsTeachersFinancialIncentivePayments", if: policy == Policies::EarlyYearsTeachersFinancialIncentivePayments do
+          it "uses the correct template" do
+            expect(mail.template_id).to eq "9268f6ef-810a-450e-a6be-9fb76a39e94a"
+          end
+        end
       end
 
       describe "#approved" do
@@ -118,6 +124,12 @@ RSpec.describe ClaimMailer, type: :mailer do
         context "when InternationalRelocationPayments", if: policy == Policies::InternationalRelocationPayments do
           it "uses the correct template" do
             expect(mail.template_id).to eq "5cf5287f-3bdf-4d0b-b999-b61987b9c39f"
+          end
+        end
+
+        context "when EarlyYearsTeachersFinancialIncentivePayments", if: policy == Policies::EarlyYearsTeachersFinancialIncentivePayments do
+          it "uses the correct template" do
+            expect(mail.template_id).to eq "a32cc7ec-7088-464e-bda6-5f3747b8d8c1"
           end
         end
       end
@@ -262,6 +274,22 @@ RSpec.describe ClaimMailer, type: :mailer do
 
           include_examples "template id and personalisation keys"
         end
+
+        context "when EarlyYearsTeachersFinancialIncentivePayments", if: policy == Policies::EarlyYearsTeachersFinancialIncentivePayments do
+          let(:expected_template_id) { "b82c512e-298a-4de7-8f1b-d1ed02ce93a0" }
+
+          let(:expected_rejected_reasons_keys) do
+            {
+              reason_no_response: "yes",
+              reason_claimant_withdrew_application: "no",
+              reason_cant_verify_claimant_is_employed_at_setting: "no",
+              reason_duplicate_claim: "no",
+              reason_other_reason_only_used_in_exceptional_circumstances: "no"
+            }
+          end
+
+          include_examples "template id and personalisation keys"
+        end
       end
 
       describe "#update_after_three_weeks" do
@@ -285,6 +313,12 @@ RSpec.describe ClaimMailer, type: :mailer do
         context "when StudentLoans", if: policy == Policies::StudentLoans do
           it "uses the correct template" do
             expect(mail.template_id).to eq "c43bac94-67ff-4440-8f26-506eb4c232e8"
+          end
+        end
+
+        context "when EarlyYearsTeachersFinancialIncentivePayments", if: policy == Policies::EarlyYearsTeachersFinancialIncentivePayments do
+          it "uses the correct template" do
+            expect(mail.template_id).to eq "f8c0722e-9536-4651-ac26-e89578c7fb0a"
           end
         end
       end
