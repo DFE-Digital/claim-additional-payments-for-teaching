@@ -14,6 +14,12 @@ RSpec.describe Journeys::EarlyYearsTeachersFinancialIncentivePayments::UploadEmp
     )
   end
 
+  describe "INLINE_PREVIEWABLE_CONTENT_TYPES" do
+    it "includes JPEG and PNG" do
+      expect(described_class::INLINE_PREVIEWABLE_CONTENT_TYPES).to contain_exactly("image/jpeg", "image/png")
+    end
+  end
+
   describe "validations" do
     subject { form }
 

@@ -13,6 +13,11 @@ module Journeys
 
       MAX_FILE_SIZE = 20.megabytes
 
+      INLINE_PREVIEWABLE_CONTENT_TYPES = %w[
+        image/jpeg
+        image/png
+      ].freeze
+
       attribute :file
 
       validates :file, presence: {message: "Select a file to upload"}

@@ -141,6 +141,34 @@ RSpec.describe Journeys::EarlyYearsTeachersFinancialIncentivePayments::ReviewEmp
     end
   end
 
+  describe "#inline_previewable?" do
+    let(:confirmed) { "yes" }
+
+    context "with a JPEG blob" do
+      let(:blob) { create(:active_storage_blob, content_type: "image/jpeg") }
+
+      it { expect(form.inline_previewable?(blob)).to be true }
+    end
+
+    context "with a PNG blob" do
+      let(:blob) { create(:active_storage_blob, content_type: "image/png") }
+
+      it { expect(form.inline_previewable?(blob)).to be true }
+    end
+
+    context "with a PDF blob" do
+      let(:blob) { create(:active_storage_blob, content_type: "application/pdf") }
+
+      it { expect(form.inline_previewable?(blob)).to be false }
+    end
+
+    context "with a HEIC blob" do
+      let(:blob) { create(:active_storage_blob, content_type: "image/heic") }
+
+      it { expect(form.inline_previewable?(blob)).to be false }
+    end
+  end
+
   describe "#latest_blob" do
     let(:confirmed) { "yes" }
 
