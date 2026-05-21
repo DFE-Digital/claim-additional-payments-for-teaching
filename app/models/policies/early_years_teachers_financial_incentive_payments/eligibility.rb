@@ -17,6 +17,24 @@ module Policies
           .by_academic_year(claim.academic_year)
           .find_by!(urn: eligible_eytfi_provider_urn)
       end
+
+      def ey_qualification
+        if dqt_teacher.has_valid_qts?
+          "Qualified Teacher Status"
+        elsif dqt_teacher.has_valid_eyts?
+          "Early Years Teacher Status"
+        elsif dqt_teacher.has_valid_eyps?
+          "Early Years Professional Status"
+        else
+          "Unknown QTS"
+        end
+      end
+
+      private
+
+      def dqt_teacher
+        @dqt_teacher ||= Dqt::Teacher.new(trs_data)
+      end
     end
   end
 end

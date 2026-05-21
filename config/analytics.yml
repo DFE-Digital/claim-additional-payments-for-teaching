@@ -441,6 +441,8 @@ shared:
     - award_amount # decimal, amount being awarded
     - eligible_eytfi_provider_urn # string, urn of nursery this claim is for
     - teacher_reference_number # string, external identifier for teacher
+    - trs_data # jsonb, payload returned from TRS
+    - trs_data_fetched_at # datetime, timestamp when TRS data was fetched
   :school_workforce_censuses:
     - id # uuid, identifies the school workforce census record
     - teacher_reference_number # string, external identifier for teacher

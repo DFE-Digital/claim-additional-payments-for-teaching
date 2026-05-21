@@ -409,4 +409,31 @@ RSpec.describe "Task index page for EYTFI claims" do
     expect(page).to have_text("Passed")
     expect(page).to have_text("This task was performed by Aaron Admin")
   end
+
+  it "shows the qualification task" do
+    travel_to DateTime.new(2026, 5, 19, 9, 0, 0) do
+      claim = create(
+        :claim,
+        :submitted,
+        policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+        eligibility_trait: [:with_trs_data]
+      )
+
+      ClaimVerifierJob.perform_now(claim)
+
+      sign_in_as_service_admin
+
+      visit admin_claim_tasks_path(claim)
+
+      click_on "Check qualification information"
+
+      expect(page).to have_text(
+        "Qualification verified as Early Years Teacher Status on 19 May 2026"
+      )
+
+      expect(page).to have_text(
+        "This task was performed by an automated check on 19 May 2026"
+      )
+    end
+  end
 end
