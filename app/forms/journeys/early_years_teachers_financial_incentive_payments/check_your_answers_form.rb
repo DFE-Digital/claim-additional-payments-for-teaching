@@ -52,12 +52,25 @@ module Journeys
           claim.eligibility ||= main_eligibility
           claim.policy ||= main_eligibility.policy
           claim.started_at = journey_session.created_at
+
           answers.attributes.each do |name, value|
             if claim.respond_to?(:"#{name}=")
               claim.public_send(:"#{name}=", value)
             end
           end
+
+          claim.email_address = answers.teacher_auth_email
+          claim.first_name = first_name
+          claim.surname = last_name
         end
+      end
+
+      def first_name
+        answers.teacher_auth_verified_name.split(" ").first
+      end
+
+      def last_name
+        answers.teacher_auth_verified_name.split(" ").last
       end
 
       def main_eligibility
