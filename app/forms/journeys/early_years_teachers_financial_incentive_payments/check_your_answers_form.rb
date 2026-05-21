@@ -34,10 +34,6 @@ module Journeys
         claim.policy.mailer.submitted(claim).deliver_later
         ClaimVerifierJob.perform_later(claim)
 
-        if Policies::EarlyYearsTeachersFinancialIncentivePayments.duplicate_claim?(claim)
-          claim.eligibility.update!(flagged_as_duplicate: true)
-        end
-
         journey_session.answers.assign_attributes(submitted_claim_id: claim.id)
         journey_session.save!
 

@@ -33,10 +33,6 @@ module Policies
       10.weeks
     end
 
-    def duplicate_claim?(claim)
-      Claim::MatchingAttributeFinder.new(claim).matching_claims.exists?
-    end
-
     def award_amount
       4_500
     end

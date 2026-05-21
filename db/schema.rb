@@ -278,7 +278,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_19_143355) do
     t.boolean "continue_claim"
     t.datetime "created_at", null: false
     t.string "eligible_eytfi_provider_urn"
-    t.boolean "flagged_as_duplicate"
     t.boolean "has_eligible_qualification"
     t.text "nursery_id"
     t.datetime "teacher_auth_completed_at"

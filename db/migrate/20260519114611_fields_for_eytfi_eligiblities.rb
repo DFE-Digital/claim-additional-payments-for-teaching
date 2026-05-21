@@ -32,8 +32,5 @@ class FieldsForEytfiEligiblities < ActiveRecord::Migration[8.1]
 
     add_column :early_years_teachers_financial_incentive_payments_eligibilities,
       :continue_claim, :boolean
-
-    add_column :early_years_teachers_financial_incentive_payments_eligibilities,
-      :flagged_as_duplicate, :boolean
   end
 end

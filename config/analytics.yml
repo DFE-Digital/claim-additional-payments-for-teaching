@@ -454,7 +454,6 @@ shared:
     - confirmed_employment_proof_blob_ids # string, array of references of their file uploads
     - has_eligible_qualification # boolean, does the user have a eligible qualifcation for this policy
     - continue_claim # boolean, did the user choose to continue with their claim
-    - flagged_as_duplicate # boolean, is this record a dupe
   :school_workforce_censuses:
     - id # uuid, identifies the school workforce census record
     - teacher_reference_number # string, external identifier for teacher
