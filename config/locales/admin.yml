@@ -81,6 +81,9 @@ en:
       matching_details:
         name: Matching details
         title: "Review matching details from other claims"
+      provider_claim_count:
+        name: Provider claim count
+        title: "Review claims at nursery"
       identity_confirmation:
         name: Identity confirmation
         title: "Confirm the claimant made the claim"
@@ -517,3 +520,5 @@ en:
           title: "The claimant’s personal bank account details have not been automatically validated. Has the claimant confirmed their personal bank account details?"
         matching_details:
           title: "Is this claim still valid despite having matching details with other claims?"
+        provider_claim_count:
+          title: "Is this claim still valid given there are %{count} other claims for this provider?"

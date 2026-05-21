@@ -32,6 +32,16 @@ module Policies
           .limit(School::SEARCH_RESULTS_LIMIT)
       end
 
+      def claims
+        Claim
+          .where(
+            eligibility_type: Eligibility.name,
+            eligibility_id: Eligibility
+              .where(eligible_eytfi_provider_urn: urn)
+              .select(:id)
+          )
+      end
+
       def address
         [
           address_line_1,
