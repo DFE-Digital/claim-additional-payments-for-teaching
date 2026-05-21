@@ -8,14 +8,13 @@ module Journeys
         eligible-teaching-qualification-held
         sign-in
         qualifications-check
-        eligible-qualification-confirmed
+        continue-claim
+        claim-cancelled
         upload-employment-proof
         review-employment-proof
         uploaded-employment-proof
         delete-employment-proof
         upload-employment-proof-success
-        confirm-eligibility
-        accept-payment
         information-provided
         postcode-search
         select-home-address
@@ -29,6 +28,7 @@ module Journeys
 
       DEAD_END_SLUGS = %w[
         ineligible
+        claim-cancelled
       ].freeze
 
       RESTRICTED_SLUGS = [].freeze
@@ -66,14 +66,17 @@ module Journeys
         array << SLUGS_HASH["eligible-teaching-qualification-held"]
         array << SLUGS_HASH["sign-in"]
         array << SLUGS_HASH["qualifications-check"]
-        array << SLUGS_HASH["eligible-qualification-confirmed"]
+        array << SLUGS_HASH["continue-claim"]
+
+        if answers.continue_claim == false
+          array << SLUGS_HASH["claim-cancelled"]
+        end
+
         array << SLUGS_HASH["upload-employment-proof"]
         array << SLUGS_HASH["review-employment-proof"]
         array << SLUGS_HASH["uploaded-employment-proof"]
         array << SLUGS_HASH["delete-employment-proof"]
         array << SLUGS_HASH["upload-employment-proof-success"]
-        array << SLUGS_HASH["confirm-eligibility"]
-        array << SLUGS_HASH["accept-payment"]
         array << SLUGS_HASH["information-provided"]
         array << SLUGS_HASH["postcode-search"]
 

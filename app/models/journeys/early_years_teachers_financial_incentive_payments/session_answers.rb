@@ -17,6 +17,8 @@ module Journeys
       attribute :trs_data_fetched_at, :datetime, pii: false
       attribute :has_eligible_qualification, :boolean, pii: false
 
+      attribute :continue_claim, :boolean, pii: false
+
       def nursery
         @nursery ||= Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider.find_by(
           id: nursery_id

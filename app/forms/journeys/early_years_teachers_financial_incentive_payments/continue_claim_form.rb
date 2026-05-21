@@ -1,7 +1,19 @@
 module Journeys
   module EarlyYearsTeachersFinancialIncentivePayments
-    class AcceptPaymentForm < Form
+    class ContinueClaimForm < Form
+      attribute :continue_claim, :boolean
+
+      validates :continue_claim,
+        inclusion: {
+          in: [true, false],
+          message: i18n_error_message(:blank)
+        }
+
       def save
+        return if invalid?
+
+        journey_session.answers.update!(continue_claim:)
+
         true
       end
 

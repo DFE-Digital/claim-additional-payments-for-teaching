@@ -17,10 +17,6 @@ en:
           false: "No"
         errors:
           inclusion: Select yes if you hold one of the listed qualifications
-      accept_payment:
-        options:
-          true: "Yes"
-          false: "No"
       ineligible:
         teaching_qualification_not_confirmed:
           heading: You are not eligible for this payment
@@ -28,3 +24,9 @@ en:
           heading: You are not eligible for this payment
         teaching_qualification_ineligible:
           heading: You’re not eligible based on your qualification
+      continue_claim:
+        options:
+          true: "Yes"
+          false: "No"
+        errors:
+          blank: Select yes if you would like to continue with your claim

@@ -1,8 +1,8 @@
 module Journeys
   module EarlyYearsTeachersFinancialIncentivePayments
-    class ConfirmEligibilityForm < Form
+    class ClaimCancelledForm < Form
       def save
-        true
+        session.clear
       end
     end
   end
