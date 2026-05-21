@@ -12,6 +12,8 @@ module Journeys
           "your knowledge"
         }
 
+      validate :validate_claimant_is_eligible
+
       def save
         return false if invalid?
 
@@ -46,6 +48,16 @@ module Journeys
       end
 
       private
+
+      def eligibility_checker
+        @eligibility_checker ||= journey::EligibilityChecker.new(journey_session:)
+      end
+
+      def validate_claimant_is_eligible
+        if eligibility_checker.ineligible?
+          errors.add(:base, "You are not eligible")
+        end
+      end
 
       def build_claim
         Claim.new.tap do |claim|
