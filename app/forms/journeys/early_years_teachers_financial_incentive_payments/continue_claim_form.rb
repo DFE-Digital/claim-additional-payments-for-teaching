@@ -6,7 +6,6 @@ module Journeys
       validates :continue_claim,
         inclusion: {
           in: [true, false],
-          allow_blank: false,
           message: i18n_error_message(:blank)
         }
 
