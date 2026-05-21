@@ -28,12 +28,6 @@ class FieldsForEytfiEligiblities < ActiveRecord::Migration[8.1]
       :confirmed_employment_proof_blob_ids, :text, array: true, default: []
 
     add_column :early_years_teachers_financial_incentive_payments_eligibilities,
-      :trs_data, :jsonb
-
-    add_column :early_years_teachers_financial_incentive_payments_eligibilities,
-      :trs_data_fetched_at, :datetime
-
-    add_column :early_years_teachers_financial_incentive_payments_eligibilities,
       :has_eligible_qualification, :boolean
 
     add_column :early_years_teachers_financial_incentive_payments_eligibilities,
