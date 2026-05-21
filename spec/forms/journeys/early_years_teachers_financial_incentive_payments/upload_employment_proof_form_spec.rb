@@ -31,6 +31,54 @@ RSpec.describe Journeys::EarlyYearsTeachersFinancialIncentivePayments::UploadEmp
         expect(form.errors[:file]).to include("Select a file to upload")
       end
     end
+
+    context "when the file type is not allowed" do
+      let(:file) { Rack::Test::UploadedFile.new(StringIO.new("test content"), "text/plain", original_filename: "document.txt") }
+
+      it { is_expected.not_to be_valid }
+
+      it "has an appropriate error message" do
+        form.valid?
+        expect(form.errors[:file]).to include("The selected file must be a PDF, JPG, PNG or HEIC")
+      end
+    end
+
+    context "when the file is too large" do
+      let(:file) do
+        Rack::Test::UploadedFile.new(
+          StringIO.new("x" * (20.megabytes + 1)),
+          "application/pdf",
+          original_filename: "document.pdf"
+        )
+      end
+
+      it { is_expected.not_to be_valid }
+
+      it "has an appropriate error message" do
+        form.valid?
+        expect(form.errors[:file]).to include("The selected file must be smaller than 20MB")
+      end
+    end
+
+    context "when the file is exactly 20MB" do
+      let(:file) do
+        Rack::Test::UploadedFile.new(
+          StringIO.new("x" * 20.megabytes),
+          "application/pdf",
+          original_filename: "document.pdf"
+        )
+      end
+
+      it { is_expected.to be_valid }
+    end
+
+    %w[application/pdf image/jpeg image/png image/heic image/heif].each do |content_type|
+      context "when the file type is #{content_type}" do
+        let(:file) { Rack::Test::UploadedFile.new(StringIO.new("test content"), content_type, original_filename: "document") }
+
+        it { is_expected.to be_valid }
+      end
+    end
   end
 
   describe "#save" do
