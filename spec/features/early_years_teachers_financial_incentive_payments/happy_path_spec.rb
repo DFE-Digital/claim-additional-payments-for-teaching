@@ -125,10 +125,13 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     expect(page).to have_text "Confirm your details and complete your claim"
     check "I confirm that I understand and accept these conditions."
 
-    expect {
-      click_button "Confirm and claim"
-    }.to change { Claim.count }.by(1)
-      .and change { Policies::EarlyYearsTeachersFinancialIncentivePayments::Eligibility.count }.by(1)
+    perform_enqueued_jobs do
+      expect {
+        click_button "Confirm and claim"
+      }.to change { Claim.count }.by(1)
+        .and change { Policies::EarlyYearsTeachersFinancialIncentivePayments::Eligibility.count }.by(1)
+        .and change { ActionMailer::Base.deliveries.count }.by(1)
+    end
 
     claim = Claim.last
 
@@ -165,6 +168,12 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     expect(eligibility.teaching_qualification_confirmation).to be_truthy
     expect(eligibility.trs_data).to be_present
     expect(eligibility.trs_data_fetched_at).to be_present
+
+    mail = ActionMailer::Base.deliveries.last
+
+    expect(mail.template_id).to eql(ApplicationMailer::EARLY_YEARS_TEACHERS_FINANCIAL_INCENTIVE_PAYMENTS[:CLAIM_RECEIVED_NOTIFY_TEMPLATE_ID])
+    expect(mail.personalisation[:first_name]).to eql("John")
+    expect(mail.personalisation[:ref_number]).to eql(claim.reference)
 
     expect(page).to have_text "Your reference number"
   end
