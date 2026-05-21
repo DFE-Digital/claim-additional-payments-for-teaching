@@ -99,7 +99,7 @@ Rails.application.routes.draw do
 
       get "auth/teacher/callback", to: "journeys/early_years_teachers_financial_incentive_payments/auth#callback"
 
-      get "guidance", to: "static_pages#guidance_page"
+      get "guidance", to: "static_pages#guidance_page", as: :eytfi_guidance
     end
 
     scope path: "/", constraints: {journey: Regexp.new(Journeys.all_routing_names.join("|"))} do
