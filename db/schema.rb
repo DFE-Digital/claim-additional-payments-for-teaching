@@ -278,7 +278,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_19_143355) do
     t.boolean "continue_claim"
     t.datetime "created_at", null: false
     t.string "eligible_eytfi_provider_urn"
-    t.string "teacher_reference_number"
     t.boolean "flagged_as_duplicate"
     t.boolean "has_eligible_qualification"
     t.text "nursery_id"
@@ -288,6 +287,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_19_143355) do
     t.text "teacher_auth_teacher_reference_number"
     t.date "teacher_auth_verified_date_of_birth"
     t.citext "teacher_auth_verified_name"
+    t.string "teacher_reference_number"
     t.boolean "teaching_qualification_confirmation"
     t.jsonb "trs_data"
     t.datetime "trs_data_fetched_at"

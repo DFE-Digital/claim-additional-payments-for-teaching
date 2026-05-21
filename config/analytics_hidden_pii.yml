@@ -45,6 +45,11 @@
     - alternative_idv_claimant_email
   :early_years_teachers_financial_incentive_payments_eligibilities:
     - trs_data
+    - teacher_auth_teacher_reference_number
+    - teacher_auth_email
+    - teacher_auth_verified_name
+    - teacher_auth_verified_date_of_birth
+    - teacher_auth_one_login_uid
   :school_workforce_censuses:
     - teacher_reference_number
   :teachers_pensions_service:
