@@ -24,6 +24,8 @@ module Journeys
               Event.create(claim:, name: "claim_submitted")
             end
 
+            Claims::Match.update_matching_claims!(claim)
+
             claim.policy.mailer.submitted(claim).deliver_later
 
             ClaimMailer.early_years_payment_practitioner_email(claim).deliver_later

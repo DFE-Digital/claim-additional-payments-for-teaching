@@ -165,6 +165,8 @@ class Admin::AmendmentForm
       claim.assign_attributes(claim_attributes)
       claim.save!
 
+      Claims::Match.update_matching_claims!(claim)
+
       Event.create(claim: claim, name: "claim_amendment", actor: admin_user, entity: amendment)
 
       amendment.persisted?
