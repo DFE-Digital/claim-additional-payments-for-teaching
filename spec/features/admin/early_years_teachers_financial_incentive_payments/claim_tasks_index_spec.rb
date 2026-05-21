@@ -365,6 +365,79 @@ RSpec.describe "Task index page for EYTFI claims" do
     expect(page).to have_no_link("employment_proof2.pdf")
   end
 
+  it "shows the provider claim count task when number claims exceed the limit" do
+    eligible_eytfi_provider = create(
+      :eligible_eytfi_provider,
+      urn: "EY123456",
+      name: "Sunny Days Nursery",
+      max_claims: 5
+    )
+
+    claim = create(
+      :claim,
+      :submitted,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+      eligibility_attributes: {
+        eligible_eytfi_provider_urn: eligible_eytfi_provider.urn
+      }
+    )
+
+    5.times do
+      create(
+        :claim,
+        :submitted,
+        policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+        eligibility_attributes: {
+          eligible_eytfi_provider_urn: eligible_eytfi_provider.urn
+        }
+      )
+    end
+
+    # A rejected claim at the same provider — doesn't count toward the limit
+    rejected_claim = create(
+      :claim,
+      :submitted,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+      eligibility_attributes: {
+        eligible_eytfi_provider_urn: eligible_eytfi_provider.urn
+      }
+    )
+    create(:decision, :rejected, claim: rejected_claim)
+
+    approved_claim = create(
+      :claim,
+      :submitted,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+      eligibility_attributes: {
+        eligible_eytfi_provider_urn: eligible_eytfi_provider.urn
+      }
+    )
+    create(:decision, :approved, claim: approved_claim)
+
+    Claim.where(
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments
+    ).where.not(id: [claim.id, rejected_claim.id, approved_claim.id]).first
+
+    sign_in_as_service_admin
+
+    visit admin_claim_tasks_path(claim)
+
+    click_on "Review claims at nursery"
+
+    expect(page).to have_text(
+      "Is this claim still valid given there are 6 other claims for this provider?"
+    )
+
+    choose "Yes"
+
+    click_on "Save and continue"
+
+    visit admin_claim_task_path(claim, "provider_claim_count")
+
+    expect(page).to have_text("Passed")
+    expect(page).to have_text("This task was performed by Aaron Admin")
+  end
+
   it "shows the matching details" do
     eligible_eytfi_provider = create(
       :eligible_eytfi_provider,

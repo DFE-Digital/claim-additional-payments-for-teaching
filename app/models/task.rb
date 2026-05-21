@@ -40,6 +40,7 @@ class Task < ApplicationRecord
     fe_repeat_applicant_check
     fe_provider_check
     claimant_check
+    provider_claim_count
   ].freeze
 
   NAMES.each { |name| scope name.to_sym, -> { where(name: name) } }
