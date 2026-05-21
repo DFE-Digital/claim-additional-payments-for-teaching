@@ -22,7 +22,7 @@ module Policies
     end
 
     def notify_reply_to_id
-      # TODO find out what this needs to be
+      "f7ad7769-b521-4b30-bd60-9779cfe12c63".freeze
     end
 
     def auto_check_student_loan_plan_task?
