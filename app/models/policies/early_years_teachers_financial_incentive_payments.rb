@@ -32,5 +32,9 @@ module Policies
     def decision_deadline_in_weeks
       10.weeks
     end
+
+    def award_amount
+      4_500
+    end
   end
 end

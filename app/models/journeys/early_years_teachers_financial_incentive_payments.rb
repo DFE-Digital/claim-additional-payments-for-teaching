@@ -32,6 +32,8 @@ module Journeys
         DeleteEmploymentProofForm,
         UploadEmploymentProofSuccessForm,
         InformationProvidedForm,
+        CheckYourAnswersForm,
+        ConfirmationForm,
         IneligibleForm
       ]
 
@@ -40,6 +42,10 @@ module Journeys
 
     def available?
       FeatureFlag.enabled?(:eytfi_journey)
+    end
+
+    def requires_student_loan_details?
+      true
     end
   end
 end

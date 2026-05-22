@@ -274,9 +274,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_19_143355) do
 
   create_table "early_years_teachers_financial_incentive_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.decimal "award_amount", precision: 7, scale: 2
+    t.text "confirmed_employment_proof_blob_ids", default: [], array: true
+    t.boolean "continue_claim"
     t.datetime "created_at", null: false
     t.string "eligible_eytfi_provider_urn"
+    t.boolean "has_eligible_qualification"
+    t.text "nursery_id"
+    t.datetime "teacher_auth_completed_at"
+    t.citext "teacher_auth_email"
+    t.text "teacher_auth_one_login_uid"
+    t.text "teacher_auth_teacher_reference_number"
+    t.date "teacher_auth_verified_date_of_birth"
+    t.citext "teacher_auth_verified_name"
     t.string "teacher_reference_number"
+    t.boolean "teaching_qualification_confirmation"
     t.jsonb "trs_data"
     t.datetime "trs_data_fetched_at"
     t.datetime "updated_at", null: false
