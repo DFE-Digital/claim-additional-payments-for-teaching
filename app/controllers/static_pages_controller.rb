@@ -35,7 +35,7 @@ class StaticPagesController < BasePublicController
   def guidance_page
     guidance_page = "#{journey.view_path}/guidance"
 
-    if lookup_context.template_exists?(guidance_page, [], false)
+    if journey_available? && lookup_context.template_exists?(guidance_page, [], false)
       render guidance_page
     else
       render(
