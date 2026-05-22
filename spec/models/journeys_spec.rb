@@ -14,8 +14,6 @@ RSpec.describe Journeys do
         Journeys::EarlyYearsPayment::Provider::Authenticated,
         Journeys::EarlyYearsPayment::Provider::AlternativeIdv,
         Journeys::EarlyYearsPayment::Practitioner,
-        Journeys::EarlyYearsTeachers::Provider,
-        Journeys::EarlyYearsTeachers::Practitioner,
         Journeys::EarlyYearsTeachersFinancialIncentivePayments
       ])
     end
@@ -32,8 +30,6 @@ RSpec.describe Journeys do
         Journeys::EarlyYearsPayment::Provider::Authenticated.routing_name,
         Journeys::EarlyYearsPayment::Provider::AlternativeIdv.routing_name,
         Journeys::EarlyYearsPayment::Practitioner.routing_name,
-        Journeys::EarlyYearsTeachers::Provider.routing_name,
-        Journeys::EarlyYearsTeachers::Practitioner.routing_name,
         Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
       ])
     end
