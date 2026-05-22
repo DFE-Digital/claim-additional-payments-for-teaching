@@ -9,6 +9,10 @@ module Policies
       AutomatedChecks::ClaimVerifiers::EyQualificationCheck
     ]
 
+    APPROVED_MIN_QA_THRESHOLD = 10
+
+    REJECTED_MIN_QA_THRESHOLD = 10
+
     ADMIN_DECISION_REJECTED_REASONS = [
       :no_response,
       :claimant_withdrew_application,

@@ -509,4 +509,106 @@ RSpec.describe "Task index page for EYTFI claims" do
       )
     end
   end
+
+  it "approves a claim and emails the claimant" do
+    stub_const(
+      "Policies::EarlyYearsTeachersFinancialIncentivePayments::APPROVED_MIN_QA_THRESHOLD",
+      0
+    )
+
+    eligible_eytfi_provider = create(
+      :eligible_eytfi_provider,
+      urn: "EY123456",
+      name: "Sunny Days Nursery"
+    )
+
+    claim = create(
+      :claim,
+      :submitted,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+      first_name: "Edna",
+      surname: "Krabappel",
+      email_address: "e.krabappel@springfield-elementary.edu",
+      eligibility_attributes: {
+        eligible_eytfi_provider_urn: eligible_eytfi_provider.urn
+      }
+    )
+
+    sign_in_as_service_operator
+
+    visit new_admin_claim_decision_path(claim)
+
+    choose "Approve"
+
+    fill_in "Decision notes", with: "All checks passed"
+
+    perform_enqueued_jobs do
+      click_on "Confirm decision"
+    end
+
+    expect(claim.reload.latest_decision).to be_approved
+
+    expect("e.krabappel@springfield-elementary.edu").to have_received_email(
+      "a32cc7ec-7088-464e-bda6-5f3747b8d8c1",
+      ref_number: claim.reference,
+      first_name: "Edna"
+    )
+  end
+
+  it "rejects a claim and emails the claimant with the rejection reason" do
+    stub_const(
+      "Policies::EarlyYearsTeachersFinancialIncentivePayments::REJECTED_MIN_QA_THRESHOLD",
+      0
+    )
+
+    eligible_eytfi_provider = create(
+      :eligible_eytfi_provider,
+      urn: "EY123456",
+      name: "Sunny Days Nursery"
+    )
+
+    claim = create(
+      :claim,
+      :submitted,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+      first_name: "Edna",
+      surname: "Krabappel",
+      email_address: "e.krabappel@springfield-elementary.edu",
+      eligibility_attributes: {
+        eligible_eytfi_provider_urn: eligible_eytfi_provider.urn
+      }
+    )
+
+    sign_in_as_service_operator
+
+    visit new_admin_claim_decision_path(claim)
+
+    choose "Reject"
+
+    check "Can't verify claimant is employed at setting"
+
+    fill_in(
+      "Decision notes",
+      with: "Employment evidence did not match the setting"
+    )
+
+    perform_enqueued_jobs do
+      click_on "Confirm decision"
+    end
+
+    decision = claim.reload.latest_decision
+
+    expect(decision).to be_rejected
+
+    expect(decision.rejected_reasons_hash).to include(
+      reason_cant_verify_claimant_is_employed_at_setting: "1"
+    )
+
+    expect("e.krabappel@springfield-elementary.edu").to have_received_email(
+      "b82c512e-298a-4de7-8f1b-d1ed02ce93a0",
+      ref_number: claim.reference,
+      first_name: "Edna",
+      reason_cant_verify_claimant_is_employed_at_setting: "yes"
+    )
+  end
 end
