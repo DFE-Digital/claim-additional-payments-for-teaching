@@ -97,6 +97,7 @@ module Journeys
         end
 
         eligibility.award_amount = Policies::EarlyYearsTeachersFinancialIncentivePayments.award_amount
+        eligibility.eligible_eytfi_provider_urn = answers.nursery.urn
       end
 
       def set_attributes_for_claim_submission

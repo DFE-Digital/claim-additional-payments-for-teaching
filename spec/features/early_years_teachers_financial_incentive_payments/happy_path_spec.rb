@@ -164,6 +164,7 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     expect(eligibility.confirmed_employment_proof_blob_ids).to be_present
     expect(eligibility.has_eligible_qualification).to be_truthy
     expect(eligibility.nursery_id).to be_present
+    expect(eligibility.eligible_eytfi_provider_urn).to be_present
 
     expect(eligibility.teaching_qualification_confirmation).to be_truthy
     expect(eligibility.trs_data).to be_present
