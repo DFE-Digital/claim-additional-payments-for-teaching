@@ -318,7 +318,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_20_120000) do
     t.datetime "created_at", null: false
     t.boolean "eligible", null: false
     t.uuid "file_upload_id", null: false
-    t.integer "max_claims", null: false
+    t.integer "max_claims", default: 5, null: false
     t.text "name", null: false
     t.text "postcode", null: false
     t.text "sanitised_postcode"
