@@ -42,7 +42,7 @@ RSpec.feature "EYTFI employment proof upload validation", feature_flag: [:eytfi_
       file.write("test content")
       file.flush
 
-      attach_file "File", file.path
+      attach_file "Upload document", file.path
       click_on "Upload"
     end
 
@@ -59,7 +59,7 @@ RSpec.feature "EYTFI employment proof upload validation", feature_flag: [:eytfi_
       file.write("x" * 2.kilobytes)
       file.flush
 
-      attach_file "File", file.path
+      attach_file "Upload document", file.path
       click_on "Upload"
     end
 

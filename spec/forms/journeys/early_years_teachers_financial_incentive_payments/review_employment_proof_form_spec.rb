@@ -123,21 +123,9 @@ RSpec.describe Journeys::EarlyYearsTeachersFinancialIncentivePayments::ReviewEmp
   describe "#redirect_to" do
     let(:confirmed) { "no" }
 
-    it "always redirects to upload-employment-proof" do
+    it "redirects to upload-employment-proof" do
       expect(form.redirect_to).to include("upload-employment-proof")
       expect(form.redirect_to).not_to include("uploaded-employment-proof")
-    end
-
-    context "when blobs are already confirmed" do
-      before do
-        journey_session.answers.confirmed_employment_proof_blob_ids << "some-other-blob-id"
-        journey_session.save!
-      end
-
-      it "still redirects to upload-employment-proof" do
-        expect(form.redirect_to).to include("upload-employment-proof")
-        expect(form.redirect_to).not_to include("uploaded-employment-proof")
-      end
     end
   end
 

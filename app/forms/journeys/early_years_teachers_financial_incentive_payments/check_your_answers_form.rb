@@ -31,6 +31,8 @@ module Journeys
           Event.create(claim:, name: "claim_submitted")
         end
 
+        trigger_malware_scan_jobs
+
         claim.policy.mailer.submitted(claim).deliver_later
         ClaimVerifierJob.perform_later(claim)
 
@@ -98,6 +100,9 @@ module Journeys
 
         eligibility.award_amount = Policies::EarlyYearsTeachersFinancialIncentivePayments.award_amount
         eligibility.eligible_eytfi_provider_urn = answers.nursery.urn
+
+        confirmed_blobs = ActiveStorage::Blob.where(id: answers.confirmed_employment_proof_blob_ids)
+        confirmed_blobs.each { |blob| eligibility.employment_proofs.attach(blob) }
       end
 
       def set_attributes_for_claim_submission
@@ -112,6 +117,12 @@ module Journeys
           ref = Reference.new.to_s
           break ref unless Claim.exists?(reference: ref)
         }
+      end
+
+      def trigger_malware_scan_jobs
+        answers.confirmed_employment_proof_blob_ids.each do |blob_id|
+          ::EarlyYearsTeachersFinancialIncentivePayments::FetchEmploymentProofMalwareScanResultJob.perform_later(blob_id)
+        end
       end
 
       def mark_service_access_code_as_used!

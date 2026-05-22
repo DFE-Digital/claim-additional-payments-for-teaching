@@ -12,9 +12,6 @@ module Journeys
         claim-cancelled
         upload-employment-proof
         review-employment-proof
-        uploaded-employment-proof
-        delete-employment-proof
-        upload-employment-proof-success
         information-provided
         postcode-search
         select-home-address
@@ -74,9 +71,6 @@ module Journeys
 
         array << SLUGS_HASH["upload-employment-proof"]
         array << SLUGS_HASH["review-employment-proof"]
-        array << SLUGS_HASH["uploaded-employment-proof"]
-        array << SLUGS_HASH["delete-employment-proof"]
-        array << SLUGS_HASH["upload-employment-proof-success"]
         array << SLUGS_HASH["information-provided"]
         array << SLUGS_HASH["postcode-search"]
 

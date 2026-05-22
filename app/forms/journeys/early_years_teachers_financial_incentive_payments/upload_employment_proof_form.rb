@@ -22,6 +22,8 @@ module Journeys
       def save
         return false if invalid?
 
+        journey_session.employment_proofs.purge
+        journey_session.answers.confirmed_employment_proof_blob_ids.clear
         journey_session.employment_proofs.attach(
           io: file,
           filename: file.original_filename,
@@ -34,6 +36,10 @@ module Journeys
 
       def completed?
         journey_session.employment_proofs.attached?
+      end
+
+      def nursery_name
+        journey_session.answers.nursery&.name
       end
 
       def has_confirmed_blobs?
