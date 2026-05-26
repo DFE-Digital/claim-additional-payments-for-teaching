@@ -26,6 +26,8 @@ module Policies
           :not_subject_to_performance_and_disciplinary_not_confirmed
         elsif answers.has_eligible_qualification == false
           :teaching_qualification_ineligible
+        elsif answers.claim_already_submitted_this_policy_year?
+          :claim_already_submitted_this_policy_year
         end
       end
     end
