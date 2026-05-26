@@ -5,6 +5,8 @@ module Journeys
       include Rails.application.routes.url_helpers
       include ActionView::Helpers::UrlHelper
       include ActionView::Helpers::NumberHelper
+      include GovukVisuallyHiddenHelper
+      include GovukLinkHelper
 
       def nursery_answers
         [].tap do |a|
@@ -29,11 +31,12 @@ module Journeys
       end
 
       def upload_answers
-        uploaded_blobs.each_with_index.map do |blob, index|
+        # Should only be ONE
+        uploaded_documents.map do |blob|
           [
-            "File #{index + 1}",
-            "#{link_to(blob.filename.to_s, rails_storage_proxy_path(blob, only_path: true), target: "_blank", rel: "noopener noreferrer")}, #{number_to_human_size(blob.byte_size)}",
-            "uploaded-employment-proof"
+            "Payslip",
+            "#{govuk_link_to(blob.filename.to_s, rails_storage_proxy_path(blob, only_path: true), new_tab: true)}, #{number_to_human_size(blob.byte_size)}",
+            "review-employment-proof"
           ]
         end
       end
@@ -62,7 +65,7 @@ module Journeys
         ]
       end
 
-      def uploaded_blobs
+      def uploaded_documents
         confirmed_ids = answers.confirmed_employment_proof_blob_ids
         ActiveStorage::Blob.where(id: confirmed_ids).order(created_at: :asc)
       end

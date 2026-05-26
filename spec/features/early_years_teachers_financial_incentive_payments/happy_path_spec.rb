@@ -113,7 +113,7 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     choose "Yes"
     click_button "Continue"
 
-    upload_employment_proof_multiple_with_delete
+    upload_employment_proof
 
     expect(page).to have_text "How we’ll use your information"
     click_button "Continue"

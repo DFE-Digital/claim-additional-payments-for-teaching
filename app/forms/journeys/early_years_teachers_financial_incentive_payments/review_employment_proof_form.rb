@@ -12,7 +12,9 @@ module Journeys
         return false if invalid?
 
         if confirmed == "no"
-          journey_session.employment_proofs.attachments.find_by(blob_id: blob_id)&.purge
+          journey_session.employment_proofs.purge
+          journey_session.answers.confirmed_employment_proof_blob_ids.clear
+          journey_session.save!
           return false
         end
 
