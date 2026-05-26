@@ -54,7 +54,7 @@ RSpec.describe FileUpload, type: :model do
       end
 
       it "returns link to edit journey config" do
-        expect(subject.back_link).to eql("/admin/journey-configurations/early-years-teachers-financial-incentive-payments/edit")
+        expect(subject.back_link).to eql("/admin/journey-configurations/early-years-teachers-recognition-payments/edit")
       end
     end
 

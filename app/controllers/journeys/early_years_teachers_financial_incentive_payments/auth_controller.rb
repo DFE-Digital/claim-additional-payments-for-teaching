@@ -11,6 +11,10 @@ module Journeys
 
       private
 
+      def current_journey_routing_name
+        Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
+      end
+
       def omniauth_hash
         @omniauth_hash ||= request.env["omniauth.auth"]
       end
