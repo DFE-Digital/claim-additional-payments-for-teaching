@@ -28,6 +28,8 @@ module Journeys
         elsif form.respond_to?(:completed?)
           if form.completed?
             last_valid_slug = slug
+          else
+            return last_valid_slug
           end
         elsif form.valid?
           last_valid_slug = slug

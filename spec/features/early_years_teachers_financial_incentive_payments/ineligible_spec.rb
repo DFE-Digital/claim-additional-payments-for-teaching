@@ -47,6 +47,9 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
     expect(page).to have_text(
       "Based on our records, the nursery you selected is not currently eligible for the early years teacher recognition payment."
     )
+    click_link "Back"
+
+    expect(page).to have_text "Which nursery do you teach in?"
   end
 
   scenario "claimant states they do not have relevant qualification" do
@@ -70,6 +73,7 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
     choose "No"
     click_button "Continue"
 
+    expect(page).to have_link "Back", href: "/early-years-teachers-financial-incentive-payments/teaching-qualification-confirmation"
     expect(page).to have_text "You are not eligible for this payment"
   end
 
@@ -161,6 +165,7 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
       choose "No"
       click_button "Continue"
 
+      expect(page).to have_link "Back"
       expect(page).to have_text "Claim cancelled"
       click_button "Start a new claim"
 

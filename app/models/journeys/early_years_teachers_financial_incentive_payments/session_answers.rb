@@ -17,6 +17,7 @@ module Journeys
       attribute :trs_data_fetched_at, :datetime, pii: false
       attribute :has_eligible_qualification, :boolean, pii: false
 
+      attribute :eligible_teaching_qualification_held_clicked, :boolean, pii: false
       attribute :continue_claim, :boolean, pii: false
       attribute :claimant_declaration, :boolean, pii: false
 

@@ -28,8 +28,6 @@ module Journeys
       ].freeze
 
       DEAD_END_SLUGS = %w[
-        ineligible
-        claim-cancelled
         confirmation
       ].freeze
 
