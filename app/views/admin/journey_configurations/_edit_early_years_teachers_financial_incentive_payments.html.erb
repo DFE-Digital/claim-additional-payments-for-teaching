@@ -1,7 +1,7 @@
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
 <h2 class="govuk-heading-m">
-  Upload eligible EYTFI providers
+  Upload eligible EYTRP providers
 </h2>
 
 <%= form_with model: @upload_form, scope: :eligible_eytfi_providers_upload, url: admin_eligible_eytfi_providers_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
@@ -11,7 +11,7 @@
     label: { text: "Academic year" } %>
 
   <%= f.govuk_file_field :file,
-    label: { text: "Eligible EYTFI providers" },
+    label: { text: "Eligible EYTRP providers" },
     hint: { text: "This file should be a CSV" },
     javascript: true %>
 
