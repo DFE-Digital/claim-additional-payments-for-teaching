@@ -38,7 +38,7 @@ RSpec.describe Policies, type: :model do
         ["International Relocation Payments", "international-relocation-payments"],
         ["Further Education Targeted Retention Incentive", "further-education-payments"],
         ["Early Years Financial Incentive Payments", "early-years-payments"],
-        ["Early Years Teachers Financial Incentive Payments", "early-years-teachers-financial-incentive-payments"]
+        ["Early Years Teachers Recognition Payments", "early-years-teachers-financial-incentive-payments"]
       ])
     end
   end
