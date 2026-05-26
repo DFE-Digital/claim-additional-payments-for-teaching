@@ -41,6 +41,19 @@ RSpec.describe PurgeUnsubmittedClaimsJob do
       ).to be_empty
     end
 
+    context "when an EYTFI session with file attachments is purgeable" do
+      it "deletes the session and purges its blobs from storage" do
+        session = create(:eytfi_session, :with_employment_proof)
+        session.update_column(:updated_at, over_24_hours_ago)
+
+        expect {
+          perform_enqueued_jobs { PurgeUnsubmittedClaimsJob.new.perform }
+        }.to change(ActiveStorage::Blob, :count).by(-1)
+
+        expect(Journeys::Session.where(id: session.id)).to be_empty
+      end
+    end
+
     context "FE sessions" do
       it "deletes unsubmitted sessions over a year old" do
         Journeys::FurtherEducationPayments::Session.create!(
