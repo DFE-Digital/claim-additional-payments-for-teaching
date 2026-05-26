@@ -16,17 +16,17 @@ module Journeys
       def save
         return if invalid? || no_results?
 
-        if possible_school_id.present? && changed_possible_school?
-          journey_session.answers.assign_attributes(
-            possible_school_id:
-          )
-          reset_dependent_answers
-        end
-
         if changed_query?
           journey_session.answers.assign_attributes(
             possible_school_id: nil,
             provision_search:
+          )
+          reset_dependent_answers
+        end
+
+        if possible_school_id.present? && changed_possible_school?
+          journey_session.answers.assign_attributes(
+            possible_school_id:
           )
           reset_dependent_answers
         end
