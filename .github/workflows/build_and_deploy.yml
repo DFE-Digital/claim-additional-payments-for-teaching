@@ -95,7 +95,7 @@ jobs:
             | Further Education Providers | <${{ env.APP_URL }}/further-education-payments/providers/claims>                    |
             | Early Years Payment         | <${{ env.APP_URL }}/early-years-payment/landing-page>                               |
             | Relocation Payments         | <${{ env.APP_URL }}/get-a-teacher-relocation-payment/landing-page>                  |
-            | Early Years Teachers        | <${{ env.APP_URL }}/early-years-teachers-financial-incentive-payments/landing-page> |
+            | Early Years Teachers        | <${{ env.APP_URL }}/early-years-teachers-recognition-payments/landing-page> |
             | Admin                       | <${{ env.APP_URL }}/admin>                                                          |
 
   deploy:

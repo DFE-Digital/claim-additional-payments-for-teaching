@@ -98,7 +98,9 @@ Rails.application.routes.draw do
       end
 
       get "auth/teacher/callback", to: "journeys/early_years_teachers_financial_incentive_payments/auth#callback"
+    end
 
+    scope constraints: {journey: "early-years-teachers-recognition-payments"} do
       get "guidance", to: "static_pages#guidance_page", as: :eytfi_guidance
     end
 

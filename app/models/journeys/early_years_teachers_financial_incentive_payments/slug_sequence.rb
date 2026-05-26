@@ -35,11 +35,11 @@ module Journeys
       SLUGS_HASH = SLUGS.to_h { |slug| [slug, slug] }.freeze
 
       def self.start_page_url
-        Rails.application.routes.url_helpers.landing_page_path("early-years-teachers-financial-incentive-payments")
+        Rails.application.routes.url_helpers.landing_page_path("early-years-teachers-recognition-payments")
       end
 
       def self.signed_out_path
-        Rails.application.routes.url_helpers.landing_page_path("early-years-teachers-financial-incentive-payments")
+        Rails.application.routes.url_helpers.landing_page_path("early-years-teachers-recognition-payments")
       end
 
       attr_reader :journey_session

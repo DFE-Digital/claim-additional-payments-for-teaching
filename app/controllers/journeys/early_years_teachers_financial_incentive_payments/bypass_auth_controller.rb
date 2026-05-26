@@ -13,6 +13,10 @@ module Journeys
 
       private
 
+      def current_journey_routing_name
+        Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
+      end
+
       def form
         @form ||= Debug::TeacherAuth::SignInForm.new(
           journey_session: nil,
