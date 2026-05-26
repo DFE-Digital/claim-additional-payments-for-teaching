@@ -14,8 +14,6 @@ module Journeys
     EarlyYearsPayment::Provider::Authenticated,
     EarlyYearsPayment::Provider::AlternativeIdv,
     EarlyYearsPayment::Practitioner,
-    EarlyYearsTeachers::Provider,
-    EarlyYearsTeachers::Practitioner,
     EarlyYearsTeachersFinancialIncentivePayments
   ].freeze
 
