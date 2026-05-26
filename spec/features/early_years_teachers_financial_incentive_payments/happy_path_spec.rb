@@ -171,6 +171,9 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     expect(claim.decision_deadline).to be_present
     expect(claim.payroll_gender).to eql "dont_know"
 
+    expect(claim.onelogin_uid).to be_present
+    expect(claim.date_of_birth).to be_present
+
     eligibility = claim.eligibility
 
     expect(eligibility.teacher_auth_completed_at).to be_present

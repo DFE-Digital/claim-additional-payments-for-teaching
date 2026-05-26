@@ -69,9 +69,12 @@ module Journeys
             end
           end
 
+          claim.onelogin_uid = answers.teacher_auth_one_login_uid
+
           claim.email_address = answers.teacher_auth_email
           claim.first_name = first_name
           claim.surname = last_name
+          claim.date_of_birth = answers.teacher_auth_verified_date_of_birth
         end
       end
 
