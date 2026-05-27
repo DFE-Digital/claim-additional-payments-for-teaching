@@ -152,8 +152,7 @@ document.addEventListener("DOMContentLoaded", function () {
               '<div class="govuk-hint">' +
               school.address +
               "</div>" +
-            "</div>" +
-          "</div>";
+            "</div>";
 
         if (school.closeDate) {
           suggestion +=
