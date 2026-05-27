@@ -3,7 +3,7 @@ class Admin::DecisionsController < Admin::BaseAdminController
   before_action :load_claim
 
   def index
-    @decisions = @claim.decisions.includes(:created_by).order(created_at: :asc)
+    @decisions = @claim.decisions.includes(:created_by, :claim).order(created_at: :asc)
     @task_pagination = Admin::TaskPagination.new(claim: @claim, current_task_name:)
   end
 
