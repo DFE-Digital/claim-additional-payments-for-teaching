@@ -5,7 +5,11 @@
     </h1>
 
     <p class="govuk-body">
-      We are checking your qualifications and will update shortly.
+      We are checking your qualifications, this will take a few moments. If the page does not reload, press the continue button below.
     </p>
+
+    <%= form_with model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_submit %>
+    <% end %>
   </div>
 </div>
