@@ -13,7 +13,7 @@ class Admin::TasksController < Admin::BaseAdminController
     @claim_checking_tasks = ClaimCheckingTasks.new(@claim)
     @tasks_presenter = @claim.policy.admin_tasks_presenter(@claim)
     @form = form_class.new(name:, claim: @claim)
-    @notes = @claim.notes.by_label(params[:name])
+    @notes = @claim.notes.includes(:created_by).by_label(params[:name])
     @task_note = Note.new
     @task_pagination = Admin::TaskPagination.new(claim: @claim, current_task_name: @form.task.name)
 
@@ -30,7 +30,7 @@ class Admin::TasksController < Admin::BaseAdminController
     else
       load_matching_claims if load_matching_claims?
       @tasks_presenter = @claim.policy.admin_tasks_presenter(@claim)
-      @notes = @claim.notes.by_label(name)
+      @notes = @claim.notes.includes(:created_by).by_label(name)
       @task_note = Note.new
       render task_view(@form.task)
     end
@@ -45,7 +45,7 @@ class Admin::TasksController < Admin::BaseAdminController
       redirect_to @task_pagination.next_task_path
     else
       @tasks_presenter = @claim.policy.admin_tasks_presenter(@claim)
-      @notes = @claim.notes.by_label(name)
+      @notes = @claim.notes.includes(:created_by).by_label(name)
       @task_note = Note.new
       render task_view(@form.task)
     end
@@ -63,7 +63,7 @@ class Admin::TasksController < Admin::BaseAdminController
   end
 
   def load_claim
-    @claim = Claim.find(params[:claim_id])
+    @claim = Claim.includes(notes: :created_by, tasks: :created_by).find(params[:claim_id])
   end
 
   def ensure_task_has_not_already_been_completed
