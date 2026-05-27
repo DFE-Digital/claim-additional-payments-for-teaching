@@ -5,7 +5,7 @@ module TeacherAuth
     end
 
     def bypass?
-      (Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")) && ENV["BYPASS_TEACHER_AUTH"] == "true"
+      false
     end
 
     def callback_path
