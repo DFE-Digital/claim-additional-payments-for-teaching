@@ -8,7 +8,7 @@
       <h1 class="govuk-heading-l">Upload your payslip</h1>
 
       <p class="govuk-body">
-        Upload a recent document to show that you work at <%= @form.nursery_name %>.
+        Upload a recent payslip to show that you work at <%= @form.nursery_name %>.
       </p>
 
       <p class="govuk-body">The document must:</p>
@@ -25,6 +25,14 @@
             accept: f.object.class::ALLOWED_CONTENT_TYPES.join(",") %>
 
       <%= f.govuk_submit "Upload" %>
+
+      <p class="govuk-body">
+        Uploaded files are processed securely and retained only for as long as necessary to review your claim,
+        after which they are securely deleted. For more information, see
+        <%= govuk_link_to "DFE personal information charter",
+          "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter",
+          new_tab: true %>
+      </p>
     <% end %>
   </div>
 </div>
