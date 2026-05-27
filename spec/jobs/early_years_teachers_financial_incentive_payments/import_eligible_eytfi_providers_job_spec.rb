@@ -348,7 +348,7 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
               "",
               "",
               "",
-              "0"
+              "-1"
             ],
             true
           )
