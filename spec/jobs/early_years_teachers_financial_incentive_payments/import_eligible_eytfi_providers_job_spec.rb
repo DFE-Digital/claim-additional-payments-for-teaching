@@ -315,23 +315,23 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
           CSV::Row.new(
             described_class::HEADERS,
             [
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
+              "123456",
+              "Some nursery",
+              "Some Road",
+              "Somewhere",
+              "Somewhere Else",
+              "Some Town",
+              "TE57 1NG",
+              "TRUE",
               ""
             ],
             true
           )
         end
 
-        it "is not valid" do
-          subject.valid?
-          expect(subject.errors["Max claims"]).to be_present
+        it "defaults to 5" do
+          provider = subject.to_provider(file_upload:)
+          expect(provider.max_claims).to eql(5)
         end
       end
 

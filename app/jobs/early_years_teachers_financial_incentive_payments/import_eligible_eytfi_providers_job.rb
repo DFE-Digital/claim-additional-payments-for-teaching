@@ -40,8 +40,8 @@ module EarlyYearsTeachersFinancialIncentivePayments
         inclusion: {in: %w[TRUE FALSE], message: "must be TRUE or FALSE"}
 
       validates "Max claims",
-        presence: true,
-        numericality: {only_integer: true, greater_than_or_equal_to: 0}
+        numericality: {only_integer: true, greater_than_or_equal_to: 0},
+        if: -> { row["Max claims"].present? }
 
       def initialize(row:)
         @row = row
@@ -59,7 +59,7 @@ module EarlyYearsTeachersFinancialIncentivePayments
             town: row["Provider town"],
             postcode: row["Postcode"],
             eligible: cast_bool(row["Eligible"]),
-            max_claims: row["Max claims"],
+            max_claims: row["Max claims"].presence || 5,
             file_upload:
           )
       end
