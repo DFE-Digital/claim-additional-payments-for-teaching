@@ -33,7 +33,9 @@ module Journeys
           teacher_auth_verified_date_of_birth: form.verified_date_of_birth,
           teacher_auth_one_login_uid: form.sub,
           teacher_auth_completed_at: Time.zone.now,
-          has_eligible_qualification: form.has_eligible_qualification
+          has_eligible_qualification: form.has_eligible_qualification,
+          identity_confirmed_with_onelogin: true,
+          onelogin_idv_at: Time.zone.now
         )
         journey_session.save!
       end
