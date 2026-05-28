@@ -25,6 +25,11 @@
             accept: f.object.class::ALLOWED_CONTENT_TYPES.join(",") %>
 
       <%= f.govuk_submit "Upload" %>
+
+      <p class="govuk-body">
+        Uploaded files are processed securely and retained only for as long as necessary to review your claim, after which they are securely deleted. For more information, see the 
+        <%= govuk_link_to "DfE personal information charter (opens in new tab)", "https://mcas-proxyweb.mcas.ms/certificate-checker?login=false&originalUrl=https%3A%2F%2Fwww.gov.uk.mcas.ms%2Fgovernment%2Forganisations%2Fdepartment-for-education%2Fabout%2Fpersonal-information-charter%3FMcasTsid%3D20596&McasCSRF=a91d99d10f6959b900114b66c7df079999c35f88b47d20b40bb666b9b43ff115", target: "_blank", rel: "noreferrer noopener" %>
+      </p>
     <% end %>
   </div>
 </div>
