@@ -103,6 +103,7 @@ module Journeys
 
         eligibility.award_amount = Policies::EarlyYearsTeachersFinancialIncentivePayments.award_amount
         eligibility.eligible_eytfi_provider_urn = answers.nursery.urn
+        eligibility.teacher_reference_number = answers.teacher_auth_teacher_reference_number
 
         confirmed_blobs = ActiveStorage::Blob.where(id: answers.confirmed_employment_proof_blob_ids)
         confirmed_blobs.each { |blob| eligibility.employment_proofs.attach(blob) }

@@ -156,6 +156,9 @@ RSpec.describe "Full end to end EYTRP", feature_flag: [:eytfi_journey] do
 
     click_on claim.reference
 
+    # Check TRN pulled over from trs
+    expect(page).to have_text "1234567"
+
     expect(page).to have_text "1. Identity confirmation"
     expect(page).to have_text "2. Qualifications"
     expect(page).to have_text "3. Employment"
