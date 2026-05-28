@@ -14,8 +14,9 @@ module Policies
 
       def eligible_eytfi_provider
         @eligible_eytfi_provider ||= EligibleEytfiProvider
-          .by_academic_year(claim.academic_year)
-          .find_by!(urn: eligible_eytfi_provider_urn)
+          .where(urn: eligible_eytfi_provider_urn)
+          .order(created_at: :desc) # Handle EytfiProviders being backed by file uploads
+          .first!
       end
 
       def ey_qualification
