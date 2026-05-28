@@ -26,3 +26,10 @@
   @extend .govuk-body;
   color: #505a5f;
 }
+
+.app-employment-proof-preview {
+  max-width: 100%;
+  max-height: 500px;
+  object-fit: contain;
+  display: block;
+}
