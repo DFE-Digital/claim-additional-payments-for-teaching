@@ -11,7 +11,8 @@ module EarlyYearsTeachersFinancialIncentivePayments
         "Provider address line 3",
         "Provider town",
         "Postcode",
-        "Eligible"
+        "Eligible",
+        "Max claims"
       ]
 
       include ActiveModel::Validations
@@ -38,6 +39,10 @@ module EarlyYearsTeachersFinancialIncentivePayments
         presence: true,
         inclusion: {in: %w[TRUE FALSE], message: "must be TRUE or FALSE"}
 
+      validates "Max claims",
+        numericality: {only_integer: true, greater_than_or_equal_to: 0},
+        if: -> { row["Max claims"].present? }
+
       def initialize(row:)
         @row = row
       end
@@ -54,6 +59,7 @@ module EarlyYearsTeachersFinancialIncentivePayments
             town: row["Provider town"],
             postcode: row["Postcode"],
             eligible: cast_bool(row["Eligible"]),
+            max_claims: row["Max claims"].presence || 5,
             file_upload:
           )
       end

@@ -506,6 +506,7 @@ shared:
     - eligible # boolean, whether or not this provider is eligible for payment
     - file_upload_id # uuid, associated file upload. use this to work out academic year and latest version as this table is append only
     - sanitised_postcode # string, postcode of the provider normalised
+    - max_claims # integer, max number of claims permitted for this nursery
   :active_storage_variant_records:
     - id # uuid, uniquely identifies this variant record
     - blob_id # uuid, the blob this variant was derived from

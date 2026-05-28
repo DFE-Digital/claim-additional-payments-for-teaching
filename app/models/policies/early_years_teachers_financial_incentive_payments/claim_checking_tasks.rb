@@ -4,6 +4,7 @@ module Policies
       def applicable_task_names
         tasks = []
 
+        tasks << "provider_claim_count" if add_provider_claim_count_task? || task_exists?("provider_claim_count")
         tasks << "one_login_identity"
         tasks << "qualifications"
         tasks << "employment"
@@ -21,6 +22,28 @@ module Policies
           locale_key = (name == "one_login_identity") ? "identity_confirmation" : name
           OpenStruct.new(name:, locale_key:)
         end
+      end
+
+      private
+
+      def add_provider_claim_count_task?
+        # Don't add the task to already decided claims
+        provider_claim_limit_exceeded? && !claim.decision_made?
+      end
+
+      def provider_claim_count
+        @provider_claim_count ||= claim
+          .eligibility
+          .eligible_eytfi_provider
+          .claims
+          .not_rejected
+          .count
+      end
+
+      def provider_claim_limit_exceeded?
+        return false if claim.eligibility.eligible_eytfi_provider_urn.blank?
+
+        provider_claim_count > claim.eligibility.eligible_eytfi_provider.max_claims
       end
     end
   end
