@@ -6,7 +6,7 @@ class Admin::EligibleEytfiProvidersForm
   attribute :file
 
   validates :file,
-    presence: {message: "Choose a CSV file of eligible EYTFI providers to upload"}
+    presence: {message: "Choose a CSV file of eligible EYTRP providers to upload"}
 
   attr_reader :admin_user
 

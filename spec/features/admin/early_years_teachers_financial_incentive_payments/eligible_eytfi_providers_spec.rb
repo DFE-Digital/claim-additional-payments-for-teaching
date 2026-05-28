@@ -10,7 +10,7 @@ RSpec.feature "Admin of eligible EYTFI providers" do
     sign_in_as_service_operator
 
     click_link "Manage services"
-    click_link "Change Early Years Teachers Financial Incentive Payments"
+    click_link "Change Early Years Teachers Recognition Payments"
 
     select AcademicYear.current.to_s, from: "Academic year"
     attach_file "eligible-eytfi-providers-upload-file-field", eligible_eytfi_providers_csv_file

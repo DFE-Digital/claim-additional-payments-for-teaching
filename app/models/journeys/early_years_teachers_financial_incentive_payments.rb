@@ -5,6 +5,8 @@ module Journeys
 
     POLICIES = [Policies::EarlyYearsTeachersFinancialIncentivePayments]
 
+    ROUTING_NAME = "early-years-teachers-recognition-payments"
+
     def forms
       array = []
 

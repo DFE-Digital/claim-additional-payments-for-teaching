@@ -20,7 +20,7 @@ RSpec.describe "EYTFI claims displayed on index page" do
 
     within "#filters" do
       select(
-        "Early Years Teachers Financial Incentive Payments",
+        "Early Years Teachers Recognition Payments",
         from: "Policy"
       )
 
