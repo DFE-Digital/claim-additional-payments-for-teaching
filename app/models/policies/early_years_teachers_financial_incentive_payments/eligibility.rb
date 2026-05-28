@@ -4,6 +4,9 @@ module Policies
       self.table_name = "early_years_teachers_financial_incentive_payments_eligibilities"
 
       has_one :claim, as: :eligibility, inverse_of: :eligibility
+
+      # dependent: :purge_later by default
+      # — blobs are deleted from Azure asynchronously when the session is destroyed
       has_many_attached :employment_proofs
 
       AMENDABLE_ATTRIBUTES = []
