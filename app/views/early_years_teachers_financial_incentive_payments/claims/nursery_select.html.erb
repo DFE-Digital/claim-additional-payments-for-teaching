@@ -32,7 +32,9 @@
             size: "l"
           },
           hint: {
-            text: "Select your nursery from the search results."
+            text: "<p>Select your nursery from the search results.</p>
+            <p>If you teach at a #{govuk_link_to "provider of childcare on domestic premises (CoDP)", t("early_years_teachers_financial_incentive_payments.codp_url")} 
+            and cannot find it in the search, email #{govuk_mail_to t("early_years_teachers_financial_incentive_payments.support_email_address") }.</p>".html_safe
           }
         ) %>
         <%= f.govuk_submit %>

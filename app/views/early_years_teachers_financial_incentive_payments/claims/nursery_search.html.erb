@@ -11,12 +11,17 @@
         If you work in more than one setting, choose the one you spend most of your time in.
       </p>
 
+      <p class="govuk-body">
+        If you think you might be classed as working as part of <%= govuk_link_to "childcare on domestic premises", t("early_years_teachers_financial_incentive_payments.codp_url") %>, email <%= govuk_mail_to t("early_years_teachers_financial_incentive_payments.support_email_address") %>.
+      </p>
+
       <%= f.govuk_school_search(
         :nursery_search_query,
         search_path: journeys_early_years_teachers_financial_incentive_payments_nursery_searches_path,
         result_attribute: :nursery_id,
         label: {
           text: "Enter nursery name or postcode",
+          class: "govuk-!-padding-top-4",
           size: "m"
         },
         hint: {
