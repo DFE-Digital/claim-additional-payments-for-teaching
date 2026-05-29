@@ -13,8 +13,7 @@
         <% if @form.inline_previewable?(blob) %>
           <%= image_tag rails_storage_proxy_path(blob),
               alt: blob.filename.to_s,
-              class: "govuk-!-margin-bottom-4",
-              style: "max-width: 100%; max-height: 500px; object-fit: contain; display: block;" %>
+              class: "govuk-!-margin-bottom-4 app-image-preview" %>
         <% end %>
         <p class="govuk-body">
           <% if @form.inline_previewable?(blob) %>
