@@ -1,9 +1,5 @@
 module Journeys
   module EarlyYearsTeachersFinancialIncentivePayments
-    class ClaimCancelledForm < Form
-      def save
-        session.clear
-      end
-    end
+    class ClaimCancelledForm < Form; end
   end
 end
