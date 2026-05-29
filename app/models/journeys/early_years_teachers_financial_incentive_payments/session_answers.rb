@@ -26,6 +26,11 @@ module Journeys
           id: nursery_id
         )
       end
+
+      # required for student loan details updater
+      def date_of_birth
+        teacher_auth_verified_date_of_birth
+      end
     end
   end
 end
