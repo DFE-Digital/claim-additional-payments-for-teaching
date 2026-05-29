@@ -10,8 +10,6 @@
       If you change your mind, you can start a new claim.
     </div>
 
-    <%= form_with model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
-      <%= f.govuk_submit "Start a new claim" %>
-    <% end %>
+    <%= govuk_button_link_to("Start a new claim", landing_page_path) %>
   </div>
 </div>
