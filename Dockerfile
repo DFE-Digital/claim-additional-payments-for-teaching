@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
 # base
 # ------------------------------------------------------------------------------
-FROM ruby:3.4.9-alpine AS base
+FROM ruby:3.4.9-alpine3.23 AS base
 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
@@ -9,20 +9,25 @@ ENV APP_HOME=/app
 ENV DEPS_HOME=/deps
 ENV RAILS_ENV=production
 
-RUN apk update
-RUN apk add icu=~76.1-r1 # force vulnerability fix
-RUN apk add pcre2=~10.47-r0 # force vulnerability fix
-RUN apk add zlib=~1.3.2-r0 # force vulnerability fix
-RUN apk add nodejs=~24.14.1-r0 # force vulnerability fix
-RUN apk add bash postgresql-dev tzdata curl libc6-compat shared-mime-info
+RUN apk add --no-cache \
+  bash \
+  postgresql-dev \
+  tzdata \
+  curl \
+  libc6-compat \
+  shared-mime-info \
+  icu=~76.1-r1 \
+  pcre2=~10.47-r0 \
+  zlib=~1.3.2-r0 \
+  nodejs=~24.14.1-r0 \
+  "libxml2>=2.13.9-r1"
 
 # ------------------------------------------------------------------------------
 # dependencies
 # ------------------------------------------------------------------------------
 FROM base AS dependencies
 
-RUN apk update
-RUN apk add build-base git yarn yaml-dev libffi-dev
+RUN apk add --no-cache build-base git yarn yaml-dev libffi-dev
 
 # Set up install environment
 RUN mkdir -p ${DEPS_HOME}
