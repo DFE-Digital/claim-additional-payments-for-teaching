@@ -531,3 +531,16 @@ shared:
     - name # string, the name of the has_one/has_many_attached association (e.g. employment_proofs)
     - record_id # uuid, the id of the record this file is attached to
     - record_type # string, the model class this file is attached to (e.g. Journeys::TeacherStudentLoanReimbursement::Session)
+  :feedbacks:
+    - id # uuid, uniquely identifies this feedback
+    - area # string, which area of feedback concerns
+    - claim_id # uuid, refers to claim id claimaint submitted if available
+    - comment # string, optional comment left by claimant
+    - created_at # datetime, when this feedback record was created
+    - email_address # string, claimant email address if user chose to participate in future user research
+    - occupation # string, claimant occupation if user chose to participate in future user research
+    - origin # string, where the user came from before submitting feedback
+    - rating # string, claiming rating for their feedback
+    - research_participation # boolean, does the claimant wish to participate in future user research
+    - specific_page # string, if the feedback concerns a specific page, what was that page
+    - updated_at # datetime, when this feedback record was updated

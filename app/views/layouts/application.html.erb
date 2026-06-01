@@ -63,15 +63,7 @@
     <% end %>
 
     <div class="govuk-width-container">
-      <div class="govuk-phase-banner">
-        <p class="govuk-phase-banner__content">
-          <strong class="govuk-tag govuk-phase-banner__content__tag">Beta</strong>
-          <span class="govuk-phase-banner__text">
-            This is a new service – your <%= mail_to feedback_email(current_journey_routing_name), "feedback", class: "govuk-link" %> will help us to improve it.
-          </span>
-        </p>
-      </div>
-
+      <%= render "shared/phase_banner" %>
       <%= render "shared/backlink" %>
 
       <main class="govuk-main-wrapper app-main-class" id="main-content">
