@@ -6,25 +6,21 @@
       url: @form.url,
       method: :patch,
       builder: GOVUKDesignSystemFormBuilder::FormBuilder,
-      id: "further-education-provision-search-form",
-      data: { "fe-only" => true },
       html: { novalidate: false } do |f| %>
       <%= f.govuk_error_summary %>
 
-      <%= f.hidden_field :possible_school_id %>
-
-      <h1 class="govuk-heading-l">
-        <%= @form.t(:question) %>
-      </h1>
-
-      <div id="autocomplete-container" class="govuk-!-margin-bottom-9">
-        <%= f.govuk_text_field :provision_search,
-          class: "js-remove",
-          label: nil,
-          hint: -> do %>
-            Enter the name or postcode using at least 3 characters.
-          <% end %>
-      </div>
+      <%= f.govuk_school_search(
+        :provision_search,
+        search_path: school_search_index_path(fe_only: true),
+        result_attribute: :possible_school_id,
+        label: {
+          text: @form.t(:question),
+          size: "l"
+        },
+        hint: {
+          text: "Enter the name or postcode using at least 3 characters."
+        }
+      ) %>
 
       <p class="govuk-body">
         You can find 
