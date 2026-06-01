@@ -1,0 +1,46 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-xl">
+        Check that you are eligible
+      </h1>
+
+      <p class="govuk-body">
+        You must meet the
+        <%= govuk_link_to "eligiblity criteria", eytfi_guidance_path(anchor: "eligibility"), new_tab: true %>
+        for the early years recognition payment. Select all that apply.
+      </p>
+
+      <%= f.govuk_check_boxes_fieldset :fifty_percent_time_as_eyt,
+        multiple: false,
+        legend: nil do %>
+        <%= f.govuk_check_box :fifty_percent_time_as_eyt,
+          1,
+          0,
+          multiple: false,
+          label: {
+            text: @form.t("labels.fifty_percent_time_as_eyt",
+              standards_link: govuk_link_to(
+                "Early years teacher standards",
+                "https://www.gov.uk/government/publications/early-years-teachers-standards",
+                new_tab: true
+            )).html_safe
+          } %>
+      <% end %>
+
+      <%= f.govuk_check_boxes_fieldset :not_subject_to_performance_and_disciplinary,
+        multiple: false,
+        legend: nil do %>
+        <%= f.govuk_check_box :not_subject_to_performance_and_disciplinary,
+          1,
+          0,
+          multiple: false,
+          label: { text: @form.t("labels.not_subject_to_performance_and_disciplinary") } %>
+      <% end %>
+
+      <%= f.govuk_submit "Confirm and continue" %>
+    <% end %>
+  </div>
+</div>

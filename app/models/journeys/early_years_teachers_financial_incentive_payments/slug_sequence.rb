@@ -5,6 +5,7 @@ module Journeys
         nursery-search
         nursery-select
         teaching-qualification-confirmation
+        check-eligibility
         eligible-teaching-qualification-held
         sign-in
         qualifications-check
@@ -60,6 +61,7 @@ module Journeys
         end
 
         array << SLUGS_HASH["teaching-qualification-confirmation"]
+        array << SLUGS_HASH["check-eligibility"]
         array << SLUGS_HASH["eligible-teaching-qualification-held"]
         array << SLUGS_HASH["sign-in"]
         array << SLUGS_HASH["qualifications-check"]

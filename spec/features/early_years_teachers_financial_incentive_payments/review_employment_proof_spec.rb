@@ -33,6 +33,10 @@ RSpec.feature "EYTFI review employment proof preview", feature_flag: [:eytfi_jou
     choose "Yes"
     click_button "Continue"
 
+    check "I spend at least 50%"
+    check "I am not currently subject"
+    click_button "Confirm and continue"
+
     click_button "Continue"
     perform_enqueued_jobs { click_button "Continue" }
 

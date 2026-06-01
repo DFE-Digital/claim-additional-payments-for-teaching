@@ -25,6 +25,16 @@ en:
           heading: The nursery you selected may not be eligible
         teaching_qualification_ineligible:
           heading: You’re not eligible based on your qualification
+        check_eligibility_both_not_confirmed:
+          heading: You are not eligible for this payment
+        fifty_percent_time_as_eyt_not_confirmed:
+          heading: You are not eligible for this payment
+        not_subject_to_performance_and_disciplinary_not_confirmed:
+          heading: You are not eligible for this payment
+      check_eligibility:
+        labels:
+          fifty_percent_time_as_eyt: "I spend at least 50%% of my working time fulfilling the role of an early years teacher, as set out in the %{standards_link}"
+          not_subject_to_performance_and_disciplinary: "I am not currently subject to any formal performance measures as a result of continuous poor teaching standards or disciplinary action"
       continue_claim:
         options:
           true: "Yes"

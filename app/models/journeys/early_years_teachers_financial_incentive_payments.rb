@@ -15,6 +15,7 @@ module Journeys
         NurserySearchForm,
         NurserySelectForm,
         TeachingQualificationConfirmationForm,
+        CheckEligibilityForm,
         EligibleTeachingQualificationHeldForm
       ]
 
