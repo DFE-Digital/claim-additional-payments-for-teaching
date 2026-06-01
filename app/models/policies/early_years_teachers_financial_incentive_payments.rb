@@ -3,6 +3,11 @@ module Policies
     include BasePolicy
     extend self
 
+    # Percentage of approved claims to QA
+    APPROVED_MIN_QA_THRESHOLD = 10
+    # Percentage of rejected claims to QA
+    REJECTED_MIN_QA_THRESHOLD = 10
+
     VERIFIERS = [
       AutomatedChecks::ClaimVerifiers::OneLoginIdentity,
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
