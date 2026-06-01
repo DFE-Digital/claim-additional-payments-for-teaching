@@ -31,6 +31,11 @@ RSpec.describe "EYTFIP with teacher auth bypass", feature_flag: [:eytfi_journey]
     choose "Yes"
     click_button "Continue"
 
+    expect(page).to have_text "Check that you are eligible"
+    check "I spend at least 50%"
+    check "I am not currently subject"
+    click_button "Confirm and continue"
+
     expect(page).to have_text "You are eligible to apply"
     click_button "Continue"
 
@@ -60,6 +65,11 @@ RSpec.describe "EYTFIP with teacher auth bypass", feature_flag: [:eytfi_journey]
     expect(page).to have_text "Do you hold one of these teaching qualifications?"
     choose "Yes"
     click_button "Continue"
+
+    expect(page).to have_text "Check that you are eligible"
+    check "I spend at least 50%"
+    check "I am not currently subject"
+    click_button "Confirm and continue"
 
     expect(page).to have_text "You are eligible to apply"
     click_button "Continue"

@@ -88,6 +88,11 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     choose "Yes"
     click_button "Continue"
 
+    expect(page).to have_text "Check that you are eligible"
+    check "I spend at least 50%"
+    check "I am not currently subject"
+    click_button "Confirm and continue"
+
     expect(page).to have_text "You are eligible to apply"
     click_button "Continue"
 
