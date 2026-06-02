@@ -143,7 +143,7 @@ module Admin
 
     def identity_confirmation_task_claim_verifier_match_status_tag(claim)
       case claim.policy
-      when Policies::FurtherEducationPayments
+      when Policies::FurtherEducationPayments, Policies::EarlyYearsTeachersFinancialIncentivePayments
         identity_tasks = []
         identity_tasks << (claim.tasks.detect { |t| t.name == "one_login_identity" } || Task.new)
         identity_tasks << (claim.tasks.detect { |t| t.name == "fe_alternative_verification" } || Task.new)
