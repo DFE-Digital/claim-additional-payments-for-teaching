@@ -176,4 +176,64 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks, feature_f
       end
     end
   end
+
+  describe "#identity_status" do
+    subject(:identity_status) { described_class.new(claim).identity_status }
+
+    let(:claim) do
+      create(
+        :claim,
+        policy: Policies::FurtherEducationPayments,
+        tasks: claim_tasks
+      )
+    end
+
+    context "when there are no identity tasks" do
+      let(:claim_tasks) { [] }
+
+      it { is_expected.to eq("Unverified") }
+    end
+
+    context "when the one login identity task passed" do
+      let(:claim_tasks) do
+        [
+          create(:task, name: "one_login_identity", passed: true)
+        ]
+      end
+
+      it { is_expected.to eq("Passed") }
+    end
+
+    context "when one login idv failed but alternative verification is pending" do
+      let(:claim_tasks) do
+        [
+          create(:task, name: "one_login_identity", passed: false)
+        ]
+      end
+
+      it { is_expected.to eq("Unverified") }
+    end
+
+    context "when one login idv failed and alternative verification passed" do
+      let(:claim_tasks) do
+        [
+          create(:task, name: "one_login_identity", passed: false),
+          create(:task, name: "fe_alternative_verification", passed: true)
+        ]
+      end
+
+      it { is_expected.to eq("Passed") }
+    end
+
+    context "when one login idv failed and alternative verification failed" do
+      let(:claim_tasks) do
+        [
+          create(:task, name: "one_login_identity", passed: false),
+          create(:task, name: "fe_alternative_verification", passed: false)
+        ]
+      end
+
+      it { is_expected.to eq("Failed") }
+    end
+  end
 end
