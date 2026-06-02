@@ -6,27 +6,22 @@
       url: @form.url,
       method: :patch,
       builder: GOVUKDesignSystemFormBuilder::FormBuilder,
-      id: "provision-search-form",
-      data: {
-        "exclude-closed": true
-      },
       html: { novalidate: false } do |f| %>
       <%= f.govuk_error_summary %>
 
-      <%= f.hidden_field :possible_school_id %>
-
-      <div id="autocomplete-container" class="govuk-!-margin-bottom-9">
-        <%= f.govuk_text_field :provision_search,
-          class: "js-remove",
-          label: {
-            text: @form.t(:question),
-            tag: "h1",
-            size: "l"
-          },
-          hint: -> do %>
-            Enter the school name or postcode using at least 3 characters
-          <% end %>
-      </div>
+      <%= f.govuk_school_search(
+        :provision_search,
+        search_path: school_search_index_path(exclude_closed: true),
+        result_attribute: :possible_school_id,
+        label: {
+          text: @form.t(:question),
+          size: "l",
+          tag: "h1"
+        },
+        hint: {
+          text: "Enter the school name or postcode using at least 3 characters"
+        }
+      ) %>
 
       <%= f.govuk_submit %>
     <% end %>
