@@ -175,9 +175,8 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
       choose "No"
       click_button "Continue"
 
-      expect(page).to have_link "Back"
       expect(page).to have_text "Claim cancelled"
-      click_button "Start a new claim"
+      click_on "Start a new claim"
 
       expect(page).to have_text "Start now"
     end

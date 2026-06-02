@@ -36,6 +36,12 @@ Rails.application.routes.draw do
     end
   }
 
+  scope path: ":journey", constraints: {journey: "early-years-teachers-recognition-payments"} do
+    get "guidance", to: "static_pages#guidance_page", as: :eytfi_guidance
+
+    get "claim-cancelled", to: "static_pages#claim_cancelled", as: :claim_cancelled
+  end
+
   # Define routes that are specific to each journey's page sequence
   Journeys.all.each do |journey|
     constraints(restrict_to_sequence_slugs.new(journey)) do
@@ -98,10 +104,6 @@ Rails.application.routes.draw do
       end
 
       get "auth/teacher/callback", to: "journeys/early_years_teachers_financial_incentive_payments/auth#callback"
-    end
-
-    scope constraints: {journey: "early-years-teachers-recognition-payments"} do
-      get "guidance", to: "static_pages#guidance_page", as: :eytfi_guidance
     end
 
     scope path: "/", constraints: {journey: Regexp.new(Journeys.all_routing_names.join("|"))} do
