@@ -46,6 +46,20 @@ class StaticPagesController < BasePublicController
     end
   end
 
+  def methodology_page
+    methodology_page = "#{journey.view_path}/methodology"
+
+    if journey_available? && lookup_context.template_exists?(methodology_page, [], false)
+      render methodology_page
+    else
+      render(
+        file: Rails.root.join("public", "404.html"),
+        status: :not_found,
+        layout: false
+      )
+    end
+  end
+
   private
 
   def journey_available?

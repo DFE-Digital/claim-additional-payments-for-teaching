@@ -1,0 +1,82 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-xl">Methodology</span>
+    <h1 class="govuk-heading-l">
+      Early Years Teacher Recognition Payment 
+    </h1>
+
+    <h2 class="govuk-heading-m">
+      Methodology for Phase 1 Eligibility
+    </h2>
+
+    <p class="govuk-body">
+      To be eligible for a recognition payment, teachers must be working in an eligible early years (EY) setting. 
+      This document outlines our methodology for the eligibility of early years settings.
+    </p>
+
+    <p class="govuk-body">
+      In addition to working in an eligible setting, teachers must meet the eligibility criteria as outlined on the main guidance page 
+      <%= govuk_link_to "Claim an early years teacher recognition payment", eytfi_guidance_path %>.
+    </p>
+
+    <h2 id="eligibility" class="govuk-heading-m">Local Authority (LA) area:</h2>
+
+    <p class="govuk-body">
+      Eligible settings must be within one of the following 10 LA areas: 
+    </p>
+
+    <%= govuk_list [
+      "Sandwell",
+      "Middlesbrough",
+      "Tameside",
+      "Rochdale",
+      "Bolton",
+      "Hartlepool",
+      "Rotherham",
+      "Dudley",
+      "Luton",
+      "Barking and Dagenham"
+    ], type: :bullet %>
+
+    <p class="govuk-body">
+      The Department for Education has selected LA areas using three measures, each weighted equally:
+    </p>
+
+    <h2 id="eligible-group-based-settings" class="govuk-heading-m">Eligible Group Based Settings:</h2>
+
+    <p class="govuk-body">
+      To be an eligible setting, you must be:
+    </p>
+
+    <%= govuk_list [
+      "registered in England with Ofsted on the Early Years Register or",
+      "an early years childminder agency, to provide early years childcare on either domestic premises or non‑domestic premises",
+      "school based settings, including independent schools"
+    ], type: :bullet %>
+
+    <p class="govuk-body">
+      This criteria reflects evidence that group‑based settings face greater workforce challenges than school‑based settings and we 
+      are prioritising the recognition payments for settings where there is greatest needed. We know that staff in group‑based settings are paid less on average, 
+      staff turnover is higher and fewer staff in group-based settings hold Level 6 qualifications.  
+    </p>
+
+    <p class="govuk-body">
+      A list of all eligible GBS in phase one is available here: 
+    </p>
+
+    <h2 id="updates-eligibility" class="govuk-heading-m">Updates to the eligibility criteria</h2>
+
+    <p class="govuk-body">
+      Eligibility criteria will be reviewed at least once a year.
+    </p>
+
+    <p class="govuk-body">
+      The list of eligible providers will be reviewed and refreshed to take account of any updates to the Ofsted Childcare Provider list, which is updated every six months and the Early Years census, which is updated every year.
+    </p>
+
+    <p class="govuk-body">
+      GBS that have recently opened may not be included on our list but will still be eligible. If a teacher believes they work in an eligible GBS but it is not included on the list linked above, 
+      they should contact the department at: <%= govuk_mail_to t("early_years_teachers_financial_incentive_payments.support_email_address") %>.
+    </p>
+  </div>
+</div>

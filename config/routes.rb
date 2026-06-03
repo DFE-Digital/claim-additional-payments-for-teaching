@@ -102,6 +102,7 @@ Rails.application.routes.draw do
 
     scope constraints: {journey: "early-years-teachers-recognition-payments"} do
       get "guidance", to: "static_pages#guidance_page", as: :eytfi_guidance
+      get "methodology", to: "static_pages#methodology_page", as: :eytfi_methodology
     end
 
     scope path: "/", constraints: {journey: Regexp.new(Journeys.all_routing_names.join("|"))} do
