@@ -22,6 +22,10 @@ module Policies
       :other_reason_only_used_in_exceptional_circumstances
     ]
 
+    ELIGIBILITY_MATCHING_ATTRIBUTES = [
+      %w[teacher_reference_number]
+    ]
+
     def hidden?
       Rails.env.production? && !ENV["ENVIRONMENT_NAME"].start_with?("review")
     end
