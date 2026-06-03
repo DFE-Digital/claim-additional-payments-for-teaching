@@ -140,6 +140,16 @@ module Admin
         payroll_details
         matching_details
         payroll_gender
+      ],
+      Policies::EarlyYearsTeachersFinancialIncentivePayments => %w[
+        provider_claim_count
+        one_login_identity
+        qualifications
+        employment
+        student_loan_plan
+        payroll_details
+        payroll_gender
+        matching_details
       ]
     }
 
