@@ -88,6 +88,16 @@ Rails.application.routes.draw do
         }
     end
 
+    scope constraints: {journey: %r{#{Journeys.all.select(&:uses_feedback?).map(&:routing_name).join("|")}}} do
+      resources :feedback,
+        only: [:show, :update],
+        param: :slug,
+        controller: "feedback",
+        constraints: {
+          slug: %r{#{Journeys::Feedbacks::SlugSequence::SLUGS.join("|")}}
+        }
+    end
+
     scope constraints: {journey: /early-years-payment/} do
       get "guidance", to: "journeys/early_years_payment/provider/start/static_pages#guidance", as: :guidance
       get "consent-form", to: "journeys/early_years_payment/provider/start/static_pages#consent_form"

@@ -63,3 +63,7 @@
     - email_address
   :active_storage_blobs:
     - filename
+  :feedbacks:
+    - comment # string, optional comment left by claimant
+    - email_address # string, claimant email address if user chose to participate in future user research
+    - occupation # string, claimant occupation if user chose to participate in future user research

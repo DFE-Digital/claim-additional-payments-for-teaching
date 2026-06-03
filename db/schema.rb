@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_26_124909) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_28_133525) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -360,6 +360,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_26_124909) do
     t.text "name", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_feature_flags_on_name", unique: true
+  end
+
+  create_table "feedbacks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "area"
+    t.uuid "claim_id"
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.citext "email_address"
+    t.text "occupation"
+    t.text "origin"
+    t.text "rating"
+    t.boolean "research_participation"
+    t.text "specific_page"
+    t.datetime "updated_at", null: false
   end
 
   create_table "file_downloads", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
