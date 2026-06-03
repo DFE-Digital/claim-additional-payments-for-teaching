@@ -44,6 +44,26 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     allow(Dqt::Client).to receive(:new).and_return(mock_client)
   end
 
+  scenario "methodology redirects to the guidance page" do
+    create(
+      :eligible_eytfi_provider,
+      name: "Springfield nursery"
+    )
+
+    visit eytfi_methodology_path(
+      journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
+    )
+
+    click_link "Claim an early years teacher recognition payment"
+
+    expect(page).to have_current_path(
+      eytfi_guidance_path(
+        journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
+      )
+    )
+    expect(page).to have_text "Claim an early years teacher recognition payment"
+  end
+
   scenario "guidance apply button redirects to the landing page" do
     create(
       :eligible_eytfi_provider,
