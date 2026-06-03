@@ -60,6 +60,20 @@ class StaticPagesController < BasePublicController
     end
   end
 
+  def claim_cancelled
+    claim_cancelled_page = "#{journey.view_path}/claims/claim_cancelled"
+
+    if lookup_context.template_exists?(claim_cancelled_page, [], false)
+      render claim_cancelled_page
+    else
+      render(
+        file: Rails.root.join("public", "404.html"),
+        status: :not_found,
+        layout: false
+      )
+    end
+  end
+
   private
 
   def journey_available?
