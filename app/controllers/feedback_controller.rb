@@ -1,6 +1,4 @@
 class FeedbackController < BasePublicController
-  before_action :create_journey_session_if_no_session
-
   def show
     @form = form_from_slug
 
@@ -21,24 +19,6 @@ class FeedbackController < BasePublicController
   end
 
   private
-
-  def create_journey_session_if_no_session
-    if session[journey_session_key].blank?
-      create_journey_session!
-    end
-  end
-
-  def create_journey_session!
-    journey_session = journey::SessionForm.create!(params)
-
-    session[journey_session_key] = journey_session.id
-
-    journey_session
-  end
-
-  def journey_session_key
-    :"#{journey.routing_name}_journeys_session_id"
-  end
 
   def view_file
     params[:slug].underscore
@@ -63,11 +43,7 @@ class FeedbackController < BasePublicController
   end
 
   def form_from_slug
-    form_class_from_slug.new(
-      journey_session:,
-      journey:,
-      params:,
-      session:
-    )
+    keys = form_class_from_slug.new.attributes.keys
+    form_class_from_slug.new(params.fetch(:form, {}).permit(keys))
   end
 end

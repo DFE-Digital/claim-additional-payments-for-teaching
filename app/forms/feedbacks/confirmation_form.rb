@@ -1,5 +1,8 @@
 module Feedbacks
-  class ConfirmationForm < Form
+  class ConfirmationForm
+    include ActiveModel::Model
+    include ActiveModel::Attributes
+
     def save
       false
     end

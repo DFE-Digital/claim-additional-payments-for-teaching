@@ -1,5 +1,8 @@
 module Feedbacks
-  class DetailsForm < Form
+  class DetailsForm
+    include ActiveModel::Model
+    include ActiveModel::Attributes
+
     attribute :rating, :string
     attribute :area, :string
     attribute :specific_page, :string
@@ -9,6 +12,23 @@ module Feedbacks
     attribute :occupation, :string
     attribute :origin, :string
     attribute :claim_id, :string
+
+    def self.i18n_error_message(path, args = {})
+      ->(object, _) { object.i18n_errors_path(path, args) }
+    end
+
+    def i18n_errors_path(key, args = {})
+      base_key = :"forms.#{i18n_form_namespace}.errors.#{key}"
+      I18n.t("#{i18n_namespace}.#{base_key}", default: base_key, **args)
+    end
+
+    def i18n_form_namespace
+      self.class.name.demodulize.gsub("Form", "").underscore
+    end
+
+    def i18n_namespace
+      "early_years_teachers_financial_incentive_payments"
+    end
 
     validates :rating,
       inclusion: {
@@ -55,23 +75,23 @@ module Feedbacks
 
     def rating_radio_options
       [
-        Option.new(
+        Form::Option.new(
           id: "very_satisfied",
           name: "Very satisfied"
         ),
-        Option.new(
+        Form::Option.new(
           id: "satisfied",
           name: "Satisfied"
         ),
-        Option.new(
+        Form::Option.new(
           id: "neither",
           name: "Neither satisfied or dissatisfied"
         ),
-        Option.new(
+        Form::Option.new(
           id: "dissatisfied",
           name: "Dissatisfied"
         ),
-        Option.new(
+        Form::Option.new(
           id: "very_dissatisfied",
           name: "Very dissatisfied"
         )
@@ -80,11 +100,11 @@ module Feedbacks
 
     def area_radio_options
       [
-        Option.new(
+        Form::Option.new(
           id: "whole_service",
           name: "Whole service"
         ),
-        Option.new(
+        Form::Option.new(
           id: "specific_page",
           name: "Specific page"
         )
@@ -93,23 +113,23 @@ module Feedbacks
 
     def specific_page_radio_options
       [
-        Option.new(
+        Form::Option.new(
           id: "guidance",
           name: "Guidance"
         ),
-        Option.new(
+        Form::Option.new(
           id: "nursery_selection",
           name: "Nursery selection"
         ),
-        Option.new(
+        Form::Option.new(
           id: "uploading",
           name: "Uploading proof of employment"
         ),
-        Option.new(
+        Form::Option.new(
           id: "bank_details",
           name: "Providing bank details"
         ),
-        Option.new(
+        Form::Option.new(
           id: "submission",
           name: "Submission"
         )
