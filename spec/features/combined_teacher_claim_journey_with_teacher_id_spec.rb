@@ -143,7 +143,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     # - What is your home address
     expect(page).to have_text("What is your home address?")
 
-    click_on("Enter your address manually")
+    click_link("Enter your address manually")
 
     # - What is your address
     expect(page).to have_text("What is your address?")

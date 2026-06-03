@@ -149,7 +149,7 @@ RSpec.describe "Targeted retention incentives eligible paths" do
     fill_in "National Insurance number", with: "AB123456C"
     click_on "Continue"
 
-    click_on "Enter your address manually"
+    click_link "Enter your address manually"
 
     fill_in "House number or name", with: "Test house"
     fill_in "Building and street", with: "Test street"
@@ -668,7 +668,7 @@ RSpec.describe "Targeted retention incentives eligible paths" do
 
     # Postcode search
     expect(page).to have_content("What is your home address?")
-    click_on "Enter your address manually"
+    click_link "Enter your address manually"
 
     # Address
     fill_in "House number or name", with: "42"

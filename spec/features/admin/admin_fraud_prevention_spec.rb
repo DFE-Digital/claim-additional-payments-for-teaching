@@ -232,7 +232,7 @@ RSpec.feature "Admin fraud prevention" do
     click_on "Continue"
 
     # /targeted-retention-incentive-payments/postcode-search
-    click_on "Enter your address manually"
+    click_link "Enter your address manually"
 
     # /targeted-retention-incentive-payments/address
     fill_in "House number or name", with: "123 Main Street"

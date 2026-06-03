@@ -341,7 +341,7 @@ RSpec.describe "Changing answers" do
     fill_in "National Insurance number", with: "AB123456C"
     click_on "Continue"
 
-    click_on "Enter your address manually"
+    click_link "Enter your address manually"
 
     fill_in "House number or name", with: "Test house"
     fill_in "Building and street", with: "Test street"
