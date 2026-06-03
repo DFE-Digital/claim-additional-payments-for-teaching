@@ -55,6 +55,10 @@ module Journeys
       false
     end
 
+    def uses_feedback?
+      false
+    end
+
     def view_path
       if defined?(self::VIEW_PATH)
         self::VIEW_PATH

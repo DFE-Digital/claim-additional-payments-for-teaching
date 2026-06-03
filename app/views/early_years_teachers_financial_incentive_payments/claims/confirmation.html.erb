@@ -22,5 +22,9 @@
     <p class="govuk-body">
       If you’re eligible, you'll be paid within 16 weeks.
     </p>
+
+    <p class="govuk-body">
+      <%= govuk_link_to "What did you think of this service?", feedback_path(journey: current_journey_routing_name, slug: "details") %>
+    </p>
   </div>
 </div>

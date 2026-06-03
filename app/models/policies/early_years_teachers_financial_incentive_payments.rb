@@ -4,9 +4,9 @@ module Policies
     extend self
 
     # Percentage of approved claims to QA
-    APPROVED_MIN_QA_THRESHOLD = 10
+    APPROVED_MIN_QA_THRESHOLD = 100
     # Percentage of rejected claims to QA
-    REJECTED_MIN_QA_THRESHOLD = 10
+    REJECTED_MIN_QA_THRESHOLD = 100
 
     VERIFIERS = [
       AutomatedChecks::ClaimVerifiers::OneLoginIdentity,
@@ -20,6 +20,10 @@ module Policies
       :cant_verify_claimant_is_employed_at_setting,
       :duplicate_claim,
       :other_reason_only_used_in_exceptional_circumstances
+    ]
+
+    ELIGIBILITY_MATCHING_ATTRIBUTES = [
+      %w[teacher_reference_number]
     ]
 
     def hidden?

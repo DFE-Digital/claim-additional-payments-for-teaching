@@ -47,5 +47,9 @@ module Journeys
     def requires_student_loan_details?
       true
     end
+
+    def uses_feedback?
+      true
+    end
   end
 end

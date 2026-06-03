@@ -38,7 +38,7 @@ Rails.application.routes.draw do
 
   scope path: ":journey", constraints: {journey: "early-years-teachers-recognition-payments"} do
     get "guidance", to: "static_pages#guidance_page", as: :eytfi_guidance
-
+    get "methodology", to: "static_pages#methodology_page", as: :eytfi_methodology
     get "claim-cancelled", to: "static_pages#claim_cancelled", as: :claim_cancelled
   end
 
@@ -85,6 +85,16 @@ Rails.application.routes.draw do
         controller: "reminders",
         constraints: {
           slug: %r{#{Journeys::Reminders::SlugSequence::SLUGS.join("|")}}
+        }
+    end
+
+    scope constraints: {journey: %r{#{Journeys.all.select(&:uses_feedback?).map(&:routing_name).join("|")}}} do
+      resources :feedback,
+        only: [:show, :update],
+        param: :slug,
+        controller: "feedback",
+        constraints: {
+          slug: %r{#{Journeys::Feedbacks::SlugSequence::SLUGS.join("|")}}
         }
     end
 
