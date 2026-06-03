@@ -14,7 +14,7 @@ module Policies
   end.flatten.uniq.freeze
 
   def self.all
-    POLICIES.reject(&:hidden?)
+    POLICIES
   end
 
   def self.options_for_select
