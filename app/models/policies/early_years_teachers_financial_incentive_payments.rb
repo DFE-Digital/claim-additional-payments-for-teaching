@@ -4,9 +4,9 @@ module Policies
     extend self
 
     # Percentage of approved claims to QA
-    APPROVED_MIN_QA_THRESHOLD = 10
+    APPROVED_MIN_QA_THRESHOLD = 100
     # Percentage of rejected claims to QA
-    REJECTED_MIN_QA_THRESHOLD = 10
+    REJECTED_MIN_QA_THRESHOLD = 100
 
     VERIFIERS = [
       AutomatedChecks::ClaimVerifiers::OneLoginIdentity,
