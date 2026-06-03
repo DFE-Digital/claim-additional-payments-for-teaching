@@ -33,8 +33,8 @@ en:
           heading: You are not eligible for this payment
       check_eligibility:
         labels:
-          fifty_percent_time_as_eyt: "I spend at least 50%% of my working time fulfilling the role of an early years teacher, as set out in the %{standards_link}"
-          not_subject_to_performance_and_disciplinary: "I am not currently subject to any formal performance measures as a result of continuous poor teaching standards or disciplinary action"
+          fifty_percent_time_as_eyt: "I spend at least half of my working time as an early years teacher, as set out in the %{standards_link}"
+          not_subject_to_performance_and_disciplinary: "I’m not currently subject to any formal performance measures"
       continue_claim:
         options:
           true: "Yes"

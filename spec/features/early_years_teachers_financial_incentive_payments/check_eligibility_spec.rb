@@ -17,26 +17,26 @@ RSpec.feature "EYTFI check eligibility page", feature_flag: [:eytfi_journey] do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_text "Check that you are eligible"
+    expect(page).to have_text "Check if you’re eligible"
   end
 
   scenario "both boxes checked proceeds to next page" do
-    check "I spend at least 50%"
-    check "I am not currently subject"
+    check "I spend at least half"
+    check "I’m not currently subject"
     click_button "Confirm and continue"
 
     expect(page).to have_text "You are eligible to apply"
   end
 
   scenario "only first box checked redirects to ineligible" do
-    check "I spend at least 50%"
+    check "I spend at least half"
     click_button "Confirm and continue"
 
     expect(page).to have_text "You are not eligible for this payment"
   end
 
   scenario "only second box checked redirects to ineligible" do
-    check "I am not currently subject"
+    check "I’m not currently subject"
     click_button "Confirm and continue"
 
     expect(page).to have_text "You are not eligible for this payment"

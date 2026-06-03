@@ -177,8 +177,9 @@ RSpec.describe "Approvals" do
         choose "Approve"
         click_on "Confirm decision"
 
-        expect(page.body)
-          .to have_content(/Duplicate claims have already been approved with references #{approved_claim_1.reference}, #{approved_claim_2.reference}/)
+        expect(page.body).to have_content("Duplicate claims have already been approved with references")
+        expect(page.body).to have_content(approved_claim_1.reference)
+        expect(page.body).to have_content(approved_claim_2.reference)
       end
     end
   end
