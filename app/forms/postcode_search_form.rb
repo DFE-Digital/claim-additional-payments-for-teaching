@@ -44,6 +44,7 @@ class PostcodeSearchForm < Form
     return nil if postcode.blank?
 
     @address_data ||= Rails.cache.fetch("address_data/#{postcode}", expires_in: 1.hour) do
+      journey_session.answers.assign_attributes(ordnance_survey_error: false)
       OrdnanceSurvey::Client.new.api.search_places.index(
         params: {postcode:}
       )

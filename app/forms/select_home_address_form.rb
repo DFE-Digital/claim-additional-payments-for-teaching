@@ -29,9 +29,15 @@ class SelectHomeAddressForm < Form
 
     if skip_postcode_search?
       journey_session.answers.assign_attributes(
-        skip_postcode_search:
+        skip_postcode_search:,
+        postcode:
       )
     else
+      if address.blank?
+        errors.add(:address, "Select an address")
+        return false
+      end
+
       address_parts = address.split(":")
 
       journey_session.answers.assign_attributes({
