@@ -7,9 +7,13 @@ RSpec.describe Admin::AmendmentForm, type: :model do
     context "when out of range ie invalid date" do
       subject do
         described_class.new(
-          "date_of_birth(1i)": "13",
-          "date_of_birth(2i)": "13",
-          "date_of_birth(3i)": "1970"
+          claim: create(:claim, :submitted),
+          admin_user:,
+          params: {
+            "date_of_birth(1i)": "13",
+            "date_of_birth(2i)": "13",
+            "date_of_birth(3i)": "1970"
+          }
         )
       end
 
@@ -24,9 +28,24 @@ RSpec.describe Admin::AmendmentForm, type: :model do
     let(:admin_user) { create(:dfe_signin_user) }
     let(:notes) { "made some changes" }
 
-    subject { described_class.new(claim:, admin_user:, notes:) }
+    subject do
+      described_class.new(
+        claim:,
+        admin_user:,
+        params: {
+          notes:
+        }
+      )
+    end
 
     it { is_expected.to validate_presence_of(:date_of_birth).with_message("Enter a date of birth") }
+
+    it do
+      is_expected.to(
+        validate_presence_of(:banking_name)
+        .with_message("Enter a name on the account")
+      )
+    end
   end
 
   describe "#save" do
@@ -39,8 +58,10 @@ RSpec.describe Admin::AmendmentForm, type: :model do
         described_class.new(
           claim:,
           admin_user:,
-          notes:,
-          student_loan_plan: ""
+          params: {
+            notes:,
+            student_loan_plan: ""
+          }
         )
       end
 
@@ -65,8 +86,10 @@ RSpec.describe Admin::AmendmentForm, type: :model do
           form = described_class.new(
             claim: claim,
             admin_user: admin_user,
-            notes: "made some changes",
-            banking_name: "New banking name"
+            params: {
+              notes: "made some changes",
+              banking_name: "New banking name"
+            }
           )
 
           expect(form).not_to be_valid
@@ -90,8 +113,10 @@ RSpec.describe Admin::AmendmentForm, type: :model do
           form = described_class.new(
             claim: claim,
             admin_user: admin_user,
-            notes: "made some changes",
-            banking_name: "New banking name"
+            params: {
+              notes: "made some changes",
+              banking_name: "New banking name"
+            }
           )
 
           expect(form).to be_valid
@@ -102,6 +127,30 @@ RSpec.describe Admin::AmendmentForm, type: :model do
               .to("New banking name")
           )
         end
+      end
+    end
+
+    context "when a value is missing in the params" do
+      it "is unchanged from the claim's value" do
+        claim = create(
+          :claim,
+          :submitted,
+          email_address: "test@example.com",
+          date_of_birth: Date.new(1970, 1, 1)
+        )
+
+        form = described_class.new(
+          claim: claim,
+          admin_user:,
+          params: {
+            notes: "made some changes",
+            email_address: "test2@example.com"
+          }
+        )
+
+        expect { expect(form.save).to be true }.to_not(
+          change { claim.reload.date_of_birth }
+        )
       end
     end
   end
