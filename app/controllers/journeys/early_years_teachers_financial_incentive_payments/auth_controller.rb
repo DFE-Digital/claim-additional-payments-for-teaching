@@ -10,6 +10,7 @@ module Journeys
       end
 
       def failure
+        Sentry.capture_message "Teacher Auth failure"
       end
 
       private

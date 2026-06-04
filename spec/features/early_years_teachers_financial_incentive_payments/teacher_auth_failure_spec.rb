@@ -37,10 +37,14 @@ RSpec.describe "EYTFIP with teacher auth failure", feature_flag: [:eytfi_journey
 
     expect(page).to have_text "You are eligible to apply"
 
+    allow(Sentry).to receive(:capture_message)
+
     visit "/early-years-teachers-financial-incentive-payments/auth/failure?message=csrf_detected&strategy=teacher"
     expect(page).to have_text("Sorry, there is a problem with the service")
     expect(page).to have_text("Try again later")
     click_link "Try again"
+
+    expect(Sentry).to have_received(:capture_message)
 
     expect(page).to have_text "You are eligible to apply"
   end
