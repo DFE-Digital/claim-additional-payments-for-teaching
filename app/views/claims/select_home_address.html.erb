@@ -10,7 +10,9 @@
         <h2 class="govuk-heading-l govuk-!-margin-bottom-1">Postcode</h2>
         <p class="govuk-body">
           <%= @form.postcode %>
-          <%= govuk_link_to "Change", claim_path(current_journey_routing_name, "postcode-search"), class: "govuk-!-margin-left-3", "aria-label": "Change" %>
+          <%= govuk_link_to claim_path(current_journey_routing_name, "postcode-search"), class: "govuk-!-margin-left-3" do %>
+            Change <span class="govuk-visually-hidden">postcode <%= @form.postcode %></span>
+          <% end %>
         </p>
 
         <%= f.govuk_collection_radio_buttons :address,
