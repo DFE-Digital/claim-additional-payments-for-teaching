@@ -19,7 +19,11 @@
           <% if @form.inline_previewable?(blob) %>
             <%= blob.filename %>, <%= number_to_human_size(blob.byte_size) %>
           <% else %>
-            <%= govuk_link_to blob.filename.to_s, rails_storage_proxy_path(blob), new_tab: true %>, <%= number_to_human_size(blob.byte_size) %>
+            <%= govuk_link_to rails_storage_proxy_path(blob), new_tab: true do %>
+              <span class="govuk-visually-hidden">Download file </span>
+              <%= blob.filename %> (opens in new tab)
+            <% end %>,
+            <%= number_to_human_size(blob.byte_size) %>
           <% end %>
         </p>
       <% end %>
