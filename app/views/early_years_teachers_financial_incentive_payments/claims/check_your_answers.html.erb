@@ -18,7 +18,7 @@
 
       <%= render partial: "claims/check_your_answers_section",
         locals: {
-          heading: "Nursery",
+          heading: "Employment details",
           answers: journey.answers_for_claim(@form.journey_session).nursery_answers
         } %>
 
@@ -32,12 +32,6 @@
         locals: {
           heading: "Bank details",
           answers: journey.answers_for_claim(@form.journey_session).banking_answers
-        } %>
-
-      <%= render partial: "claims/check_your_answers_section",
-        locals: {
-          heading: "Uploaded document",
-          answers: journey.answers_for_claim(@form.journey_session).upload_answers
         } %>
 
       <%= f.govuk_check_boxes_fieldset :claimant_declaration, multiple: false, legend: { text: "Confirm you are eligible" } do %>
