@@ -78,6 +78,13 @@ class Admin::AmendmentForm
       message: "Enter a message to explain why you are making this amendment"
     }
 
+  validates :banking_name,
+    comparison: {
+      equal_to: ->(form) { form.claim.banking_name },
+      message: "You do not have permission to change the banking name"
+    },
+    if: :banking_name_disabled?
+
   validates :admin_user,
     presence: true
 

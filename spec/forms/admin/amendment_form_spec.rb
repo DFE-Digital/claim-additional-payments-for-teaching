@@ -50,5 +50,59 @@ RSpec.describe Admin::AmendmentForm, type: :model do
         expect(claim.reload.student_loan_plan).to be_nil
       end
     end
+
+    context "when setting the banking name" do
+      context "when the banking name is set by a non service admin" do
+        it "is not updated" do
+          claim = create(
+            :claim,
+            :submitted,
+            banking_name: "Old banking name"
+          )
+
+          admin_user = create(:dfe_signin_user, :service_operator)
+
+          form = described_class.new(
+            claim: claim,
+            admin_user: admin_user,
+            notes: "made some changes",
+            banking_name: "New banking name"
+          )
+
+          expect(form).not_to be_valid
+
+          expect(form.errors[:banking_name]).to include(
+            "You do not have permission to change the banking name"
+          )
+        end
+      end
+
+      context "when the banking name is set by a service admin" do
+        it "is updated" do
+          claim = create(
+            :claim,
+            :submitted,
+            banking_name: "Old banking name"
+          )
+
+          admin_user = create(:dfe_signin_user, :service_admin)
+
+          form = described_class.new(
+            claim: claim,
+            admin_user: admin_user,
+            notes: "made some changes",
+            banking_name: "New banking name"
+          )
+
+          expect(form).to be_valid
+
+          expect { form.save }.to(
+            change { claim.reload.banking_name }
+              .from("Old banking name")
+              .to("New banking name")
+          )
+        end
+      end
+    end
   end
 end
