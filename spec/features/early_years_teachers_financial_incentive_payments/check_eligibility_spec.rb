@@ -25,7 +25,7 @@ RSpec.feature "EYTFI check eligibility page", feature_flag: [:eytfi_journey] do
     check "I’m not currently subject"
     click_button "Confirm and continue"
 
-    expect(page).to have_text "You are eligible to apply"
+    expect(page).to have_text "You’re eligible to apply"
   end
 
   scenario "only first box checked redirects to ineligible" do

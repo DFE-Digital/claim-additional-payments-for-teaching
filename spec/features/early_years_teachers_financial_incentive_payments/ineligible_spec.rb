@@ -106,7 +106,7 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
       check "I’m not currently subject"
       click_button "Confirm and continue"
 
-      expect(page).to have_text "You are eligible to apply"
+      expect(page).to have_text "You’re eligible to apply"
       click_button "Continue"
 
       expect(page).to have_text "Sign in with GOV.UK One Login"
@@ -150,7 +150,7 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
       check "I’m not currently subject"
       click_button "Confirm and continue"
 
-      expect(page).to have_text "You are eligible to apply"
+      expect(page).to have_text "You’re eligible to apply"
       click_button "Continue"
 
       expect(page).to have_text "Sign in with GOV.UK One Login"
