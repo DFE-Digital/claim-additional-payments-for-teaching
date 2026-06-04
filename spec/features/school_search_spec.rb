@@ -96,6 +96,8 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
       question = page.find("h1").text
       fill_in question, with: search_keywords(school)
       expect(page).to have_text(school.name)
+      # dismiss drop down
+      find('input[name="claim[provision_search]"]').send_keys(:escape)
       click_button "Continue"
 
       choose school.name
