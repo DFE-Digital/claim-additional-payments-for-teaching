@@ -128,6 +128,69 @@ RSpec.describe Admin::AmendmentForm, type: :model do
           )
         end
       end
+
+      context "setting the award amount" do
+        context "when the award amount is amendable" do
+          it "is updated" do
+            claim = create(
+              :claim,
+              :submitted,
+              eligibility_attributes: {
+                award_amount: 1000
+              }
+            )
+
+            form = described_class.new(
+              claim: claim,
+              admin_user:,
+              params: {
+                notes: "made some changes",
+                award_amount: 2000
+              }
+            )
+
+            expect(form).to be_valid
+
+            expect { form.save }.to(
+              change { claim.reload.eligibility.award_amount }
+                .from(1000)
+                .to(2000)
+            )
+          end
+        end
+
+        context "when the award amount is not amendable" do
+          it "is not updated" do
+            claim = create(
+              :claim,
+              :submitted,
+              policy: Policies::EarlyYearsPayments,
+              eligibility_attributes: {
+                award_amount: 1000
+              }
+            )
+
+            form = described_class.new(
+              claim: claim,
+              admin_user:,
+              params: {
+                notes: "made some changes",
+                award_amount: 2000
+              }
+            )
+
+            expect(form).not_to be_valid
+
+            expect(form.errors[:award_amount]).to include(
+              "Award amount cannot be changed for this policy"
+            )
+
+            expect { form.save }.to_not(
+              change { claim.reload.eligibility.award_amount }
+            )
+          end
+        end
+      end
     end
 
     context "when a value is missing in the params" do

@@ -125,7 +125,10 @@ RSpec.feature "Admin amends a claim" do
       :claim,
       :submitted,
       policy: Policies::EarlyYearsPayments,
-      practitioner_email_address: "old-practitioner-address@example.com"
+      practitioner_email_address: "old-practitioner-address@example.com",
+      eligibility_attributes: {
+        award_amount: 0
+      }
     )
 
     visit admin_claim_url(claim)

@@ -90,6 +90,13 @@ class Admin::AmendmentForm
     },
     if: :banking_name_disabled?
 
+  validates :award_amount,
+    comparison: {
+      equal_to: ->(form) { form.claim.eligibility.award_amount },
+      message: "Award amount cannot be changed for this policy"
+    },
+    unless: :show_award_amount?
+
   validates :admin_user,
     presence: true
 
