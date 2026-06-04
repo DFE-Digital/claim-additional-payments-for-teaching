@@ -49,7 +49,10 @@
     <h2 class="govuk-heading-m">Contact us</h2>
 
     <p class="govuk-body">
-      If you have any questions, email <%= govuk_mail_to t("early_years_teachers_financial_incentive_payments.support_email_address"), t("early_years_teachers_financial_incentive_payments.support_email_address") %>.
+      If you have any questions, email
+      <%= claim_mail_to t("early_years_teachers_financial_incentive_payments.support_email_address"),
+        t("early_years_teachers_financial_incentive_payments.support_email_address"),
+        screen_reader: :default %>.
     </p>
 
     <%= govuk_start_button(text: "Start now", href: claim_path(current_journey_routing_name, "claim", answers: { service_access_code: params[:service_access_code] })) %>

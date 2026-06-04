@@ -85,12 +85,12 @@
 
     <%= govuk_list [
       "hold qualified teacher status (QTS), early years teacher status (EYTS) or early years professional status (EYPS), and",
-      "be directly employed to work in an eligible early years group-based settings that offers the #{govuk_link_to "early years entitlements", "https://www.gov.uk/government/publications/early-years-funding-2024-to-2025/early-years-entitlements-local-authority-funding-operational-guide-2024-to-2025"}. 
+      "be directly employed to work in an eligible early years group-based settings that offers the #{govuk_link_to "early years entitlements", "https://www.gov.uk/government/publications/early-years-funding-2024-to-2025/early-years-entitlements-local-authority-funding-operational-guide-2024-to-2025"}.
       Eligible providers include only registered group based settings (GBS) delivering early years entitlements. Childminders and teachers working in school based settings are not eligible.".html_safe
     ], type: :bullet %>
 
     <p class="govuk-body">
-      <%= govuk_link_to "Early years teacher recognition payment: methodology", "https://draft-origin.publishing.service.gov.uk/government/publications/early-years-teacher-recognition-payment-methodology?token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmYmFmYjA0Ny0wNzMxLTRlYzUtODE3MS1lZDU2MjhkOWFlMWEiLCJjb250ZW50X2lkIjoiNDlhZjMwNWItMmUwZi00N2IzLTk0MDItMzE0MDUxOTIzZWMzIiwiaWF0IjoxNzc4NTg2ODEzLCJleHAiOjE3ODEyNjUyMTN9.s8bwl8Vsf2I7XoLIpZ1t7_x4pXODT7AzmeQk_yfiDbs&utm_campaign=govuk_publishing&utm_medium=preview&utm_source=share" %> gives 
+      <%= govuk_link_to "Early years teacher recognition payment: methodology", "https://draft-origin.publishing.service.gov.uk/government/publications/early-years-teacher-recognition-payment-methodology?token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmYmFmYjA0Ny0wNzMxLTRlYzUtODE3MS1lZDU2MjhkOWFlMWEiLCJjb250ZW50X2lkIjoiNDlhZjMwNWItMmUwZi00N2IzLTk0MDItMzE0MDUxOTIzZWMzIiwiaWF0IjoxNzc4NTg2ODEzLCJleHAiOjE3ODEyNjUyMTN9.s8bwl8Vsf2I7XoLIpZ1t7_x4pXODT7AzmeQk_yfiDbs&utm_campaign=govuk_publishing&utm_medium=preview&utm_source=share" %> gives
       further information on how local authority areas and early years group-based settings were selected.
     </p>
 
@@ -215,7 +215,9 @@
 
     <p class="govuk-body">
       If you have any questions, email
-      <%= govuk_mail_to t("early_years_teachers_financial_incentive_payments.support_email_address"), t("early_years_teachers_financial_incentive_payments.support_email_address") %>.
+      <%= claim_mail_to t("early_years_teachers_financial_incentive_payments.support_email_address"),
+          t("early_years_teachers_financial_incentive_payments.support_email_address"),
+          screen_reader: :default %>.
     </p>
   </div>
 </div>

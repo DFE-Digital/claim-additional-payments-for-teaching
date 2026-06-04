@@ -22,6 +22,17 @@ module ApplicationHelper
     number_to_currency(value, delimiter: "", unit: "")
   end
 
+  # Wraps govuk_mail_to with visually-hidden spans so screen readers announce context
+  # when tabbing to an email link and handle all mail links in one place
+  # TODO: all govuk_mail_to should use claim_mail_to as it delegates to govuk_mail_to
+  #       if screen_reader params is not used
+  def claim_mail_to(email, text = nil, screen_reader: {}, **options)
+    screen_reader = {before: "email", after: "if you need support"} if screen_reader == :default
+    before = screen_reader[:before] ? content_tag(:span, "#{screen_reader[:before]} ", class: "govuk-visually-hidden") : ""
+    after = screen_reader[:after] ? content_tag(:span, " #{screen_reader[:after]}", class: "govuk-visually-hidden") : ""
+    govuk_mail_to(email, "#{before}#{text || email}#{after}".html_safe, **options)
+  end
+
   def support_email_address(routing_name = nil)
     return t("support_email_address") unless routing_name
 

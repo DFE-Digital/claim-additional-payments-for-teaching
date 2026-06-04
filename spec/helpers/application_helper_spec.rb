@@ -74,6 +74,64 @@ RSpec.describe ApplicationHelper do
     end
   end
 
+  describe "#claim_mail_to" do
+    let(:email) { "support@example.gov.uk" }
+    let(:text) { "support@example.gov.uk" }
+
+    it "renders a govuk mailto link with the given text" do
+      result = helper.claim_mail_to(email, text)
+      expect(result).to include('href="mailto:support@example.gov.uk"')
+      expect(result).to include("support@example.gov.uk")
+    end
+
+    context "when text is omitted" do
+      it "falls back to the email address as the link text" do
+        result = helper.claim_mail_to(email)
+        expect(result).to include('href="mailto:support@example.gov.uk"')
+        expect(result).to include(">support@example.gov.uk<")
+      end
+    end
+
+    context "with screen_reader: :default" do
+      it "wraps text with visually hidden 'email' before and 'if you need support' after" do
+        result = helper.claim_mail_to(email, text, screen_reader: :default)
+        expect(result).to include('<span class="govuk-visually-hidden">email </span>')
+        expect(result).to include('<span class="govuk-visually-hidden"> if you need support</span>')
+      end
+    end
+
+    context "with explicit hidden before and after" do
+      it "wraps text with the given visually hidden strings" do
+        result = helper.claim_mail_to(email, text, screen_reader: {before: "Email us at", after: "for help"})
+        expect(result).to include('<span class="govuk-visually-hidden">Email us at </span>')
+        expect(result).to include('<span class="govuk-visually-hidden"> for help</span>')
+      end
+    end
+
+    context "with only hidden before" do
+      it "adds a visually hidden span before but not after" do
+        result = helper.claim_mail_to(email, text, screen_reader: {before: "Email"})
+        expect(result).to include('<span class="govuk-visually-hidden">Email </span>')
+        expect(result).not_to include('govuk-visually-hidden"> ')
+      end
+    end
+
+    context "with only hidden after" do
+      it "adds a visually hidden span after but not before" do
+        result = helper.claim_mail_to(email, text, screen_reader: {after: "for queries"})
+        expect(result).to include('<span class="govuk-visually-hidden"> for queries</span>')
+        expect(result).not_to match(/<span class="govuk-visually-hidden">[^ ]/)
+      end
+    end
+
+    context "with no hidden option" do
+      it "renders the link without any visually hidden spans" do
+        result = helper.claim_mail_to(email, text)
+        expect(result).not_to include("govuk-visually-hidden")
+      end
+    end
+  end
+
   describe "#one_login_home_url" do
     context "when ONELOGIN_DID_URL env var not present" do
       it "defaults to production url" do

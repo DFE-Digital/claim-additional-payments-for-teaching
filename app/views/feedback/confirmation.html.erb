@@ -5,7 +5,10 @@
     ) %>
 
     <p class="govuk-body">
-      If you need more help, email us at <%= govuk_mail_to t("early_years_teachers_financial_incentive_payments.support_email_address") %>.
+      If you need more help, email us at
+      <%= claim_mail_to t("early_years_teachers_financial_incentive_payments.support_email_address"),
+        t("early_years_teachers_financial_incentive_payments.support_email_address"),
+        screen_reader: :default %>.
     </p>
   </div>
 </div>

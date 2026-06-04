@@ -12,7 +12,12 @@
       </p>
 
       <p class="govuk-body">
-        If you think you might be classed as working as part of <%= govuk_link_to "childcare on domestic premises", t("early_years_teachers_financial_incentive_payments.codp_url") %>, email <%= govuk_mail_to t("early_years_teachers_financial_incentive_payments.support_email_address") %>.
+        If you think you might be classed as working as part of
+        <%= govuk_link_to "childcare on domestic premises", t("early_years_teachers_financial_incentive_payments.codp_url") %>,
+        email
+        <%= claim_mail_to t("early_years_teachers_financial_incentive_payments.support_email_address"),
+          t("early_years_teachers_financial_incentive_payments.support_email_address"),
+          screen_reader: :default %>.
       </p>
 
       <%= f.govuk_school_search(
