@@ -74,7 +74,7 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
     click_button "Continue"
 
     expect(page).to have_link "Back", href: "/early-years-teachers-recognition-payments/teaching-qualification-confirmation"
-    expect(page).to have_text "You are not eligible for this payment"
+    expect(page).to have_text "You’re not eligible for this payment"
   end
 
   context do
