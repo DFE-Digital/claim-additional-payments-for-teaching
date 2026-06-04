@@ -18,8 +18,9 @@ RSpec.feature "EYTFI journey" do
     Journeys::Configuration.last.update open_for_submissions: false
 
     visit landing_page_path(Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name)
-    click_link "Start now"
+    expect(page).not_to have_text "Start now"
 
+    visit "/early-years-teachers-recognition-payments/nursery-search"
     expect(page).to have_text "Sorry, the service is unavailable"
   end
 end
