@@ -74,8 +74,6 @@ document.addEventListener("DOMContentLoaded", function () {
   var searchBoxName = searchBoxTarget.name;
   searchBoxTarget.parentNode.removeChild(searchBoxTarget);
 
-  var excludeClosedSchools = searchContainer.dataset.excludeClosed || false;
-
   var displayMenu = searchContainer.dataset.schoolSearchDisplayMenu || "overlay";
 
   var inputClasses = searchContainer.dataset.schoolSearchInputClasses || null;
@@ -121,7 +119,6 @@ document.addEventListener("DOMContentLoaded", function () {
         url: schoolSearchPath,
         data: new URLSearchParams({
           query: query,
-          exclude_closed: excludeClosedSchools
         }),
         success: handleResponse,
         error: handleResponse,
