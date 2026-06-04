@@ -175,10 +175,6 @@ class Admin::AmendmentForm
     !admin_user.is_service_admin?
   end
 
-  def show_banking_name?
-    !claim.hmrc_bank_validation_succeeded?
-  end
-
   private
 
   def nilify_student_loan_repayment_plan
