@@ -6,7 +6,7 @@ module Policies
       def applicable_task_names
         tasks = []
         tasks << "ey_eoi_cross_reference" unless year_1_of_ey?
-        tasks += identity_tasks
+        tasks += identity_task_names
         tasks << "employment"
         tasks << "student_loan_plan" if claim.submitted_without_slc_data?
         tasks << "payroll_details" if claim.must_manually_validate_bank_details?
@@ -16,7 +16,25 @@ module Policies
         tasks
       end
 
-      def identity_tasks
+      def identity_status
+        if !claim.eligibility.practitioner_journey_completed?
+          "Incomplete"
+        elsif identity_tasks.any? { |t| t.passed? }
+          "Passed"
+        elsif identity_tasks.all? { |t| t.failed? }
+          "Failed"
+        else
+          "Unverified"
+        end
+      end
+
+      private
+
+      def year_1_of_ey?
+        claim.academic_year == AcademicYear.new("2024/2025")
+      end
+
+      def identity_task_names
         tasks = []
 
         if year_1_of_ey?
@@ -36,10 +54,10 @@ module Policies
         tasks
       end
 
-      private
-
-      def year_1_of_ey?
-        claim.academic_year == AcademicYear.new("2024/2025")
+      def identity_tasks
+        identity_task_names.map do |task_name|
+          claim.tasks.detect { |t| t.name == task_name } || Task.new
+        end
       end
     end
   end
