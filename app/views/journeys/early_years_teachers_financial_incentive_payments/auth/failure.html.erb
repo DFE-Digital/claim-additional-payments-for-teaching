@@ -13,7 +13,7 @@
     </p>
 
     <p class="govuk-body">
-      Email <%= govuk_mail_to "help@opsteam.education.gov.uk" %> if you need help.
+      Email <%= govuk_mail_to t("early_years_teachers_financial_incentive_payments.support_email_address") %> if you need help.
     </p>
 
     <%= govuk_button_link_to "Try again", claim_path(journey: current_journey_routing_name, slug: "sign-in") %>
