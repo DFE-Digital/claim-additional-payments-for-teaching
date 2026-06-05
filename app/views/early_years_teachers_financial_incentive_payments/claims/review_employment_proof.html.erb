@@ -31,7 +31,11 @@
       <%= f.govuk_collection_radio_buttons :confirmed,
           @form.radio_options,
           :id, :name,
-          legend: { text: "Is this file correct?", tag: "h2", size: "m" },
+          legend: {
+            text: "Does this file show your name, your workplace and a date from the last 2 months?",
+            tag: "h2",
+            size: "m"
+          },
           hint: { text: @form.latest_blob&.filename } %>
 
       <%= f.govuk_submit "Continue" %>

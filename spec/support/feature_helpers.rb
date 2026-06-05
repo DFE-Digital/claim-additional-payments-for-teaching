@@ -13,7 +13,7 @@ module FeatureHelpers
     attach_file "Upload document", Rails.root.join("spec/fixtures/files/employment_proof.pdf")
     click_on "Upload"
 
-    expect(page).to have_text("Is this file correct?")
+    expect(page).to have_text("Does this file show your name, your workplace and a date from the last 2 months?")
     expect(page).to have_text("employment_proof.pdf")
     choose "No, I want to choose a different file"
     click_on "Continue"
@@ -23,7 +23,7 @@ module FeatureHelpers
     attach_file "Upload document", Rails.root.join("spec/fixtures/files/employment_proof2.pdf")
     click_on "Upload"
 
-    expect(page).to have_text("Is this file correct?")
+    expect(page).to have_text("Does this file show your name, your workplace and a date from the last 2 months?")
     expect(page).to have_text("employment_proof2.pdf")
     choose "Yes, add this file"
     click_on "Continue"
