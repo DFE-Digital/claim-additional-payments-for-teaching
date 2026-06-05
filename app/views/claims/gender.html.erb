@@ -15,7 +15,7 @@
         hint: {
           text: @form.t(
             "hint_html",
-            default: "We need to match HMRC’s records to make tax contributions for you. If you are unsure how your gender is recorded, contact your Payroll team."
+            default: "We need this information to match HMRC’s records to make tax contributions for you. If you’re not sure, contact your Payroll team."
           ).html_safe
         }) do %>
         <%= f.govuk_radio_button :payroll_gender, :female, label: { text: "Female" }, link_errors: true %>
