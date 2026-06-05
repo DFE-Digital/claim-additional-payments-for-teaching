@@ -1,10 +1,10 @@
-<% content_for(:page_title, page_title("Check your document", journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+<% content_for(:page_title, page_title(@form.t(:title), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
       <%= f.govuk_error_summary %>
-      <h1 class="govuk-heading-l">Check your document</h1>
+      <h1 class="govuk-heading-l"><%= @form.t(:title) %></h1>
 
       <%= f.hidden_field :blob_id, value: @form.latest_blob&.id %>
 
