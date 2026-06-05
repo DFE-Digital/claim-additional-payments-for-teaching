@@ -31,11 +31,11 @@ RSpec.describe "EYTFIP with teacher auth failure", feature_flag: [:eytfi_journey
     click_button "Continue"
 
     expect(page).to have_text "Check that you are eligible"
-    check "I spend at least 50%"
-    check "I am not currently subject"
+    check "I spend at least half"
+    check "I’m not currently subject"
     click_button "Confirm and continue"
 
-    expect(page).to have_text "You are eligible to apply"
+    expect(page).to have_text "You’re eligible to apply"
 
     allow(Sentry).to receive(:capture_message)
 
@@ -46,6 +46,6 @@ RSpec.describe "EYTFIP with teacher auth failure", feature_flag: [:eytfi_journey
 
     expect(Sentry).to have_received(:capture_message)
 
-    expect(page).to have_text "You are eligible to apply"
+    expect(page).to have_text "You’re eligible to apply"
   end
 end
