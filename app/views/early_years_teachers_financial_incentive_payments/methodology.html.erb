@@ -38,7 +38,7 @@
     ], type: :bullet %>
 
     <p class="govuk-body">
-      The Department for Education has selected LA areas using three measures, each weighted equally:
+      The Department for Education has selected LA areas using 3 measures, each weighted equally:
     </p>
 
     <%= govuk_list [
@@ -52,7 +52,7 @@
     </p>
 
     <p class="govuk-body">
-      This approach ensures incentives are targeted at areas with the highest levels of need and the greatest potenatial for impact.
+      This approach ensures incentives are targeted at areas with the highest levels of need and the greatest potential for impact.
     </p>
 
     <p class="govuk-body">
@@ -64,7 +64,7 @@
       Phase 2 LA areas will be shared in due course.
     </p>
 
-    <h2 id="eligible-group-based-settings" class="govuk-heading-m">Eligible group‑based settings:</h2>
+    <h2 id="eligible-group-based-settings" class="govuk-heading-m">Eligible group‑based settings</h2>
 
     <p class="govuk-body">
       To be an eligible setting, you must be:
@@ -78,7 +78,7 @@
     ], type: :bullet %>
 
     <p class="govuk-body">
-      To be an eligible setting, you must be:
+      Settings that are ineligible:
     </p>
 
     <%= govuk_list [
@@ -89,8 +89,8 @@
 
     <p class="govuk-body">
       This criteria reflects evidence that group‑based settings face greater workforce challenges than school‑based settings and we 
-      are prioritising the recognition payments for settings where there is greatest needed. We know that staff in group‑based settings are paid less on average<sup><a href="#footnote-4">[footnote 4]</a></sup> and that, 
-      staff turnover is higher<sup><a href="#footnote-5">[footnote 5]</a></sup> and fewer staff in group-based settings hold Level 6 qualifications.  
+      are prioritising the recognition payments for settings where there is greatest need. We know that staff in group‑based settings are paid less on average<sup><a href="#footnote-4">[footnote 4]</a></sup> and that, 
+      staff turnover is higher<sup><a href="#footnote-5">[footnote 5]</a></sup> and fewer staff in group-based settings hold Level 6 qualifications<sup><a href="#footnote-6">[footnote 6]</a></sup>.  
     </p>
 
     <h2 id="updates-eligibility" class="govuk-heading-m">Updates to the eligibility criteria</h2>
@@ -113,9 +113,10 @@
     <%= govuk_list [
       "#{govuk_link_to '2025 EY census data', 'https://draft-origin.publishing.service.gov.uk/government/publications/early-years-teacher-recognition-payment-methodology/early-years-teacher-recognition-payment-methodology#:~:text=education.gov.uk-,2025%20EY%20census%20data,-%E2%86%A9', id: "footnote-1"}".html_safe,
       "#{govuk_link_to '24/25 EYFSP data', 'https://explore-education-statistics.service.gov.uk/find-statistics/early-years-foundation-stage-profile-results/2024-25', id: "footnote-2"}".html_safe,
-      "#{govuk_link_to 'Hourly staff pay, Data set from Childcare and early years provider survey - Explore education statistics - GOV.UK', 'https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/035b3b70-74df-4d73-847f-54dc1032b876', id: "footnote-3"}".html_safe,
-      "<span id='footnote-4'>Level 6 includes those holding Early Years Practitioner Status (EYPS), Early Years Teacher Status (EYTS) and Qualified Teacher Status (QTS). It is also important to note that all teachers with one of these three qualifications will be qualified to Level 6, however not all Level 6 staff will have one of these teaching qualifications.</span>".html_safe,
-      "#{govuk_link_to 'Childcare and early years provider survey, Reporting year 2025 - Explore education statistics - GOV.UK', 'https://explore-education-statistics.service.gov.uk/find-statistics/childcare-and-early-years-provider-survey/2025', id: "footnote-5"}".html_safe
+      "#{govuk_link_to 'Schools making provision in respect of which they are registered with Ofsted are also ineligible', 'https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/035b3b70-74df-4d73-847f-54dc1032b876', id: "footnote-3"}".html_safe,
+      "#{govuk_link_to 'Level 6 includes those holding Early Years Practitioner Status (EYPS), Early Years Teacher Status (EYTS) and Qualified Teacher Status (QTS). It is also important to note that all teachers with one of these three qualifications will be qualified to Level 6, however not all Level 6 staff will have one of these teaching qualifications', 'https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/035b3b70-74df-4d73-847f-54dc1032b876', id: "footnote-4"}".html_safe,
+      "#{govuk_link_to 'Childcare and early years provider survey, Reporting year 2025 - Explore education statistics - GOV.UK', 'https://explore-education-statistics.service.gov.uk/find-statistics/childcare-and-early-years-provider-survey/2025', id: "footnote-5"}".html_safe,
+      "<span id='footnote-6'>Level 6 includes those holding Early Years Practitioner Status (EYPS), Early Years Teacher Status (EYTS) and Qualified Teacher Status (QTS). It is also important to note that all teachers with one of these three qualifications will be qualified to Level 6, however not all Level 6 staff will have one of these teaching qualifications.</span>".html_safe
     ], type: :number %>
   </div>
 </div>
