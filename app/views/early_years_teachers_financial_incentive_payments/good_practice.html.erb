@@ -1,0 +1,51 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Good practice for teachers and settings: Guidance
+    </h1>
+
+    <h2 class="govuk-heading-s">
+      DfE recognises that every early years setting is different and that teachers working within these settings work differently. 
+    </h2>
+
+    <p class="govuk-body">
+      In addition to the eligibility criteria and expectations, we have set out the following good practice guidance that 
+      we encourage all early years teachers, and their settings, to follow.  
+    </p>
+
+    <p class="govuk-body">
+      Teachers should:
+    </p>
+
+    <%= govuk_list [
+      "act as pedagogical leaders within their settings and communities",
+      "fulfil the role of an early years teacher, as outlined in the #{link_to 'early years teacher standards', 'https://www.gov.uk/government/publications/early-years-teachers-standards'}. This could be through working directly with children, 
+      working more widely in a setting, doing activities such as curriculum planning or supporting other staff, or a combination of both. 
+      In order to be eligible for the recognition payment, applicants must confirm they are meeting these expectations for at least 50% of their time at work".html_safe,
+      "keep their knowledge and skills up to date through ongoing continuing professional development (CPD) relevant to their role and early years setting, 
+      for example the #{link_to 'Early years leadership national professional qualification', 'https://www.gov.uk/guidance/early-years-leadership-national-professional-qualification'} and the #{link_to 'Early years child development training', 'https://child-development-training.education.gov.uk/'}".html_safe,
+      "where relevant, work across the full early years age range, including babies and children under the age of 3",
+      "engage with local networks, families and communities, for example through stronger practice hubs or family hubs, where relevant"
+    ], type: :bullet %>
+
+    <p class="govuk-body">
+      Settings should:
+    </p>
+
+    <%= govuk_list [
+      "support teachers to complete their role as outlined in the #{link_to 'Early years teachers’ standards', 'https://www.gov.uk/government/publications/early-years-teachers-standards'} and this good practice guidance, including support for CPD".html_safe,
+      "not reduce or offset salaries as a result of an #{link_to 'early years teacher recognition payment', eytfi_guidance_path} being paid to a teacher".html_safe,
+    ], type: :bullet %>
+
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+
+    <%= govuk_start_button(text: "Apply to claim a payment", href: landing_page_path) %>
+
+    <h2 id="contact-us" class="govuk-heading-m">Contact us</h2>
+
+    <p class="govuk-body">
+      If you have any questions, email
+      <%= govuk_mail_to t("early_years_teachers_financial_incentive_payments.support_email_address"), t("early_years_teachers_financial_incentive_payments.support_email_address") %>.
+    </p>
+  </div>
+</div>
