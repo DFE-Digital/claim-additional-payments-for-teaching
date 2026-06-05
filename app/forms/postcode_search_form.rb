@@ -44,7 +44,6 @@ class PostcodeSearchForm < Form
     return nil if postcode.blank?
 
     @address_data ||= Rails.cache.fetch("address_data/#{postcode}", expires_in: 1.hour) do
-      journey_session.answers.assign_attributes(ordnance_survey_error: false)
       OrdnanceSurvey::Client.new.api.search_places.index(
         params: {postcode:}
       )
@@ -55,10 +54,12 @@ class PostcodeSearchForm < Form
     return nil unless UKPostcode.parse(postcode).full_valid?
     return unless address_data.nil?
 
+    journey_session.answers.assign_attributes(ordnance_survey_error: false)
     errors.add(:postcode, "Address not found")
   rescue OrdnanceSurvey::Client::ResponseError => e
     Sentry.capture_exception(e)
 
+    errors.add(:postcode, "Postcode search is currently unavailable. Please try again or enter your address manually.")
     journey_session.answers.assign_attributes(ordnance_survey_error: true)
     journey_session.save!
   end
