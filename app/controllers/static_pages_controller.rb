@@ -60,6 +60,20 @@ class StaticPagesController < BasePublicController
     end
   end
 
+  def good_practice_page
+    good_practice_page = "#{journey.view_path}/good_practice"
+
+    if journey_available? && lookup_context.template_exists?(good_practice_page, [], false)
+      render good_practice_page
+    else
+      render(
+        file: Rails.root.join("public", "404.html"),
+        status: :not_found,
+        layout: false
+      )
+    end
+  end
+
   def claim_cancelled
     claim_cancelled_page = "#{journey.view_path}/claims/claim_cancelled"
 
