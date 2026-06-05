@@ -114,6 +114,7 @@ Rails.application.routes.draw do
       end
 
       get "auth/teacher/callback", to: "journeys/early_years_teachers_financial_incentive_payments/auth#callback"
+      get "auth/failure", to: "journeys/early_years_teachers_financial_incentive_payments/auth#failure"
     end
 
     scope path: "/", constraints: {journey: Regexp.new(Journeys.all_routing_names.join("|"))} do

@@ -9,6 +9,10 @@ module Journeys
         redirect_to claim_path(current_journey_routing_name, "qualifications-check")
       end
 
+      def failure
+        Sentry.capture_message "Teacher Auth failure"
+      end
+
       private
 
       def current_journey_routing_name
