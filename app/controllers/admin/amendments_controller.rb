@@ -9,11 +9,14 @@ class Admin::AmendmentsController < Admin::BaseAdminController
   def new
     @amendment = @claim.amendments.build
     @form = form_class.new(claim: @claim, admin_user:)
-    @form.load_data_from_claim
   end
 
   def create
-    @form = form_class.new(amendment_params.merge(claim: @claim, admin_user:))
+    @form = form_class.new(
+      claim: @claim,
+      admin_user: @admin_user,
+      params: amendment_params
+    )
 
     if @form.valid? && @form.save
       redirect_to admin_claim_tasks_url(@claim), notice: "Claim has been amended successfully"

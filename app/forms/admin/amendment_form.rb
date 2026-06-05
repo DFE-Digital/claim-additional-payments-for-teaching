@@ -7,8 +7,8 @@ class Admin::AmendmentForm
   include ActiveModel::Attributes
   include ActiveRecord::AttributeAssignment
 
-  attribute :claim
-  attribute :admin_user
+  attr_reader :claim
+  attr_reader :admin_user
 
   attribute :teacher_reference_number, :string
   attribute :national_insurance_number, :string
@@ -63,6 +63,11 @@ class Admin::AmendmentForm
       message: "Enter a date of birth"
     }
 
+  validates :banking_name,
+    presence: {
+      message: "Enter a name on the account"
+    }
+
   validates :bank_account_number,
     presence: {
       message: "Enter an account number"
@@ -77,6 +82,20 @@ class Admin::AmendmentForm
     presence: {
       message: "Enter a message to explain why you are making this amendment"
     }
+
+  validates :banking_name,
+    comparison: {
+      equal_to: ->(form) { form.claim.banking_name },
+      message: "You do not have permission to change the banking name"
+    },
+    if: :banking_name_disabled?
+
+  validates :award_amount,
+    comparison: {
+      equal_to: ->(form) { form.claim.eligibility.award_amount },
+      message: "Award amount cannot be changed for this policy"
+    },
+    unless: :show_award_amount?
 
   validates :admin_user,
     presence: true
@@ -104,8 +123,33 @@ class Admin::AmendmentForm
     array
   end
 
-  def initialize(args)
-    super
+  def initialize(claim:, admin_user:, params: {})
+    @claim = claim
+    @admin_user = admin_user
+
+    super(params)
+  end
+
+  def assign_attributes(params)
+    super(
+      params.reverse_merge(
+        teacher_reference_number: claim.eligibility.teacher_reference_number,
+        national_insurance_number: claim.national_insurance_number,
+        email_address: claim.email_address,
+        mobile_number: claim.mobile_number,
+        date_of_birth: claim.date_of_birth,
+        student_loan_plan: claim.student_loan_plan,
+        banking_name: claim.banking_name,
+        bank_sort_code: claim.bank_sort_code,
+        bank_account_number: claim.bank_account_number,
+        address_line_1: claim.address_line_1,
+        address_line_2: claim.address_line_2,
+        address_line_3: claim.address_line_3,
+        address_line_4: claim.address_line_4,
+        postcode: claim.postcode,
+        award_amount: claim.eligibility.award_amount
+      )
+    )
   rescue ActiveRecord::MultiparameterAssignmentErrors
     self.date_of_birth = nil
   end
@@ -126,27 +170,6 @@ class Admin::AmendmentForm
     options
   end
 
-  def load_data_from_claim
-    self.teacher_reference_number = eligibility.teacher_reference_number
-    self.national_insurance_number = claim.national_insurance_number
-    self.email_address = claim.email_address
-    self.mobile_number = claim.mobile_number
-    self.date_of_birth = claim.date_of_birth
-    self.student_loan_plan = claim.student_loan_plan
-
-    self.banking_name = claim.banking_name
-    self.bank_sort_code = claim.bank_sort_code
-    self.bank_account_number = claim.bank_account_number
-
-    self.address_line_1 = claim.address_line_1
-    self.address_line_2 = claim.address_line_2
-    self.address_line_3 = claim.address_line_3
-    self.address_line_4 = claim.address_line_4
-    self.postcode = claim.postcode
-
-    self.award_amount = eligibility.award_amount if show_award_amount?
-  end
-
   def show_award_amount?
     return true if claim.policy == Policies::StudentLoans
 
@@ -154,6 +177,8 @@ class Admin::AmendmentForm
   end
 
   def save
+    return false unless valid?
+
     Claim.transaction do
       amendment = claim.amendments.build(**amendment_attributes)
       amendment.claim_changes = change_hash
@@ -169,6 +194,8 @@ class Admin::AmendmentForm
 
       amendment.persisted?
     end
+
+    true
   end
 
   def banking_name_disabled?
