@@ -89,7 +89,7 @@ RSpec.describe "Full end to end EYTRP", feature_flag: [:eytfi_journey] do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_text "Check that you are eligible"
+    expect(page).to have_text "Check if you’re eligible"
     check "I spend at least half"
     check "I’m not currently subject"
     click_button "Confirm and continue"
@@ -119,7 +119,7 @@ RSpec.describe "Full end to end EYTRP", feature_flag: [:eytfi_journey] do
     fill_in "Postcode", with: "NE1 6EE"
     click_button "Continue"
 
-    expect(page).to have_text "How is your gender recorded"
+    expect(page).to have_text "Are you recorded as male or female on your employer’s payroll system?"
     choose "I don’t know"
     click_button "Continue"
 

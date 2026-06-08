@@ -88,7 +88,7 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_text "Check that you are eligible"
+    expect(page).to have_text "Check if you’re eligible"
     check "I spend at least half"
     check "I’m not currently subject"
     click_button "Confirm and continue"
@@ -133,7 +133,7 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     fill_in "Postcode", with: "NE1 6EE"
     click_button "Continue"
 
-    expect(page).to have_text "How is your gender recorded"
+    expect(page).to have_text "Are you recorded as male or female on your employer’s payroll system?"
     choose "I don’t know"
     click_button "Continue"
 
@@ -209,7 +209,7 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
 
     expect(page).to have_text "Give feedback on Claim an early years teacher recognition payment"
     choose "Very satisfied"
-    choose "Specific page"
+    choose "A specific area"
     choose "Uploading proof of employment"
     fill_in "How could we improve this service? (optional)", with: "some comment"
     choose "Yes"

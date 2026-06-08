@@ -4,7 +4,6 @@
       <%= f.govuk_error_summary %>
 
       <h1 class="govuk-heading-l">Give feedback on Claim an early years teacher recognition payment</h1>
-      <h2 class="govuk-heading-m">Satisfaction survey</h2>
 
       <%= f.hidden_field :origin, value: (@form.origin || request.env["HTTP_REFERER"]) %>
       <%= f.hidden_field :claim_id, value: session[:submitted_claim_id] %>
@@ -33,14 +32,14 @@
           :area,
           "whole_service",
           label: {
-            text: "Whole service"
+            text: "The whole service"
           }
         ) %>
 
         <%= f.govuk_radio_button :area,
           "specific_page",
           label: {
-            text: "Specific page"
+            text: "A specific area"
           } do %>
           <%= f.govuk_collection_radio_buttons(
             :specific_page,
@@ -48,7 +47,8 @@
             :id,
             :name,
             legend: {
-              text: 'Which specific page does your feedback relate to?'
+              text: "What area of the service is your feedback for?",
+              size: "s"
             }
           ) %>
         <% end %>

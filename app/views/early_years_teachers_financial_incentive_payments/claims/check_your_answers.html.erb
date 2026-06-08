@@ -34,7 +34,7 @@
           answers: journey.answers_for_claim(@form.journey_session).banking_answers
         } %>
 
-      <%= f.govuk_check_boxes_fieldset :claimant_declaration, multiple: false, legend: { text: "Confirm you are eligible" } do %>
+      <%= f.govuk_check_boxes_fieldset :claimant_declaration, multiple: false, legend: { text: "Confirm you’re eligible" } do %>
         <p class="govuk-body">
           By continuing, you confirm that the information you’ve given is accurate, and that you meet all the eligibility criteria and expectations in the <%= govuk_link_to "guidance", eytfi_guidance_path, new_tab: true %>.
         </p>

@@ -33,7 +33,7 @@ en:
           heading: You’re not eligible for this payment
       check_eligibility:
         labels:
-          fifty_percent_time_as_eyt: "I spend at least half of my working time as an early years teacher, as set out in the #{standards_link}"
+          fifty_percent_time_as_eyt: "I spend at least half of my working time as an early years teacher, as set out in the %{standards_link}"
           not_subject_to_performance_and_disciplinary: "I’m not currently subject to any formal performance measures as a result of continuous poor teaching standards or disciplinary action"
       continue_claim:
         options:
@@ -43,12 +43,12 @@ en:
           blank: Select yes if you would like to continue with your claim
       gender:
         questions:
-          payroll_gender: "How is your gender recorded on your school’s payroll system?"
+          payroll_gender: "Are you recorded as male or female on your employer’s payroll system?"
       details:
         errors:
           rating_inclusion: Select a rating
           area_inclusion: Select a service area
-          specific_page_inclusion: Select a specific page
+          specific_page_inclusion: Select a specific area
           comment_length: "Comment exceeds %{count} characters"
           research_participation_inclusion: Select yes if would like to participate in user research
           email_address_presence: Enter your email address

@@ -1,0 +1,36 @@
+<% content_for(:page_title, page_title(t("forms.gender.questions.payroll_gender"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_radio_buttons_fieldset(
+        :payroll_gender,
+        legend: {
+          text: @form.t("questions.payroll_gender"),
+          tag: "h1",
+          size: "l"
+        },
+        hint: {
+          text: @form.t(
+            "hint_html",
+            default: "We need this information to match HMRC’s records to make tax contributions for you. If you’re not sure, contact your Payroll team."
+          ).html_safe
+        }) do %>
+        <%= f.govuk_radio_button :payroll_gender, :female, label: { text: "Female" }, link_errors: true %>
+        <%= f.govuk_radio_button :payroll_gender, :male, label: { text: "Male" } %>
+        <%= f.govuk_radio_divider %>
+        <%= f.govuk_radio_button :payroll_gender, :dont_know, label: { text: "I don’t know" } %>
+      <% end %>
+
+      <%= govuk_details(summary_text: "Why do we ask this?") do %>
+        <p class="govuk-body">
+          Payroll records your gender as male or female, and we need this information to make your payment.
+        </p>
+      <% end %>
+
+      <%= f.govuk_submit "Continue" %>
+    <% end %>
+  </div>
+</div>
