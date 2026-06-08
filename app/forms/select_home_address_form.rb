@@ -53,7 +53,7 @@ class SelectHomeAddressForm < Form
   end
 
   def completed?
-    skip_postcode_search? || valid?
+    skip_postcode_search? || address_selected_in_answers? || valid?
   end
 
   private
@@ -73,10 +73,6 @@ class SelectHomeAddressForm < Form
   end
 
   def validate_address_selected
-    if journey_session.answers.address_line_1.present? && journey_session.answers.postcode.present?
-      return
-    end
-
     if address.present?
       return
     end
@@ -88,5 +84,9 @@ class SelectHomeAddressForm < Form
     if journey_session.answers.address_line_1.blank? && journey_session.answers.postcode.blank?
       errors.add(:address, "Enter an address") if journey_session.answers.address_line_1.blank?
     end
+  end
+
+  def address_selected_in_answers?
+    journey_session.answers.address_line_1.present? && journey_session.answers.postcode.present?
   end
 end
