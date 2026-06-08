@@ -1,6 +1,15 @@
+<% content_for(
+  :page_title,
+  page_title(
+    "Claim cancelled",
+    journey: current_journey_routing_name,
+    show_error: false
+  )
+) %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Claim cancelled</h1>
+    <h1 class="govuk-heading-l">"Claim cancelled"</h1>
 
     <div class="govuk-body">
       You have chosen not to continue with your claim. Your claim has been cancelled.

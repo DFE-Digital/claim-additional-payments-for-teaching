@@ -1,6 +1,15 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:title),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Sign in with GOV.UK One Login</h1>
+    <h1 class="govuk-heading-l"><%= @form.t(:title) %></h1>
 
     <p class="govuk-body">
       You will need to sign in to your GOV.UK One Login account to apply. If you don't have an account yet, we will help you create one.

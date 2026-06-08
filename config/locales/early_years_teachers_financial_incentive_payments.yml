@@ -9,10 +9,14 @@ en:
     claim_subject: "Early Years Recognition Payment"
     claim_description: for an early years teachers recognition payment
     forms:
+      nursery_search:
+        title: "Which nursery do you teach in?"
       nursery_select:
+        title: "Which nursery do you teach in?"
         errors:
           blank: "Select the setting you work in"
       teaching_qualification_confirmation:
+        title: "Do you hold one of these teaching qualifications?"
         options:
           true: "Yes"
           false: "No"
@@ -32,10 +36,22 @@ en:
         not_subject_to_performance_and_disciplinary_not_confirmed:
           heading: You’re not eligible for this payment
       check_eligibility:
+        title: "Check if you’re eligible"
         labels:
           fifty_percent_time_as_eyt: "I spend at least half of my working time as an early years teacher, as set out in the %{standards_link}"
           not_subject_to_performance_and_disciplinary: "I’m not currently subject to any formal performance measures as a result of continuous poor teaching standards or disciplinary action"
+      eligible_teaching_qualification_held:
+        title: "You’re eligible to apply"
+      sign_in:
+        title: "Sign in with GOV.UK One Login"
+      qualifications_check:
+        title: "Checking qualifications"
+      information_provided:
+        title: "How we’ll use your information"
+      review_employment_proof:
+        title: "Check your document"
       continue_claim:
+        title: "You may be eligible for a recognition payment of up to £4,500"
         options:
           true: "Yes"
           false: "No"
