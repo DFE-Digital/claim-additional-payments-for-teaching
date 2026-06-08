@@ -135,7 +135,7 @@ RSpec.feature "Postcode journey desired behavior", feature_flag: [:eytfi_journey
     fill_in "Postcode", with: "NE1 6EE"
     click_button "Continue"
 
-    expect(page).to have_text("How is your gender recorded")
+    expect(page).to have_text("Are you recorded as male or female on your employer’s payroll system?")
   end
 
   scenario "selecting an address from postcode journey proceeds to gender page" do
@@ -169,7 +169,7 @@ RSpec.feature "Postcode journey desired behavior", feature_flag: [:eytfi_journey
     choose "Flat 1, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX"
     click_button "Continue"
 
-    expect(page).to have_text("How is your gender recorded")
+    expect(page).to have_text("Are you recorded as male or female on your employer’s payroll system?")
   end
 
   scenario "from gender page claimant can go back, change address, and continue again" do
@@ -203,7 +203,7 @@ RSpec.feature "Postcode journey desired behavior", feature_flag: [:eytfi_journey
     choose "Flat 1, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX"
     click_button "Continue"
 
-    expect(page).to have_text("How is your gender recorded")
+    expect(page).to have_text("Are you recorded as male or female on your employer’s payroll system?")
 
     click_link "Back"
 
@@ -211,7 +211,7 @@ RSpec.feature "Postcode journey desired behavior", feature_flag: [:eytfi_journey
     choose "Flat 10, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX"
     click_button "Continue"
 
-    expect(page).to have_text("How is your gender recorded")
+    expect(page).to have_text("Are you recorded as male or female on your employer’s payroll system?")
   end
 
   scenario "from gender page claimant can go back and switch to manual address entry" do
@@ -245,7 +245,7 @@ RSpec.feature "Postcode journey desired behavior", feature_flag: [:eytfi_journey
     choose "Flat 1, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX"
     click_button "Continue"
 
-    expect(page).to have_text("How is your gender recorded")
+    expect(page).to have_text("Are you recorded as male or female on your employer’s payroll system?")
     click_link "Back"
 
     expect(page).to have_text("Select an address")

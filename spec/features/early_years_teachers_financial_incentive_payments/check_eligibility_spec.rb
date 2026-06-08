@@ -17,7 +17,7 @@ RSpec.feature "EYTFI check eligibility page", feature_flag: [:eytfi_journey] do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_text "Check that you are eligible"
+    expect(page).to have_text "Check if you’re eligible"
   end
 
   scenario "both boxes checked proceeds to next page" do

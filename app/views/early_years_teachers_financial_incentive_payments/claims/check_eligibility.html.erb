@@ -4,14 +4,14 @@
       <%= f.govuk_error_summary %>
 
       <h1 class="govuk-heading-xl">
-        Check that you are eligible
+        Check if you’re eligible
       </h1>
 
-      <p class="govuk-body">
-        You must meet the
+      <div class="govuk-hint">
+        You’ll need to meet the
         <%= govuk_link_to "eligiblity criteria and expectations", eytfi_guidance_path(anchor: "eligibility"), new_tab: true %>
         for the early years recognition payment. Select all that apply.
-      </p>
+      </div>
 
       <%= f.govuk_check_boxes_fieldset :fifty_percent_time_as_eyt,
         multiple: false,
