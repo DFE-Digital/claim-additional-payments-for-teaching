@@ -120,9 +120,9 @@ module Journeys
           slugs << "information-provided"
           slugs << "personal-details" unless personal_details_from_tid_complete?
           slugs << "student-loan-amount"
-          slugs << "postcode-search"
-          slugs << "select-home-address" unless answers.ordnance_survey_error || answers.skip_postcode_search?
-          slugs << "address" unless address_set_by_postcode_search?
+          slugs << "postcode-search" unless answers.ordnance_survey_error?
+          slugs << "select-home-address" if answers.postcode_searched?
+          slugs << "address" unless answers.postcode_searched?
           slugs << "select-email" if set_by_teacher_id?("email")
           slugs << "email-address" unless answers.email_address_check?
           slugs << "email-verification" unless answers.email_address_check? || answers.email_verified?

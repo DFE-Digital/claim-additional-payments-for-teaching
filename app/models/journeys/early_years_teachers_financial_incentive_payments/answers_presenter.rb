@@ -34,7 +34,7 @@ module Journeys
         [].tap do |a|
           a << ["Name", answers.teacher_auth_verified_name, nil]
           a << ["Email address", answers.teacher_auth_email, nil]
-          a << ["Home address", address, "address"]
+          a << ["Home address", address, answers.postcode_searched? ? "postcode-search" : "address"]
           a << gender
           a << ["National Insurance number", answers.national_insurance_number, "national-insurance-number"]
         end

@@ -439,7 +439,7 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
     end
 
     context do
-      scenario "Ordanance Survery Client raise a ResponseError" do
+      scenario "Ordnance Survey Client raises a ResponseError" do
         jump_to_claim_journey_page(
           slug: "postcode-search",
           journey_session: journey_session
@@ -451,13 +451,9 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
         fill_in "Postcode", with: "DA1 5FZ"
         click_on "Search"
 
-        # Stays on postcode page and shows availability error
-        expect(page).to have_text("What is your home address?")
-        expect(page).to have_text("Postcode search is currently unavailable. Please try again or enter your address manually.")
-
-        click_button "Enter your address manually"
-
-        # Manual address page is still reachable
+        # On an Ordnance Survey error the claimant is taken straight to manual
+        # address entry
+        expect(page).to have_text("Please enter your address manually")
         expect(page).to have_text("What is your address?")
       end
     end

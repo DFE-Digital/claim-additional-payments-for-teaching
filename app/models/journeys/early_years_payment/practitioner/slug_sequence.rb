@@ -62,9 +62,9 @@ module Journeys
             sequence << "full-name" if show_full_name?
             sequence << "date-of-birth" if show_date_of_birth?
             sequence << "national-insurance-number"
-            sequence << "postcode-search"
-            sequence << "select-home-address" unless answers.skip_postcode_search? || answers.ordnance_survey_error?
-            sequence << "address" unless address_set_by_postcode_search?
+            sequence << "postcode-search" unless answers.ordnance_survey_error?
+            sequence << "select-home-address" if answers.postcode_searched?
+            sequence << "address" unless answers.postcode_searched?
             sequence << "email-address"
             sequence << "email-verification" unless answers.email_verified?
             sequence << "provide-mobile-number"
@@ -89,10 +89,6 @@ module Journeys
 
         def show_date_of_birth?
           !answers.identity_confirmed_with_onelogin?
-        end
-
-        def address_set_by_postcode_search?
-          answers.address_line_1.present? && answers.postcode.present?
         end
       end
     end

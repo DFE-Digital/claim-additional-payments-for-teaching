@@ -1,60 +1,106 @@
 require "rails_helper"
 
 RSpec.describe SelectHomeAddressForm, type: :model do
-  describe "#save" do
-    subject(:save) { form.save }
-
-    let(:address) { "The full address:123:Main Street:Springfield:12345" }
-    let(:form) do
-      described_class.new(
-        journey: journey,
-        journey_session: journey_session,
-        params: params
+  before do
+    allow(OrdnanceSurvey).to receive(:configuration).and_return(
+      double(
+        client: double(
+          base_url: "https://api.os.uk",
+          params: {"key" => "ABC123"}
+        )
       )
-    end
-    let(:journey) { Journeys::TeacherStudentLoanReimbursement }
-    let(:journey_session) { build(:student_loans_session, answers:) }
-    let(:answers) do
-      attributes_for(
-        :"#{journey.i18n_namespace}_answers",
-        skip_postcode_search: false
-      )
-    end
-    let(:params) { ActionController::Parameters.new(claim: {address:}) }
+    )
+  end
 
-    it { is_expected.to be_truthy }
+  describe "#initialize" do
+    context "when there's no address attributes in the params" do
+      it "loads them from the journey session" do
+        journey_session = create(
+          :student_loans_session,
+          answers: attributes_for(
+            :student_loans_answers,
+            address_line_1: "123",
+            address_line_2: "Main Street",
+            address_line_3: "Springfield",
+            postcode: "TE57 1NG"
+          )
+        )
 
-    it "splits the address and assigns it to the current claim" do
-      save
-      answers = journey_session.reload.answers
-      expect(answers.address_line_1).to eq("123")
-      expect(answers.address_line_2).to eq("Main Street")
-      expect(answers.address_line_3).to eq("Springfield")
-      expect(answers.postcode).to eq("12345")
-    end
+        form = described_class.new(
+          journey: journey_session.journey_class,
+          journey_session: journey_session,
+          params: ActionController::Parameters.new(claim: {})
+        )
 
-    context "when the form is invalid" do
-      let(:address) { nil }
-
-      it { is_expected.to be_falsey }
-    end
-
-    context "when an address is already selected and no new selection is submitted" do
-      let(:answers) do
-        attributes_for(
-          :"#{journey.i18n_namespace}_answers",
-          skip_postcode_search: false,
-          address_line_1: "1 High Street",
-          address_line_2: "Town Centre",
-          address_line_3: "Springfield",
-          postcode: "NE1 6EE"
+        expect(form.address).to eq(
+          "123, Main Street, Springfield, TE57 1NG"
         )
       end
-      let(:params) { ActionController::Parameters.new(claim: {}) }
+    end
+  end
 
-      it "is invalid and requires selecting an address" do
-        expect(save).to be_falsey
-        expect(form.errors[:address]).to include("Select an address")
+  describe "#save" do
+    context "when not skip_postcode_search" do
+      context "when the form is valid" do
+        around do |example|
+          original_cache = Rails.cache
+          Rails.cache = ActiveSupport::Cache::MemoryStore.new
+          example.run
+        ensure
+          Rails.cache = original_cache
+        end
+
+        it "stores the selected address in the session" do
+          stub_request(
+            :get,
+            "https://api.os.uk/search/places/v1/postcode?key=ABC123&postcode=TE571NG"
+          )
+            .to_return(
+              status: 200,
+              body: {
+                results: [
+                  {
+                    DPA: {
+                      ADDRESS: "123, Main Street, Springfield, TE57 1NG",
+                      BUILDING_NUMBER: "123",
+                      THOROUGHFARE_NAME: "Main Street",
+                      POST_TOWN: "Springfield",
+                      POSTCODE: "TE57 1NG"
+                    }
+                  }
+                ]
+              }.to_json,
+              headers: {"Content-Type" => "application/json"}
+            )
+
+          # Populate the cache with the addresses as this form is expected to
+          # read from the cahce
+          PostcodeSearch.new("TE57 1NG").addresses
+
+          journey_session = create(
+            :student_loans_session,
+            answers: attributes_for(
+              :student_loans_answers,
+              skip_postcode_search: false,
+              postcode: "TE57 1NG"
+            )
+          )
+
+          form = described_class.new(
+            journey: journey_session.journey_class,
+            journey_session: journey_session,
+            params: ActionController::Parameters.new(claim: {
+              address: "123, Main Street, Springfield, TE57 1NG",
+              skip_postcode_search: false
+            })
+          )
+
+          expect { expect(form.save).to eq(true) }.to(
+            change { journey_session.reload.answers.address_line_1 }.to("123")
+            .and(change { journey_session.answers.address_line_2 }.to("Main Street")
+            .and(change { journey_session.answers.address_line_3 }.to("Springfield")))
+          )
+        end
       end
     end
   end

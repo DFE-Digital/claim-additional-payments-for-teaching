@@ -11,7 +11,7 @@ module Journeys
     def identity_answers
       [].tap do |a|
         a << [t("questions.name"), answers.full_name, "personal-details"] if show_name?
-        a << [t("forms.address.questions.your_address"), answers.address, "address"]
+        a << [t("forms.address.questions.your_address"), answers.address, answers.postcode_searched? ? "postcode-search" : "address"]
         a << [t("questions.date_of_birth"), date_of_birth_string, "personal-details"] if show_dob?
         a << payroll_gender
         a << teacher_reference_number if show_trn?

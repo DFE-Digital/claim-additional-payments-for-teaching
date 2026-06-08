@@ -98,9 +98,9 @@ module Journeys
           slugs << "nationality"
           slugs << "passport-number"
           slugs << "personal-details"
-          slugs << "postcode-search"
-          slugs << "select-home-address" unless answers.skip_postcode_search? || answers.ordnance_survey_error?
-          slugs << "address" unless address_set_by_postcode_search?
+          slugs << "postcode-search" unless answers.ordnance_survey_error?
+          slugs << "select-home-address" if answers.postcode_searched?
+          slugs << "address" unless answers.postcode_searched?
           slugs << "email-address"
           slugs << "email-verification" unless answers.email_verified?
           slugs << "provide-mobile-number"

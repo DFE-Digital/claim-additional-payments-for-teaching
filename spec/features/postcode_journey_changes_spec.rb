@@ -53,9 +53,8 @@ RSpec.feature "Postcode journey desired behavior", feature_flag: [:eytfi_journey
     fill_in "Postcode", with: "SO16 9FX"
     click_on "Search"
 
-    expect(page).to have_text("What is your home address?")
     expect(page).to have_text("Address not found")
-    expect(page).to have_field("Postcode", with: "SO16 9FX")
+    expect(page).to have_text("We have not been able to find your address")
     expect(page).to have_button("Enter your address manually")
 
     click_button "Enter your address manually"
@@ -96,7 +95,7 @@ RSpec.feature "Postcode journey desired behavior", feature_flag: [:eytfi_journey
     expect(page).to have_text("What is your address?")
   end
 
-  scenario "postcode search unavailable still allows manual address entry" do
+  scenario "postcode search unavailable routes claimant straight to manual address entry" do
     allow_any_instance_of(OrdnanceSurvey::Client)
       .to receive_message_chain(:api, :search_places, :index)
       .and_raise(OrdnanceSurvey::Client::ResponseError, "Service unavailable")
@@ -106,12 +105,7 @@ RSpec.feature "Postcode journey desired behavior", feature_flag: [:eytfi_journey
     fill_in "Postcode", with: "SO16 9FX"
     click_button "Search"
 
-    expect(page).to have_text("What is your home address?")
-    expect(page).to have_text("Postcode search is currently unavailable")
-    expect(page).to have_button("Enter your address manually")
-
-    click_button "Enter your address manually"
-
+    expect(page).to have_text("Please enter your address manually")
     expect(page).to have_text("What is your address?")
   end
 

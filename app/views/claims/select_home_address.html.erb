@@ -9,9 +9,16 @@
         <h1 class="govuk-heading-xl"><%= t("questions.address.home.title") %></h1>
         <h2 class="govuk-heading-l govuk-!-margin-bottom-1">Postcode</h2>
         <p class="govuk-body">
-          <%= @form.postcode %>
-          <%= govuk_link_to claim_path(current_journey_routing_name, "postcode-search"), class: "govuk-!-margin-left-3" do %>
-            Change <span class="govuk-visually-hidden">postcode <%= @form.postcode %></span>
+          <%= @form.answers.postcode %>
+          <%= govuk_link_to(
+            claim_path(
+              current_journey_routing_name,
+              "postcode-search",
+              change: params[:change]
+            ),
+            class: "govuk-!-margin-left-3"
+          ) do %>
+            Change <span class="govuk-visually-hidden">postcode <%= @form.answers.postcode %></span>
           <% end %>
         </p>
 
@@ -26,7 +33,7 @@
           } %>
 
         <p class="govuk-body">
-          <button type="submit" name="claim[skip_postcode_search]" value="true" class="govuk-link govuk-link--no-visited-state button-to-as-link">
+          <button form="skip-postcode-search" class="govuk-link govuk-link--no-visited-state button-to-as-link">
             <%= I18n.t("questions.address.home.i_cannot_find") %>
           </button>
         </p>
@@ -37,3 +44,7 @@
     <% end %>
   </div>
 </div>
+
+<%= form_for @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { id: "skip-postcode-search" } do |f| %>
+  <%= f.hidden_field :skip_postcode_search, value: true %>
+<% end %>
