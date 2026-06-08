@@ -38,5 +38,24 @@ RSpec.describe SelectHomeAddressForm, type: :model do
 
       it { is_expected.to be_falsey }
     end
+
+    context "when an address is already selected and no new selection is submitted" do
+      let(:answers) do
+        attributes_for(
+          :"#{journey.i18n_namespace}_answers",
+          skip_postcode_search: false,
+          address_line_1: "1 High Street",
+          address_line_2: "Town Centre",
+          address_line_3: "Springfield",
+          postcode: "NE1 6EE"
+        )
+      end
+      let(:params) { ActionController::Parameters.new(claim: {}) }
+
+      it "is invalid and requires selecting an address" do
+        expect(save).to be_falsey
+        expect(form.errors[:address]).to include("Select an address")
+      end
+    end
   end
 end
