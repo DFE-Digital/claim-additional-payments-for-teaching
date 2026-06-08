@@ -43,7 +43,7 @@ en:
           blank: Select yes if you would like to continue with your claim
       gender:
         questions:
-          payroll_gender: "How is your gender recorded on your school’s payroll system?"
+          payroll_gender: "Are you recorded as male or female on your employer’s payroll system?"
       details:
         errors:
           rating_inclusion: Select a rating
