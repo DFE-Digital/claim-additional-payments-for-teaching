@@ -102,11 +102,11 @@ module Feedbacks
       [
         Form::Option.new(
           id: "whole_service",
-          name: "Whole service"
+          name: "The whole service"
         ),
         Form::Option.new(
           id: "specific_page",
-          name: "Specific page"
+          name: "A specific area"
         )
       ]
     end
@@ -131,7 +131,7 @@ module Feedbacks
         ),
         Form::Option.new(
           id: "submission",
-          name: "Submission"
+          name: "Submission and confirmation"
         )
       ]
     end
