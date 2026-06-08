@@ -29,6 +29,21 @@ RSpec.describe Journeys::EarlyYearsTeachersFinancialIncentivePayments::AnswersPr
     it "has email address as the second row" do
       expect(subject.second).to eq(["Email address", "john@example.com", nil])
     end
+
+    context "when address is present" do
+      let(:extra_answers) do
+        {
+          address_line_1: "24",
+          address_line_2: "Bridge Road",
+          address_line_3: "Bristol",
+          postcode: "BS1 5AH"
+        }
+      end
+
+      it "links home address changes to postcode-search" do
+        expect(subject).to include(["Home address", "24, Bridge Road, Bristol, BS1 5AH", "postcode-search"])
+      end
+    end
   end
 
   describe "#nursery_answers" do
