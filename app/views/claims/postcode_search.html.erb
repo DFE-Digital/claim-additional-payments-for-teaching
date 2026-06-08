@@ -5,7 +5,6 @@
     <%= form_for @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
       <%= f.govuk_error_summary %>
 
-      <%= f.hidden_field :skip_postcode_search, value: false %>
       <%= f.govuk_fieldset legend: {
         text: I18n.t("questions.address.home.title"),
         tag: "h1",
@@ -23,23 +22,14 @@
       <% end %>
 
       <p class="govuk-body">
-        <button form="skip-postcode-search" class="govuk-link govuk-link--no-visited-state button-to-as-link">
+        <button type="submit" name="claim[skip_postcode_search]" value="true" formnovalidate class="govuk-link govuk-link--no-visited-state button-to-as-link">
           <%= I18n.t("questions.address.home.link_to_manual_address") %>
         </button>
       </p>
 
       <p class="govuk-!-padding-top-6">
-        <%= f.govuk_submit "Search" %>
+        <%= f.govuk_submit "Search", name: "claim[skip_postcode_search]", value: "false" %>
       </p>
-    <% end %>
-
-    <%= form_with(
-      model: @form,
-      url: claim_path(current_journey_routing_name),
-      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
-      html: { id: "skip-postcode-search" }
-    ) do |f| %>
-      <%= f.hidden_field :skip_postcode_search, value: true %>
     <% end %>
   </div>
 </div>
