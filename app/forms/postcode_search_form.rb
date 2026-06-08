@@ -21,10 +21,22 @@ class PostcodeSearchForm < Form
     return false if invalid?
 
     if skip_postcode_search
-      journey_session.answers.assign_attributes(skip_postcode_search:)
+      journey_session.answers.assign_attributes(
+        skip_postcode_search:,
+        address_line_1: nil,
+        address_line_2: nil,
+        address_line_3: nil,
+        address_line_4: nil
+      )
     else
-      journey_session.answers.assign_attributes(skip_postcode_search: false)
-      journey_session.answers.assign_attributes(postcode:)
+      journey_session.answers.assign_attributes(
+        skip_postcode_search: false,
+        address_line_1: nil,
+        address_line_2: nil,
+        address_line_3: nil,
+        address_line_4: nil,
+        postcode:
+      )
     end
 
     journey_session.save!
