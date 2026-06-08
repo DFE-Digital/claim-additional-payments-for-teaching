@@ -1,3 +1,12 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:title),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(
@@ -27,7 +36,7 @@
           :id, ->(option) { "#{option.name} #{' (closed)' if option.closed?}" },
           :address,
           legend: {
-            text: "Which nursery do you teach in?",
+            text: @form.t(:title),
             tag: "h1",
             size: "l"
           },
