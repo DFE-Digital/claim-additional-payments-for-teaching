@@ -263,7 +263,7 @@ GEM
       sentry-rails (>= 5.3, < 7.0)
       sentry-ruby (~> 5.3)
       statsd-ruby (~> 1.5)
-    govuk_design_system_formbuilder (5.11.0)
+    govuk_design_system_formbuilder (5.13.0)
       actionview (>= 6.1)
       activemodel (>= 6.1)
       activesupport (>= 6.1)
@@ -896,8 +896,8 @@ DEPENDENCIES
   faker (~> 3.5)
   faraday_middleware
   foreman
-  govuk-components (~> 5.13)
-  govuk_design_system_formbuilder (~> 5.11.0)
+  govuk-components (~> 5.13.1)
+  govuk_design_system_formbuilder (~> 5.13.0)
   govuk_publishing_components
   herb
   httpclient
