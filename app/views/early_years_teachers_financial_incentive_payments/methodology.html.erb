@@ -1,17 +1,16 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <span class="govuk-caption-xl">Methodology</span>
     <h1 class="govuk-heading-l">
-      Early Years Teacher Recognition Payment 
+      Early years teacher recognition payment: methodology
     </h1>
 
-    <h2 class="govuk-heading-m">
-      Methodology for Phase 1 Eligibility
+    <h2 class="govuk-heading-s">
+      Methodology for phase 1 eligibility criteria for the early years teacher recognition payment.
     </h2>
 
     <p class="govuk-body">
       To be eligible for a recognition payment, teachers must be working in an eligible early years (EY) setting. 
-      This document outlines our methodology for the eligibility of early years settings.
+      This document outlines the methodology for the eligibility of early years settings.
     </p>
 
     <p class="govuk-body">
@@ -19,7 +18,7 @@
       <%= govuk_link_to "Claim an early years teacher recognition payment", eytfi_guidance_path %>.
     </p>
 
-    <h2 id="eligibility" class="govuk-heading-m">Local Authority (LA) area:</h2>
+    <h2 id="eligibility" class="govuk-heading-m">Local authority (LA) area</h2>
 
     <p class="govuk-body">
       Eligible settings must be within one of the following 10 LA areas: 
@@ -39,29 +38,59 @@
     ], type: :bullet %>
 
     <p class="govuk-body">
-      The Department for Education has selected LA areas using three measures, each weighted equally:
+      The Department for Education has selected LA areas using 3 measures, each weighted equally:
     </p>
 
-    <h2 id="eligible-group-based-settings" class="govuk-heading-m">Eligible Group Based Settings:</h2>
+    <%= govuk_list [
+      "the Income Deprivation Affecting Children Index (IDACI) rank",
+      "proportion of the LAs early years workforce that are qualified teachers<sup><a href=\"#footnote-1\">[footnote 1]</a></sup>".html_safe,
+      "percentage of children achieving a Good Level of Development (GLD) in the LA <sup><a href=\"#footnote-2\">[footnote 2]</a></sup>".html_safe
+    ], type: :bullet %>
+
+    <p class="govuk-body">
+      For each measure, LAs were ranked so that lower scores indicated higher levels of need. These rankings were then combined with equal weight to produce an overall ranking of LAs.
+    </p>
+
+    <p class="govuk-body">
+      This approach ensures incentives are targeted at areas with the highest levels of need and the greatest potential for impact.
+    </p>
+
+    <p class="govuk-body">
+      For phase 1, which will be used to test the service, we selected a subset of LAs identified through this ranking to ensure that for 
+      this phase there is a good regional spread and a mix of provider size and number of existing early years teachers.
+    </p>
+
+    <p class="govuk-body">
+      Phase 2 LA areas will be shared in due course.
+    </p>
+
+    <h2 id="eligible-group-based-settings" class="govuk-heading-m">Eligible group‑based settings</h2>
 
     <p class="govuk-body">
       To be an eligible setting, you must be:
     </p>
 
     <%= govuk_list [
-      "registered in England with Ofsted on the Early Years Register or",
-      "an early years childminder agency, to provide early years childcare on either domestic premises or non‑domestic premises",
-      "school based settings, including independent schools"
+      "registered in England with Ofsted on the Early Years Register or an early years childminder agency, 
+      to provide early years childcare on either domestic premises or non‑domestic premises",
+      "delivering funded early years entitlements",
+      "not be an ineligible setting"
+    ], type: :bullet %>
+
+    <p class="govuk-body">
+      Settings that are ineligible:
+    </p>
+
+    <%= govuk_list [
+      "childminders",
+      "school based settings, including independent schools<sup><a href=\"#footnote-3\">[footnote 3]</a></sup>".html_safe,
+      "settings run by the governing body of a maintained school"
     ], type: :bullet %>
 
     <p class="govuk-body">
       This criteria reflects evidence that group‑based settings face greater workforce challenges than school‑based settings and we 
-      are prioritising the recognition payments for settings where there is greatest needed. We know that staff in group‑based settings are paid less on average, 
-      staff turnover is higher and fewer staff in group-based settings hold Level 6 qualifications.  
-    </p>
-
-    <p class="govuk-body">
-      A list of all eligible GBS in phase one is available here: 
+      are prioritising the recognition payments for settings where there is greatest need. We know that staff in group‑based settings are paid less on average<sup><a href="#footnote-4">[footnote 4]</a></sup> and that, 
+      staff turnover is higher<sup><a href="#footnote-5">[footnote 5]</a></sup> and fewer staff in group-based settings hold Level 6 qualifications.<sup><a href="#footnote-6">[footnote 6]</a></sup>
     </p>
 
     <h2 id="updates-eligibility" class="govuk-heading-m">Updates to the eligibility criteria</h2>
@@ -71,12 +100,23 @@
     </p>
 
     <p class="govuk-body">
-      The list of eligible providers will be reviewed and refreshed to take account of any updates to the Ofsted Childcare Provider list, which is updated every six months and the Early Years census, which is updated every year.
+      The list of eligible providers will be reviewed and refreshed to take account of any updates to the Ofsted Childcare Provider list, which is updated every 6 months and the EY census, which is updated every year.
     </p>
 
     <p class="govuk-body">
-      GBS that have recently opened may not be included on our list but will still be eligible. If a teacher believes they work in an eligible GBS but it is not included on the list linked above, 
+      Group-based settings that have recently opened may not be included on our list but will still be eligible. If a teacher believes they work in an eligible group-based setting but it is not included on the list linked above, 
       they should contact the department at: <%= govuk_mail_to t("early_years_teachers_financial_incentive_payments.support_email_address") %>.
     </p>
+
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+
+    <%= govuk_list [
+      "#{govuk_link_to '2025 EY census data', 'https://explore-education-statistics.service.gov.uk/find-statistics/funded-early-education-and-childcare/2025/explore#content', id: "footnote-1"}".html_safe,
+      "#{govuk_link_to '24/25 EYFSP data', 'https://explore-education-statistics.service.gov.uk/find-statistics/early-years-foundation-stage-profile-results/2024-25', id: "footnote-2"}".html_safe,
+      "#{govuk_link_to 'Schools making provision in respect of which they are registered with Ofsted are also ineligible', 'https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/035b3b70-74df-4d73-847f-54dc1032b876', id: "footnote-3"}".html_safe,
+      "#{govuk_link_to 'Level 6 includes those holding Early Years Practitioner Status (EYPS), Early Years Teacher Status (EYTS) and Qualified Teacher Status (QTS). It is also important to note that all teachers with one of these three qualifications will be qualified to Level 6, however not all Level 6 staff will have one of these teaching qualifications', 'https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/035b3b70-74df-4d73-847f-54dc1032b876', id: "footnote-4"}".html_safe,
+      "#{govuk_link_to 'Childcare and early years provider survey, Reporting year 2025 - Explore education statistics - GOV.UK', 'https://explore-education-statistics.service.gov.uk/find-statistics/childcare-and-early-years-provider-survey/2025', id: "footnote-5"}".html_safe,
+      "<span id='footnote-6'>Level 6 includes those holding Early Years Practitioner Status (EYPS), Early Years Teacher Status (EYTS) and Qualified Teacher Status (QTS). It is also important to note that all teachers with one of these three qualifications will be qualified to Level 6, however not all Level 6 staff will have one of these teaching qualifications.</span>".html_safe
+    ], type: :number %>
   </div>
 </div>

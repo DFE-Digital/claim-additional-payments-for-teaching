@@ -39,6 +39,20 @@ module Policies
         applicable_task_names - task_names_for_claim
       end
 
+      def identity_status
+        identity_tasks = []
+        identity_tasks << (claim.tasks.detect { |t| t.name == "one_login_identity" } || Task.new)
+        identity_tasks << (claim.tasks.detect { |t| t.name == "fe_alternative_verification" } || Task.new)
+
+        if identity_tasks.any? { |t| t.passed? }
+          "Passed"
+        elsif identity_tasks.all? { |t| t.failed? }
+          "Failed"
+        else
+          "Unverified"
+        end
+      end
+
       private
 
       def y1_fe_claim?

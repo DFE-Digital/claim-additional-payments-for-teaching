@@ -73,8 +73,8 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_link "Back", href: "/early-years-teachers-recognition-payments/check-eligibility"
-    expect(page).to have_text "You are not eligible for this payment"
+    expect(page).to have_link "Back", href: "/early-years-teachers-recognition-payments/teaching-qualification-confirmation"
+    expect(page).to have_text "You’re not eligible for this payment"
   end
 
   context do
@@ -102,11 +102,11 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
       click_button "Continue"
 
       expect(page).to have_text "Check that you are eligible"
-      check "I spend at least 50%"
-      check "I am not currently subject"
+      check "I spend at least half"
+      check "I’m not currently subject"
       click_button "Confirm and continue"
 
-      expect(page).to have_text "You are eligible to apply"
+      expect(page).to have_text "You’re eligible to apply"
       click_button "Continue"
 
       expect(page).to have_text "Sign in with GOV.UK One Login"
@@ -146,11 +146,11 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
       click_button "Continue"
 
       expect(page).to have_text "Check that you are eligible"
-      check "I spend at least 50%"
-      check "I am not currently subject"
+      check "I spend at least half"
+      check "I’m not currently subject"
       click_button "Confirm and continue"
 
-      expect(page).to have_text "You are eligible to apply"
+      expect(page).to have_text "You’re eligible to apply"
       click_button "Continue"
 
       expect(page).to have_text "Sign in with GOV.UK One Login"

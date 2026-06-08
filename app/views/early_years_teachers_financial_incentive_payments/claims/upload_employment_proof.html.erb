@@ -19,7 +19,7 @@
         <li>be dated within the last 2 months</li>
       </ul>
 
-      <p class="govuk-body">You upload a clear photo or a scanned copy of the document.</p>
+      <p class="govuk-body">You can upload a clear photo or a scanned copy of the document.</p>
 
       <%= f.govuk_file_field :file, label: { text: "Upload document", class: "govuk-label--m" },
             accept: f.object.class::ALLOWED_CONTENT_TYPES.join(",") %>

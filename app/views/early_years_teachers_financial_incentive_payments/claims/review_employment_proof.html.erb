@@ -19,7 +19,11 @@
           <% if @form.inline_previewable?(blob) %>
             <%= blob.filename %>, <%= number_to_human_size(blob.byte_size) %>
           <% else %>
-            <%= govuk_link_to blob.filename.to_s, rails_storage_proxy_path(blob), new_tab: true %>, <%= number_to_human_size(blob.byte_size) %>
+            <%= govuk_link_to rails_storage_proxy_path(blob), new_tab: true do %>
+              <span class="govuk-visually-hidden">Download file </span>
+              <%= blob.filename %> (opens in new tab)
+            <% end %>,
+            <%= number_to_human_size(blob.byte_size) %>
           <% end %>
         </p>
       <% end %>
@@ -27,7 +31,11 @@
       <%= f.govuk_collection_radio_buttons :confirmed,
           @form.radio_options,
           :id, :name,
-          legend: { text: "Is this file correct?", tag: "h2", size: "m" },
+          legend: {
+            text: "Does this file show your name, your workplace and a date from the last 2 months?",
+            tag: "h2",
+            size: "m"
+          },
           hint: { text: @form.latest_blob&.filename } %>
 
       <%= f.govuk_submit "Continue" %>

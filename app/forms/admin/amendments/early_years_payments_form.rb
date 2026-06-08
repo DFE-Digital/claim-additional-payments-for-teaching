@@ -16,10 +16,12 @@ module Admin
           message: "Email address must be less than %{length} characters"
         }
 
-      def load_data_from_claim
-        super
-
-        self.practitioner_email_address = claim.practitioner_email_address
+      def assign_attributes(params)
+        super(
+          params.reverse_merge(
+            practitioner_email_address: claim.practitioner_email_address
+          )
+        )
       end
 
       def valid?
