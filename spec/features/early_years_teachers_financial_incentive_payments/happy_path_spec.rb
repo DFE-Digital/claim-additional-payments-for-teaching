@@ -209,7 +209,7 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
 
     expect(page).to have_text "Give feedback on Claim an early years teacher recognition payment"
     choose "Very satisfied"
-    choose "Specific page"
+    choose "A specific area"
     choose "Uploading proof of employment"
     fill_in "How could we improve this service? (optional)", with: "some comment"
     choose "Yes"
