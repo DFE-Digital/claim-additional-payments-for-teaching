@@ -271,8 +271,8 @@ RSpec.feature "Postcode journey desired behavior", feature_flag: [:eytfi_journey
     choose "Yes"
     click_button "Continue"
 
-    check "I spend at least 50%"
-    check "I am not currently subject"
+    check "I spend at least half"
+    check "I’m not currently subject"
     click_button "Confirm and continue"
 
     click_button "Continue"
