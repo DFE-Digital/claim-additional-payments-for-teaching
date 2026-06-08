@@ -29,15 +29,22 @@ class SelectHomeAddressForm < Form
 
     if skip_postcode_search?
       journey_session.answers.assign_attributes(
-        skip_postcode_search:
+        skip_postcode_search: true,
+        address_line_1: nil,
+        address_line_2: nil,
+        address_line_3: nil,
+        address_line_4: nil,
+        postcode:
       )
     else
       address_parts = address.split(":")
 
       journey_session.answers.assign_attributes({
+        skip_postcode_search: false,
         address_line_1: address_parts[1].titleize,
         address_line_2: address_parts[2].titleize,
         address_line_3: address_parts[3].titleize,
+        address_line_4: nil,
         postcode: address_parts[4]
       })
     end

@@ -80,8 +80,9 @@ module Journeys
         if answers.postcode.present? && postcode_search_form.completed_or_valid? && !answers.skip_postcode_search? && !answers.ordnance_survey_error
           array << SLUGS_HASH["select-home-address"]
         end
-
-        array << SLUGS_HASH["address"]
+        if answers.address_line_1.blank?
+          array << SLUGS_HASH["address"]
+        end
         array << SLUGS_HASH["gender"]
         array << SLUGS_HASH["national-insurance-number"]
         array << SLUGS_HASH["personal-bank-account"]
