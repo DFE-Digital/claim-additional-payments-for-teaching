@@ -254,6 +254,54 @@ RSpec.feature "Postcode journey desired behavior", feature_flag: [:eytfi_journey
     expect(page).to have_text("What is your address?")
   end
 
+  scenario "from gender page claimant can switch to manual address entry and continue" do
+    allow_any_instance_of(OrdnanceSurvey::Client)
+      .to receive_message_chain(:api, :search_places, :index)
+      .and_return(
+        [
+          {
+            address: "Flat 1, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX",
+            address_line_1: "FLAT 1, MILLBROOK TOWER",
+            address_line_2: "WINDERMERE AVENUE",
+            address_line_3: "SOUTHAMPTON",
+            postcode: "SO16 9FX"
+          },
+          {
+            address: "Flat 10, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX",
+            address_line_1: "FLAT 10, MILLBROOK TOWER",
+            address_line_2: "WINDERMERE AVENUE",
+            address_line_3: "SOUTHAMPTON",
+            postcode: "SO16 9FX"
+          }
+        ]
+      )
+
+    navigate_to_eytfi_postcode_page
+
+    fill_in "Postcode", with: "SO16 9FX"
+    click_button "Search"
+
+    choose "Flat 1, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX"
+    click_button "Continue"
+
+    expect(page).to have_text("Are you recorded as male or female on your employer’s payroll system?")
+    click_link "Back"
+
+    expect(page).to have_text("Select an address")
+    click_on "I can’t find my address in the list"
+
+    expect(page).to have_text("What is your address?")
+
+    fill_in "House number or name", with: "24"
+    fill_in "Building and street", with: "Bridge Road"
+    fill_in "Town or city", with: "Bristol"
+    fill_in "County", with: "Bristol"
+    fill_in "Postcode", with: "BS1 5AH"
+    click_button "Continue"
+
+    expect(page).to have_text("Are you recorded as male or female on your employer’s payroll system?")
+  end
+
   def navigate_to_eytfi_postcode_page
     visit landing_page_path(
       Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name

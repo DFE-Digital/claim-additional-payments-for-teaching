@@ -75,4 +75,56 @@ RSpec.describe PostcodeSearchForm, type: :model do
       expect(journey_session.reload.answers.ordnance_survey_error).to be_truthy
     end
   end
+
+  describe "#save" do
+    subject(:save) { form.save }
+
+    let(:answers) do
+      attributes_for(
+        :targeted_retention_incentive_payments_answers,
+        skip_postcode_search: false,
+        address_line_1: "1 High Street",
+        address_line_2: "Town Centre",
+        address_line_3: "Springfield",
+        address_line_4: "County",
+        postcode: "SW1A 1AA"
+      )
+    end
+    let(:journey_session) { build(:targeted_retention_incentive_payments_session, answers:) }
+    let(:params) { ActionController::Parameters.new(claim: {skip_postcode_search: true}) }
+    let(:form) do
+      described_class.new(
+        journey: journey,
+        params: params,
+        journey_session: journey_session
+      )
+    end
+
+    it "clears selected address fields when switching to manual address entry" do
+      expect(save).to be_truthy
+
+      saved_answers = journey_session.reload.answers
+      expect(saved_answers.skip_postcode_search).to be(true)
+      expect(saved_answers.address_line_1).to be_nil
+      expect(saved_answers.address_line_2).to be_nil
+      expect(saved_answers.address_line_3).to be_nil
+      expect(saved_answers.address_line_4).to be_nil
+    end
+
+    context "when searching with a new postcode" do
+      let(:params) { ActionController::Parameters.new(claim: {postcode: "SW1B 1AA", skip_postcode_search: false}) }
+
+      it "clears any existing address fields and stores the new postcode" do
+        expect(save).to be_truthy
+
+        saved_answers = journey_session.reload.answers
+        expect(saved_answers.skip_postcode_search).to be(false)
+        expect(saved_answers.address_line_1).to be_nil
+        expect(saved_answers.address_line_2).to be_nil
+        expect(saved_answers.address_line_3).to be_nil
+        expect(saved_answers.address_line_4).to be_nil
+        expect(saved_answers.postcode).to eq("SW1B 1AA")
+      end
+    end
+  end
 end
