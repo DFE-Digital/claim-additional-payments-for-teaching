@@ -11,7 +11,7 @@ class SelectHomeAddressForm < Form
   )
 
   def radio_options
-    address_data.map do |option|
+    postcode_search.addresses.map do |option|
       Option.new(
         id: option[:address],
         name: option[:address]
@@ -35,7 +35,7 @@ class SelectHomeAddressForm < Form
 
     return false unless valid?
 
-    selected_address = address_data.detect { it[:address] == address }
+    selected_address = postcode_search.addresses.detect { it[:address] == address }
 
     journey_session.answers.assign_attributes({
       skip_postcode_search: false,
@@ -69,13 +69,7 @@ class SelectHomeAddressForm < Form
     end
   end
 
-  def address_data
-    return [] if answers.postcode.blank?
-
-    @address_data ||= Rails.cache.fetch("address_data/#{answers.postcode}", expires_in: 1.hour) do
-      OrdnanceSurvey::Client.new.api.search_places.index(
-        params: {postcode: answers.postcode}
-      )
-    end
+  def postcode_search
+    @postcode_search ||= PostcodeSearch.new(answers.postcode)
   end
 end
