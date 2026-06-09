@@ -77,8 +77,6 @@ RSpec.describe PostcodeSearchForm, type: :model do
   end
 
   describe "#save" do
-    subject(:save) { form.save }
-
     let(:answers) do
       attributes_for(
         :targeted_retention_incentive_payments_answers,
@@ -91,7 +89,6 @@ RSpec.describe PostcodeSearchForm, type: :model do
       )
     end
     let(:journey_session) { build(:targeted_retention_incentive_payments_session, answers:) }
-    let(:params) { ActionController::Parameters.new(claim: {skip_postcode_search: true}) }
     let(:form) do
       described_class.new(
         journey: journey,
@@ -100,22 +97,28 @@ RSpec.describe PostcodeSearchForm, type: :model do
       )
     end
 
-    it "clears selected address fields when switching to manual address entry" do
-      expect(save).to be_truthy
+    context "when skipping postcode search" do
+      let(:params) do
+        ActionController::Parameters.new(claim: {skip_postcode_search: true})
+      end
 
-      saved_answers = journey_session.reload.answers
-      expect(saved_answers.skip_postcode_search).to be(true)
-      expect(saved_answers.address_line_1).to be_nil
-      expect(saved_answers.address_line_2).to be_nil
-      expect(saved_answers.address_line_3).to be_nil
-      expect(saved_answers.address_line_4).to be_nil
+      it "clears selected address fields when switching to manual address entry" do
+        expect(form.save).to be_truthy
+
+        saved_answers = journey_session.reload.answers
+        expect(saved_answers.skip_postcode_search).to be(true)
+        expect(saved_answers.address_line_1).to be_nil
+        expect(saved_answers.address_line_2).to be_nil
+        expect(saved_answers.address_line_3).to be_nil
+        expect(saved_answers.address_line_4).to be_nil
+      end
     end
 
     context "when searching with a new postcode" do
       let(:params) { ActionController::Parameters.new(claim: {postcode: "SW1B 1AA", skip_postcode_search: false}) }
 
       it "clears any existing address fields and stores the new postcode" do
-        expect(save).to be_truthy
+        expect(form.save).to be_truthy
 
         saved_answers = journey_session.reload.answers
         expect(saved_answers.skip_postcode_search).to be(false)

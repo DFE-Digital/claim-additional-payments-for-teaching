@@ -4,40 +4,42 @@ class PostcodeSearchForm < Form
 
   validates :postcode,
     presence: {message: "Enter a postcode, for example NE1 6EE"},
-    length: {maximum: 11, message: "Postcode must be 11 characters or less"},
-    if: -> { !skip_postcode_search? }
+    length: {maximum: 11, message: "Postcode must be 11 characters or less"}
 
   validates(
     :postcode,
     postcode_format: {
       message: "Enter a postcode in the correct format"
     },
-    if: -> { !skip_postcode_search? && postcode.present? }
+    if: -> { postcode.present? }
   )
 
-  validate :postcode_has_address, if: -> { !skip_postcode_search && postcode.present? }
+  validate :postcode_has_address, if: -> { postcode.present? }
 
   def save
-    return false if invalid?
-
-    if skip_postcode_search
-      journey_session.answers.assign_attributes(
-        skip_postcode_search:,
-        address_line_1: nil,
-        address_line_2: nil,
-        address_line_3: nil,
-        address_line_4: nil
-      )
-    else
-      journey_session.answers.assign_attributes(
-        skip_postcode_search: false,
+    if skip_postcode_search?
+      journey_session.answers.update!(
+        skip_postcode_search: true,
         address_line_1: nil,
         address_line_2: nil,
         address_line_3: nil,
         address_line_4: nil,
-        postcode:
+        postcode: nil
       )
+
+      return true
     end
+
+    return false if invalid?
+
+    journey_session.answers.assign_attributes(
+      skip_postcode_search: false,
+      address_line_1: nil,
+      address_line_2: nil,
+      address_line_3: nil,
+      address_line_4: nil,
+      postcode:
+    )
 
     journey_session.save!
   end
