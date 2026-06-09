@@ -43,7 +43,15 @@ class FeedbackController < BasePublicController
   end
 
   def form_from_slug
-    keys = form_class_from_slug.new.attributes.keys
-    form_class_from_slug.new(params.fetch(:form, {}).permit(keys))
+    form_class_from_slug.new(
+      params
+        .fetch(:form, {})
+        .permit(permitted_keys)
+        .merge(journey:)
+    )
+  end
+
+  def permitted_keys
+    form_class_from_slug.new.permitted_keys
   end
 end

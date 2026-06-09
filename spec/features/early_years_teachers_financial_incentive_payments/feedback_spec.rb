@@ -31,6 +31,7 @@ RSpec.feature "EYTFI feedback", feature_flag: [:eytfi_journey] do
 
     feedback = Feedback.last
 
+    expect(feedback.journey).to eql "Journeys::EarlyYearsTeachersFinancialIncentivePayments"
     expect(feedback.rating).to eql "very_satisfied"
     expect(feedback.area).to eql "specific_page"
     expect(feedback.specific_page).to eql "uploading"
