@@ -62,20 +62,6 @@ RSpec.describe PostcodeSearchForm, type: :model do
     end
   end
 
-  context "when the postcode lookup failed" do
-    let(:params) { ActionController::Parameters.new(claim: {postcode: "SW1B 1AA"}) }
-
-    before do
-      allow_any_instance_of(OrdnanceSurvey::Client).to receive_message_chain(:api, :search_places, :index)
-        .and_raise(OrdnanceSurvey::Client::ResponseError)
-    end
-
-    it "stores state to session" do
-      subject.validate
-      expect(journey_session.reload.answers.ordnance_survey_error).to be_truthy
-    end
-  end
-
   describe "#save" do
     let(:answers) do
       attributes_for(
@@ -95,6 +81,20 @@ RSpec.describe PostcodeSearchForm, type: :model do
         params: params,
         journey_session: journey_session
       )
+    end
+
+    context "when the postcode lookup failed" do
+      let(:params) { ActionController::Parameters.new(claim: {postcode: "SW1B 1AA"}) }
+
+      before do
+        allow_any_instance_of(OrdnanceSurvey::Client).to receive_message_chain(:api, :search_places, :index)
+          .and_raise(OrdnanceSurvey::Client::ResponseError)
+      end
+
+      it "stores state to session" do
+        form.save
+        expect(journey_session.reload.answers.ordnance_survey_error).to be_truthy
+      end
     end
 
     context "when skipping postcode search" do

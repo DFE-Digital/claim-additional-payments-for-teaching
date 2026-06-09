@@ -1,7 +1,7 @@
 <% content_for(:page_title, page_title(t("forms.address.questions.your_address"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
 <% if journey_session.answers.ordnance_survey_error %>
-  <%= govuk_notification_banner(title_text: "Notice") { |nb| nb.with_heading(text: "Please enter your address manually") } %>
+  <%= govuk_notification_banner(title_text: "Notice") { |nb| nb.with_heading(text: "Postcode search is currently unavailable. Please enter your address manually") } %>
 <% end %>
 
 <% if !journey_session.answers.postcode %>
