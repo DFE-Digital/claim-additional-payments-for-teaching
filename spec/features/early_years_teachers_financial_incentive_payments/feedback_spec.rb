@@ -12,6 +12,7 @@ RSpec.feature "EYTFI feedback", feature_flag: [:eytfi_journey] do
     visit eytfi_guidance_path(
       journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
     )
+    expect(page).not_to have_css("a[target='_blank'][rel~='noreferrer']")
     click_link "feedback"
 
     expect(page).to have_text "Give feedback on Claim an early years teacher recognition payment"
