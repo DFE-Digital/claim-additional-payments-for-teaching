@@ -10,7 +10,7 @@ gem "pg", ">= 0.18", "< 2.0"
 # Azure Blob Storage for Active Storage
 gem "azure-blob"
 # Use Puma as the app server
-gem "puma", "~> 7.1"
+gem "puma", "~> 7.2"
 # Use SCSS for stylesheets
 gem "sass-rails", "~> 6.0"
 # Use Terser as compressor for ES6 JavaScript assets
