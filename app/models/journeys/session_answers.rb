@@ -132,5 +132,9 @@ module Journeys
         teacher_reference_number: teacher_id_user_info["trn"]
       )
     end
+
+    def address_present?
+      address_line_1.present? && postcode.present?
+    end
   end
 end

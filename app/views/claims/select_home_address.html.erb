@@ -9,9 +9,9 @@
         <h1 class="govuk-heading-xl"><%= t("questions.address.home.title") %></h1>
         <h2 class="govuk-heading-l govuk-!-margin-bottom-1">Postcode</h2>
         <p class="govuk-body">
-          <%= @form.postcode %>
+          <%= @form.answers.postcode %>
           <%= govuk_link_to claim_path(current_journey_routing_name, "postcode-search"), class: "govuk-!-margin-left-3" do %>
-            Change <span class="govuk-visually-hidden">postcode <%= @form.postcode %></span>
+            Change <span class="govuk-visually-hidden">postcode <%= @form.answers.postcode %></span>
           <% end %>
         </p>
 
