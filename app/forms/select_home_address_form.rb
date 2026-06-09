@@ -50,7 +50,7 @@ class SelectHomeAddressForm < Form
   end
 
   def completed?
-    skip_postcode_search || answers.address_present? || valid?
+    skip_postcode_search || answers.address_present?
   end
 
   private
