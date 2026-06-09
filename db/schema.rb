@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_28_133525) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_09_131626) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -368,6 +368,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_28_133525) do
     t.text "comment"
     t.datetime "created_at", null: false
     t.citext "email_address"
+    t.text "journey"
     t.text "occupation"
     t.text "origin"
     t.text "rating"

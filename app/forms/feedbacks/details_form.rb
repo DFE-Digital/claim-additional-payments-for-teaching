@@ -12,6 +12,7 @@ module Feedbacks
     attribute :occupation, :string
     attribute :origin, :string
     attribute :claim_id, :string
+    attribute :journey, :string
 
     def self.i18n_error_message(path, args = {})
       ->(object, _) { object.i18n_errors_path(path, args) }
@@ -148,8 +149,13 @@ module Feedbacks
         email_address:,
         occupation:,
         origin:,
-        claim_id:
+        claim_id:,
+        journey:
       )
+    end
+
+    def permitted_keys
+      attributes.keys - [:journey]
     end
   end
 end
