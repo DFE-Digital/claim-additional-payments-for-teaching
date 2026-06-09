@@ -53,8 +53,8 @@ gem "rails_semantic_logger"
 gem "httpclient"
 
 # Gov form builder to structure claims
-gem "govuk_design_system_formbuilder", "~> 5.11.0"
-gem "govuk-components", "~> 5.13"
+gem "govuk_design_system_formbuilder", "~> 5.13.0"
+gem "govuk-components", "~> 5.13.1"
 
 gem "govuk_publishing_components"
 
