@@ -7,8 +7,7 @@ class SelectHomeAddressForm < Form
     inclusion: {
       in: ->(form) { form.radio_options.map(&:id) },
       message: "Select an address"
-    },
-    unless: :skip_postcode_search
+    }
   )
 
   def radio_options
@@ -21,35 +20,37 @@ class SelectHomeAddressForm < Form
   end
 
   def save
-    return false unless valid?
-
-    if skip_postcode_search?
-      journey_session.answers.assign_attributes(
+    if skip_postcode_search
+      journey_session.answers.update!(
         skip_postcode_search: true,
         address_line_1: nil,
         address_line_2: nil,
         address_line_3: nil,
         address_line_4: nil,
-        postcode:
+        postcode: nil
       )
-    else
-      selected_address = address_data.detect { it[:address] == address }
 
-      journey_session.answers.assign_attributes({
-        skip_postcode_search: false,
-        address_line_1: selected_address[:address_line_1].titleize,
-        address_line_2: selected_address[:address_line_2].titleize,
-        address_line_3: selected_address[:address_line_3].titleize,
-        address_line_4: nil,
-        postcode: selected_address[:postcode]
-      })
+      return true
     end
+
+    return false unless valid?
+
+    selected_address = address_data.detect { it[:address] == address }
+
+    journey_session.answers.assign_attributes({
+      skip_postcode_search: false,
+      address_line_1: selected_address[:address_line_1].titleize,
+      address_line_2: selected_address[:address_line_2].titleize,
+      address_line_3: selected_address[:address_line_3].titleize,
+      address_line_4: nil,
+      postcode: selected_address[:postcode]
+    })
 
     journey_session.save!
   end
 
   def completed?
-    skip_postcode_search? || answers.address_present? || valid?
+    skip_postcode_search || answers.address_present? || valid?
   end
 
   private
@@ -76,9 +77,5 @@ class SelectHomeAddressForm < Form
         params: {postcode: answers.postcode}
       )
     end
-  end
-
-  def skip_postcode_search?
-    journey_session.answers.skip_postcode_search || skip_postcode_search
   end
 end
