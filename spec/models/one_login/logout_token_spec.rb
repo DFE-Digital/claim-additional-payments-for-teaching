@@ -91,6 +91,12 @@ RSpec.describe OneLogin::LogoutToken do
   end
 
   describe "#valid?" do
+    context "when all claims are valid" do
+      it "returns true" do
+        expect(subject.valid?).to be_truthy
+      end
+    end
+
     context "when iss claim is invalid" do
       let(:payload) do
         {
