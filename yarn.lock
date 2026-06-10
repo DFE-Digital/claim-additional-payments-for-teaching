@@ -15,10 +15,10 @@ a-sync-waterfall@^1.0.0:
   resolved "https://registry.npmjs.org/a-sync-waterfall/-/a-sync-waterfall-1.0.1.tgz"
   integrity sha512-RYTOHHdWipFUliRFMCS4X2Yn2X8M87V/OpSqWzKKOGhzqyUxzyVmhHDH9sAvG+ZuQf/TAOFsLCpMw09I1ufUnA==
 
-a11y-dialog@^8.1.4:
-  version "8.1.4"
-  resolved "https://registry.npmjs.org/a11y-dialog/-/a11y-dialog-8.1.4.tgz"
-  integrity sha512-CgaQfoTg9t+O8vArlNAYN7Gzv6h1bpWRqggzCtng6TQ2im6XCpUQI+GWlPvQdovQtwzJN6MydxipXKB8qP5Zxw==
+a11y-dialog@^8.1.5:
+  version "8.1.5"
+  resolved "https://registry.yarnpkg.com/a11y-dialog/-/a11y-dialog-8.1.5.tgz#b781400a225d81632fe9549376875fe41296a5e4"
+  integrity sha512-SlFk3QSqeuvmN/anaIteUkB6ipBHoG1jq5gfQZU2kqvbkDW3Iab7SNufj4io4e8StvuIshD+loJnsQgTEvq6dA==
   dependencies:
     focusable-selectors "^0.8.0"
 
