@@ -13,7 +13,8 @@ class OneLogin::LogoutToken
     encoded_token.verify_claims!(
       iss:,
       aud:,
-      iat: true
+      iat: true,
+      exp: {}
     )
 
     encoded_token.verify!(
