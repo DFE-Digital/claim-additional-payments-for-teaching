@@ -104,8 +104,10 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
       end
 
       context "when onelogin auth fail" do
-        it "renders problem with service page" do
+        it "renders problem with service page and notifies sentry" do
           get "/further-education-payments/claim"
+
+          expect(Sentry).to receive(:capture_message)
 
           get "/auth/failure?message=access_denied&origin=http%3A%2F%2Flocalhost%3A3000%2Ffurther-education-payments%2Fsign-in&strategy=onelogin"
 
@@ -114,12 +116,14 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
       end
 
       context "when onelogin idv fail" do
-        it "renders cannot progress page" do
+        it "renders cannot progress page and notifies sentry" do
           get "/further-education-payments/claim"
 
           journey_session = Journeys::FurtherEducationPayments::Session.last
           journey_session.answers.logged_in_with_onelogin = true
           journey_session.save!
+
+          expect(Sentry).to receive(:capture_message)
 
           get "/auth/failure?message=access_denied&origin=http%3A%2F%2Flocalhost%3A3000%2Ffurther-education-payments%2Fsign-in&strategy=onelogin"
 
