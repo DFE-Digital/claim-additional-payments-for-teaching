@@ -20,7 +20,8 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::AnswersPresenter do
       banking_name: "Mr John Doe",
       bank_account_number: "12345678",
       bank_sort_code: "123456",
-      payroll_gender: "dont_know"
+      payroll_gender: "dont_know",
+      skip_postcode_search: true
     )
   }
 

@@ -37,7 +37,6 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::SlugSequence do
             passport-number
             personal-details
             postcode-search
-            select-home-address
             address
             email-address
             email-verification
