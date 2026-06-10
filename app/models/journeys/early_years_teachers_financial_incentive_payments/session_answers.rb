@@ -35,6 +35,19 @@ module Journeys
       def date_of_birth
         teacher_auth_verified_date_of_birth
       end
+
+      def claim_already_submitted_this_policy_year?
+        previous_claim.present?
+      end
+
+      def previous_claim
+        @previous_claim ||= Claim
+          .by_policy(Policies::EarlyYearsTeachersFinancialIncentivePayments)
+          .current_academic_year
+          .where.not(id: submitted_claim_id)
+          .where.not(onelogin_uid: nil)
+          .find_by(onelogin_uid: teacher_auth_one_login_uid)
+      end
     end
   end
 end
