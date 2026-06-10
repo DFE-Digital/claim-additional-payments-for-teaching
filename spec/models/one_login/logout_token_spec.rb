@@ -86,7 +86,7 @@ RSpec.describe OneLogin::LogoutToken do
     token.sign!(key: jwk, algorithm: "ES256")
   end
 
-  after :each do
+  before :each do
     OneLogin::JwksCache.clear_cache!
   end
 
