@@ -99,8 +99,8 @@ module Journeys
           slugs << "passport-number"
           slugs << "personal-details"
           slugs << "postcode-search"
-          slugs << "select-home-address" unless answers.skip_postcode_search? || answers.ordnance_survey_error?
-          slugs << "address" unless address_set_by_postcode_search?
+          slugs << "select-home-address" if answers.postcode_searched?
+          slugs << "address" unless answers.postcode_searched?
           slugs << "email-address"
           slugs << "email-verification" unless answers.email_verified?
           slugs << "provide-mobile-number"
@@ -121,10 +121,6 @@ module Journeys
           check-your-answers
           confirmation
         ]
-      end
-
-      def address_set_by_postcode_search?
-        answers.address_line_1.present? && answers.postcode.present?
       end
     end
   end

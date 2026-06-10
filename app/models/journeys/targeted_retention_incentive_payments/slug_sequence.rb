@@ -147,8 +147,8 @@ module Journeys
           sequence << "personal-details" unless answers.personal_details_set_by_tid?
 
           sequence << "postcode-search"
-          sequence << "select-home-address" unless answers.skip_postcode_search? || answers.ordnance_survey_error?
-          sequence << "address" if answers.skip_postcode_search? || answers.ordnance_survey_error?
+          sequence << "select-home-address" if answers.postcode_searched?
+          sequence << "address" unless answers.postcode_searched?
 
           sequence << "select-email" if answers.set_by_teacher_id?("email")
           sequence << "email-address" unless answers.email_address_check?
