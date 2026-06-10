@@ -282,7 +282,7 @@ RSpec.describe "Full end to end EYTRP", feature_flag: [:eytfi_journey] do
     expect(claim_row["ROLL_NUMBER"]).to eq(nil)
     expect(claim_row["SCHEME_AMOUNT"]).to eq("4500.0")
     expect(claim_row["PAYMENT_ID"]).to eq(payroll_run.payments.first.id.to_s)
-    expect(claim_row["CLAIM_POLICIES"]).to eq("EarlyYearsTeachersFinancialIncentivePayments")
+    expect(claim_row["CLAIM_POLICIES"]).to eq("EYTRP")
     expect(claim_row["RIGHT_TO_WORK_CONFIRM_STATUS"]).to eq("2")
   end
 end
