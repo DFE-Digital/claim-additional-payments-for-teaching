@@ -39,9 +39,9 @@ class SelectHomeAddressForm < Form
 
     journey_session.answers.assign_attributes({
       skip_postcode_search: false,
-      address_line_1: selected_address[:address_line_1].titleize,
-      address_line_2: selected_address[:address_line_2].titleize,
-      address_line_3: selected_address[:address_line_3].titleize,
+      address_line_1: selected_address[:address_line_1]&.titleize,
+      address_line_2: selected_address[:address_line_2]&.titleize,
+      address_line_3: selected_address[:address_line_3]&.titleize,
       address_line_4: nil,
       postcode: selected_address[:postcode]
     })
