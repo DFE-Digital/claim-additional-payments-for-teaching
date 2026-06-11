@@ -63,7 +63,7 @@ class Admin::TasksController < Admin::BaseAdminController
   end
 
   def load_claim
-    @claim = Claim.includes(notes: :created_by, tasks: :created_by).find(params[:claim_id])
+    @claim = Claim.includes(:eligibility, notes: :created_by, tasks: :created_by).find(params[:claim_id])
   end
 
   def ensure_task_has_not_already_been_completed

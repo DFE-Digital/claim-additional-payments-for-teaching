@@ -82,6 +82,7 @@ class Claim
 
     def claims_to_compare
       Claim
+        .includes(:eligibility)
         .by_academic_year(@source_claim.academic_year)
         .where.not(id: @source_claim.id)
     end
