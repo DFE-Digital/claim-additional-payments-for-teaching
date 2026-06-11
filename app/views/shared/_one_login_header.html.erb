@@ -53,7 +53,11 @@
       </nav>
     </div>
   </div>
+  <%= govuk_service_navigation(
+    service_name: journey_service_name(current_journey_routing_name),
+    service_url: start_page_url(current_journey_routing_name)) %>
+
+  <%= govuk_phase_banner(tag: { text: "Beta" }, classes: "govuk-width-container") do %>
+    <%= render "shared/phase_banner" %>
+  <% end %>
 </header>
-<%= govuk_service_navigation(
-  service_name: journey_service_name(current_journey_routing_name),
-  service_url: start_page_url(current_journey_routing_name)) %>

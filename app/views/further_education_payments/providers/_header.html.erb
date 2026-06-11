@@ -1,14 +1,18 @@
-<%= govuk_header(homepage_url: "https://www.gov.uk") %>
+<% header_html = govuk_header do |header| %>
+  <% header.with_service_navigation(
+    navigation_items: provider_nav_items,
+    current_path: request.fullpath
+  ) %>
 
-<% nav_html = govuk_service_navigation(
-  navigation_items: provider_nav_items,
-  current_path: request.fullpath
-) %>
+  <% header.with_phase_banner(tag: { text: "Beta" }, classes: "govuk-width-container") do %>
+    <%= render "shared/phase_banner" %>
+  <% end %>
+<% end %>
 
 <%
-  nav_document = Nokogiri::HTML.fragment(nav_html)
-  sign_out_link = nav_document.css("a").last
+  header_document = Nokogiri::HTML.fragment(header_html)
+  sign_out_link = header_document.css('a[href="/further-education-payments/providers/session"]').first
   sign_out_link["data-method"] = "delete" if sign_out_link
 %>
 
-<%= nav_document.to_s.html_safe %>
+<%= header_document.to_s.html_safe %>

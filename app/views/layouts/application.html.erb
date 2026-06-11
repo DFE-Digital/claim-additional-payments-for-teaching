@@ -59,11 +59,17 @@
     <% elsif lookup_context.exists?(Pathname.new(journey.view_path).join("_header")) %>
       <%= render Pathname.new(journey.view_path).join("header").to_s %>
     <% else %>
-      <%= render "shared/header" %>
+      <%= govuk_header do |header| %>
+        <% header.with_service_navigation(
+          service_name: journey_service_name(current_journey_routing_name),
+          service_url: start_page_url(current_journey_routing_name)) %>
+        <% header.with_phase_banner(tag: { text: "Beta" }, classes: "govuk-width-container") do %>
+          <%= render "shared/phase_banner" %>
+        <% end %>
+      <% end %>
     <% end %>
 
     <div class="govuk-width-container">
-      <%= render "shared/phase_banner" %>
       <%= render "shared/backlink" %>
 
       <main class="govuk-main-wrapper app-main-class" id="main-content">
