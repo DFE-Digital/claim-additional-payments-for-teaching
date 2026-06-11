@@ -9,7 +9,7 @@ module Journeys
             a << ["Full name", answers.full_name, "full-name"] if show_full_name?
             a << ["Date of birth", date_of_birth_string, "date-of-birth"] if show_date_of_birth?
             a << ["National Insurance number", answers.national_insurance_number, "national-insurance-number"]
-            a << ["Home address", answers.address, "address"]
+            a << ["Home address", answers.address, answers.postcode_searched? ? "postcode-search" : "address"]
             a << ["Preferred email address", answers.email_address, "email-address"]
             a << ["Provide mobile number?", answers.provide_mobile_number? ? "Yes" : "No", "provide-mobile-number"]
             a << ["Preferred mobile number", answers.mobile_number, "mobile-number"] if answers.provide_mobile_number?

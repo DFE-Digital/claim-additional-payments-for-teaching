@@ -136,5 +136,11 @@ module Journeys
     def address_present?
       address_line_1.present? && postcode.present?
     end
+
+    def postcode_searched?
+      return false if skip_postcode_search
+      return false if ordnance_survey_error?
+      postcode.present?
+    end
   end
 end

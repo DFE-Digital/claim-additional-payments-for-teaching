@@ -381,18 +381,40 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
       subject { personal_details_slugs }
 
       context "with default settings" do
-        it do
-          is_expected.to match_array %w[
-            information-provided
-            personal-details
-            postcode-search
-            select-home-address
-            email-address
-            email-verification
-            provide-mobile-number
-            mobile-number
-            mobile-verification
-          ]
+        context "when postcode searched" do
+          before { journey_session.answers.update!(postcode: "TE57 1NG") }
+
+          it do
+            is_expected.to match_array %w[
+              information-provided
+              personal-details
+              postcode-search
+              select-home-address
+              email-address
+              email-verification
+              provide-mobile-number
+              mobile-number
+              mobile-verification
+            ]
+          end
+        end
+
+        context "when postcode search skipped" do
+          before { journey_session.answers.update!(skip_postcode_search: true) }
+
+          it do
+            is_expected.to match_array %w[
+              information-provided
+              personal-details
+              postcode-search
+              address
+              email-address
+              email-verification
+              provide-mobile-number
+              mobile-number
+              mobile-verification
+            ]
+          end
         end
       end
 
