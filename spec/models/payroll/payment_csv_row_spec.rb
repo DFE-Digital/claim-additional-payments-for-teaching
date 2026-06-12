@@ -15,6 +15,8 @@ RSpec.describe Payroll::PaymentCsvRow do
 
     let(:personal_details_for_student_loans_and_early_career_payments_claim) do
       {
+        first_name: "Jo",
+        surname: "Bloggs",
         national_insurance_number: generate(:national_insurance_number),
         eligibility_attributes: {teacher_reference_number: generate(:teacher_reference_number)},
         payroll_gender: :female,
@@ -104,6 +106,8 @@ RSpec.describe Payroll::PaymentCsvRow do
       context "with a six part address" do
         let(:personal_details_for_tri_claim_1) do
           {
+            first_name: "Stephen",
+            surname: "Hawkes",
             national_insurance_number: generate(:national_insurance_number),
             eligibility_attributes: {teacher_reference_number: generate(:teacher_reference_number)},
             payroll_gender: :male,
@@ -176,6 +180,8 @@ RSpec.describe Payroll::PaymentCsvRow do
       context "with a five part address" do
         let(:personal_details_for_tri_claim_2) do
           {
+            first_name: "Jessica",
+            surname: "Xu",
             national_insurance_number: generate(:national_insurance_number),
             eligibility_attributes: {teacher_reference_number: generate(:teacher_reference_number)},
             payroll_gender: :female,
