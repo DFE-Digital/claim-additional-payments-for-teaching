@@ -8,7 +8,7 @@
     <%= csp_meta_tag %>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#1d70b8">
-    <meta name="robots" content="noindex,nofollow">
+    <meta name="robots" content="<%= current_path_indexable? ? "index" : "noindex" %>,nofollow">
 
     <%= favicon_link_tag asset_path("favicon.ico") %>
     <%= favicon_link_tag asset_path("govuk-icon-mask.svg"), rel: "mask-icon", type: "image/svg", color: "#0b1c0c" %>
