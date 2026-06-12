@@ -19,11 +19,15 @@ class OmniauthCallbacksController < ApplicationController
   def failure
     case params[:strategy]
     when "onelogin"
-      render OneLogin::FailureHandler.new(
+      handler = OneLogin::FailureHandler.new(
         message: params[:message],
         origin: params[:origin],
         answers: journey_session&.answers
-      ).template
+      )
+
+      handler.notify_sentry!
+
+      render handler.template
     else
       render :dfe_identity_failure
     end
