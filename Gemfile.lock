@@ -225,6 +225,9 @@ GEM
       faraday (>= 1.0, < 3.a)
     google-cloud-errors (1.5.0)
     google-logging-utils (0.2.0)
+    google-protobuf (4.33.2-aarch64-linux-musl)
+      bigdecimal
+      rake (>= 13)
     google-protobuf (4.33.2-arm64-darwin)
       bigdecimal
       rake (>= 13)
@@ -283,6 +286,7 @@ GEM
       sprockets-rails
     hashdiff (1.2.1)
     hashie (5.0.0)
+    herb (0.7.4-aarch64-linux-musl)
     herb (0.7.4-arm64-darwin)
     herb (0.7.4-x86_64-darwin)
     herb (0.7.4-x86_64-linux-gnu)
@@ -382,6 +386,8 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.5)
+    nokogiri (1.19.3-aarch64-linux-musl)
+      racc (~> 1.4)
     nokogiri (1.19.3-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.19.3-x86_64-darwin)
@@ -595,6 +601,7 @@ GEM
     parser (3.3.10.0)
       ast (~> 2.4.1)
       racc
+    pg (1.6.3-aarch64-linux-musl)
     pg (1.6.3-arm64-darwin)
     pg (1.6.3-x86_64-darwin)
     pg (1.6.3-x86_64-linux)
@@ -873,6 +880,7 @@ GEM
     zeitwerk (2.7.5)
 
 PLATFORMS
+  aarch64-linux-musl
   arm64-darwin-23
   arm64-darwin-24
   arm64-darwin-25
