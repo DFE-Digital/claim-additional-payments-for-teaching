@@ -47,10 +47,10 @@ govuk-frontend@^5.13.0:
   resolved "https://registry.npmjs.org/govuk-frontend/-/govuk-frontend-5.13.0.tgz"
   integrity sha512-6N3pHelWN7wftdM6e4YEzZAfattapa1gnd+Al6d5PUbfTr9D+T2dnphpNpjX75CTEhihlQqlL0RDQ3WIfZ3PSg==
 
-govuk-frontend@^5.14.0:
-  version "5.14.0"
-  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-5.14.0.tgz#d93f1ffa88b0696114509cab86e4ea474006f8e0"
-  integrity sha512-MgfaXswIM6KpXS2T5gltEnzgVLgfM3UoE9+rYkhBiR0suaJ8Let31VZXQZqz9QhiPDbv28fW1nRjIyLujfZIBA==
+govuk-frontend@^6.0.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-6.2.0.tgz#51ce06aa0e6d2c214749621fd12cedd77d4b1e33"
+  integrity sha512-PCRyQT+7kiV2dUz0Ku6Co+Nx4anOwJ7mAduXYbTQHK2krppBSynv9dBXtOYha/8j+LIzK7FqesTbJl9HD6ekHg==
 
 nunjucks@^3.2.4:
   version "3.2.4"

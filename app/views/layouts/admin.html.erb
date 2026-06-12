@@ -53,7 +53,7 @@
 
     <%= render "admin/cookie_banner" %>
 
-    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+    <%= govuk_skip_link %>
 
     <% if current_admin.is_service_operator? %>
       <%= render "admin/shared/signed_in_header" %>
