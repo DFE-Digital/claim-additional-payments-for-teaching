@@ -339,3 +339,7 @@ the user IP address as part of the payload data sent to Application Insights in
 [`lib/application_insights`](lib/application_insights). See
 [`config/initializers/application_insights.rb`](config/initializers/application_insights.rb)
 for how to mixin this code to your Rails application.
+
+## Infrastructure validation workflow
+
+The scheduled workflow defined in `.github/workflows/validate-infra.yml` runs Terraform plan validations for the AKS cluster plus domains infrastructure/environment each day at **07:00 UTC** against **production** only. Failures and drift notifications are sent to the SD Infra alerts Teams channel via the `TEAMS_WEBHOOK_URL_INFRA` secret.
