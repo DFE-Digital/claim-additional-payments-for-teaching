@@ -106,11 +106,8 @@ RSpec.feature "Postcode journey desired behavior", feature_flag: [:eytfi_journey
     fill_in "Postcode", with: "SO16 9FX"
     click_button "Search"
 
-    expect(page).to have_text("What is your home address?")
     expect(page).to have_text("Postcode search is currently unavailable")
-    expect(page).to have_button("Enter your address manually")
-
-    click_button "Enter your address manually"
+    expect(page).to have_text("Please enter your address manually")
 
     expect(page).to have_text("What is your address?")
   end
