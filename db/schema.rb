@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_09_131626) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_15_140306) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -177,7 +177,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_09_131626) do
     t.datetime "created_at", null: false
     t.uuid "left_claim_id", null: false
     t.jsonb "matching_attributes", default: [], null: false
-    t.datetime "resolved_at", precision: nil
     t.uuid "right_claim_id", null: false
     t.datetime "updated_at", null: false
     t.index ["left_claim_id", "right_claim_id"], name: "index_claims_matches_on_left_and_right_claim_id", unique: true
