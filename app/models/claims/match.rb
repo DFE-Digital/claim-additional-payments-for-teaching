@@ -10,24 +10,30 @@ module Claims
     validate :left_claim_is_older_than_right_claim
     validates :left_claim_id, uniqueness: {scope: :right_claim_id}
 
-    scope :unresolved, -> { where(resolved_at: nil) }
-
     def self.find_match_record(claim_1, claim_2)
       left_claim, right_claim = sort_for_matching(claim_1, claim_2)
 
       find_by(left_claim: left_claim, right_claim: right_claim)
     end
 
+    # FIXME once all claims have the matching_attributes_last_checked_at
+    # timestamp set delete these two shim methods.
+    def self.matches_shim(claim)
+      unless claim.matching_attributes_last_checked_at.present?
+        update_matching_claims!(claim)
+      end
+
+      matches(claim)
+    end
+
     def self.matching_claims(claim)
-      Claim.where(id: unresolved.where(left_claim: claim).select(:right_claim_id)).or(
-        Claim.where(id: unresolved.where(right_claim: claim).select(:left_claim_id))
+      Claim.where(id: where(left_claim: claim).select(:right_claim_id)).or(
+        Claim.where(id: where(right_claim: claim).select(:left_claim_id))
       )
     end
 
     def self.matches(claim)
-      unresolved.where(left_claim: claim).or(
-        unresolved.where(right_claim: claim)
-      )
+      where(left_claim: claim).or(where(right_claim: claim))
     end
 
     def self.sort_for_matching(claim_1, claim_2)
@@ -44,10 +50,7 @@ module Claims
       raise NoMatchError unless matching_attributes.any?
 
       if (existing_match = find_match_record(left_claim, right_claim))
-        existing_match.update!(
-          resolved_at: nil,
-          matching_attributes: matching_attributes
-        )
+        existing_match.update!(matching_attributes: matching_attributes)
 
         match = existing_match
       else
@@ -86,9 +89,7 @@ module Claims
         end
 
         no_longer_matching.each do |non_matching_claim|
-          find_match_record(claim, non_matching_claim).update!(
-            resolved_at: Time.current
-          )
+          find_match_record(claim, non_matching_claim).destroy!
         end
 
         if claim.persisted?
@@ -99,16 +100,6 @@ module Claims
       end
     end
 
-    # FIXME once all claims have the matching_attributes_last_checked_at
-    # timestamp set delete these two shim methods.
-    def self.matches_shim(claim)
-      unless claim.matching_attributes_last_checked_at.present?
-        update_matching_claims!(claim)
-      end
-
-      matches(claim)
-    end
-
     def other(claim)
       if left_claim == claim
         right_claim
@@ -117,10 +108,6 @@ module Claims
       else
         raise ArgumentError, "claim is not part of this match"
       end
-    end
-
-    def resolved?
-      resolved_at.present?
     end
 
     private

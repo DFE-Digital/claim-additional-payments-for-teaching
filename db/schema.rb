@@ -177,7 +177,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_06_122602) do
     t.datetime "created_at", null: false
     t.uuid "left_claim_id", null: false
     t.jsonb "matching_attributes", default: [], null: false
-    t.datetime "resolved_at", precision: nil
     t.uuid "right_claim_id", null: false
     t.datetime "updated_at", null: false
     t.index ["left_claim_id", "right_claim_id"], name: "index_claims_matches_on_left_and_right_claim_id", unique: true

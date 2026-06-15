@@ -121,7 +121,6 @@ shared:
     - updated_at # datetime, when the match was last updated
     - left_claim_id # uuid, references the elder claim in the match pair
     - matching_attributes # jsonb, array of attributes that matched between the claims
-    - resolved_at # datetime, when the claims stopped being considered a match, null if the claims still match
     - right_claim_id # uuid, references the newer claim in the match pair
   :decisions:
     - id # uuid, identifies the decision
