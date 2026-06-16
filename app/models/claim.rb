@@ -177,6 +177,10 @@ class Claim < ApplicationRecord
     by_policies(Policies.all.select { |p| p.require_in_progress_update_emails? })
   }
 
+  scope :with_verifier, ->(verifier) do
+    by_policies(Policies.all.select { it.has_verifier?(verifier) })
+  end
+
   def hold!(reason:, user:)
     if holdable? && !held?
       self.class.transaction do
