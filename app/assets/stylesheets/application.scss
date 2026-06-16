@@ -1,11 +1,31 @@
-// Use the Rails helpers to load images and fonts
-$govuk-font-url-function: "image-url";
-$govuk-image-url-function: "font-url";
+@use "sass:meta";
+@use "url_handlers";
 
-@import "components/gds_kit_tweaks";
-@import "govuk-frontend/dist/govuk/index";
-@import "accessible-autocomplete/src/autocomplete";
+@use "govuk-frontend/dist/govuk" as * with(
+  $govuk-font-url-function: meta.get-function("font-url", $module: "url_handlers"),
+  $govuk-image-url-function: meta.get-function("image-url", $module: "url_handlers")
+);
+
+@use "accessible-autocomplete/src/autocomplete";
+
+@use "components/_timeline";
+@use "components/a11y_dialog";
+@use "components/accessible_autocomplete_tweaks";
+@use "components/admin_filters";
+@use "components/banner";
+@use "components/button_to";
+@use "components/card";
+@use "components/container";
+@use "components/flash";
+@use "components/gds_kit_tweaks";
+@use "components/grey_box";
+@use "components/image_preview";
+@use "components/panel";
+@use "components/school_search";
+@use "components/tag";
+@use "components/task_list";
+@use "components/text";
+@use "components/train";
+@use "components/contents_list";
+
 @import "@govuk-one-login/service-header/dist/styles/service-header-no-imports";
-@import "govuk_publishing_components/components/_contents-list";
-
-@import "**/*";

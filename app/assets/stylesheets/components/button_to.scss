@@ -1,3 +1,5 @@
+@use "govuk-frontend/dist/govuk/helpers/focused.scss";
+
 .govuk-button.button-to-as-link, .button-to-as-link {
   padding: 0;
   background: none;
@@ -11,7 +13,7 @@
   line-height: inherit;
 
   &:focus {
-    @include govuk-focused-text;
+    @include focused.govuk-focused-text;
   }
 }
 

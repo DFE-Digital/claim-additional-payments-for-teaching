@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="govuk-template govuk-template--rebranded app-html-class">
+<html lang="en" class="govuk-template app-html-class">
   <head>
     <title>
       <%= content_for(:page_title) || "#{t("service_name")} – GOV.UK" %>
@@ -29,7 +29,7 @@
       <% end %>
     <% end %>
 
-    <%= stylesheet_link_tag 'application', media: 'all' %>
+    <%= stylesheet_link_tag "application", media: "all" %>
   </head>
 
   <body class="govuk-template__body">

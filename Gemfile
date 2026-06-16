@@ -12,7 +12,8 @@ gem "azure-blob"
 # Use Puma as the app server
 gem "puma", "~> 7.2"
 # Use SCSS for stylesheets
-gem "sass-rails", "~> 6.0"
+gem "dartsass-rails"
+gem "sprockets-rails"
 # Use Terser as compressor for ES6 JavaScript assets
 gem "terser"
 # See https://github.com/rails/execjs#readme for more supported runtimes
@@ -55,8 +56,6 @@ gem "httpclient"
 # Gov form builder to structure claims
 gem "govuk_design_system_formbuilder", "~> 6.0.0"
 gem "govuk-components", "~> 6.0.0"
-
-gem "govuk_publishing_components"
 
 # ROTP requried for Early Career Payments one-time password
 gem "rotp"
