@@ -225,6 +225,9 @@ GEM
       faraday (>= 1.0, < 3.a)
     google-cloud-errors (1.5.0)
     google-logging-utils (0.2.0)
+    google-protobuf (4.33.2-aarch64-linux-musl)
+      bigdecimal
+      rake (>= 13)
     google-protobuf (4.33.2-arm64-darwin)
       bigdecimal
       rake (>= 13)
@@ -247,10 +250,10 @@ GEM
       multi_json (~> 1.11)
       os (>= 0.9, < 2.0)
       signet (>= 0.16, < 2.a)
-    govuk-components (5.13.1)
+    govuk-components (6.0.0)
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (>= 6, < 10)
-      view_component (>= 4.0, < 4.2)
+      view_component (>= 4.0, < 4.3)
     govuk_app_config (9.22.2)
       logstasher (~> 2.1)
       opentelemetry-exporter-otlp (>= 0.25, < 0.32)
@@ -263,7 +266,7 @@ GEM
       sentry-rails (>= 5.3, < 7.0)
       sentry-ruby (~> 5.3)
       statsd-ruby (~> 1.5)
-    govuk_design_system_formbuilder (5.11.0)
+    govuk_design_system_formbuilder (6.0.0)
       actionview (>= 6.1)
       activemodel (>= 6.1)
       activesupport (>= 6.1)
@@ -283,6 +286,7 @@ GEM
       sprockets-rails
     hashdiff (1.2.1)
     hashie (5.0.0)
+    herb (0.7.4-aarch64-linux-musl)
     herb (0.7.4-arm64-darwin)
     herb (0.7.4-x86_64-darwin)
     herb (0.7.4-x86_64-linux-gnu)
@@ -372,7 +376,7 @@ GEM
     multipart-post (2.4.1)
     mutex_m (0.3.0)
     nanoid (2.0.0)
-    net-imap (0.6.4)
+    net-imap (0.6.4.1)
       date
       net-protocol
     net-pop (0.1.2)
@@ -382,6 +386,8 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.5)
+    nokogiri (1.19.3-aarch64-linux-musl)
+      racc (~> 1.4)
     nokogiri (1.19.3-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.19.3-x86_64-darwin)
@@ -595,6 +601,7 @@ GEM
     parser (3.3.10.0)
       ast (~> 2.4.1)
       racc
+    pg (1.6.3-aarch64-linux-musl)
     pg (1.6.3-arm64-darwin)
     pg (1.6.3-x86_64-darwin)
     pg (1.6.3-x86_64-linux)
@@ -613,7 +620,7 @@ GEM
       date
       stringio
     public_suffix (7.0.5)
-    puma (7.1.0)
+    puma (7.2.1)
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.1)
@@ -873,6 +880,7 @@ GEM
     zeitwerk (2.7.5)
 
 PLATFORMS
+  aarch64-linux-musl
   arm64-darwin-23
   arm64-darwin-24
   arm64-darwin-25
@@ -896,8 +904,8 @@ DEPENDENCIES
   faker (~> 3.5)
   faraday_middleware
   foreman
-  govuk-components (~> 5.13)
-  govuk_design_system_formbuilder (~> 5.11.0)
+  govuk-components (~> 6.0.0)
+  govuk_design_system_formbuilder (~> 6.0.0)
   govuk_publishing_components
   herb
   httpclient
@@ -915,7 +923,7 @@ DEPENDENCIES
   pagy
   pg (>= 0.18, < 2.0)
   pry
-  puma (~> 7.1)
+  puma (~> 7.2)
   rack-mini-profiler
   rack_session_access
   rails (~> 8.1)

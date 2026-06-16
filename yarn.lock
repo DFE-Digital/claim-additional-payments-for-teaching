@@ -15,10 +15,10 @@ a-sync-waterfall@^1.0.0:
   resolved "https://registry.npmjs.org/a-sync-waterfall/-/a-sync-waterfall-1.0.1.tgz"
   integrity sha512-RYTOHHdWipFUliRFMCS4X2Yn2X8M87V/OpSqWzKKOGhzqyUxzyVmhHDH9sAvG+ZuQf/TAOFsLCpMw09I1ufUnA==
 
-a11y-dialog@^8.1.4:
-  version "8.1.4"
-  resolved "https://registry.npmjs.org/a11y-dialog/-/a11y-dialog-8.1.4.tgz"
-  integrity sha512-CgaQfoTg9t+O8vArlNAYN7Gzv6h1bpWRqggzCtng6TQ2im6XCpUQI+GWlPvQdovQtwzJN6MydxipXKB8qP5Zxw==
+a11y-dialog@^8.1.5:
+  version "8.1.5"
+  resolved "https://registry.yarnpkg.com/a11y-dialog/-/a11y-dialog-8.1.5.tgz#b781400a225d81632fe9549376875fe41296a5e4"
+  integrity sha512-SlFk3QSqeuvmN/anaIteUkB6ipBHoG1jq5gfQZU2kqvbkDW3Iab7SNufj4io4e8StvuIshD+loJnsQgTEvq6dA==
   dependencies:
     focusable-selectors "^0.8.0"
 
@@ -47,6 +47,11 @@ govuk-frontend@^5.13.0:
   resolved "https://registry.npmjs.org/govuk-frontend/-/govuk-frontend-5.13.0.tgz"
   integrity sha512-6N3pHelWN7wftdM6e4YEzZAfattapa1gnd+Al6d5PUbfTr9D+T2dnphpNpjX75CTEhihlQqlL0RDQ3WIfZ3PSg==
 
+govuk-frontend@^6.0.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-6.2.0.tgz#51ce06aa0e6d2c214749621fd12cedd77d4b1e33"
+  integrity sha512-PCRyQT+7kiV2dUz0Ku6Co+Nx4anOwJ7mAduXYbTQHK2krppBSynv9dBXtOYha/8j+LIzK7FqesTbJl9HD6ekHg==
+
 nunjucks@^3.2.4:
   version "3.2.4"
   resolved "https://registry.npmjs.org/nunjucks/-/nunjucks-3.2.4.tgz"
@@ -56,7 +61,7 @@ nunjucks@^3.2.4:
     asap "^2.0.3"
     commander "^5.1.0"
 
-prettier@^3.8.3:
-  version "3.8.3"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.8.3.tgz#560f2de55bf01b4c0503bc629d5df99b9a1d09b0"
-  integrity sha512-7igPTM53cGHMW8xWuVTydi2KO233VFiTNyF5hLJqpilHfmn8C8gPf+PS7dUT64YcXFbiMGZxS9pCSxL/Dxm/Jw==
+prettier@^3.8.4:
+  version "3.8.4"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.8.4.tgz#f334f013ac04a96676f24dabc23c1c4ae1bae411"
+  integrity sha512-N2MylSdi48+5N/6S5j+maeHbUSIzzZ5uOcX5Hm4QpV8Dkb1HFjfAKTKX6yNPJQD9AhcT3ifHNB66tWTTJDi11Q==

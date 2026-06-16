@@ -1,12 +1,5 @@
 <% if lookup_context.exists?("shared/phase_banner/_#{current_journey_routing_name.underscore}") %>
   <%= render "shared/phase_banner/#{current_journey_routing_name.underscore}" %>
 <% else %>
-  <div class="govuk-phase-banner">
-    <p class="govuk-phase-banner__content">
-      <strong class="govuk-tag govuk-phase-banner__content__tag">Beta</strong>
-      <span class="govuk-phase-banner__text">
-        This is a new service – your <%= govuk_mail_to feedback_email(current_journey_routing_name), "feedback" %> will help us to improve it.
-      </span>
-    </p>
-  </div>
+  This is a new service – your <%= govuk_mail_to feedback_email(current_journey_routing_name), "feedback" %> will help us to improve it.
 <% end %>

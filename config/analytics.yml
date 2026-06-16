@@ -544,3 +544,4 @@ shared:
     - research_participation # boolean, does the claimant wish to participate in future user research
     - specific_page # string, if the feedback concerns a specific page, what was that page
     - updated_at # datetime, when this feedback record was updated
+    - journey # string, which journey this feedback relates to

@@ -83,6 +83,24 @@ class Claim
         end
       end
 
+      class EarlyYearsTeachersFinancialIncentivePayments < Base
+        def to_csv_row
+          [
+            ExcelUtils.escape_formulas(claim.reference),
+            ExcelUtils.escape_formulas(claim.eligibility.teacher_reference_number),
+            ExcelUtils.escape_formulas(claim.national_insurance_number),
+            ExcelUtils.escape_formulas(claim.full_name),
+            ExcelUtils.escape_formulas(claim.email_address),
+            ExcelUtils.escape_formulas(claim.date_of_birth),
+            nil,
+            ExcelUtils.escape_formulas(claim.policy),
+            ExcelUtils.escape_formulas(claim.eligibility.eligible_eytfi_provider.name),
+            ExcelUtils.escape_formulas(claim.eligibility.eligible_eytfi_provider.urn),
+            ExcelUtils.escape_formulas(claim.payroll_gender)
+          ]
+        end
+      end
+
       class EarlyYearsPayments < Base
         def to_csv_row
           [

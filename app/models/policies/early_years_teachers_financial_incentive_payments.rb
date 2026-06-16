@@ -41,5 +41,9 @@ module Policies
     def award_amount
       4_500
     end
+
+    def payroll_file_name
+      "EYTRP"
+    end
   end
 end
