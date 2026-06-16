@@ -6,7 +6,7 @@
     </h1>
 
     <p class="govuk-body-l">
-      How eligible early years teachers can apply for a recognition payment before 1 June 2026.
+      How eligible early years teachers can apply for a recognition payment before 31 July 2026.
     </p>
 
     <%= render "govuk_publishing_components/components/contents_list", contents: [
@@ -19,12 +19,8 @@
         href: "#what-youll-get"
       },
       {
-        text: "Eligibility criteria",
+        text: "Eligibility criteria and expectations of teachers",
         href: "#eligibility"
-      },
-      {
-        text: "Good practice guidance for teachers and settings",
-        href: "#good-practice-guidance-for-teachers-and-settings"
       },
       {
         text: "What you need to make a claim",
@@ -51,19 +47,19 @@
     <h2 id="overview" class="govuk-heading-m">Overview</h2>
 
     <p class="govuk-body">
-      Eligible early years teachers can apply for a recognition payment before 1 June 2026.
+      Eligible early years teachers can apply for a recognition payment before 31 July 2026 in phase one of this payment scheme.
     </p>
 
     <h2 id="what-youll-get" class="govuk-heading-m">What you’ll get</h2>
 
     <p class="govuk-body">
-      Eligible teachers will receive £4,500, after tax deductions. Teachers will be able to make a claim for every year of the scheme that they are eligible.
+      Eligible teachers can apply for a payment of £4,500 after tax deductions.
     </p>
 
-    <h2 id="eligibility" class="govuk-heading-m">Eligibility criteria</h2>
+    <h2 id="eligibility" class="govuk-heading-m">Eligibility criteria and expectations of teachers</h2>
 
     <p class="govuk-body">
-      To be eligible for the recognition payment, teachers must work within one of these eligible local authorities:
+      To be eligible for the recognition payment in phase one, you must work within at least one of these eligible local authorities:
     </p>
 
     <%= govuk_list [
@@ -80,27 +76,32 @@
     ], type: :bullet %>
 
     <p class="govuk-body">
-      Teachers must also:
+      You must also:
     </p>
 
     <%= govuk_list [
       "hold qualified teacher status (QTS), early years teacher status (EYTS) or early years professional status (EYPS)",
-      "be directly employed and work in an eligible early years group-based setting that offers the Early Years Entitlements"
+      "be directly employed to work in an eligible early years group-based settings that offers the #{govuk_link_to "early years entitlements", "https://www.gov.uk/government/publications/early-years-funding-2025-to-2026/early-years-entitlements-local-authority-funding-operational-guide-2025-to-2026"}".html_safe
     ], type: :bullet %>
 
     <p class="govuk-body">
-      During the application, you will be asked to select your employer from a list of eligible group based settings. If you believe you or your setting should be eligible but are not included on the list please email
-      <%= govuk_mail_to t("early_years_teachers_financial_incentive_payments.support_email_address"), t("early_years_teachers_financial_incentive_payments.support_email_address") %>.
+      <%= govuk_link_to "Early years teacher recognition payment: methodology", eytfi_methodology_path %> gives 
+      further information on how local authority areas and early years group-based settings were selected.
     </p>
 
     <p class="govuk-body">
-      Eligible teachers must also self-declare that they are:
+      You must also confirm that you meet the following expectations: 
     </p>
 
     <%= govuk_list [
-      "fulfilling the role of an early years teacher, as outlined in the #{govuk_link_to("Early years teacher standards", "https://www.gov.uk/government/publications/early-years-teachers-standards")}, for at least 50% of their time".html_safe,
-      "not subject to any formal performance measures as a result of continuous poor teaching standards or disciplinary action"
+      "that you are fulfilling the role of an early years teacher, as outlined in the #{govuk_link_to "Early years teacher standards", "https://www.gov.uk/government/publications/early-years-teachers-standards"}, for at least half of your time at work".html_safe,
+      "that you are not currently subject to any formal performance measures as a result of continuous poor teaching standards or disciplinary action"
     ], type: :bullet %>
+
+
+    <p class="govuk-body">
+      You should also consider DfE’s <%= govuk_link_to "Good practice for teachers and settings", eytfi_good_practice_path %> guidance.
+    </p>
 
     <h3 id="breaks-in-teaching" class="govuk-heading-s">Breaks in teaching</h3>
 
@@ -119,7 +120,7 @@
     </p>
 
     <p class="govuk-body">
-      You should apply for payments as usual during any statutory breaks in teaching, before the claim window closes each year.
+      You should apply for payments as usual during any statutory breaks in teaching, before the claim window closes.
     </p>
 
     <h3 id="part-time-and-temporary-staff" class="govuk-heading-s">Part time and temporary staff</h3>
@@ -128,45 +129,26 @@
       All eligible staff directly employed by an eligible setting are able to claim a recognition payment, including those working part time or on temporary contracts. Agency staff that are not directly employed by the setting are not eligible to claim a payment.
     </p>
 
-    <h2 id="good-practice-guidance-for-teachers-and-settings" class="govuk-heading-m">Good practice guidance for teachers and settings</h2>
-
-    <p class="govuk-body">
-      As well as meeting the <%= govuk_link_to "eligibility criteria", "#eligibility" %>, we encourage all early years teachers, and their settings, to consider the following good practice guidance.
-    </p>
-
-    <p class="govuk-body">Teachers should:</p>
-
-    <%= govuk_list [
-      "keep their knowledge and skills up to date through ongoing continuing professional development (CPD) relevant to their role and early years setting",
-      "where relevant, work across the full early years age range, including babies and children under the age of 3",
-      "engage with local networks, such as stronger practice hubs, where relevant"
-    ], type: :bullet %>
-
-    <p class="govuk-body">Settings should:</p>
-
-    <%= govuk_list [
-      "support teachers to complete their role as outlined in the early years teacher standards and this good practice guidance, including support for CPD",
-      "not reduce or offset salaries as a result of this recognition payment",
-      "ensure the number of teachers claiming is proportionate to the number of children in the setting. If we receive 5 or more claims from teachers at one setting, we will review these applications and reserve the right to limit the number of claims per setting"
-    ], type: :bullet %>
-
     <h2 id="what-you-need-to-make-a-claim" class="govuk-heading-m">What you need to make a claim</h2>
 
-    <p class="govuk-body">You will need:</p>
+    <div class="govuk-!-padding-6 app-grey-box">
+      <p class="govuk-body">You’ll need:</p>
 
-    <%= govuk_list [
-      "your #{govuk_link_to("teacher reference number (TRN)", "https://www.gov.uk/guidance/teacher-reference-number-trn")} - you’ll have one if you have early years professional status (EYPS), qualified teacher status (QTS) or early years teacher status (EYTS)".html_safe,
-      "a GOV.UK One Login account to prove your identity - you’ll need a UK passport, UK photo driving license or biometric residence permit to set it up",
-      "your bank details, including the full name on the account, sort code and account number",
-      "payslip, P60, or letter from your employer as proof of employment"
-    ], type: :bullet %>
+      <%= govuk_list [
+        "your #{govuk_link_to("teacher reference number (TRN)", "https://www.gov.uk/guidance/teacher-reference-number-trn")} - you’ll have one if you have early years professional status (EYPS), qualified teacher status (QTS) or early years teacher status (EYTS)".html_safe,
+        "a GOV.UK One Login account to prove your identity - you’ll need a UK passport, UK photo driving license or biometric residence permit to set it up",
+        "your bank details, including the full name on the account, sort code and account number",
+        "your gender as it appears on payroll",
+        "a recent payslip from the last 2 months"
+      ], type: :bullet %>
+    </div>
 
-    <p class="govuk-body">
+    <p class="govuk-body govuk-!-padding-top-5">
       If you need to <%= govuk_link_to "find a lost TRN", "https://find-a-lost-trn.education.gov.uk/start" %>, do this before you claim. It can take 5 working days to recover your TRN.
     </p>
 
     <p class="govuk-body">
-      If you need to get set up with a GOV.UK One Login account, this can take 2 weeks.
+      If you need to set up a GOV.UK One Login account, this can take 2 weeks.
     </p>
 
     <h2 id="how-long-it-takes-to-claim" class="govuk-heading-m">How long it takes to claim</h2>
@@ -178,7 +160,7 @@
     <h2 id="after-you-have-submitted" class="govuk-heading-m">After you have submitted</h2>
 
     <p class="govuk-body">
-      If your claim is successful you will receive a single payment.
+      If your claim is successful you will receive a single payment within 16 weeks of submitting your claim.
     </p>
 
     <p class="govuk-body">
@@ -186,7 +168,7 @@
     </p>
 
     <p class="govuk-body">
-      Your claim may be verified with your employer, by DfE or Ofsted. If a payment is made and you are later found to be ineligible, or not meeting the <%= govuk_link_to "outlined expectations", "#eligibility" %>, we reserve the right to recover the payment.
+      Your claim may be verified with your employer by DfE or Ofsted. If a payment is made and you are later found to be ineligible, we reserve the right to recover the payment. If we receive 5 or more claims from teachers at one setting, we'll review these applications and reserve the right to limit the number of claims per setting.
     </p>
 
     <h3 id="taxable-income-and-national-insurance" class="govuk-heading-s">Taxable income and National Insurance</h3>
@@ -212,11 +194,15 @@
     <h2 id="apply-for-an-early-years-teacher-recognition-payment" class="govuk-heading-m">Apply for an early years teacher recognition payment</h2>
 
     <p class="govuk-body">
-      You need to apply before 1 June 2026. Applications submitted after this date will not be considered.
+      You need to apply before 31 July 2026. Applications submitted after this date will not be considered.
     </p>
 
     <p class="govuk-body">
-      This is an initial pilot of the service and we plan to launch the full service later in 2026. If you are eligible for the pilot but did not make a claim, you will be able to claim when the full service is live.
+      You should ensure you have set aside time to complete your application before the closing date.
+    </p>
+
+    <p class="govuk-body">
+      This is an initial pilot of the service and we plan to launch the full service later in 2026. If you are eligible for the pilot but did not make a claim, you may be able to claim when the full service is live.
     </p>
 
     <%= govuk_start_button(text: "Apply to claim a payment", href: landing_page_path) %>

@@ -3,22 +3,6 @@ require "rails_helper"
 RSpec.describe Admin::Amendments::FurtherEducationPaymentsForm, type: :model do
   let(:admin_user) { create(:dfe_signin_user) }
 
-  describe "#load_data_from_claim" do
-    let(:claim) do
-      create(:claim, :further_education, :submitted,
-        eligibility_attributes: {
-          further_education_teaching_start_year: "2023"
-        })
-    end
-
-    it "loads further_education_teaching_start_year from the eligibility" do
-      form = described_class.new(claim: claim, admin_user: admin_user)
-      form.load_data_from_claim
-
-      expect(form.further_education_teaching_start_year).to eq("2023")
-    end
-  end
-
   describe "#save" do
     let(:notes) { "Amending claim based on provider feedback" }
 
@@ -48,9 +32,14 @@ RSpec.describe Admin::Amendments::FurtherEducationPaymentsForm, type: :model do
       end
 
       it "saves the amendment without creating a provider verification task" do
-        form = described_class.new(claim: claim, admin_user: admin_user, notes: notes)
-        form.load_data_from_claim
-        form.further_education_teaching_start_year = "2024"
+        form = described_class.new(
+          claim: claim,
+          admin_user: admin_user,
+          params: {
+            notes: notes,
+            further_education_teaching_start_year: "2024"
+          }
+        )
 
         expect(form.save).to be_truthy
 
@@ -77,9 +66,14 @@ RSpec.describe Admin::Amendments::FurtherEducationPaymentsForm, type: :model do
         original_task = claim.tasks.find_by(name: "fe_provider_verification_v2")
         expect(original_task).to be_present
 
-        form = described_class.new(claim: claim, admin_user: admin_user, notes: notes)
-        form.load_data_from_claim
-        form.teacher_reference_number = "7654321"
+        form = described_class.new(
+          claim: claim,
+          admin_user: admin_user,
+          params: {
+            notes: notes,
+            teacher_reference_number: "7654321"
+          }
+        )
 
         expect(form.save).to be_truthy
 
@@ -106,9 +100,14 @@ RSpec.describe Admin::Amendments::FurtherEducationPaymentsForm, type: :model do
         original_task = claim.tasks.find_by(name: "fe_provider_verification_v2")
         expect(original_task.passed).to be(true)
 
-        form = described_class.new(claim: claim, admin_user: admin_user, notes: notes)
-        form.load_data_from_claim
-        form.further_education_teaching_start_year = "2024"
+        form = described_class.new(
+          claim: claim,
+          admin_user: admin_user,
+          params: {
+            notes: notes,
+            further_education_teaching_start_year: "2024"
+          }
+        )
 
         expect(form.save).to be_truthy
 

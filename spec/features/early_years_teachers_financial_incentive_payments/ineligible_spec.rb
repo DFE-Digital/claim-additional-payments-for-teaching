@@ -74,7 +74,7 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
     click_button "Continue"
 
     expect(page).to have_link "Back", href: "/early-years-teachers-recognition-payments/teaching-qualification-confirmation"
-    expect(page).to have_text "You are not eligible for this payment"
+    expect(page).to have_text "You’re not eligible for this payment"
   end
 
   context do
@@ -101,7 +101,12 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
       choose "Yes"
       click_button "Continue"
 
-      expect(page).to have_text "You are eligible to apply"
+      expect(page).to have_text "Check if you’re eligible"
+      check "I spend at least half"
+      check "I’m not currently subject"
+      click_button "Confirm and continue"
+
+      expect(page).to have_text "You’re eligible to apply"
       click_button "Continue"
 
       expect(page).to have_text "Sign in with GOV.UK One Login"
@@ -140,7 +145,12 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
       choose "Yes"
       click_button "Continue"
 
-      expect(page).to have_text "You are eligible to apply"
+      expect(page).to have_text "Check if you’re eligible"
+      check "I spend at least half"
+      check "I’m not currently subject"
+      click_button "Confirm and continue"
+
+      expect(page).to have_text "You’re eligible to apply"
       click_button "Continue"
 
       expect(page).to have_text "Sign in with GOV.UK One Login"
@@ -165,11 +175,135 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
       choose "No"
       click_button "Continue"
 
-      expect(page).to have_link "Back"
       expect(page).to have_text "Claim cancelled"
-      click_button "Start a new claim"
+      click_on "Start a new claim"
 
       expect(page).to have_text "Start now"
+    end
+  end
+
+  context do
+    include_examples "stub_teacher_auth"
+
+    scenario "double submission" do
+      create(
+        :eligible_eytfi_provider,
+        name: "Springfield nursery"
+      )
+
+      visit landing_page_path(
+        Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
+      )
+
+      click_link "Start now"
+
+      expect(page).to have_text "Which nursery do you teach in?"
+      find_field("claim[nursery_search_query]").set("Springfield nursery")
+      click_button "Continue"
+
+      expect(page).to have_text "Which nursery do you teach in?"
+      choose "Springfield nursery"
+      click_button "Continue"
+
+      expect(page).to have_text "Do you hold one of these teaching qualifications?"
+      choose "Yes"
+      click_button "Continue"
+
+      expect(page).to have_text "Check if you’re eligible"
+      check "I spend at least half"
+      check "I’m not currently subject"
+      click_button "Confirm and continue"
+
+      expect(page).to have_text "You’re eligible to apply"
+      click_button "Continue"
+
+      expect(page).to have_text "Sign in with GOV.UK One Login"
+      perform_enqueued_jobs do
+        click_button "Continue"
+      end
+
+      expect(page).to have_text "You may be eligible for a recognition payment"
+      choose "Yes"
+      click_button "Continue"
+
+      upload_employment_proof
+
+      expect(page).to have_text "How we’ll use your information"
+      click_button "Continue"
+
+      expect(page).to have_text "What is your home address?"
+      click_button "Enter your address manually"
+
+      fill_in "House number or name", with: "1"
+      fill_in "Building and street", with: "Grey Street"
+      fill_in "Town or city", with: "Newcastle upon Tyne"
+      fill_in "County", with: "Tyne and Wear"
+      fill_in "Postcode", with: "NE1 6EE"
+      click_button "Continue"
+
+      expect(page).to have_text "Are you recorded as male or female on your employer’s payroll system?"
+      choose "I don’t know"
+      click_button "Continue"
+
+      expect(page).to have_text "Enter your National Insurance number"
+      fill_in "Enter your National Insurance number", with: "AB123456C"
+      click_button "Continue"
+
+      expect(page).to have_text "Enter your personal bank account details"
+      fill_in "Name on your account", with: "John Doe"
+      fill_in "Sort code", with: "123456"
+      fill_in "Account number", with: "12345678"
+      click_button "Continue"
+
+      expect(page).to have_text "Confirm your details and complete your claim"
+      check "I confirm that I understand and accept these conditions."
+
+      perform_enqueued_jobs do
+        expect {
+          click_button "Confirm and claim"
+        }.to change { Claim.count }.by(1)
+          .and change { Policies::EarlyYearsTeachersFinancialIncentivePayments::Eligibility.count }.by(1)
+          .and change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+
+      claim = Claim.last
+
+      expect(page).to have_text "Your reference number"
+      expect(page).to have_text claim.reference
+
+      visit landing_page_path(
+        Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
+      )
+
+      click_link "Start now"
+
+      expect(page).to have_text "Which nursery do you teach in?"
+      find_field("claim[nursery_search_query]").set("Springfield nursery")
+      click_button "Continue"
+
+      expect(page).to have_text "Which nursery do you teach in?"
+      choose "Springfield nursery"
+      click_button "Continue"
+
+      expect(page).to have_text "Do you hold one of these teaching qualifications?"
+      choose "Yes"
+      click_button "Continue"
+
+      expect(page).to have_text "Check if you’re eligible"
+      check "I spend at least half"
+      check "I’m not currently subject"
+      click_button "Confirm and continue"
+
+      expect(page).to have_text "You’re eligible to apply"
+      click_button "Continue"
+
+      expect(page).to have_text "Sign in with GOV.UK One Login"
+      perform_enqueued_jobs do
+        click_button "Continue"
+      end
+
+      expect(page).to have_text "You’ve already submitted a claim in this claim window"
+      expect(page).to have_text claim.reference
     end
   end
 end

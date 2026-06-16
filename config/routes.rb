@@ -36,6 +36,13 @@ Rails.application.routes.draw do
     end
   }
 
+  scope path: ":journey", constraints: {journey: "early-years-teachers-recognition-payments"} do
+    get "guidance", to: "static_pages#guidance_page", as: :eytfi_guidance
+    get "methodology", to: "static_pages#methodology_page", as: :eytfi_methodology
+    get "good-practice", to: "static_pages#good_practice_page", as: :eytfi_good_practice
+    get "claim-cancelled", to: "static_pages#claim_cancelled", as: :claim_cancelled
+  end
+
   # Define routes that are specific to each journey's page sequence
   Journeys.all.each do |journey|
     constraints(restrict_to_sequence_slugs.new(journey)) do
@@ -82,6 +89,16 @@ Rails.application.routes.draw do
         }
     end
 
+    scope constraints: {journey: %r{#{Journeys.all.select(&:uses_feedback?).map(&:routing_name).join("|")}}} do
+      resources :feedback,
+        only: [:show, :update],
+        param: :slug,
+        controller: "feedback",
+        constraints: {
+          slug: %r{#{Journeys::Feedbacks::SlugSequence::SLUGS.join("|")}}
+        }
+    end
+
     scope constraints: {journey: /early-years-payment/} do
       get "guidance", to: "journeys/early_years_payment/provider/start/static_pages#guidance", as: :guidance
       get "consent-form", to: "journeys/early_years_payment/provider/start/static_pages#consent_form"
@@ -98,10 +115,7 @@ Rails.application.routes.draw do
       end
 
       get "auth/teacher/callback", to: "journeys/early_years_teachers_financial_incentive_payments/auth#callback"
-    end
-
-    scope constraints: {journey: "early-years-teachers-recognition-payments"} do
-      get "guidance", to: "static_pages#guidance_page", as: :eytfi_guidance
+      get "auth/failure", to: "journeys/early_years_teachers_financial_incentive_payments/auth#failure"
     end
 
     scope path: "/", constraints: {journey: Regexp.new(Journeys.all_routing_names.join("|"))} do

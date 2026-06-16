@@ -3,10 +3,12 @@ module Admin
     class FurtherEducationPaymentsForm < Admin::AmendmentForm
       attribute :further_education_teaching_start_year, :string
 
-      def load_data_from_claim
-        super
-
-        self.further_education_teaching_start_year = eligibility.further_education_teaching_start_year
+      def assign_attributes(params)
+        super(
+          params.reverse_merge(
+            further_education_teaching_start_year: eligibility.further_education_teaching_start_year
+          )
+        )
       end
 
       def save

@@ -451,11 +451,14 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
         fill_in "Postcode", with: "DA1 5FZ"
         click_on "Search"
 
-        # Redirects to manual address page
-        expect(page).to have_text("What is your address?")
+        # Stays on postcode page and shows availability error
+        expect(page).to have_text("What is your home address?")
+        expect(page).to have_text("Postcode search is currently unavailable. Please try again or enter your address manually.")
 
-        # Shows a flash message to enter address manually
-        expect(page).to have_text("Please enter your address manually")
+        click_button "Enter your address manually"
+
+        # Manual address page is still reachable
+        expect(page).to have_text("What is your address?")
       end
     end
   end

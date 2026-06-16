@@ -14,6 +14,10 @@ module Journeys
 
         journey_session.answers.update!(continue_claim:)
 
+        if claim_cancelled?
+          session.clear
+        end
+
         true
       end
 
@@ -28,6 +32,12 @@ module Journeys
             name: t("options.false")
           )
         ]
+      end
+
+      private
+
+      def claim_cancelled?
+        continue_claim == false
       end
     end
   end

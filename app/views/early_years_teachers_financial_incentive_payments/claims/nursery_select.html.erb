@@ -1,3 +1,12 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:title),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(
@@ -27,12 +36,14 @@
           :id, ->(option) { "#{option.name} #{' (closed)' if option.closed?}" },
           :address,
           legend: {
-            text: "Which nursery do you teach in?",
+            text: @form.t(:title),
             tag: "h1",
             size: "l"
           },
           hint: {
-            text: "Select your nursery from the search results."
+            text: "<p>Select your nursery from the search results.</p>
+            <p>If you teach at a #{govuk_link_to "provider of childcare on domestic premises (CoDP)", t("early_years_teachers_financial_incentive_payments.codp_url")} 
+            and cannot find it in the search, email #{govuk_mail_to t("early_years_teachers_financial_incentive_payments.support_email_address") }.</p>".html_safe
           }
         ) %>
         <%= f.govuk_submit %>

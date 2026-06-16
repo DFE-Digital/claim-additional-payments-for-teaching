@@ -150,6 +150,46 @@ RSpec.describe Claim::DataReportRequest do
       end
     end
 
+    context "EYTFI policy claims" do
+      let(:eligible_eytfi_provider) { create(:eligible_eytfi_provider) }
+
+      let(:claims) do
+        [
+          create(
+            :claim,
+            :submitted,
+            policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+            eligibility: create(
+              :early_years_teachers_financial_incentive_payments_eligibility,
+              eligible_eytfi_provider: eligible_eytfi_provider
+            )
+          )
+        ]
+      end
+
+      it "contains the correct headers" do
+        expect(csv.headers).to eql(Claim::DataReportRequest::HEADERS)
+      end
+
+      it "contains the correct values" do
+        claims.each_with_index do |claim, index|
+          expect(csv[index]["Claim reference"]).to eql(claim.reference)
+          expect(csv[index]["Teacher reference number"]).to eql(claim.eligibility.teacher_reference_number)
+          expect(csv[index]["NINO"]).to eql(claim.national_insurance_number)
+          expect(csv[index]["Full name"]).to eql(claim.full_name)
+          expect(csv[index]["Email"]).to eql(claim.email_address)
+          expect(csv[index]["Date of birth"]).to eql(claim.date_of_birth.to_s)
+          expect(csv[index]["ITT subject"]).to be_nil
+          expect(csv[index]["Policy name"]).to eql(claim.policy.to_s)
+          expect(csv[index]["School name"]).to eql(eligible_eytfi_provider.name)
+          expect(csv[index]["School unique reference number"]).to eql(eligible_eytfi_provider.urn)
+          expect(csv[index]["Payroll gender"]).to eql(claim.payroll_gender)
+          expect(csv[index]["Nationality"]).to be_nil
+          expect(csv[index]["Passport number"]).to be_nil
+        end
+      end
+    end
+
     context "when there is a single quotation sign in name field" do
       let(:claims) do
         [

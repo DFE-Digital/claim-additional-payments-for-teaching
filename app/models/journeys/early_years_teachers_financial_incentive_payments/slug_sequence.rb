@@ -5,6 +5,7 @@ module Journeys
         nursery-search
         nursery-select
         teaching-qualification-confirmation
+        check-eligibility
         eligible-teaching-qualification-held
         sign-in
         qualifications-check
@@ -60,6 +61,7 @@ module Journeys
         end
 
         array << SLUGS_HASH["teaching-qualification-confirmation"]
+        array << SLUGS_HASH["check-eligibility"]
         array << SLUGS_HASH["eligible-teaching-qualification-held"]
         array << SLUGS_HASH["sign-in"]
         array << SLUGS_HASH["qualifications-check"]
@@ -78,8 +80,9 @@ module Journeys
         if answers.postcode.present? && postcode_search_form.completed_or_valid? && !answers.skip_postcode_search? && !answers.ordnance_survey_error
           array << SLUGS_HASH["select-home-address"]
         end
-
-        array << SLUGS_HASH["address"]
+        if answers.address_line_1.blank?
+          array << SLUGS_HASH["address"]
+        end
         array << SLUGS_HASH["gender"]
         array << SLUGS_HASH["national-insurance-number"]
         array << SLUGS_HASH["personal-bank-account"]

@@ -3,6 +3,11 @@ module Policies
     include BasePolicy
     extend self
 
+    # Percentage of approved claims to QA
+    APPROVED_MIN_QA_THRESHOLD = 100
+    # Percentage of rejected claims to QA
+    REJECTED_MIN_QA_THRESHOLD = 100
+
     VERIFIERS = [
       AutomatedChecks::ClaimVerifiers::OneLoginIdentity,
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
@@ -17,9 +22,9 @@ module Policies
       :other_reason_only_used_in_exceptional_circumstances
     ]
 
-    def hidden?
-      Rails.env.production? && !ENV["ENVIRONMENT_NAME"].start_with?("review")
-    end
+    ELIGIBILITY_MATCHING_ATTRIBUTES = [
+      %w[teacher_reference_number]
+    ]
 
     def notify_reply_to_id
       "f7ad7769-b521-4b30-bd60-9779cfe12c63".freeze
@@ -35,6 +40,10 @@ module Policies
 
     def award_amount
       4_500
+    end
+
+    def payroll_file_name
+      "EYTRP"
     end
   end
 end

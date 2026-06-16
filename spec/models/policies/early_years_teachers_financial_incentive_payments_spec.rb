@@ -40,34 +40,4 @@ RSpec.describe Policies::EarlyYearsTeachersFinancialIncentivePayments do
       expect(described_class.decision_deadline_in_weeks).to eq(10.weeks)
     end
   end
-
-  describe "#hidden?" do
-    subject(:hidden?) { described_class.hidden? }
-
-    context "when in review environment" do
-      before do
-        allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("production"))
-        allow(ENV).to receive(:[]).with("ENVIRONMENT_NAME").and_return("review-123")
-      end
-
-      it { is_expected.to be(false) }
-    end
-
-    context "when in production but not review" do
-      before do
-        allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("production"))
-        allow(ENV).to receive(:[]).with("ENVIRONMENT_NAME").and_return("production")
-      end
-
-      it { is_expected.to be(true) }
-    end
-
-    context "when not in production" do
-      before do
-        allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("test"))
-      end
-
-      it { is_expected.to be(false) }
-    end
-  end
 end

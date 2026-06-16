@@ -1,11 +1,20 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:title),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= govuk_notification_banner(title_text: "Success", success: true) do |nb| %>
       <% nb.with_heading(text: "Document uploaded successfully") %>
-      <p class="govuk-body">We will review your document to confirm where you work.</p>
+      <p class="govuk-body">We’ll review your document to confirm where you work.</p>
     <% end %>
 
-    <h1 class="govuk-heading-l">How we’ll use your information</h1>
+    <h1 class="govuk-heading-l"><%= @form.t(:title) %></h1>
 
     <h2 class="govuk-heading-m">Student loan deductions</h2>
 
@@ -25,12 +34,12 @@
 
     <p class="govuk-body">
       The Department of Education (DfE) will make the payment directly to you.
-      To complete the rest of your application, you will need your:
+      To complete the rest of your application, you’ll need your:
     </p>
 
     <ul class="govuk-list govuk-list--bullet">
       <li>home address</li>
-      <li>gender as it appears on payroll</li>
+      <li>gender as it appears in payroll</li>
       <li>bank account details</li>
     </ul>
 

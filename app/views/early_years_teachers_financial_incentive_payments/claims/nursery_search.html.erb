@@ -1,14 +1,26 @@
 <% @backlink_path = landing_page_path %>
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:title),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-l">Which nursery do you teach in?</h1>
+      <h1 class="govuk-heading-l"><%= @form.t(:title) %></h1>
 
       <p class="govuk-body">
         If you work in more than one setting, choose the one you spend most of your time in.
+      </p>
+
+      <p class="govuk-body">
+        If you teach at a <%= govuk_link_to "provider of childcare on domestic premises (CoDP)", t("early_years_teachers_financial_incentive_payments.codp_url") %> and you cannot find it in the search, email <%= govuk_mail_to t("early_years_teachers_financial_incentive_payments.support_email_address") %>.
       </p>
 
       <%= f.govuk_school_search(
@@ -17,6 +29,7 @@
         result_attribute: :nursery_id,
         label: {
           text: "Enter nursery name or postcode",
+          class: "govuk-!-padding-top-4",
           size: "m"
         },
         hint: {

@@ -1,0 +1,115 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: feedback_path(current_journey_routing_name), scope: :form, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">Give feedback on Claim an early years teacher recognition payment</h1>
+
+      <%= f.hidden_field :origin, value: (@form.origin || request.env["HTTP_REFERER"]) %>
+      <%= f.hidden_field :claim_id, value: session[:submitted_claim_id] %>
+
+      <%= f.govuk_collection_radio_buttons(
+        :rating,
+        @form.rating_radio_options,
+        :id,
+        :name,
+        legend: {
+          text: "How would you rate your experience claiming a recognition payment?",
+          size: "s"
+        }
+      ) %>
+
+      <%= f.govuk_radio_buttons_fieldset(
+        :area,
+        legend: {
+          text: "Which area of the service is your feedback for?",
+          size: "s",
+        },
+        link_errors: true
+      ) do %>
+
+        <%= f.govuk_radio_button(
+          :area,
+          "whole_service",
+          label: {
+            text: "The whole service"
+          }
+        ) %>
+
+        <%= f.govuk_radio_button :area,
+          "specific_page",
+          label: {
+            text: "A specific area"
+          } do %>
+          <%= f.govuk_collection_radio_buttons(
+            :specific_page,
+            @form.specific_page_radio_options,
+            :id,
+            :name,
+            legend: {
+              text: "What area of the service is your feedback for?",
+              size: "s"
+            }
+          ) %>
+        <% end %>
+      <% end %>
+
+      <%= f.govuk_text_area(
+        :comment,
+        label: {
+          text: "How could we improve this service? (optional)",
+          size: "s"
+        },
+        hint: {
+          text: "Do not include any personal or financial information, for example your National Insurance or credit card numbers."
+        },
+        max_chars: 1_250
+      ) %>
+
+      <%= f.govuk_radio_buttons_fieldset(
+        :research_participation,
+        legend: {
+          text: "Would you like to participate in our research?",
+          size: "s",
+        }) do %>
+
+        <%= f.govuk_radio_button :research_participation,
+          true,
+          label: {
+            text: "Yes"
+          },
+          link_errors: true do %>
+          <%= f.govuk_email_field(
+            :email_address,
+            label: {
+              text: "What is your email address?"
+            },
+            hint: {
+              text: "We’ll only use this to tell you about opportunities to take part in user research."
+            }
+          ) %>
+
+          <%= f.govuk_email_field(
+            :occupation,
+            label: {
+              text: "Occupation"
+            },
+            hint: {
+              text: "We’ll only use this to tell you about opportunities to take part in user research that is relevant to you."
+            }
+          ) %>
+        <% end %>
+
+        <%= f.govuk_radio_button(
+          :research_participation,
+          false,
+          label: {
+            text: "No"
+          },
+        ) %>
+      <% end %>
+
+      <%= f.govuk_submit "Submit feedback" %>
+    <% end %>
+  </div>
+</div>

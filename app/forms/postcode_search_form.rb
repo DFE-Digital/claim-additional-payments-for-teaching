@@ -21,10 +21,22 @@ class PostcodeSearchForm < Form
     return false if invalid?
 
     if skip_postcode_search
-      journey_session.answers.assign_attributes(skip_postcode_search:)
+      journey_session.answers.assign_attributes(
+        skip_postcode_search:,
+        address_line_1: nil,
+        address_line_2: nil,
+        address_line_3: nil,
+        address_line_4: nil
+      )
     else
-      journey_session.answers.assign_attributes(skip_postcode_search: false)
-      journey_session.answers.assign_attributes(postcode:)
+      journey_session.answers.assign_attributes(
+        skip_postcode_search: false,
+        address_line_1: nil,
+        address_line_2: nil,
+        address_line_3: nil,
+        address_line_4: nil,
+        postcode:
+      )
     end
 
     journey_session.save!
@@ -54,10 +66,12 @@ class PostcodeSearchForm < Form
     return nil unless UKPostcode.parse(postcode).full_valid?
     return unless address_data.nil?
 
+    journey_session.answers.assign_attributes(ordnance_survey_error: false)
     errors.add(:postcode, "Address not found")
   rescue OrdnanceSurvey::Client::ResponseError => e
     Sentry.capture_exception(e)
 
+    errors.add(:postcode, "Postcode search is currently unavailable. Please try again or enter your address manually.")
     journey_session.answers.assign_attributes(ordnance_survey_error: true)
     journey_session.save!
   end

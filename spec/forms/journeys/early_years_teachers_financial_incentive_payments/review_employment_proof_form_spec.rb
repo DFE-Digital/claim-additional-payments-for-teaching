@@ -43,7 +43,7 @@ RSpec.describe Journeys::EarlyYearsTeachersFinancialIncentivePayments::ReviewEmp
 
       it "has an appropriate error message" do
         form.valid?
-        expect(form.errors[:confirmed]).to include("Select yes if the file is correct")
+        expect(form.errors[:confirmed]).to include("Select yes if this file shows your name, your workplace and a date from the last 2 months")
       end
     end
   end

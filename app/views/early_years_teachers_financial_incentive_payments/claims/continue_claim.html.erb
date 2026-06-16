@@ -1,9 +1,19 @@
+<% @backlink_path = nil %>
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:title),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-l">You may be eligible for a recognition payment of up to £4,500</h1>
+      <h1 class="govuk-heading-l"><%= @form.t(:title) %></h1>
 
       <p class="govuk-body">
         We’ve confirmed your identity and that you have an eligible qualification. We still need to review your employment evidence before we can make a decision.
@@ -26,7 +36,7 @@
       </p>
 
       <h2 class="govuk-heading-s">
-        Income tax
+        Income Tax
       </h2>
 
       <p class="govuk-body">

@@ -24,6 +24,18 @@ module Policies
         end
       end
 
+      def identity_status
+        task = claim.tasks.detect { |t| t.name == "one_login_identity" } || Task.new
+
+        if task.passed?
+          "Passed"
+        elsif task.failed?
+          "Failed"
+        else
+          "Unverified"
+        end
+      end
+
       private
 
       def add_provider_claim_count_task?

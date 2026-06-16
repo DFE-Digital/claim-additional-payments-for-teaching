@@ -29,15 +29,22 @@ class SelectHomeAddressForm < Form
 
     if skip_postcode_search?
       journey_session.answers.assign_attributes(
-        skip_postcode_search:
+        skip_postcode_search: true,
+        address_line_1: nil,
+        address_line_2: nil,
+        address_line_3: nil,
+        address_line_4: nil,
+        postcode:
       )
     else
       address_parts = address.split(":")
 
       journey_session.answers.assign_attributes({
+        skip_postcode_search: false,
         address_line_1: address_parts[1].titleize,
         address_line_2: address_parts[2].titleize,
         address_line_3: address_parts[3].titleize,
+        address_line_4: nil,
         postcode: address_parts[4]
       })
     end
@@ -46,7 +53,7 @@ class SelectHomeAddressForm < Form
   end
 
   def completed?
-    skip_postcode_search? || valid?
+    skip_postcode_search? || address_selected_in_answers? || valid?
   end
 
   private
@@ -66,10 +73,6 @@ class SelectHomeAddressForm < Form
   end
 
   def validate_address_selected
-    if journey_session.answers.address_line_1.present? && journey_session.answers.postcode.present?
-      return
-    end
-
     if address.present?
       return
     end
@@ -81,5 +84,9 @@ class SelectHomeAddressForm < Form
     if journey_session.answers.address_line_1.blank? && journey_session.answers.postcode.blank?
       errors.add(:address, "Enter an address") if journey_session.answers.address_line_1.blank?
     end
+  end
+
+  def address_selected_in_answers?
+    journey_session.answers.address_line_1.present? && journey_session.answers.postcode.present?
   end
 end

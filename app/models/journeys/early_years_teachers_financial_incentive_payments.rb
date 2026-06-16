@@ -15,6 +15,7 @@ module Journeys
         NurserySearchForm,
         NurserySelectForm,
         TeachingQualificationConfirmationForm,
+        CheckEligibilityForm,
         EligibleTeachingQualificationHeldForm
       ]
 
@@ -44,6 +45,10 @@ module Journeys
     end
 
     def requires_student_loan_details?
+      true
+    end
+
+    def uses_feedback?
       true
     end
   end

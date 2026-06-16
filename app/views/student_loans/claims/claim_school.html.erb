@@ -8,33 +8,30 @@
       url: @form.url,
       method: :patch,
       builder: GOVUKDesignSystemFormBuilder::FormBuilder,
-      id: "further-education-provision-search-form",
       html: { novalidate: false } do |f| %>
       <%= f.govuk_error_summary %>
 
-      <%= f.hidden_field :possible_school_id %>
+      <%= f.govuk_school_search \
+        :provision_search,
+        search_path: school_search_index_path,
+        result_attribute: :possible_school_id,
+        label: {
+          text: claim_school_question(additional_school: params[:additional_school]),
+          tag: "h1",
+          size: "xl"
+        },
+        hint: -> do %>
+        <p>
+          Enter the school name or postcode using at least 3 characters.
+        </p>
 
-      <div id="autocomplete-container" class="govuk-!-margin-bottom-9">
-        <%= f.govuk_text_field :provision_search,
-          class: "js-remove",
-          label: {
-            text: claim_school_question(additional_school: params[:additional_school]),
-            tag: "h1",
-            size: "xl"
-          },
-          hint: -> do %>
+        <% if @form.show_multiple_schools_content? %>
           <p>
-            Enter the school name or postcode using at least 3 characters.
+            If you taught at multiple schools during this period, enter the
+            first school you think might be eligible.
           </p>
-
-          <% if @form.show_multiple_schools_content? %>
-            <p>
-              If you taught at multiple schools during this period, enter the
-              first school you think might be eligible.
-            </p>
-          <% end %>
         <% end %>
-      </div>
+      <% end %>
 
       <%= f.govuk_submit %>
     <% end %>

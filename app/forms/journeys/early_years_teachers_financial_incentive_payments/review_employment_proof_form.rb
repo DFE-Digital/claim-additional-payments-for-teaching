@@ -6,7 +6,11 @@ module Journeys
       attribute :confirmed, :string
       attribute :blob_id, :string
 
-      validates :confirmed, inclusion: {in: %w[yes no], message: "Select yes if the file is correct"}
+      validates :confirmed,
+        inclusion: {
+          in: %w[yes no],
+          message: "Select yes if this file shows your name, your workplace and a date from the last 2 months"
+        }
 
       def save
         return false if invalid?

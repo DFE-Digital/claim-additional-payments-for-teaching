@@ -125,7 +125,10 @@ RSpec.feature "Admin amends a claim" do
       :claim,
       :submitted,
       policy: Policies::EarlyYearsPayments,
-      practitioner_email_address: "old-practitioner-address@example.com"
+      practitioner_email_address: "old-practitioner-address@example.com",
+      eligibility_attributes: {
+        award_amount: 0
+      }
     )
 
     visit admin_claim_url(claim)
@@ -327,11 +330,15 @@ RSpec.feature "Admin amends a claim" do
         sign_in_as_service_admin
       end
 
-      scenario "admin cannot view or edit account name" do
+      scenario "admin can view or edit account name" do
         visit admin_claim_url(claim)
         click_link "Amend claim"
 
-        expect(page).not_to have_field("Banking name", with: claim.banking_name)
+        expect(page).to have_field(
+          "Banking name",
+          with: claim.banking_name,
+          disabled: false
+        )
       end
     end
 
@@ -344,7 +351,11 @@ RSpec.feature "Admin amends a claim" do
         visit admin_claim_url(claim)
         click_link "Amend claim"
 
-        expect(page).not_to have_field("Banking name", with: claim.banking_name)
+        expect(page).to have_field(
+          "Banking name",
+          with: claim.banking_name,
+          disabled: true
+        )
       end
     end
   end

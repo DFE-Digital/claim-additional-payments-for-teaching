@@ -110,4 +110,102 @@ RSpec.describe Policies::EarlyYearsPayments::ClaimCheckingTasks do
       end
     end
   end
+
+  describe "#identity_status" do
+    subject(:identity_status) { described_class.new(claim).identity_status }
+
+    context "when the practitioner has not completed their part of the claim" do
+      let(:claim) do
+        create(
+          :claim,
+          :awaiting_practitioner,
+          policy: Policies::EarlyYearsPayments
+        )
+      end
+
+      it { is_expected.to eq("Incomplete") }
+    end
+
+    context "when the one login identity task passed" do
+      let(:claim) do
+        create(
+          :claim,
+          :submitted,
+          policy: Policies::EarlyYearsPayments,
+          tasks: [
+            build(:task, name: "one_login_identity", passed: true)
+          ]
+        )
+      end
+
+      it { is_expected.to eq("Passed") }
+    end
+
+    context "when one login idv failed but alternative verification is pending" do
+      let(:claim) do
+        create(
+          :claim,
+          :submitted,
+          policy: Policies::EarlyYearsPayments,
+          onelogin_idv_at: DateTime.current,
+          identity_confirmed_with_onelogin: false,
+          tasks: [
+            build(:task, name: "one_login_identity", passed: false)
+          ]
+        )
+      end
+
+      it { is_expected.to eq("Unverified") }
+    end
+
+    context "when one login idv failed and alternative verification failed" do
+      let(:claim) do
+        create(
+          :claim,
+          :submitted,
+          policy: Policies::EarlyYearsPayments,
+          tasks: [
+            build(:task, name: "one_login_identity", passed: false),
+            build(:task, name: "ey_alternative_verification", passed: false)
+          ]
+        )
+      end
+
+      it { is_expected.to eq("Failed") }
+    end
+
+    context "when one login idv failed and alternative verification passed" do
+      let(:claim) do
+        create(
+          :claim,
+          :submitted,
+          policy: Policies::EarlyYearsPayments,
+          onelogin_idv_at: DateTime.current,
+          identity_confirmed_with_onelogin: false,
+          tasks: [
+            build(:task, name: "one_login_identity", passed: false),
+            build(:task, name: "ey_alternative_verification", passed: true)
+          ]
+        )
+      end
+
+      it { is_expected.to eq("Passed") }
+    end
+
+    context "with a year 1 claim that passed identity confirmation" do
+      let(:claim) do
+        create(
+          :claim,
+          :submitted,
+          policy: Policies::EarlyYearsPayments,
+          academic_year: AcademicYear.new("2024/2025"),
+          tasks: [
+            build(:task, name: "identity_confirmation", passed: true)
+          ]
+        )
+      end
+
+      it { is_expected.to eq("Passed") }
+    end
+  end
 end

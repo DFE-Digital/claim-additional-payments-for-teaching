@@ -1,3 +1,12 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:title),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
@@ -8,7 +17,7 @@
         :id,
         :name,
         legend: {
-          text: "Do you hold one of these teaching qualifications?",
+          text: @form.t(:title),
           tag: "h1",
           size: "xl"
         },
@@ -18,9 +27,9 @@
           </p>
 
           <%= govuk_list [
-            "Qualified Teacher Status (QTS)",
-            "Early Years Teacher Status (EYTS)",
-            "Early Years Professional Status (EYPS)",
+            "qualified teacher status (QTS)",
+            "early years teacher status (EYTS)",
+            "early years professional status (EYPS)",
           ], type: :bullet %>
 
           <p class="govuk-body">

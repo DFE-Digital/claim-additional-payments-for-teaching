@@ -3,7 +3,7 @@
     <h1 class="govuk-heading-xl">Claim an early years teacher recognition payment</h1>
 
     <p class="govuk-body">
-      Use this service to claim a recognition payment of £4,500 before tax if you're an eligible early years teacher.
+      Use this service to claim a recognition payment of £4,500 after tax if you’re an eligible early years teacher.
     </p>
 
     <p class="govuk-body">
@@ -15,14 +15,14 @@
     <h2 class="govuk-heading-m">What you need</h2>
 
     <div class="govuk-!-padding-5 app-grey-box">
-      <p class="govuk-body">You will need:</p>
+      <p class="govuk-body">You’ll need:</p>
 
       <%= govuk_list [
-        "your Teacher Reference Number (TRN) - you’ll have one if you have, or are working towards, Early Years Professional Status (EYPS), qualified teacher status (QTS) or early years teacher status (EYTS)",
+        "your teacher reference number (TRN) - you’ll have one if you have, or are working towards, early years professional status (EYPS), qualified teacher status (QTS) or early years teacher status (EYTS)",
         "a GOV.UK One Login account to prove your identity - you’ll need a UK passport, UK photo driving licence or biometric residence permit to set it up",
         "your bank details, including the full name on the account, sort code and account number",
+        "your gender as it appears on payroll",
         "a recent payslip from the last 2 months",
-        "gender as it appears on payroll"
       ], type: :bullet, classes: "govuk-!-margin-bottom-0" %>
     </div>
 
@@ -33,7 +33,7 @@
     </p>
 
     <p class="govuk-body">
-      If you need to get set up on a GOV.UK One Login account, this can take 2 weeks.
+      If you need to set up a GOV.UK One Login account, this can take 2 weeks.
     </p>
 
     <h2 class="govuk-heading-m">How long it takes to claim</h2>
@@ -52,6 +52,8 @@
       If you have any questions, email <%= govuk_mail_to t("early_years_teachers_financial_incentive_payments.support_email_address"), t("early_years_teachers_financial_incentive_payments.support_email_address") %>.
     </p>
 
-    <%= govuk_start_button(text: "Start now", href: claim_path(current_journey_routing_name, "claim", answers: { service_access_code: params[:service_access_code] })) %>
+    <% if @journey_open %>
+      <%= govuk_start_button(text: "Start now", href: claim_path(current_journey_routing_name, "claim", answers: { service_access_code: params[:service_access_code] })) %>
+    <% end %>
   </div>
 </div>

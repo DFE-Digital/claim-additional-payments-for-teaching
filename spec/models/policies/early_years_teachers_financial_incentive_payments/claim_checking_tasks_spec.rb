@@ -112,4 +112,52 @@ RSpec.describe Policies::EarlyYearsTeachersFinancialIncentivePayments::ClaimChec
       end
     end
   end
+
+  describe "#identity_status" do
+    subject(:identity_status) { described_class.new(claim).identity_status }
+
+    let(:claim) do
+      build(
+        :claim,
+        policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+        tasks: claim_tasks
+      )
+    end
+
+    context "when there is no identity_confirmation task" do
+      let(:claim_tasks) { [] }
+
+      it { is_expected.to eq("Unverified") }
+    end
+
+    context "when the task passed" do
+      let(:claim_tasks) do
+        [
+          build(
+            :task,
+            claim_verifier_match: nil,
+            name: "one_login_identity",
+            passed: true
+          )
+        ]
+      end
+
+      it { is_expected.to eq("Passed") }
+    end
+
+    context "when the task failed" do
+      let(:claim_tasks) do
+        [
+          build(
+            :task,
+            claim_verifier_match: nil,
+            name: "one_login_identity",
+            passed: false
+          )
+        ]
+      end
+
+      it { is_expected.to eq("Failed") }
+    end
+  end
 end

@@ -347,6 +347,45 @@ RSpec.describe Claim::MatchingAttributeFinder do
     it { is_expected.to eq [other_claim] }
   end
 
+  describe "matching_claims - same trn different policy" do
+    let!(:source_claim) {
+      eligibility = create(
+        :early_years_teachers_financial_incentive_payments_eligibility,
+        :eligible,
+        teacher_reference_number: "1234567"
+      )
+
+      create(
+        :claim,
+        :submitted,
+        policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+        eligibility: eligibility
+      )
+    }
+
+    let!(:other_claim) {
+      eligibility = create(
+        :further_education_payments_eligibility,
+        :eligible,
+        teacher_reference_number: "1234567"
+      )
+
+      create(
+        :claim,
+        :submitted,
+        policy: Policies::FurtherEducationPayments,
+        eligibility: eligibility,
+        surname: Faker::Name.last_name
+      )
+    }
+
+    subject(:matching_claims) do
+      Claim::MatchingAttributeFinder.new(source_claim).matching_claims
+    end
+
+    it { is_expected.to eq [other_claim] }
+  end
+
   describe "matching_claims - blank trn, matching email addresses" do
     let(:policy) { Policies::FurtherEducationPayments }
 

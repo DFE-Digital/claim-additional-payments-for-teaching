@@ -88,7 +88,12 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_text "You are eligible to apply"
+    expect(page).to have_text "Check if you’re eligible"
+    check "I spend at least half"
+    check "I’m not currently subject"
+    click_button "Confirm and continue"
+
+    expect(page).to have_text "You’re eligible to apply"
     click_button "Continue"
 
     expect(page).to have_text "Sign in with GOV.UK One Login"
@@ -128,7 +133,7 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     fill_in "Postcode", with: "NE1 6EE"
     click_button "Continue"
 
-    expect(page).to have_text "How is your gender recorded"
+    expect(page).to have_text "Are you recorded as male or female on your employer’s payroll system?"
     choose "I don’t know"
     click_button "Continue"
 
@@ -200,6 +205,34 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     expect(mail.personalisation[:ref_number]).to eql(claim.reference)
 
     expect(page).to have_text "Your reference number"
+    click_link "What did you think of this service?"
+
+    expect(page).to have_text "Give feedback on Claim an early years teacher recognition payment"
+    choose "Very satisfied"
+    choose "A specific area"
+    choose "Uploading proof of employment"
+    fill_in "How could we improve this service? (optional)", with: "some comment"
+    choose "Yes"
+    fill_in "What is your email address?", with: "claimant@example.com"
+    fill_in "Occupation", with: "Teacher"
+    expect {
+      click_button "Submit feedback"
+    }.to change(Feedback, :count).by(1)
+
+    expect(page).to have_text "Feedback submitted"
+
+    feedback = Feedback.last
+
+    expect(feedback.rating).to eql "very_satisfied"
+    expect(feedback.area).to eql "specific_page"
+    expect(feedback.specific_page).to eql "uploading"
+    expect(feedback.comment).to eql "some comment"
+    expect(feedback.research_participation).to be_truthy
+    expect(feedback.email_address).to eql "claimant@example.com"
+    expect(feedback.occupation).to eql "Teacher"
+
+    expect(feedback.origin).to eql "http://www.example.com/early-years-teachers-recognition-payments/confirmation"
+    expect(feedback.claim_id).to eql(claim.id)
   end
 
   scenario "using nursery auto complete - js", js: true do

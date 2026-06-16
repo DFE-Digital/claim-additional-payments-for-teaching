@@ -2,16 +2,21 @@ en:
   early_years_teachers_financial_incentive_payments:
     policy_short_name: Early Years Teachers Recognition Payments
     policy_acronym: EYTRP
-    journey_name: Early Years Teachers Recognition Payments
+    journey_name: Claim an early years teacher recognition payment
     feedback_email: "feedback@example.com"
     support_email_address: "EY-teacher.recognitionpayment@education.gov.uk"
+    codp_url: "https://www.gov.uk/guidance/childcare-on-domestic-premises"
     claim_subject: "Early Years Recognition Payment"
     claim_description: for an early years teachers recognition payment
     forms:
+      nursery_search:
+        title: "Which nursery do you teach in?"
       nursery_select:
+        title: "Which nursery do you teach in?"
         errors:
           blank: "Select the setting you work in"
       teaching_qualification_confirmation:
+        title: "Do you hold one of these teaching qualifications?"
         options:
           true: "Yes"
           false: "No"
@@ -19,12 +24,36 @@ en:
           inclusion: Select yes if you hold one of the listed qualifications
       ineligible:
         teaching_qualification_not_confirmed:
-          heading: You are not eligible for this payment
+          heading: You’re not eligible for this payment
         ineligible_provider:
           heading: The nursery you selected may not be eligible
         teaching_qualification_ineligible:
           heading: You’re not eligible based on your qualification
+        check_eligibility_both_not_confirmed:
+          heading: You’re not eligible for this payment
+        fifty_percent_time_as_eyt_not_confirmed:
+          heading: You’re not eligible for this payment
+        not_subject_to_performance_and_disciplinary_not_confirmed:
+          heading: You’re not eligible for this payment
+        claim_already_submitted_this_policy_year:
+          heading: "You’ve already submited a claim in this claim window"
+      check_eligibility:
+        title: "Check if you’re eligible"
+        labels:
+          fifty_percent_time_as_eyt: "I spend at least half of my working time as an early years teacher, as set out in the %{standards_link}"
+          not_subject_to_performance_and_disciplinary: "I’m not currently subject to any formal performance measures as a result of continuous poor teaching standards or disciplinary action"
+      eligible_teaching_qualification_held:
+        title: "You’re eligible to apply"
+      sign_in:
+        title: "Sign in with GOV.UK One Login"
+      qualifications_check:
+        title: "Checking qualifications"
+      information_provided:
+        title: "How we’ll use your information"
+      review_employment_proof:
+        title: "Check your document"
       continue_claim:
+        title: "You may be eligible for a recognition payment of up to £4,500"
         options:
           true: "Yes"
           false: "No"
@@ -32,4 +61,13 @@ en:
           blank: Select yes if you would like to continue with your claim
       gender:
         questions:
-          payroll_gender: "How is your gender recorded on your school’s payroll system?"
+          payroll_gender: "Are you recorded as male or female on your employer’s payroll system?"
+      details:
+        errors:
+          rating_inclusion: Select a rating
+          area_inclusion: Select a service area
+          specific_page_inclusion: Select a specific area
+          comment_length: "Comment exceeds %{count} characters"
+          research_participation_inclusion: Select yes if would like to participate in user research
+          email_address_presence: Enter your email address
+          occupation_presence: Enter your occupation

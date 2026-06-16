@@ -10,7 +10,9 @@
         <h2 class="govuk-heading-l govuk-!-margin-bottom-1">Postcode</h2>
         <p class="govuk-body">
           <%= @form.postcode %>
-          <%= govuk_link_to "Change", claim_path(current_journey_routing_name, "postcode-search"), class: "govuk-!-margin-left-3", "aria-label": "Change" %>
+          <%= govuk_link_to claim_path(current_journey_routing_name, "postcode-search"), class: "govuk-!-margin-left-3" do %>
+            Change <span class="govuk-visually-hidden">postcode <%= @form.postcode %></span>
+          <% end %>
         </p>
 
         <%= f.govuk_collection_radio_buttons :address,
@@ -24,7 +26,7 @@
           } %>
 
         <p class="govuk-body">
-          <button form="skip-postcode-search" class="govuk-link govuk-link--no-visited-state button-to-as-link">
+          <button type="submit" name="claim[skip_postcode_search]" value="true" class="govuk-link govuk-link--no-visited-state button-to-as-link">
             <%= I18n.t("questions.address.home.i_cannot_find") %>
           </button>
         </p>
@@ -35,7 +37,3 @@
     <% end %>
   </div>
 </div>
-
-<%= form_for @form, url: claim_path(current_journey_routing_name), builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { id: "skip-postcode-search" } do |f| %>
-  <%= f.hidden_field :skip_postcode_search, value: true %>
-<% end %>

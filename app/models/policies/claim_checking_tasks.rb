@@ -21,6 +21,24 @@ module Policies
         .select(&:not_passed?)
     end
 
+    def identity_status
+      task = claim.tasks.detect { |t| t.name == "identity_confirmation" }
+
+      if task.nil?
+        "Unverified"
+      elsif task.passed?
+        "Passed"
+      elsif task.passed == false
+        "Failed"
+      elsif task.claim_verifier_match_all?
+        "Full match"
+      elsif task.claim_verifier_match_any?
+        "Partial match"
+      elsif task.claim_verifier_match_none?
+        "No match"
+      end
+    end
+
     private
 
     def all_tasks

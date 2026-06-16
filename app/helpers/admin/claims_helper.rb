@@ -142,62 +142,16 @@ module Admin
     end
 
     def identity_confirmation_task_claim_verifier_match_status_tag(claim)
-      case claim.policy
-      when Policies::FurtherEducationPayments
-        identity_tasks = []
-        identity_tasks << (claim.tasks.detect { |t| t.name == "one_login_identity" } || Task.new)
-        identity_tasks << (claim.tasks.detect { |t| t.name == "fe_alternative_verification" } || Task.new)
+      status = claim.policy::ClaimCheckingTasks.new(claim).identity_status
 
-        if identity_tasks.any? { |t| t.passed? }
-          status = "Passed"
-          status_colour = "green"
-        elsif identity_tasks.all? { |t| t.failed? }
-          status = "Failed"
-          status_colour = "red"
-        else
-          status = "Unverified"
-          status_colour = "grey"
-        end
-      when Policies::EarlyYearsPayments
-        identity_tasks = Policies::EarlyYearsPayments::ClaimCheckingTasks.new(claim).identity_tasks.map do |name|
-          claim.tasks.detect { |t| t.name == name } || Task.new
-        end
-
-        if !claim.eligibility.practitioner_journey_completed?
-          status = "Incomplete"
-          status_colour = "grey"
-        elsif identity_tasks.any? { |t| t.passed? }
-          status = "Passed"
-          status_colour = "green"
-        elsif identity_tasks.all? { |t| t.failed? }
-          status = "Failed"
-          status_colour = "red"
-        else
-          status = "Unverified"
-          status_colour = "grey"
-        end
-      else
-        task = claim.tasks.detect { |t| t.name == "identity_confirmation" }
-
-        if task.nil?
-          status = "Unverified"
-          status_colour = "grey"
-        elsif task.passed?
-          status = "Passed"
-          status_colour = "green"
-        elsif task.passed == false
-          status = "Failed"
-          status_colour = "red"
-        elsif task.claim_verifier_match_all?
-          status = "Full match"
-          status_colour = "green"
-        elsif task.claim_verifier_match_any?
-          status = "Partial match"
-          status_colour = "yellow"
-        elsif task.claim_verifier_match_none?
-          status = "No match"
-          status_colour = "red"
-        end
+      status_colour = case status
+      when "Passed" then "green"
+      when "Full match" then "green"
+      when "Partial match" then "yellow"
+      when "Failed" then "red"
+      when "No match" then "red"
+      when "Unverified" then "grey"
+      when "Incomplete" then "grey"
       end
 
       tag_classes = "govuk-tag app-task-list__task-completed govuk-tag--#{status_colour}"
