@@ -20,7 +20,7 @@ module Claims
     # timestamp set delete these two shim methods.
     def self.matches_shim(claim)
       unless claim.matching_attributes_last_checked_at.present?
-        update_matching_claims!(claim)
+        AutomatedChecks::ClaimVerifiers::MatchingClaims.new(claim: claim).perform
       end
 
       matches(claim)

@@ -24,7 +24,8 @@ module Policies
       AutomatedChecks::ClaimVerifiers::FraudRisk,
       AutomatedChecks::ClaimVerifiers::FeRepeatApplicantCheck,
       AutomatedChecks::ClaimVerifiers::ClaimantCheck,
-      AutomatedChecks::ClaimVerifiers::ProviderCheck
+      AutomatedChecks::ClaimVerifiers::ProviderCheck,
+      AutomatedChecks::ClaimVerifiers::MatchingClaims
     ]
 
     # Options shown to admins when rejecting a claim
