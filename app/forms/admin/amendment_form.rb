@@ -190,7 +190,7 @@ class Admin::AmendmentForm
       claim.assign_attributes(claim_attributes)
       claim.save!
 
-      Claims::Match.update_matching_claims!(claim)
+      AutomatedChecks::ClaimVerifiers::MatchingClaims.new(claim: claim).perform
 
       Event.create(claim: claim, name: "claim_amendment", actor: admin_user, entity: amendment)
 

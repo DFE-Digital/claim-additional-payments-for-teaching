@@ -6,7 +6,8 @@ RSpec.describe Policies::EarlyYearsTeachersFinancialIncentivePayments do
       expect(described_class::VERIFIERS).to eq([
         AutomatedChecks::ClaimVerifiers::OneLoginIdentity,
         AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
-        AutomatedChecks::ClaimVerifiers::EyQualificationCheck
+        AutomatedChecks::ClaimVerifiers::EyQualificationCheck,
+        AutomatedChecks::ClaimVerifiers::MatchingClaims
       ])
     end
   end

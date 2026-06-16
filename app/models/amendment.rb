@@ -49,7 +49,7 @@ class Amendment < ApplicationRecord
 
       raise ActiveRecord::Rollback unless amendment.save
 
-      Claims::Match.update_matching_claims!(claim)
+      AutomatedChecks::ClaimVerifiers::MatchingClaims.new(claim: claim).perform
     end
 
     amendment

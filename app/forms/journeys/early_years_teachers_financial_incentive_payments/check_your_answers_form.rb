@@ -29,7 +29,6 @@ module Journeys
           claim.save!
           mark_service_access_code_as_used!
           Event.create(claim:, name: "claim_submitted")
-          Claims::Match.update_matching_claims!(claim)
         end
 
         trigger_malware_scan_jobs
