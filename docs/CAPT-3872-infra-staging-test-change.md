@@ -14,16 +14,33 @@ flowchart LR
 ```
 ---
 
-### Feedback
+### Feedback notes
 
 - We're not really using test because it's in the production pipeline and whatever we deploy there also has to be deployed to production.
 - It has the integrations we actually want to use but due to the previous point it's awkward.
 - Ideally Test should be our "3930" Review App, but we didn't want the integrations, testing with preprod OL, TRS is a pain for everyday business review and we prefer bypass and stubs.
-- "3930" we always wanted it to have the lastest version, same as production.
+- "3930" we always wanted it to have the latest version, same as production.
 - Have a long-running "3930" isn't ideal:
     - it can get closed changing the URL
     - malware scanning needs reprovisioning by DevOps
     - review apps are stopped after a few days and need "touching" to re-deploy them.
+
+---
+
+## What we can't do currently:
+
+- Testing integrations without deploying to Production
+    - Because deploying to Test which auto-deploys to Production
+- Have an up-to-date Review App that has no integrations to quickly test
+- Have an environment we can easily freeze for penetration/application/load testing without preventing deployments to production
+
+---
+
+## What we need:
+
+- Be able to do end-to-end testing with integrations without affecting Production
+- Devs to be able to manually freeze and configure deployment for developing against third party integrations without affecting Production
+- Have a "Review App" that has the latest for ease of testing without integrations like OL
 
 ---
 
