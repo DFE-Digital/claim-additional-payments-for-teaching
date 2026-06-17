@@ -21,6 +21,12 @@ module Journeys
     JOURNEYS
   end
 
+  def customer_journeys
+    all
+      .reject(&:start_with_magic_link?)
+      .sort_by(&:full_name)
+  end
+
   def all_routing_names
     all.map(&:routing_name)
   end

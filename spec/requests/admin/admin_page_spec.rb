@@ -21,6 +21,22 @@ RSpec.describe "Admin page", type: :request do
 
 			expect(response).to be_successful
 			expect(response.body).to include(journey_components_path)
+			expect(response.body).to include(customer_journeys_path)
+		end
+	end
+
+	describe "GET /customer-journeys" do
+		it "loads the page with the main journey urls", :aggregate_failures do
+			get customer_journeys_path
+
+			expect(response).to be_successful
+			expect(response.body).to include(Journeys::TargetedRetentionIncentivePayments.start_page_url)
+			expect(response.body).to include(Journeys::TeacherStudentLoanReimbursement.start_page_url)
+			expect(response.body).to include(Journeys::GetATeacherRelocationPayment.start_page_url)
+			expect(response.body).to include(Journeys::FurtherEducationPayments.start_page_url)
+			expect(response.body).to include(Journeys::EarlyYearsPayment::Provider::Start.start_page_url)
+			expect(response.body).to include(Journeys::EarlyYearsPayment::Practitioner.start_page_url)
+			expect(response.body).to include(Journeys::EarlyYearsTeachersFinancialIncentivePayments.start_page_url)
 		end
 	end
 
