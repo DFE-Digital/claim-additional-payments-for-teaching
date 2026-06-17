@@ -213,13 +213,10 @@ module Journeys
           array << SLUGS_HASH["postcode-search"]
         end
 
-        postcode_search_form = form_for_slug(SLUGS_HASH["postcode-search"])
-        if answers.postcode.present? && postcode_search_form.completed_or_valid? && !answers.skip_postcode_search? && !answers.ordnance_survey_error
-          array << SLUGS_HASH["select-home-address"]
-        end
-
-        if answers.skip_postcode_search? || answers.ordnance_survey_error
-          array << SLUGS_HASH["address"]
+        array << if answers.postcode_searched?
+          SLUGS_HASH["select-home-address"]
+        else
+          SLUGS_HASH["address"]
         end
 
         array << SLUGS_HASH["email-address"]
