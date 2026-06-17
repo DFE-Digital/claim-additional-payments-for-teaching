@@ -89,12 +89,16 @@ class ClaimsController < BasePublicController
   end
 
   def check_page_is_authorised
+    return if admin_component_preview_enabled_for_current_journey?
+
     if navigator.requires_authorisation? && !navigator.authorised_slug?
       redirect_to claim_path(current_journey_routing_name, "unauthorised")
     end
   end
 
   def check_page_is_permissible
+    return if admin_component_preview_enabled_for_current_journey?
+
     unless navigator.permissible_slug?
       redirect_to claim_path(current_journey_routing_name, navigator.furthest_permissible_slug)
     end
@@ -156,6 +160,7 @@ class ClaimsController < BasePublicController
   end
 
   def check_whether_closed_for_submissions
+    return if admin_component_preview_enabled_for_current_journey?
     return if session[:submitted_claim_id].present?
 
     unless journey.accessible?(access_code)
@@ -194,6 +199,20 @@ class ClaimsController < BasePublicController
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
     response.headers["Pragma"] = "no-cache"
     response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
+  end
+
+  def admin_component_preview_enabled_for_current_journey?
+    preview = session[:admin_component_preview]
+    return false unless preview.present?
+
+    preview_data = preview.with_indifferent_access
+
+    return false if preview_data[:journey] != current_journey_routing_name
+
+    expires_at = preview_data[:expires_at].to_i
+    return false if expires_at <= Time.zone.now.to_i
+
+    true
   end
 
   private

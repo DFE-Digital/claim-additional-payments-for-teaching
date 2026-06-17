@@ -1,4 +1,8 @@
 class StaticPagesController < BasePublicController
+  include JourneyComponentsPage
+
+  skip_before_action :add_view_paths, only: [:home, :journey_components]
+
   def accessibility_statement
     journey_accessibility_statement = "#{journey.view_path}/accessibility_statement"
 
@@ -7,6 +11,13 @@ class StaticPagesController < BasePublicController
     else
       render "static_pages/accessibility_statement"
     end
+  end
+
+  def home
+  end
+
+  def journey_components
+    prepare_journey_components_page
   end
 
   def contact_us
@@ -89,6 +100,10 @@ class StaticPagesController < BasePublicController
   end
 
   private
+
+  def current_journey_routing_name
+    super || Journeys.all.first.routing_name
+  end
 
   def journey_available?
     return true unless journey

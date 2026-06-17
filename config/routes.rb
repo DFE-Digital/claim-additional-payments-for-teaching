@@ -1,10 +1,16 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  root to: redirect(Rails.application.config.guidance_url)
+  if Rails.env.production?
+    root to: redirect(Rails.application.config.guidance_url)
+  else
+    root to: "static_pages#home"
+  end
 
   get "/claim/auth/tid/callback", to: "omniauth_callbacks#callback"
   get "/auth/failure", to: "omniauth_callbacks#failure"
   get "/auth/onelogin", to: "omniauth_callbacks#onelogin"
+  get "/journey-components", to: "static_pages#journey_components", as: :journey_components
+  get "/journey-components/open", to: "admin/components#open", as: :open_component
   if OneLogin::Config.instance.bypass?
     post "/auth/onelogin", to: "omniauth_callbacks#onelogin"
     post "/auth/onelogin_identity", to: "omniauth_callbacks#onelogin"

@@ -374,7 +374,6 @@ en:
                 new_member_of_staff: "They’re a new member of staff"
                 no_valid_reason: "No valid reason"
                 other: "Another reason"
-
   further_education_payments_provider:
     accessibility_statement:
       test_date: "20 September 2024"
@@ -448,7 +447,6 @@ en:
             no_not_planned: "No, and has no plan to enrol on one in the next 12 months"
         provider_verification_teaching_responsibilities:
           question: "Is %{claimant_name} a member of staff with the responsibilities of a teacher?"
-
       verify_claim:
         title: "Review a targeted retention incentive payment claim"
         declaration_title: "Declaration"
