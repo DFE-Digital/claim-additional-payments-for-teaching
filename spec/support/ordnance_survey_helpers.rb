@@ -324,6 +324,58 @@ module OrdnanceSurveyHelpers
       )
   end
 
+  # Stubs the API call to OS
+  #
+  # usage:
+  # ```
+  # stub_address_search(
+  #   postcode: "TE57 1NG",
+  #   results: [
+  #     {
+  #       address: "123, Main Street, Springfield, TE57 1NG",
+  #       address_line_1: "123",
+  #       address_line_2: "Main Street",
+  #       address_line_3: "Springfield",
+  #       postcode: "TE57 1NG"
+  #     }
+  #   ]
+  # )
+  # ```
+  def stub_address_search(postcode:, results:)
+    allow(OrdnanceSurvey).to receive(:configuration).and_return(
+      double(
+        client: double(
+          base_url: "https://api.os.uk",
+          params: {"key" => "ABC123"}
+        )
+      )
+    )
+
+    results_in_os_response_format = results.map do |result|
+      {
+        DPA: {
+          ADDRESS: result[:address],
+          BUILDING_NUMBER: result[:address_line_1],
+          THOROUGHFARE_NAME: result[:address_line_2],
+          POST_TOWN: result[:address_line_3],
+          POSTCODE: result[:postcode]
+        }
+      }
+    end
+
+    stub_request(
+      :get,
+      "https://api.os.uk/search/places/v1/postcode?key=ABC123&postcode=#{postcode.remove(" ")}"
+    )
+      .to_return(
+        status: 200,
+        body: {
+          results: results_in_os_response_format
+        }.to_json,
+        headers: {"Content-Type" => "application/json"}
+      )
+  end
+
   private
 
   def merge_recursively(a, b)
