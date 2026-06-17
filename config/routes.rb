@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get "/auth/failure", to: "omniauth_callbacks#failure"
   get "/auth/onelogin", to: "omniauth_callbacks#onelogin"
   get "/journey-components", to: "static_pages#journey_components", as: :journey_components
+  get "/customer-journeys", to: "static_pages#customer_journeys", as: :customer_journeys
   get "/journey-components/open", to: "admin/components#open", as: :open_component
   if OneLogin::Config.instance.bypass?
     post "/auth/onelogin", to: "omniauth_callbacks#onelogin"

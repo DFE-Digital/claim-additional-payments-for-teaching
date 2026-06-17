@@ -1,7 +1,7 @@
 class StaticPagesController < BasePublicController
   include JourneyComponentsPage
 
-  skip_before_action :add_view_paths, only: [:home, :journey_components]
+  skip_before_action :add_view_paths, only: [:home, :journey_components, :customer_journeys]
 
   def accessibility_statement
     journey_accessibility_statement = "#{journey.view_path}/accessibility_statement"
@@ -14,6 +14,9 @@ class StaticPagesController < BasePublicController
   end
 
   def home
+  end
+
+  def customer_journeys
   end
 
   def journey_components
