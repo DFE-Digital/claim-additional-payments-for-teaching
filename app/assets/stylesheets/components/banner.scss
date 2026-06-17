@@ -1,11 +1,14 @@
+@use "govuk-frontend/dist/govuk/helpers/colour";
+@use "govuk-frontend/dist/govuk/helpers/spacing";
+
 .banner {
-  background: govuk-colour("red");
-  color: govuk-colour("white");
-  padding: govuk-spacing(4);
-  margin-bottom: govuk-spacing(4);
+  background: colour.govuk-colour("red");
+  color: colour.govuk-colour("white");
+  padding: spacing.govuk-spacing(4);
+  margin-bottom: spacing.govuk-spacing(4);
 
   *[class*="govuk-body"] {
-    color: govuk-colour("white");
+    color: colour.govuk-colour("white");
   }
 
   .govuk-body-l {
@@ -15,15 +18,15 @@
   a,
   a.govuk-link,
   a:visited {
-    color: govuk-colour("white");
+    color: colour.govuk-colour("white");
   }
 
   a.govuk-link:focus {
-    color: $govuk-focus-text-colour;
+    color: colour.govuk-functional-colour(focus-text);
   }
 
   h2 {
-    margin-bottom: govuk-spacing(3);
+    margin-bottom: spacing.govuk-spacing(3);
   }
 
   p:last-of-type {

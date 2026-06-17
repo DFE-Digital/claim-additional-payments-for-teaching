@@ -1,10 +1,15 @@
+@use "govuk-frontend/dist/govuk/helpers/_colour.scss";
+@use "govuk-frontend/dist/govuk/core/_typography.mixin.scss" as typography;
+
+@include typography.styles;
+
 .autocomplete__option--focused,
 .autocomplete__option:hover {
-  background-color: $govuk-link-colour;
+  background-color: colour.govuk-functional-colour(link);
 }
 
 .autocomplete__input.govuk-input--error {
-  border-color: $govuk-error-colour;
+  border-color: colour.govuk-functional-colour(error);
 }
 
 .school-search__suggestion {

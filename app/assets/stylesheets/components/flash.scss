@@ -1,8 +1,9 @@
-@import "govuk-frontend/dist/govuk/index";
+@use "govuk-frontend/dist/govuk/helpers/colour";
+@use "govuk-frontend/dist/govuk/settings/measurements";
 
 %govuk-flash {
-  padding: $govuk-gutter-half;
-  margin-bottom: $govuk-gutter;
+  padding: measurements.$govuk-gutter-half;
+  margin-bottom: measurements.$govuk-gutter;
   border: 5px solid;
   font-weight: 700;
 }
@@ -10,20 +11,20 @@
 .govuk-flash {
   &__notice {
     @extend %govuk-flash;
-    color: govuk-colour("blue");
-    border-color: govuk-colour("blue");
+    color: colour.govuk-colour("blue");
+    border-color: colour.govuk-colour("blue");
   }
   &__alert {
     @extend %govuk-flash;
-    color: govuk-colour("red");
-    border-color: govuk-colour("red");
+    color: colour.govuk-colour("red");
+    border-color: colour.govuk-colour("red");
   }
   &__warning {
     @extend %govuk-flash;
-    color: govuk-colour("orange");
-    border-color: govuk-colour("orange");
+    color: colour.govuk-colour("orange");
+    border-color: colour.govuk-colour("orange");
     a {
-      color: govuk-colour("orange");
+      color: colour.govuk-colour("orange");
     }
   }
 }

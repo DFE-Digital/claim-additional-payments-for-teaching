@@ -1,4 +1,4 @@
-@import "govuk-frontend/dist/govuk/index";
+@use "govuk-frontend/dist/govuk/helpers/colour";
 
 [data-a11y-dialog-native] > :first-child {
   display: none;
@@ -23,12 +23,12 @@ dialog[open] {
 
 .timeout_dialog_titlebar {
   padding: 8px 15px 10px;
-  color: govuk-colour("white");
-  background: govuk-colour("black");
+  color: colour.govuk-colour("white");
+  background: colour.govuk-colour("black");
   margin: -1em -1em 2em;
 
   & *:focus {
-    outline: 3px solid govuk-colour("yellow");
+    outline: 3px solid colour.govuk-colour("yellow");
     outline-offset: 0;
   }
 
@@ -40,7 +40,7 @@ dialog[open] {
     width: 44px;
     height: 44px;
     border: 0;
-    color: govuk-colour("white");
+    color: colour.govuk-colour("white");
     background: none;
     cursor: pointer;
     font-family: "nta", Arial, sans-serif;
@@ -66,8 +66,8 @@ dialog::backdrop {
 }
 
 .dialog-content {
-  background-color: govuk-colour("white");
-  border: 2px solid govuk-colour("black");
+  background-color: colour.govuk-colour("white");
+  border: 2px solid colour.govuk-colour("black");
   z-index: 3;
   position: fixed;
   top: 50%;

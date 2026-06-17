@@ -1,4 +1,6 @@
-@import "remove_default_button_styling";
+@use "govuk-frontend/dist/govuk/helpers/colour";
+@use "govuk-frontend/dist/govuk/helpers/links";
+@use "govuk-frontend/dist/govuk/helpers/spacing";
 
 .admin-filter-group {
   display: flex;
@@ -20,8 +22,15 @@
   font-family: arial, sans-serif; //input has OS specific font-family
   font: inherit;
   text-decoration: underline;
-  color: $govuk-link-colour;
-  @include remove-default-button-styling;
-  @include govuk-link-common;
-  @include govuk-responsive-padding(2);
+  color: colour.govuk-functional-colour(link);
+
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  font-family: inherit;
+  cursor: pointer;
+
+  @include links.govuk-link-common;
+  @include spacing.govuk-responsive-padding(2);
 }

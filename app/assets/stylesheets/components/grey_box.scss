@@ -1,3 +1,5 @@
+@use "govuk-frontend/dist/govuk/helpers/colour";
+
 .app-grey-box {
-  background: govuk-colour("light-grey");
+  background: colour.govuk-colour("black", $variant: "tint-95");
 }

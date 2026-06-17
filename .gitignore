@@ -63,3 +63,6 @@ terraform/domains/infrastructure/vendor
 terraform/domains/environment_domains/vendor
 terraform.tfstate*
 bin/konduit.sh
+
+/app/assets/builds/*
+!/app/assets/builds/.keep

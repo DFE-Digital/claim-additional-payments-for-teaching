@@ -1,4 +1,4 @@
-@import "govuk-frontend/dist/govuk/index";
+@use "govuk-frontend/dist/govuk/helpers/colour";
 
 .autocomplete__wrapper {
   .autocomplete__menu {
@@ -7,7 +7,7 @@
       &--focused {
         .govuk-label,
         .govuk-hint {
-          color: govuk-colour("white");
+          color: colour.govuk-colour("white");
         }
       }
     }

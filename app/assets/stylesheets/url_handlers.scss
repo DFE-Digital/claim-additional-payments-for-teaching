@@ -1,0 +1,7 @@
+@function font-url($filename) {
+  @return url("#{$filename}");
+}
+
+@function image-url($filename) {
+  @return url("#{$filename}");
+}

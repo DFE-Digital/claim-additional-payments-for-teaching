@@ -1,4 +1,4 @@
-@import "govuk-frontend/dist/govuk/index";
+@use "govuk-frontend/dist/govuk/helpers/colour";
 
 // Don't know why we're redefining tag styles here but unfortunately we have to because of the tag rule in gds_kit_tweaks.scss.
 
@@ -11,43 +11,43 @@
 
 .govuk-tag {
   &--warning {
-    background-color: govuk-colour("orange");
+    background-color: colour.govuk-colour("orange");
   }
 
   &--alert {
-    background-color: govuk-colour("red");
+    background-color: colour.govuk-colour("red");
   }
 
   &--inactive {
-    background-color: govuk-colour("dark-grey");
+    background-color: colour.govuk-colour("black", $variant: "tint-25");
   }
 
   &--green {
-    color: govuk-shade(govuk-colour("green"), 20);
-    background: govuk-tint(govuk-colour("green"), 80);
+    color: colour.govuk-colour("green", $variant: "shade-25");
+    background: colour.govuk-colour("green", $variant: "tint-80");
   }
 
   &--grey {
-    color: govuk-shade(govuk-colour("dark-grey"), 30);
-    background: govuk-tint(govuk-colour("dark-grey"), 90);
+    color: colour.govuk-colour("black", $variant: "tint-25");
+    background: colour.govuk-colour("black", $variant: "tint-80");
   }
 
   &--red {
-    color: govuk-shade(govuk-colour("red"), 30);
-    background: govuk-tint(govuk-colour("red"), 80);
+    color: colour.govuk-colour("red", $variant: "shade-25");
+    background: colour.govuk-colour("red", $variant: "tint-80");
   }
 
   &--yellow {
-    color: govuk-shade(govuk-colour("yellow"), 65);
-    background: govuk-tint(govuk-colour("yellow"), 75);
+    color: colour.govuk-colour("yellow", $variant: "shade-50");
+    background: colour.govuk-colour("yellow", $variant: "tint-80");
   }
 
   &--strong-green {
-    background-color: govuk-colour("green");
+    background-color: colour.govuk-colour("green");
   }
 
   &--strong-red {
-    background-color: govuk-colour("red");
+    background-color: colour.govuk-colour("red");
   }
 }
 
@@ -63,7 +63,7 @@
 
 .tag--information {
   @extend %tag;
-  background-color: govuk-colour("blue");
+  background-color: colour.govuk-colour("blue");
 }
 
 .govuk-summary-list {
