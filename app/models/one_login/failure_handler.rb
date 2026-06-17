@@ -17,6 +17,10 @@ class OneLogin::FailureHandler
     end
   end
 
+  def notify_sentry!
+    Sentry.capture_message "One Login failure"
+  end
+
   private
 
   def journey
