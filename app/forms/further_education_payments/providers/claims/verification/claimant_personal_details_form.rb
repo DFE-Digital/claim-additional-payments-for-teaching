@@ -5,7 +5,7 @@ module FurtherEducationPayments
         class ClaimantPersonalDetailsForm < BaseForm
           include ActiveRecord::AttributeAssignment
 
-          class InvalidDate < Struct.new(:day, :month, :year, keyword_init: true)
+          class InvalidDate < Struct.new(:day, :month, :year)
             def future?
               false
             end

@@ -13,8 +13,7 @@ module AutomatedChecks
       :qts_award_date,
       :qualification_name,
       :surname,
-      :teacher_reference_number,
-      keyword_init: true
+      :teacher_reference_number
     )
 
     CLAIM_REFERENCE_COLUMN = "dfeta text2".freeze

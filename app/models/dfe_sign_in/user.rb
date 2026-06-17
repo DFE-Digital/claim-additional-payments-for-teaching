@@ -94,7 +94,7 @@ module DfeSignIn
       unassign_claims
     end
 
-    class Organisation < Struct.new(:ukprn, keyword_init: true); end
+    class Organisation < Struct.new(:ukprn); end
 
     def current_organisation
       @current_organisation ||= Organisation.new(

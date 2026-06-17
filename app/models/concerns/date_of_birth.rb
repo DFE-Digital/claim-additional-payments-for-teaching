@@ -11,7 +11,7 @@
 module DateOfBirth
   extend ActiveSupport::Concern
 
-  InvalidDate = Struct.new(:day, :month, :year, keyword_init: true) do
+  InvalidDate = Struct.new(:day, :month, :year) do
     def future?
       false
     end

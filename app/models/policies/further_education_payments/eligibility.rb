@@ -11,7 +11,7 @@ module Policies
 
       self.table_name = "further_education_payments_eligibilities"
 
-      class Course < Struct.new(:subject, :name, keyword_init: true)
+      class Course < Struct.new(:subject, :name)
         include Journeys::FurtherEducationPayments::CoursesHelper
 
         def taught?
@@ -52,9 +52,9 @@ module Policies
           .or(
             where(
               id: left_joins(claim: :notes)
-              .merge(Claim.by_academic_year(AcademicYear.new(2024)))
-              .duplicate_claim_provider_verification_email_manually_sent_by_ops_team
-              .select(:id)
+                .merge(Claim.by_academic_year(AcademicYear.new(2024)))
+                .duplicate_claim_provider_verification_email_manually_sent_by_ops_team
+                .select(:id)
             )
           )
       end

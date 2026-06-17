@@ -4,8 +4,7 @@ module Policies
       class Row < Struct.new(
         :label,
         :claimant_answer,
-        :provider_answer,
-        keyword_init: true
+        :provider_answer
       )
       end
 
