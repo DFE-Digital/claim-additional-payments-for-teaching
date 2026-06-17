@@ -105,4 +105,8 @@ module BasePolicy
   def admin_tasks_presenter(claim)
     self::AdminTasksPresenter.new(claim)
   end
+
+  def has_verifier?(verifier)
+    self::VERIFIERS.include?(verifier)
+  end
 end

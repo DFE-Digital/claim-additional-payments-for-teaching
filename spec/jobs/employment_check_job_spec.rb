@@ -61,5 +61,23 @@ RSpec.describe EmploymentCheckJob do
         expect(AutomatedChecks::ClaimVerifiers::Employment).not_to have_received(:new)
       end
     end
+
+    context "when the claim is for a policy that doesn't use employment verifier" do
+      it "doesn't run the employment verifier" do
+        eytrp_claim = create(
+          :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          eligibility_attributes: {
+            teacher_reference_number: "1234567"
+          }
+        )
+
+        job.perform
+
+        expect(AutomatedChecks::ClaimVerifiers::Employment).not_to(
+          have_received(:new).with(claim: eytrp_claim)
+        )
+      end
+    end
   end
 end
