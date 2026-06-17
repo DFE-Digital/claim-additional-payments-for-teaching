@@ -108,7 +108,7 @@ GEM
     bigdecimal (3.3.1)
     bindata (2.5.0)
     bindex (0.8.1)
-    bootsnap (1.18.6)
+    bootsnap (1.24.6)
       msgpack (~> 1.2)
     brakeman (7.1.0)
       racc
@@ -228,21 +228,21 @@ GEM
       faraday (>= 1.0, < 3.a)
     google-cloud-errors (1.5.0)
     google-logging-utils (0.2.0)
-    google-protobuf (4.33.2-aarch64-linux-musl)
+    google-protobuf (4.35.1-aarch64-linux-musl)
       bigdecimal
-      rake (>= 13)
-    google-protobuf (4.33.2-arm64-darwin)
+      rake (~> 13.3)
+    google-protobuf (4.35.1-arm64-darwin)
       bigdecimal
-      rake (>= 13)
-    google-protobuf (4.33.2-x86_64-darwin)
+      rake (~> 13.3)
+    google-protobuf (4.35.1-x86_64-darwin)
       bigdecimal
-      rake (>= 13)
-    google-protobuf (4.33.2-x86_64-linux-gnu)
+      rake (~> 13.3)
+    google-protobuf (4.35.1-x86_64-linux-gnu)
       bigdecimal
-      rake (>= 13)
-    google-protobuf (4.33.2-x86_64-linux-musl)
+      rake (~> 13.3)
+    google-protobuf (4.35.1-x86_64-linux-musl)
       bigdecimal
-      rake (>= 13)
+      rake (~> 13.3)
     googleauth (1.15.1)
       faraday (>= 1.0, < 3.a)
       google-cloud-env (~> 2.2)
@@ -262,6 +262,7 @@ GEM
       html-attributes-utils (~> 1)
     hashdiff (1.2.1)
     hashie (5.0.0)
+    herb (0.7.4)
     herb (0.7.4-aarch64-linux-musl)
     herb (0.7.4-arm64-darwin)
     herb (0.7.4-x86_64-darwin)
@@ -341,7 +342,7 @@ GEM
       railties (>= 7.1)
       stimulus-rails
       turbo-rails
-    msgpack (1.8.0)
+    msgpack (1.8.3)
     multi_json (1.15.0)
     multi_xml (0.6.0)
     multipart-post (2.4.1)
@@ -633,7 +634,7 @@ GEM
     uk_postcode (2.1.8)
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
-    unicode-emoji (4.1.0)
+    unicode-emoji (4.2.0)
     uniform_notifier (1.18.0)
     uri (1.1.1)
     useragent (0.16.11)
@@ -739,7 +740,7 @@ DEPENDENCIES
   webmock
 
 RUBY VERSION
-   ruby 3.4.9p82
+  ruby 4.0.5
 
 BUNDLED WITH
-   2.6.9
+  4.0.10
