@@ -22,6 +22,7 @@ RSpec.describe "Admin page", type: :request do
 			expect(response).to be_successful
 			expect(response.body).to include(journey_components_path)
 			expect(response.body).to include(customer_journeys_path)
+			expect(response.body).to include("href=\"/admin\"")
 		end
 	end
 
