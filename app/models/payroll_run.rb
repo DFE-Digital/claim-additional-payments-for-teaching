@@ -53,7 +53,7 @@ class PayrollRun < ApplicationRecord
     @payments_count ||= payments.count
   end
 
-  class LineItem < Struct.new(:id, :award_amount); end
+  class LineItem < Struct.new(:id, :award_amount, keyword_init: true); end
 
   def line_items(policy, filter: :all)
     policies = if policy == :all

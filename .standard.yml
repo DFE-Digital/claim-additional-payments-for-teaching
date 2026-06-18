@@ -4,3 +4,5 @@ ignore:
     - Layout/EmptyLineAfterMagicComment
   - "app/jobs/delete_personal_data_from_old_claims_job.rb":
     - Lint/UnreachableCode
+  - "**/*.rb":
+    - Style/RedundantStructKeywordInit

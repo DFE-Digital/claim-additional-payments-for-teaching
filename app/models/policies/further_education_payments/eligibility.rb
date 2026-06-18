@@ -11,7 +11,7 @@ module Policies
 
       self.table_name = "further_education_payments_eligibilities"
 
-      class Course < Struct.new(:subject, :name)
+      class Course < Struct.new(:subject, :name, keyword_init: true)
         include Journeys::FurtherEducationPayments::CoursesHelper
 
         def taught?
