@@ -117,10 +117,12 @@ module Dqt
     end
 
     def has_valid_eyps?
-      return false if eyts.blank?
-      return false if date_reader(eyts.holdsFrom) > Date.today
+      Array.wrap(routesToProfessionalStatuses).any? do |route|
+        type = route.routeToProfessionalStatusType&.professionalStatusType
+        status = route.status
 
-      eyts.routes.any? { |route| route.routeToProfessionalStatusType.professionalStatusType == "EarlyYearsProfessionalStatus" }
+        type == "EarlyYearsProfessionalStatus" && status == "Holds"
+      end
     end
 
     def has_valid_qts?

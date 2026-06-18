@@ -567,18 +567,16 @@ RSpec.describe Dqt::Teacher do
     context "when valid eyps present?" do
       let(:response) do
         {
-          eyts: {
-            holdsFrom: "2020-04-03",
-            routes: [
-              {
-                routeToProfessionalStatusType: {
-                  routeToProfessionalStatusTypeId: "11b66de5-4670-4c82-86aa-20e42df723b7",
-                  name: "Early Years Teacher Degree Apprenticeship",
-                  professionalStatusType: "EarlyYearsProfessionalStatus"
-                }
-              }
-            ]
-          },
+          routesToProfessionalStatuses: [
+            {
+              routeToProfessionalStatusType: {
+                professionalStatusType: "EarlyYearsProfessionalStatus"
+              },
+              status: "Holds",
+              holdsFrom: nil
+            }
+          ],
+          eyts: nil,
           trn: teacher_reference_number_str,
           alerts: [],
           lastName: "Doe",

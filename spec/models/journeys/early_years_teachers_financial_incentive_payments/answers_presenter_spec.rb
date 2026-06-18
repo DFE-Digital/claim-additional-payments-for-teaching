@@ -95,10 +95,14 @@ RSpec.describe Journeys::EarlyYearsTeachersFinancialIncentivePayments::AnswersPr
       let(:extra_answers) do
         {
           trs_data: {
-            "eyts" => {
-              "holdsFrom" => "2020-01-01",
-              "routes" => [{"routeToProfessionalStatusType" => {"professionalStatusType" => "EarlyYearsProfessionalStatus"}}]
-            }
+            "routesToProfessionalStatuses" => [
+              {
+                "routeToProfessionalStatusType" => {
+                  "professionalStatusType" => "EarlyYearsProfessionalStatus"
+                },
+                "status" => "Holds"
+              }
+            ]
           }
         }
       end

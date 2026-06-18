@@ -39,7 +39,7 @@ RSpec.describe "Full end to end EYTRP", feature_flag: [:eytfi_journey] do
       }
     })
 
-    stub_request(:get, "https://dqt-api.education.gov.uk/v3/persons/1234567")
+    stub_request(:get, "https://dqt-api.education.gov.uk/v3/persons/1234567?include=routesToProfessionalStatuses")
       .to_return(
         status: 200,
         headers: {
