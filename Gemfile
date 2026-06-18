@@ -82,6 +82,7 @@ gem "sentry-ruby"
 gem "sentry-rails"
 
 group :development, :test do
+  gem "rb-readline"
   gem "pry"
   gem "rspec-rails"
   gem "turbo_tests"
