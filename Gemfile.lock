@@ -707,12 +707,15 @@ DEPENDENCIES
   mail-notify
   mission_control-jobs
   nanoid
+  net-protocol
   omniauth
   omniauth-rails_csrf_protection
   omniauth_openid_connect
   ostruct
   pagy
   pg (>= 0.18, < 2.0)
+  pp
+  prettyprint
   pry
   puma (~> 7.2)
   rack-mini-profiler
@@ -724,6 +727,8 @@ DEPENDENCIES
   rotp
   rspec-rails
   rspec-retry
+  ruby2_keywords
+  securerandom
   sentry-rails
   sentry-ruby
   shoulda-matchers
@@ -735,9 +740,11 @@ DEPENDENCIES
   sprockets-rails
   standard
   terser
+  tsort
   turbo_tests
   tzinfo-data
   uk_postcode
+  uri
   web-console (>= 3.3.0)
   webmock
 

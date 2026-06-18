@@ -3,6 +3,14 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "4.0.5"
 
+gem "securerandom"
+gem "uri"
+gem "tsort"
+gem "net-protocol"
+gem "ruby2_keywords"
+gem "pp"
+gem "prettyprint"
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "rails", "~> 8.1"
 # Use postgresql as the database for Active Record
