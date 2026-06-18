@@ -1,8 +1,4 @@
 class StaticPagesController < BasePublicController
-  include JourneyComponentsPage
-
-  skip_before_action :add_view_paths, only: [:home, :journey_components, :customer_journeys]
-
   def accessibility_statement
     journey_accessibility_statement = "#{journey.view_path}/accessibility_statement"
 
@@ -11,16 +7,6 @@ class StaticPagesController < BasePublicController
     else
       render "static_pages/accessibility_statement"
     end
-  end
-
-  def home
-  end
-
-  def customer_journeys
-  end
-
-  def journey_components
-    prepare_journey_components_page
   end
 
   def contact_us
@@ -102,10 +88,12 @@ class StaticPagesController < BasePublicController
     end
   end
 
+  helper_method :current_user
+
   private
 
   def current_journey_routing_name
-    super || Journeys.all.first.routing_name
+    super || journey&.routing_name
   end
 
   def journey_available?
@@ -117,5 +105,4 @@ class StaticPagesController < BasePublicController
   def current_user
     DfeSignIn::NullUser.new
   end
-  helper_method :current_user
 end
