@@ -21,7 +21,7 @@ module Journeys
     JOURNEYS
   end
 
-  def customer_journeys
+  def landing_page_journeys
     all
       .reject(&:start_with_magic_link?)
       .sort_by(&:full_name)

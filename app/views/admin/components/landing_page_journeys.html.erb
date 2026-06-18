@@ -1,8 +1,6 @@
 <% content_for(:page_title) { page_title("Customer journeys") } %>
 
-<%
-  landing_page_journeys = Journeys.landing_page_journeys
-%>
+<% landing_page_journeys = Journeys.landing_page_journeys %>
 
 <p class="govuk-body">
   <%= link_to "Back", root_path, class: "govuk-back-link" %>

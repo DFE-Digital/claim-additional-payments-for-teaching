@@ -1,0 +1,106 @@
+<% content_for(:page_title) { page_title("Journey components") } %>
+
+<p class="govuk-body">
+  <%= link_to "Back", root_path, class: "govuk-back-link" %>
+</p>
+<h1 class="govuk-heading-l">Journey Components</h1>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <div class="govuk-accordion" data-module="govuk-accordion" id="journey-components-accordion">
+      <% @journey_components.each_with_index do |journey, index| %>
+        <div class="govuk-accordion__section">
+          <div class="govuk-accordion__section-header">
+            <h2 class="govuk-accordion__section-heading">
+              <span class="govuk-accordion__section-button" id="journey-components-heading-<%= index %>">
+                <%= journey[:journey_name] %>
+              </span>
+            </h2>
+          </div>
+
+          <div class="govuk-accordion__section-content" id="journey-components-content-<%= index %>">
+            <% journey[:constants].each do |constant_name, values| %>
+              <h3 class="govuk-heading-s govuk-!-font-size-16"><%= constant_name %></h3>
+              <ul class="govuk-list govuk-list--bullet">
+                <% values.each do |slug| %>
+                  <% target_path = claim_path(journey[:journey_routing_name], slug) %>
+                  <li>
+                    <%= link_to target_path, admin_components_open_component_path(journey: journey[:journey_routing_name], slug: slug) %>
+                  </li>
+                <% end %>
+              </ul>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h2 class="govuk-heading-m">Reused Components</h2>
+
+    <% if @reused_components.any? %>
+      <ul class="govuk-list govuk-list--bullet">
+        <% @reused_components.each do |entry| %>
+          <li>
+            <%= entry[:component] %> (<%= entry[:count] %> journeys)
+
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-2">
+              <% entry[:journeys].each do |journey| %>
+                <li>
+                  <%= link_to claim_path(journey[:journey_routing_name], entry[:component]), admin_components_open_component_path(journey: journey[:journey_routing_name], slug: entry[:component]) %>
+                </li>
+              <% end %>
+            </ul>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="govuk-body">No reused components found.</p>
+    <% end %>
+  </div>
+</div>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <div class="govuk-accordion" data-module="govuk-accordion" id="prepopulated-preview-data-accordion">
+      <div class="govuk-accordion__section">
+        <div class="govuk-accordion__section-header">
+          <h2 class="govuk-accordion__section-heading">
+            <span class="govuk-accordion__section-button" id="prepopulated-preview-data-heading">
+              Show data used to prepopulate journeys
+            </span>
+          </h2>
+        </div>
+
+        <div class="govuk-accordion__section-content" id="prepopulated-preview-data-content">
+          <p class="govuk-body">
+            These default answers are applied when opening a journey component preview link.
+          </p>
+
+          <table class="govuk-table">
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">Field</th>
+                <th scope="col" class="govuk-table__header">Value</th>
+              </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+              <% @default_prepopulated_answers.each do |field, value| %>
+                <tr class="govuk-table__row">
+                  <th scope="row" class="govuk-table__header"><%= field %></th>
+                  <td class="govuk-table__cell"><%= value %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
