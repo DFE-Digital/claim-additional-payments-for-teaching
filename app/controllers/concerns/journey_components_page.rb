@@ -6,6 +6,14 @@ module JourneyComponentsPage
   def prepare_journey_components_page
     @journey_components = load_journey_components
     @reused_components = load_reused_components(@journey_components)
+    @default_prepopulated_answers = default_prepopulated_answers
+  end
+
+  def default_prepopulated_answers
+    Admin::ComponentsController::DEFAULT_PREPOPULATED_ANSWERS
+      .transform_keys(&:to_s)
+      .sort
+      .to_h
   end
 
   def load_journey_components
