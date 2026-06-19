@@ -17,19 +17,8 @@ class Claim
           .by_academic_year(journey_configuration.current_academic_year)
           .by_policy(policy)
           .awaiting_decision
-          .where(submitted_using_slc_data: submitted_using_slc_data(policy))
+          .where(submitted_using_slc_data: [nil, false])
       end.compact.reduce(&:or)
-    end
-
-    private
-
-    def submitted_using_slc_data(policy)
-      if policy == Policies::FurtherEducationPayments
-        # For 2024/2025 academic year onwards, only FE claims prior to the deployment of LUPEYALPHA-1010 have submitted_using_slc_data = nil
-        [false, nil]
-      else
-        false
-      end
     end
   end
 end
