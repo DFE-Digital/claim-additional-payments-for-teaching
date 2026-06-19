@@ -5,6 +5,7 @@ RSpec.describe "SLC (Student Loans Company) data upload " do
   let!(:journey_configuration_targeted_retention_incentive) { create(:journey_configuration, :targeted_retention_incentive_payments) }
   let!(:journey_configuration_fe) { create(:journey_configuration, :further_education_payments) }
   let!(:journey_configuration_ey) { create(:journey_configuration, :early_years_payment_provider_start) }
+  let!(:journey_configuration_eytrp) { create(:journey_configuration, :early_years_teachers_financial_incentive_payments) }
 
   before { @signed_in_user = sign_in_as_service_operator }
 

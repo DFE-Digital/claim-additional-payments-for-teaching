@@ -8,13 +8,17 @@ class Claim
 
     def claims_submitted_without_slc_data
       policies.map do |policy|
-        journey_configuration = Journeys.for_policy(policy).configuration
+        journey = Journeys.for_policy(policy)
+
+        next if journey.nil? # ECP
+
+        journey_configuration = journey.configuration
         Claim
           .by_academic_year(journey_configuration.current_academic_year)
           .by_policy(policy)
           .awaiting_decision
           .where(submitted_using_slc_data: submitted_using_slc_data(policy))
-      end.reduce(&:or)
+      end.compact.reduce(&:or)
     end
 
     private
