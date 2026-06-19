@@ -1,10 +1,4 @@
 class StudentLoanPlanCheckJob < ApplicationJob
-  APPLICABLE_POLICIES = [
-    Policies::TargetedRetentionIncentivePayments,
-    Policies::FurtherEducationPayments,
-    Policies::EarlyYearsPayments
-  ].freeze
-
   def perform(admin)
     delete_no_data_student_loan_plan_tasks
     claims = current_year_claims_awaiting_decision.awaiting_task("student_loan_plan")
@@ -31,7 +25,11 @@ class StudentLoanPlanCheckJob < ApplicationJob
     current_year_claims_awaiting_decision.joins(:tasks).where(tasks: {name: "student_loan_plan", claim_verifier_match: nil, manual: false})
   end
 
+  def applicable_policies
+    Policies.all.select(&:auto_check_student_loan_plan_task?)
+  end
+
   def current_year_claims_awaiting_decision
-    Claim::ClaimsAwaitingDecisionFinder.new(policies: APPLICABLE_POLICIES).claims_submitted_without_slc_data
+    Claim::ClaimsAwaitingDecisionFinder.new(policies: applicable_policies).claims_submitted_without_slc_data
   end
 end
