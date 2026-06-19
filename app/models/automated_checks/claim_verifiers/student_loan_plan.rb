@@ -19,8 +19,6 @@ module AutomatedChecks
       end
 
       def perform
-        return unless claim.policy.auto_check_student_loan_plan_task?
-        return unless claim.submitted_without_slc_data?
         return unless claim.awaiting_task?(TASK_NAME)
 
         student_loan_data_exists || nino_only_match_found || no_student_loan_data_entry

@@ -10,17 +10,12 @@ module AutomatedChecks
       end
 
       def perform
-        return unless required?
         return unless claim.awaiting_task?(TASK_NAME)
 
         no_data || no_match || matched
       end
 
       private
-
-      def required?
-        claim.eligibility.teacher_reference_number.present?
-      end
 
       attr_accessor :admin_user, :claim
 

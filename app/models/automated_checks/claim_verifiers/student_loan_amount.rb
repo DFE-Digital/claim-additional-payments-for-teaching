@@ -10,7 +10,6 @@ module AutomatedChecks
       end
 
       def perform
-        return unless claim.policy == Policies::StudentLoans
         return unless claim.awaiting_task?(TASK_NAME)
 
         no_data || no_match || invalid_match || complete_match
