@@ -455,9 +455,7 @@ class Claim < ApplicationRecord
   end
 
   def awaiting_task?(task_name)
-    return false unless claim_checking_tasks.applicable_task_names.include?(task_name)
-
-    tasks.where(name: task_name).count.zero?
+    task_required?(task_name) && !task_completed?(task_name)
   end
 
   private
@@ -530,5 +528,13 @@ class Claim < ApplicationRecord
 
   def submittable_email_details?
     email_address.present? && email_verified == true
+  end
+
+  def task_required?(task_name)
+    claim_checking_tasks.applicable_task_names.include?(task_name)
+  end
+
+  def task_completed?(task_name)
+    tasks.where(name: task_name).exists?
   end
 end
