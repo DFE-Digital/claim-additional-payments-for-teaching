@@ -8,7 +8,10 @@ module EarlyYearsTeachersFinancialIncentivePayments
       client = Dqt::Client.new
       trs_data = client
         .teacher
-        .find(journey_session.answers.teacher_auth_teacher_reference_number)
+        .find(
+          journey_session.answers.teacher_auth_teacher_reference_number,
+          include: "routesToProfessionalStatuses"
+        )
 
       journey_session.answers.assign_attributes(
         trs_data: trs_data.as_json(without_table: true),
