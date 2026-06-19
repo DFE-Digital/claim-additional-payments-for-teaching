@@ -455,6 +455,8 @@ class Claim < ApplicationRecord
   end
 
   def awaiting_task?(task_name)
+    return false unless claim_checking_tasks.applicable_task_names.include?(task_name)
+
     tasks.where(name: task_name).count.zero?
   end
 

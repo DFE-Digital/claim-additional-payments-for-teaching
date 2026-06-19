@@ -1596,34 +1596,50 @@ RSpec.describe Claim, type: :model do
   describe "#awaiting_task?" do
     let(:claim) { create(:claim) }
 
-    let(:task_name) { "one_login_identity" }
-
     subject { claim.awaiting_task?(task_name) }
 
-    context "when the task is passed" do
-      before { claim.tasks.create!(name: task_name, passed: true) }
+    context "when the policy implements the task" do
+      let(:task_name) { "payroll_gender" }
 
-      it { is_expected.to be false }
-    end
+      context "when the task is required" do
+        context "when the task is passed" do
+          before { claim.tasks.create!(name: task_name, passed: true) }
 
-    context "when the task is failed" do
-      before { claim.tasks.create!(name: task_name, passed: false) }
+          it { is_expected.to be false }
+        end
 
-      it { is_expected.to be false }
-    end
+        context "when the task is failed" do
+          before { claim.tasks.create!(name: task_name, passed: false) }
 
-    context "when the claim is neither passed nor failed" do
-      before do
-        claim.tasks
-          .build(name: task_name, passed: nil)
-          .save!(context: :claim_verifier)
+          it { is_expected.to be false }
+        end
+
+        context "when the task is neither passed nor failed" do
+          before do
+            claim.tasks
+              .build(name: task_name, passed: nil)
+              .save!(context: :claim_verifier)
+          end
+
+          it { is_expected.to be false }
+        end
+
+        context "when the task is not persisted" do
+          it { is_expected.to be true }
+        end
       end
 
-      it { is_expected.to be false }
+      context "when the task is not required" do
+        before { claim.update!(payroll_gender: "male") }
+
+        it { is_expected.to be false }
+      end
     end
 
-    context "when the task is not persisted" do
-      it { is_expected.to be true }
+    context "when the policy does not implement the task" do
+      let(:task_name) { "onelogin_identity" }
+
+      it { is_expected.to be false }
     end
   end
 end
