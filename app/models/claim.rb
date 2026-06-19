@@ -454,6 +454,10 @@ class Claim < ApplicationRecord
     @claim_checking_tasks ||= policy::ClaimCheckingTasks.new(self)
   end
 
+  def awaiting_task?(task_name)
+    tasks.where(name: task_name).count.zero?
+  end
+
   private
 
   def one_login_idv_name_match?

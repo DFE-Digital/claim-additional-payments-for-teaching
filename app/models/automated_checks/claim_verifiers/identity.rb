@@ -15,7 +15,7 @@ module AutomatedChecks
       end
 
       def perform
-        return unless awaiting_task?(TASK_NAME)
+        return unless claim.awaiting_task?(TASK_NAME)
 
         # Order of matching matters so that subsequent conditions in methods fall through to execute the right thing
         no_match || partial_match || complete_match
@@ -36,10 +36,6 @@ module AutomatedChecks
 
       def active_alert?
         dqt_teacher_status.active_alert?
-      end
-
-      def awaiting_task?(task_name)
-        claim.tasks.none? { |task| task.name == task_name }
       end
 
       def complete_match

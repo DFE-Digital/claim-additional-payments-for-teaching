@@ -21,7 +21,7 @@ module AutomatedChecks
       def perform
         return unless claim.policy.auto_check_student_loan_plan_task?
         return unless claim.submitted_without_slc_data?
-        return unless awaiting_task?
+        return unless claim.awaiting_task?(TASK_NAME)
 
         student_loan_data_exists || nino_only_match_found || no_student_loan_data_entry
       end
@@ -42,10 +42,6 @@ module AutomatedChecks
 
       def student_loans_data_nino_only
         @student_loans_data_nino_only ||= StudentLoansData.where(nino:).where.not(date_of_birth:)
-      end
-
-      def awaiting_task?
-        claim.tasks.where(name: TASK_NAME).count.zero?
       end
 
       def student_loan_data_exists

@@ -11,7 +11,7 @@ module AutomatedChecks
 
       def perform
         return unless required?
-        return unless awaiting_task?
+        return unless claim.awaiting_task?(TASK_NAME)
 
         no_data || no_match || matched
       end
@@ -23,10 +23,6 @@ module AutomatedChecks
       end
 
       attr_accessor :admin_user, :claim
-
-      def awaiting_task?
-        claim.tasks.where(name: TASK_NAME).count.zero?
-      end
 
       def start_of_previous_financial_year
         previous_academic_year = Policies::StudentLoans.current_academic_year - 1

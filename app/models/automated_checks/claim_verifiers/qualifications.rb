@@ -15,7 +15,7 @@ module AutomatedChecks
       end
 
       def perform
-        return unless awaiting_task?(TASK_NAME)
+        return unless claim.awaiting_task?(TASK_NAME)
 
         no_match || complete_match
       end
@@ -24,10 +24,6 @@ module AutomatedChecks
 
       attr_accessor :admin_user, :claim
       attr_reader :dqt_teacher_status
-
-      def awaiting_task?(task_name)
-        claim.tasks.none? { |task| task.name == task_name }
-      end
 
       def complete_match
         return unless dqt_teacher_status.eligible?
