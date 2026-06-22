@@ -3,6 +3,7 @@ module Admin
     ADMIN_TIMEOUT_LENGTH_IN_MINUTES = 60
 
     include HttpAuthConcern
+    include Pundit::Authorization
 
     layout "admin"
 
