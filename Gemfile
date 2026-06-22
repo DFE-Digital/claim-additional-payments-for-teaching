@@ -1,7 +1,15 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.4.9"
+ruby "4.0.5"
+
+gem "securerandom"
+gem "uri"
+gem "tsort"
+gem "net-protocol"
+gem "ruby2_keywords"
+gem "pp"
+gem "prettyprint"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "rails", "~> 8.1"
@@ -82,6 +90,7 @@ gem "sentry-ruby"
 gem "sentry-rails"
 
 group :development, :test do
+  gem "rb-readline"
   gem "pry"
   gem "rspec-rails"
   gem "turbo_tests"

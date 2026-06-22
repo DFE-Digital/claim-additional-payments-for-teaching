@@ -208,7 +208,7 @@ RSpec.describe "Targeted retention incentives reminders" do
 
     context "when itt year is not eligible next year" do
       # itt year will be outside the range of eligible itt years next year
-      let(:itt_year) { (current_academic_year - 5) }
+      let(:itt_year) { current_academic_year - 5 }
 
       it "doesn't allow setting a reminder" do
         expect(page).to have_content(
@@ -220,7 +220,7 @@ RSpec.describe "Targeted retention incentives reminders" do
     end
 
     context "when itt year is still eligible next year" do
-      let(:itt_year) { (current_academic_year - 1) }
+      let(:itt_year) { current_academic_year - 1 }
 
       it "allows setting a reminder" do
         expect(page).to have_content(

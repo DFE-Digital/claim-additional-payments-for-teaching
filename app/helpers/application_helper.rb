@@ -1,5 +1,3 @@
-require "pathname"
-
 module ApplicationHelper
   include GOVUKDesignSystemFormBuilder::BuilderHelper
 

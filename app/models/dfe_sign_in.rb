@@ -20,7 +20,7 @@ module DfeSignIn
       new_config = Configuration.new
       yield(new_config)
 
-      self.configurations << new_config
+      configurations << new_config
     end
   end
 

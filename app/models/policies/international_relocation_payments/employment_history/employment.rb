@@ -48,7 +48,7 @@ module Policies
         end
 
         def ==(other)
-          other.id == self.id
+          other.id == id
         end
 
         def deleted?

@@ -65,7 +65,7 @@ FactoryBot.define do
       identity_confirmed_with_onelogin { true }
       onelogin_uid { SecureRandom.uuid }
       onelogin_auth_at { rand(14.days.ago..1.day.ago).to_datetime }
-      onelogin_idv_at { (onelogin_auth_at + 1.hour) }
+      onelogin_idv_at { onelogin_auth_at + 1.hour }
       onelogin_idv_first_name { first_name }
       onelogin_idv_last_name { surname }
       onelogin_idv_full_name { [first_name, surname].join(" ") }
@@ -74,7 +74,7 @@ FactoryBot.define do
 
     trait :with_failed_ol_idv do
       onelogin_auth_at { rand(14.days.ago..1.day.ago).to_datetime }
-      onelogin_idv_at { (onelogin_auth_at + 1.hour) }
+      onelogin_idv_at { onelogin_auth_at + 1.hour }
       identity_confirmed_with_onelogin { false }
     end
 
@@ -82,7 +82,7 @@ FactoryBot.define do
       identity_confirmed_with_onelogin { false }
       onelogin_uid { SecureRandom.uuid }
       onelogin_auth_at { rand(14.days.ago..1.day.ago).to_datetime }
-      onelogin_idv_at { (onelogin_auth_at + 1.hour) }
+      onelogin_idv_at { onelogin_auth_at + 1.hour }
     end
 
     trait :with_details_from_dfe_identity do
