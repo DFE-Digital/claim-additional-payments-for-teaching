@@ -4,6 +4,7 @@ module Admin
 
     include DfE::Analytics::Requests
     include HttpAuthConcern
+    include Pundit::Authorization
 
     layout "admin"
 
