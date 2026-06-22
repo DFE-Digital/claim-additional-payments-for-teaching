@@ -111,10 +111,6 @@ group :development do
 
   gem "listen", ">= 3.0.5", "< 3.10"
 
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem "spring"
-  gem "spring-watcher-listen", "~> 2.1.0"
-
   gem "foreman"
   # Provides a detailed speed badge for every HTML page to aid performance optimisation.
   gem "rack-mini-profiler"
