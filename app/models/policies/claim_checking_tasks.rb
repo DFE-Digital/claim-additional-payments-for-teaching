@@ -68,5 +68,12 @@ module Policies
         claim.tasks.exists?(name: name)
       end
     end
+
+    # Temporary shim until all claims have a persisted matching details task
+    def persisting_tasks_shim(name)
+      if name == "matching_details" && !task_exists?(name)
+        AutomatedChecks::ClaimVerifiers::MatchingClaims.new(claim: claim).perform
+      end
+    end
   end
 end
