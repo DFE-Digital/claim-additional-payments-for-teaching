@@ -5,12 +5,16 @@ module Admin
     before_action :ensure_service_operator
 
     def index
+      authorize PayrollRun, policy_class: PayrollPolicy
+
       @payroll_runs = PayrollRun
         .includes(:payments, :payment_confirmations)
         .order(created_at: :desc)
     end
 
     def new
+      authorize PayrollRun, policy_class: PayrollPolicy
+
       @claims = Claim
         .includes(:eligibility)
         .payrollable
@@ -21,6 +25,8 @@ module Admin
     end
 
     def create
+      authorize PayrollRun, policy_class: PayrollPolicy
+
       claims = Claim
         .payrollable
         .order(submitted_at: :asc)
@@ -42,11 +48,15 @@ module Admin
     end
 
     def show
+      authorize PayrollRun, policy_class: PayrollPolicy
+
       @payroll_run = PayrollRun.find(params[:id])
       @pagy, @payments = pagy(@payroll_run.payments.ordered.includes(:confirmation, claims: [:eligibility]).includes(:topups))
     end
 
     def destroy
+      authorize PayrollRun, policy_class: PayrollPolicy
+
       if PayrollRun.allow_destroy?
         PayrollRun.find(params[:id]).destroy!
         redirect_to admin_payroll_runs_path, notice: "Payroll run deleted"

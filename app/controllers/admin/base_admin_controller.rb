@@ -90,5 +90,9 @@ module Admin
     def admin_timeout_in_minutes
       ADMIN_TIMEOUT_LENGTH_IN_MINUTES
     end
+
+    def pundit_user
+      current_admin
+    end
   end
 end
