@@ -11,6 +11,9 @@ RSpec.feature "Admin checking a claim with matching details" do
     claim = create(:claim, :submitted, policy: Policies::StudentLoans)
     claim_with_matching_details = create(:claim, :submitted, eligibility_attributes: {teacher_reference_number: claim.eligibility.teacher_reference_number})
 
+    AutomatedChecks::ClaimVerifiers::MatchingClaims.new(claim: claim).perform
+    AutomatedChecks::ClaimVerifiers::MatchingClaims.new(claim: claim_with_matching_details).perform
+
     click_on "Claims"
     find("a[href='#{admin_claim_tasks_path(claim)}']").click
 
@@ -51,7 +54,7 @@ RSpec.feature "Admin checking a claim with matching details" do
     )
 
     # Matching claim
-    create(
+    matching_claim = create(
       :claim,
       :submitted,
       bank_sort_code: "123456",
@@ -59,6 +62,9 @@ RSpec.feature "Admin checking a claim with matching details" do
         teacher_reference_number: claim.eligibility.teacher_reference_number
       }
     )
+
+    AutomatedChecks::ClaimVerifiers::MatchingClaims.new(claim: claim).perform
+    AutomatedChecks::ClaimVerifiers::MatchingClaims.new(claim: matching_claim).perform
 
     visit admin_claim_tasks_path(claim)
 
@@ -74,7 +80,10 @@ RSpec.feature "Admin checking a claim with matching details" do
 
   scenario "admin forgets to select an option" do
     claim = create(:claim, :submitted, policy: Policies::StudentLoans)
-    create(:claim, :submitted, eligibility_attributes: {teacher_reference_number: claim.eligibility.teacher_reference_number})
+    other_claim = create(:claim, :submitted, eligibility_attributes: {teacher_reference_number: claim.eligibility.teacher_reference_number})
+
+    AutomatedChecks::ClaimVerifiers::MatchingClaims.new(claim: claim).perform
+    AutomatedChecks::ClaimVerifiers::MatchingClaims.new(claim: other_claim).perform
 
     click_on "Claims"
     find("a[href='#{admin_claim_tasks_path(claim)}']").click
