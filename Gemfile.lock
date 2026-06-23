@@ -255,7 +255,7 @@ GEM
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (>= 6, < 10)
       view_component (>= 4.9, < 4.13)
-    govuk_design_system_formbuilder (6.2.0)
+    govuk_design_system_formbuilder (6.2.1)
       actionview (>= 7.2)
       activemodel (>= 7.2)
       activesupport (>= 7.2)
@@ -698,7 +698,7 @@ DEPENDENCIES
   faraday_middleware
   foreman
   govuk-components (~> 6.3.1)
-  govuk_design_system_formbuilder (~> 6.2.0)
+  govuk_design_system_formbuilder (~> 6.2.1)
   herb
   httpclient
   jbuilder (~> 2.13)
