@@ -2,6 +2,8 @@ module Policies
   module EarlyYearsTeachersFinancialIncentivePayments
     class ClaimCheckingTasks < Policies::ClaimCheckingTasks
       def applicable_task_names
+        persisting_tasks_shim("matching_details")
+
         tasks = []
 
         tasks << "provider_claim_count" if add_provider_claim_count_task? || task_exists?("provider_claim_count")

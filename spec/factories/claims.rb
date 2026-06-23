@@ -183,7 +183,9 @@ FactoryBot.define do
         case claim.policy
         when Policies::EarlyYearsPayments
           claim.claim_checking_tasks.applicable_task_names.each do |task_name|
-            create(:task, :automated, :passed, name: task_name, claim: claim)
+            unless claim.tasks.where(name: task_name).exists?
+              create(:task, :automated, :passed, name: task_name, claim: claim)
+            end
           end
         else
           claim.claim_checking_tasks.blocking_approval.each do |task|

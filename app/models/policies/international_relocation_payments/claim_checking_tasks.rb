@@ -4,6 +4,8 @@ module Policies
   module InternationalRelocationPayments
     class ClaimCheckingTasks < Policies::ClaimCheckingTasks
       def applicable_task_names
+        persisting_tasks_shim("matching_details")
+
         tasks = []
 
         tasks << "first_year_application" unless claim.tasks.previous_payment.exists?
