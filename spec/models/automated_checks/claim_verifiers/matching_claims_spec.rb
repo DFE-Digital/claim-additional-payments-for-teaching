@@ -106,15 +106,16 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
     end
 
     it "does not add a task to the source claim when it has been decided" do
-      other_claim = create_claim(
-        email_address: "duplicate@example.com",
-        created_at: 2.days.ago
-      )
       source_claim = create_claim(
         email_address: "duplicate@example.com",
         created_at: 1.day.ago
       )
       create(:decision, claim: source_claim, approved: true)
+
+      other_claim = create_claim(
+        email_address: "duplicate@example.com",
+        created_at: 2.days.ago
+      )
 
       described_class.new(claim: source_claim).perform
 

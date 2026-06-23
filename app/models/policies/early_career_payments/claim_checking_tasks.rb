@@ -4,6 +4,8 @@ module Policies
   module EarlyCareerPayments
     class ClaimCheckingTasks < Policies::ClaimCheckingTasks
       def applicable_task_names
+        persisting_tasks_shim("matching_details")
+
         tasks = []
 
         tasks << "identity_confirmation"

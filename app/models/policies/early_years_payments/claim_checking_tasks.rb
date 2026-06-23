@@ -4,6 +4,8 @@ module Policies
   module EarlyYearsPayments
     class ClaimCheckingTasks < Policies::ClaimCheckingTasks
       def applicable_task_names
+        persisting_tasks_shim("matching_details")
+
         tasks = []
         tasks << "ey_eoi_cross_reference" unless year_1_of_ey?
         tasks += identity_task_names
