@@ -20,7 +20,7 @@
   </div>
 
   <div class="govuk-grid-column-two-thirds">
-    <% if @form.task.persisted? %>
+    <% if @form.task.completed? %>
       <%= render "task_outcome", task: @form.task %>
     <% elsif @claim.policy.task_available?(@form.task) %>
       <%= render "form", task_name: "matching_details", claim: @claim %>
