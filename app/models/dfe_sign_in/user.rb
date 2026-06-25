@@ -9,8 +9,6 @@ module DfeSignIn
 
     has_secure_token :session_token
 
-    after_save :send_slack_notification
-
     scope :admin, -> { where(user_type: "admin") }
     scope :provider, -> { where(user_type: "provider") }
     scope :service_operators, -> { where("role_codes @> ?", "{teacher_payments_access}") }
@@ -106,10 +104,6 @@ module DfeSignIn
 
     def unassign_claims
       assigned_claims.update(assigned_to_id: nil)
-    end
-
-    def send_slack_notification
-      SlackNotificationJob.perform_later(id) if granted_admin_access? && (ENV.fetch("ENVIRONMENT_NAME") == "production")
     end
 
     def granted_admin_access?
