@@ -802,6 +802,79 @@ RSpec.describe "Admin matching claims task" do
           )
         end
       end
+
+      context "when a former duplicate still has matches" do
+        let(:other_duplicate) do
+          create(
+            :claim,
+            :submitted,
+            policy: Policies::TargetedRetentionIncentivePayments,
+            email_address: "edna.krabappel@springfield-elementary.edu",
+            national_insurance_number: "AB121212B"
+          )
+        end
+
+        let(:former_duplicate) do
+          create(
+            :claim,
+            :submitted,
+            policy: Policies::TargetedRetentionIncentivePayments,
+            email_address: "seymour.skinner@springfield-elementary.edu",
+            national_insurance_number: "AB121212B"
+          )
+        end
+
+        let(:amended_claim) do
+          submit_a_claim
+        end
+
+        before do
+          other_duplicate
+
+          former_duplicate
+
+          amended_claim
+
+          sign_in_as_service_operator
+
+          visit new_admin_claim_amendment_path(amended_claim)
+
+          fill_in(
+            "Email address",
+            with: "elisabeth.hoover@springfield-elementary.edu"
+          )
+
+          fill_in "Change notes", with: "Updated email address"
+
+          click_on "Amend claim"
+        end
+
+        it "removes the task from on the amended claim" do
+          visit admin_claim_tasks_path(amended_claim)
+
+          within ".app-task-list" do
+            expect(page).not_to have_content "Matching details"
+          end
+        end
+
+        it "keeps the task on the other duplicates" do
+          # claim is still a duplicate by NINO with another claim
+          visit admin_claim_tasks_path(other_duplicate)
+
+          within ".app-task-list" do
+            expect(page).to have_content "Matching details"
+          end
+
+          visit admin_claim_tasks_path(former_duplicate)
+
+          within ".app-task-list" do
+            expect(page).to have_content "Matching details"
+            click_on "Review matching details from other claims"
+          end
+
+          expect(page).to have_content other_duplicate.reference
+        end
+      end
     end
   end
 
