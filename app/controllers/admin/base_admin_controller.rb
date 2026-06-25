@@ -79,6 +79,16 @@ module Admin
       Sentry.set_user(id: session[:user_id])
     end
 
+    # Required by DfE::Analytics::Requests to populate user_id on web_request events
+    def current_user
+      current_admin unless current_admin.null_user?
+    end
+
+    # Required by DfE::Analytics::Requests to populate namespace on web_request events
+    def current_namespace
+      "admin"
+    end
+
     def admin_signed_in?
       session.key?(:user_id) && admin_user.present?
     end
