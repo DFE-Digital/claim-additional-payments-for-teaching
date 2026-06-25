@@ -14,7 +14,7 @@ module Policies
         tasks << "employment"
         tasks << "student_loan_amount"
         tasks << "payroll_details" if claim.must_manually_validate_bank_details?
-        tasks << "matching_details" if task_exists?("matching_details")
+        tasks << "matching_details" if FeatureFlag.enabled?(:persist_matching_claims) ? task_exists?("matching_details") : matching_claims.exists?
         tasks << "payroll_gender" if claim.payroll_gender_missing? || task_exists?("payroll_gender")
 
         tasks

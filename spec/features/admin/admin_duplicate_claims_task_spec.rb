@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "Admin matching claims task" do
+  before do
+    FeatureFlag.enable! :persist_matching_claims
+  end
+
   context "when a new claim is submitted" do
     context "when the claim is not a duplicate" do
       before do
