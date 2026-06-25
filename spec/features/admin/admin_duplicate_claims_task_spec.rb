@@ -739,6 +739,66 @@ RSpec.describe "Admin matching claims task" do
         end
       end
     end
+
+    context "when a claim is reopened" do
+      context "when a duplicate claim has been submitted in the interim" do
+        let(:reopened_claim) do
+          create(
+            :claim,
+            :submitted,
+            policy: Policies::TargetedRetentionIncentivePayments,
+            email_address: "seymour.skinner@springfield-elementary.edu"
+          )
+        end
+
+        let(:duplicate_claim) do
+          submit_a_claim
+        end
+
+        before do
+          reopened_claim
+
+          create(:decision, :rejected, claim: reopened_claim)
+
+          duplicate_claim
+
+          sign_in_as_service_operator
+
+          visit new_admin_claim_amendment_path(reopened_claim)
+          click_link "Undo decision"
+          fill_in "Change notes", with: "test"
+          click_button "Undo rejection"
+        end
+
+        it "shows the matching details task on both claims" do
+          visit admin_claim_tasks_path(duplicate_claim)
+
+          within ".app-task-list" do
+            expect(page).to have_content "Matching details"
+          end
+
+          visit admin_claim_tasks_path(reopened_claim)
+
+          within ".app-task-list" do
+            expect(page).to have_content "Matching details"
+          end
+        end
+
+        it "show the matching details warning on both claim" do
+          visit admin_claim_tasks_path(reopened_claim)
+
+          expect(page).to have_content(
+            "Multiple claims with matching details have been made"
+          )
+
+          visit admin_claim_tasks_path(duplicate_claim)
+
+          expect(page).to have_content(
+            "Multiple claims with matching details have been made"
+          )
+        end
+      end
+    end
   end
 
   def submit_a_claim
