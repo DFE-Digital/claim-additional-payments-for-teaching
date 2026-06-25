@@ -2,6 +2,7 @@ module Admin
   class BaseAdminController < ApplicationController
     ADMIN_TIMEOUT_LENGTH_IN_MINUTES = 60
 
+    include DfE::Analytics::Requests
     include HttpAuthConcern
 
     layout "admin"
