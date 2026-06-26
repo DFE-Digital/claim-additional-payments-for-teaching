@@ -1,6 +1,17 @@
 require "rails_helper"
 
 RSpec.describe PaymentConfirmationUpload do
+  before do
+    # TODO - remove this once the backfill for persisting tasks has been run on
+    # production and we no longer need a shim for the policy task lists.
+    # The shim checks for matching claims and this spec is too tricky to modify
+    # to set the claims up realistically (ie they don't all have the same
+    # timestamp)
+    allow(AutomatedChecks::ClaimVerifiers::MatchingClaims).to(
+      receive(:new) { double(perform: true) }
+    )
+  end
+
   subject(:payment_confirmation_upload) do
     described_class.new(payroll_run, file, admin_user)
   end

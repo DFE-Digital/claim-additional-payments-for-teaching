@@ -9,35 +9,16 @@ module AutomatedChecks
         ApplicationRecord.transaction do
           result = Claims::Match.update_matching_claims!(source_claim)
 
-          if result.removed_matches.any?
-            # remove the matching details task from the other claims only if
-            # * the task is not completed
-            # * the other claim is not decided
-            # * there are no _other_ match pairs on that claim
-            result.removed_matches
-              .select { |claim| Claims::Match.matching_claims(claim).none? }
-              .select { |claim| task_updateable?(claim) }
-              .each { |claim| remove_matching_details_task!(claim) }
-
-            if task_updateable?(source_claim) && Claims::Match.matching_claims(source_claim).none?
-              remove_matching_details_task!(source_claim)
-            end
+          result.removed_matches.each do |removed_match|
+            remove_match!(source_claim, removed_match)
+            remove_match!(removed_match, source_claim)
           end
 
           current_matches = result.new_matches + result.existing_matches
 
-          if current_matches.any?
-            # add the matching details task to matching claims only if
-            # * the other claim doesn't already have the task
-            # * the other claim is not decided
-            current_matches
-              .select { |claim| task_updateable?(claim) }
-              .select { |claim| !already_has_task?(claim) }
-              .each { |claim| add_matching_details_task!(claim) }
-
-            if task_updateable?(source_claim) && !already_has_task?(source_claim)
-              add_matching_details_task!(source_claim)
-            end
+          current_matches.each do |matching_claim|
+            record_match!(source_claim, matching_claim)
+            record_match!(matching_claim, source_claim)
           end
         end
       end
@@ -45,6 +26,46 @@ module AutomatedChecks
       private
 
       attr_reader :source_claim
+
+      def record_match!(target_claim, duplicate_claim)
+        return unless task_updateable?(target_claim)
+
+        task = target_claim.tasks.matching_details.last || target_claim.tasks.matching_details.new
+
+        data = task.data || {}
+
+        matches = Set.new(data["matching_claims"])
+
+        matches << duplicate_claim.reference
+
+        data["matching_claims"] = matches.to_a
+
+        task.data = data
+
+        task.save!(context: :claim_verifier)
+      end
+
+      def remove_match!(target_claim, duplicate_claim)
+        return unless task_updateable?(target_claim)
+
+        task = target_claim.tasks.matching_details.last
+
+        # If for some reason there isn't a task there's nothing to do
+        return unless task
+
+        data = task.data || {}
+
+        matches = Set.new(data["matching_claims"])
+        matches = matches.excluding(duplicate_claim.reference)
+
+        if matches.empty?
+          task.destroy!
+        else
+          data["matching_claims"] = matches.to_a
+          task.data = data
+          task.save!(context: :claim_verifier)
+        end
+      end
 
       def task_updateable?(claim)
         # Don't change the tasks history on a decided claim.
@@ -56,20 +77,6 @@ module AutomatedChecks
         else
           true
         end
-      end
-
-      def already_has_task?(claim)
-        claim.tasks.matching_details.exists?
-      end
-
-      def remove_matching_details_task!(claim)
-        task = claim.tasks.matching_details.last
-        task&.destroy!
-      end
-
-      def add_matching_details_task!(claim)
-        task = claim.tasks.matching_details.new
-        task.save!(context: :claim_verifier)
       end
     end
   end

@@ -22,8 +22,8 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
 
       described_class.new(claim: source_claim).perform
 
-      expect(source_claim.tasks.matching_details.sole).not_to be_completed
-      expect(other_claim.tasks.matching_details.sole).not_to be_completed
+      expect_incomplete_matching_details_task(source_claim, other_claim)
+      expect_incomplete_matching_details_task(other_claim, source_claim)
     end
 
     it "does not add another task when a claim already has an incomplete task" do
@@ -42,6 +42,8 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
 
       expect(source_claim.tasks.matching_details).to contain_exactly(source_task)
       expect(other_claim.tasks.matching_details).to contain_exactly(other_task)
+      expect_matching_claim_references(source_task, other_claim)
+      expect_matching_claim_references(other_task, source_claim)
     end
 
     it "does not change a completed task when a new match is found" do
@@ -63,7 +65,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
       described_class.new(claim: source_claim).perform
 
       expect(other_claim.tasks.matching_details).to contain_exactly(completed_task)
-      expect(source_claim.tasks.matching_details.sole).not_to be_completed
+      expect_incomplete_matching_details_task(source_claim, other_claim)
     end
 
     it "does not add a task to a decided claim when a new match is found" do
@@ -80,7 +82,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
       described_class.new(claim: source_claim).perform
 
       expect(decided_claim.tasks.matching_details).to be_empty
-      expect(source_claim.tasks.matching_details.sole).not_to be_completed
+      expect_incomplete_matching_details_task(source_claim, decided_claim)
     end
 
     it "does not change the source claim's completed task when a new match is found" do
@@ -102,7 +104,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
       described_class.new(claim: source_claim).perform
 
       expect(source_claim.tasks.matching_details).to contain_exactly(completed_task)
-      expect(other_claim.tasks.matching_details.sole).not_to be_completed
+      expect_incomplete_matching_details_task(other_claim, source_claim)
     end
 
     it "does not add a task to the source claim when it has been decided" do
@@ -120,10 +122,10 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
       described_class.new(claim: source_claim).perform
 
       expect(source_claim.tasks.matching_details).to be_empty
-      expect(other_claim.tasks.matching_details.sole).not_to be_completed
+      expect_incomplete_matching_details_task(other_claim, source_claim)
     end
 
-    it "does not change tasks when the set of matching claims has not changed" do
+    it "does not add tasks when the set of matching claims has not changed" do
       other_claim = create_claim(
         email_address: "duplicate@example.com",
         created_at: 2.days.ago
@@ -133,13 +135,15 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
         created_at: 1.day.ago
       )
       Claims::Match.create_match!(source_claim, other_claim)
-      source_task = create_incomplete_matching_details_task(source_claim)
-      other_task = create_incomplete_matching_details_task(other_claim)
+      source_task = create_incomplete_matching_details_task(source_claim, matching_claims: [other_claim])
+      other_task = create_incomplete_matching_details_task(other_claim, matching_claims: [source_claim])
 
       described_class.new(claim: source_claim).perform
 
       expect(source_claim.tasks.matching_details).to contain_exactly(source_task)
       expect(other_claim.tasks.matching_details).to contain_exactly(other_task)
+      expect_matching_claim_references(source_task, other_claim)
+      expect_matching_claim_references(other_task, source_claim)
     end
 
     it "adds missing tasks when a persisted match has not changed" do
@@ -155,8 +159,8 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
 
       described_class.new(claim: source_claim).perform
 
-      expect(source_claim.tasks.matching_details.sole).not_to be_completed
-      expect(other_claim.tasks.matching_details.sole).not_to be_completed
+      expect_incomplete_matching_details_task(source_claim, other_claim)
+      expect_incomplete_matching_details_task(other_claim, source_claim)
     end
 
     it "rolls back match changes when persisting a task fails" do
@@ -190,8 +194,8 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
         created_at: 1.day.ago
       )
       Claims::Match.create_match!(source_claim, other_claim)
-      create_incomplete_matching_details_task(source_claim)
-      create_incomplete_matching_details_task(other_claim)
+      create_incomplete_matching_details_task(source_claim, matching_claims: [other_claim])
+      create_incomplete_matching_details_task(other_claim, matching_claims: [source_claim])
       source_claim.update!(email_address: "changed@example.com")
 
       described_class.new(claim: source_claim).perform
@@ -210,7 +214,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
         created_at: 1.day.ago
       )
       Claims::Match.create_match!(source_claim, other_claim)
-      create_incomplete_matching_details_task(source_claim)
+      create_incomplete_matching_details_task(source_claim, matching_claims: [other_claim])
       completed_task = create(
         :task,
         :passed,
@@ -241,7 +245,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
         claim: source_claim,
         name: "matching_details"
       )
-      create_incomplete_matching_details_task(other_claim)
+      create_incomplete_matching_details_task(other_claim, matching_claims: [source_claim])
       source_claim.update!(email_address: "changed@example.com")
 
       described_class.new(claim: source_claim).perform
@@ -260,8 +264,8 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
         created_at: 1.day.ago
       )
       Claims::Match.create_match!(source_claim, other_claim)
-      create_incomplete_matching_details_task(source_claim)
-      other_task = create_incomplete_matching_details_task(other_claim)
+      create_incomplete_matching_details_task(source_claim, matching_claims: [other_claim])
+      other_task = create_incomplete_matching_details_task(other_claim, matching_claims: [source_claim])
       create(:decision, claim: other_claim, approved: true)
       source_claim.update!(email_address: "changed@example.com")
 
@@ -269,6 +273,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
 
       expect(source_claim.tasks.matching_details).to be_empty
       expect(other_claim.tasks.matching_details).to contain_exactly(other_task)
+      expect_matching_claim_references(other_task, source_claim)
     end
 
     it "does not remove the source claim's task when it has been decided" do
@@ -281,14 +286,15 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
         created_at: 1.day.ago
       )
       Claims::Match.create_match!(source_claim, other_claim)
-      source_task = create_incomplete_matching_details_task(source_claim)
-      create_incomplete_matching_details_task(other_claim)
+      source_task = create_incomplete_matching_details_task(source_claim, matching_claims: [other_claim])
+      create_incomplete_matching_details_task(other_claim, matching_claims: [source_claim])
       create(:decision, claim: source_claim, approved: true)
       source_claim.update!(email_address: "changed@example.com")
 
       described_class.new(claim: source_claim).perform
 
       expect(source_claim.tasks.matching_details).to contain_exactly(source_task)
+      expect_matching_claim_references(source_task, other_claim)
       expect(other_claim.tasks.matching_details).to be_empty
     end
 
@@ -310,16 +316,21 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
       )
       Claims::Match.create_match!(source_claim, other_claim)
       Claims::Match.create_match!(other_claim, remaining_match)
-      create_incomplete_matching_details_task(source_claim)
-      other_task = create_incomplete_matching_details_task(other_claim)
-      create_incomplete_matching_details_task(remaining_match)
+      create_incomplete_matching_details_task(source_claim, matching_claims: [other_claim])
+      other_task = create_incomplete_matching_details_task(
+        other_claim,
+        matching_claims: [source_claim, remaining_match]
+      )
+      remaining_task = create_incomplete_matching_details_task(remaining_match, matching_claims: [other_claim])
       source_claim.update!(email_address: "changed@example.com")
 
       described_class.new(claim: source_claim).perform
 
       expect(source_claim.tasks.matching_details).to be_empty
       expect(other_claim.tasks.matching_details).to contain_exactly(other_task)
-      expect(remaining_match.tasks.matching_details.sole).not_to be_completed
+      expect_matching_claim_references(other_task, remaining_match)
+      expect(remaining_match.tasks.matching_details).to contain_exactly(remaining_task)
+      expect_matching_claim_references(remaining_task, other_claim)
     end
 
     it "keeps the source claim's task when it still has another match" do
@@ -340,16 +351,21 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
       )
       Claims::Match.create_match!(source_claim, removed_match)
       Claims::Match.create_match!(source_claim, remaining_match)
-      source_task = create_incomplete_matching_details_task(source_claim)
-      create_incomplete_matching_details_task(removed_match)
-      remaining_task = create_incomplete_matching_details_task(remaining_match)
+      source_task = create_incomplete_matching_details_task(
+        source_claim,
+        matching_claims: [removed_match, remaining_match]
+      )
+      create_incomplete_matching_details_task(removed_match, matching_claims: [source_claim])
+      remaining_task = create_incomplete_matching_details_task(remaining_match, matching_claims: [source_claim])
       source_claim.update!(email_address: "changed@example.com")
 
       described_class.new(claim: source_claim).perform
 
       expect(source_claim.tasks.matching_details).to contain_exactly(source_task)
+      expect_matching_claim_references(source_task, remaining_match)
       expect(removed_match.tasks.matching_details).to be_empty
       expect(remaining_match.tasks.matching_details).to contain_exactly(remaining_task)
+      expect_matching_claim_references(remaining_task, source_claim)
     end
 
     it "handles a removed match and a new match in the same check" do
@@ -366,15 +382,16 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
         created_at: 1.day.ago
       )
       Claims::Match.create_match!(source_claim, removed_match)
-      source_task = create_incomplete_matching_details_task(source_claim)
-      create_incomplete_matching_details_task(removed_match)
+      source_task = create_incomplete_matching_details_task(source_claim, matching_claims: [removed_match])
+      create_incomplete_matching_details_task(removed_match, matching_claims: [source_claim])
       source_claim.update!(email_address: "new@example.com")
 
       described_class.new(claim: source_claim).perform
 
-      expect(source_claim.tasks.matching_details).to contain_exactly(source_task)
+      expect(source_claim.tasks.matching_details).not_to include(source_task)
+      expect_incomplete_matching_details_task(source_claim, new_match)
       expect(removed_match.tasks.matching_details).to be_empty
-      expect(new_match.tasks.matching_details.sole).not_to be_completed
+      expect_incomplete_matching_details_task(new_match, source_claim)
     end
   end
 
@@ -389,9 +406,27 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
     create(:claim, :submitted, **attributes)
   end
 
-  def create_incomplete_matching_details_task(claim)
-    task = claim.tasks.matching_details.new(name: "matching_details")
+  def create_incomplete_matching_details_task(claim, matching_claims: [])
+    task = claim.tasks.matching_details.new(
+      name: "matching_details",
+      data: {matching_claims: matching_claims.map(&:reference)}
+    )
     task.save!(context: :claim_verifier)
     task
+  end
+
+  def expect_incomplete_matching_details_task(claim, *matching_claims)
+    task = claim.tasks.matching_details.sole
+
+    expect(task).not_to be_completed
+    expect_matching_claim_references(task, *matching_claims)
+  end
+
+  def expect_matching_claim_references(task, *matching_claims)
+    data = task.reload.data || {}
+
+    expect(Array(data["matching_claims"] || data[:matching_claims])).to contain_exactly(
+      *matching_claims.map(&:reference)
+    )
   end
 end
