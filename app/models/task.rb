@@ -93,7 +93,7 @@ class Task < ApplicationRecord
   # persisted sso we need to know if the task has an outcome to determine
   # completeness.
   def completed?
-    if name == "matching_details"
+    if name == "matching_details" && FeatureFlag.enabled?(:persist_matching_claims)
       !passed.nil?
     else
       persisted?
