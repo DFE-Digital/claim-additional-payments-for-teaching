@@ -284,6 +284,9 @@ shared:
     - deleted_at # datetime, when record was soft deleted
     - current_organisation_ukprn # string, UKPRN identifier of organisation
     - user_type # string, internally what type of user are they
+    - given_name # string, first name of the user
+    - family_name # string, last name of the user
+    - email # string, email address of the user
   :targeted_retention_incentive_payments_awards:
     - id # integer, identifies the award
     - academic_year # string, the acdemic year for the award

@@ -25,9 +25,6 @@
   - identification_attribute
   - identification_value
   :dfe_sign_in_users:
-  - given_name
-  - family_name
-  - email
   - session_token
   :eligible_ey_providers:
   - primary_key_contact_email_address
