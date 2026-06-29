@@ -85,6 +85,7 @@ RSpec.configure do |config|
     OmniAuth.config.mock_auth[:dfe] = nil
     OmniAuth.config.mock_auth[:tid] = nil
     OmniAuth.config.mock_auth[:default] = nil
+    FeatureFlag.enable!(:persist_matching_claims)
   end
 
   config.filter_run_excluding :smoke
