@@ -2,6 +2,8 @@ module Policies
   module EarlyYearsTeachersFinancialIncentivePayments
     class ClaimCheckingTasks < Policies::ClaimCheckingTasks
       def applicable_task_names
+        persisting_tasks_shim("matching_details")
+
         tasks = []
 
         tasks << "provider_claim_count" if add_provider_claim_count_task? || task_exists?("provider_claim_count")
@@ -11,7 +13,7 @@ module Policies
         tasks << "student_loan_plan" if claim.submitted_without_slc_data?
         tasks << "payroll_details" if claim.must_manually_validate_bank_details?
         tasks << "payroll_gender" if claim.payroll_gender_missing? || task_exists?("payroll_gender")
-        tasks << "matching_details" if matching_claims.exists?
+        tasks << "matching_details" if FeatureFlag.enabled?(:persist_matching_claims) ? task_exists?("matching_details") : matching_claims.exists?
 
         tasks
       end
