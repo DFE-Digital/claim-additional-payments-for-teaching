@@ -9,16 +9,18 @@ module AutomatedChecks
         ApplicationRecord.transaction do
           result = Claims::Match.update_matching_claims!(source_claim)
 
-          result.removed_matches.each do |removed_match|
-            remove_match!(source_claim, removed_match)
-            remove_match!(removed_match, source_claim)
-          end
+          if FeatureFlag.enabled?(:persist_matching_claims)
+            result.removed_matches.each do |removed_match|
+              remove_match!(source_claim, removed_match)
+              remove_match!(removed_match, source_claim)
+            end
 
-          current_matches = result.new_matches + result.existing_matches
+            current_matches = result.new_matches + result.existing_matches
 
-          current_matches.each do |matching_claim|
-            record_match!(source_claim, matching_claim)
-            record_match!(matching_claim, source_claim)
+            current_matches.each do |matching_claim|
+              record_match!(source_claim, matching_claim)
+              record_match!(matching_claim, source_claim)
+            end
           end
         end
       end
