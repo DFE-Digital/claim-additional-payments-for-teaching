@@ -279,4 +279,31 @@ RSpec.describe Claim::Search do
       it { is_expected.to match_array([claim_5]) }
     end
   end
+
+  context "search by EYTFI provider name" do
+    let!(:provider_1) do
+      create(
+        :eligible_eytfi_provider,
+        name: "Test Eytfi Provider"
+      )
+    end
+
+    let!(:claim_1) do
+      create(
+        :claim,
+        policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+        eligibility_attributes: {
+          eligible_eytfi_provider_urn: provider_1.urn
+        }
+      )
+    end
+
+    subject { search.claims }
+
+    context "when searching for an EYTFI provider name" do
+      let(:query) { provider_1.name }
+
+      it { is_expected.to match_array([claim_1]) }
+    end
+  end
 end
