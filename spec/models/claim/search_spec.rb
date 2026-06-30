@@ -306,4 +306,31 @@ RSpec.describe Claim::Search do
       it { is_expected.to match_array([claim_1]) }
     end
   end
+
+  context "search by FE provider name" do
+    let!(:school_1) do
+      create(
+        :school,
+        name: "Test FE Provider"
+      )
+    end
+
+    let!(:claim_1) do
+      create(
+        :claim,
+        policy: Policies::FurtherEducationPayments,
+        eligibility_attributes: {
+          school_id: school_1.id
+        }
+      )
+    end
+
+    subject { search.claims }
+
+    context "when searching for an FE provider name" do
+      let(:query) { school_1.name }
+
+      it { is_expected.to match_array([claim_1]) }
+    end
+  end
 end

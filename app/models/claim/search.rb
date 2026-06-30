@@ -44,14 +44,19 @@ class Claim
         )
 
       eligibilities_matched_on_eytfi_provider_details = Policies::EarlyYearsTeachersFinancialIncentivePayments::Eligibility
-          .joins("JOIN eligible_eytfi_providers ON eligible_eytfi_providers.urn = early_years_teachers_financial_incentive_payments_eligibilities.eligible_eytfi_provider_urn")
-          .where("eligible_eytfi_providers.name ILIKE ?", "%#{search_term}%")
+        .joins("JOIN eligible_eytfi_providers ON eligible_eytfi_providers.urn = early_years_teachers_financial_incentive_payments_eligibilities.eligible_eytfi_provider_urn")
+        .where("eligible_eytfi_providers.name ILIKE ?", "%#{search_term}%")
+
+      eligibilities_matched_on_fe_provider_details = Policies::FurtherEducationPayments::Eligibility
+        .joins(:school)
+        .where("schools.name ILIKE ?", "%#{search_term}%")
 
       claim_match_query
         .or(Claim.where(eligibility_id: eligibility_ids))
         .or(Claim.where(id: claims_matched_on_payment_ids))
         .or(Claim.where(id: claims_matched_on_ey_provider_details))
         .or(Claim.where(eligibility_id: eligibilities_matched_on_eytfi_provider_details.select(:id)))
+        .or(Claim.where(eligibility_id: eligibilities_matched_on_fe_provider_details.select(:id)))
     end
 
     private
