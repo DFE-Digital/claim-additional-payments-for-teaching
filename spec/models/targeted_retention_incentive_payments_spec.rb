@@ -27,7 +27,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments, type: :model do
 
   describe ".payroll_file_name" do
     subject(:payroll_file_name) { described_class.payroll_file_name }
-    it { is_expected.to eq("SchoolsLUP") }
+    it { is_expected.to eq("SCHOOLS TRI") }
   end
 
   describe ".selectable_itt_years_for_view" do
