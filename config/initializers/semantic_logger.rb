@@ -4,7 +4,9 @@ Rails.application.configure do
   config.log_tags = [:request_id]         # Prepend all log lines with the following tags
 end
 
-unless Rails.env.test?
+# Development uses the standard Rails logger (see config/environments/development.rb),
+# so there's no SemanticLogger appender to configure there.
+unless Rails.env.test? || Rails.env.development?
   SemanticLogger.add_appender(io: $stdout, level: Rails.application.config.log_level, formatter: Rails.application.config.log_format)
   Rails.application.config.logger.info("Application logging to STDOUT")
 end
