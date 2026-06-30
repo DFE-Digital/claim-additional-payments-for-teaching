@@ -84,8 +84,6 @@ gem "ostruct"
 gem "solid_queue", "~> 1.2"
 gem "mission_control-jobs"
 
-gem "slack-notifier"
-
 gem "sentry-ruby"
 gem "sentry-rails"
 

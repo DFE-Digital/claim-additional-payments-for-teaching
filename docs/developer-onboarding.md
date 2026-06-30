@@ -44,7 +44,6 @@ Then, follow these steps to complete your onboarding:
    using your DfE email address.
 9. Follow these steps from the
    [onboarding page in Confluence](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1085538326/Onboarding+Offboarding+Guidance):
-   - Slack
    - GitHub
    - logit.io – the Viewers team is sufficient for support needs
    - Sentry
