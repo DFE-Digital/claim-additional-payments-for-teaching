@@ -95,15 +95,17 @@ module ApplicationHelper
   end
 
   def admin_nav_items
-    [
-      {text: "My claims", href: admin_my_claim_path(current_admin.id), active_when: "my-claims"},
-      {text: "Claims", href: admin_claims_path, active_when: /^(?!#{search_admin_claims_path})#{admin_claims_path}/},
-      {text: "Search", href: search_admin_claims_path, active_when: search_admin_claims_path},
-      {text: "Payroll", href: admin_payroll_runs_path, active_when: admin_payroll_runs_path},
-      {text: "Manage services", href: admin_journey_configurations_path, active_when: admin_journey_configurations_path},
-      {text: "QA Reports", href: admin_reports_path, active_when: admin_reports_path},
-      {text: "Sign out", href: admin_sign_out_path}
-    ]
+    array = []
+
+    array << {text: "My claims", href: admin_my_claim_path(current_admin.id), active_when: "my-claims"}
+    array << {text: "Claims", href: admin_claims_path, active_when: /^(?!#{search_admin_claims_path})#{admin_claims_path}/}
+    array << {text: "Search", href: search_admin_claims_path, active_when: search_admin_claims_path}
+    array << {text: "Payroll", href: admin_payroll_runs_path, active_when: admin_payroll_runs_path} if PayrollPolicy.new(current_admin).read?
+    array << {text: "Manage services", href: admin_journey_configurations_path, active_when: admin_journey_configurations_path}
+    array << {text: "QA Reports", href: admin_reports_path, active_when: admin_reports_path}
+    array << {text: "Sign out", href: admin_sign_out_path}
+
+    array
   end
 
   def footer_links

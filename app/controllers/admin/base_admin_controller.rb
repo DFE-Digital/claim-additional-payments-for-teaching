@@ -4,6 +4,7 @@ module Admin
 
     include DfE::Analytics::Requests
     include HttpAuthConcern
+    include Pundit::Authorization
 
     layout "admin"
 
@@ -99,6 +100,10 @@ module Admin
 
     def admin_timeout_in_minutes
       ADMIN_TIMEOUT_LENGTH_IN_MINUTES
+    end
+
+    def pundit_user
+      current_admin
     end
   end
 end

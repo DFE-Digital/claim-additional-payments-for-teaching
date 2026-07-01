@@ -420,6 +420,8 @@ GEM
     public_suffix (7.0.5)
     puma (7.2.1)
       nio4r (~> 2.0)
+    pundit (2.5.2)
+      activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.8.1)
     rack (3.2.6)
@@ -713,6 +715,7 @@ DEPENDENCIES
   prettyprint
   pry
   puma (~> 7.2)
+  pundit
   rack-mini-profiler
   rack_session_access
   rails (~> 8.1)

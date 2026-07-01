@@ -1,0 +1,25 @@
+<% content_for :back_link do %>
+  <%= govuk_back_link href: admin_users_path %>
+<% end %>
+
+<span class="govuk-caption-l"><%= @user.email %></span>
+<h1 class="govuk-heading-l"><%= @user.full_name %></h1>
+
+<%= form_with model: @form, scope: "form", url: admin_user_path(@user), builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :patch do |f| %>
+  <%= f.govuk_error_summary %>
+
+  <%= f.govuk_collection_check_boxes :roles,
+    @form.checkbox_options,
+    :id,
+    :name,
+    :hint,
+    caption: nil,
+    legend: {
+      text: "Which roles should #{@user.full_name} have?"
+    },
+    hint: {
+      text: "Select all roles that apply"
+    } %>
+
+  <%= f.govuk_submit "Save" %>
+<% end %>
