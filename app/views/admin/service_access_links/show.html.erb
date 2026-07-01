@@ -23,11 +23,17 @@
     </p>
 
     <p class="govuk-body">
-      The link will remain active until the claimant submits a claim.
+      This link will expire
+      on <strong><%= l(@service_access_code.expires_at.to_date) %></strong>
     </p>
 
     <p class="govuk-body">
-      They can restart the journey as many times as they like.
+      The link can only be used to submit one claim.
+    </p>
+
+    <p class="govuk-body">
+      Until the link expires, the claimant can restart the journey as many times
+      as they like.
     </p>
 
     <p class="govuk-body">
