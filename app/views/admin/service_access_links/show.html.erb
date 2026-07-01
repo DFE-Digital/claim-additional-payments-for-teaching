@@ -40,11 +40,17 @@
       <strong>Send this link to the claimant</strong>
     </p>
 
-    <pre>
-      <%= landing_page_url(
+    <%= text_field_tag(
+      "service_access_link",
+      landing_page_url(
         @service_access_code.journey_class.routing_name,
         service_access_code: @service_access_code.code
-      ) %>
-    </pre>
+      ),
+      class: "govuk-input",
+      readonly: true,
+      data: {
+        copy_to_clipboard: "true"
+      }
+    ) %>
   </div>
 </div>

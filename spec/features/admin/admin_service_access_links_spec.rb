@@ -23,7 +23,9 @@ RSpec.describe "Admin service access links" do
 
     click_on "Generate a new service access link"
 
-    expect(page).to have_content(
+    link_field = find("#service_access_link")
+
+    expect(link_field[:value]).to eq(
       landing_page_url(
         "further-education-payments",
         service_access_code: "ABCDEFG"
