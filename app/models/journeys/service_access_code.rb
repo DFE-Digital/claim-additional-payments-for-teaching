@@ -19,6 +19,10 @@ module Journeys
       update!(used: true)
     end
 
+    def journey_class
+      journey.constantize
+    end
+
     private
 
     def generate_code
