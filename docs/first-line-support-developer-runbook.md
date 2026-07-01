@@ -6,6 +6,12 @@ tasks that you might get asked to do.
 
 ## Support tasks
 
+### I want to open the service for a new academic year
+
+See [`new-academic-year.md`](new-academic-year.md).
+
+
+
 If you want to do one of these tasks and you don’t have what you need, see the
 [first-line support onboarding list](developer-onboarding.md#first-line-support-onboarding).
 
