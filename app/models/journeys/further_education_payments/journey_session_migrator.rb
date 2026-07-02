@@ -12,7 +12,11 @@ module Journeys
       end
 
       def call
-        to.answers.assign_attributes(from.answers.attributes)
+        service_access_code = to.answers.service_access_code
+
+        to.answers.assign_attributes(
+          from.answers.attributes.merge(service_access_code: service_access_code)
+        )
 
         # handle blanking of answers prior to resuming
         if to.answers.respond_to?(:work_email_access) &&
