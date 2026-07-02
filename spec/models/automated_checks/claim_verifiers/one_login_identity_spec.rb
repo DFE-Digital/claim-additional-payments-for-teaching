@@ -10,6 +10,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::OneLoginIdentity do
       let(:claim) do
         create(
           :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
           identity_confirmed_with_onelogin: false
         )
       end
@@ -23,7 +24,12 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::OneLoginIdentity do
 
     context "when identity_confirmed_with_onelogin is true" do
       let(:claim) do
-        create(:claim, :submitted, :with_onelogin_idv_data)
+        create(
+          :claim,
+          :submitted,
+          :with_onelogin_idv_data,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments
+        )
       end
 
       it "creates a passed task" do

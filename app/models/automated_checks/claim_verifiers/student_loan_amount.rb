@@ -10,8 +10,7 @@ module AutomatedChecks
       end
 
       def perform
-        return unless claim.policy == Policies::StudentLoans
-        return unless awaiting_task?
+        return unless claim.awaiting_task?(TASK_NAME)
 
         no_data || no_match || invalid_match || complete_match
       end
@@ -29,10 +28,6 @@ module AutomatedChecks
 
       def student_loans_data
         @student_loans_data ||= StudentLoansData.where(nino:, date_of_birth:)
-      end
-
-      def awaiting_task?
-        claim.tasks.where(name: TASK_NAME).count.zero?
       end
 
       def no_data
