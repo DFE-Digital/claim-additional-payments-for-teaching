@@ -2,9 +2,9 @@ module Policies
   class ClaimCheckingTasks
     attr_reader :claim
 
-    def initialize(claim, skip_matching_claims_check: false)
+    def initialize(claim, skip_persisting_tasks_shim: false)
       @claim = claim
-      @skip_matching_claims_check = skip_matching_claims_check
+      @skip_persisting_tasks_shim = skip_persisting_tasks_shim
     end
 
     delegate :policy, to: :claim
@@ -49,14 +49,12 @@ module Policies
       end
     end
 
-    def skip_matching_claims_check?
-      !!@skip_matching_claims_check
+    def skip_persisting_tasks_shim?
+      !!@skip_persisting_tasks_shim
     end
 
     def matching_claims
       return @matching_claims if defined?(@matching_claims)
-
-      return Claim.none if skip_matching_claims_check?
 
       @matching_claims = Claims::Match.matches_shim(claim)
     end
@@ -73,7 +71,7 @@ module Policies
     def persisting_tasks_shim(name)
       # Skip the shim if we're rendering the admin task list page otherwise it
       # will slow to a crawl!
-      return if skip_matching_claims_check?
+      return if skip_persisting_tasks_shim?
 
       if name == "matching_details" && !task_exists?(name)
         AutomatedChecks::ClaimVerifiers::MatchingClaims.new(claim: claim).perform
