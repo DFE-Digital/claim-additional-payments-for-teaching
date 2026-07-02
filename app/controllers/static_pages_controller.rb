@@ -1,4 +1,7 @@
 class StaticPagesController < BasePublicController
+  skip_before_action :add_view_paths, only: [:home]
+  before_action :set_home_journey, only: [:home]
+
   def accessibility_statement
     journey_accessibility_statement = "#{journey.view_path}/accessibility_statement"
 
@@ -7,6 +10,10 @@ class StaticPagesController < BasePublicController
     else
       render "static_pages/accessibility_statement"
     end
+  end
+
+  def home
+    render layout: "application"
   end
 
   def contact_us
@@ -88,7 +95,13 @@ class StaticPagesController < BasePublicController
     end
   end
 
+  helper_method :current_user
+
   private
+
+  def current_journey_routing_name
+    super || journey&.routing_name
+  end
 
   def journey_available?
     return true unless journey
@@ -99,5 +112,8 @@ class StaticPagesController < BasePublicController
   def current_user
     DfeSignIn::NullUser.new
   end
-  helper_method :current_user
+
+  def set_home_journey
+    @journey = Journeys::TargetedRetentionIncentivePayments
+  end
 end

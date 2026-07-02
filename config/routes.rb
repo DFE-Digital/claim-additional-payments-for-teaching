@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  root to: redirect(Rails.application.config.guidance_url)
+  if Rails.env.production? && !Rails.env.review_app?
+    root to: redirect(Rails.application.config.guidance_url)
+  else
+    root to: "static_pages#home"
+  end
 
   get "/claim/auth/tid/callback", to: "omniauth_callbacks#callback"
   get "/auth/failure", to: "omniauth_callbacks#failure"
@@ -245,6 +249,13 @@ Rails.application.routes.draw do
         post "reject"
         post "hide"
       end
+    end
+
+    scope "/components", as: :components do
+      get "/", to: "components#index", as: :index
+      get "journey-components", to: "components#journey_components", as: :journey_components
+      get "landing-page-journeys", to: "components#landing_page_journeys", as: :landing_page_journeys
+      get "journey-components/open", to: "components#open", as: :open_component
     end
   end
 

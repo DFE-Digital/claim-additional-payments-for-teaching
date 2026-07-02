@@ -1,0 +1,27 @@
+<% content_for(:page_title) { page_title("Customer journeys") } %>
+
+<%
+  landing_page_journeys = Journeys.landing_page_journeys
+%>
+
+<p class="govuk-body">
+  <%= link_to "Back", root_path, class: "govuk-back-link" %>
+</p>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Customer journeys</h1>
+
+    <p class="govuk-body">
+      Use these links to open the main customer journey start pages directly.
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <% landing_page_journeys.each do |journey| %>
+        <li>
+          <%= link_to journey.full_name, journey.start_page_url, class: "govuk-link govuk-link--no-visited-state" %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
