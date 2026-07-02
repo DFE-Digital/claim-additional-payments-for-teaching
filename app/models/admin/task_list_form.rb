@@ -11,7 +11,7 @@ module Admin
         end
 
         def display_status
-          if status == "na"
+          if status == "not_applicable"
             "N/A"
           else
             status.humanize
@@ -19,16 +19,7 @@ module Admin
         end
 
         def filter_status
-          if name == "employment"
-            case status
-            when "na" then "incomplete"
-            else status.tr(" ", "_")
-            end
-          elsif status == "no data" || status == "na"
-            "incomplete"
-          else
-            status
-          end
+          status
         end
       end
 
@@ -63,9 +54,9 @@ module Admin
         @tasks ||= available_tasks.map do |task_name|
           if claim_tasks.include?(task_name)
             status, colour = ::Tasks.status(claim: claim, task_name: task_name)
-            Task.new(task_name, status, colour)
+            Task.new(task_name, status.downcase.tr(" ", "_"), colour)
           else
-            Task.new(task_name, "na", "blue")
+            Task.new(task_name, "not_applicable", "blue")
           end
         end
       end
@@ -79,7 +70,7 @@ module Admin
       def claim_tasks
         @claim_tasks ||= claim.policy::ClaimCheckingTasks.new(
           claim,
-          skip_matching_claims_check: true
+          skip_persisting_tasks_shim: true
         ).applicable_task_names
       end
     end
@@ -190,17 +181,70 @@ module Admin
     end
 
     def policy_tasks
-      TASKS.fetch(policy).excluding("matching_details")
+      TASKS.fetch(policy)
     end
 
     def selected_statuses_for(task_key)
       statuses.fetch(task_key.to_s, []).compact_blank
     end
 
-    DEFAULT_STATUSES = %w[passed failed incomplete].freeze
+    DEFAULT_STATUSES = %w[passed failed incomplete not_applicable].freeze
 
     TASK_STATUSES = {
-      "employment" => %w[passed failed no_match no_data incomplete]
+      "one_login_identity" => %w[
+        passed
+        failed
+        incomplete
+        no_data
+        not_applicable
+      ],
+      "identity_confirmation" => %w[
+        passed
+        failed
+        partial_match
+        no_match
+        incomplete
+        not_applicable
+      ],
+      "qualifications" => %w[
+        passed
+        failed
+        no_match
+        incomplete
+        not_applicable
+      ],
+      "census_subjects_taught" => %w[
+        passed
+        failed
+        no_match
+        no_data
+        incomplete
+        not_applicable
+      ],
+      "employment" => %w[
+        passed
+        failed
+        no_match
+        no_data
+        incomplete
+        not_applicable
+      ],
+      "student_loan_amount" => %w[
+        passed
+        failed
+        no_match
+        no_data
+        incomplete
+        not_applicable
+      ],
+      "student_loan_plan" => %w[
+        passed
+        failed
+        no_match
+        no_data
+        incomplete
+        not_applicable
+      ]
     }
 
     def task_statuses(task_key)

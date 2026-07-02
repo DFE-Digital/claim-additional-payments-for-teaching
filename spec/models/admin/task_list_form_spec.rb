@@ -57,7 +57,7 @@ RSpec.describe Admin::TaskListForm do
 
         expect(claim_1_presenter.task("ey_eoi_cross_reference").status).to eq("passed")
         expect(claim_1_presenter.task("one_login_identity").status).to eq("incomplete")
-        expect(claim_1_presenter.task("ey_alternative_verification").status).to eq("na")
+        expect(claim_1_presenter.task("ey_alternative_verification").status).to eq("not_applicable")
         expect(claim_1_presenter.task("employment").status).to eq("failed")
         expect(claim_1_presenter.task("student_loan_plan").status).to eq("incomplete")
         expect(claim_1_presenter.task("payroll_details").status).to eq("incomplete")
@@ -65,7 +65,7 @@ RSpec.describe Admin::TaskListForm do
 
         expect(claim_2_presenter.task("ey_eoi_cross_reference").status).to eq("failed")
         expect(claim_2_presenter.task("one_login_identity").status).to eq("incomplete")
-        expect(claim_2_presenter.task("ey_alternative_verification").status).to eq("na")
+        expect(claim_2_presenter.task("ey_alternative_verification").status).to eq("not_applicable")
         expect(claim_2_presenter.task("employment").status).to eq("passed")
         expect(claim_2_presenter.task("student_loan_plan").status).to eq("incomplete")
         expect(claim_2_presenter.task("payroll_details").status).to eq("incomplete")
@@ -408,6 +408,104 @@ RSpec.describe Admin::TaskListForm do
       end
     end
 
+    context "when all default filters are applied" do
+      it "includes claims with every student loan plan status" do
+        claim_with_passed_status = create(
+          :claim,
+          policy: Policies::EarlyYearsPayments,
+          academic_year: AcademicYear.current
+        )
+        create(
+          :task,
+          :passed,
+          name: "student_loan_plan",
+          claim: claim_with_passed_status
+        )
+
+        claim_with_failed_status = create(
+          :claim,
+          policy: Policies::EarlyYearsPayments,
+          academic_year: AcademicYear.current
+        )
+        create(
+          :task,
+          :failed,
+          name: "student_loan_plan",
+          claim: claim_with_failed_status
+        )
+
+        claim_with_no_match_status = create(
+          :claim,
+          policy: Policies::EarlyYearsPayments,
+          academic_year: AcademicYear.current
+        )
+        create(
+          :task,
+          :claim_verifier_context,
+          name: "student_loan_plan",
+          claim: claim_with_no_match_status,
+          passed: nil,
+          claim_verifier_match: :none,
+          manual: false,
+          created_by: nil
+        )
+
+        claim_with_no_data_status = create(
+          :claim,
+          policy: Policies::EarlyYearsPayments,
+          academic_year: AcademicYear.current
+        )
+        create(
+          :task,
+          :claim_verifier_context,
+          name: "student_loan_plan",
+          claim: claim_with_no_data_status,
+          passed: nil,
+          claim_verifier_match: nil,
+          manual: false,
+          created_by: nil
+        )
+
+        claim_with_incomplete_status = create(
+          :claim,
+          policy: Policies::EarlyYearsPayments,
+          academic_year: AcademicYear.current
+        )
+
+        form = described_class.new(policy_name: "early_years_payments")
+
+        expect(form.claims.map(&:reference)).to include(
+          claim_with_passed_status.reference,
+          claim_with_failed_status.reference,
+          claim_with_no_match_status.reference,
+          claim_with_no_data_status.reference,
+          claim_with_incomplete_status.reference
+        )
+      end
+
+      it "includes claims with an identity partial match status" do
+        claim = create(
+          :claim,
+          policy: Policies::TargetedRetentionIncentivePayments,
+          academic_year: AcademicYear.current
+        )
+        create(
+          :task,
+          :claim_verifier_context,
+          name: "identity_confirmation",
+          claim: claim,
+          passed: nil,
+          claim_verifier_match: :any,
+          manual: false,
+          created_by: nil
+        )
+
+        form = described_class.new(policy_name: "targeted_retention_incentive_payments")
+
+        expect(form.claims.map(&:reference)).to include(claim.reference)
+      end
+    end
+
     context "when assignee filters are applied" do
       it "returns ClaimPresenters matching the filters" do
         assignee_1 = create(:dfe_signin_user, :service_operator)
@@ -472,54 +570,50 @@ RSpec.describe Admin::TaskListForm do
     it "returns match-based statuses for employment" do
       form = described_class.new(policy_name: "early_years_payments")
       expect(form.task_statuses("employment")).to eq(
-        %w[passed failed no_match no_data incomplete]
+        %w[passed failed no_match no_data incomplete not_applicable]
+      )
+    end
+
+    it "returns match-based statuses for identity confirmation" do
+      form = described_class.new(policy_name: "targeted_retention_incentive_payments")
+      expect(form.task_statuses("identity_confirmation")).to eq(
+        %w[passed failed partial_match no_match incomplete not_applicable]
+      )
+    end
+
+    it "returns match-based statuses for qualifications" do
+      form = described_class.new(policy_name: "targeted_retention_incentive_payments")
+      expect(form.task_statuses("qualifications")).to eq(
+        %w[passed failed no_match incomplete not_applicable]
+      )
+    end
+
+    it "returns no-data statuses for census subjects taught" do
+      form = described_class.new(policy_name: "targeted_retention_incentive_payments")
+      expect(form.task_statuses("census_subjects_taught")).to eq(
+        %w[passed failed no_match no_data incomplete not_applicable]
+      )
+    end
+
+    it "returns no-data statuses for student loan plan" do
+      form = described_class.new(policy_name: "early_years_payments")
+      expect(form.task_statuses("student_loan_plan")).to eq(
+        %w[passed failed no_match no_data incomplete not_applicable]
       )
     end
 
     it "returns standard statuses for non-employment tasks" do
       form = described_class.new(policy_name: "early_years_payments")
       expect(form.task_statuses("ey_eoi_cross_reference")).to eq(
-        %w[passed failed incomplete]
+        %w[passed failed incomplete not_applicable]
       )
     end
-  end
 
-  describe Admin::TaskListForm::ClaimPresenter::Task do
-    describe "#filter_status" do
-      it "returns 'no_match' for employment tasks with 'no match' status" do
-        task = described_class.new("employment", "No match", "red")
-        expect(task.filter_status).to eq("no_match")
-      end
-
-      it "returns 'no_data' for employment tasks with 'no data' status" do
-        task = described_class.new("employment", "No data", "red")
-        expect(task.filter_status).to eq("no_data")
-      end
-
-      it "returns 'passed' for employment tasks with 'passed' status" do
-        task = described_class.new("employment", "Passed", "green")
-        expect(task.filter_status).to eq("passed")
-      end
-
-      it "returns 'failed' for employment tasks with 'failed' status" do
-        task = described_class.new("employment", "Failed", "red")
-        expect(task.filter_status).to eq("failed")
-      end
-
-      it "returns 'incomplete' for employment tasks with 'na' status" do
-        task = described_class.new("employment", "na", "blue")
-        expect(task.filter_status).to eq("incomplete")
-      end
-
-      it "returns 'incomplete' for non-employment tasks with 'no data' status" do
-        task = described_class.new("census_subjects_taught", "No data", "red")
-        expect(task.filter_status).to eq("incomplete")
-      end
-
-      it "returns 'incomplete' for non-employment tasks with 'na' status" do
-        task = described_class.new("identity_confirmation", "na", "blue")
-        expect(task.filter_status).to eq("incomplete")
-      end
+    it "returns standard statuses for payroll gender" do
+      form = described_class.new(policy_name: "early_years_payments")
+      expect(form.task_statuses("payroll_gender")).to eq(
+        %w[passed failed incomplete not_applicable]
+      )
     end
   end
 end
