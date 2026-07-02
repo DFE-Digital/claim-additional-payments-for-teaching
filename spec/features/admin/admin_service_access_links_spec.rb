@@ -13,7 +13,7 @@ RSpec.describe "Admin service access links" do
   end
 
   it "allows an admin to create a service access code" do
-    sign_in_as_service_operator
+    sign_in_as_service_admin
 
     visit "/admin"
 

@@ -1,6 +1,6 @@
 module Admin
   class ServiceAccessLinksController < BaseAdminController
-    before_action :ensure_service_operator
+    before_action :ensure_service_admin
 
     def show
       @service_access_code = Journeys::ServiceAccessCode.find params[:id]
