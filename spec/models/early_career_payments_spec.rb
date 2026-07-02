@@ -10,7 +10,8 @@ RSpec.describe Policies::EarlyCareerPayments, type: :model do
       AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
       AutomatedChecks::ClaimVerifiers::Employment,
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
-      AutomatedChecks::ClaimVerifiers::FraudRisk
+      AutomatedChecks::ClaimVerifiers::FraudRisk,
+      AutomatedChecks::ClaimVerifiers::MatchingClaims
     ])
   end
 

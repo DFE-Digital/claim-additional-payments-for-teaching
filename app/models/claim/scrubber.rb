@@ -17,6 +17,7 @@ class Claim
         claim.amendments.each { |amendment| scrub_amendment!(amendment) }
         scrub_claim!
         scrub_eligibility!
+        AutomatedChecks::ClaimVerifiers::MatchingClaims.new(claim: claim).perform
         scrub_session!
       end
     end

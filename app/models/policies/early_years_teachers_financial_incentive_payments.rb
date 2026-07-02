@@ -11,7 +11,8 @@ module Policies
     VERIFIERS = [
       AutomatedChecks::ClaimVerifiers::OneLoginIdentity,
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
-      AutomatedChecks::ClaimVerifiers::EyQualificationCheck
+      AutomatedChecks::ClaimVerifiers::EyQualificationCheck,
+      AutomatedChecks::ClaimVerifiers::MatchingClaims
     ]
 
     ADMIN_DECISION_REJECTED_REASONS = [

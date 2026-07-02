@@ -24,7 +24,8 @@ module Policies
       AutomatedChecks::ClaimVerifiers::FraudRisk,
       AutomatedChecks::ClaimVerifiers::FeRepeatApplicantCheck,
       AutomatedChecks::ClaimVerifiers::ClaimantCheck,
-      AutomatedChecks::ClaimVerifiers::ProviderCheck
+      AutomatedChecks::ClaimVerifiers::ProviderCheck,
+      AutomatedChecks::ClaimVerifiers::MatchingClaims
     ]
 
     # Options shown to admins when rejecting a claim
@@ -118,7 +119,7 @@ module Policies
     end
 
     def duplicate_claim?(claim)
-      Claim::MatchingAttributeFinder.new(claim).matching_claims.exists?
+      Claims::Match.matches_shim(claim).exists?
     end
 
     def teaching_start_year_mismatch?(claim)

@@ -54,6 +54,7 @@ RSpec.describe AutomatedChecks::ClaimVerifier do
             double(perform: Task.new),
             double(perform: Object.new),
             double(perform: nil),
+            double(perform: nil),
             double(perform: nil)
           ]
         end
@@ -94,6 +95,10 @@ RSpec.describe AutomatedChecks::ClaimVerifier do
           expect(AutomatedChecks::ClaimVerifiers::StudentLoanAmount).to have_received(:new).with(
             claim:,
             admin_user:
+          )
+
+          expect(AutomatedChecks::ClaimVerifiers::MatchingClaims).to have_received(:new).with(
+            claim:
           )
 
           verifiers.each do |verifier|

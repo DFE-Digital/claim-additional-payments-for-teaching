@@ -5,7 +5,8 @@ module Policies
 
     VERIFIERS = [
       AutomatedChecks::ClaimVerifiers::FraudRisk,
-      AutomatedChecks::ClaimVerifiers::PreviousYearClaims
+      AutomatedChecks::ClaimVerifiers::PreviousYearClaims,
+      AutomatedChecks::ClaimVerifiers::MatchingClaims
     ].freeze
 
     ELIGIBILITY_MATCHING_ATTRIBUTES = [["passport_number"]].freeze

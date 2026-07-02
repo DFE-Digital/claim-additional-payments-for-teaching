@@ -10,7 +10,8 @@ FactoryBot.define do
         email_address: "email@example.com",
         bank_sort_code: "220011",
         bank_account_number: "12345678",
-        eligibility_attributes: {teacher_reference_number: generate(:teacher_reference_number)}
+        eligibility_attributes: {teacher_reference_number: generate(:teacher_reference_number)},
+        created_at: DateTime.now - Claim.count.seconds
       }
       claim_policies.map do |policy|
         association(:claim, :approved, personal_details.merge(policy: policy))

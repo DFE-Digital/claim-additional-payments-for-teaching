@@ -48,6 +48,8 @@ class Amendment < ApplicationRecord
       amendment.claim_changes = changes_hash
 
       raise ActiveRecord::Rollback unless amendment.save
+
+      AutomatedChecks::ClaimVerifiers::MatchingClaims.new(claim: claim).perform
     end
 
     amendment

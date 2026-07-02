@@ -11,7 +11,8 @@ RSpec.describe Policies::FurtherEducationPayments, type: :model do
       AutomatedChecks::ClaimVerifiers::FraudRisk,
       AutomatedChecks::ClaimVerifiers::FeRepeatApplicantCheck,
       AutomatedChecks::ClaimVerifiers::ClaimantCheck,
-      AutomatedChecks::ClaimVerifiers::ProviderCheck
+      AutomatedChecks::ClaimVerifiers::ProviderCheck,
+      AutomatedChecks::ClaimVerifiers::MatchingClaims
     ])
   end
 
