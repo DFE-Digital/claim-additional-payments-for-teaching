@@ -227,6 +227,8 @@ Rails.application.routes.draw do
       resource :flagged_providers_csv, only: [:update]
     end
 
+    resources :service_access_links, only: [:create, :show]
+
     get "refresh-session", to: "sessions#refresh", as: :refresh_session
 
     patch "allocate/:id", to: "allocations#allocate", as: :allocate

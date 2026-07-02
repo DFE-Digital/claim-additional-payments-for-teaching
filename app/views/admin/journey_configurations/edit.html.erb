@@ -109,3 +109,16 @@
 <% if lookup_context.exists?("admin/journey_configurations/_edit_#{journey_configuration.routing_name.underscore}") %>
   <%= render partial: "admin/journey_configurations/edit_#{journey_configuration.routing_name.underscore}" %>
 <% end %>
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-m">Create a service access link</h2>
+
+    <%= govuk_button_to(
+      "Generate a new service access link",
+      admin_service_access_links_path(journey: journey_configuration.routing_name)
+    ) %>
+  </div>
+</div>

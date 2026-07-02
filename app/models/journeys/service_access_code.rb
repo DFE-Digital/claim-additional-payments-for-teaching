@@ -12,11 +12,32 @@ module Journeys
     validates :code, presence: true, uniqueness: true
 
     def self.permits_access?(code:, journey:)
-      code.present? && for_journey(journey).unused.exists?(code: code)
+      return false unless code.present?
+
+      link = for_journey(journey).find_by(code: code)
+      return false unless link
+
+      link.active?
     end
 
     def mark_as_used!
       update!(used: true)
+    end
+
+    def journey_class
+      journey.constantize
+    end
+
+    def expires_at
+      created_at + 30.days
+    end
+
+    def expired?
+      expires_at.past?
+    end
+
+    def active?
+      !used && !expired?
     end
 
     private
