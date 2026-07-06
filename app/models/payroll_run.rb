@@ -37,6 +37,14 @@ class PayrollRun < ApplicationRecord
     end
   end
 
+  def payments_count
+    if FeatureFlag.enabled?(:payroll_speed_up)
+      super
+    else
+      @payments_count ||= payments.count
+    end
+  end
+
   def total_confirmed_payments
     if FeatureFlag.enabled?(:payroll_speed_up)
       super
@@ -58,9 +66,13 @@ class PayrollRun < ApplicationRecord
   end
 
   def all_payments_confirmed?
-    return @all_payments_confirmed if defined?(@all_payments_confirmed)
+    if FeatureFlag.enabled?(:payroll_speed_up)
+      payment_confirmation_uploaded? && total_confirmed_payments == payments_count
+    else
+      return @all_payments_confirmed if defined?(@all_payments_confirmed)
 
-    @all_payments_confirmed = payment_confirmations.any? && total_confirmed_payments == payments_count
+      @all_payments_confirmed = payment_confirmations.any? && total_confirmed_payments == payments_count
+    end
   end
 
   def download_triggered?
@@ -68,14 +80,6 @@ class PayrollRun < ApplicationRecord
   end
 
   private
-
-  def payments_count
-    if FeatureFlag.enabled?(:payroll_speed_up)
-      super
-    else
-      @payments_count ||= payments.count
-    end
-  end
 
   class LineItem < Struct.new(:id, :award_amount, keyword_init: true); end
 

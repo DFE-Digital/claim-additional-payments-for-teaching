@@ -599,6 +599,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_06_122602) do
     t.uuid "created_by_id"
     t.datetime "downloaded_at", precision: nil
     t.uuid "downloaded_by_id"
+    t.boolean "payment_confirmation_uploaded", default: false
     t.integer "payments_count"
     t.date "scheduled_payment_date"
     t.string "status", default: "pending", null: false
