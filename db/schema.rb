@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_09_131626) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_06_122602) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -593,13 +593,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_09_131626) do
   end
 
   create_table "payroll_runs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "claims_count"
     t.uuid "confirmation_report_uploaded_by_id"
     t.datetime "created_at", precision: nil, null: false
     t.uuid "created_by_id"
     t.datetime "downloaded_at", precision: nil
     t.uuid "downloaded_by_id"
+    t.integer "payments_count"
     t.date "scheduled_payment_date"
     t.string "status", default: "pending", null: false
+    t.integer "topups_count"
+    t.integer "total_confirmed_payments"
     t.datetime "updated_at", precision: nil, null: false
     t.index ["confirmation_report_uploaded_by_id"], name: "index_payroll_runs_on_confirmation_report_uploaded_by_id"
     t.index ["created_at"], name: "index_payroll_runs_on_created_at"

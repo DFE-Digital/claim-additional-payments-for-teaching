@@ -21,6 +21,30 @@ class PayrollRun < ApplicationRecord
       Rails.env.development?
   end
 
+  def claims_count
+    if FeatureFlag.enabled?(:payroll_speed_up)
+      super
+    else
+      number_of_claims_for_policy(:all, filter: :claims)
+    end
+  end
+
+  def topups_count
+    if FeatureFlag.enabled?(:payroll_speed_up)
+      super
+    else
+      number_of_claims_for_policy(:all, filter: :topups)
+    end
+  end
+
+  def total_confirmed_payments
+    if FeatureFlag.enabled?(:payroll_speed_up)
+      super
+    else
+      payments.where.not(confirmation: nil).count
+    end
+  end
+
   def total_award_amount
     payments.sum(:award_amount)
   end
@@ -31,10 +55,6 @@ class PayrollRun < ApplicationRecord
 
   def total_claim_amount_for_policy(policy, filter: :all)
     line_items(policy, filter: filter).sum(&:award_amount)
-  end
-
-  def total_confirmed_payments
-    payments.where.not(confirmation: nil).count
   end
 
   def all_payments_confirmed?
@@ -50,7 +70,11 @@ class PayrollRun < ApplicationRecord
   private
 
   def payments_count
-    @payments_count ||= payments.count
+    if FeatureFlag.enabled?(:payroll_speed_up)
+      super
+    else
+      @payments_count ||= payments.count
+    end
   end
 
   class LineItem < Struct.new(:id, :award_amount, keyword_init: true); end
