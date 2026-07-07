@@ -17,7 +17,7 @@ teachers through a streamlined digital service.
 
 ## Development user journeys
 
-Each pull request opened on GitHub creates a review app containing only that change. The review app URL is posted as a comment on the pull request.
+Each pull request with the "deploy" label applied creates a review app containing only that change. The review app URL is posted as a comment on the pull request.
 
 Review app basic auth credentials:
 
