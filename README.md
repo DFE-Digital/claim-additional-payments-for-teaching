@@ -27,6 +27,8 @@ Architecture decision records can be found in the
 
 ### Documentation for common developer tasks
 
+- Service overview and user journeys:
+  [`docs/service-overview.md`](docs/service-overview.md)
 - Release process for production:
   [`docs/release-process.md`](docs/release-process.md)
 - Generating school check data:
