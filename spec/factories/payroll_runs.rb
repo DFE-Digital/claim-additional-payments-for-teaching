@@ -23,6 +23,8 @@ FactoryBot.define do
       confirmed_batches { nil }
     end
 
+    payments_count { claims_counts.values.sum }
+
     after(:create) do |payroll_run, evaluator|
       evaluator.claims_counts.each do |policies, count|
         policies = Array(policies)
@@ -37,6 +39,8 @@ FactoryBot.define do
     end
 
     trait :with_confirmations do
+      payment_confirmation_uploaded { true }
+      total_confirmed_payments { claims_counts.values.sum }
       payment_traits { %i[with_figures] }
 
       after(:create) do |payroll_run, evaluator|
