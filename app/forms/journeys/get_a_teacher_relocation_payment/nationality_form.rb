@@ -16,9 +16,7 @@ module Journeys
       def save
         return false unless valid?
 
-        journey_session.answers.assign_attributes(nationality: nationality)
-
-        journey_session.save!
+        journey_session.answers.update!(nationality: nationality)
       end
     end
   end

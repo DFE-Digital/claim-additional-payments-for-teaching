@@ -29,9 +29,7 @@ module Journeys
       def save
         return false unless valid?
 
-        journey_session.answers.assign_attributes(date_of_entry: date_of_entry)
-
-        journey_session.save!
+        journey_session.answers.update!(date_of_entry: date_of_entry)
       end
     end
   end

@@ -16,9 +16,7 @@ module Journeys
       def save
         return false unless valid?
 
-        journey_session.answers.assign_attributes(one_year: one_year)
-
-        journey_session.save!
+        journey_session.answers.update!(one_year: one_year)
       end
     end
   end

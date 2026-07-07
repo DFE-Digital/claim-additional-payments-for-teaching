@@ -15,9 +15,7 @@ module Journeys
       def save
         return false unless valid?
 
-        journey_session.answers.assign_attributes(subject: subject)
-
-        journey_session.save!
+        journey_session.answers.update!(subject: subject)
 
         true
       end
