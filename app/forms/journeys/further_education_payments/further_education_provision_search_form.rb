@@ -35,12 +35,10 @@ module Journeys
       end
 
       def clear_answers_from_session
-        journey_session.answers.assign_attributes(
+        journey_session.answers.update!(
           possible_school_id: nil,
           provision_search: nil
         )
-
-        journey_session.save!
       end
 
       private

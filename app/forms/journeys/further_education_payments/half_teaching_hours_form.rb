@@ -19,8 +19,7 @@ module Journeys
       def save
         return false unless valid?
 
-        journey_session.answers.assign_attributes(half_teaching_hours:)
-        journey_session.save!
+        journey_session.answers.update!(half_teaching_hours:)
       end
     end
   end

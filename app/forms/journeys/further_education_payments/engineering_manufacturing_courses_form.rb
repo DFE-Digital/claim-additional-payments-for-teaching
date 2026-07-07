@@ -55,14 +55,12 @@ module Journeys
       def save
         return false if invalid?
 
-        journey_session.answers.assign_attributes(engineering_manufacturing_courses:)
-        journey_session.save!
+        journey_session.answers.update!(engineering_manufacturing_courses:)
       end
 
       def clear_answers_from_session
         if answers.subjects_taught.exclude?("engineering_manufacturing")
-          journey_session.answers.assign_attributes(engineering_manufacturing_courses: [])
-          journey_session.save!
+          journey_session.answers.update!(engineering_manufacturing_courses: [])
         end
       end
 

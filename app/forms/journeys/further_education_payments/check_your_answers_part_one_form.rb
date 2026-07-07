@@ -4,8 +4,7 @@ module Journeys
       def save
         journey_session
           .answers
-          .assign_attributes(check_your_answers_part_one_completed: true)
-        journey_session.save!
+          .update!(check_your_answers_part_one_completed: true)
       end
 
       def completed?
