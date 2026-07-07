@@ -11,9 +11,6 @@ module Seeders
       puts "Seeding feature flags..."
       toggle_feature_flags
 
-      puts "Seeding fixtures..."
-      seed_fixures
-
       puts "Seeding payroll runs..."
       seed_payroll_runs
 
@@ -50,12 +47,6 @@ module Seeders
     def toggle_feature_flags
       FeatureFlag.enable!("fe_provider_dashboard")
       FeatureFlag.enable!("eytfi_journey")
-    end
-
-    def seed_fixures
-      ENV["FIXTURES_PATH"] = "spec/fixtures"
-      ENV["FIXTURES"] = "local_authorities,local_authority_districts,schools"
-      Rake::Task["db:fixtures:load"].invoke
     end
 
     def seed_payroll_runs
