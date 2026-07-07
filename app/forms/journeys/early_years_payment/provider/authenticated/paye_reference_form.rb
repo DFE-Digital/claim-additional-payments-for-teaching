@@ -18,8 +18,7 @@ module Journeys
           def save
             return false if invalid?
 
-            journey_session.answers.assign_attributes(paye_reference:)
-            journey_session.save!
+            journey_session.answers.update!(paye_reference:)
           end
         end
       end

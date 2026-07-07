@@ -47,11 +47,9 @@ module Journeys
           def save
             return false unless valid?
 
-            journey_session.answers.assign_attributes(
+            journey_session.answers.update!(
               provider_entered_contract_type: provider_entered_contract_type
             )
-
-            journey_session.save!
           end
         end
       end

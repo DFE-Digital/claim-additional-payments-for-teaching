@@ -113,11 +113,9 @@ module Journeys
           def save
             return false if invalid?
 
-            journey_session.answers.assign_attributes(
+            journey_session.answers.update!(
               claimant_employment_check_declaration: claimant_employment_check_declaration
             )
-
-            journey_session.save!
 
             journey_session.answers.alternative_idv_completed!
 

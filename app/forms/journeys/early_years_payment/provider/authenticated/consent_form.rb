@@ -11,8 +11,7 @@ module Journeys
           def save
             return false if invalid?
 
-            journey_session.answers.assign_attributes(consent_given:)
-            journey_session.save!
+            journey_session.answers.update!(consent_given:)
           end
         end
       end

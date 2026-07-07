@@ -29,13 +29,9 @@ module Journeys
 
             return false unless valid?
 
-            journey_session.answers.assign_attributes(
+            journey_session.answers.update!(
               provider_email_verified: true
             )
-
-            journey_session.save!
-
-            true
           end
 
           def back_link_path
