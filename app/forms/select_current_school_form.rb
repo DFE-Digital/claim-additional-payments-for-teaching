@@ -10,10 +10,9 @@ class SelectCurrentSchoolForm < Form
   def save
     return unless valid?
 
-    journey_session.answers.assign_attributes(
+    journey_session.answers.update!(
       current_school_id: possible_school_id
     )
-    journey_session.save!
   end
 
   def completed?

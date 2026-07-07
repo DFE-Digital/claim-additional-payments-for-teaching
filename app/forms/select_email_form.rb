@@ -13,12 +13,11 @@ class SelectEmailForm < Form
   def save
     return false unless valid?
 
-    journey_session.answers.assign_attributes(
+    journey_session.answers.update!(
       email_address: email_address,
       email_verified: email_verified,
       email_address_check: email_address_check
     )
-    journey_session.save!
   end
 
   def determine_dependant_attributes

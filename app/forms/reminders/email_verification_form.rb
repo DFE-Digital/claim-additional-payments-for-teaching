@@ -11,10 +11,9 @@ module Reminders
     def save!
       return false if invalid?
 
-      journey_session.answers.assign_attributes(
+      journey_session.answers.update!(
         reminder_otp_confirmed: true
       )
-      journey_session.save!
 
       reminder = Reminder.find_or_create_by(
         full_name: journey_session.answers.reminder_full_name,

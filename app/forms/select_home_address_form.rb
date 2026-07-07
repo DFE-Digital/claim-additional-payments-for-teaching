@@ -37,7 +37,7 @@ class SelectHomeAddressForm < Form
 
     selected_address = postcode_search.addresses.detect { it[:address] == address }
 
-    journey_session.answers.assign_attributes({
+    journey_session.answers.update!({
       skip_postcode_search: false,
       address_line_1: selected_address[:address_line_1]&.titleize,
       address_line_2: selected_address[:address_line_2]&.titleize,
@@ -45,8 +45,6 @@ class SelectHomeAddressForm < Form
       address_line_4: nil,
       postcode: selected_address[:postcode]
     })
-
-    journey_session.save!
   end
 
   def completed?

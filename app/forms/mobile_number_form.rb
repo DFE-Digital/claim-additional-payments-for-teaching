@@ -21,14 +21,12 @@ class MobileNumberForm < Form
       Time.now
     end
 
-    journey_session.answers.assign_attributes(
+    journey_session.answers.update!(
       mobile_number: mobile_number,
       mobile_verified: nil,
       mobile_verification_secret: otp_secret,
       sent_one_time_password_at: sent_one_time_password_at
     )
-
-    journey_session.save!
   rescue NotifySmsMessage::NotifySmsError => e
     handle_notify_error(e)
     false

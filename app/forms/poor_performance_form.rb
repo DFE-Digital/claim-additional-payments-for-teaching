@@ -24,10 +24,9 @@ class PoorPerformanceForm < Form
   def save
     return false if invalid?
 
-    journey_session.answers.assign_attributes(
+    journey_session.answers.update!(
       subject_to_formal_performance_action:,
       subject_to_disciplinary_action:
     )
-    journey_session.save
   end
 end

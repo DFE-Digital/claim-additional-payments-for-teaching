@@ -90,7 +90,7 @@ class SignInOrContinueForm < Form
   def update_from_dfe_identity_sign_in!
     if details_check
       if DfeIdentity::UserInfo.validated?(teacher_id_user_info.attributes)
-        journey_session.answers.assign_attributes(
+        journey_session.answers.update!(
           first_name: teacher_id_user_info.given_name,
           surname: teacher_id_user_info.family_name,
           teacher_reference_number: teacher_id_user_info.trn,
@@ -102,21 +102,17 @@ class SignInOrContinueForm < Form
           teacher_id_user_info: teacher_id_user_info.attributes
         )
 
-        journey_session.save!
-
         retrieve_qualifications_data!
       else
-        journey_session.answers.assign_attributes(
+        journey_session.answers.update!(
           logged_in_with_tid: true,
           details_check: false,
           dqt_teacher_status: nil,
           teacher_id_user_info: teacher_id_user_info.attributes
         )
-
-        journey_session.save!
       end
     else
-      journey_session.answers.assign_attributes(
+      journey_session.answers.update!(
         first_name: "",
         surname: "",
         teacher_reference_number: "",
@@ -126,13 +122,11 @@ class SignInOrContinueForm < Form
         details_check: false,
         teacher_id_user_info: teacher_id_user_info.attributes
       )
-
-      journey_session.save!
     end
   end
 
   def update_from_skipped_dfe_identity_sign_in!
-    journey_session.answers.assign_attributes(
+    journey_session.answers.update!(
       first_name: "",
       surname: "",
       teacher_reference_number: "",
@@ -142,8 +136,6 @@ class SignInOrContinueForm < Form
       details_check: nil,
       teacher_id_user_info: {}
     )
-
-    journey_session.save!
   end
 
   def retrieve_qualifications_data!

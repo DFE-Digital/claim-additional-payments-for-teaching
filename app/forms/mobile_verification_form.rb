@@ -13,8 +13,7 @@ class MobileVerificationForm < Form
   def save
     return false unless valid?
 
-    journey_session.answers.assign_attributes(mobile_verified: true)
-    journey_session.save!
+    journey_session.answers.update!(mobile_verified: true)
   end
 
   def completed?
