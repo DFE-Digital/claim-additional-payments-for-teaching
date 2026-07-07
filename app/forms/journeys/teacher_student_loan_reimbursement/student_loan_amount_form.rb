@@ -6,11 +6,9 @@ module Journeys
       end
 
       def save
-        journey_session.answers.assign_attributes(
+        journey_session.answers.update!(
           student_loan_amount_seen: true
         )
-
-        journey_session.save!
       end
     end
   end

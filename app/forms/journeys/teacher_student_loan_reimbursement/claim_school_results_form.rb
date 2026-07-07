@@ -12,10 +12,9 @@ module Journeys
       def save
         return unless valid?
 
-        journey_session.answers.assign_attributes(
+        journey_session.answers.update!(
           claim_school_id: possible_claim_school_id
         )
-        journey_session.save!
       end
 
       def completed?
