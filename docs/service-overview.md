@@ -46,6 +46,8 @@ Integration endpoint basic auth credentials:
   https://test.claim-additional-teaching-payment.service.gov.uk/further-education-payments/landing-page
 - Early years:
   https://test.claim-additional-teaching-payment.service.gov.uk/early-years-payment/guidance
+- EYTRP:
+  https://test.claim-additional-teaching-payment.service.gov.uk/early-years-teachers-recognition-payments/landing-page
 
 ## Production environment user journeys
 
@@ -58,3 +60,5 @@ Integration endpoint basic auth credentials:
   https://www.claim-additional-teaching-payment.service.gov.uk/early-years-payment/guidance
 - Early years (practitioner):
   https://www.claim-additional-teaching-payment.service.gov.uk/early-years-payment-practitioner/find-reference?skip_landing_page=true
+- EYTRP:
+  https://www.claim-additional-teaching-payment.service.gov.uk/early-years-teachers-recognition-payments/landing-page
