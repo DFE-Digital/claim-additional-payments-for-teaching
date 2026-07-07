@@ -21,38 +21,6 @@ class PayrollRun < ApplicationRecord
       Rails.env.development?
   end
 
-  def claims_count
-    if FeatureFlag.enabled?(:payroll_speed_up)
-      super
-    else
-      number_of_claims_for_policy(:all, filter: :claims)
-    end
-  end
-
-  def topups_count
-    if FeatureFlag.enabled?(:payroll_speed_up)
-      super
-    else
-      number_of_claims_for_policy(:all, filter: :topups)
-    end
-  end
-
-  def payments_count
-    if FeatureFlag.enabled?(:payroll_speed_up)
-      super
-    else
-      @payments_count ||= payments.count
-    end
-  end
-
-  def total_confirmed_payments
-    if FeatureFlag.enabled?(:payroll_speed_up)
-      super
-    else
-      payments.where.not(confirmation: nil).count
-    end
-  end
-
   def total_award_amount
     payments.sum(:award_amount)
   end
@@ -66,13 +34,7 @@ class PayrollRun < ApplicationRecord
   end
 
   def all_payments_confirmed?
-    if FeatureFlag.enabled?(:payroll_speed_up)
-      payment_confirmation_uploaded? && total_confirmed_payments == payments_count
-    else
-      return @all_payments_confirmed if defined?(@all_payments_confirmed)
-
-      @all_payments_confirmed = payment_confirmations.any? && total_confirmed_payments == payments_count
-    end
+    payment_confirmation_uploaded? && total_confirmed_payments == payments_count
   end
 
   def download_triggered?
