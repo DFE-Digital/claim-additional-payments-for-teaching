@@ -11,13 +11,9 @@ module Journeys
       def save
         return false unless valid?
 
-        journey_session.answers.assign_attributes(
+        journey_session.answers.update!(
           eligible_degree_subject: eligible_degree_subject
         )
-
-        journey_session.save!
-
-        true
       end
 
       def radio_options
