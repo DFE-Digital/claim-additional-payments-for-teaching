@@ -33,13 +33,11 @@ module Journeys
       def save
         return false unless valid?
 
-        journey_session.answers.assign_attributes(teaching_hours_per_week:)
-        journey_session.save!
+        journey_session.answers.update!(teaching_hours_per_week:)
       end
 
       def clear_answers_from_session
-        journey_session.answers.assign_attributes(teaching_hours_per_week: nil)
-        journey_session.save!
+        journey_session.answers.update!(teaching_hours_per_week: nil)
       end
 
       def school

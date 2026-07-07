@@ -38,8 +38,7 @@ module Journeys
       def save
         return if invalid?
 
-        journey_session.answers.assign_attributes(contract_type:)
-        journey_session.save!
+        journey_session.answers.update!(contract_type:)
       end
 
       def school
@@ -47,8 +46,7 @@ module Journeys
       end
 
       def clear_answers_from_session
-        journey_session.answers.assign_attributes(contract_type: nil)
-        journey_session.save!
+        journey_session.answers.update!(contract_type: nil)
       end
     end
   end

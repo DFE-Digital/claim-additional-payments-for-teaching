@@ -2,13 +2,11 @@ module Journeys
   module FurtherEducationPayments
     class EligibleForm < Form
       def save
-        journey_session.answers.assign_attributes(award_amount:)
-        journey_session.save!
+        journey_session.answers.update!(award_amount:)
       end
 
       def clear_answers_from_session
-        journey_session.answers.assign_attributes(award_amount: nil)
-        journey_session.save!
+        journey_session.answers.update!(award_amount: nil)
       end
 
       def award_amount

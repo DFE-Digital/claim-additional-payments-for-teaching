@@ -13,21 +13,19 @@ module Journeys
         return if invalid?
 
         if email_changed?
-          journey_session.answers.assign_attributes(
+          journey_session.answers.update!(
             work_email_verified: false,
             work_email:,
             work_email_otp_secret: otp_secret,
             work_email_otp_timestamp: Time.zone.now
           )
-          journey_session.save!
 
           send_email
         elsif resend
-          journey_session.answers.assign_attributes(
+          journey_session.answers.update!(
             work_email_otp_secret: otp_secret,
             work_email_otp_timestamp: Time.zone.now
           )
-          journey_session.save!
 
           send_email
         end
@@ -40,8 +38,7 @@ module Journeys
       end
 
       def clear_answers_from_session
-        journey_session.answers.assign_attributes(work_email: nil)
-        journey_session.save!
+        journey_session.answers.update!(work_email: nil)
       end
 
       private

@@ -17,7 +17,7 @@ module Journeys
         return if invalid? || no_results?
 
         if changed_query?
-          journey_session.answers.assign_attributes(
+          journey_session.answers.update!(
             possible_school_id: nil,
             provision_search:
           )
@@ -25,22 +25,20 @@ module Journeys
         end
 
         if possible_school_id.present? && changed_possible_school?
-          journey_session.answers.assign_attributes(
+          journey_session.answers.update!(
             possible_school_id:
           )
           reset_dependent_answers
         end
 
-        journey_session.save!
+        true
       end
 
       def clear_answers_from_session
-        journey_session.answers.assign_attributes(
+        journey_session.answers.update!(
           possible_school_id: nil,
           provision_search: nil
         )
-
-        journey_session.save!
       end
 
       private
@@ -68,7 +66,7 @@ module Journeys
       end
 
       def reset_dependent_answers
-        journey_session.answers.assign_attributes(
+        journey_session.answers.update!(
           school_id: nil
         )
       end

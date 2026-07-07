@@ -25,13 +25,11 @@ module Journeys
       def save
         return false if invalid?
 
-        journey_session.answers.assign_attributes(taught_at_least_one_term:)
-        journey_session.save!
+        journey_session.answers.update!(taught_at_least_one_term:)
       end
 
       def clear_answers_from_session
-        journey_session.answers.assign_attributes(taught_at_least_one_term: nil)
-        journey_session.save!
+        journey_session.answers.update!(taught_at_least_one_term: nil)
       end
 
       def school
