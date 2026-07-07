@@ -17,14 +17,14 @@ module Journeys
 
         if confirmed == "no"
           journey_session.employment_proofs.purge
-          journey_session.answers.confirmed_employment_proof_blob_ids.clear
-          journey_session.save!
+          journey_session.answers.update!(confirmed_employment_proof_blob_ids: [])
           return false
         end
 
         unless journey_session.answers.confirmed_employment_proof_blob_ids.include?(blob_id)
-          journey_session.answers.confirmed_employment_proof_blob_ids << blob_id
-          journey_session.save!
+          journey_session.answers.update!(
+            confirmed_employment_proof_blob_ids: journey_session.answers.confirmed_employment_proof_blob_ids + [blob_id]
+          )
         end
 
         true
