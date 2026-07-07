@@ -8,7 +8,7 @@ Full list of acronyms across DFE with 3,500 acronyms:
 | AOC | Association of Colleges |
 | DQT | Database of Qualified Teachers |
 | ECP | Early-career payments (for teachers) |
-| EY | Early years |
+| EYTRP | Early years teacher recognition payments |
 | FE | Further education |
 | FEC | Further Education Commissioner |
 | FEWDC | Further Education Workforce Data Collection |
