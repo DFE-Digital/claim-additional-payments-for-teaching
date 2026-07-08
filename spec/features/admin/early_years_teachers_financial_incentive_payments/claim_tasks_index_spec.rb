@@ -2,6 +2,8 @@ require "rails_helper"
 
 RSpec.describe "Task index page for EYTFI claims" do
   it "shows an overview of the claim" do
+    travel_to DateTime.new(2026, 5, 13, 13, 30, 0)
+
     eligible_eytfi_provider = create(
       :eligible_eytfi_provider,
       urn: "EY123456",
@@ -95,6 +97,8 @@ RSpec.describe "Task index page for EYTFI claims" do
         value: "EY123456"
       )
     end
+
+    travel_back
   end
 
   it "shows the list of tasks" do
