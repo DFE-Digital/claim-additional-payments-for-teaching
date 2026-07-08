@@ -103,7 +103,10 @@ module Admin
     def admin_decision_details(decision)
       [].tap do |a|
         a << [translate("admin.decision.created_at"), l(decision.created_at)]
-        a << [translate("admin.decision.result"), decision.result.capitalize]
+        a << [
+          translate("admin.decision.result"),
+          decision.result.capitalize + (decision.undone? ? " (undone)" : "")
+        ]
         a << [translate("admin.decision.reasons"), rejected_reasons_list(decision)] if decision.rejected?
         a << [translate("admin.decision.notes"), simple_format(decision.notes, class: "govuk-body")] if decision.notes.present?
         a << [translate("admin.decision.created_by"), user_details(decision.created_by)] if decision.created_by_id?
