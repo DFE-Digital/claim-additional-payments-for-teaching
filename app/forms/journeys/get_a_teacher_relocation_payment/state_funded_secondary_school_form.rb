@@ -16,11 +16,9 @@ module Journeys
       def save
         return false unless valid?
 
-        journey_session.answers.assign_attributes(
+        journey_session.answers.update!(
           state_funded_secondary_school: state_funded_secondary_school
         )
-
-        journey_session.save!
       end
     end
   end

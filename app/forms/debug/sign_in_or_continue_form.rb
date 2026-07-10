@@ -107,9 +107,7 @@ module Debug
         dqt_teacher_status[:routesToProfessionalStatuses] << route
       end
 
-      journey_session.answers.dqt_teacher_status = dqt_teacher_status
-
-      journey_session.save!
+      journey_session.answers.update!(dqt_teacher_status: dqt_teacher_status)
     end
 
     def i18n_form_namespace

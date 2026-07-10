@@ -25,11 +25,9 @@ module Journeys
       def save
         return false unless valid?
 
-        journey_session.answers.assign_attributes(
+        journey_session.answers.update!(
           previous_payment_received: previous_payment_received
         )
-
-        journey_session.save!
       end
     end
   end

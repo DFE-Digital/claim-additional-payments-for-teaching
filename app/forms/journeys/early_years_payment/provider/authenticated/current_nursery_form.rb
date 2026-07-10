@@ -22,8 +22,7 @@ module Journeys
           def save
             return false if invalid?
 
-            journey_session.answers.assign_attributes(nursery_urn:)
-            journey_session.save!
+            journey_session.answers.update!(nursery_urn:)
           end
 
           def nursery_is_valid_for_user

@@ -29,8 +29,7 @@ module Journeys
       def save
         return if invalid?
 
-        journey_session.answers.assign_attributes(have_one_login_account:)
-        journey_session.save!
+        journey_session.answers.update!(have_one_login_account:)
       end
     end
   end

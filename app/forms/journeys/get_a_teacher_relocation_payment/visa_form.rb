@@ -31,9 +31,7 @@ module Journeys
       def save
         return false unless valid?
 
-        journey_session.answers.assign_attributes(visa_type: visa_type)
-
-        journey_session.save!
+        journey_session.answers.update!(visa_type: visa_type)
       end
     end
   end

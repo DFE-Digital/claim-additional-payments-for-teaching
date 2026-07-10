@@ -16,9 +16,7 @@ module Journeys
       def save
         return false unless valid?
 
-        journey_session.answers.assign_attributes(changed_workplace_or_new_contract: changed_workplace_or_new_contract)
-
-        journey_session.save!
+        journey_session.answers.update!(changed_workplace_or_new_contract: changed_workplace_or_new_contract)
       end
     end
   end

@@ -35,14 +35,12 @@ module Journeys
       def save
         return false if invalid?
 
-        journey_session.answers.assign_attributes(maths_courses:)
-        journey_session.save!
+        journey_session.answers.update!(maths_courses:)
       end
 
       def clear_answers_from_session
         if answers.subjects_taught.exclude?("maths")
-          journey_session.answers.assign_attributes(maths_courses: [])
-          journey_session.save!
+          journey_session.answers.update!(maths_courses: [])
         end
       end
 

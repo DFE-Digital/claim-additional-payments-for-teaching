@@ -13,14 +13,13 @@ module Journeys
             .by_policy(Policies::EarlyYearsPayments)
             .find_by(reference: reference_number)
 
-          journey_session.answers.assign_attributes(
+          journey_session.answers.update!(
             reference_number:,
             reference_number_found: existing_claim.present?,
             claim_already_submitted: existing_claim&.submitted?,
             nursery_name: existing_claim&.eligibility&.eligible_ey_provider&.nursery_name,
             practitioner_claim_started_at: Time.now
           )
-          journey_session.save!
         end
       end
     end

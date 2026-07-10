@@ -14,8 +14,7 @@ class EmailVerificationForm < Form
   def save
     return false unless valid?
 
-    journey_session.answers.assign_attributes(email_verified: true)
-    journey_session.save!
+    journey_session.answers.update!(email_verified: true)
   end
 
   private

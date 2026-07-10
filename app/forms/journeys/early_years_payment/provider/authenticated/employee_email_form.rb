@@ -16,8 +16,7 @@ module Journeys
           def save
             return false if invalid?
 
-            journey_session.answers.assign_attributes(practitioner_email_address:)
-            journey_session.save!
+            journey_session.answers.update!(practitioner_email_address:)
           end
         end
       end

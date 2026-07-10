@@ -17,8 +17,7 @@ module Journeys
       def save
         return false if invalid?
 
-        journey_session.answers.assign_attributes(claimant_declaration:)
-        journey_session.save!
+        journey_session.answers.update!(claimant_declaration:)
 
         journey::AnswersStudentLoansDetailsUpdater.call(journey_session)
 
@@ -36,8 +35,7 @@ module Journeys
         claim.policy.mailer.submitted(claim).deliver_later
         ClaimVerifierJob.perform_later(claim)
 
-        journey_session.answers.assign_attributes(submitted_claim_id: claim.id)
-        journey_session.save!
+        journey_session.answers.update!(submitted_claim_id: claim.id)
 
         session[:submitted_claim_id] = claim.id
         clear_claim_session

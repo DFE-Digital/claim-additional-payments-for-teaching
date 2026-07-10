@@ -4,14 +4,11 @@ module Journeys
       def save
         return false unless super
 
-        journey_session.answers.assign_attributes(
+        journey_session.answers.update!(
           award_amount: Policies::TargetedRetentionIncentivePayments.award_amount(
             current_school
           )
         )
-        journey_session.save!
-
-        true
       end
     end
   end

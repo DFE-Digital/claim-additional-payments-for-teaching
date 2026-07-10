@@ -16,7 +16,7 @@ module Journeys
       def save
         return false if invalid?
 
-        journey_session.answers.assign_attributes(
+        journey_session.answers.update!(
           taught_eligible_subjects: taught_eligible_subjects,
           biology_taught: taught?("biology"),
           chemistry_taught: taught?("chemistry"),
@@ -24,8 +24,6 @@ module Journeys
           computing_taught: taught?("computing"),
           languages_taught: taught?("languages")
         )
-
-        journey_session.save!
       end
 
       def claim_school_name

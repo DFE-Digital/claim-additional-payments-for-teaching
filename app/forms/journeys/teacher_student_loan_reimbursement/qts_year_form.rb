@@ -12,11 +12,9 @@ module Journeys
       def save
         return false unless valid?
 
-        journey_session.answers.assign_attributes(
+        journey_session.answers.update!(
           qts_award_year: qts_award_year
         )
-
-        journey_session.save!
       end
 
       def radio_options

@@ -19,13 +19,11 @@ module Journeys
       def save
         return false if invalid?
 
-        journey_session.answers.assign_attributes(teaching_responsibilities:)
-        journey_session.save!
+        journey_session.answers.update!(teaching_responsibilities:)
       end
 
       def clear_answers_from_session
-        journey_session.answers.assign_attributes(teaching_responsibilities: nil)
-        journey_session.save!
+        journey_session.answers.update!(teaching_responsibilities: nil)
       end
     end
   end

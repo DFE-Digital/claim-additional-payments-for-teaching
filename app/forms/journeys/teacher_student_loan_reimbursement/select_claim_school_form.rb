@@ -31,8 +31,6 @@ module Journeys
         end
 
         journey_session.save!
-
-        true
       end
 
       def claim_school_id

@@ -43,14 +43,12 @@ module Journeys
       def save
         return false if invalid?
 
-        journey_session.answers.assign_attributes(early_years_courses:)
-        journey_session.save!
+        journey_session.answers.update!(early_years_courses:)
       end
 
       def clear_answers_from_session
         if answers.subjects_taught.exclude?("early_years")
-          journey_session.answers.assign_attributes(early_years_courses: [])
-          journey_session.save!
+          journey_session.answers.update!(early_years_courses: [])
         end
       end
 

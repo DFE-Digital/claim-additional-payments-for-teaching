@@ -12,8 +12,7 @@ module Journeys
           def save
             return false if invalid?
 
-            journey_session.answers.assign_attributes(provider_contact_name:)
-            journey_session.save!
+            journey_session.answers.update!(provider_contact_name:)
 
             @claim = build_claim
 

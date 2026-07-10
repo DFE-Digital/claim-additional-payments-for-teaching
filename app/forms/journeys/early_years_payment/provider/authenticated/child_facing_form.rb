@@ -14,8 +14,7 @@ module Journeys
           def save
             return false if invalid?
 
-            journey_session.answers.assign_attributes(child_facing_confirmation_given:)
-            journey_session.save!
+            journey_session.answers.update!(child_facing_confirmation_given:)
           end
 
           def claimant_full_name

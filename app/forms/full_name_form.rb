@@ -17,13 +17,10 @@ class FullNameForm < Form
   def save
     return false if invalid?
 
-    journey_session.answers.assign_attributes(
+    journey_session.answers.update!(
       first_name:,
       middle_name:,
       surname:
     )
-    journey_session.save!
-
-    true
   end
 end

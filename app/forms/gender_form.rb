@@ -10,8 +10,6 @@ class GenderForm < Form
   def save
     return false unless valid?
 
-    journey_session.answers.assign_attributes(payroll_gender: payroll_gender)
-
-    journey_session.save!
+    journey_session.answers.update!(payroll_gender: payroll_gender)
   end
 end

@@ -42,8 +42,7 @@ module Journeys
           def save
             return false if invalid?
 
-            journey_session.answers.assign_attributes(returner_contract_type:)
-            journey_session.save!
+            journey_session.answers.update!(returner_contract_type:)
           end
 
           def claimant_full_name

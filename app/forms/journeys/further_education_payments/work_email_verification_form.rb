@@ -13,8 +13,7 @@ module Journeys
       def save
         return if invalid?
 
-        journey_session.answers.assign_attributes(work_email_verified: true)
-        journey_session.save!
+        journey_session.answers.update!(work_email_verified: true)
       end
 
       def completed?

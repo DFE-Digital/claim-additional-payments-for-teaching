@@ -21,12 +21,10 @@ module Journeys
       def save
         return false if invalid?
 
-        journey_session.answers.assign_attributes(
+        journey_session.answers.update!(
           valid_passport:,
           passport_number:
         )
-
-        journey_session.save!
       end
     end
   end

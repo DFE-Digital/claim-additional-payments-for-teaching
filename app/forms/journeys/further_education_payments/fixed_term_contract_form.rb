@@ -28,13 +28,11 @@ module Journeys
       def save
         return if invalid?
 
-        journey_session.answers.assign_attributes(fixed_term_full_year:)
-        journey_session.save!
+        journey_session.answers.update!(fixed_term_full_year:)
       end
 
       def clear_answers_from_session
-        journey_session.answers.assign_attributes(fixed_term_full_year: nil)
-        journey_session.save!
+        journey_session.answers.update!(fixed_term_full_year: nil)
       end
 
       def current_academic_year

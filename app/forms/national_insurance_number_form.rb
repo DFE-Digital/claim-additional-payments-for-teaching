@@ -21,11 +21,8 @@ class NationalInsuranceNumberForm < Form
   def save
     return false if invalid?
 
-    journey_session.answers.assign_attributes(
+    journey_session.answers.update!(
       national_insurance_number: national_insurance_number
     )
-    journey_session.save!
-
-    true
   end
 end
