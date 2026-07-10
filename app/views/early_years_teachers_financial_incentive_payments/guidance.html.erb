@@ -103,6 +103,37 @@
       You should also consider DfE’s <%= govuk_link_to "Good practice for teachers and settings", eytfi_good_practice_path %> guidance.
     </p>
 
+<h2 id="eligible-group-based-settings" class="govuk-heading-m">Eligible group‑based settings</h2>
+
+    <p class="govuk-body">
+      To be an eligible setting, you must be:
+    </p>
+
+    <%= govuk_list [
+      "registered in England with Ofsted on the Early Years Register or an early years childminder agency, 
+      to provide early years childcare on either domestic premises or non‑domestic premises",
+      "delivering funded early years entitlements",
+      "not be an ineligible setting"
+    ], type: :bullet %>
+
+    <p class="govuk-body">
+      Settings that are ineligible:
+    </p>
+
+    <%= govuk_list [
+      "childminders",
+      "maintained nursery schools"
+      "settings that are an embedded part of a school (including maintained schools, academies and independent schools) where the children are enrolled as pupils<sup><a href=\"#footnote-3\">[footnote 3]</a></sup>".html_safe,
+      "settings run by the proprietor or governing body of a school (including maintained schools, academies or independent schools)"
+    ], type: :bullet %>
+
+    <p class="govuk-body">
+      This criteria reflects evidence that group‑based settings face greater workforce challenges than school‑based settings and we 
+      are prioritising the recognition payments for settings where there is greatest need. We know that staff in group‑based settings are paid less on average<sup><a href="#footnote-4">[footnote 4]</a></sup>, 
+      staff turnover is higher<sup><a href="#footnote-5">[footnote 5]</a></sup> and fewer staff in group-based settings hold Level 6 qualifications.<sup><a href="#footnote-6">[footnote 6]</a></sup>
+    </p>
+
+
     <h3 id="breaks-in-teaching" class="govuk-heading-s">Breaks in teaching</h3>
 
     <p class="govuk-body">
