@@ -14,10 +14,11 @@ on:
         default: review
         options:
           - review
-          - test
+          - staging
           - production
+          - test
       docker-image-tag:
-        description: "Docker image tag to deploy (optional)"
+        description: "Docker image tag to deploy"
         required: true
         type: string
       pull-request-number:
@@ -50,6 +51,133 @@ jobs:
           target: web
           context: .
           snyk-token: ${{ secrets.SNYK_TOKEN }}
+
+  check_test_env:
+    name: Check test environment deployments
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+
+    permissions:
+      contents: read
+      deployments: read
+    outputs:
+      deploy_test: ${{ steps.check_test_deployment.outputs.deploy_test }}
+    steps:
+      - uses: actions/github-script@v9
+        id: check_test_deployment
+        with:
+          script: |
+            // If the current test deployment has not come from master then we don't want to overwrite it
+
+            const { owner, repo } = context.repo;
+            const testEnvironmentName = "test";
+
+            const deployments = await github.rest.repos.listDeployments({ owner, repo, environment: testEnvironmentName, per_page: 20 });
+            if (deployments.data.length === 0) {
+              core.setOutput("deploy_test", true);
+              return;
+            }
+
+            let latestSuccessfulDeployment = null;
+
+            for (const deployment of deployments.data) {
+              const statuses = await github.rest.repos.listDeploymentStatuses({owner, repo, deployment_id: deployment.id, per_page: 1 });
+              const latestStatus = statuses.data[0];
+              core.info(`Deployment ${deployment.id} ref=${deployment.ref} status=${latestStatus?.state}`);
+
+              if (latestStatus?.state === "success") {
+                latestSuccessfulDeployment = deployment;
+                break;
+              }
+            }
+
+            if (!latestSuccessfulDeployment) {
+              core.info("No successful test deployments found, allowing deployment");
+              core.setOutput("deploy_test", true);
+              return;
+            }
+
+            const deployedRef = latestSuccessfulDeployment.ref;
+            core.info(`DEBUG - Latest successful test deployment ref: ${deployedRef}`);
+
+            let deployTest = true;
+
+            if (deployedRef !== "master") {
+              const branches = await github.rest.repos.listBranches({ owner, repo, per_page: 100 });
+              const branchExists = branches.data.some(branch => branch.name === deployedRef);
+
+              if (branchExists) {
+                deployTest = false;
+                core.info(`Test environment is currently owned by branch '${deployedRef}'`);
+              } else {
+                core.info(`Branch '${deployedRef}' no longer exists, allowing deployment`);
+              }
+            } else {
+              core.info("Latest successful deployment was from master, allowing deployment");
+            }
+
+            core.setOutput("deploy_test", deployTest);
+
+  deploy_test:
+    name: Deploy to test environment
+    runs-on: ubuntu-latest
+    concurrency: deploy_test
+    needs: [build, deploy_production, check_test_env]
+
+    if: |
+      github.ref == 'refs/heads/master' &&
+      github.event_name == 'push' &&
+      needs.check_test_env.outputs.deploy_test == 'true'
+    environment:
+      name: test
+    outputs:
+      environment_url: ${{ steps.deploy.outputs.environment_url }}
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - uses: ./.github/actions/deploy-environment
+        id: deploy
+        with:
+          environment: test
+          docker-image: ${{ needs.build.outputs.docker-image-tag }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          aks-namespace: srtl-test
+          aks-deployment: claim-additional-payments-for-teaching-test
+
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Run smoke tests
+        shell: bash
+        run: bundle exec rspec spec/smoke -t smoke:true -b
+        env:
+          RAILS_ENV: test
+          SMOKE_TEST_APP_HOST: ${{ vars.SMOKE_TEST_APP_HOST }}
+          BASIC_AUTH_USERNAME: ${{ secrets.BASIC_AUTH_USERNAME }}
+          BASIC_AUTH_PASSWORD: ${{ secrets.BASIC_AUTH_PASSWORD }}
+
+      - name: Notify teams channel failure
+        if: ${{ failure() }}
+        uses: DFE-Digital/github-actions/send-to-teams-channel@master
+        with:
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          title: Failure deploying release to test
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
+          message: Failure deploying release to test - Docker tag ${{ needs.build.outputs.docker-image-tag }}
 
   deploy_review:
     name: Deploy to review environment
@@ -98,21 +226,17 @@ jobs:
             | Early Years Teachers        | <${{ env.APP_URL }}/early-years-teachers-recognition-payments/landing-page> |
             | Admin                       | <${{ env.APP_URL }}/admin>                                                          |
 
-  deploy:
-    name: Deploy to ${{ matrix.environment }}
+  deploy_staging:
+    name: Deploy to staging
     runs-on: ubuntu-latest
-    concurrency: deploy_${{ matrix.environment }}
+    concurrency: deploy_staging
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     needs: [build]
     environment:
-      name: ${{ matrix.environment }}
+      name: staging
       url: ${{ steps.deploy.outputs.environment_url }}
     outputs:
       environment_url: ${{ steps.deploy.outputs.environment_url }}
-    strategy:
-      max-parallel: 1
-      matrix:
-        environment: [test, production]
     permissions:
       id-token: write
 
@@ -129,13 +253,13 @@ jobs:
       - uses: ./.github/actions/deploy-environment
         id: deploy
         with:
-          environment: ${{ matrix.environment }}
+          environment: staging
           docker-image: ${{ needs.build.outputs.docker-image-tag }}
           azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          aks-namespace: srtl-${{ matrix.environment }}
-          aks-deployment: claim-additional-payments-for-teaching-${{ matrix.environment }}
+          aks-namespace: srtl-test
+          aks-deployment: claim-additional-payments-for-teaching-staging
 
       - name: Install Ruby
         uses: ruby/setup-ruby@v1
@@ -156,11 +280,67 @@ jobs:
         uses: DFE-Digital/github-actions/send-to-teams-channel@master
         with:
           teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
-          title: Failure deploying release to ${{ matrix.environment }}
+          title: Failure deploying release to staging
           service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
-          message: |
-            Failure deploying release to ${{ matrix.environment }} - Docker tag ${{ needs.build.outputs.docker-image-tag
-            }}
+          message: Failure deploying release to staging - Docker tag ${{ needs.build.outputs.docker-image-tag }}
+
+  deploy_production:
+    name: Deploy to production
+    runs-on: ubuntu-latest
+    concurrency: deploy_production
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    needs: [build, deploy_staging]
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.environment_url }}
+    outputs:
+      environment_url: ${{ steps.deploy.outputs.environment_url }}
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - uses: ./.github/actions/deploy-environment
+        id: deploy
+        with:
+          environment: production
+          docker-image: ${{ needs.build.outputs.docker-image-tag }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          aks-namespace: srtl-production
+          aks-deployment: claim-additional-payments-for-teaching-production
+
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Run smoke tests
+        shell: bash
+        run: bundle exec rspec spec/smoke -t smoke:true -b
+        env:
+          RAILS_ENV: test
+          SMOKE_TEST_APP_HOST: ${{ vars.SMOKE_TEST_APP_HOST }}
+          BASIC_AUTH_USERNAME: ${{ secrets.BASIC_AUTH_USERNAME }}
+          BASIC_AUTH_PASSWORD: ${{ secrets.BASIC_AUTH_PASSWORD }}
+
+      - name: Notify teams channel failure
+        if: ${{ failure() }}
+        uses: DFE-Digital/github-actions/send-to-teams-channel@master
+        with:
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          title: Failure deploying release to production
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
+          message: Failure deploying release to production - Docker tag ${{ needs.build.outputs.docker-image-tag }}
 
   manual_deploy:
     name: Deploy to ${{ inputs.environment }}
@@ -188,7 +368,7 @@ jobs:
       - name: Set env vars
         shell: bash
         run: |
-          if [ ${{ inputs.environment }} == 'review' ]; then
+          if [ "${{ inputs.environment }}" == 'review' ]; then
             AKS_NAMESPACE=srtl-development
             AKS_DEPLOYMENT=claim-additional-payments-for-teaching-review-${{ inputs.pull-request-number }}
           else
@@ -231,7 +411,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     concurrency: deploy_production
-    needs: [deploy]
+    needs: [deploy_production]
     environment:
       name: production
     permissions:
@@ -263,7 +443,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        domain_environment: [test, production]
+        domain_environment: [staging, production, test]
     environment:
       name: production
     permissions:

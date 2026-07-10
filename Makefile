@@ -19,6 +19,10 @@ review: test-cluster
 test: test-cluster
 	$(eval include global_config/test.sh)
 
+.PHONY: staging
+staging: test-cluster
+	$(eval include global_config/staging.sh)
+
 .PHONY: production
 production: production-cluster
 	$(if $(or ${SKIP_CONFIRM}, ${CONFIRM_PRODUCTION}), , $(error Missing CONFIRM_PRODUCTION=yes))

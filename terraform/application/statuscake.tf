@@ -8,5 +8,5 @@ module "statuscake" {
 
   contact_groups = var.statuscake_contact_groups
 
-  heartbeat_names  = [local.heartbeat_check_name]
+  heartbeat_names = [local.heartbeat_check_name]
 }

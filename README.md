@@ -246,8 +246,19 @@ via terraform.
 
 It creates resource groups, database server, app service plan, etc.
 
+### Staging
+
+Staging is automatically built and deployed when commits are pushed to `master`.
+
+You can check the progress of the build and release in
+[Azure DevOps](https://dev.azure.com/dfe-ssp/S118-Teacher-Payments-Service).
+
+The staging website is at
+https://staging.additional-teaching-payment.education.gov.uk.
+
 ### Test
 
+Test does not build and deploy if it has been deployed outside `master`.
 Test is automatically built and deployed when commits are pushed to `master`.
 
 You can check the progress of the build and release in
