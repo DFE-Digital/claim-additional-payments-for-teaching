@@ -17,7 +17,10 @@ RSpec.describe Admin::ClaimsHelper do
         address_line_3: "Test Town",
         postcode: "AB1 2CD",
         date_of_birth: Date.new(1901, 1, 1),
-        eligibility_attributes: {teacher_reference_number: "1234567"}
+        eligibility_attributes: {teacher_reference_number: "1234567"},
+        banking_name: "B Wayne",
+        bank_account_number: "12345678",
+        bank_sort_code: "010101"
       )
     end
 
@@ -28,7 +31,10 @@ RSpec.describe Admin::ClaimsHelper do
         ["Date of birth", "1 January 1901"],
         [I18n.t("admin.national_insurance_number"), "AB123456C"],
         ["Address", "Flat 1<br>1 Test Road<br>Test Town<br>AB1 2CD"],
-        [I18n.t("admin.email_address"), "test@email.com"]
+        [I18n.t("admin.email_address"), "test@email.com"],
+        ["Banking name", "B Wayne"],
+        ["Bank account number", "12345678"],
+        ["Bank sort code", "010101"]
       ]
 
       expect(helper.admin_personal_details(claim)).to eq expected_answers
@@ -44,7 +50,10 @@ RSpec.describe Admin::ClaimsHelper do
           ["Date of birth", helper.personal_data_removed_text],
           [I18n.t("admin.national_insurance_number"), helper.personal_data_removed_text],
           ["Address".capitalize, helper.personal_data_removed_text],
-          [I18n.t("admin.email_address"), "test@email.com"]
+          [I18n.t("admin.email_address"), "test@email.com"],
+          ["Banking name", helper.personal_data_removed_text],
+          ["Bank account number", helper.personal_data_removed_text],
+          ["Bank sort code", helper.personal_data_removed_text]
         ]
 
         expect(helper.admin_personal_details(claim)).to eq expected_answers

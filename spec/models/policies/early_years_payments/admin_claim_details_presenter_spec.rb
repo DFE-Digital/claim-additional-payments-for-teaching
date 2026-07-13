@@ -47,6 +47,9 @@ RSpec.describe Policies::EarlyYearsPayments::AdminClaimDetailsPresenter do
       paye_reference: "123/A",
       provider_contact_name: "John Doe",
       submitted_at: Date.new(2020, 1, 4),
+      banking_name: "B Wayne",
+      bank_account_number: "12345678",
+      bank_sort_code: "123456",
       eligibility_attributes: {
         nursery_urn: eligible_ey_provider.urn,
         start_date: Date.new(2020, 1, 1),
@@ -79,7 +82,10 @@ RSpec.describe Policies::EarlyYearsPayments::AdminClaimDetailsPresenter do
           [I18n.t("admin.mobile_number"), nil],
           [I18n.t("early_years_payments.admin.nursery_name"), eligible_ey_provider.nursery_name],
           [I18n.t("early_years_payments.admin.start_date"), I18n.l(claim.eligibility.start_date)],
-          [I18n.t("early_years_payments.admin.paye_reference"), "123/A"]
+          [I18n.t("early_years_payments.admin.paye_reference"), "123/A"],
+          ["Banking name", nil],
+          ["Bank account number", nil],
+          ["Bank sort code", nil]
         ]
 
         expect(subject).to eq expected_answers
@@ -100,7 +106,10 @@ RSpec.describe Policies::EarlyYearsPayments::AdminClaimDetailsPresenter do
           [I18n.t("admin.mobile_number"), "07700900000"],
           [I18n.t("early_years_payments.admin.nursery_name"), eligible_ey_provider.nursery_name],
           [I18n.t("early_years_payments.admin.start_date"), I18n.l(claim.eligibility.start_date)],
-          [I18n.t("early_years_payments.admin.paye_reference"), "123/A"]
+          [I18n.t("early_years_payments.admin.paye_reference"), "123/A"],
+          ["Banking name", "B Wayne"],
+          ["Bank account number", "12345678"],
+          ["Bank sort code", "123456"]
         ]
 
         expect(subject).to eq expected_answers
