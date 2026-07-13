@@ -8,7 +8,7 @@
     "govuk-frontend": "^6.3.0"
   },
   "devDependencies": {
-    "prettier": "^3.9.4"
+    "prettier": "^3.9.5"
   },
   "scripts": {
     "build:css": "sass ./app/assets/stylesheets/application.scss:./app/assets/builds/application.css --no-source-map --load-path=. --load-path=node_modules"
