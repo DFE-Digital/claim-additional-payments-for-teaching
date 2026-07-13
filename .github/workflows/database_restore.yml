@@ -10,16 +10,17 @@ on:
         default: test
         type: choice
         options:
-        - 'test'
-#        - 'production'
+          - "test"
+          - "staging"
+      #        - 'production'
       confirm-production:
         description: Must be set to true if restoring production
         required: true
-        default: 'false'
+        default: "false"
         type: choice
         options:
-        - 'false'
-        - 'true'
+          - "false"
+          - "true"
       backup-file:
         description: Name of the backup file in Azure storage. e.g. capt_prod_2024-07-15.sql.gz. The default value is today's backup.
         type: string
@@ -41,37 +42,37 @@ jobs:
     environment: ${{ inputs.environment }}
 
     steps:
-    - uses: actions/checkout@v4
-      name: Checkout
+      - uses: actions/checkout@v4
+        name: Checkout
 
-    - name: Set environment variables
-      run: |
-        source global_config/${{ inputs.environment }}.sh
-        tf_vars_file=${{ env.TF_VARS_PATH }}/${{ inputs.environment }}.tfvars.json
-        echo "CLUSTER=$(jq -r '.cluster' ${tf_vars_file})" >> $GITHUB_ENV
-        echo "RESOURCE_GROUP_NAME=${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-rg" >> $GITHUB_ENV
-        echo "NAMESPACE=$(jq -r '.namespace' ${tf_vars_file})" >> $GITHUB_ENV
-        echo "STORAGE_ACCOUNT_NAME=${AZURE_RESOURCE_PREFIX}${SERVICE_SHORT}dbbkp${CONFIG_SHORT}sa" >> $GITHUB_ENV
-        echo "DB_SERVER=${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-pg" >> $GITHUB_ENV
-        TODAY=$(date +"%F")
-        echo "BACKUP_FILE=${SERVICE_SHORT}_${CONFIG_SHORT}_${TODAY}.sql" >> $GITHUB_ENV
-        if [ "${{ inputs.backup-file }}" != "" ]; then
-          BACKUP_FILE=${{ inputs.backup-file }}
-        else
-          BACKUP_FILE=${SERVICE_SHORT}_${CONFIG_SHORT}_${TODAY}.sql.gz
-        fi
-        echo "BACKUP_FILE=$BACKUP_FILE" >> $GITHUB_ENV
+      - name: Set environment variables
+        run: |
+          source global_config/${{ inputs.environment }}.sh
+          tf_vars_file=${{ env.TF_VARS_PATH }}/${{ inputs.environment }}.tfvars.json
+          echo "CLUSTER=$(jq -r '.cluster' ${tf_vars_file})" >> $GITHUB_ENV
+          echo "RESOURCE_GROUP_NAME=${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-rg" >> $GITHUB_ENV
+          echo "NAMESPACE=$(jq -r '.namespace' ${tf_vars_file})" >> $GITHUB_ENV
+          echo "STORAGE_ACCOUNT_NAME=${AZURE_RESOURCE_PREFIX}${SERVICE_SHORT}dbbkp${CONFIG_SHORT}sa" >> $GITHUB_ENV
+          echo "DB_SERVER=${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-pg" >> $GITHUB_ENV
+          TODAY=$(date +"%F")
+          echo "BACKUP_FILE=${SERVICE_SHORT}_${CONFIG_SHORT}_${TODAY}.sql" >> $GITHUB_ENV
+          if [ "${{ inputs.backup-file }}" != "" ]; then
+            BACKUP_FILE=${{ inputs.backup-file }}
+          else
+            BACKUP_FILE=${SERVICE_SHORT}_${CONFIG_SHORT}_${TODAY}.sql.gz
+          fi
+          echo "BACKUP_FILE=$BACKUP_FILE" >> $GITHUB_ENV
 
-    - name: Restore ${{ inputs.environment }} postgres
-      uses: DFE-Digital/github-actions/restore-postgres-backup@master
-      with:
-        storage-account: ${{ env.STORAGE_ACCOUNT_NAME }}
-        resource-group: ${{ env.RESOURCE_GROUP_NAME }}
-        app-name: ${{ env.SERVICE_NAME }}-${{ inputs.environment }}-web
-        cluster: ${{ env.CLUSTER }}
-        azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        backup-file: ${{ env.BACKUP_FILE }}
-        db-server-name: ${{ env.DB_SERVER }}
-        namespace: ${{ env.NAMESPACE }}
+      - name: Restore ${{ inputs.environment }} postgres
+        uses: DFE-Digital/github-actions/restore-postgres-backup@master
+        with:
+          storage-account: ${{ env.STORAGE_ACCOUNT_NAME }}
+          resource-group: ${{ env.RESOURCE_GROUP_NAME }}
+          app-name: ${{ env.SERVICE_NAME }}-${{ inputs.environment }}-web
+          cluster: ${{ env.CLUSTER }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          backup-file: ${{ env.BACKUP_FILE }}
+          db-server-name: ${{ env.DB_SERVER }}
+          namespace: ${{ env.NAMESPACE }}

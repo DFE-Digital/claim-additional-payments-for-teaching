@@ -7,14 +7,15 @@ on:
         required: true
         type: choice
         options:
-        - test
-        - production
+          - test
+          - staging
+          - production
       mode:
         required: true
         type: choice
         options:
-        - enable
-        - disable
+          - enable
+          - disable
 
 jobs:
   set-maintenance-mode:
@@ -27,16 +28,16 @@ jobs:
     environment: ${{ inputs.environment }}
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Enable or disable maintenance mode
-      uses: DFE-Digital/github-actions/maintenance@master
-      with:
-        azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        environment: ${{ inputs.environment }}
-        mode: ${{ inputs.mode }}
-        docker-repository: ghcr.io/dfe-digital/claim-additional-payments-for-teaching-maintenance
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Enable or disable maintenance mode
+        uses: DFE-Digital/github-actions/maintenance@master
+        with:
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          environment: ${{ inputs.environment }}
+          mode: ${{ inputs.mode }}
+          docker-repository: ghcr.io/dfe-digital/claim-additional-payments-for-teaching-maintenance
+          github-token: ${{ secrets.GITHUB_TOKEN }}
