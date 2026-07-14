@@ -47,6 +47,10 @@ module Journeys
             .provider_alternative_idv_request(claim)
             .deliver_later
         end
+
+        def self.provider_journey?
+          true
+        end
       end
     end
   end
