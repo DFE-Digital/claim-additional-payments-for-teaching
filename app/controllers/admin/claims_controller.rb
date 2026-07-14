@@ -38,9 +38,14 @@ class Admin::ClaimsController < Admin::BaseAdminController
   end
 
   def search
+    @search = Claim::Search.new(
+      params[:query],
+      current_year_only: params[:current_year_only]
+    )
+
     return unless params[:query].present?
 
-    @claims = Claim::Search.new(params[:query]).claims
+    @claims = @search.claims
 
     if @claims.none?
       flash.now[:notice] = "Cannot find a claim for query \"#{params[:query]}\""

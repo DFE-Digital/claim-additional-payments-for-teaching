@@ -333,4 +333,30 @@ RSpec.describe Claim::Search do
       it { is_expected.to match_array([claim_1]) }
     end
   end
+
+  context "when scoped to the current academic year" do
+    subject { search.claims }
+
+    let(:search) do
+      described_class.new("test@example.com", current_year_only: true)
+    end
+
+    let!(:prior_year_claim) do
+      create(
+        :claim,
+        academic_year: AcademicYear.previous,
+        email_address: "test@example.com"
+      )
+    end
+
+    let!(:current_year_claim) do
+      create(
+        :claim,
+        academic_year: AcademicYear.current,
+        email_address: "test@example.com"
+      )
+    end
+
+    it { is_expected.to eq [current_year_claim] }
+  end
 end

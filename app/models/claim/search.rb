@@ -3,7 +3,7 @@ class Claim
   # attributes defined in the `SEARCHABLE_ATTRIBUTES` or `policy::SEARCHABLE_ELIGIBILITY_ATTRIBUTES` constant. Both subject
   # and attribute are downcased, so the search is case-insensitive.
   class Search
-    attr_accessor :search_term
+    attr_accessor :search_term, :current_year_only
 
     SEARCHABLE_CLAIM_ATTRIBUTES = %w[
       reference
@@ -11,8 +11,9 @@ class Claim
       surname
     ]
 
-    def initialize(search_term)
+    def initialize(search_term, current_year_only: false)
       @search_term = search_term
+      @current_year_only = current_year_only
     end
 
     def claims
@@ -51,12 +52,22 @@ class Claim
         .joins(:school)
         .where("schools.name ILIKE ?", "%#{search_term}%")
 
-      claim_match_query
+      claim_scope = claim_match_query
         .or(Claim.where(eligibility_id: eligibility_ids))
         .or(Claim.where(id: claims_matched_on_payment_ids))
         .or(Claim.where(id: claims_matched_on_ey_provider_details))
         .or(Claim.where(eligibility_id: eligibilities_matched_on_eytfi_provider_details.select(:id)))
         .or(Claim.where(eligibility_id: eligibilities_matched_on_fe_provider_details.select(:id)))
+
+      if current_year_only?
+        claim_scope = Claim.current_academic_year.where(id: claim_scope.select(:id))
+      end
+
+      claim_scope
+    end
+
+    def current_year_only?
+      !!current_year_only
     end
 
     private
