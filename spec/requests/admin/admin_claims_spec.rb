@@ -144,8 +144,8 @@ RSpec.describe "Admin claims", type: :request do
   end
 
   describe "claims#search" do
-    let!(:claim1) { create(:claim, :submitted, surname: "Wayne") }
-    let!(:claim2) { create(:claim, :submitted, surname: "Wayne") }
+    let!(:claim1) { create(:claim, :current_academic_year, :submitted, surname: "Wayne") }
+    let!(:claim2) { create(:claim, :current_academic_year, :submitted, surname: "Wayne") }
 
     it "redirects to a claim when one exists" do
       get search_admin_claims_path(query: claim1.reference)

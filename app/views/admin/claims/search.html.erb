@@ -24,6 +24,7 @@
           hidden: true
         }
       ) do %>
+        <%= form.hidden_field(:current_year_only, value: false) %>
         <%= form.govuk_check_box(
           :current_year_only,
           true,

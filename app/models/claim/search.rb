@@ -13,7 +13,7 @@ class Claim
 
     def initialize(search_term, current_year_only: false)
       @search_term = search_term
-      @current_year_only = current_year_only
+      @current_year_only = ActiveModel::Type::Boolean.new.cast(current_year_only)
     end
 
     def claims

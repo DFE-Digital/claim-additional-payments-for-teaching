@@ -40,7 +40,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
   def search
     @search = Claim::Search.new(
       params[:query],
-      current_year_only: params[:current_year_only]
+      current_year_only: params.fetch(:current_year_only, true)
     )
 
     return unless params[:query].present?
