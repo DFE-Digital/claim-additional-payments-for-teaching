@@ -64,6 +64,8 @@ module AutomatedChecks
           SchoolWorkforceCensus::ECP_ELIGIBLE_SUBJECTS
         ].reduce({}, :update)
 
+        return [] if claim.eligibility.eligible_itt_subject.nil?
+
         ecp_subjects[claim.eligibility.eligible_itt_subject.to_sym]
       end
 
