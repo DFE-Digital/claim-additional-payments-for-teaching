@@ -150,7 +150,7 @@ module Policies
     end
 
     def payroll_file_name
-      "FELUPEXPANSION"
+      "FE TRI"
     end
 
     def approvable?(claim)
