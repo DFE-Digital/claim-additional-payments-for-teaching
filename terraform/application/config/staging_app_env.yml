@@ -8,7 +8,7 @@ DFE_SIGN_IN_API_CLIENT_ID: teacherpayments
 DFE_SIGN_IN_API_ENDPOINT: https://pp-api.signin.education.gov.uk/
 DFE_SIGN_IN_IDENTIFIER: teacherpayments
 DFE_SIGN_IN_ISSUER: https://pp-oidc.signin.education.gov.uk:443
-DFE_SIGN_IN_REDIRECT_BASE_URL: https://claim-additional-teaching-payment.service.gov.uk
+DFE_SIGN_IN_REDIRECT_BASE_URL: https://staging.claim-additional-teaching-payment.service.gov.uk
 
 DFE_SIGN_IN_INTERNAL_CLIENT_ID: teacherpaymentsadmin
 
@@ -29,7 +29,7 @@ SUPPRESS_DFE_ANALYTICS_INIT: true
 TID_SIGN_IN_API_ENDPOINT: https://preprod.teaching-identity.education.gov.uk:433
 TID_SIGN_IN_CLIENT_ID: claim
 TID_SIGN_IN_ISSUER: https://preprod.teaching-identity.education.gov.uk/
-TID_BASE_URL: https://claim-additional-teaching-payment.service.gov.uk/targeted-retention-incentive-payments/claim
+TID_BASE_URL: https://staging.claim-additional-teaching-payment.service.gov.uk/targeted-retention-incentive-payments/claim
 
 GOVUK_APP_DOMAIN: ""
 GOVUK_WEBSITE_ROOT: ""
