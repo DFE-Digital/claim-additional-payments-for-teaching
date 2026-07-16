@@ -7,7 +7,8 @@
     </h1>
 
     <div class="govuk-inset-text">
-      The next payroll run must be with DfE Payroll on or before <%= l(next_payroll_file_due_date) %>
+      The next payroll run must be with DfE Payroll on or before
+      <%= govuk_link_to(l(next_payroll_file_due_date), admin_payroll_projection_path) %>
     </div>
 
     <%= link_to(

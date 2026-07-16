@@ -212,6 +212,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resource :payroll_projection, only: :show
+
     resources :payments, only: :show
 
     resources :journey_configurations, only: [:index, :edit, :update], path: "journey-configurations"
