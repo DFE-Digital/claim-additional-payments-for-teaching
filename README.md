@@ -254,7 +254,7 @@ You can check the progress of the build and release in
 [Azure DevOps](https://dev.azure.com/dfe-ssp/S118-Teacher-Payments-Service).
 
 The staging website is at
-https://staging.additional-teaching-payment.education.gov.uk.
+https://staging.claim-additional-teaching-payment.service.gov.uk.
 
 ### Test
 
@@ -265,7 +265,7 @@ You can check the progress of the build and release in
 [Azure DevOps](https://dev.azure.com/dfe-ssp/S118-Teacher-Payments-Service).
 
 The test website is at
-https://test.additional-teaching-payment.education.gov.uk.
+https://test.claim-additional-teaching-payment.service.gov.uk.
 
 ### Production
 
