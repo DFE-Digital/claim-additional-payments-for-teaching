@@ -11,16 +11,30 @@ module AutomatedChecks
       end
 
       def perform
-        return if task_already_persisted?
-
         if passable?
-          create_task(passed: true)
-        elsif failed_checks.any?
-          create_task(passed: false, data: {failed_checks: failed_checks})
+          if existing_task
+            existing_task.update(passed: true)
+          else
+            create_task(passed: true)
+          end
+        elsif provider_verification_completed? && failed_checks.any?
+          if existing_task
+            existing_task.update(passed: false, data: {failed_checks: failed_checks})
+          else
+            create_task(passed: false, data: {failed_checks: failed_checks})
+          end
+        elsif existing_task
+          existing_task.update(passed: nil)
+        else
+          create_task(passed: nil)
         end
       end
 
       private
+
+      def existing_task
+        @existing_task ||= claim.tasks.find_by(name: TASK_NAME)
+      end
 
       def create_task(passed:, data: nil)
         task = claim.tasks.build(
@@ -39,10 +53,11 @@ module AutomatedChecks
       end
 
       def passable?
-        failed_checks.empty? &&
-          provider_confirms_claimant_answers? &&
-          provider_indicates_no_measures? &&
-          provider_indicates_claimant_is_interested_in_becoming_qualified?
+        provider_verification_completed?
+          && failed_checks.empty?
+          && provider_confirms_claimant_answers?
+          && provider_indicates_no_measures?
+          && provider_indicates_claimant_is_interested_in_becoming_qualified?
       end
 
       def provider_confirms_claimant_answers?
@@ -61,6 +76,10 @@ module AutomatedChecks
 
       def provider_indicates_claimant_is_interested_in_becoming_qualified?
         eligibility.provider_verification_teaching_qualification != "no_not_planned"
+      end
+
+      def provider_verification_completed?
+        eligibility.provider_verification_completed_at
       end
 
       def failed_checks
@@ -121,10 +140,6 @@ module AutomatedChecks
         end
 
         @failed_checks
-      end
-
-      def task_already_persisted?
-        claim.tasks.any? { |task| task.name == TASK_NAME }
       end
     end
   end

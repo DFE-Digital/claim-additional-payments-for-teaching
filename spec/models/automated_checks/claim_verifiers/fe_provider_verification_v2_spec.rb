@@ -13,11 +13,12 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
     end
 
     context "automatically failing the task" do
-      context "when the provider has sellected no for teaching responsibilities" do
+      context "when the provider has selected no for teaching responsibilities" do
         let(:eligibility) do
           build(
             :further_education_payments_eligibility,
-            provider_verification_teaching_responsibilities: false
+            provider_verification_teaching_responsibilities: false,
+            provider_verification_completed_at: 1.day.ago
           )
         end
 
@@ -36,7 +37,8 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
           build(
             :further_education_payments_eligibility,
             further_education_teaching_start_year: "2023",
-            provider_verification_teaching_start_year: "2020"
+            provider_verification_teaching_start_year: "2020",
+            provider_verification_completed_at: 1.day.ago
           )
         end
 
@@ -54,7 +56,8 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
         let(:eligibility) do
           build(
             :further_education_payments_eligibility,
-            provider_verification_half_teaching_hours: false
+            provider_verification_half_teaching_hours: false,
+            provider_verification_completed_at: 1.day.ago
           )
         end
 
@@ -72,7 +75,8 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
         let(:eligibility) do
           build(
             :further_education_payments_eligibility,
-            provider_verification_half_timetabled_teaching_time: false
+            provider_verification_half_timetabled_teaching_time: false,
+            provider_verification_completed_at: 1.day.ago
           )
         end
 
@@ -90,7 +94,8 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
         let(:eligibility) do
           build(
             :further_education_payments_eligibility,
-            provider_verification_performance_measures: true
+            provider_verification_performance_measures: true,
+            provider_verification_completed_at: 1.day.ago
           )
         end
 
@@ -108,7 +113,8 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
         let(:eligibility) do
           build(
             :further_education_payments_eligibility,
-            provider_verification_disciplinary_action: true
+            provider_verification_disciplinary_action: true,
+            provider_verification_completed_at: 1.day.ago
           )
         end
 
@@ -126,7 +132,8 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
         let(:eligibility) do
           build(
             :further_education_payments_eligibility,
-            provider_verification_teaching_qualification: "no_not_planned"
+            provider_verification_teaching_qualification: "no_not_planned",
+            provider_verification_completed_at: 1.day.ago
           )
         end
 
@@ -144,7 +151,8 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
         let(:eligibility) do
           build(
             :further_education_payments_eligibility,
-            provider_verification_continued_employment: false
+            provider_verification_continued_employment: false,
+            provider_verification_completed_at: 1.day.ago
           )
         end
 
@@ -182,10 +190,10 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
           )
         end
 
-        it "does not persist a task" do
+        it "persists an unpassed task" do
           expect {
             subject.perform
-          }.to not_change(Task, :count)
+          }.to change { Task.where(passed: nil).count }.by(1)
         end
       end
 
@@ -403,6 +411,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
       let(:eligibility) do
         build(
           :further_education_payments_eligibility,
+          :provider_verification_completed,
           provider_verification_teaching_responsibilities: true,
           further_education_teaching_start_year: "2023",
           provider_verification_teaching_start_year: "2023",
@@ -427,6 +436,87 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
         expect(task.passed?).to be true
         expect(task.manual?).to be false
         expect(task.data).to be nil
+      end
+    end
+
+    context "when task already exists" do
+      before do
+        task = claim.tasks.new(
+          name: "fe_provider_verification_v2",
+          passed: nil
+        )
+
+        task.save(validate: false)
+      end
+
+      let(:eligibility) do
+        build(
+          :further_education_payments_eligibility
+        )
+      end
+
+      context "and now passes" do
+        let(:eligibility) do
+          build(
+            :further_education_payments_eligibility,
+            :provider_verification_completed,
+            provider_verification_teaching_responsibilities: true,
+            further_education_teaching_start_year: "2023",
+            provider_verification_teaching_start_year: "2023",
+            provider_verification_half_teaching_hours: true,
+            provider_verification_half_timetabled_teaching_time: true,
+            provider_verification_performance_measures: false,
+            provider_verification_disciplinary_action: false,
+            provider_verification_contract_type: "permanent",
+            contract_type: "permanent",
+            provider_verification_teaching_qualification: "yes",
+            provider_verification_continued_employment: true,
+            provider_verification_teaching_hours_per_week: "more_than_20",
+            teaching_hours_per_week: "more_than_20"
+          )
+        end
+
+        it "does not create another task" do
+          expect { subject.perform }.to not_change(Task, :count)
+        end
+
+        it "updates existing task as passing" do
+          task = claim.tasks.find_by(name: "fe_provider_verification_v2")
+
+          expect { subject.perform }.to change { task.reload.passed }.from(nil).to(true)
+        end
+      end
+
+      context "and now fails" do
+        let(:eligibility) do
+          build(
+            :further_education_payments_eligibility,
+            :provider_verification_completed,
+            provider_verification_teaching_responsibilities: false
+          )
+        end
+
+        it "does not create another task" do
+          expect { subject.perform }.to not_change(Task, :count)
+        end
+
+        it "updates existing task as failing" do
+          task = claim.tasks.find_by(name: "fe_provider_verification_v2")
+
+          expect { subject.perform }.to change { task.reload.passed }.from(nil).to(false)
+        end
+      end
+
+      context "and now neither passes or fails" do
+        it "does not create another task" do
+          expect { subject.perform }.to not_change(Task, :count)
+        end
+
+        it "does not change passed value" do
+          task = claim.tasks.find_by(name: "fe_provider_verification_v2")
+
+          expect { subject.perform }.not_to change { task.reload.passed }
+        end
       end
     end
   end
