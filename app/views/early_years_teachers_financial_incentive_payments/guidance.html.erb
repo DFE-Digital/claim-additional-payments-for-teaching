@@ -23,6 +23,10 @@
         href: "#eligibility"
       },
       {
+        text: "Eligible group‑based settings",
+        href: "#eligible-group-based-settings"
+      },
+      {
         text: "What you need to make a claim",
         href: "#what-you-need-to-make-a-claim"
       },
@@ -86,7 +90,7 @@
 
     <p class="govuk-body">
       <%= govuk_link_to "Early years teacher recognition payment: methodology", eytfi_methodology_path %> gives 
-      further information on how local authority areas and early years group-based settings were selected.
+      further information on how local authority areas were selected.
     </p>
 
     <p class="govuk-body">
@@ -103,7 +107,7 @@
       You should also consider DfE’s <%= govuk_link_to "Good practice for teachers and settings", eytfi_good_practice_path %> guidance.
     </p>
 
-<h2 id="eligible-group-based-settings" class="govuk-heading-m">Eligible group‑based settings</h2>
+    <h2 id="eligible-group-based-settings" class="govuk-heading-m">Eligible group‑based settings</h2>
 
     <p class="govuk-body">
       To be an eligible setting, you must be:
@@ -123,14 +127,14 @@
     <%= govuk_list [
       "childminders",
       "maintained nursery schools",
-      "settings that are an embedded part of a school (including maintained schools, academies and independent schools) where the children are enrolled as pupils<sup><a href=\"#footnote-3\">[footnote 3]</a></sup>".html_safe,
+      "settings that are an embedded part of a school (including maintained schools, academies and independent schools<sup><a href=\"#footnote-1\">[footnote 1]</a></sup>) where the children are enrolled as pupils".html_safe,
       "settings run by the proprietor or governing body of a school (including maintained schools, academies or independent schools)"
     ], type: :bullet %>
 
     <p class="govuk-body">
       This criteria reflects evidence that group‑based settings face greater workforce challenges than school‑based settings and we 
-      are prioritising the recognition payments for settings where there is greatest need. We know that staff in group‑based settings are paid less on average<sup><a href="#footnote-4">[footnote 4]</a></sup>, 
-      staff turnover is higher<sup><a href="#footnote-5">[footnote 5]</a></sup> and fewer staff in group-based settings hold Level 6 qualifications.<sup><a href="#footnote-6">[footnote 6]</a></sup>
+      are prioritising the recognition payments for settings where there is greatest need. We know that staff in group‑based settings are paid less on average<sup><a href="#footnote-2">[footnote 2]</a></sup>, 
+      staff turnover is higher<sup><a href="#footnote-3">[footnote 3]</a></sup> and fewer staff in group-based settings hold Level 6 qualifications.<sup><a href="#footnote-4">[footnote 4]</a></sup>
     </p>
 
 
@@ -244,5 +248,14 @@
       If you have any questions, email
       <%= govuk_mail_to t("early_years_teachers_financial_incentive_payments.support_email_address"), t("early_years_teachers_financial_incentive_payments.support_email_address") %>.
     </p>
+
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+
+    <%= govuk_list [
+      "#{govuk_link_to 'Schools making provision in respect of which they are registered with Ofsted are also ineligible', 'https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/035b3b70-74df-4d73-847f-54dc1032b876', id: "footnote-1"}".html_safe,
+      "#{govuk_link_to 'Level 6 includes those holding Early Years Practitioner Status (EYPS), Early Years Teacher Status (EYTS) and Qualified Teacher Status (QTS). It is also important to note that all teachers with one of these three qualifications will be qualified to Level 6, however not all Level 6 staff will have one of these teaching qualifications', 'https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/035b3b70-74df-4d73-847f-54dc1032b876', id: "footnote-2"}".html_safe,
+      "#{govuk_link_to 'Childcare and early years provider survey, Reporting year 2025 - Explore education statistics - GOV.UK', 'https://explore-education-statistics.service.gov.uk/find-statistics/childcare-and-early-years-provider-survey/2025', id: "footnote-3"}".html_safe,
+      "<span id='footnote-4'>Level 6 includes those holding Early Years Practitioner Status (EYPS), Early Years Teacher Status (EYTS) and Qualified Teacher Status (QTS). It is also important to note that all teachers with one of these three qualifications will be qualified to Level 6, however not all Level 6 staff will have one of these teaching qualifications.</span>".html_safe
+    ], type: :number %>
   </div>
 </div>
