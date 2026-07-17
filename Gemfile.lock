@@ -161,7 +161,7 @@ GEM
     factory_bot_rails (6.5.1)
       factory_bot (~> 6.5)
       railties (>= 6.1.0)
-    faker (3.5.2)
+    faker (3.8.0)
       i18n (>= 1.8.11, < 2)
     faraday (1.10.6)
       faraday-em_http (~> 1.0)
@@ -685,7 +685,7 @@ DEPENDENCIES
   dfe-analytics!
   dotenv-rails
   factory_bot_rails
-  faker (~> 3.5)
+  faker (~> 3.8)
   foreman
   govuk-components (~> 6.3.1)
   govuk_design_system_formbuilder (~> 6.2.1)
