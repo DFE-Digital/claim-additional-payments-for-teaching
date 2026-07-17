@@ -86,19 +86,24 @@ RSpec.describe Admin::Amendments::FurtherEducationPaymentsForm, type: :model do
 
     context "when provider verification task is present and further_education_teaching_start_year is changed" do
       let(:claim) do
-        create(:claim, :further_education, :submitted,
+        create(
+          :claim,
+          :further_education,
+          :submitted,
           eligibility_attributes: provider_verification_attributes.merge(
+            provider_verification_completed_at: 1.day.ago,
             further_education_teaching_start_year: "2023"
-          ))
+          )
+        )
       end
 
       before do
         AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2.new(claim).perform
       end
 
-      it "destroys the old task, reruns the automated check and creates a note" do
-        original_task = claim.tasks.find_by(name: "fe_provider_verification_v2")
-        expect(original_task.passed).to be(true)
+      it "reruns the automated check and creates a note" do
+        task = claim.tasks.find_by(name: "fe_provider_verification_v2")
+        expect(task.passed).to be(true)
 
         form = described_class.new(
           claim: claim,
@@ -110,14 +115,7 @@ RSpec.describe Admin::Amendments::FurtherEducationPaymentsForm, type: :model do
         )
 
         expect(form.save).to be_truthy
-
-        claim.reload
-
-        expect(claim.tasks.find_by(id: original_task.id)).to be_nil
-
-        new_task = claim.tasks.find_by(name: "fe_provider_verification_v2")
-        expect(new_task).to be_present
-        expect(new_task.passed).to be(false)
+        expect(task.reload.passed).to be(false)
 
         note = claim.notes.find_by(label: "fe_provider_verification_v2")
         expect(note).to be_present
