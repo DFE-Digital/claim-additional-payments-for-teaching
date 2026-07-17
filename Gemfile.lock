@@ -186,8 +186,6 @@ GEM
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
     faraday-retry (1.0.4)
-    faraday_middleware (1.2.1)
-      faraday (~> 1.0)
     ferrum (0.17.1)
       addressable (~> 2.5)
       base64 (~> 0.2)
@@ -688,7 +686,6 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   faker (~> 3.5)
-  faraday_middleware
   foreman
   govuk-components (~> 6.3.1)
   govuk_design_system_formbuilder (~> 6.2.1)

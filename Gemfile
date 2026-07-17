@@ -70,8 +70,6 @@ gem "rotp"
 
 gem "uk_postcode"
 
-gem "faraday_middleware"
-
 # required for prod due to Azure DEV/TEST all running as 'production'
 gem "faker", "~> 3.5", require: false
 # speed up bulk imports
