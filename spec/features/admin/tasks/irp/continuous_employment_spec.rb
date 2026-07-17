@@ -1,8 +1,6 @@
 require "rails_helper"
 
 RSpec.describe "IRP continuous employment admin task" do
-  let!(:journey_configuration) { create(:journey_configuration, :international_relocation_payments) }
-
   let(:eligibility) do
     build(
       :international_relocation_payments_eligibility,

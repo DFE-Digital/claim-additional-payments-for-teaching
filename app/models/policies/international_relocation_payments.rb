@@ -74,5 +74,9 @@ module Policies
     def payroll_file_name
       "IRP"
     end
+
+    def active?
+      false
+    end
   end
 end

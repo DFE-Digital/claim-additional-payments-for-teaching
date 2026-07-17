@@ -61,7 +61,7 @@ RSpec.describe "Accessing a closed service" do
     it "doesn't allow access to the journey" do
       service_access_code = create(
         :service_access_code,
-        journey: Journeys::GetATeacherRelocationPayment
+        journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
       )
 
       visit landing_page_path(

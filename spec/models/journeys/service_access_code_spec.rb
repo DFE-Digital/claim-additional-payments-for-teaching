@@ -92,7 +92,7 @@ RSpec.describe Journeys::ServiceAccessCode, type: :model do
           journey: Journeys::FurtherEducationPayments
         ).code
 
-        journey = Journeys::GetATeacherRelocationPayment
+        journey = Journeys::EarlyYearsTeachersFinancialIncentivePayments
 
         expect(
           described_class.permits_access?(code: code, journey: journey)
