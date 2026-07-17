@@ -26,18 +26,6 @@ FactoryBot.define do
     end
 
     after(:build) do |claim, evaluator|
-      journey = if evaluator.policy == Policies::EarlyCareerPayments
-        Journeys::TargetedRetentionIncentivePayments
-      else
-        Journeys.for_policy(evaluator.policy)
-      end
-
-      begin
-        raise ActiveRecord::RecordNotFound unless journey&.configuration.present?
-      rescue ActiveRecord::RecordNotFound
-        create(:journey_configuration, journey.i18n_namespace)
-      end
-
       claim.eligibility = build(evaluator.eligibility_factory, *Array.wrap(evaluator.eligibility_trait), **evaluator.eligibility_attributes || {}) unless claim.eligibility
       claim.policy = claim.eligibility.policy
 
