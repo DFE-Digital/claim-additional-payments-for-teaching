@@ -71,7 +71,7 @@ gem "rotp"
 gem "uk_postcode"
 
 # required for prod due to Azure DEV/TEST all running as 'production'
-gem "faker", "~> 3.5", require: false
+gem "faker", "~> 3.8", require: false
 # speed up bulk imports
 gem "activerecord-copy", require: false
 
