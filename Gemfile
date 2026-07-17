@@ -70,10 +70,8 @@ gem "rotp"
 
 gem "uk_postcode"
 
-gem "faraday_middleware"
-
 # required for prod due to Azure DEV/TEST all running as 'production'
-gem "faker", "~> 3.5", require: false
+gem "faker", "~> 3.8", require: false
 # speed up bulk imports
 gem "activerecord-copy", require: false
 
@@ -117,7 +115,6 @@ end
 group :test do
   gem "rspec-retry"
   gem "launchy"
-  gem "rack_session_access"
   gem "simplecov", require: false
   # Return null object for active record connection rather than raising error
   gem "activerecord-nulldb-adapter", github: "simpl1g/nulldb", ref: "3986f43f1680ee098ec51af1dc763bfe2d579efe"

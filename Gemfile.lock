@@ -161,7 +161,7 @@ GEM
     factory_bot_rails (6.5.1)
       factory_bot (~> 6.5)
       railties (>= 6.1.0)
-    faker (3.5.2)
+    faker (3.8.0)
       i18n (>= 1.8.11, < 2)
     faraday (1.10.6)
       faraday-em_http (~> 1.0)
@@ -186,8 +186,6 @@ GEM
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
     faraday-retry (1.0.4)
-    faraday_middleware (1.2.1)
-      faraday (~> 1.0)
     ferrum (0.17.1)
       addressable (~> 2.5)
       base64 (~> 0.2)
@@ -437,9 +435,6 @@ GEM
       rack (>= 3.0.0)
     rack-test (2.2.0)
       rack (>= 1.3)
-    rack_session_access (0.2.0)
-      builder (>= 2.0.0)
-      rack (>= 1.0.0)
     rackup (2.3.1)
       rack (>= 3)
     rails (8.1.3)
@@ -690,8 +685,7 @@ DEPENDENCIES
   dfe-analytics!
   dotenv-rails
   factory_bot_rails
-  faker (~> 3.5)
-  faraday_middleware
+  faker (~> 3.8)
   foreman
   govuk-components (~> 6.3.1)
   govuk_design_system_formbuilder (~> 6.2.1)
@@ -716,7 +710,6 @@ DEPENDENCIES
   pry
   puma (~> 7.2)
   rack-mini-profiler
-  rack_session_access
   rails (~> 8.1)
   rails_semantic_logger
   rb-readline

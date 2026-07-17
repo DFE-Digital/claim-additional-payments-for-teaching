@@ -11,9 +11,6 @@ module Seeders
       puts "Seeding feature flags..."
       toggle_feature_flags
 
-      puts "Seeding fixtures..."
-      seed_fixures
-
       puts "Seeding payroll runs..."
       seed_payroll_runs
 
@@ -36,26 +33,18 @@ module Seeders
     end
 
     def create_journey_configurations
-      Journeys::Configuration.create!(routing_name: Journeys::TeacherStudentLoanReimbursement.routing_name, current_academic_year: AcademicYear.current)
-      Journeys::Configuration.create!(routing_name: Journeys::TargetedRetentionIncentivePayments.routing_name, current_academic_year: AcademicYear.current)
-      Journeys::Configuration.create!(routing_name: Journeys::GetATeacherRelocationPayment.routing_name, current_academic_year: AcademicYear.current)
-      Journeys::Configuration.create!(routing_name: Journeys::FurtherEducationPayments.routing_name, current_academic_year: AcademicYear.current)
-      Journeys::Configuration.create!(routing_name: Journeys::EarlyYearsPayment::Provider::Start.routing_name, current_academic_year: AcademicYear.current)
-      Journeys::Configuration.create!(routing_name: Journeys::EarlyYearsPayment::Provider::Authenticated.routing_name, current_academic_year: AcademicYear.current)
-      Journeys::Configuration.create!(routing_name: Journeys::EarlyYearsPayment::Practitioner.routing_name, current_academic_year: AcademicYear.current)
-      Journeys::Configuration.create!(routing_name: Journeys::EarlyYearsPayment::Provider::AlternativeIdv.routing_name, current_academic_year: AcademicYear.current)
-      Journeys::Configuration.create!(routing_name: Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name, current_academic_year: AcademicYear.current)
+      Journeys.all.each do |journey|
+        Journeys::Configuration
+          .create!(
+            routing_name: journey.routing_name,
+            current_academic_year: AcademicYear.current
+          )
+      end
     end
 
     def toggle_feature_flags
       FeatureFlag.enable!("fe_provider_dashboard")
       FeatureFlag.enable!("eytfi_journey")
-    end
-
-    def seed_fixures
-      ENV["FIXTURES_PATH"] = "spec/fixtures"
-      ENV["FIXTURES"] = "local_authorities,local_authority_districts,schools"
-      Rake::Task["db:fixtures:load"].invoke
     end
 
     def seed_payroll_runs
