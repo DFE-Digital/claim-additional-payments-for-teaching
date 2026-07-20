@@ -8,6 +8,10 @@ class ComponentsController < BasePublicController
 
   private
 
+  def current_journey_routing_name
+    super || journey&.routing_name
+  end
+
   def set_home_journey
     @journey = Journeys::TargetedRetentionIncentivePayments
   end
