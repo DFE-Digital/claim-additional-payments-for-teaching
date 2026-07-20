@@ -16,6 +16,22 @@ RSpec.describe "Maintenance Mode", type: :request do
       expect(response.body).to include("service is unavailable")
     end
 
+    it "blocks admin component previews in production" do
+      sign_in_as_service_operator
+
+      get admin_components_open_component_path(
+        journey: Journeys::TeacherStudentLoanReimbursement.routing_name,
+        slug: Journeys::TeacherStudentLoanReimbursement.slug_sequence::SLUGS.first
+      )
+
+      allow(Rails.env).to receive(:production?).and_return(true)
+
+      get new_claim_path(Journeys::TeacherStudentLoanReimbursement.routing_name)
+
+      expect(response).to have_http_status(:service_unavailable)
+      expect(response.body).to include("service is unavailable")
+    end
+
     it "still allows access to /admin for service operator access" do
       get admin_root_path
       expect(response).to redirect_to(admin_sign_in_path)

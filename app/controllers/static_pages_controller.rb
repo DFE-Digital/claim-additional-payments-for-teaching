@@ -88,7 +88,13 @@ class StaticPagesController < BasePublicController
     end
   end
 
+  helper_method :current_user
+
   private
+
+  def current_journey_routing_name
+    super || journey&.routing_name
+  end
 
   def journey_available?
     return true unless journey
@@ -99,5 +105,4 @@ class StaticPagesController < BasePublicController
   def current_user
     DfeSignIn::NullUser.new
   end
-  helper_method :current_user
 end
