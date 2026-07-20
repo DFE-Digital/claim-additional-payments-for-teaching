@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  if Rails.env.production? && !Rails.env.review_app?
-    root to: redirect(Rails.application.config.guidance_url)
-  else
+  if Rails.env.enable_home_components?
     root to: "components#home"
+  else
+    root to: redirect(Rails.application.config.guidance_url)
   end
 
   get "/claim/auth/tid/callback", to: "omniauth_callbacks#callback"
