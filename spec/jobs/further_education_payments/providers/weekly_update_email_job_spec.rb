@@ -5,6 +5,8 @@ RSpec.describe FurtherEducationPayments::Providers::WeeklyUpdateEmailJob, type: 
   let(:other_provider) { create(:eligible_fe_provider, :with_school) }
 
   around do |example|
+    create(:journey_configuration, :further_education_payments)
+
     perform_enqueued_jobs do
       example.run
     end

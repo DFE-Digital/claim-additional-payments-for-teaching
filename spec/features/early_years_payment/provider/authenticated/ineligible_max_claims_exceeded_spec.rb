@@ -2,7 +2,8 @@ require "rails_helper"
 
 RSpec.feature "Early years payment provider" do
   scenario "exceeding max claims" do
-    when_early_years_payment_provider_authenticated_journey_configuration_exists
+    create(:journey_configuration, :early_years_payment_provider_start)
+    create(:journey_configuration, :early_years_payment_provider_authenticated)
 
     eligible_ey_provider = create(
       :eligible_ey_provider,

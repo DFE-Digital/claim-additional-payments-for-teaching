@@ -7,6 +7,8 @@ RSpec.describe "Targeted retention incentives reminders" do
 
       current_academic_year = policy_end_year - 1
 
+      travel_to current_academic_year.start_of_autumn_term
+
       create(
         :journey_configuration,
         :targeted_retention_incentive_payments,
@@ -82,6 +84,8 @@ RSpec.describe "Targeted retention incentives reminders" do
       expect("bergstrom@springfield-elementary.edu").to have_received_email(
         ApplicationMailer::REMINDER_APPLICATION_WINDOW_OPEN_NOTIFY_TEMPLATE_ID
       )
+
+      travel_back
     end
   end
 
@@ -94,6 +98,8 @@ RSpec.describe "Targeted retention incentives reminders" do
         :targeted_retention_incentive_payments,
         current_academic_year: current_academic_year
       )
+
+      travel_to current_academic_year.start_of_autumn_term
 
       school = create(
         :school,
@@ -204,6 +210,8 @@ RSpec.describe "Targeted retention incentives reminders" do
       click_on "Continue"
 
       click_on "Accept and send"
+
+      travel_back
     end
 
     context "when itt year is not eligible next year" do

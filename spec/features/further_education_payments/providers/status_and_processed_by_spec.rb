@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Status and Processed by labels", feature_flag: [:fe_provider_dashboard] do
   before do
+    create(:journey_configuration, :further_education_payments)
     allow(DfeSignIn::Config).to receive(:instance).and_return(OpenStruct.new(bypass?: true))
   end
 

@@ -1030,6 +1030,8 @@ RSpec.feature "Further education payments ineligible paths" do
   end
 
   scenario "when the claimant has already submitted a claim" do
+    create(:journey_configuration, :further_education_payments)
+
     previous_claim = create(
       :claim,
       :further_education,

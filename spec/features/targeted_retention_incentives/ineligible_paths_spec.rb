@@ -628,6 +628,12 @@ RSpec.describe "Targeted retention incentives ineligible paths" do
         :targeted_retention_incentive_payments_eligible
       )
 
+      school.targeted_retention_incentive_payments_awards.each do |award|
+        award.file_upload.update!(
+          academic_year: Policies::TargetedRetentionIncentivePayments::POLICY_END_YEAR
+        )
+      end
+
       visit Journeys::TargetedRetentionIncentivePayments.start_page_url
 
       click_on "Start now"

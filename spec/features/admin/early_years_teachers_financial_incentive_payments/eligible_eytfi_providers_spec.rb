@@ -28,6 +28,11 @@ RSpec.feature "Admin of eligible EYTFI providers" do
   scenario "re-uploading the file doesn't lose existing claims" do
     academic_year = AcademicYear.current
 
+    create(
+      :journey_configuration,
+      :early_years_teachers_financial_incentive_payments
+    )
+
     claim = create(
       :claim,
       :submitted,

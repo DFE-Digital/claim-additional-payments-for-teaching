@@ -39,6 +39,7 @@ RSpec.feature "Admin checks a claim" do
     end
 
     scenario "they can reject a claim" do
+      create(:journey_configuration, :student_loans)
       submitted_claims = create_list(:claim, 2, :submitted)
       claim_to_reject = submitted_claims.first
 

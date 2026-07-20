@@ -3,6 +3,10 @@ require "rails_helper"
 RSpec.describe ClaimStudentLoanDetailsUpdater do
   let(:admin) { create(:dfe_signin_user) }
 
+  before do
+    create(:journey_configuration, :targeted_retention_incentive_payments)
+  end
+
   describe ".call" do
     let(:updater) { described_class.new(claim, admin) }
     let(:claim) { create(:claim, policy:) }

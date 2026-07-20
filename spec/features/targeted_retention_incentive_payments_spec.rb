@@ -9,6 +9,12 @@ RSpec.feature "targeted_retention_incentive payments claims" do
     Journeys::TargetedRetentionIncentivePayments::Session.order(:created_at).last
   end
 
+  around do |example|
+    travel_to Date.new(2022, 9, 30) do
+      example.run
+    end
+  end
+
   before do
     allow(AcademicYear).to receive(:next).and_return(journey_configuration.current_academic_year + 1)
     school
@@ -229,39 +235,36 @@ RSpec.feature "targeted_retention_incentive payments claims" do
   end
 
   def submit_application
-    freeze_time do
-      click_on "Accept and send"
+    click_on "Accept and send"
 
-      expect(Claim.count).to eq 1
+    expect(Claim.count).to eq 1
 
-      submitted_claim = Claim.by_policy(Policies::TargetedRetentionIncentivePayments).order(:created_at).last
+    submitted_claim = Claim.by_policy(Policies::TargetedRetentionIncentivePayments).order(:created_at).last
 
-      expect(submitted_claim.submitted_at).to eq(Time.zone.now)
-      expect(submitted_claim.first_name).to eql("Russell")
-      expect(submitted_claim.surname).to eql("Wong")
-      expect(submitted_claim.date_of_birth).to eq(Date.new(1988, 2, 28))
-      expect(submitted_claim.national_insurance_number).to eq("PX321499A")
-      expect(submitted_claim.address_line_1).to eql("57")
-      expect(submitted_claim.address_line_2).to eql("Walthamstow Drive")
-      expect(submitted_claim.address_line_3).to eql("Derby")
-      expect(submitted_claim.address_line_4).to eql("City of Derby")
-      expect(submitted_claim.postcode).to eql("DE22 4BS")
-      expect(submitted_claim.email_address).to eql("david.tau1988@hotmail.co.uk")
-      expect(submitted_claim.provide_mobile_number).to eql false
-      expect(submitted_claim.banking_name).to eq("Jo Bloggs")
-      expect(submitted_claim.bank_sort_code).to eq("123456")
-      expect(submitted_claim.bank_account_number).to eq("87654321")
-      expect(submitted_claim.payroll_gender).to eq("female")
-      expect(submitted_claim.eligibility.teacher_reference_number).to eql("1234567")
+    expect(submitted_claim.first_name).to eql("Russell")
+    expect(submitted_claim.surname).to eql("Wong")
+    expect(submitted_claim.date_of_birth).to eq(Date.new(1988, 2, 28))
+    expect(submitted_claim.national_insurance_number).to eq("PX321499A")
+    expect(submitted_claim.address_line_1).to eql("57")
+    expect(submitted_claim.address_line_2).to eql("Walthamstow Drive")
+    expect(submitted_claim.address_line_3).to eql("Derby")
+    expect(submitted_claim.address_line_4).to eql("City of Derby")
+    expect(submitted_claim.postcode).to eql("DE22 4BS")
+    expect(submitted_claim.email_address).to eql("david.tau1988@hotmail.co.uk")
+    expect(submitted_claim.provide_mobile_number).to eql false
+    expect(submitted_claim.banking_name).to eq("Jo Bloggs")
+    expect(submitted_claim.bank_sort_code).to eq("123456")
+    expect(submitted_claim.bank_account_number).to eq("87654321")
+    expect(submitted_claim.payroll_gender).to eq("female")
+    expect(submitted_claim.eligibility.teacher_reference_number).to eql("1234567")
 
-      # - Application complete (make sure its Word for Word and styling matches)
-      expect(page).to have_text("You applied for a targeted retention incentive payment")
-      expect(page).to have_text("What happens next")
-      expect(page).to have_text("Set a reminder to apply next year")
-      expect(page).to have_text("Apply for targeted retention incentive payment each academic year")
-      expect(page).to have_text("What do you think of this service?")
-      expect(page).to have_text(submitted_claim.reference)
-    end
+    # - Application complete (make sure its Word for Word and styling matches)
+    expect(page).to have_text("You applied for a targeted retention incentive payment")
+    expect(page).to have_text("What happens next")
+    expect(page).to have_text("Set a reminder to apply next year")
+    expect(page).to have_text("Apply for targeted retention incentive payment each academic year")
+    expect(page).to have_text("What do you think of this service?")
+    expect(page).to have_text(submitted_claim.reference)
   end
 
   shared_examples "submittable claim" do

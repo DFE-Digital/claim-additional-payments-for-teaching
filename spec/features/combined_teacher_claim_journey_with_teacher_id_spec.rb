@@ -30,6 +30,12 @@ RSpec.feature "Combined journey with Teacher ID" do
     )
   end
 
+  around do |example|
+    travel_to DateTime.new(2023, 9, 30) do
+      example.run
+    end
+  end
+
   before do
     school
     stub_otp_verification
