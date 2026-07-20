@@ -1592,4 +1592,54 @@ RSpec.describe Claim, type: :model do
       end
     end
   end
+
+  describe "#awaiting_task?" do
+    let(:claim) { create(:claim) }
+
+    subject { claim.awaiting_task?(task_name) }
+
+    context "when the policy implements the task" do
+      let(:task_name) { "payroll_gender" }
+
+      context "when the task is required" do
+        context "when the task is passed" do
+          before { claim.tasks.create!(name: task_name, passed: true) }
+
+          it { is_expected.to be false }
+        end
+
+        context "when the task is failed" do
+          before { claim.tasks.create!(name: task_name, passed: false) }
+
+          it { is_expected.to be false }
+        end
+
+        context "when the task is neither passed nor failed" do
+          before do
+            claim.tasks
+              .build(name: task_name, passed: nil)
+              .save!(context: :claim_verifier)
+          end
+
+          it { is_expected.to be false }
+        end
+
+        context "when the task is not persisted" do
+          it { is_expected.to be true }
+        end
+      end
+
+      context "when the task is not required" do
+        before { claim.update!(payroll_gender: "male") }
+
+        it { is_expected.to be false }
+      end
+    end
+
+    context "when the policy does not implement the task" do
+      let(:task_name) { "onelogin_identity" }
+
+      it { is_expected.to be false }
+    end
+  end
 end

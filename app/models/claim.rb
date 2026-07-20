@@ -454,6 +454,10 @@ class Claim < ApplicationRecord
     @claim_checking_tasks ||= policy::ClaimCheckingTasks.new(self)
   end
 
+  def awaiting_task?(task_name)
+    task_required?(task_name) && !task_completed?(task_name)
+  end
+
   private
 
   def one_login_idv_name_match?
@@ -524,5 +528,13 @@ class Claim < ApplicationRecord
 
   def submittable_email_details?
     email_address.present? && email_verified == true
+  end
+
+  def task_required?(task_name)
+    claim_checking_tasks.applicable_task_names.include?(task_name)
+  end
+
+  def task_completed?(task_name)
+    tasks.where(name: task_name).exists?
   end
 end

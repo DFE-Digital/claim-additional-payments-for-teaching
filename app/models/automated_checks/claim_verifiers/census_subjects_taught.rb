@@ -15,7 +15,7 @@ module AutomatedChecks
       end
 
       def perform
-        return unless awaiting_task?(TASK_NAME)
+        return unless claim.awaiting_task?(TASK_NAME)
 
         no_data || no_match || any_match
       end
@@ -24,10 +24,6 @@ module AutomatedChecks
 
       attr_accessor :admin_user, :claim, :school_workforce_census
       attr_reader :school_workforce_census_subjects
-
-      def awaiting_task?(task_name)
-        claim.tasks.none? { |task| task.name == task_name }
-      end
 
       def school_workforce_census_subjects=(school_workforce_census)
         return if school_workforce_census.empty?
