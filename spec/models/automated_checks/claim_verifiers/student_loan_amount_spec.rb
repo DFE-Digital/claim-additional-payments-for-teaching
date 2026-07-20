@@ -150,7 +150,9 @@ module AutomatedChecks
             let(:claim_student_loan_repayment_amount) { 100 }
             let(:slc_student_loan_repayment_amount) { 100 }
 
-            it_behaves_like :execution_without_an_outcome
+            it "creates a task" do
+              expect { perform }.to change(Task, :count).by(1)
+            end
           end
         end
       end

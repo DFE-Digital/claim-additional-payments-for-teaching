@@ -11,9 +11,19 @@ module AutomatedChecks
 
       def perform
         return unless claim.policy == Policies::StudentLoans
-        return unless awaiting_task?
+        return if existing_task?
 
-        no_data || no_match || invalid_match || complete_match
+        if !student_loans_data.any?
+          create_task(match: nil)
+        elsif slc_total_repayment_amount&.zero?
+          create_task(match: :none)
+        elsif student_loan_repayment_amount_greater_than_actual?
+          create_task(match: :none, passed: false)
+        elsif amount_and_plan_type_valid?
+          create_task(match: :all, passed: true)
+        else
+          create_task(match: nil)
+        end
       end
 
       private
@@ -31,32 +41,8 @@ module AutomatedChecks
         @student_loans_data ||= StudentLoansData.where(nino:, date_of_birth:)
       end
 
-      def awaiting_task?
-        claim.tasks.where(name: TASK_NAME).count.zero?
-      end
-
-      def no_data
-        return if student_loans_data.any?
-
-        create_task(match: nil)
-      end
-
-      def no_match
-        return unless slc_total_repayment_amount&.zero?
-
-        create_task(match: :none)
-      end
-
-      def invalid_match
-        return unless student_loan_repayment_amount_greater_than_actual?
-
-        create_task(match: :none, passed: false)
-      end
-
-      def complete_match
-        return unless amount_and_plan_type_valid?
-
-        create_task(match: :all, passed: true)
+      def existing_task?
+        claim.tasks.where(name: TASK_NAME).exists?
       end
 
       def student_loan_repayment_amount_greater_than_actual?
