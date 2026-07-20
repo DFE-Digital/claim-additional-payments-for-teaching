@@ -102,6 +102,10 @@ module Journeys
       true
     end
 
+    def provider_journey?
+      false
+    end
+
     private
 
     def all_forms_mapping

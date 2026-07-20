@@ -37,7 +37,10 @@
     </p>
 
     <p class="govuk-body">
-      <strong>Send this link to the claimant</strong>
+      <strong>
+        Send this link to the
+        <%= @service_access_code.journey_class.provider_journey? ? "provider" : "claimant" %>
+      </strong>
     </p>
 
     <%= text_field_tag(

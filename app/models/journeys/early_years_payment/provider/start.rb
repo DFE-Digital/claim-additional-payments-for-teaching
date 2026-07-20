@@ -13,6 +13,10 @@ module Journeys
           CheckYourEmailForm,
           IneligibleForm
         ]
+
+        def self.provider_journey?
+          true
+        end
       end
     end
   end

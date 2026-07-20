@@ -25,6 +25,10 @@ module Journeys
           ExpiredLinkForm
         ]
         START_WITH_MAGIC_LINK = true
+
+        def self.provider_journey?
+          true
+        end
       end
     end
   end
