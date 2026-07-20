@@ -3,7 +3,11 @@ class Claim
   # attributes defined in the `SEARCHABLE_ATTRIBUTES` or `policy::SEARCHABLE_ELIGIBILITY_ATTRIBUTES` constant. Both subject
   # and attribute are downcased, so the search is case-insensitive.
   class Search
-    attr_accessor :search_term, :current_year_only
+    include ActiveModel::Model
+    include ActiveModel::Attributes
+
+    attribute :search_term, :string
+    attribute :current_year_only, :boolean, default: true
 
     SEARCHABLE_CLAIM_ATTRIBUTES = %w[
       reference
@@ -11,9 +15,8 @@ class Claim
       surname
     ]
 
-    def initialize(search_term, current_year_only: false)
-      @search_term = search_term
-      @current_year_only = ActiveModel::Type::Boolean.new.cast(current_year_only)
+    def initialize(params)
+      super
     end
 
     def claims
@@ -68,6 +71,15 @@ class Claim
 
     def current_year_only?
       !!current_year_only
+    end
+
+    def params
+      {
+        model_name.param_key => {
+          search_term: search_term,
+          current_year_only: current_year_only
+        }
+      }
     end
 
     private

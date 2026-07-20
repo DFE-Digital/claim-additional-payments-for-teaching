@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Claim::Search do
-  subject(:search) { described_class.new(query) }
+  let(:search_params) { {search_term: query, current_year_only: false} }
+  subject(:search) { described_class.new(search_params) }
 
   let(:reference) { "abc123" }
   let(:email) { "foo@example.com" }
@@ -337,8 +338,8 @@ RSpec.describe Claim::Search do
   context "when scoped to the current academic year" do
     subject { search.claims }
 
-    let(:search) do
-      described_class.new("test@example.com", current_year_only: true)
+    let(:search_params) do
+      {search_term: "test@example.com", current_year_only: true}
     end
 
     let!(:prior_year_claim) do
