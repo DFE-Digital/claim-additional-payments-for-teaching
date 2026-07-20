@@ -18,13 +18,11 @@ class PersonalBankAccountForm < Form
   def save
     return false unless valid?(:save)
 
-    journey_session.answers.assign_attributes(
+    journey_session.answers.update!(
       banking_name: banking_name,
       bank_sort_code: normalised_bank_detail(bank_sort_code),
       bank_account_number: normalised_bank_detail(bank_account_number)
     )
-
-    journey_session.save!
   end
 
   def valid?(context = nil)

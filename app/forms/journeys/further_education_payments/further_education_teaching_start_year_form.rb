@@ -29,8 +29,7 @@ module Journeys
       def save
         return false if invalid?
 
-        journey_session.answers.assign_attributes(further_education_teaching_start_year:)
-        journey_session.save!
+        journey_session.answers.update!(further_education_teaching_start_year:)
       end
 
       def before_year

@@ -12,6 +12,7 @@ main app.
 
    - `review` – `s189t01-capt-rv-app-kv`
    - `test` – `s189t01-capt-ts-app-kv`
+   - `staging` - `s189t01-capt-st-app-kv`
    - `production` – `s189p01-capt-pd-app-kv`
 
 3. In the key vault, navigate to Secrets to view or change the secrets.

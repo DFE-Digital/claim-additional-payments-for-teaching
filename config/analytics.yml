@@ -174,6 +174,11 @@ shared:
     - scheduled_payment_date # date, when the payment is scheduled to happen
     - confirmation_report_uploaded_by_id # uuid, references admin that uploaded the confirmation
     - status # string, state of the payroll run, defaults to pending
+    - claims_count # integer, number of claims in this payroll run
+    - topups_count # integer, number of topups in this payroll run
+    - total_confirmed_payments # integer, number of confirmed payments
+    - payments_count # integer, number of payments in this payroll run
+    - payment_confirmation_uploaded # boolean, has the confirmation report been uploaded
   :student_loans_eligibilities:
     - id # uuid, that identifies the eligibility
     - created_at # datetime, timestamp when eligibility was created
@@ -284,6 +289,9 @@ shared:
     - deleted_at # datetime, when record was soft deleted
     - current_organisation_ukprn # string, UKPRN identifier of organisation
     - user_type # string, internally what type of user are they
+    - given_name # string, first name of the user
+    - family_name # string, last name of the user
+    - email # string, email address of the user
   :targeted_retention_incentive_payments_awards:
     - id # integer, identifies the award
     - academic_year # string, the acdemic year for the award

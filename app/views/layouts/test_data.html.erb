@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="govuk-template govuk-template--rebranded app-html-class">
+<html lang="en" class="govuk-template app-html-class">
   <head>
     <title>
       <%= content_for(:page_title) || "Test Data Downloads – GOV.UK" %>
@@ -18,7 +18,7 @@
   <body class="govuk-template__body">
     <%= javascript_include_tag 'js_check' %>
 
-    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+    <%= govuk_skip_link %>
 
     <div class="govuk-width-container">
       <main class="govuk-main-wrapper app-main-class" id="main-content">

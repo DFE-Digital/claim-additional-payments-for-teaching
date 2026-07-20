@@ -18,6 +18,21 @@ module Admin
       end
     )
 
+    def show
+      upload = FileUpload.latest_version_for(
+        Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider,
+        AcademicYear.current
+      ).order(created_at: :desc).first
+
+      upload_date = upload.created_at.to_date.iso8601
+
+      send_data(
+        upload.body,
+        type: "text/csv",
+        filename: "eytrp_nurseries-#{upload_date}.csv"
+      )
+    end
+
     def create
       @upload_form = EligibleEytfiProvidersForm.new(upload_params, admin_user)
 

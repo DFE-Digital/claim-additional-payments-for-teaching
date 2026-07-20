@@ -2,6 +2,7 @@ module Admin
   class BaseAdminController < ApplicationController
     ADMIN_TIMEOUT_LENGTH_IN_MINUTES = 60
 
+    include DfE::Analytics::Requests
     include HttpAuthConcern
 
     layout "admin"
@@ -76,6 +77,16 @@ module Admin
 
     def set_sentry_user_context
       Sentry.set_user(id: session[:user_id])
+    end
+
+    # Required by DfE::Analytics::Requests to populate user_id on web_request events
+    def current_user
+      current_admin unless current_admin.null_user?
+    end
+
+    # Required by DfE::Analytics::Requests to populate namespace on web_request events
+    def current_namespace
+      "admin"
     end
 
     def admin_signed_in?

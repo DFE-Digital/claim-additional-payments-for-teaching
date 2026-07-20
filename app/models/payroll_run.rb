@@ -33,14 +33,8 @@ class PayrollRun < ApplicationRecord
     line_items(policy, filter: filter).sum(&:award_amount)
   end
 
-  def total_confirmed_payments
-    payments.where.not(confirmation: nil).count
-  end
-
   def all_payments_confirmed?
-    return @all_payments_confirmed if defined?(@all_payments_confirmed)
-
-    @all_payments_confirmed = payment_confirmations.any? && total_confirmed_payments == payments_count
+    payment_confirmation_uploaded? && total_confirmed_payments == payments_count
   end
 
   def download_triggered?
@@ -48,10 +42,6 @@ class PayrollRun < ApplicationRecord
   end
 
   private
-
-  def payments_count
-    @payments_count ||= payments.count
-  end
 
   class LineItem < Struct.new(:id, :award_amount, keyword_init: true); end
 

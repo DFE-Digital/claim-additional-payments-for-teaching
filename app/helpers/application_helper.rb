@@ -1,5 +1,3 @@
-require "pathname"
-
 module ApplicationHelper
   include GOVUKDesignSystemFormBuilder::BuilderHelper
 
@@ -167,5 +165,20 @@ module ApplicationHelper
         }
       ]
     end
+  end
+
+  INDEXABLE_PATHS = %w[
+    /early-years-teachers-recognition-payments/landing-page
+    /early-years-teachers-recognition-payments/guidance
+  ]
+
+  def current_path_indexable?
+    return false if review_app?
+
+    INDEXABLE_PATHS.any? { |path| current_page?(path) }
+  end
+
+  def review_app?
+    ENV["ENVIRONMENT_NAME"].start_with?("review")
   end
 end

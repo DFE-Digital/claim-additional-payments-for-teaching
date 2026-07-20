@@ -1,2 +1,2 @@
-web: bundle exec rails s -b 'ssl://localhost:3000?key=localhost.key&cert=localhost.crt'
-worker: bundle exec rake jobs:work
+web: bundle exec rails s -p 3000
+css: bundle exec rails dartsass:watch

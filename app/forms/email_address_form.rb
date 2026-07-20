@@ -20,14 +20,12 @@ class EmailAddressForm < Form
     return false unless valid?
     return true unless email_address_changed? || resend
 
-    journey_session.answers.assign_attributes(
+    journey_session.answers.update!(
       email_address: email_address,
       email_verified: email_verified,
       email_verification_secret: otp_secret,
       sent_one_time_password_at: Time.now
     )
-
-    journey_session.save!
 
     ClaimMailer.email_verification(answers, otp_code, journey_session.journey_class.journey_name).deliver_now
   end

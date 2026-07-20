@@ -17,13 +17,12 @@ module Journeys
           def save
             return false if invalid?
 
-            journey_session.answers.assign_attributes(
+            journey_session.answers.update!(
               first_name: first_name,
               surname: surname,
               practitioner_first_name: first_name,
               practitioner_surname: surname
             )
-            journey_session.save!
           end
         end
       end

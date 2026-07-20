@@ -25,8 +25,7 @@ module Journeys
       def save
         return if invalid?
 
-        journey_session.answers.assign_attributes(previously_claimed:)
-        journey_session.save!
+        journey_session.answers.update!(previously_claimed:)
       end
 
       def previous_claim_window_start

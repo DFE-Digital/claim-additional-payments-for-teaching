@@ -1,9 +1,12 @@
+@use "govuk-frontend/dist/govuk/helpers/colour";
+@use "govuk-frontend/dist/govuk/helpers/spacing";
+
 .govuk-heading--navigation .govuk-link:not(:last-of-type) {
-  margin-right: govuk-spacing(2);
+  margin-right: spacing.govuk-spacing(2);
 }
 
 .claim-error-summary--warning {
-  border-color: govuk-colour("blue");
+  border-color: colour.govuk-colour("blue");
 }
 
 .claim-error-summary__list--warning a {
@@ -11,6 +14,6 @@
   &:visited,
   &:hover,
   &:active {
-    color: govuk-colour("blue");
+    color: colour.govuk-colour("blue");
   }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="govuk-template govuk-template--rebranded app-html-class">
+<html lang="en" class="govuk-template app-html-class">
   <head>
     <title>
       <%= content_for(:page_title) || "#{t("service_name")} – GOV.UK" %>
@@ -29,7 +29,7 @@
       <% end %>
     <% end %>
 
-    <%= stylesheet_link_tag 'application', media: 'all' %>
+    <%= stylesheet_link_tag "application", media: "all" %>
   </head>
 
   <body class="govuk-template__body">
@@ -53,7 +53,7 @@
 
     <%= render "admin/cookie_banner" %>
 
-    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+    <%= govuk_skip_link %>
 
     <% if current_admin.is_service_operator? %>
       <%= render "admin/shared/signed_in_header" %>

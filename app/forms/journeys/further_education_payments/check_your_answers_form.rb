@@ -17,8 +17,7 @@ module Journeys
       def save
         return false if invalid?
 
-        journey_session.answers.assign_attributes(claimant_declaration:)
-        journey_session.save!
+        journey_session.answers.update!(claimant_declaration:)
 
         if journey.requires_student_loan_details?
           journey::AnswersStudentLoansDetailsUpdater.call(journey_session)
@@ -48,8 +47,7 @@ module Journeys
           claim.eligibility.update!(flagged_as_previously_start_year_matches_claim_false: true)
         end
 
-        journey_session.answers.assign_attributes(submitted_claim_id: claim.id)
-        journey_session.save!
+        journey_session.answers.update!(submitted_claim_id: claim.id)
 
         session[:submitted_claim_id] = claim.id
         clear_claim_session

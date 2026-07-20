@@ -29,11 +29,9 @@ module Journeys
           def save
             return false if invalid?
 
-            journey_session.answers.assign_attributes(
+            journey_session.answers.update!(
               claimant_employed_by_nursery: claimant_employed_by_nursery
             )
-
-            journey_session.save!
 
             if !claimant_employed_by_nursery
               # We exit the journey early, so we need to mark the verification

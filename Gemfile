@@ -1,7 +1,15 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.4.9"
+ruby "4.0.5"
+
+gem "securerandom"
+gem "uri"
+gem "tsort"
+gem "net-protocol"
+gem "ruby2_keywords"
+gem "pp"
+gem "prettyprint"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "rails", "~> 8.1"
@@ -12,7 +20,8 @@ gem "azure-blob"
 # Use Puma as the app server
 gem "puma", "~> 7.2"
 # Use SCSS for stylesheets
-gem "sass-rails", "~> 6.0"
+gem "dartsass-rails"
+gem "sprockets-rails"
 # Use Terser as compressor for ES6 JavaScript assets
 gem "terser"
 # See https://github.com/rails/execjs#readme for more supported runtimes
@@ -53,20 +62,16 @@ gem "rails_semantic_logger"
 gem "httpclient"
 
 # Gov form builder to structure claims
-gem "govuk_design_system_formbuilder", "~> 5.13.0"
-gem "govuk-components", "~> 5.13.1"
-
-gem "govuk_publishing_components"
+gem "govuk_design_system_formbuilder", "~> 6.2.1"
+gem "govuk-components", "~> 6.3.1"
 
 # ROTP requried for Early Career Payments one-time password
 gem "rotp"
 
 gem "uk_postcode"
 
-gem "faraday_middleware"
-
 # required for prod due to Azure DEV/TEST all running as 'production'
-gem "faker", "~> 3.5", require: false
+gem "faker", "~> 3.8", require: false
 # speed up bulk imports
 gem "activerecord-copy", require: false
 
@@ -74,15 +79,14 @@ gem "pagy"
 
 gem "ostruct"
 
-gem "solid_queue", "~> 1.2"
+gem "solid_queue", "~> 1.4"
 gem "mission_control-jobs"
-
-gem "slack-notifier"
 
 gem "sentry-ruby"
 gem "sentry-rails"
 
 group :development, :test do
+  gem "rb-readline"
   gem "pry"
   gem "rspec-rails"
   gem "turbo_tests"
@@ -103,10 +107,6 @@ group :development do
 
   gem "listen", ">= 3.0.5", "< 3.10"
 
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem "spring"
-  gem "spring-watcher-listen", "~> 2.1.0"
-
   gem "foreman"
   # Provides a detailed speed badge for every HTML page to aid performance optimisation.
   gem "rack-mini-profiler"
@@ -115,7 +115,6 @@ end
 group :test do
   gem "rspec-retry"
   gem "launchy"
-  gem "rack_session_access"
   gem "simplecov", require: false
   # Return null object for active record connection rather than raising error
   gem "activerecord-nulldb-adapter", github: "simpl1g/nulldb", ref: "3986f43f1680ee098ec51af1dc763bfe2d579efe"
@@ -123,8 +122,8 @@ group :test do
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem "tzinfo-data", platforms: [:windows, :jruby]
 
-gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.15.9"
+gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.15.17"
 
 gem "reactionview", "~> 0.1.2"

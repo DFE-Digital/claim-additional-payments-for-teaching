@@ -7,7 +7,7 @@
 <div class="govuk-grid-row">
   <%= render "admin/tasks/#{claim_summary_view}", claim: @claim, heading: "Claim decision" %>
 
-  <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-two-thirds" data-test-id="decisions-container">
     <% @decisions.each do |decision| %>
       <% heading = (@decisions.first == decision ? "Claim decision details" : nil) %>
       <%= render "admin/claims/answer_section", {heading:, answers: admin_decision_details(decision)} %>

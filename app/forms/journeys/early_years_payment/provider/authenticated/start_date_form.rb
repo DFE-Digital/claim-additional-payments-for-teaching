@@ -32,8 +32,7 @@ module Journeys
           def save
             return false unless valid?
 
-            journey_session.answers.assign_attributes(start_date:)
-            journey_session.save!
+            journey_session.answers.update!(start_date:)
           end
 
           def nursery_name

@@ -59,14 +59,12 @@ module Journeys
       def save
         return false if invalid?
 
-        journey_session.answers.assign_attributes(computing_courses:)
-        journey_session.save!
+        journey_session.answers.update!(computing_courses:)
       end
 
       def clear_answers_from_session
         if answers.subjects_taught.exclude?("computing")
-          journey_session.answers.assign_attributes(computing_courses: [])
-          journey_session.save!
+          journey_session.answers.update!(computing_courses: [])
         end
       end
 

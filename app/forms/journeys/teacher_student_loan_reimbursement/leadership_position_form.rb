@@ -13,12 +13,10 @@ module Journeys
         return false unless valid?
         return true unless had_leadership_position_changed?
 
-        journey_session.answers.assign_attributes(
+        journey_session.answers.update!(
           had_leadership_position: had_leadership_position,
           mostly_performed_leadership_duties: nil
         )
-
-        journey_session.save!
       end
 
       def radio_options

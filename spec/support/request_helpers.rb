@@ -30,8 +30,4 @@ module RequestHelpers
     post "/admin/auth/dfe"
     follow_redirect!
   end
-
-  def set_session_data(data)
-    put ::RackSessionAccess.path, params: {data: ::RackSessionAccess.encode(data)}
-  end
 end

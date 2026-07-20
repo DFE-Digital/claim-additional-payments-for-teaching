@@ -27,6 +27,8 @@ Architecture decision records can be found in the
 
 ### Documentation for common developer tasks
 
+- Service overview and user journeys:
+  [`docs/service-overview.md`](docs/service-overview.md)
 - Release process for production:
   [`docs/release-process.md`](docs/release-process.md)
 - Generating school check data:
@@ -244,15 +246,26 @@ via terraform.
 
 It creates resource groups, database server, app service plan, etc.
 
+### Staging
+
+Staging is automatically built and deployed when commits are pushed to `master`.
+
+You can check the progress of the build and release in
+[Azure DevOps](https://dev.azure.com/dfe-ssp/S118-Teacher-Payments-Service).
+
+The staging website is at
+https://staging.claim-additional-teaching-payment.service.gov.uk.
+
 ### Test
 
+Test does not build and deploy if it has been deployed outside `master`.
 Test is automatically built and deployed when commits are pushed to `master`.
 
 You can check the progress of the build and release in
 [Azure DevOps](https://dev.azure.com/dfe-ssp/S118-Teacher-Payments-Service).
 
 The test website is at
-https://test.additional-teaching-payment.education.gov.uk.
+https://test.claim-additional-teaching-payment.service.gov.uk.
 
 ### Production
 
@@ -339,3 +352,7 @@ the user IP address as part of the payload data sent to Application Insights in
 [`lib/application_insights`](lib/application_insights). See
 [`config/initializers/application_insights.rb`](config/initializers/application_insights.rb)
 for how to mixin this code to your Rails application.
+
+## Infrastructure validation workflow
+
+The scheduled workflow defined in `.github/workflows/validate-infra.yml` runs Terraform plan validations for the AKS cluster plus domains infrastructure/environment each day at **07:00 UTC** against **production** only. Failures and drift notifications are sent to the SD Infra alerts Teams channel via the `TEAMS_WEBHOOK_URL_INFRA` secret.

@@ -14,10 +14,9 @@ module Journeys
         ApplicationRecord.transaction do
           set_qualification! if trainee_teacher?
 
-          journey_session.answers.assign_attributes(
+          journey_session.answers.update!(
             nqt_in_academic_year_after_itt:
           )
-          journey_session.save
         end
       end
 

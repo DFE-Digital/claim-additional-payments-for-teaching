@@ -19,15 +19,12 @@ module Admin
         end
 
         def filter_status
-          if name == "employment"
-            case status
-            when "na" then "incomplete"
-            else status.tr(" ", "_")
-            end
-          elsif status == "no data" || status == "na"
+          if status == "no data" && TASK_STATUSES.fetch(name, {}).include?("no_data")
+            "no_data"
+          elsif status == "na" || status == "no data"
             "incomplete"
           else
-            status
+            status.tr(" ", "_")
           end
         end
       end
@@ -200,7 +197,47 @@ module Admin
     DEFAULT_STATUSES = %w[passed failed incomplete].freeze
 
     TASK_STATUSES = {
-      "employment" => %w[passed failed no_match no_data incomplete]
+      "identity_confirmation" => %w[
+        passed
+        failed
+        partial_match
+        no_match
+        incomplete
+      ],
+      "qualifications" => %w[
+        passed
+        failed
+        no_match
+        incomplete
+      ],
+      "census_subjects_taught" => %w[
+        passed
+        failed
+        no_match
+        no_data
+        incomplete
+      ],
+      "employment" => %w[
+        passed
+        failed
+        no_match
+        no_data
+        incomplete
+      ],
+      "student_loan_amount" => %w[
+        passed
+        failed
+        no_match
+        no_data
+        incomplete
+      ],
+      "student_loan_plan" => %w[
+        passed
+        failed
+        no_match
+        no_data
+        incomplete
+      ]
     }
 
     def task_statuses(task_key)

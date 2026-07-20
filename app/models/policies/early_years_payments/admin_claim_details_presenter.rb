@@ -24,7 +24,10 @@ module Policies
           [translate("admin.mobile_number"), claim.mobile_number],
           [translate("#{claim.policy.locale_key}.admin.nursery_name"), claim.eligibility.eligible_ey_provider.nursery_name],
           [translate("#{claim.policy.locale_key}.admin.start_date"), formatted_date(claim.eligibility.start_date)],
-          [translate("#{claim.policy.locale_key}.admin.paye_reference"), claim.paye_reference]
+          [translate("#{claim.policy.locale_key}.admin.paye_reference"), claim.paye_reference],
+          ["Banking name", personal_data(claim.banking_name)],
+          ["Bank account number", personal_data(claim.bank_account_number)],
+          ["Bank sort code", personal_data(claim.bank_sort_code)]
         ]
       end
 

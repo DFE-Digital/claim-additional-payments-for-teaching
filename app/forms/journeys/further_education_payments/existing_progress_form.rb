@@ -35,8 +35,7 @@ module Journeys
 
         journey_session
           .answers
-          .assign_attributes(start_new_claim:)
-        journey_session.save!
+          .update!(start_new_claim:)
 
         true
       end

@@ -87,7 +87,7 @@ module Policies
 
     # Agreed shorthand name to accommodate 30 character limit in payroll system (CAPT-1709)
     def payroll_file_name
-      "SchoolsLUP"
+      "SCHOOLS TRI"
     end
 
     def auto_check_student_loan_plan_task?

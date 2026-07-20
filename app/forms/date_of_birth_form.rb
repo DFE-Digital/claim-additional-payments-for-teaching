@@ -6,11 +6,8 @@ class DateOfBirthForm < Form
   def save
     return false if invalid?
 
-    journey_session.answers.assign_attributes(
+    journey_session.answers.update!(
       date_of_birth:
     )
-    journey_session.save!
-
-    true
   end
 end

@@ -4,6 +4,7 @@ RSpec.describe "layouts/application.html.erb" do
   before do
     allow(ENV).to receive(:[]).with("GOOGLE_ANALYTICS_ID").and_return("foo")
     allow(ENV).to receive(:[]).with("GTM_ANALYTICS").and_return("foo")
+    allow(ENV).to receive(:[]).with("ENVIRONMENT_NAME").and_return("foo")
 
     without_partial_double_verification do
       allow(view).to receive(:current_journey_routing_name).and_return("further-education-payments")

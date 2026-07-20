@@ -42,6 +42,11 @@ class PaymentConfirmationUpload
 
       raise ActiveRecord::Rollback if errors.any?
 
+      payroll_run.update!(
+        total_confirmed_payments: payroll_run.payments.where.not(confirmation: nil).count,
+        payment_confirmation_uploaded: true
+      )
+
       payments.each_with_index do |payment, index|
         ApplicationMailer.deliver_later_with_throttling(
           PaymentMailer.confirmation(payment),

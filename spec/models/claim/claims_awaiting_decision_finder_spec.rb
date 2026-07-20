@@ -14,6 +14,7 @@ RSpec.describe Claim::ClaimsAwaitingDecisionFinder do
   let!(:claim_tri_not_awaiting_decision) { create(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments, academic_year: tri_academic_year, submitted_using_slc_data: false) }
   let!(:claim_tri_other_year) { create(:claim, :submitted, policy: Policies::TargetedRetentionIncentivePayments, academic_year: tri_previous_academic_year, submitted_using_slc_data: false) }
   let!(:claim_sl_awaiting_decision_submitted_using_slc_data_false) { create(:claim, :submitted, policy: Policies::StudentLoans, academic_year: fe_academic_year, submitted_using_slc_data: false) }
+
   let(:fe_academic_year) { AcademicYear.new(2024) }
   let(:fe_previous_academic_year) { AcademicYear.new(2023) }
   let(:tri_academic_year) { AcademicYear.new(2023) }
@@ -27,7 +28,8 @@ RSpec.describe Claim::ClaimsAwaitingDecisionFinder do
       expect(subject).to contain_exactly(
         claim_fe_awaiting_decision_submitted_using_slc_data_false,
         claim_fe_awaiting_decision_submitted_using_slc_data_nil,
-        claim_tri_awaiting_decision_submitted_using_slc_data_false
+        claim_tri_awaiting_decision_submitted_using_slc_data_false,
+        claim_tri_awaiting_decision_submitted_using_slc_data_nil
       )
     end
   end

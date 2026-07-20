@@ -57,6 +57,70 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
   end
 
+  scenario "started journey with service access link" do
+    when_student_loan_data_exists
+    when_further_education_payments_journey_configuration_exists
+    and_college_exists
+
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
+    click_link "Start now"
+
+    expect(page).to have_content("Do you have a")
+    choose "Yes"
+    click_button "Continue"
+
+    mock_one_login_auth(uid: one_login_uid)
+
+    expect(page).to have_content("Sign in with GOV.UK One Login")
+    fill_in "One Login UID", with: one_login_uid
+    click_button "Continue"
+
+    expect(page).to have_content("You’ve successfully signed in to GOV.UK One Login")
+    click_button "Continue"
+
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
+    click_button "Start eligibility check"
+
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
+    click_button "Sign out"
+
+    # Close the journey and issue a "magic link"
+
+    Journeys::FurtherEducationPayments.configuration.update!(open_for_submissions: false)
+
+    service_access_code = Journeys::ServiceAccessCode.create!(
+      journey: Journeys::FurtherEducationPayments
+    )
+
+    visit landing_page_path(
+      Journeys::FurtherEducationPayments.routing_name,
+      service_access_code: service_access_code.code
+    )
+
+    click_link "Start now"
+
+    expect(page).to have_content("Do you have a")
+    choose "Yes"
+    click_button "Continue"
+
+    mock_one_login_auth(uid: one_login_uid)
+
+    expect(page).to have_content("Sign in with GOV.UK One Login")
+    fill_in "One Login UID", with: one_login_uid
+    click_button "Continue"
+
+    expect(page).to have_content("You’ve successfully signed in to GOV.UK One Login")
+    click_button "Continue"
+
+    expect(page).to have_content("You have already started an eligibility check")
+    choose "Continue with the eligibility check that you have already started"
+    click_button "Continue"
+
+    expect(page).not_to have_content("Sorry, the service is unavailable")
+
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
+  end
+
   scenario "has OL account with existing partial eligibility but starts anew" do
     when_student_loan_data_exists
     when_further_education_payments_journey_configuration_exists

@@ -2,12 +2,11 @@
 # yarn lockfile v1
 
 
-"@govuk-one-login/service-header@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.npmjs.org/@govuk-one-login/service-header/-/service-header-5.0.0.tgz"
-  integrity sha512-C0TClWrjSWrN5U773hFr4ZdUlTWRTCVl4L2D8IrQWimCF84zXdY+LF2bfQM2RqUMIzjdpmMwARv7NS8Wohkrlw==
+"@govuk-one-login/service-header@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@govuk-one-login/service-header/-/service-header-6.0.0.tgz#5a92f048e5203fb7761379068c3c41c767ec1351"
+  integrity sha512-c8ehXo/o18DFhJecfN7JXE1K/J6D9wWN6eT3E8IGSqCHxz72gXoJLwkJh8s6aKVSIvIILuhX7KoRaI72gIKuNQ==
   dependencies:
-    govuk-frontend "^5.13.0"
     nunjucks "^3.2.4"
 
 a-sync-waterfall@^1.0.0:
@@ -42,15 +41,10 @@ focusable-selectors@^0.8.0:
   resolved "https://registry.npmjs.org/focusable-selectors/-/focusable-selectors-0.8.4.tgz"
   integrity sha512-0XxbkD0KhOnX10qmnfF9U8DkDD8N/e4M77wMYw2Itoi4vdcoRjSkqXLZFIzkrLIOxzmzCGy88fNG1EbeXMD/zw==
 
-govuk-frontend@^5.13.0:
-  version "5.13.0"
-  resolved "https://registry.npmjs.org/govuk-frontend/-/govuk-frontend-5.13.0.tgz"
-  integrity sha512-6N3pHelWN7wftdM6e4YEzZAfattapa1gnd+Al6d5PUbfTr9D+T2dnphpNpjX75CTEhihlQqlL0RDQ3WIfZ3PSg==
-
-govuk-frontend@^5.14.0:
-  version "5.14.0"
-  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-5.14.0.tgz#d93f1ffa88b0696114509cab86e4ea474006f8e0"
-  integrity sha512-MgfaXswIM6KpXS2T5gltEnzgVLgfM3UoE9+rYkhBiR0suaJ8Let31VZXQZqz9QhiPDbv28fW1nRjIyLujfZIBA==
+govuk-frontend@^6.3.0:
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-6.3.0.tgz#1ff97c181ab08ec0b96fdb96628066a5d32e1018"
+  integrity sha512-cXIQxm5PHCsbic47GXZrVBZhAeeshTLRL6ZBKilLsR6rMCjJuWb7Fruq0VUNMBJFlJk/srsRj/q8d5bM9cgKoA==
 
 nunjucks@^3.2.4:
   version "3.2.4"
@@ -61,7 +55,7 @@ nunjucks@^3.2.4:
     asap "^2.0.3"
     commander "^5.1.0"
 
-prettier@^3.8.4:
-  version "3.8.4"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.8.4.tgz#f334f013ac04a96676f24dabc23c1c4ae1bae411"
-  integrity sha512-N2MylSdi48+5N/6S5j+maeHbUSIzzZ5uOcX5Hm4QpV8Dkb1HFjfAKTKX6yNPJQD9AhcT3ifHNB66tWTTJDi11Q==
+prettier@^3.9.5:
+  version "3.9.5"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.9.5.tgz#4fec97736e33b9d0b620b48914fe93b530e835ad"
+  integrity sha512-/FVl766LpUfB5vXgCYOYa0MeV/441Ia99AeICQIQFTY/Nw0roZwULcXpku5i1/m5kt/baz+s4Zogspd839HSMg==

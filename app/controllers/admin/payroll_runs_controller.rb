@@ -5,9 +5,7 @@ module Admin
     before_action :ensure_service_operator
 
     def index
-      @payroll_runs = PayrollRun
-        .includes(:payments, :payment_confirmations)
-        .order(created_at: :desc)
+      @payroll_runs = PayrollRun.order(created_at: :desc)
     end
 
     def new

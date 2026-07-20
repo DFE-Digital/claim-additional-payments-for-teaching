@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="govuk-template govuk-template--rebranded app-html-class">
+<html lang="en" class="govuk-template app-html-class">
   <head>
     <title>
       <%= content_for(:page_title) || "#{journey_service_name(current_journey_routing_name)} – GOV.UK" %>
@@ -8,7 +8,7 @@
     <%= csp_meta_tag %>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#1d70b8">
-    <meta name="robots" content="noindex,nofollow">
+    <meta name="robots" content="<%= current_path_indexable? ? "index" : "noindex" %>,nofollow">
 
     <%= favicon_link_tag asset_path("favicon.ico") %>
     <%= favicon_link_tag asset_path("govuk-icon-mask.svg"), rel: "mask-icon", type: "image/svg", color: "#0b1c0c" %>
@@ -29,7 +29,7 @@
       <% end %>
     <% end %>
 
-    <%= stylesheet_link_tag 'application', media: 'all' %>
+    <%= stylesheet_link_tag "application", media: "all" %>
     <%= Sentry.get_trace_propagation_meta.html_safe %>
   </head>
 
@@ -52,18 +52,24 @@
 
     <%= render "shared/cookie_banner" %>
 
-    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+    <%= govuk_skip_link %>
 
     <% if @journey_session&.answers&.logged_in_with_onelogin? %>
       <%= render "shared/one_login_header" %>
     <% elsif lookup_context.exists?(Pathname.new(journey.view_path).join("_header")) %>
       <%= render Pathname.new(journey.view_path).join("header").to_s %>
     <% else %>
-      <%= render "shared/header" %>
+      <%= govuk_header do |header| %>
+        <% header.with_service_navigation(
+          service_name: journey_service_name(current_journey_routing_name),
+          service_url: start_page_url(current_journey_routing_name)) %>
+        <% header.with_phase_banner(tag: { text: "Beta" }, classes: "govuk-width-container") do %>
+          <%= render "shared/phase_banner" %>
+        <% end %>
+      <% end %>
     <% end %>
 
     <div class="govuk-width-container">
-      <%= render "shared/phase_banner" %>
       <%= render "shared/backlink" %>
 
       <main class="govuk-main-wrapper app-main-class" id="main-content">

@@ -1,3 +1,7 @@
+@use "govuk-frontend/dist/govuk/core/typography.mixin" as typography;
+
+@include typography.styles;
+
 .train {
   display: flex;
   gap: 20px;

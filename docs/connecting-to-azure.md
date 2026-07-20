@@ -165,6 +165,3 @@ kubectl -n ${NAMESPACE} exec -it deployment/${DEPLOYMENT_NAME} -- rake -T
 - [Teacher Services Cloud documentation](https://github.com/DFE-Digital/teacher-services-cloud/tree/main/documentation)
 - [Developer onboarding](https://github.com/DFE-Digital/teacher-services-cloud/blob/main/documentation/developer-onboarding.md)
   for the Teacher Services Cloud
-- If in doubt, ask in the
-  [#teacher-services-infra](https://ukgovernmentdfe.slack.com/archives/C011EM7HU85)
-  Slack channel

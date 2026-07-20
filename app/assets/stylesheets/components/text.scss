@@ -1,15 +1,17 @@
+@use "govuk-frontend/dist/govuk/helpers/colour";
+
 .capt-text-quiet {
-  color: govuk-colour("dark-grey");
+  color: colour.govuk-colour("black", $variant: "tint-25");
 }
 
 .dark-grey {
-  color: govuk-colour("dark-grey");
+  color: colour.govuk-colour("black", $variant: "tint-25");
 }
 
 .green {
-  color: govuk-colour("green");
+  color: colour.govuk-colour("green");
 }
 
 .red {
-  color: govuk-colour("red");
+  color: colour.govuk-colour("red");
 }

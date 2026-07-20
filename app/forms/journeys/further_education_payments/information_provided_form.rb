@@ -2,10 +2,9 @@ module Journeys
   module FurtherEducationPayments
     class InformationProvidedForm < Form
       def save
-        journey_session.answers.assign_attributes(
+        journey_session.answers.update!(
           information_provided_completed: true
         )
-        journey_session.save!
       end
 
       def completed?

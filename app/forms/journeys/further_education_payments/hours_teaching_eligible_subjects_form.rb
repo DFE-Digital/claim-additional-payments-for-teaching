@@ -27,13 +27,11 @@ module Journeys
       def save
         return false unless valid?
 
-        journey_session.answers.assign_attributes(hours_teaching_eligible_subjects:)
-        journey_session.save!
+        journey_session.answers.update!(hours_teaching_eligible_subjects:)
       end
 
       def clear_answers_from_session
-        journey_session.answers.assign_attributes(hours_teaching_eligible_subjects: nil)
-        journey_session.save!
+        journey_session.answers.update!(hours_teaching_eligible_subjects: nil)
       end
 
       private

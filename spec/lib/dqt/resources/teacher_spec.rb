@@ -27,7 +27,7 @@ RSpec.describe Dqt::TeacherResource do
         }
       end
 
-      let(:qts_date) { (Date.today - 1.year) }
+      let(:qts_date) { Date.today - 1.year }
 
       before { stub_qualified_teaching_statuses_show(trn:, params: {birthdate:, nino:}, body:, status:) }
 

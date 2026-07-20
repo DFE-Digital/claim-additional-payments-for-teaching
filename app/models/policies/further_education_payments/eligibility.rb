@@ -52,9 +52,9 @@ module Policies
           .or(
             where(
               id: left_joins(claim: :notes)
-              .merge(Claim.by_academic_year(AcademicYear.new(2024)))
-              .duplicate_claim_provider_verification_email_manually_sent_by_ops_team
-              .select(:id)
+                .merge(Claim.by_academic_year(AcademicYear.new(2024)))
+                .duplicate_claim_provider_verification_email_manually_sent_by_ops_team
+                .select(:id)
             )
           )
       end

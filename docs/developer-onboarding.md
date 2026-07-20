@@ -25,7 +25,7 @@ Then, follow these steps to complete your onboarding:
 2. If Google asks you to set up two-factor authentication, see
    [this advice](#how-to-set-up-two-factor-auth-for-your-digitaleducationgovuk-google-account).
 3. Follow the link in the Azure invitation email and create an account. Your
-   password should be no longer than 16 characters.
+   password should be a maximum of 16 characters.
 4. Click on
    [this link](https://portal.azure.com/#view/Microsoft_AAD_IAM/GroupDetailsMenuBlade/~/Overview/groupId/f50f3249-db5d-4d96-a123-cd1ef84536c3)
    – we’ll use this to confirm you’re using the correct directory in Azure.
@@ -44,10 +44,118 @@ Then, follow these steps to complete your onboarding:
    using your DfE email address.
 9. Follow these steps from the
    [onboarding page in Confluence](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1085538326/Onboarding+Offboarding+Guidance):
-   - Slack
    - GitHub
    - logit.io – the Viewers team is sufficient for support needs
    - Sentry
+
+## Access checklist for joiners and leavers
+
+Use this checklist when a team member joins or leaves. The same services are
+used for first-line support and service team onboarding, but some are
+developer-only.
+
+### Core services
+
+#### SharePoint (project files)
+
+Project files are held in the Claim Additional Payments for Teaching SharePoint
+folder.
+
+- Grant access: explicitly share the folder with new joiners if they cannot
+   access it automatically via their DfE Digital account.
+- Revoke access: remove their direct access from the SharePoint folder.
+
+#### GitHub Projects
+
+The team uses GitHub Projects for sprint and work management:
+https://github.com/orgs/DFE-Digital/projects/101/
+
+- Grant access: add the user to the DfE Digital organisation/team permissions
+   needed for this project board.
+- Revoke access: remove the user from the relevant organisation/team
+   permissions.
+
+#### Teams
+
+Team collaboration access is managed via Teams.
+
+- Grant access: add the user to the relevant Teams team/channels.
+- Revoke access: remove the user from Teams team/channels.
+
+#### DfE Sign-in
+
+DfE Sign-in controls access to `/admin` for this service.
+
+- Grant and revoke access: follow
+   [`docs/dfe-sign-in.md`](dfe-sign-in.md), which links to the authoritative
+   Confluence runbook.
+
+#### GOV.UK Notify
+
+Notify is used by this service to send emails.
+
+- Who needs it: service operators and developers who debug delivery issues.
+- Grant/revoke access: existing Notify team members can manage users in
+   `Team members` within GOV.UK Notify.
+
+#### Zendesk
+
+Zendesk is used for claimant support tickets.
+
+- Who needs it: anyone handling support tickets, including developers on support
+   rotation.
+- Grant/revoke access: request changes through the support team service owner.
+
+### Developer-specific services
+
+#### GitHub
+
+- Who needs it: anyone needing write access to this repository.
+- Grant access: request addition to:
+   - DfE Digital GitHub organisation: https://github.com/DFE-Digital
+   - Teacher Payments team:
+      https://github.com/orgs/DFE-Digital/teams/teacher-payments
+- Revoke access: org owners or team maintainers can remove users.
+
+#### Logit.io
+
+- Who needs it: developers investigating application logs and telemetry.
+- Grant access: register via invitation and ask an administrator to add you to
+   the appropriate team.
+- Revoke access: remove from Logit.io teams.
+
+#### Container images (GitHub Packages)
+
+This service publishes Docker images to GitHub Packages.
+
+- Who needs it: developers working on build/deploy troubleshooting.
+- Grant/revoke access: manage GitHub organisation/team membership.
+
+#### Sentry
+
+Sentry is the active error monitoring tool for this service.
+
+- Who needs it: developers investigating exceptions and runtime errors.
+- Grant/revoke access: access is typically inherited via GitHub SSO permissions
+   for DfE Teacher Services.
+
+#### Azure
+
+The service runs on DfE Cloud Infrastructure Platform (Azure).
+
+- Who needs it: developers and operators with environment access duties.
+- Grant access: request CIP platform access for the user’s
+   `@digital.education.gov.uk` account via Service Now.
+- Permissions: once added, manage access via DfE Platform Identity groups used
+   by this service (for example `s189` prefixed groups in this repo).
+
+#### Grafana (requires Azure AD)
+
+Production dashboards are available at
+https://grafana.teacherservices.cloud/dashboards.
+
+- Prerequisite: complete Azure AD onboarding first.
+- Grant/revoke access: manage through Azure AD and service group membership.
 
 ## How to set up two-factor auth for your `@digital.education.gov.uk` Google account
 

@@ -1,110 +1,379 @@
 require "rails_helper"
 
 RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::FetchQualificationsJob do
-  let(:journey_session) do
-    create(
-      :eytfi_session
-    )
-  end
-
-  let(:response_hash) do
-    {
-      trn: "3013822",
-      firstName: "Newell",
-      middleName: "",
-      lastName: "Ondricka",
-      dateOfBirth: "1960-01-01",
-      nationalInsuranceNumber: "LC882331C",
-      emailAddress: nil,
-      qts: nil,
-      eyts: {
-        holdsFrom: "2026-01-01",
-        routes: [
-          {
-            routeToProfessionalStatusType: {
-              routeToProfessionalStatusTypeId: "11b66de5-4670-4c82-86aa-20e42df723b7",
-              name: "Early Years Teacher Degree Apprenticeship",
-              professionalStatusType: "EarlyYearsTeacherStatus"
-            }
-          }
-        ]
-      },
-      qtlsStatus: "None"
-    }
-  end
-
-  let(:mock_teacher) do
-    Dqt::Teacher.new(
-      response_hash
-    )
-  end
-
-  let(:mock_teacher_resource) do
-    instance_double(
-      "Dqt::TeacherResource",
-      find: -> { mock_teacher }.call
-    )
-  end
-
-  let(:mock_client) do
-    instance_double(
-      "Dqt::Client",
-      teacher: mock_teacher_resource
-    )
-  end
-
-  before do
-    allow(Dqt::Client).to receive(:new).and_return(mock_client)
-  end
-
   describe "#perform" do
-    it "persists api call" do
-      subject.perform(journey_session)
-
-      expect(journey_session.reload.answers.trs_data).to eql(response_hash.deep_stringify_keys)
-    end
-
-    it "touches trs_data_fetched_at" do
-      expect {
-        subject.perform(journey_session)
-      }.to change { journey_session.reload.answers.trs_data_fetched_at }
-    end
-
-    it "calculates and persists has_eligible_qualification" do
-      expect {
-        subject.perform(journey_session)
-      }.to change { journey_session.reload.answers.has_eligible_qualification }.from(nil).to(true)
-    end
-
-    context "when user for api call does not have eligible qualifications" do
-      let(:response_hash) do
-        {
-          trn: "3013822",
-          firstName: "Newell",
-          middleName: "",
-          lastName: "Ondricka",
-          dateOfBirth: "1960-01-01",
-          nationalInsuranceNumber: "LC882331C",
-          emailAddress: nil,
-          qts: nil,
-          eyts: nil,
-          qtlsStatus: "None"
+    let(:journey_session) do
+      create(
+        :eytfi_session,
+        answers: {
+          teacher_auth_teacher_reference_number: "1234567"
         }
-      end
+      )
+    end
 
-      it "persists has_eligible_qualification to false" do
-        expect {
-          subject.perform(journey_session)
-        }.to change { journey_session.reload.answers.has_eligible_qualification }.from(nil).to(false)
+    around do |example|
+      travel_to DateTime.new(2026, 6, 1, 0, 0, 0) do
+        example.run
       end
     end
 
-    context "when trs_data_fetched_at is set" do
-      it "does not make an api call again" do
-        subject.perform(journey_session)
-        subject.perform(journey_session)
+    context "when the teacher holds EYTS" do
+      before do
+        stub_request(
+          :get,
+          "https://dqt-api.education.gov.uk/v3/persons/1234567?include=routesToProfessionalStatuses"
+        ).with(
+          headers: {
+            "Authorization" => "Bearer 1234567890"
+          }
+        ).to_return(
+          status: 200,
+          body: {
+            "trn" => "1234567",
+            "firstName" => "Seymour",
+            "middleName" => "",
+            "dateOfBirth" => "1945-06-01",
+            "nationalInsuranceNumber" => "AB123456C",
+            "emailAddress" => nil,
+            "qts" => nil,
+            "eyts" => {
+              "holdsFrom" => "2015-10-22",
+              "routes" => [
+                {
+                  "routeToProfessionalStatusType" => {
+                    "routeToProfessionalStatusTypeId" => "11111",
+                    "name" => "EYTS ITT Migrated",
+                    "professionalStatusType" => "EarlyYearsTeacherStatus"
+                  }
+                }
+              ]
+            },
+            "routesToProfessionalStatuses" => [
+              {
+                "routeToProfessionalStatusId" => "222222",
+                "routeToProfessionalStatusType" => {
+                  "routeToProfessionalStatusTypeId" => "33333",
+                  "name" => "EYTS ITT Migrated",
+                  "professionalStatusType" => "EarlyYearsTeacherStatus"
+                },
+                "status" => "Holds",
+                "holdsFrom" => "2015-10-22",
+                "trainingStartDate" => "2014-09-30",
+                "trainingEndDate" => nil,
+                "trainingSubjects" => [],
+                "trainingAgeSpecialism" => {
+                  "type" => "Range"
+                },
+                "trainingCountry" => {
+                  "reference" => "GB",
+                  "name" => "United Kingdom"
+                },
+                "trainingProvider" => {
+                  "ukprn" => "10000000",
+                  "name" => "SpringField University"
+                },
+                "degreeType" => nil,
+                "inductionExemption" => {
+                  "isExempt" => false,
+                  "exemptionReasons" => []
+                }
+              }
+            ],
+            "qtlsStatus" => "None"
+          }.to_json,
+          headers: {
+            "Content-Type" => "application/json"
+          }
+        )
 
-        expect(Dqt::Client).to have_received(:new).once
+        described_class.perform_now(journey_session)
+      end
+
+      it "sets the qualification as eligible" do
+        expect(journey_session.answers.has_eligible_qualification).to be true
+      end
+
+      it "sets the trs_data_fetched_at timestamp" do
+        expect(journey_session.answers.trs_data_fetched_at).to(
+          eq(DateTime.new(2026, 6, 1, 0, 0, 0))
+        )
+      end
+
+      it "stores the trs data in the answers" do
+        expect(journey_session.answers.trs_data).to(
+          eq({
+            "trn" => "1234567",
+            "firstName" => "Seymour",
+            "middleName" => "",
+            "dateOfBirth" => "1945-06-01",
+            "nationalInsuranceNumber" => "AB123456C",
+            "emailAddress" => nil,
+            "qts" => nil,
+            "eyts" => {
+              "holdsFrom" => "2015-10-22",
+              "routes" => [
+                {
+                  "routeToProfessionalStatusType" => {
+                    "routeToProfessionalStatusTypeId" => "11111",
+                    "name" => "EYTS ITT Migrated",
+                    "professionalStatusType" => "EarlyYearsTeacherStatus"
+                  }
+                }
+              ]
+            },
+            "routesToProfessionalStatuses" => [
+              {
+                "routeToProfessionalStatusId" => "222222",
+                "routeToProfessionalStatusType" => {
+                  "routeToProfessionalStatusTypeId" => "33333",
+                  "name" => "EYTS ITT Migrated",
+                  "professionalStatusType" => "EarlyYearsTeacherStatus"
+                },
+                "status" => "Holds",
+                "holdsFrom" => "2015-10-22",
+                "trainingStartDate" => "2014-09-30",
+                "trainingEndDate" => nil,
+                "trainingSubjects" => [],
+                "trainingAgeSpecialism" => {
+                  "type" => "Range"
+                },
+                "trainingCountry" => {
+                  "reference" => "GB",
+                  "name" => "United Kingdom"
+                },
+                "trainingProvider" => {
+                  "ukprn" => "10000000",
+                  "name" => "SpringField University"
+                },
+                "degreeType" => nil,
+                "inductionExemption" => {
+                  "isExempt" => false,
+                  "exemptionReasons" => []
+                }
+              }
+            ],
+            "qtlsStatus" => "None"
+          })
+        )
+      end
+    end
+
+    context "when the teacher holds QTS" do
+      before do
+        stub_request(
+          :get,
+          "https://dqt-api.education.gov.uk/v3/persons/1234567?include=routesToProfessionalStatuses"
+        ).with(
+          headers: {
+            "Authorization" => "Bearer 1234567890"
+          }
+        ).to_return(
+          status: 200,
+          body: {
+            "trn" => "1234567",
+            "firstName" => "Seymour",
+            "middleName" => "T",
+            "lastName" => "Skinner",
+            "dateOfBirth" => "1945-06-01",
+            "nationalInsuranceNumber" => "AB123456C",
+            "emailAddress" => nil,
+            "qts" => {
+              "holdsFrom" => "2018-07-06",
+              "routes" => [
+                {
+                  "routeToProfessionalStatusType" => {
+                    "routeToProfessionalStatusTypeId" => "11111",
+                    "name" => "HEI",
+                    "professionalStatusType" => "QualifiedTeacherStatus"
+                  }
+                }
+              ]
+            },
+            "eyts" => nil,
+            "routesToProfessionalStatuses" => [
+              {
+                "routeToProfessionalStatusId" => "22222",
+                "routeToProfessionalStatusType" => {
+                  "routeToProfessionalStatusTypeId" => "33333",
+                  "name" => "HEI",
+                  "professionalStatusType" => "QualifiedTeacherStatus"
+                },
+                "status" => "Holds",
+                "holdsFrom" => "2018-07-06",
+                "trainingStartDate" => "2015-09-20",
+                "trainingEndDate" => "2018-06-01",
+                "trainingSubjects" => [
+                  {
+                    "reference" => "X121",
+                    "name" => "Primary Foundation"
+                  }
+                ],
+                "trainingAgeSpecialism" => {
+                  "type" => "Range"
+                },
+                "trainingCountry" => {
+                  "reference" => "GB",
+                  "name" => "United Kingdom"
+                },
+                "trainingProvider" => {
+                  "ukprn" => "10000000",
+                  "name" => "SpringField University"
+                },
+                "degreeType" => {
+                  "degreeTypeId" => "44444",
+                  "name" => "BA (Hons)"
+                },
+                "inductionExemption" => {
+                  "isExempt" => false,
+                  "exemptionReasons" => []
+                }
+              }
+            ],
+            "qtlsStatus" => "None"
+          }.to_json,
+          headers: {
+            "Content-Type" => "application/json"
+          }
+        )
+
+        described_class.perform_now(journey_session)
+      end
+
+      it "sets the qualification as eligible" do
+        expect(journey_session.answers.has_eligible_qualification).to be true
+      end
+
+      it "sets the trs_data_fetched_at timestamp" do
+        expect(journey_session.answers.trs_data_fetched_at).to(
+          eq(DateTime.new(2026, 6, 1, 0, 0, 0))
+        )
+      end
+
+      it "stores the trs data in the answers" do
+        expect(journey_session.answers.trs_data).to(
+          match(a_hash_including("trn" => "1234567"))
+        )
+      end
+    end
+
+    context "when the teacher holds EYPS" do
+      before do
+        stub_request(
+          :get,
+          "https://dqt-api.education.gov.uk/v3/persons/1234567?include=routesToProfessionalStatuses"
+        ).with(
+          headers: {
+            "Authorization" => "Bearer 1234567890"
+          }
+        ).to_return(
+          status: 200,
+          body: {
+            "trn" => "1234567",
+            "firstName" => "Seymour",
+            "middleName" => "",
+            "lastName" => "Skinner",
+            "dateOfBirth" => "1945-06-01",
+            "nationalInsuranceNumber" => nil,
+            "emailAddress" => nil,
+            "qts" => nil,
+            "eyts" => nil,
+            "routesToProfessionalStatuses" => [
+              {
+                "routeToProfessionalStatusId" => "111111",
+                "routeToProfessionalStatusType" => {
+                  "routeToProfessionalStatusTypeId" => "22222",
+                  "name" => "EYPS",
+                  "professionalStatusType" => "EarlyYearsProfessionalStatus"
+                },
+                "status" => "Holds",
+                "holdsFrom" => nil,
+                "trainingStartDate" => "2012-01-01",
+                "trainingEndDate" => "2012-07-31",
+                "trainingSubjects" => [],
+                "trainingAgeSpecialism" => {
+                  "type" => "Range"
+                },
+                "trainingCountry" => {
+                  "reference" => "GB",
+                  "name" => "United Kingdom"
+                },
+                "trainingProvider" => {
+                  "ukprn" => "10000000",
+                  "name" => "SpringField University"
+                },
+                "degreeType" => nil,
+                "inductionExemption" => {
+                  "isExempt" => false,
+                  "exemptionReasons" => []
+                }
+              }
+            ],
+            "qtlsStatus" => "None"
+          }.to_json,
+          headers: {
+            "Content-Type" => "application/json"
+          }
+        )
+
+        described_class.perform_now(journey_session)
+      end
+
+      it "sets the qualification as eligible" do
+        expect(journey_session.answers.has_eligible_qualification).to be true
+      end
+
+      it "sets the trs_data_fetched_at timestamp" do
+        expect(journey_session.answers.trs_data_fetched_at).to(
+          eq(DateTime.new(2026, 6, 1, 0, 0, 0))
+        )
+      end
+
+      it "stores the trs data in the answers" do
+        expect(journey_session.answers.trs_data).to(
+          match(a_hash_including("trn" => "1234567"))
+        )
+      end
+    end
+
+    context "when the teacher does not have a valid qualification" do
+      before do
+        stub_request(
+          :get,
+          "https://dqt-api.education.gov.uk/v3/persons/1234567?include=routesToProfessionalStatuses"
+        ).with(
+          headers: {
+            "Authorization" => "Bearer 1234567890"
+          }
+        ).to_return(
+          status: 200,
+          body: {
+            "trn" => "1234567",
+            "firstName" => "Seymour",
+            "middleName" => "",
+            "lastName" => "Skinner",
+            "dateOfBirth" => "1945-06-01",
+            "nationalInsuranceNumber" => nil,
+            "emailAddress" => nil,
+            "qts" => nil,
+            "eyts" => nil,
+            "qtlsStatus" => "None"
+          }.to_json,
+          headers: {
+            "Content-Type" => "application/json"
+          }
+        )
+
+        described_class.perform_now(journey_session)
+      end
+
+      it "sets the qualification as ineligible" do
+        expect(journey_session.answers.has_eligible_qualification).to be false
+      end
+
+      it "sets the trs_data_fetched_at timestamp" do
+        expect(journey_session.answers.trs_data_fetched_at).to(
+          eq(DateTime.new(2026, 6, 1, 0, 0, 0))
+        )
       end
     end
   end

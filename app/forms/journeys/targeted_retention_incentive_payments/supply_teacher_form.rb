@@ -12,13 +12,11 @@ module Journeys
         return false unless valid?
         return true unless employed_as_supply_teacher_changed?
 
-        journey_session.answers.assign_attributes(
+        journey_session.answers.update!(
           employed_as_supply_teacher: employed_as_supply_teacher,
           has_entire_term_contract: nil,
           employed_directly: nil
         )
-
-        journey_session.save!
       end
 
       def radio_options

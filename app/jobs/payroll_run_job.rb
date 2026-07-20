@@ -24,6 +24,13 @@ class PayrollRunJob < ApplicationJob
         Event.insert_all(grouped_claim_attributes, record_timestamps: true)
       end
 
+      payroll_run.update!(
+        claims_count: payroll_run.number_of_claims_for_policy(:all, filter: :claims),
+        topups_count: payroll_run.number_of_claims_for_policy(:all, filter: :topups),
+        total_confirmed_payments: 0,
+        payments_count: payroll_run.payments.count
+      )
+
       payroll_run.complete!
     end
   rescue => e

@@ -19,8 +19,7 @@ module Journeys
       def save
         return false if invalid?
 
-        journey_session.answers.assign_attributes(breaks_in_employment:)
-        journey_session.save!
+        journey_session.answers.update!(breaks_in_employment:)
       end
     end
   end

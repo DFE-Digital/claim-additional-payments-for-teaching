@@ -62,7 +62,10 @@ module Admin
         ["Date of birth", personal_data(claim, :date_of_birth) { |date| l(date) }],
         [translate("admin.national_insurance_number"), personal_data(claim, :national_insurance_number)],
         ["Address", personal_data(claim, :address, "<br>") { |address| sanitize(address.html_safe, tags: %w[br]) }],
-        [translate("#{claim.policy.locale_key}.admin.email_address", default: :"admin.email_address"), claim.email_address]
+        [translate("#{claim.policy.locale_key}.admin.email_address", default: :"admin.email_address"), claim.email_address],
+        ["Banking name", personal_data(claim, :banking_name)],
+        ["Bank account number", personal_data(claim, :bank_account_number)],
+        ["Bank sort code", personal_data(claim, :bank_sort_code)]
       ]
     end
 
@@ -103,7 +106,10 @@ module Admin
     def admin_decision_details(decision)
       [].tap do |a|
         a << [translate("admin.decision.created_at"), l(decision.created_at)]
-        a << [translate("admin.decision.result"), decision.result.capitalize]
+        a << [
+          translate("admin.decision.result"),
+          decision.result.capitalize + (decision.undone? ? " (undone)" : "")
+        ]
         a << [translate("admin.decision.reasons"), rejected_reasons_list(decision)] if decision.rejected?
         a << [translate("admin.decision.notes"), simple_format(decision.notes, class: "govuk-body")] if decision.notes.present?
         a << [translate("admin.decision.created_by"), user_details(decision.created_by)] if decision.created_by_id?

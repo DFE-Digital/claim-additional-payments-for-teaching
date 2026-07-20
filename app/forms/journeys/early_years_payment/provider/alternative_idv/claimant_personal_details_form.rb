@@ -116,14 +116,13 @@ module Journeys
           def save
             return false if invalid?
 
-            journey_session.answers.assign_attributes(
+            journey_session.answers.update!(
               claimant_date_of_birth: claimant_date_of_birth,
               claimant_postcode: claimant_postcode,
               claimant_national_insurance_number: claimant_national_insurance_number,
               claimant_bank_details_match: claimant_bank_details_match,
               claimant_email: claimant_email
             )
-            journey_session.save!
           end
 
           def date_of_birth_blank_error_message

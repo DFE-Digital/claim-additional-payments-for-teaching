@@ -19,8 +19,7 @@ module Journeys
       def save
         return false if invalid?
 
-        journey_session.answers.assign_attributes(subjects_taught:)
-        journey_session.save!
+        journey_session.answers.update!(subjects_taught:)
       end
 
       private

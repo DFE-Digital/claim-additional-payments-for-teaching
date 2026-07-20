@@ -1,0 +1,56 @@
+<% content_for(:page_title) { page_title("Service access link") } %>
+
+<% content_for :back_link do %>
+  <%= govuk_back_link(
+    href: edit_admin_journey_configuration_path(
+      @service_access_code.journey_class.configuration
+    )
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <span class="govuk-caption-xl">
+      <%= @service_access_code.journey_class.journey_name %>
+    </span>
+
+    <h1 class="govuk-heading-xl">
+      Service access link
+    </h1>
+
+    <p class="govuk-body">
+      This link will allow a claimant access to a closed service.
+    </p>
+
+    <p class="govuk-body">
+      This link will expire
+      on <strong><%= l(@service_access_code.expires_at.to_date) %></strong>
+    </p>
+
+    <p class="govuk-body">
+      The link can only be used to submit one claim.
+    </p>
+
+    <p class="govuk-body">
+      Until the link expires, the claimant can restart the journey as many times
+      as they like.
+    </p>
+
+    <p class="govuk-body">
+      <strong>Send this link to the claimant</strong>
+    </p>
+
+    <%= text_field_tag(
+      "service_access_link",
+      landing_page_url(
+        @service_access_code.journey_class.routing_name,
+        service_access_code: @service_access_code.code
+      ),
+      class: "govuk-input",
+      readonly: true,
+      data: {
+        copy_to_clipboard: "true"
+      }
+    ) %>
+  </div>
+</div>

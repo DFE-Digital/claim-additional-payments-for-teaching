@@ -88,9 +88,17 @@ Rails.application.configure do
   config.hosts << "ecp.test"
 
   # https://technical-guidance.education.gov.uk/infrastructure/monitoring/logit/#ruby-on-rails
-  config.log_level = :debug                       # Or :info
-  config.log_format = :color                      # Console colorised non-json output
-  config.semantic_logger.backtrace_level = :debug # Show file and line number (expensive: not for production)
+  config.log_level = :debug # Or :info
+
+  # In development we prefer the plain Rails logger over rails_semantic_logger's
+  # structured output. Disabling `semantic` keeps the default Rails log
+  # subscribers (Started/Processing/Completed lines) instead of the semantic
+  # ones, and disabling the file appender stops it writing to log/*.json.
+  # The actual swap of Rails.logger back to a standard logger happens in
+  # config/initializers/use_standard_logger_in_development.rb, which runs after
+  # the engine has forced Rails.logger = SemanticLogger[Rails] during boot.
+  config.rails_semantic_logger.semantic = false
+  config.rails_semantic_logger.add_file_appender = false
 
   config.active_job.queue_adapter = :async
 

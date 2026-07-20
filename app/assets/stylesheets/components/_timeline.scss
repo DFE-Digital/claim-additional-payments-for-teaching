@@ -1,19 +1,19 @@
-/* ==========================================================================
-   #TIMELINE
-   ========================================================================== */
+@use "govuk-frontend/dist/govuk/helpers/spacing";
+@use "govuk-frontend/dist/govuk/helpers/colour";
+@use "govuk-frontend/dist/govuk/helpers/typography";
 
 .hmcts-timeline {
-  margin-bottom: govuk-spacing(4);
+  margin-bottom: spacing.govuk-spacing(4);
   overflow: hidden;
   position: relative;
 
   &:before {
-    background-color: govuk-colour("blue");
+    background-color: colour.govuk-colour("blue");
     content: "";
     height: 100%;
     left: 0;
     position: absolute;
-    top: govuk-spacing(2);
+    top: spacing.govuk-spacing(2);
     width: 5px;
   }
 }
@@ -26,40 +26,40 @@
 }
 
 .hmcts-timeline__item {
-  padding-bottom: govuk-spacing(6);
-  padding-left: govuk-spacing(4);
+  padding-bottom: spacing.govuk-spacing(6);
+  padding-left: spacing.govuk-spacing(4);
   position: relative;
 
   &:before {
-    background-color: govuk-colour("blue");
+    background-color: colour.govuk-colour("blue");
     content: "";
     height: 5px;
     left: 0;
     position: absolute;
-    top: govuk-spacing(2);
+    top: spacing.govuk-spacing(2);
     width: 15px;
   }
 }
 
 .hmcts-timeline__title {
-  @include govuk-font($size: 19, $weight: bold);
+  @include typography.govuk-font($size: 19, $weight: bold);
   display: inline;
 }
 
 .hmcts-timeline__by {
-  @include govuk-font($size: 19);
-  color: $govuk-secondary-text-colour;
+  @include typography.govuk-font($size: 19);
+  color: colour.govuk-functional-colour(secondary-text);
   display: inline;
   margin: 0;
 }
 
 .hmcts-timeline__date {
-  @include govuk-font($size: 16);
-  margin-top: govuk-spacing(1);
+  @include typography.govuk-font($size: 16);
+  margin-top: spacing.govuk-spacing(1);
   margin-bottom: 0;
 }
 
 .hmcts-timeline__description {
-  @include govuk-font($size: 16);
-  margin-top: govuk-spacing(4);
+  @include typography.govuk-font($size: 16);
+  margin-top: spacing.govuk-spacing(4);
 }

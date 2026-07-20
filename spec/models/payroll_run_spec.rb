@@ -346,12 +346,7 @@ RSpec.describe PayrollRun, type: :model do
     let(:payroll_run) do
       create(:payroll_run, :with_confirmations, confirmed_batches: 2, claims_counts: {
         Policies::StudentLoans => 5
-      })
-    end
-    let(:batch_size) { 2 }
-
-    before do
-      stub_const("#{described_class}::MAX_BATCH_SIZE", batch_size)
+      }, total_confirmed_payments: 4)
     end
 
     it { is_expected.to eq(4) }
@@ -360,26 +355,28 @@ RSpec.describe PayrollRun, type: :model do
   describe "#all_payments_confirmed?" do
     subject { payroll_run.all_payments_confirmed? }
 
-    let(:payroll_run) do
-      create(:payroll_run,
-        :with_confirmations,
-        confirmed_batches: confirmed_batches,
-        claims_counts: {Policies::StudentLoans => 5})
-    end
-    let(:batch_size) { 2 }
-
-    before do
-      stub_const("#{described_class}::MAX_BATCH_SIZE", batch_size)
-    end
-
     context "when some payments have not been confirmed" do
-      let(:confirmed_batches) { 2 }
+      let(:payroll_run) do
+        create(
+          :payroll_run,
+          payment_confirmation_uploaded: true,
+          total_confirmed_payments: 1,
+          payments_count: 2
+        )
+      end
 
       it { is_expected.to eq(false) }
     end
 
     context "when all payments have been confirmed" do
-      let(:confirmed_batches) { 3 }
+      let(:payroll_run) do
+        create(
+          :payroll_run,
+          payment_confirmation_uploaded: true,
+          total_confirmed_payments: 2,
+          payments_count: 2
+        )
+      end
 
       it { is_expected.to eq(true) }
     end

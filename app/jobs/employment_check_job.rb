@@ -2,6 +2,7 @@ class EmploymentCheckJob < ApplicationJob
   def perform
     delete_employment_tasks
     claims = claims_awaiting_decision
+      .with_verifier(AutomatedChecks::ClaimVerifiers::Employment)
       .awaiting_task("employment")
       .includes(eligibility: [:current_school, :claim_school])
 

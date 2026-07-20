@@ -250,7 +250,7 @@ RSpec.describe PaymentConfirmationUpload do
       let!(:payroll_run) do
         create(:payroll_run, :with_confirmations, confirmed_batches: 1, claims_counts: {
           Policies::StudentLoans => 2, Policies::EarlyCareerPayments => 1
-        })
+        }, total_confirmed_payments: 2)
       end
 
       let(:csv) do

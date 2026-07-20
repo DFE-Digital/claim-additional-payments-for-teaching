@@ -118,7 +118,23 @@ RSpec.describe Journeys::ServiceAccessCode, type: :model do
       end
     end
 
-    context "when the code is for the correct journey and unused" do
+    context "when the code is expired" do
+      it "returns false" do
+        journey = Journeys::FurtherEducationPayments
+
+        code = nil
+
+        travel_to 31.days.ago do
+          code = create(:service_access_code, journey: journey).code
+        end
+
+        expect(
+          described_class.permits_access?(code: code, journey: journey)
+        ).to be false
+      end
+    end
+
+    context "when the code is for the correct journey, unused, not expired" do
       it "returns true" do
         journey = Journeys::FurtherEducationPayments
 

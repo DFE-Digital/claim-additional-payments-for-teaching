@@ -43,15 +43,13 @@ class AddressForm < Form
   def save
     return false unless valid?
 
-    journey_session.answers.assign_attributes(
+    journey_session.answers.update!(
       address_line_1: address_line_1,
       address_line_2: address_line_2,
       address_line_3: address_line_3,
       address_line_4: address_line_4,
       postcode: postcode
     )
-
-    journey_session.save!
   end
 
   private
