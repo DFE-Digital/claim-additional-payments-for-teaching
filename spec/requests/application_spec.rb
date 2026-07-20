@@ -3,12 +3,12 @@ require "rails_helper"
 RSpec.describe "Application", type: :request do
   describe "root redirect in production" do
     before do
-      allow(Rails.env).to receive(:production?).and_return(true)
+      allow(Rails.env).to receive(:enable_home_components?).and_return(false)
       Rails.application.reload_routes!
     end
 
     after do
-      allow(Rails.env).to receive(:production?).and_return(false)
+      allow(Rails.env).to receive(:enable_home_components?).and_return(true)
       Rails.application.reload_routes!
     end
 
