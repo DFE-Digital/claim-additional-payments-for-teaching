@@ -6,11 +6,34 @@
       Search for a claim
     </h1>
 
-    <%= form_with url: search_admin_claims_path, method: :get do |form| %>
+    <%= form_with model: @search, url: search_admin_claims_path, method: :get, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
       <div class="govuk-form-group">
-        <%= form.label :query, "Enter a reference, email address, Teacher Reference Number, surname, payment ID, FE provider name, or EYTRP nursery name", class: "govuk-label" %>
-        <%= form.text_field :query, class: "govuk-input govuk-input--width-20" %>
+        <%= form.label :search_term, "Enter a reference, email address, Teacher Reference Number, surname, payment ID, FE provider name, or EYTRP nursery name", class: "govuk-label" %>
+        <%= form.text_field(
+          :search_term,
+          class: "govuk-input govuk-input--width-20",
+          value: @search.search_term
+        ) %>
       </div>
+
+      <%= form.govuk_check_boxes_fieldset(
+        :current_year_only,
+        multiple: false,
+        small: true,
+        legend: {
+          hidden: true
+        }
+      ) do %>
+        <%= form.govuk_check_box(
+          :current_year_only,
+          1,
+          0,
+          multiple: false,
+          label: {
+            text: "limit to current academic year"
+          },
+        ) %>
+      <% end %>
 
       <div class="govuk-form-group">
         <%= form.submit "Search", class: "govuk-button" %>

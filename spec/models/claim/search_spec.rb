@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Claim::Search do
-  subject(:search) { described_class.new(query) }
+  let(:search_params) { {search_term: query, current_year_only: false} }
+  subject(:search) { described_class.new(search_params) }
 
   let(:reference) { "abc123" }
   let(:email) { "foo@example.com" }
@@ -332,5 +333,31 @@ RSpec.describe Claim::Search do
 
       it { is_expected.to match_array([claim_1]) }
     end
+  end
+
+  context "when scoped to the current academic year" do
+    subject { search.claims }
+
+    let(:search_params) do
+      {search_term: "test@example.com", current_year_only: true}
+    end
+
+    let!(:prior_year_claim) do
+      create(
+        :claim,
+        academic_year: AcademicYear.previous,
+        email_address: "test@example.com"
+      )
+    end
+
+    let!(:current_year_claim) do
+      create(
+        :claim,
+        academic_year: AcademicYear.current,
+        email_address: "test@example.com"
+      )
+    end
+
+    it { is_expected.to eq [current_year_claim] }
   end
 end

@@ -38,17 +38,20 @@ class Admin::ClaimsController < Admin::BaseAdminController
   end
 
   def search
-    return unless params[:query].present?
+    search_params = params.fetch(:claim_search, {})
+    @search = Claim::Search.new(search_params.permit(:search_term, :current_year_only))
 
-    @claims = Claim::Search.new(params[:query]).claims
+    return unless @search.search_term.present?
+
+    @claims = @search.claims
 
     if @claims.none?
-      flash.now[:notice] = "Cannot find a claim for query \"#{params[:query]}\""
+      flash.now[:notice] = "Cannot find a claim for query \"#{@search.search_term}\""
     elsif @claims.one?
       claims_backlink_path!(search_admin_claims_path)
       redirect_to(admin_claim_tasks_url(@claims.first))
     else
-      claims_backlink_path!(search_admin_claims_path(query: params[:query]))
+      claims_backlink_path!(search_admin_claims_path(@search.params))
     end
   end
 

@@ -5,8 +5,8 @@ RSpec.feature "Admin search" do
     sign_in_as_service_operator
   end
 
-  let!(:claim1) { create(:claim, :submitted, surname: "Wayne") }
-  let!(:claim2) { create(:claim, :submitted, surname: "Wayne") }
+  let!(:claim1) { create(:claim, :current_academic_year, :submitted, surname: "Wayne") }
+  let!(:claim2) { create(:claim, :current_academic_year, :submitted, surname: "Wayne") }
 
   scenario "redirects a service operator to the claim if there is only one match" do
     visit search_admin_claims_path

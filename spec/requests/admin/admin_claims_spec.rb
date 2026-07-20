@@ -144,17 +144,25 @@ RSpec.describe "Admin claims", type: :request do
   end
 
   describe "claims#search" do
-    let!(:claim1) { create(:claim, :submitted, surname: "Wayne") }
-    let!(:claim2) { create(:claim, :submitted, surname: "Wayne") }
+    let!(:claim1) { create(:claim, :current_academic_year, :submitted, surname: "Wayne") }
+    let!(:claim2) { create(:claim, :current_academic_year, :submitted, surname: "Wayne") }
 
     it "redirects to a claim when one exists" do
-      get search_admin_claims_path(query: claim1.reference)
+      get search_admin_claims_path(
+        claim_search: {
+          search_term: claim1.reference
+        }
+      )
 
       expect(response).to redirect_to(admin_claim_tasks_path(claim1))
     end
 
     it "shows a list of matching claims if there are more than one" do
-      get search_admin_claims_path(query: "Wayne")
+      get search_admin_claims_path(
+        claim_search: {
+          search_term: "Wayne"
+        }
+      )
 
       expect(response.body).to include(claim1.reference)
       expect(response.body).to include(claim2.reference)
@@ -162,7 +170,11 @@ RSpec.describe "Admin claims", type: :request do
 
     it "shows an error if a claim can't be found" do
       reference = "12345678"
-      get search_admin_claims_path(query: reference)
+      get search_admin_claims_path(
+        claim_search: {
+          search_term: reference
+        }
+      )
 
       expected_flash = CGI.escapeHTML("Cannot find a claim for query \"#{reference}\"")
       expect(response.body).to include(expected_flash)
