@@ -259,12 +259,11 @@ GEM
       html-attributes-utils (~> 1)
     hashdiff (1.2.1)
     hashie (5.0.0)
-    herb (0.7.4)
-    herb (0.7.4-aarch64-linux-musl)
-    herb (0.7.4-arm64-darwin)
-    herb (0.7.4-x86_64-darwin)
-    herb (0.7.4-x86_64-linux-gnu)
-    herb (0.7.4-x86_64-linux-musl)
+    herb (0.10.2-aarch64-linux-musl)
+    herb (0.10.2-arm64-darwin)
+    herb (0.10.2-x86_64-darwin)
+    herb (0.10.2-x86_64-linux-gnu)
+    herb (0.10.2-x86_64-linux-musl)
     html-attributes-utils (1.0.2)
       activesupport (>= 6.1.4.4)
     httparty (0.24.0)
@@ -485,9 +484,9 @@ GEM
       prism (>= 1.6.0)
       rbs (>= 4.0.0)
       tsort
-    reactionview (0.1.2)
+    reactionview (0.3.0)
       actionview (>= 7.0)
-      herb (>= 0.7.0, < 1.0.0)
+      herb (>= 0.9.0, < 1.0.0)
     regexp_parser (2.12.0)
     reline (0.6.3)
       io-console (~> 0.5)
@@ -707,7 +706,7 @@ DEPENDENCIES
   rails (~> 8.1)
   rails_semantic_logger
   rb-readline
-  reactionview (~> 0.1.2)
+  reactionview (~> 0.3.0)
   rotp
   rspec-rails
   rspec-retry
