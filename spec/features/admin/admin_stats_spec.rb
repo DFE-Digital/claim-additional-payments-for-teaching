@@ -1,16 +1,16 @@
 require "rails_helper"
 
 RSpec.feature "Admin stats" do
-  let(:submitted_claims) { create_list(:claim, 6, :submitted) }
+  let(:submitted_claims) { create_list(:claim, 6, :submitted, academic_year: AcademicYear.new(2019)) }
   let!(:school_workforce_census_task_any_match) { create(:task, claim: submitted_claims.first, name: "census_subjects_taught", claim_verifier_match: :any) }
   let!(:school_workforce_census_task_no_match) { create(:task, claim: submitted_claims.second, name: "census_subjects_taught", claim_verifier_match: :none) }
   let!(:school_workforce_census_task_no_data) { create(:task, claim: submitted_claims.third, name: "census_subjects_taught") }
 
   before do
-    @approved_claims = create_list(:claim, 3, :approved, submitted_at: 10.weeks.ago)
-    @rejected_claims = create_list(:claim, 1, :rejected)
-    @claims_approaching_deadline = create_list(:claim, 2, :submitted, submitted_at: (Claim::DECISION_DEADLINE - 1.week).ago)
-    @claims_passed_deadline = create_list(:claim, 1, :submitted, submitted_at: (Claim::DECISION_DEADLINE + 1.week).ago)
+    @approved_claims = create_list(:claim, 3, :approved, submitted_at: 10.weeks.ago, academic_year: AcademicYear.new(2019))
+    @rejected_claims = create_list(:claim, 1, :rejected, academic_year: AcademicYear.new(2019))
+    @claims_approaching_deadline = create_list(:claim, 2, :submitted, submitted_at: (Claim::DECISION_DEADLINE - 1.week).ago, academic_year: AcademicYear.new(2019))
+    @claims_passed_deadline = create_list(:claim, 1, :submitted, submitted_at: (Claim::DECISION_DEADLINE + 1.week).ago, academic_year: AcademicYear.new(2019))
 
     allow(AcademicYear).to receive(:current).and_return(AcademicYear.new("2019/2020"))
 

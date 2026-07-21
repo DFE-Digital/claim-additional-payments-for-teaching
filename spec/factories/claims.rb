@@ -31,16 +31,7 @@ FactoryBot.define do
 
       raise "Policy of Claim (#{evaluator.policy}) must match Eligibility class (#{claim.eligibility.policy})" if evaluator.policy != claim.eligibility.policy
 
-      claim_academic_year =
-        if [
-          Policies::TargetedRetentionIncentivePayments,
-          Policies::FurtherEducationPayments,
-          Policies::EarlyYearsTeachersFinancialIncentivePayments
-        ].include?(evaluator.policy)
-          AcademicYear.current
-        else
-          AcademicYear::Type.new.serialize(AcademicYear.new(2019))
-        end
+      claim_academic_year = AcademicYear.current
 
       claim.academic_year = claim_academic_year unless claim.academic_year_before_type_cast
     end
