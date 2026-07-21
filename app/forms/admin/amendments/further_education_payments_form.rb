@@ -43,8 +43,6 @@ module Admin
             #{original_start_year}
           TEXT
 
-          existing_provider_verification_task.destroy!
-          claim.reload
           AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2.new(claim).perform
 
           claim.notes.create!(
