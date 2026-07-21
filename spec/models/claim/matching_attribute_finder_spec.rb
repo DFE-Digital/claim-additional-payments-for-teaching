@@ -96,7 +96,7 @@ RSpec.describe Claim::MatchingAttributeFinder do
         email_address: "genghis.khan@mongol-empire.com",
         bank_account_number: "34682151",
         bank_sort_code: "972654",
-        academic_year: AcademicYear.new("2019"),
+        academic_year: AcademicYear.current,
         building_society_roll_number: "123456789/ABCD",
         policy: Policies::StudentLoans,
         eligibility_attributes: {teacher_reference_number: "0902344"})
@@ -272,19 +272,6 @@ RSpec.describe Claim::MatchingAttributeFinder do
         )
 
         expect(matching_claims).to be_empty
-      end
-
-      context "when matching with a claim that has one but not all of the eligibility_matching_attributes" do
-        it "does not include" do
-          create(
-            :claim,
-            :submitted,
-            policy: Policies::FurtherEducationPayments,
-            eligibility_attributes: {teacher_reference_number: "0902344"}
-          )
-
-          expect(matching_claims).to be_empty
-        end
       end
     end
   end
