@@ -17,7 +17,13 @@ module AutomatedChecks
       def perform
         return unless awaiting_task?(TASK_NAME)
 
-        no_data || no_match || any_match
+        if school_workforce_census.blank?
+          create_task(match: nil)
+        elsif school_workforce_census.empty? || !eligible?
+          create_task(match: :none)
+        else
+          create_task(match: :any, passed: true)
+        end
       end
 
       private
@@ -33,24 +39,6 @@ module AutomatedChecks
         return if school_workforce_census.empty?
 
         @school_workforce_census_subjects = school_workforce_census.map(&:subject_description_sfr)
-      end
-
-      def no_data
-        return if school_workforce_census.present?
-
-        create_task(match: nil)
-      end
-
-      def no_match
-        return unless school_workforce_census.empty? || !eligible?
-
-        create_task(match: :none)
-      end
-
-      def any_match
-        return unless eligible?
-
-        create_task(match: :any, passed: true)
       end
 
       def eligible?
@@ -75,6 +63,8 @@ module AutomatedChecks
           SchoolWorkforceCensus::COMMON_ELIGIBLE_SUBJECTS,
           SchoolWorkforceCensus::ECP_ELIGIBLE_SUBJECTS
         ].reduce({}, :update)
+
+        return [] if claim.eligibility.eligible_itt_subject.nil?
 
         ecp_subjects[claim.eligibility.eligible_itt_subject.to_sym]
       end
