@@ -16,7 +16,7 @@ class PayrollRun < ApplicationRecord
   scope :this_month, -> { where(created_at: DateTime.now.all_month) }
 
   def self.allow_destroy?
-    ENV["ENVIRONMENT_NAME"].start_with?("review") ||
+    Rails.env.review_app_like? ||
       ENV["ENVIRONMENT_NAME"] == "test" ||
       Rails.env.development?
   end

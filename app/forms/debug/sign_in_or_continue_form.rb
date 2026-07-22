@@ -20,7 +20,7 @@ module Debug
     end
 
     def dqt_bypassable?
-      !ENV["ENVIRONMENT_NAME"].start_with?("review")
+      !Rails.env.review_app_like?
     end
 
     def dqt_induction_status_options

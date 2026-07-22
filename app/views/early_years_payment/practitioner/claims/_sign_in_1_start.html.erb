@@ -23,7 +23,7 @@
   You must prove your identity using the GOV.UK One Login service in order to submit a claim for an incentive payment.
 </p>
 
-<% if Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review") %>
+<% if Rails.env.development? || Rails.env.review_app_like? %>
   <%= form_with url: "/auth/onelogin", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
     <%= f.govuk_text_field :uid,
       value: SecureRandom.uuid,

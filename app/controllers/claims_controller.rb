@@ -202,7 +202,7 @@ class ClaimsController < BasePublicController
   end
 
   def admin_component_preview_enabled_for_current_journey?
-    return false if Rails.env.production? && !Rails.env.review_app?
+    return false if Rails.env.production? && !Rails.env.review_app_like?
     preview = session[:admin_component_preview]
     return false unless preview.present?
 

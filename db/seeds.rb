@@ -8,7 +8,7 @@ require_relative "seeders/review"
 
 seeder = if Rails.env.development?
   Seeders::Development.new
-elsif ENV["ENVIRONMENT_NAME"].start_with?("review")
+elsif Rails.env.review_app?
   Seeders::Review.new
 else
   Seeders::Null.new
