@@ -156,6 +156,8 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
 
     context "when current academic year is 2022/23" do
       before {
+        allow(AcademicYear).to receive(:current) { AcademicYear.new(2022) }
+
         create(
           :journey_configuration,
           :targeted_retention_incentive_payments,

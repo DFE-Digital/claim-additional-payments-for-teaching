@@ -9,6 +9,12 @@ RSpec.feature "TRI address", slow: true do
     )
   end
 
+  around do |example|
+    travel_to Date.new(2022, 9, 30) do
+      example.run
+    end
+  end
+
   it_behaves_like(
     "an address journey",
     change_address_link: "Change what is your address?",

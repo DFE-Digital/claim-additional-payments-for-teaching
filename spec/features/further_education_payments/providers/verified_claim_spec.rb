@@ -6,6 +6,8 @@ RSpec.describe "Provider verified claims dashboard", feature_flag: [:fe_provider
   end
 
   scenario "viewing a verified claim" do
+    create(:journey_configuration, :further_education_payments)
+
     school = create(:school, :fe_eligible, ukprn: "10000952")
     eligibility = create(
       :further_education_payments_eligibility,

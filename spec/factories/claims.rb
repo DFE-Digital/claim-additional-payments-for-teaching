@@ -26,33 +26,12 @@ FactoryBot.define do
     end
 
     after(:build) do |claim, evaluator|
-      journey = if evaluator.policy == Policies::EarlyCareerPayments
-        Journeys::TargetedRetentionIncentivePayments
-      else
-        Journeys.for_policy(evaluator.policy)
-      end
-
-      begin
-        raise ActiveRecord::RecordNotFound unless journey&.configuration.present?
-      rescue ActiveRecord::RecordNotFound
-        create(:journey_configuration, journey.i18n_namespace)
-      end
-
       claim.eligibility = build(evaluator.eligibility_factory, *Array.wrap(evaluator.eligibility_trait), **evaluator.eligibility_attributes || {}) unless claim.eligibility
       claim.policy = claim.eligibility.policy
 
       raise "Policy of Claim (#{evaluator.policy}) must match Eligibility class (#{claim.eligibility.policy})" if evaluator.policy != claim.eligibility.policy
 
-      claim_academic_year =
-        if [Policies::TargetedRetentionIncentivePayments].include?(evaluator.policy)
-          Journeys::TargetedRetentionIncentivePayments.configuration.current_academic_year
-        elsif evaluator.policy == Policies::FurtherEducationPayments
-          Journeys::FurtherEducationPayments.configuration.current_academic_year
-        elsif evaluator.policy == Policies::EarlyYearsTeachersFinancialIncentivePayments
-          Journeys::EarlyYearsTeachersFinancialIncentivePayments.configuration.current_academic_year
-        else
-          AcademicYear::Type.new.serialize(AcademicYear.new(2019))
-        end
+      claim_academic_year = AcademicYear.current
 
       claim.academic_year = claim_academic_year unless claim.academic_year_before_type_cast
     end

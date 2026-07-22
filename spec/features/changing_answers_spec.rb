@@ -3,6 +3,12 @@ require "rails_helper"
 RSpec.feature "Changing the answers on a submittable claim" do
   include StudentLoansHelper
 
+  around do |example|
+    travel_to DateTime.new(2023, 9, 30) do
+      example.run
+    end
+  end
+
   before do
     create(:journey_configuration, :student_loans, current_academic_year: AcademicYear.new(2023))
     create(:journey_configuration, :targeted_retention_incentive_payments, current_academic_year: AcademicYear.new(2023))

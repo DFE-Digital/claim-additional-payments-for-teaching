@@ -9,6 +9,8 @@ RSpec.describe EmploymentCheckJob do
     let(:policy) { Policies::TargetedRetentionIncentivePayments }
 
     before do
+      create(:journey_configuration, :further_education_payments)
+
       allow(AutomatedChecks::ClaimVerifiers::Employment).to receive(:new).with(claim:).and_return(verifier_instance)
     end
 

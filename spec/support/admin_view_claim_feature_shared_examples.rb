@@ -102,18 +102,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     payroll_run = PayrollRun.create!(created_by: @signed_in_user)
     PayrollRunJob.perform_now(payroll_run, [approved_paid_claim.id], [])
 
-    # NOTE: mirror claims factory for academic_year attribute "hardcoding" of 2019
-    current_academic_year =
-      if [
-        Policies::TargetedRetentionIncentivePayments,
-        Policies::FurtherEducationPayments,
-        Policies::EarlyYearsTeachersFinancialIncentivePayments
-      ].include?(policy)
-        academic_year
-      else
-        AcademicYear.new(2019)
-      end
-    @within_academic_year = Time.zone.local(current_academic_year.start_year, 9, 1, 12)
+    @within_academic_year = Time.zone.local(academic_year.start_year, 9, 1, 12)
   end
 
   scenario "#{policy} filter approved awaiting payroll claims" do

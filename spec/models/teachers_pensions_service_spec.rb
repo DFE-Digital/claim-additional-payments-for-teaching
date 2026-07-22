@@ -67,6 +67,7 @@ RSpec.describe TeachersPensionsService do
 
     context "previous financial year has eligible school and ineligible school" do
       it "returns most recent eligible school" do
+        create(:journey_configuration, :student_loans)
         # least recent eligible
         beginning_of_month = Date.new(previous_academic_year.start_year, 9, 1)
         end_of_month = Date.new(previous_academic_year.start_year, 9, 30)
@@ -92,6 +93,7 @@ RSpec.describe TeachersPensionsService do
 
     context "previous financial year has ineligible schools only" do
       it "returns the most recent one" do
+        create(:journey_configuration, :student_loans)
         # least recent ineligible
         beginning_of_month = Date.new(previous_academic_year.start_year, 9, 1)
         end_of_month = Date.new(previous_academic_year.start_year, 9, 30)
@@ -112,6 +114,8 @@ RSpec.describe TeachersPensionsService do
 
     context "previous financial year no tps records" do
       it "returns nil" do
+        create(:journey_configuration, :student_loans)
+
         expect(
           described_class.tps_school_for_student_loan_in_previous_financial_year(
             teacher_reference_number: teacher_reference_number

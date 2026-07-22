@@ -1,6 +1,12 @@
 require "rails_helper"
 
 RSpec.feature "ITT subject selection", slow: true do
+  around do |example|
+    travel_to DateTime.new(2022, 9, 30) do
+      example.run
+    end
+  end
+
   before { create(:journey_configuration, :targeted_retention_incentive_payments, current_academic_year: AcademicYear.new(2022)) }
 
   # Note: If we ever change the UI to show all the options in all cases,

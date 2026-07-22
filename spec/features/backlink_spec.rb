@@ -101,8 +101,7 @@ RSpec.feature "Backlinking during a claim" do
   scenario "Targeted Retention Incentive journey" do
     create(
       :journey_configuration,
-      :targeted_retention_incentive_payments,
-      current_academic_year: AcademicYear.new(2023)
+      :targeted_retention_incentive_payments
     )
 
     targeted_retention_incentive_school = create(
@@ -138,8 +137,7 @@ RSpec.feature "Backlinking during a claim" do
   scenario "Targeted Retention Incentive trainee mini journey" do
     create(
       :journey_configuration,
-      :targeted_retention_incentive_payments,
-      current_academic_year: AcademicYear.new(2023)
+      :targeted_retention_incentive_payments
     )
 
     targeted_retention_incentive_school = create(
