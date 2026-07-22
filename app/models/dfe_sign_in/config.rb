@@ -5,7 +5,7 @@ module DfeSignIn
     end
 
     def bypass?
-      (Rails.env.development? || Rails.env.review_app_like?) && ENV["BYPASS_DFE_SIGN_IN"] == "true"
+      (Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")) && ENV["BYPASS_DFE_SIGN_IN"] == "true"
     end
 
     def issuer_uri

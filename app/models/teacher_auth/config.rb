@@ -5,7 +5,7 @@ module TeacherAuth
     end
 
     def bypass?
-      (Rails.env.development? || Rails.env.review_app_like?) && ENV["BYPASS_TEACHER_AUTH"] == "true"
+      (Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")) && ENV["BYPASS_TEACHER_AUTH"] == "true"
     end
 
     def callback_path
@@ -29,7 +29,7 @@ module TeacherAuth
 
       @redirect_base_url = URI.parse(ENV["TEACHER_AUTH_REDIRECT_BASE_URL"].presence || "https://www.claim-additional-teaching-payment.service.gov.uk")
 
-      if Rails.env.review_app_like?
+      if ENV["ENVIRONMENT_NAME"].start_with?("review")
         @redirect_base_url.host = ENV["CANONICAL_HOSTNAME"]
       end
 

@@ -173,8 +173,12 @@ module ApplicationHelper
   ]
 
   def current_path_indexable?
-    return false if Rails.env.review_app_like?
+    return false if review_app?
 
     INDEXABLE_PATHS.any? { |path| current_page?(path) }
+  end
+
+  def review_app?
+    ENV["ENVIRONMENT_NAME"].start_with?("review")
   end
 end

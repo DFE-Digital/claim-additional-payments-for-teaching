@@ -12,7 +12,7 @@ class OneLogin::Config
   end
 
   def bypass?
-    (!Rails.env.production? || Rails.env.review_app_like?) && ENV["BYPASS_ONELOGIN_SIGN_IN"] == "true"
+    (!Rails.env.production? || ENV["ENVIRONMENT_NAME"].start_with?("review")) && ENV["BYPASS_ONELOGIN_SIGN_IN"] == "true"
   end
 
   def issuer_uri

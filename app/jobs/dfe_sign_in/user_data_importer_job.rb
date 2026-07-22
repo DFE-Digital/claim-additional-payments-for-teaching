@@ -3,7 +3,7 @@ module DfeSignIn
     queue_as :user_data
 
     def perform
-      return if Rails.env.review_app_like?
+      return if ENV["ENVIRONMENT_NAME"].start_with?("review")
 
       Rails.logger.info "Importing DfE Sign-in user data..."
 
