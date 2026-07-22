@@ -20,4 +20,4 @@ module RailsEnvExtensions
   end
 end
 
-Rails.env.singleton_class.include(RailsEnvExtensions)
+ActiveSupport::EnvironmentInquirer.include(RailsEnvExtensions)
