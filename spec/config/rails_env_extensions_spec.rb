@@ -59,4 +59,20 @@ RSpec.describe RailsEnvExtensions do
       expect(Rails.env.review_app?).to be(false)
     end
   end
+
+  describe "#review_app_like?" do
+    it "returns true for review apps and staging" do
+      %w[review-123 staging].each do |environment_name|
+        allow(ENV).to receive(:[]).with("ENVIRONMENT_NAME").and_return(environment_name)
+
+        expect(Rails.env.review_app_like?).to be(true)
+      end
+    end
+
+    it "returns false for other environments" do
+      allow(ENV).to receive(:[]).with("ENVIRONMENT_NAME").and_return("test")
+
+      expect(Rails.env.review_app_like?).to be(false)
+    end
+  end
 end

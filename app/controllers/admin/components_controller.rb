@@ -1,7 +1,7 @@
 module Admin
   class ComponentsController < BaseAdminController
     before_action :ensure_service_operator
-    before_action -> { raise ActiveRecord::RecordNotFound if Rails.env.production? && !Rails.env.review_app? }
+    before_action -> { raise ActiveRecord::RecordNotFound if Rails.env.production? && !Rails.env.review_app_like? }
 
     PREVIEW_SESSION_LENGTH_IN_SECONDS = 2.hours.to_i
 
