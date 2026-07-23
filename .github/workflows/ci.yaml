@@ -94,6 +94,11 @@ jobs:
       DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST: localhost
       CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
       CI_NODE_INDEX: ${{ matrix.ci_node_index }}
+      PARALLEL_PROCESSES: 4
+      # turbo_tests numbers its workers 1-based (TEST_ENV_NUMBER 1..N), so the
+      # databases must be _test1.._testN. This makes parallel:create/load_schema
+      # use the same 1-based numbering instead of leaving the first one blank.
+      PARALLEL_TEST_FIRST_IS_1: "true"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -126,13 +131,19 @@ jobs:
           path: |
             public/assets
           key: ${{ steps.assets-cache.outputs.cache-primary-key }}
-      - name: Prepare DB
-        run: bin/rails db:prepare
+      - name: Prepare parallel test databases
+        run: |
+          bundle exec rake parallel:create[$PARALLEL_PROCESSES]
+          bundle exec rake parallel:load_schema[$PARALLEL_PROCESSES]
       - name: Run unit tests
         env:
           SPEC_TYPE: unit
-        run: bundle exec rspec $(bin/test_splitter)
+        run: |
+          files="$(bin/test_splitter)"
+          bundle exec turbo_tests -n "$PARALLEL_PROCESSES" $files
       - name: Run feature tests
         env:
           SPEC_TYPE: feature
-        run: bundle exec rspec $(bin/test_splitter)
+        run: |
+          files="$(bin/test_splitter)"
+          bundle exec turbo_tests -n "$PARALLEL_PROCESSES" $files
