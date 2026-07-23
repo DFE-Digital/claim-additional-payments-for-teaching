@@ -43,7 +43,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeRepeatApplicantCheck do
           expect {
             subject.perform
           }.to change(Note, :count).by(1)
-            .and not_change(Task, :count)
+            .and change(Task.where(passed: nil), :count).by(1)
 
           expect(last_note.body).to eq("Year 1 claim exists for claimant with teaching start year 2020/2021 with claim reference: #{previous_ay_claim.reference}")
         end
@@ -56,7 +56,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeRepeatApplicantCheck do
           expect {
             subject.perform
           }.to change(Note, :count).by(1)
-            .and not_change(Task, :count)
+            .and change(Task.where(passed: nil), :count).by(1)
 
           expect(last_note.body).to eq("Teaching start year does not match approved claim start year from a previous academic year with claim reference: #{previous_ay_claim.reference}")
         end
@@ -108,7 +108,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeRepeatApplicantCheck do
         expect {
           subject.perform
         }.to change(Note, :count).by(1)
-          .and not_change(Task, :count)
+          .and change(Task.where(passed: nil), :count).by(1)
 
         expect(last_note.body).to include("Claimant was previously rejected in 2024/2025")
         expect(last_note.body).to include("over 5 years of employment in Further Education")

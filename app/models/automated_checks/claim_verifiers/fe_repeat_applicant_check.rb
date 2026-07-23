@@ -21,6 +21,7 @@ module AutomatedChecks
       end
 
       def perform
+        return if year_1_claim?
         return if existing_task_persisted?
 
         ActiveRecord::Base.transaction do
@@ -36,9 +37,7 @@ module AutomatedChecks
             create_start_year_matches_claim_false_note
           end
 
-          if passed
-            create_task(passed:)
-          end
+          create_task(passed:)
         end
       end
 
@@ -46,8 +45,16 @@ module AutomatedChecks
 
       attr_accessor :claim
 
+      def year_1_claim?
+        claim.academic_year == year_one
+      end
+
+      def year_one
+        @year_one ||= AcademicYear.new("2024/2025")
+      end
+
       def existing_task_persisted?
-        claim.tasks.any? { |task| task.name == TASK_NAME }
+        claim.tasks.where(name: TASK_NAME).exists?
       end
 
       def create_task(passed:)

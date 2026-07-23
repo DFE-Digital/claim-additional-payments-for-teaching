@@ -4,17 +4,17 @@ require "faker"
 Faker::Config.locale = "en-GB"
 
 SimpleCov.start do
-  add_filter %r{^/spec/.*$}
-  add_filter %r{^/db/migrate/.*$}
-  add_filter %r{^/config/(?!routes\.rb).*$}
+  skip %r{^/spec/.*$}
+  skip %r{^/db/migrate/.*$}
+  skip %r{^/config/(?!routes\.rb).*$}
 
-  add_group "Controllers", %r{^/app/controllers/}
-  add_group "Helpers", %r{^/app/helpers/}
-  add_group "Jobs", %r{^/app/jobs/}
-  add_group "Mailers", %r{^/app/mailers/}
-  add_group "Models", %r{^/app/models/}
-  add_group "Configs", %r{^/config/}
-  add_group "Libraries", %r{^/lib/}
+  group "Controllers", %r{^/app/controllers/}
+  group "Helpers", %r{^/app/helpers/}
+  group "Jobs", %r{^/app/jobs/}
+  group "Mailers", %r{^/app/mailers/}
+  group "Models", %r{^/app/models/}
+  group "Configs", %r{^/config/}
+  group "Libraries", %r{^/lib/}
 end
 
 require "rspec/retry"
