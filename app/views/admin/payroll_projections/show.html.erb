@@ -1,0 +1,73 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      <%= @projection.month_name %> payroll run projection
+    </h1>
+
+    <%= govuk_summary_list do |summary_list| %>
+      <% summary_list.with_row do |row| %>
+        <% row.with_key(text: "Total claims") %>
+        <% row.with_value(text: @projection.claims_count) %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key(text: "Top ups") %>
+        <% row.with_value(text: @projection.topups_count) %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key(text: "Total award amount") %>
+        <% row.with_value(
+          text: number_to_currency(@projection.total_award_amount)
+        ) %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="govuk-grid-column-full">
+    <%= govuk_table do |table| %>
+      <% table.with_caption(
+        size: "m",
+        text: "Summary of claim amounts by service"
+      ) %>
+
+      <% table.with_head do |head| %>
+        <% head.with_row do |row| %>
+          <% row.with_cell(text: "Service") %>
+          <% row.with_cell(text: "Number of claims") %>
+          <% row.with_cell(text: "Total claimed amount") %>
+        <% end %>
+      <% end %>
+
+      <% table.with_body do |body| %>
+        <% Policies.all.each do |policy| %>
+          <% body.with_row do |row| %>
+            <% row.with_cell(text: policy.short_name) %>
+            <% row.with_cell(
+              text: @projection.number_of_claims_for_policy(policy)
+            ) %>
+            <% row.with_cell(
+              text: number_to_currency(
+                @projection.total_claim_amount_for_policy(policy)
+              )
+            ) %>
+          <% end %>
+        <% end %>
+
+        <% Policies.all.each do |policy| %>
+          <% body.with_row do |row| %>
+            <% row.with_cell(text: "#{policy.short_name} Top Ups") %>
+            <% row.with_cell(
+              text: @projection.number_of_topups_for_policy(policy)
+            ) %>
+            <% row.with_cell(
+              text: number_to_currency(
+                @projection.total_topup_amount_for_policy(policy)
+              )
+            ) %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
