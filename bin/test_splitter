@@ -23,4 +23,4 @@ specs_split_across_nodes = specs.each_slice(number_of_slices).to_a
 
 specs_to_run_on_this_node = specs_split_across_nodes[this_ci_node]
 
-print specs_to_run_on_this_node.join(" ")
+print specs_to_run_on_this_node&.join(" ")
