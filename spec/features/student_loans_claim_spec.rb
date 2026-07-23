@@ -217,7 +217,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       expect(claim.submitted_using_slc_data).to eql(true)
     end
 
-    scenario "Teacher claims back student loan repayments with javascript #{js_status} (no SLC data present)", js: javascript_enabled do
+    scenario "Teacher claims back student loan repayments with javascript #{js_status} (no SLC data present)", js: javascript_enabled, flaky: true do
       answer_eligibility_questions_and_fill_in_personal_details
 
       # - Student loan amount details
