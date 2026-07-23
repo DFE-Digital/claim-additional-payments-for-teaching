@@ -12,7 +12,7 @@ on:
     - cron: "0 08 * * 0"
   push:
     branches:
-      - 2855-add-review-app-cleanup-workflow
+      - 2855-reconcile-review-app-test
 
 permissions:
   id-token: write
