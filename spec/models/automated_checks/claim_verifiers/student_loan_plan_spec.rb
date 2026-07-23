@@ -49,44 +49,12 @@ module AutomatedChecks
         end
       end
 
-      shared_examples :creating_a_note_but_no_task do
-        let(:saved_note) { claim_arg.notes.last }
-
-        it "does not create a task" do
-          expect { perform }.not_to change(Task, :count)
-        end
-
-        it "saves a note" do
-          expect { perform }.to change(Note, :count).by(1)
-        end
-
-        it "saves the outcome on the note" do
-          perform
-
-          expect(saved_note).to have_attributes(
-            body: expected_note,
-            label: "student_loan_plan",
-            created_by_id: nil
-          )
-        end
-      end
-
       shared_examples :not_creating_a_task_or_note do
         it "does not save anything and returns immediately", :aggregate_failures do
           is_expected.to be_nil
 
           expect { perform }.not_to change(Task, :count)
           expect { perform }.not_to change(Note, :count)
-        end
-      end
-
-      shared_examples :raising_an_error do
-        it "raises an error" do
-          expect { perform }.to raise_error(
-            described_class::MissingClaimPlanError,
-            "Claim #{claim.reference} has no student loan plan set. " \
-            "but student loan data with matching DOB and NINO was found"
-          )
         end
       end
 
@@ -115,8 +83,11 @@ module AutomatedChecks
 
             context "when the claim was submitted using SLC data" do
               let(:submitted_using_slc_data) { true }
+              let(:expected_to_pass?) { nil }
+              let(:expected_match_value) { nil }
+              let(:expected_note) { "[SLC Student loan plan] - SLC data checked, no matching entry found" }
 
-              it_behaves_like :not_creating_a_task_or_note
+              it_behaves_like :creating_a_task_and_note
             end
 
             context "when the claim was not submitted using SLC data" do
@@ -124,8 +95,10 @@ module AutomatedChecks
 
               context "when there is no student loan data for the claim" do
                 let(:expected_note) { "[SLC Student loan plan] - SLC data checked, no matching entry found" }
+                let(:expected_to_pass?) { nil }
+                let(:expected_match_value) { nil }
 
-                it_behaves_like :creating_a_note_but_no_task
+                it_behaves_like :creating_a_task_and_note
               end
 
               context "when there is student loan data - with a plan" do
@@ -144,7 +117,11 @@ module AutomatedChecks
 
                 context "when the claim does not have a student_loan_plan" do
                   let(:claim_student_loan_plan) { nil }
-                  it_behaves_like :raising_an_error
+                  let(:expected_note) { "[SLC Student loan plan] - SLC data checked, no matching entry found" }
+                  let(:expected_to_pass?) { nil }
+                  let(:expected_match_value) { nil }
+
+                  it_behaves_like :creating_a_task_and_note
                 end
               end
 
@@ -179,8 +156,10 @@ module AutomatedChecks
 
               context "when there is no student loan data for the claim" do
                 let(:expected_note) { "[SLC Student loan plan] - SLC data checked, no matching entry found" }
+                let(:expected_to_pass?) { nil }
+                let(:expected_match_value) { nil }
 
-                it_behaves_like :creating_a_note_but_no_task
+                it_behaves_like :creating_a_task_and_note
               end
 
               context "when there is student loan data - with a plan" do

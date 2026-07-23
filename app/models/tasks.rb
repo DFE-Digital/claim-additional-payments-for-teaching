@@ -31,6 +31,9 @@ module Tasks
     elsif task.claim_verifier_match_none?
       status = "No match"
       status_colour = "red"
+    elsif task.passed.nil? && task.reason == "incomplete"
+      status = "Incomplete"
+      status_colour = "grey"
     elsif task.claim_verifier_match.nil? && %w[census_subjects_taught employment induction_confirmation student_loan_amount student_loan_plan].include?(task.name)
       status = "No data"
       status_colour = "red"

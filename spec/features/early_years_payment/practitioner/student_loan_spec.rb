@@ -10,7 +10,7 @@ RSpec.feature "Early Years Payments Student Loan Plan" do
   scenario "student loan data does not exist on submission" do
     when_early_years_practitioner_claim_submitted
 
-    expect(claim.tasks.where(name: "student_loan_plan")).to be_empty
+    expect(claim.tasks.where(name: "student_loan_plan", passed: nil, claim_verifier_match: nil)).to be_present
 
     sign_in_as_service_operator
 

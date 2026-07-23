@@ -11,7 +11,7 @@ RSpec.feature "Further education payments" do
 
     perform_enqueued_jobs { click_on "Accept and send" }
 
-    expect(claim.tasks.where(name: "student_loan_plan")).to be_empty
+    expect(claim.tasks.where(name: "student_loan_plan", passed: nil, claim_verifier_match: nil)).to be_present
 
     sign_in_as_service_operator
 

@@ -1,15 +1,6 @@
 module AutomatedChecks
   module ClaimVerifiers
     class StudentLoanPlan
-      class MissingClaimPlanError < StandardError
-        def initialize(claim)
-          super(
-            "Claim #{claim.reference} has no student loan plan set. " \
-            "but student loan data with matching DOB and NINO was found"
-          )
-        end
-      end
-
       TASK_NAME = "student_loan_plan".freeze
       private_constant :TASK_NAME
 
@@ -20,10 +11,19 @@ module AutomatedChecks
 
       def perform
         return unless claim.policy.auto_check_student_loan_plan_task?
-        return unless claim.submitted_without_slc_data?
-        return unless awaiting_task?
+        return if task_exists?
 
-        student_loan_data_exists || nino_only_match_found || no_student_loan_data_entry
+        if student_loans_data.any?
+          if claim.student_loan_plan.blank?
+            create_task(match: nil, passed: nil)
+          else
+            create_task(match: :all, passed: true)
+          end
+        elsif student_loans_data_nino_only.any?
+          create_task(match: :none)
+        else
+          create_task(match: nil, passed: nil, reason: "incomplete")
+        end
       end
 
       private
@@ -44,36 +44,20 @@ module AutomatedChecks
         @student_loans_data_nino_only ||= StudentLoansData.where(nino:).where.not(date_of_birth:)
       end
 
-      def awaiting_task?
-        claim.tasks.where(name: TASK_NAME).count.zero?
+      def task_exists?
+        claim.tasks.where(name: TASK_NAME).exists?
       end
 
-      def student_loan_data_exists
-        if student_loans_data.any?
-          if claim.student_loan_plan.blank?
-            raise MissingClaimPlanError.new(claim)
-          end
-
-          create_task(match: :all, passed: true)
-        end
-      end
-
-      def nino_only_match_found
-        create_task(match: :none) if student_loans_data_nino_only.any?
-      end
-
-      def no_student_loan_data_entry
-        create_note(match: nil)
-      end
-
-      def create_task(match:, passed: nil)
+      # poorly named method that also creates a note
+      def create_task(match:, passed: nil, reason: nil)
         task = claim.tasks.build(
           {
             name: TASK_NAME,
             claim_verifier_match: match,
             passed: passed,
             manual: false,
-            created_by: admin_user
+            created_by: admin_user,
+            reason:
           }
         )
 
