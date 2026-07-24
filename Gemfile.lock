@@ -191,7 +191,11 @@ GEM
       concurrent-ruby (~> 1.1)
       webrick (~> 1.7)
       websocket-driver (~> 0.7)
-    ffi (1.16.3)
+    ffi (1.17.4-aarch64-linux-musl)
+    ffi (1.17.4-arm64-darwin)
+    ffi (1.17.4-x86_64-darwin)
+    ffi (1.17.4-x86_64-linux-gnu)
+    ffi (1.17.4-x86_64-linux-musl)
     foreman (0.90.0)
       thor (~> 1.4)
     fugit (1.13.0)
@@ -302,7 +306,8 @@ GEM
       childprocess (~> 5.0)
       logger (~> 1.6)
     lint_roller (1.1.0)
-    listen (3.9.0)
+    listen (3.10.0)
+      logger
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     logger (1.7.0)
@@ -473,7 +478,7 @@ GEM
     rainbow (3.1.1)
     rake (13.4.2)
     rb-fsevent (0.11.2)
-    rb-inotify (0.10.1)
+    rb-inotify (0.11.1)
       ffi (~> 1.0)
     rb-readline (0.5.5)
     rbs (4.0.3)
@@ -688,7 +693,7 @@ DEPENDENCIES
   jbuilder (~> 2.13)
   jwt
   launchy
-  listen (>= 3.0.5, < 3.10)
+  listen (>= 3.0.5, < 3.11)
   mail-notify
   mission_control-jobs
   nanoid
