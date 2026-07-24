@@ -35,7 +35,7 @@ class Admin::DecisionsController < Admin::BaseAdminController
 
   def load_claim
     @claim = Claim.includes(:eligibility).find(params[:claim_id])
-    @matches = Claims::Match.matches_shim(@claim)
+    @matching_claims = Claim::MatchingAttributeFinder.new(@claim).matching_claims
   end
 
   def claims_preventing_payment_finder

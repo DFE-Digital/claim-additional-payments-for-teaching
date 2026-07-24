@@ -4,8 +4,6 @@ module Policies
   module FurtherEducationPayments
     class ClaimCheckingTasks < Policies::ClaimCheckingTasks
       def applicable_task_names
-        persisting_tasks_shim("matching_details")
-
         tasks = []
 
         tasks << "one_login_identity"

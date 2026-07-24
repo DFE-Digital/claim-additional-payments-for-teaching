@@ -29,7 +29,8 @@ RSpec.describe ClaimCheckingTasks do
 
     shared_examples :matching_details_task do
       it "includes a task for matching details when there are claims with matching details" do
-        create(:claim, :submitted, policy:, eligibility_attributes: {teacher_reference_number: claim.eligibility.teacher_reference_number})
+        task = claim.tasks.matching_details.build
+        task.save!(context: :claim_verifier)
 
         expect(checking_tasks.applicable_task_names).to match_array(applicable_tasks + %w[matching_details])
       end
@@ -128,6 +129,21 @@ RSpec.describe ClaimCheckingTasks do
       claim.tasks << create(:task, name: "employment")
       expect(checking_tasks.incomplete_task_names).to match_array(%w[identity_confirmation census_subjects_taught student_loan_plan])
     end
+
+    it "includes matching details when the persisted task has not been answered" do
+      task = claim.tasks.matching_details.build
+      task.save!(context: :claim_verifier)
+
+      expect(task.passed).to be_nil
+
+      expect(checking_tasks.incomplete_task_names).to include("matching_details")
+    end
+
+    it "excludes matching details once the persisted task has been answered" do
+      claim.tasks << create(:task, name: "matching_details", passed: true)
+
+      expect(checking_tasks.incomplete_task_names).not_to include("matching_details")
+    end
   end
 
   describe "#passed_automatically_task_names" do
@@ -161,9 +177,10 @@ RSpec.describe ClaimCheckingTasks do
         targeted_retention_incentive_tasks.each do |task|
           claim.tasks << create(:task, :passed, :automated, name: task)
         end
-      end
 
-      let!(:previous_claim) { create(:claim, :submitted, policy:, eligibility_attributes: {teacher_reference_number: claim.eligibility.teacher_reference_number}) }
+        task = claim.tasks.matching_details.build
+        task.save(context: :claim_verifier)
+      end
 
       it { is_expected.to eq(false) }
     end

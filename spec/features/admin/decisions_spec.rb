@@ -49,6 +49,31 @@ RSpec.feature "Admin decisions" do
         end
       end
 
+      context "when the matching details task has been persisted but not answered" do
+        before do
+          create(:task, name: "identity_confirmation", claim: claim)
+          create(:task, name: "qualifications", claim: claim)
+          create(:task, name: "induction_confirmation", claim: claim)
+          create(:task, name: "student_loan_plan", claim: claim)
+          create(:task, name: "census_subjects_taught", claim: claim)
+          create(:task, name: "employment", claim: claim)
+
+          # The matching claims verifier persists the task with `passed: nil`
+          # when a duplicate is found, so the task is applicable but unanswered.
+          claim.tasks.matching_details.build.save!(context: :claim_verifier)
+        end
+
+        it "warns the service operator that matching details is outstanding" do
+          visit new_admin_claim_decision_path(claim)
+
+          expect(page).to have_text("Some tasks have not yet been completed")
+          expect(page).to have_link(
+            "Review matching details from other claims",
+            href: admin_claim_task_url(claim, name: "matching_details")
+          )
+        end
+      end
+
       context "when a decision has already been made" do
         let(:claim) { create(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments) }
 

@@ -68,6 +68,6 @@ class ClaimCheckingTasks
   private
 
   def task_names_for_claim
-    claim.tasks.pluck(:name)
+    claim.tasks.select(&:completed?).map(&:name)
   end
 end

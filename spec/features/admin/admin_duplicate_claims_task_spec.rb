@@ -833,6 +833,20 @@ RSpec.describe "Admin matching claims task" do
 
           former_duplicate
 
+          task = other_duplicate.tasks.matching_details.build(
+            data: {
+              matching_claims: [former_duplicate.reference]
+            }
+          )
+          task.save!(context: :claim_verifier)
+
+          task = former_duplicate.tasks.matching_details.build(
+            data: {
+              matching_claims: [other_duplicate.reference]
+            }
+          )
+          task.save!(context: :claim_verifier)
+
           amended_claim
 
           sign_in_as_service_operator
@@ -875,6 +889,56 @@ RSpec.describe "Admin matching claims task" do
           expect(page).to have_content other_duplicate.reference
         end
       end
+    end
+  end
+
+  # The feature flag exists so we can cut back to the old behaviour if
+  # something goes wrong. Once the backfill has run there are persisted
+  # `matching_details` tasks with `passed: nil` in the database, and turning the
+  # flag off has to leave those claims in a state an operator can still work.
+  context "when the feature flag is turned off after tasks have been persisted" do
+    let(:existing_claim) do
+      create(
+        :claim,
+        :submitted,
+        policy: Policies::TargetedRetentionIncentivePayments,
+        email_address: "seymour.skinner@springfield-elementary.edu"
+      )
+    end
+
+    let(:new_claim) { submit_a_claim }
+
+    before do
+      existing_claim
+
+      new_claim
+
+      FeatureFlag.disable!(:persist_matching_claims)
+
+      sign_in_as_service_operator
+    end
+
+    it "still shows the matching details task on the task list" do
+      visit admin_claim_tasks_path(new_claim)
+
+      within ".app-task-list" do
+        expect(page).to have_content "Matching details"
+      end
+    end
+
+    it "lets the operator answer the unanswered task" do
+      visit admin_claim_task_path(new_claim, name: "matching_details")
+
+      expect(new_claim.tasks.matching_details.sole.passed).to be_nil
+
+      expect(page).to have_field("Yes")
+      expect(page).to have_button("Save and continue")
+
+      choose "Yes"
+
+      click_on "Save and continue"
+
+      expect(new_claim.tasks.matching_details.sole.reload.passed).to be(true)
     end
   end
 

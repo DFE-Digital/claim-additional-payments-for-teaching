@@ -58,7 +58,7 @@ module Policies
 
       return Claim.none if skip_matching_claims_check?
 
-      @matching_claims = Claims::Match.matches_shim(claim)
+      @matching_claims = Claim::MatchingAttributeFinder.new(claim).matching_claims
     end
 
     def task_exists?(name)
@@ -66,17 +66,6 @@ module Policies
         claim.tasks.any? { |task| task.name == name }
       else
         claim.tasks.exists?(name: name)
-      end
-    end
-
-    # Temporary shim until all claims have a persisted matching details task
-    def persisting_tasks_shim(name)
-      # Skip the shim if we're rendering the admin task list page otherwise it
-      # will slow to a crawl!
-      return if skip_matching_claims_check?
-
-      if name == "matching_details" && !task_exists?(name)
-        AutomatedChecks::ClaimVerifiers::MatchingClaims.new(claim: claim).perform
       end
     end
   end
