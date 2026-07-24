@@ -9,6 +9,10 @@ RSpec.describe Reports::FailedQualificationClaims do
 
   describe "to_csv" do
     it "returns a csv of the claims" do
+      allow(Claim::MatchingAttributeFinder).to receive(:new).and_return(
+        double(matching_claims: Claim.none)
+      )
+
       payroll_run_1 = create(
         :payroll_run,
         created_at: 1.month.ago.beginning_of_month

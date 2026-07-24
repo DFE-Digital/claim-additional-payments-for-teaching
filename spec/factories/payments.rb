@@ -13,7 +13,14 @@ FactoryBot.define do
         eligibility_attributes: {teacher_reference_number: generate(:teacher_reference_number)}
       }
       claim_policies.map do |policy|
-        association(:claim, :approved, personal_details.merge(policy: policy))
+        association(
+          :claim,
+          :approved,
+          personal_details.merge(
+            policy: policy,
+            created_at: DateTime.now - Claim.count.seconds
+          )
+        )
       end
     end
     association(:payroll_run, factory: :payroll_run)

@@ -13,7 +13,8 @@ module Policies
 
     VERIFIERS = [
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
-      AutomatedChecks::ClaimVerifiers::OneLoginIdentity
+      AutomatedChecks::ClaimVerifiers::OneLoginIdentity,
+      AutomatedChecks::ClaimVerifiers::MatchingClaims
     ]
 
     # Attributes to delete from claims submitted before the current academic

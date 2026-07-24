@@ -38,7 +38,8 @@ RSpec.describe "Admin views payment spec" do
       **personal_details,
       eligibility_attributes: {
         award_amount: 222.22
-      }
+      },
+      created_at: claim_1.created_at + 1.second
     )
 
     create(:targeted_retention_incentive_payments_award, award_amount: 9999)
