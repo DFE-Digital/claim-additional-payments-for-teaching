@@ -6,7 +6,6 @@ RSpec.feature "Switching policies" do
   before do
     create(:journey_configuration, :student_loans)
     create(:journey_configuration, :targeted_retention_incentive_payments)
-    create(:journey_configuration, :get_a_teacher_relocation_payment)
   end
 
   context "swtiching to a different journey" do

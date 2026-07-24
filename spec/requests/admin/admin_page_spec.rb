@@ -41,7 +41,6 @@ RSpec.describe "Admin page", type: :request do
       expect(response).to be_successful
       expect(response.body).to include(Journeys::TargetedRetentionIncentivePayments.start_page_url)
       expect(response.body).to include(Journeys::TeacherStudentLoanReimbursement.start_page_url)
-      expect(response.body).to include(Journeys::GetATeacherRelocationPayment.start_page_url)
       expect(response.body).to include(Journeys::FurtherEducationPayments.start_page_url)
       expect(response.body).to include(Journeys::EarlyYearsPayment::Provider::Start.start_page_url)
       expect(response.body).to include(Journeys::EarlyYearsPayment::Practitioner.start_page_url)

@@ -17,7 +17,6 @@ RSpec.feature "Claims awaiting a decision" do
   before do
     create(:journey_configuration, :student_loans)
     create(:journey_configuration, :targeted_retention_incentive_payments)
-    create(:journey_configuration, :get_a_teacher_relocation_payment)
 
     submitted_claims = []
     @signed_in_user = sign_in_as_service_operator

@@ -18,6 +18,7 @@ module Journeys
         routing_name: %w[
           additional-payments
           further-education-payments-provider
+          get-a-teacher-relocation-payment
         ]
       )
     end
