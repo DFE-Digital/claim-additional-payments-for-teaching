@@ -45,7 +45,7 @@ jobs:
       BACKUP_FILE: ${{ inputs.backup-file || 'schedule'  }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         name: Checkout
 
       - uses: azure/login@v2
