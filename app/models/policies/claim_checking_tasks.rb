@@ -68,5 +68,16 @@ module Policies
         claim.tasks.exists?(name: name)
       end
     end
+
+    # Temporary shim until all claims have a persisted matching details task
+    def persisting_tasks_shim(name)
+      # Skip the shim if we're rendering the admin task list page otherwise it
+      # will slow to a crawl!
+      return if skip_matching_claims_check?
+
+      if name == "matching_details" && !task_exists?(name)
+        AutomatedChecks::ClaimVerifiers::MatchingClaims.new(claim: claim).perform
+      end
+    end
   end
 end

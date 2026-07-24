@@ -64,18 +64,22 @@ module Claims
       match
     end
 
+    class Result < Struct.new(:new_matches, :existing_matches, :removed_matches); end
+
     def self.update_matching_claims!(claim)
       finder = Claim::MatchingAttributeFinder.new(claim)
 
-      matching_claims = finder.matching_claims
-
       existing_matches = matching_claims(claim)
+
+      matching_claims = finder.matching_claims
 
       new_matches = matching_claims - existing_matches
 
       no_longer_matching = existing_matches - matching_claims
 
       still_matching = existing_matches & matching_claims
+
+      result = Result.new(new_matches, still_matching, no_longer_matching)
 
       ApplicationRecord.transaction do
         new_matches.each do |matching_claim|
@@ -98,6 +102,8 @@ module Claims
           claim.matching_attributes_last_checked_at = Time.current
         end
       end
+
+      result
     end
 
     def other(claim)
