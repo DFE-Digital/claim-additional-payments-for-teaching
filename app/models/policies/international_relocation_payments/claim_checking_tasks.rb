@@ -4,6 +4,8 @@ module Policies
   module InternationalRelocationPayments
     class ClaimCheckingTasks < Policies::ClaimCheckingTasks
       def applicable_task_names
+        persisting_tasks_shim("matching_details")
+
         tasks = []
 
         tasks << "first_year_application" unless claim.tasks.previous_payment.exists?
@@ -20,7 +22,7 @@ module Policies
         tasks << "employment_history" if claim.eligibility.changed_workplace_or_new_contract?
         tasks << "continuous_employment"
         tasks << "payroll_details" if claim.must_manually_validate_bank_details?
-        tasks << "matching_details" if matching_claims.exists?
+        tasks << "matching_details" if FeatureFlag.enabled?(:persist_matching_claims) ? task_exists?("matching_details") : matching_claims.exists?
         tasks << "payroll_gender" if claim.payroll_gender_missing? || task_exists?("payroll_gender")
 
         tasks

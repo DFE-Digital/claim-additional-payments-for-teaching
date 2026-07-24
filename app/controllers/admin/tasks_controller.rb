@@ -83,7 +83,7 @@ class Admin::TasksController < Admin::BaseAdminController
   end
 
   def load_matching_claims
-    @matches = Claims::Match.matches_shim(@claim)
+    @matching_claims = Claim::MatchingAttributeFinder.new(@claim).matching_claims
   end
 
   def load_matching_claims?
@@ -93,7 +93,7 @@ class Admin::TasksController < Admin::BaseAdminController
   def set_banner_messages
     messages = []
 
-    if Claims::Match.matches_shim(@claim).exists?
+    if Claim::MatchingAttributeFinder.new(@claim).matching_claims.any?
       claims_link = view_context.link_to(
         "Multiple claims",
         admin_claim_task_path(claim_id: @claim.id, name: "matching_details"),

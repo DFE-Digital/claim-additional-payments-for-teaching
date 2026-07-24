@@ -7,14 +7,14 @@ module Claims
     belongs_to :left_claim, class_name: "Claim"
     belongs_to :right_claim, class_name: "Claim"
 
-    validate :left_claim_is_older_than_right_claim
-    validates :left_claim_id, uniqueness: {scope: :right_claim_id}
+    #validate :left_claim_is_older_than_right_claim
+    #validates :left_claim_id, uniqueness: {scope: :right_claim_id}
 
-    def self.find_match_record(claim_1, claim_2)
-      left_claim, right_claim = sort_for_matching(claim_1, claim_2)
+    #def self.find_match_record(claim_1, claim_2)
+    #  left_claim, right_claim = sort_for_matching(claim_1, claim_2)
 
-      find_by(left_claim: left_claim, right_claim: right_claim)
-    end
+    #  find_by(left_claim: left_claim, right_claim: right_claim)
+    #end
 
     # FIXME once all claims have the matching_attributes_last_checked_at
     # timestamp set delete these two shim methods.
@@ -23,104 +23,118 @@ module Claims
         AutomatedChecks::ClaimVerifiers::MatchingClaims.new(claim: claim).perform
       end
 
-      matches(claim)
+      matching_claims(claim)
     end
 
     def self.matching_claims(claim)
-      Claim.where(id: where(left_claim: claim).select(:right_claim_id)).or(
-        Claim.where(id: where(right_claim: claim).select(:left_claim_id))
-      )
+      matching_details_task = claim.tasks.matching_details.last
+      matching_details_data = matching_details_task&.data || {}
+      matching_references = Array.wrap(matching_details_data["matching_claims"])
+
+      Claim.where(reference: matching_references)
     end
 
-    def self.matches(claim)
-      where(left_claim: claim).or(where(right_claim: claim))
-    end
+    #def self.matching_claims(claim)
+    #  Claim.where(id: where(left_claim: claim).select(:right_claim_id)).or(
+    #    Claim.where(id: where(right_claim: claim).select(:left_claim_id))
+    #  )
+    #end
 
-    def self.sort_for_matching(claim_1, claim_2)
-      [claim_1, claim_2].sort_by(&:created_at)
-    end
+    #def self.matches(claim)
+    #  where(left_claim: claim).or(where(right_claim: claim))
+    #end
 
-    def self.create_match!(claim_1, claim_2)
-      left_claim, right_claim = sort_for_matching(claim_1, claim_2)
+    #def self.sort_for_matching(claim_1, claim_2)
+    #  [claim_1, claim_2].sort_by(&:created_at)
+    #end
 
-      finder = Claim::MatchingAttributeFinder.new(left_claim)
+    #def self.create_match!(claim_1, claim_2)
+    #  left_claim, right_claim = sort_for_matching(claim_1, claim_2)
 
-      matching_attributes = finder.matching_attributes(right_claim)
+    #  finder = Claim::MatchingAttributeFinder.new(left_claim)
 
-      raise NoMatchError unless matching_attributes.any?
+    #  matching_attributes = finder.matching_attributes(right_claim)
 
-      if (existing_match = find_match_record(left_claim, right_claim))
-        existing_match.update!(matching_attributes: matching_attributes)
+    #  raise NoMatchError unless matching_attributes.any?
 
-        match = existing_match
-      else
-        match = create!(
-          left_claim: left_claim,
-          right_claim: right_claim,
-          matching_attributes: matching_attributes
-        )
-      end
+    #  if (existing_match = find_match_record(left_claim, right_claim))
+    #    existing_match.update!(matching_attributes: matching_attributes)
 
-      match
-    end
+    #    match = existing_match
+    #  else
+    #    match = create!(
+    #      left_claim: left_claim,
+    #      right_claim: right_claim,
+    #      matching_attributes: matching_attributes
+    #    )
+    #  end
 
-    def self.update_matching_claims!(claim)
-      finder = Claim::MatchingAttributeFinder.new(claim)
+    #  match
+    #end
 
-      matching_claims = finder.matching_claims
+    #class Result < Struct.new(:new_matches, :existing_matches, :removed_matches); end
 
-      existing_matches = matching_claims(claim)
+    #def self.update_matching_claims!(claim)
+    #  finder = Claim::MatchingAttributeFinder.new(claim)
 
-      new_matches = matching_claims - existing_matches
+    #  existing_matches = matching_claims(claim)
 
-      no_longer_matching = existing_matches - matching_claims
+    #  matching_claims = finder.matching_claims
 
-      still_matching = existing_matches & matching_claims
+    #  new_matches = matching_claims - existing_matches
 
-      ApplicationRecord.transaction do
-        new_matches.each do |matching_claim|
-          create_match!(claim, matching_claim)
-        end
+    #  no_longer_matching = existing_matches - matching_claims
 
-        still_matching.each do |matching_claim|
-          find_match_record(claim, matching_claim).update!(
-            matching_attributes: finder.matching_attributes(matching_claim)
-          )
-        end
+    #  still_matching = existing_matches & matching_claims
 
-        no_longer_matching.each do |non_matching_claim|
-          find_match_record(claim, non_matching_claim).destroy!
-        end
+    #  result = Result.new(new_matches, still_matching, no_longer_matching)
 
-        if claim.persisted?
-          claim.update_columns(matching_attributes_last_checked_at: Time.current)
-        else
-          claim.matching_attributes_last_checked_at = Time.current
-        end
-      end
-    end
+    #  ApplicationRecord.transaction do
+    #    new_matches.each do |matching_claim|
+    #      create_match!(claim, matching_claim)
+    #    end
 
-    def other(claim)
-      if left_claim == claim
-        right_claim
-      elsif right_claim == claim
-        left_claim
-      else
-        raise ArgumentError, "claim is not part of this match"
-      end
-    end
+    #    still_matching.each do |matching_claim|
+    #      find_match_record(claim, matching_claim).update!(
+    #        matching_attributes: finder.matching_attributes(matching_claim)
+    #      )
+    #    end
 
-    private
+    #    no_longer_matching.each do |non_matching_claim|
+    #      find_match_record(claim, non_matching_claim).destroy!
+    #    end
 
-    def left_claim_is_older_than_right_claim
-      unless left_claim_is_older_than_right_claim?
-        errors.add(:left_claim, "must be created before right_claim")
-        errors.add(:right_claim, "must be created after left_claim")
-      end
-    end
+    #    if claim.persisted?
+    #      claim.update_columns(matching_attributes_last_checked_at: Time.current)
+    #    else
+    #      claim.matching_attributes_last_checked_at = Time.current
+    #    end
+    #  end
 
-    def left_claim_is_older_than_right_claim?
-      left_claim.created_at < right_claim.created_at
-    end
+    #  result
+    #end
+
+    #def other(claim)
+    #  if left_claim == claim
+    #    right_claim
+    #  elsif right_claim == claim
+    #    left_claim
+    #  else
+    #    raise ArgumentError, "claim is not part of this match"
+    #  end
+    #end
+
+    #private
+
+    #def left_claim_is_older_than_right_claim
+    #  unless left_claim_is_older_than_right_claim?
+    #    errors.add(:left_claim, "must be created before right_claim")
+    #    errors.add(:right_claim, "must be created after left_claim")
+    #  end
+    #end
+
+    #def left_claim_is_older_than_right_claim?
+    #  left_claim.created_at < right_claim.created_at
+    #end
   end
 end
