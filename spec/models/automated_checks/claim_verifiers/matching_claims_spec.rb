@@ -59,7 +59,10 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
         :task,
         :passed,
         claim: other_claim,
-        name: "matching_details"
+        name: "matching_details",
+        data: {
+          matching_claims: [source_claim.reference]
+        }
       )
 
       described_class.new(claim: source_claim).perform
@@ -98,7 +101,10 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
         :task,
         :failed,
         claim: source_claim,
-        name: "matching_details"
+        name: "matching_details",
+        data: {
+          matching_claims: [other_claim.reference]
+        }
       )
 
       described_class.new(claim: source_claim).perform
@@ -134,7 +140,6 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
         email_address: "duplicate@example.com",
         created_at: 1.day.ago
       )
-      Claims::Match.create_match!(source_claim, other_claim)
       source_task = create_incomplete_matching_details_task(source_claim, matching_claims: [other_claim])
       other_task = create_incomplete_matching_details_task(other_claim, matching_claims: [source_claim])
 
@@ -155,7 +160,6 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
         email_address: "duplicate@example.com",
         created_at: 1.day.ago
       )
-      Claims::Match.create_match!(source_claim, other_claim)
 
       described_class.new(claim: source_claim).perform
 
@@ -193,7 +197,6 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
         email_address: "duplicate@example.com",
         created_at: 1.day.ago
       )
-      Claims::Match.create_match!(source_claim, other_claim)
       create_incomplete_matching_details_task(source_claim, matching_claims: [other_claim])
       create_incomplete_matching_details_task(other_claim, matching_claims: [source_claim])
       source_claim.update!(email_address: "changed@example.com")
@@ -213,13 +216,15 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
         email_address: "duplicate@example.com",
         created_at: 1.day.ago
       )
-      Claims::Match.create_match!(source_claim, other_claim)
       create_incomplete_matching_details_task(source_claim, matching_claims: [other_claim])
       completed_task = create(
         :task,
         :passed,
         claim: other_claim,
-        name: "matching_details"
+        name: "matching_details",
+        data: {
+          matching_claims: [source_claim.reference]
+        }
       )
       source_claim.update!(email_address: "changed@example.com")
 
@@ -238,12 +243,14 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
         email_address: "duplicate@example.com",
         created_at: 1.day.ago
       )
-      Claims::Match.create_match!(source_claim, other_claim)
       completed_task = create(
         :task,
         :failed,
         claim: source_claim,
-        name: "matching_details"
+        name: "matching_details",
+        data: {
+          matching_claims: [other_claim.reference]
+        }
       )
       create_incomplete_matching_details_task(other_claim, matching_claims: [source_claim])
       source_claim.update!(email_address: "changed@example.com")
@@ -263,7 +270,6 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
         email_address: "duplicate@example.com",
         created_at: 1.day.ago
       )
-      Claims::Match.create_match!(source_claim, other_claim)
       create_incomplete_matching_details_task(source_claim, matching_claims: [other_claim])
       other_task = create_incomplete_matching_details_task(other_claim, matching_claims: [source_claim])
       create(:decision, claim: other_claim, approved: true)
@@ -285,7 +291,6 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
         email_address: "duplicate@example.com",
         created_at: 1.day.ago
       )
-      Claims::Match.create_match!(source_claim, other_claim)
       source_task = create_incomplete_matching_details_task(source_claim, matching_claims: [other_claim])
       create_incomplete_matching_details_task(other_claim, matching_claims: [source_claim])
       create(:decision, claim: source_claim, approved: true)
@@ -314,8 +319,6 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
         national_insurance_number: "AB000002C",
         created_at: 1.day.ago
       )
-      Claims::Match.create_match!(source_claim, other_claim)
-      Claims::Match.create_match!(other_claim, remaining_match)
       create_incomplete_matching_details_task(source_claim, matching_claims: [other_claim])
       other_task = create_incomplete_matching_details_task(
         other_claim,
@@ -349,8 +352,6 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
         national_insurance_number: "AB000001C",
         created_at: 1.day.ago
       )
-      Claims::Match.create_match!(source_claim, removed_match)
-      Claims::Match.create_match!(source_claim, remaining_match)
       source_task = create_incomplete_matching_details_task(
         source_claim,
         matching_claims: [removed_match, remaining_match]
@@ -381,7 +382,6 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
         email_address: "new@example.com",
         created_at: 1.day.ago
       )
-      Claims::Match.create_match!(source_claim, removed_match)
       source_task = create_incomplete_matching_details_task(source_claim, matching_claims: [removed_match])
       create_incomplete_matching_details_task(removed_match, matching_claims: [source_claim])
       source_claim.update!(email_address: "new@example.com")

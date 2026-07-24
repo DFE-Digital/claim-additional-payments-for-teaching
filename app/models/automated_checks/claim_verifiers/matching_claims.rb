@@ -6,21 +6,23 @@ module AutomatedChecks
       end
 
       def perform
+        finder = Claim::MatchingAttributeFinder.new(source_claim)
+
+        existing_matches = Claims::Match.matching_claims(source_claim)
+
+        current_matches = finder.matching_claims
+
+        removed_matches = existing_matches - current_matches
+
         ApplicationRecord.transaction do
-          result = Claims::Match.update_matching_claims!(source_claim)
+          removed_matches.each do |removed_match|
+            remove_match!(source_claim, removed_match)
+            remove_match!(removed_match, source_claim)
+          end
 
-          if FeatureFlag.enabled?(:persist_matching_claims)
-            result.removed_matches.each do |removed_match|
-              remove_match!(source_claim, removed_match)
-              remove_match!(removed_match, source_claim)
-            end
-
-            current_matches = result.new_matches + result.existing_matches
-
-            current_matches.each do |matching_claim|
-              record_match!(source_claim, matching_claim)
-              record_match!(matching_claim, source_claim)
-            end
+          current_matches.each do |matching_claim|
+            record_match!(source_claim, matching_claim)
+            record_match!(matching_claim, source_claim)
           end
         end
       end

@@ -73,7 +73,7 @@ RSpec.describe "Admin matching claims task" do
             :claim,
             :approved,
             policy: Policies::TargetedRetentionIncentivePayments,
-            email_address: "seymour.skinner@springfield-elementary.edu"
+            email_address: "seymour.skinner@springfield-elementary.edu",
           )
 
           new_claim = submit_a_claim
