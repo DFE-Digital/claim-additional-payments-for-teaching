@@ -1,10 +1,6 @@
 module RailsEnvExtensions
   def enable_home_components?
-    !production? || review_app_like? || test_app?
-  end
-
-  def review_app_like?
-    review_app? || staging_app?
+    !production? || review_app? || staging_app? || test_app?
   end
 
   def test_app?
