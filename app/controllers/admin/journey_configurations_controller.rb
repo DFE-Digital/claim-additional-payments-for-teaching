@@ -33,8 +33,11 @@ module Admin
     end
 
     def update
-      journey_configuration.update!(journey_configuration_params)
-      redirect_to admin_journey_configurations_url
+      if journey_configuration.update(journey_configuration_params)
+        redirect_to admin_journey_configurations_url
+      else
+        render :edit, status: :unprocessable_entity
+      end
     end
 
     private
@@ -58,6 +61,8 @@ module Admin
         .require(:journey_configuration)
         .permit(
           :availability_message,
+          :close_date,
+          :close_time,
           :open_for_submissions,
           :current_academic_year,
           :teacher_id_enabled
