@@ -89,6 +89,12 @@ variable "postgres_flexible_server_sku" {
 variable "postgres_enable_high_availability" {
   default = false
 }
+
+variable "server_version" {
+  type = number
+  default = 16
+  description = "Version number of Postgres to use"
+}
 variable "enable_logit" {
   type        = bool
   default     = false
