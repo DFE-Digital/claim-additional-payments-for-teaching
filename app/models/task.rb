@@ -63,13 +63,13 @@ class Task < ApplicationRecord
 
   scope :passed, -> { where(passed: true) }
   scope :failed, -> { where(passed: false) }
-
   scope :not_passed, -> { where(passed: [nil, false]) }
+  scope :has_passed_result, -> { where(passed: [true, false]) }
+  scope :awaiting_passed_result, -> { where(passed: nil) }
 
   scope :no_data_census_subjects_taught, -> { census_subjects_taught.where(passed: nil, claim_verifier_match: nil) }
 
   scope :blocks_approval, -> { where(name: BLOCKS_APPROAVAL) }
-
   scope :blocking_approval, -> { blocks_approval.not_passed }
 
   def to_param

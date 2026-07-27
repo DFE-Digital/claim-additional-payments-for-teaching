@@ -2,16 +2,31 @@ require "rails_helper"
 
 RSpec.describe StudentLoanPlanCheckJob do
   let(:admin) { create(:dfe_signin_user) }
+
   subject(:perform_job) { described_class.new.perform(admin) }
 
   before do
     create(:journey_configuration, :further_education_payments)
     create(:journey_configuration, :early_years_payment_provider_start)
     create(:journey_configuration, :early_years_teachers_financial_incentive_payments)
+
+    claim
+    student_loan_task
   end
 
-  let!(:claim) { create(:claim, claim_status, academic_year:, policy: Policies::TargetedRetentionIncentivePayments) }
+  let(:claim) { create(:claim, claim_status, academic_year:, policy: Policies::TargetedRetentionIncentivePayments) }
   let(:claim_status) { :submitted }
+  let(:student_loan_task) do
+    task = build(
+      :task,
+      claim:,
+      name: "student_loan_plan",
+      passed: nil
+    )
+
+    task.save!(context: :claim_verifier)
+    task
+  end
 
   let(:academic_year) { journey_configuration.current_academic_year }
   let(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments) }
@@ -27,7 +42,18 @@ RSpec.describe StudentLoanPlanCheckJob do
     end
 
     context "when the previous student loan plan check was run manually" do # not sure it's possible to do this any more
-      let!(:previous_task) { create(:task, claim: claim, name: "student_loan_plan", claim_verifier_match: nil, manual: true) }
+      let(:student_loan_task) do
+        task = build(
+          :task,
+          claim:,
+          name: "student_loan_plan",
+          claim_verifier_match: nil,
+          manual: true
+        )
+
+        task.save!(context: :claim_verifier)
+        task
+      end
 
       include_examples :student_loan_plan_claim_verifier_not_called
     end
@@ -43,7 +69,15 @@ RSpec.describe StudentLoanPlanCheckJob do
         claim.update!(submitted_using_slc_data: true)
       end
 
-      include_examples :student_loan_plan_claim_verifier_not_called
+      it "updates the student loan details" do
+        expect(ClaimStudentLoanDetailsUpdater).to receive(:call).with(claim, admin)
+        perform_job
+      end
+
+      it "calls the student loan plan claim verifier" do
+        expect(AutomatedChecks::ClaimVerifiers::StudentLoanPlan).to receive(:new).with(claim: claim).and_return(student_loan_plan_claim_verifier)
+        perform_job
+      end
     end
 
     context "when a claim was submitted with no SLC data available" do
@@ -94,7 +128,19 @@ RSpec.describe StudentLoanPlanCheckJob do
     end
 
     context "when the previous student loan plan check outcome was NO DATA" do
-      let!(:previous_task) { create(:task, claim: claim, name: "student_loan_plan", claim_verifier_match: nil, manual: false) }
+      let(:student_loan_task) do
+        task = build(
+          :task,
+          claim:,
+          name: "student_loan_plan",
+          claim_verifier_match: nil,
+          manual: false,
+          passed: nil
+        )
+
+        task.save!(context: :claim_verifier)
+        task
+      end
 
       it "updates the student loan details" do
         expect(ClaimStudentLoanDetailsUpdater).to receive(:call).with(claim, admin)
@@ -108,13 +154,36 @@ RSpec.describe StudentLoanPlanCheckJob do
     end
 
     context "when the previous student loan plan check outcome was FAILED" do
-      let!(:previous_task) { create(:task, claim: claim, name: "student_loan_plan", claim_verifier_match: :none, passed: false, manual: false) }
+      let(:student_loan_task) do
+        task = build(
+          :task,
+          claim:,
+          name: "student_loan_plan",
+          claim_verifier_match: :none,
+          passed: false,
+          manual: false
+        )
+
+        task.save!(context: :claim_verifier)
+        task
+      end
 
       include_examples :student_loan_plan_claim_verifier_not_called
     end
 
     context "when the previous student loan plan check outcome was PASSED" do
-      let!(:previous_task) { create(:task, claim: claim, name: "student_loan_plan", claim_verifier_match: :all, manual: false) }
+      let(:student_loan_task) do
+        task = build(
+          :task,
+          claim:,
+          name: "student_loan_plan",
+          claim_verifier_match: :all,
+          manual: false
+        )
+
+        task.save!(context: :claim_verifier)
+        task
+      end
 
       include_examples :student_loan_plan_claim_verifier_not_called
     end
