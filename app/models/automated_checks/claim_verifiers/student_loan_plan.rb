@@ -11,19 +11,26 @@ module AutomatedChecks
 
       def perform
         return unless claim.policy.auto_check_student_loan_plan_task?
-        return if task_exists?
+        return if task.has_result?
 
         if student_loans_data.any?
           if claim.student_loan_plan.blank?
-            create_task(match: nil, passed: nil)
+            task.assign_attributes(claim_verifier_match: nil, passed: nil, reason: nil)
           else
-            create_task(match: :all, passed: true)
+            task.assign_attributes(claim_verifier_match: :all, passed: true, reason: nil)
           end
         elsif student_loans_data_nino_only.any?
-          create_task(match: :none)
+          task.assign_attributes(claim_verifier_match: :none, reason: nil)
         else
-          create_task(match: nil, passed: nil, reason: "incomplete")
+          task.assign_attributes(claim_verifier_match: nil, passed: nil, reason: "incomplete")
         end
+
+        ApplicationRecord.transaction do
+          task.save!(context: :claim_verifier)
+          create_note(match: task.claim_verifier_match)
+        end
+
+        task
       end
 
       private
@@ -35,6 +42,18 @@ module AutomatedChecks
       delegate :repaying_plan_types, to: :student_loans_data, prefix: :slc
 
       alias_method :nino, :national_insurance_number
+
+      def task
+        @task ||= claim.tasks.find_by(name: TASK_NAME) || new_task
+      end
+
+      def new_task
+        claim.tasks.build(
+          name: TASK_NAME,
+          manual: false,
+          created_by: admin_user
+        )
+      end
 
       def student_loans_data
         @student_loans_data ||= StudentLoansData.where(nino:, date_of_birth:)
@@ -71,7 +90,7 @@ module AutomatedChecks
       def note_body(match:)
         prefix = "[SLC Student loan plan]"
         return "#{prefix} - SLC data checked, no matching entry found" unless match
-        return "#{prefix} - No match - DOB does not match" if match == :none
+        return "#{prefix} - No match - DOB does not match" if match == "none"
 
         if slc_repaying_plan_types
           "#{prefix} - Matched - has a student loan"
