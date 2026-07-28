@@ -63,30 +63,6 @@ module AutomatedChecks
         @student_loans_data_nino_only ||= StudentLoansData.where(nino:).where.not(date_of_birth:)
       end
 
-      def task_exists?
-        claim.tasks.where(name: TASK_NAME).exists?
-      end
-
-      # poorly named method that also creates a note
-      def create_task(match:, passed: nil, reason: nil)
-        task = claim.tasks.build(
-          {
-            name: TASK_NAME,
-            claim_verifier_match: match,
-            passed: passed,
-            manual: false,
-            created_by: admin_user,
-            reason:
-          }
-        )
-
-        task.save!(context: :claim_verifier)
-
-        create_note(match: match)
-
-        task
-      end
-
       def note_body(match:)
         prefix = "[SLC Student loan plan]"
         return "#{prefix} - SLC data checked, no matching entry found" unless match
