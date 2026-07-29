@@ -63,7 +63,7 @@ gem "httpclient"
 
 # Gov form builder to structure claims
 gem "govuk_design_system_formbuilder", "~> 6.2.1"
-gem "govuk-components", "~> 6.3.1"
+gem "govuk-components", "~> 6.4.1"
 
 # ROTP requried for Early Career Payments one-time password
 gem "rotp"
