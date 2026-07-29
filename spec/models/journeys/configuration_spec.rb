@@ -67,5 +67,47 @@ RSpec.describe Journeys::Configuration do
 
       expect(configuration).to be_valid
     end
+
+    it "treats Europe/London close datetimes consistently in BST" do
+      travel_to Time.zone.parse("2026-07-15 12:00:00 +01:00") do
+        configuration = described_class.new(
+          routing_name: Journeys::TeacherStudentLoanReimbursement.routing_name,
+          current_academic_year: "2020/2021",
+          open_for_submissions: true,
+          close_at: Time.zone.parse("2026-07-15 17:00:00 +01:00")
+        )
+
+        expect(configuration).to be_valid
+      end
+    end
+
+    it "treats Europe/London close datetimes consistently in GMT" do
+      travel_to Time.zone.parse("2026-12-15 12:00:00 +00:00") do
+        configuration = described_class.new(
+          routing_name: Journeys::TeacherStudentLoanReimbursement.routing_name,
+          current_academic_year: "2020/2021",
+          open_for_submissions: true,
+          close_at: Time.zone.parse("2026-12-15 17:00:00 +00:00")
+        )
+
+        expect(configuration).to be_valid
+      end
+    end
+
+    it "keeps the same UTC instant when a Europe/London close datetime is checked later in the year" do
+      close_at = Time.zone.parse("2026-07-15 17:00:00 +01:00")
+      configuration = described_class.new(
+        routing_name: Journeys::TeacherStudentLoanReimbursement.routing_name,
+        current_academic_year: "2020/2021",
+        open_for_submissions: true,
+        close_at: close_at
+      )
+
+      expect(configuration.close_at.utc).to eq(close_at.utc)
+
+      travel_to Time.zone.parse("2026-12-15 12:00:00 +00:00") do
+        expect(configuration.close_at.utc).to eq(close_at.utc)
+      end
+    end
   end
 end

@@ -60,11 +60,11 @@
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="reminders-warning-message">
               <%= render 'admin/journey_configurations/reminder_warning' %>
               <% close_at_error = journey_configuration.errors[:close_at].present? %>
-              <% close_at_value = journey_configuration.close_at&.strftime("%Y-%m-%dT%H:%M") %>
+              <% close_at_value = journey_configuration.close_at.present? ? journey_configuration.close_at.in_time_zone("London").strftime("%Y-%m-%dT%H:%M") : nil %>
 
               <div class="govuk-form-group <%= 'govuk-form-group--error' if close_at_error %>">
                 <label class="govuk-label" for="close-at">
-                  Close at
+                  Close at (Europe/London)
                 </label>
                 <% if close_at_error %>
                   <p class="govuk-error-message">
@@ -72,7 +72,7 @@
                     <%= journey_configuration.errors.full_messages_for(:close_at).first %>
                   </p>
                 <% end %>
-                <input class="govuk-input govuk-!-width-one-third" id="close-at" name="journey_configuration[close_at]" type="datetime-local" value="<%= close_at_value %>">
+                <input class="govuk-input govuk-!-width-one-third" id="close-at" name="journey_configuration[close_at]" type="datetime-local" min="<%= Time.current.in_time_zone("London").strftime("%Y-%m-%dT%H:%M") %>" value="<%= close_at_value %>">
               </div>
             </div>
             <div class="govuk-radios__item">

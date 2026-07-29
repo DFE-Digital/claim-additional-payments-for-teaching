@@ -29,6 +29,8 @@ module Journeys
     validates :close_at, presence: true, if: -> { opening_for_submissions? }
     validate :close_at_must_be_in_the_future, if: -> { opening_for_submissions? }
 
+    attribute :close_at, :datetime
+
     def targeted_retention_incentive_payments?
       journey == Journeys::TargetedRetentionIncentivePayments
     end
@@ -51,7 +53,9 @@ module Journeys
 
     def close_at_must_be_in_the_future
       return if close_at.blank?
-      return if close_at > Time.current
+
+      current_time = Time.current.in_time_zone("London")
+      return if close_at > current_time
 
       errors.add(:close_at, "must be in the future")
     end

@@ -32,7 +32,7 @@ RSpec.feature "Service configuration" do
 
     expect { click_on "Save" }.to_not enqueue_job(SendReminderEmailsJob)
 
-    expect(current_path).to eq(admin_journey_configurations_path)
+    expect(current_path).to eq(edit_admin_journey_configuration_path(journey_configuration))
 
     expect(page).to have_content("Closed")
     expect(journey_configuration.reload.open_for_submissions).to be false
@@ -65,10 +65,12 @@ RSpec.feature "Service configuration" do
     end
 
     expect(page).to have_css("#close-at")
+    expect(page).to have_css("#close-at[min]")
 
     within_fieldset("Service status") { choose("Open") }
 
     expect(page).to have_css("#close-at")
+    expect(page).to have_css("#close-at[min]")
   end
 
   scenario "shows saved close date and close time values in the edit fields", js: true do
@@ -143,7 +145,7 @@ RSpec.feature "Service configuration" do
       expect(page).to have_content(I18n.t("admin.journey_configuration.reminder_warning", count: count))
       # make sure email reminder job is queued
       expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob)
-      expect(current_path).to eq(admin_journey_configurations_path)
+      expect(current_path).to eq(edit_admin_journey_configuration_path(journey_configuration))
 
       expect(page).to have_content("Open")
       expect(page).not_to have_content("Closed")

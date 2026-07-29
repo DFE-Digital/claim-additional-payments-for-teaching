@@ -16,7 +16,7 @@ RSpec.describe "Service configuration" do
           close_at: close_at
         })
 
-        expect(response).to redirect_to(admin_journey_configurations_path)
+        expect(response).to redirect_to(edit_admin_journey_configuration_path(journey_configuration))
 
         journey_configuration.reload
         expect(journey_configuration.open_for_submissions).to be false
@@ -34,7 +34,7 @@ RSpec.describe "Service configuration" do
           close_at: close_at
         })
 
-        expect(response).to redirect_to(admin_journey_configurations_path)
+        expect(response).to redirect_to(edit_admin_journey_configuration_path(practitioner_journey_configuration))
 
         practitioner_journey_configuration.reload
         expect(practitioner_journey_configuration.close_at).to eq(close_at)
@@ -47,6 +47,51 @@ RSpec.describe "Service configuration" do
         })
 
         expect(response).to have_http_status(:unprocessable_content)
+      end
+
+      it "parses a close datetime in the Europe/London timezone for BST" do
+        travel_to Time.zone.parse("2026-07-15 12:00:00 +01:00") do
+          sign_in_as_service_operator
+
+          patch admin_journey_configuration_path(journey_configuration, journey_configuration: {
+            open_for_submissions: false,
+            close_at: "2026-07-15T17:00"
+          })
+
+          expect(response).to redirect_to(edit_admin_journey_configuration_path(journey_configuration))
+          expect(journey_configuration.reload.close_at).to eq(Time.zone.parse("2026-07-15 17:00:00 +01:00"))
+        end
+      end
+
+      it "parses a close datetime in the Europe/London timezone for GMT" do
+        travel_to Time.zone.parse("2026-12-15 12:00:00 +00:00") do
+          sign_in_as_service_operator
+
+          patch admin_journey_configuration_path(journey_configuration, journey_configuration: {
+            open_for_submissions: false,
+            close_at: "2026-12-15T17:00"
+          })
+
+          expect(response).to redirect_to(edit_admin_journey_configuration_path(journey_configuration))
+          expect(journey_configuration.reload.close_at).to eq(Time.zone.parse("2026-12-15 17:00:00 +00:00"))
+        end
+      end
+
+      it "keeps the same UTC instant when the close datetime is read later in the year" do
+        travel_to Time.zone.parse("2026-07-15 12:00:00 +01:00") do
+          sign_in_as_service_operator
+
+          patch admin_journey_configuration_path(journey_configuration, journey_configuration: {
+            open_for_submissions: false,
+            close_at: "2026-07-15T17:00"
+          })
+
+          expect(journey_configuration.reload.close_at.utc).to eq(Time.utc(2026, 7, 15, 16, 0, 0))
+        end
+
+        travel_to Time.zone.parse("2026-12-15 12:00:00 +00:00") do
+          expect(journey_configuration.reload.close_at.utc).to eq(Time.utc(2026, 7, 15, 16, 0, 0))
+        end
       end
     end
   end

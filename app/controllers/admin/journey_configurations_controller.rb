@@ -20,7 +20,7 @@ module Admin
 
     def update
       if journey_configuration.update(journey_configuration_params)
-        redirect_to admin_journey_configurations_url
+        redirect_to edit_admin_journey_configuration_path(journey_configuration)
       else
         load_edit_data
         render :edit, status: :unprocessable_entity
@@ -60,7 +60,7 @@ module Admin
     end
 
     def journey_configuration_params
-      params
+      permitted = params
         .require(:journey_configuration)
         .permit(
           :availability_message,
@@ -69,6 +69,12 @@ module Admin
           :current_academic_year,
           :teacher_id_enabled
         )
+
+      if permitted[:close_at].present?
+        permitted[:close_at] = Time.zone.parse(permitted[:close_at]).in_time_zone("London")
+      end
+
+      permitted
     end
 
     def send_reminders
