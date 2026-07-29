@@ -1,6 +1,8 @@
 FactoryBot.define do
   factory :journey_configuration, class: "journeys/configuration" do
     current_academic_year { AcademicYear.current }
+    close_date { Date.current }
+    close_time { "12:00" }
 
     trait :student_loans do
       routing_name { Journeys::TeacherStudentLoanReimbursement.routing_name }
@@ -52,6 +54,8 @@ FactoryBot.define do
 
     trait :closed do
       open_for_submissions { false }
+      close_date { Date.current }
+      close_time { "12:00" }
     end
   end
 end

@@ -57,18 +57,14 @@
               <%= f.radio_button :open_for_submissions, true, class: "govuk-radios__input", data: { aria_controls: "reminders-warning-message" } %>
               <%= f.label :open_for_submissions, "Open", value: true, class: "govuk-label govuk-radios__label" %>
             </div>
-            <%= render 'admin/journey_configurations/reminder_warning' %>
-            <div class="govuk-radios__item">
-              <%= f.radio_button :open_for_submissions, false, class: "govuk-radios__input", data: { aria_controls: "conditional-service-status-close-date" } %>
-              <%= f.label :open_for_submissions, "Closed", value: false, class: "govuk-label govuk-radios__label" %>
-            </div>
-            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-service-status-close-date">
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="reminders-warning-message">
+              <%= render 'admin/journey_configurations/reminder_warning' %>
               <% close_date_error = journey_configuration.errors[:close_date].present? %>
               <% close_time_error = journey_configuration.errors[:close_time].present? %>
 
               <div class="govuk-form-group <%= 'govuk-form-group--error' if close_date_error %>">
                 <label class="govuk-label" for="close-date">
-                  Close date
+                  Close at date
                 </label>
                 <% if close_date_error %>
                   <p class="govuk-error-message">
@@ -80,7 +76,7 @@
               </div>
               <div class="govuk-form-group <%= 'govuk-form-group--error' if close_time_error %>">
                 <label class="govuk-label" for="close-time">
-                  Close time
+                  Close at time
                 </label>
                 <% if close_time_error %>
                   <p class="govuk-error-message">
@@ -89,7 +85,11 @@
                   </p>
                 <% end %>
                 <input class="govuk-input govuk-!-width-one-third" id="close-time" name="journey_configuration[close_time]" type="time" value="<%= journey_configuration.close_time %>">
-              </div>            
+              </div>
+            </div>
+            <div class="govuk-radios__item">
+              <%= f.radio_button :open_for_submissions, false, class: "govuk-radios__input" %>
+              <%= f.label :open_for_submissions, "Closed", value: false, class: "govuk-label govuk-radios__label" %>
             </div>
           </div>
         </fieldset>
