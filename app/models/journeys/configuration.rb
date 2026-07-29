@@ -13,8 +13,6 @@ module Journeys
   class Configuration < ApplicationRecord
     self.table_name = "journey_configurations"
 
-    attr_accessor :close_date, :close_time
-
     default_scope do
       where.not(
         routing_name: %w[

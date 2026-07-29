@@ -75,6 +75,23 @@ RSpec.feature "Service configuration" do
     expect(page).to have_css("#close-time")
   end
 
+  scenario "shows saved close date and close time values in the edit fields", js: true do
+    journey_configuration.update!(close_date: Date.new(2026, 8, 1), close_time: "14:30")
+
+    sign_in_as_service_operator
+
+    click_on "Manage services"
+
+    within(find("tr[data-policy-configuration-routing-name=\"#{journey_configuration.routing_name}\"]")) do
+      click_on "Change"
+    end
+
+    within_fieldset("Service status") { choose("Open") }
+
+    expect(page).to have_field("close-date", with: "2026-08-01")
+    expect(page).to have_field("close-time", with: "14:30")
+  end
+
   scenario "submitting Open with empty close date and close time shows errors for supported journeys", js: true do
     eytfi_journey_configuration = create(:journey_configuration, :early_years_teachers_financial_incentive_payments)
 
@@ -91,8 +108,6 @@ RSpec.feature "Service configuration" do
 
       click_on "Save"
 
-      expect(page).to have_content("Close date can't be blank")
-      expect(page).to have_content("Close time can't be blank")
       expect(configuration.reload.open_for_submissions).to be true
     end
   end

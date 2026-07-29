@@ -61,6 +61,7 @@
               <%= render 'admin/journey_configurations/reminder_warning' %>
               <% close_date_error = journey_configuration.errors[:close_date].present? %>
               <% close_time_error = journey_configuration.errors[:close_time].present? %>
+              <% close_time_value = journey_configuration.close_time.is_a?(Time) ? journey_configuration.close_time.strftime("%H:%M") : journey_configuration.close_time %>
 
               <div class="govuk-form-group <%= 'govuk-form-group--error' if close_date_error %>">
                 <label class="govuk-label" for="close-date">
@@ -84,7 +85,7 @@
                     <%= journey_configuration.errors.full_messages_for(:close_time).first %>
                   </p>
                 <% end %>
-                <input class="govuk-input govuk-!-width-one-third" id="close-time" name="journey_configuration[close_time]" type="time" value="<%= journey_configuration.close_time %>">
+                <input class="govuk-input govuk-!-width-one-third" id="close-time" name="journey_configuration[close_time]" type="time" value="<%= close_time_value %>">
               </div>
             </div>
             <div class="govuk-radios__item">
