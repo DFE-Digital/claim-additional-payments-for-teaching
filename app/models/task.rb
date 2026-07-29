@@ -95,4 +95,8 @@ class Task < ApplicationRecord
   def blocks_approval?
     BLOCKS_APPROAVAL.include?(name)
   end
+
+  def has_result?
+    !passed.nil?
+  end
 end

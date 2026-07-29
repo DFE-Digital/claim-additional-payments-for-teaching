@@ -11,7 +11,7 @@ module AutomatedChecks
 
       def perform
         return unless required?
-        return unless awaiting_task?
+        return if task.has_result?
 
         if claimant_tps_records.empty?
           create_task(match: nil)
@@ -88,8 +88,11 @@ module AutomatedChecks
         )
       end
 
+      def task
+        @task ||= claim.tasks.find_or_initialize_by(name: TASK_NAME)
+      end
+
       def create_task(match:, passed: nil)
-        task = claim.tasks.find_or_initialize_by(name: TASK_NAME)
         task.claim_verifier_match = match
         task.passed = passed
         task.manual = false
