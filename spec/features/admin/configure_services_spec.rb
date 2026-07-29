@@ -12,7 +12,7 @@ RSpec.feature "Service configuration" do
     expect(page).to have_content("Sign in with DfE Identity")
   end
 
-  scenario "Service operator closes a service for submissions" do
+  scenario "Service operator closes a service for submissions", js: true do
     sign_in_as_service_operator
 
     click_on "Manage services"
@@ -25,6 +25,9 @@ RSpec.feature "Service configuration" do
     end
 
     within_fieldset("Service status") { choose("Closed") }
+
+    find("#close-date").set("2026-08-01")
+    find("#close-time").set("14:30")
 
     fill_in "Availability message", with: "You will be able to make a claim when the service enters public beta in November."
 
@@ -58,6 +61,46 @@ RSpec.feature "Service configuration" do
     expect(journey_configuration.reload.open_for_submissions).to be true
   end
 
+  scenario "selecting Closed shows close date and close time fields", js: true do
+    sign_in_as_service_operator
+
+    click_on "Manage services"
+
+    within(find("tr[data-policy-configuration-routing-name=\"#{journey_configuration.routing_name}\"]")) do
+      click_on "Change"
+    end
+
+    expect(page).to have_field("Close date", visible: :hidden)
+    expect(page).to have_field("Close time", visible: :hidden)
+
+    within_fieldset("Service status") { choose("Closed") }
+
+    expect(page).to have_field("Close date", visible: :visible)
+    expect(page).to have_field("Close time", visible: :visible)
+  end
+
+  scenario "submitting Closed with empty close date and close time shows errors for supported journeys", js: true do
+    eytfi_journey_configuration = create(:journey_configuration, :early_years_teachers_financial_incentive_payments)
+
+    sign_in_as_service_operator
+
+    [journey_configuration, eytfi_journey_configuration].each do |configuration|
+      visit admin_journey_configurations_path
+
+      within(find("tr[data-policy-configuration-routing-name=\"#{configuration.routing_name}\"]")) do
+        click_on "Change"
+      end
+
+      within_fieldset("Service status") { choose("Closed") }
+
+      click_on "Save"
+
+      expect(page).to have_content("Close date can't be blank")
+      expect(page).to have_content("Close time can't be blank")
+      expect(configuration.reload.open_for_submissions).to be true
+    end
+  end
+
   context "Reminders exist" do
     let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments) }
     let(:count) { [*1..5].sample }
@@ -73,7 +116,7 @@ RSpec.feature "Service configuration" do
     end
 
     scenario "Service operator opens an TRI service for submissions" do
-      journey_configuration.update(open_for_submissions: false)
+      journey_configuration.update_column(:open_for_submissions, false)
       sign_in_as_service_operator
 
       click_on "Manage services"

@@ -30,4 +30,21 @@ RSpec.describe Journeys::Configuration do
     expect(described_class.new(routing_name: Journeys::TeacherStudentLoanReimbursement.routing_name, current_academic_year: "2020-2021")).not_to be_valid
     expect(described_class.new(routing_name: Journeys::TeacherStudentLoanReimbursement.routing_name, current_academic_year: "2020/2021")).to be_valid
   end
+
+  describe "close date and close time" do
+    it "accepts close date and close time when service is closed" do
+      configuration = described_class.new(
+        routing_name: Journeys::TeacherStudentLoanReimbursement.routing_name,
+        current_academic_year: "2020/2021",
+        open_for_submissions: false,
+        close_date: "2026-08-01",
+        close_time: "14:30"
+      )
+
+      expect(configuration).to be_valid
+      expect(configuration.save).to be true
+      expect(configuration.close_date).to eq("2026-08-01")
+      expect(configuration.close_time).to eq("14:30")
+    end
+  end
 end

@@ -8,7 +8,12 @@ RSpec.describe "Service configuration" do
 
     describe "admin_journey_configurations#update" do
       it "sets the configuration's availability message and status" do
-        patch admin_journey_configuration_path(journey_configuration, journey_configuration: {open_for_submissions: false, availability_message: "Test message"})
+        patch admin_journey_configuration_path(journey_configuration, journey_configuration: {
+          open_for_submissions: false,
+          availability_message: "Test message",
+          close_date: Date.current,
+          close_time: "12:00"
+        })
 
         expect(response).to redirect_to(admin_journey_configurations_path)
 

@@ -13,6 +13,8 @@ module Journeys
   class Configuration < ApplicationRecord
     self.table_name = "journey_configurations"
 
+    attr_accessor :close_date, :close_time
+
     default_scope do
       where.not(
         routing_name: %w[
@@ -26,6 +28,7 @@ module Journeys
     attribute :current_academic_year, AcademicYear::Type.new
 
     validates :current_academic_year_before_type_cast, format: {with: AcademicYear::ACADEMIC_YEAR_REGEXP}
+    validates :close_date, :close_time, presence: true, unless: :open_for_submissions?
 
     def targeted_retention_incentive_payments?
       journey == Journeys::TargetedRetentionIncentivePayments
