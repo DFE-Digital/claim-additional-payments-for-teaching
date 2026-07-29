@@ -26,8 +26,7 @@ RSpec.feature "Service configuration" do
 
     within_fieldset("Service status") { choose("Open") }
 
-    find("#close-date").set("2026-08-01")
-    find("#close-time").set("14:30")
+    find("#close-at").set("2026-08-01T14:30")
 
     within_fieldset("Service status") { choose("Closed") }
 
@@ -49,8 +48,7 @@ RSpec.feature "Service configuration" do
 
     within_fieldset("Service status") { choose("Open") }
 
-    find("#close-date").set("2026-08-01")
-    find("#close-time").set("14:30")
+    find("#close-at").set("2026-08-01T14:30")
 
     expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob).with { |arg| expect(arg).to eql(Journeys::TeacherStudentLoanReimbursement) }
 
@@ -66,17 +64,15 @@ RSpec.feature "Service configuration" do
       click_on "Change"
     end
 
-    expect(page).to have_css("#close-date")
-    expect(page).to have_css("#close-time")
+    expect(page).to have_css("#close-at")
 
     within_fieldset("Service status") { choose("Open") }
 
-    expect(page).to have_css("#close-date")
-    expect(page).to have_css("#close-time")
+    expect(page).to have_css("#close-at")
   end
 
   scenario "shows saved close date and close time values in the edit fields", js: true do
-    journey_configuration.update!(close_date: Date.new(2026, 8, 1), close_time: "14:30")
+    journey_configuration.update!(close_at: Time.zone.parse("2026-08-01 14:30"))
 
     sign_in_as_service_operator
 
@@ -88,8 +84,7 @@ RSpec.feature "Service configuration" do
 
     within_fieldset("Service status") { choose("Open") }
 
-    expect(page).to have_field("close-date", with: "2026-08-01")
-    expect(page).to have_field("close-time", with: "14:30")
+    expect(page).to have_field("close-at", with: "2026-08-01T14:30")
   end
 
   scenario "submitting Open with empty close date and close time shows errors for supported journeys", js: true do
@@ -144,8 +139,7 @@ RSpec.feature "Service configuration" do
       end
 
       within_fieldset("Service status") { choose("Open") }
-      find("#close-date").set("2026-08-01")
-      find("#close-time").set("14:30")
+      find("#close-at").set("2026-08-01T14:30")
       expect(page).to have_content(I18n.t("admin.journey_configuration.reminder_warning", count: count))
       # make sure email reminder job is queued
       expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob)
@@ -169,8 +163,7 @@ RSpec.feature "Service configuration" do
       end
 
       select "2023/2024", from: "Accepting claims for academic year"
-      find("#close-date").set("2026-08-01")
-      find("#close-time").set("14:30")
+      find("#close-at").set("2026-08-01T14:30")
       expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob).with { |arg| expect(arg).to eql(journey_configuration.journey) }
 
       expect(page).to have_content(AcademicYear.new(2023).to_s)

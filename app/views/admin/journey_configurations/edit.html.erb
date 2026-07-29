@@ -59,33 +59,20 @@
             </div>
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="reminders-warning-message">
               <%= render 'admin/journey_configurations/reminder_warning' %>
-              <% close_date_error = journey_configuration.errors[:close_date].present? %>
-              <% close_time_error = journey_configuration.errors[:close_time].present? %>
-              <% close_time_value = journey_configuration.close_time.is_a?(Time) ? journey_configuration.close_time.strftime("%H:%M") : journey_configuration.close_time %>
+              <% close_at_error = journey_configuration.errors[:close_at].present? %>
+              <% close_at_value = journey_configuration.close_at&.strftime("%Y-%m-%dT%H:%M") %>
 
-              <div class="govuk-form-group <%= 'govuk-form-group--error' if close_date_error %>">
-                <label class="govuk-label" for="close-date">
-                  Close at date
+              <div class="govuk-form-group <%= 'govuk-form-group--error' if close_at_error %>">
+                <label class="govuk-label" for="close-at">
+                  Close at
                 </label>
-                <% if close_date_error %>
+                <% if close_at_error %>
                   <p class="govuk-error-message">
                     <span class="govuk-visually-hidden">Error:</span>
-                    <%= journey_configuration.errors.full_messages_for(:close_date).first %>
+                    <%= journey_configuration.errors.full_messages_for(:close_at).first %>
                   </p>
                 <% end %>
-                <input class="govuk-input govuk-!-width-one-third" id="close-date" name="journey_configuration[close_date]" type="date" value="<%= journey_configuration.close_date %>">
-              </div>
-              <div class="govuk-form-group <%= 'govuk-form-group--error' if close_time_error %>">
-                <label class="govuk-label" for="close-time">
-                  Close at time
-                </label>
-                <% if close_time_error %>
-                  <p class="govuk-error-message">
-                    <span class="govuk-visually-hidden">Error:</span>
-                    <%= journey_configuration.errors.full_messages_for(:close_time).first %>
-                  </p>
-                <% end %>
-                <input class="govuk-input govuk-!-width-one-third" id="close-time" name="journey_configuration[close_time]" type="time" value="<%= close_time_value %>">
+                <input class="govuk-input govuk-!-width-one-third" id="close-at" name="journey_configuration[close_at]" type="datetime-local" value="<%= close_at_value %>">
               </div>
             </div>
             <div class="govuk-radios__item">

@@ -64,8 +64,7 @@ module Admin
         .require(:journey_configuration)
         .permit(
           :availability_message,
-          :close_date,
-          :close_time,
+          :close_at,
           :open_for_submissions,
           :current_academic_year,
           :teacher_id_enabled
