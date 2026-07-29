@@ -42,8 +42,7 @@ module Policies
       validates :employment_status, on: [:submit], presence: {message: ->(object, _data) { "Select if you still work at #{object.claim_school_name}, another school or no longer teach in England" }}
       validates :had_leadership_position, on: [:submit], inclusion: {in: [true, false], message: "Select yes if you were employed in a leadership position"}
       validates :mostly_performed_leadership_duties, on: [:submit], inclusion: {in: [true, false], message: "Select yes if you spent more than half your working hours on leadership duties"}, if: :had_leadership_position?
-      validates_numericality_of :award_amount, message: "Enter a valid monetary amount", allow_nil: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 99999
-      validates :award_amount, on: :amendment, award_range: {max: 5_000}, if: :award_amount_changed?
+      validate :validate_award_amount
       validates :teacher_reference_number, on: :amendment, presence: {message: "Enter your teacher reference number"}
       validate :validate_teacher_reference_number_length
 
@@ -88,6 +87,10 @@ module Policies
       end
 
       private
+
+      def validate_award_amount
+        policy.award_amount_rules(self).validate(context: validation_context)
+      end
 
       def eligibility_checker
         @eligibility_checker ||= PolicyEligibilityChecker.new(answers: self)

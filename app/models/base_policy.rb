@@ -94,6 +94,12 @@ module BasePolicy
     10_000.00
   end
 
+  # Policies that constrain the size of an award define an AwardAmountRules and
+  # overwrite this. `record` is whichever model owns the award amount.
+  def award_amount_rules(record)
+    nil
+  end
+
   def current_academic_year
     Journeys.for_policy(self).configuration.current_academic_year
   end
