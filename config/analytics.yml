@@ -8,6 +8,7 @@ shared:
     - updated_at # datetime, when was this journey configuration last updated
     - current_academic_year # string, configured academic year for this journey
     - teacher_id_enabled # boolean, is teacher ID enabled for this journey
+    - close_at # datetime, when this journey configuration is scheduled to close
   :reminders:
     - id # uuid, that uniquely this reminder
     - created_at # datetime, when this reminder was created
