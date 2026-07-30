@@ -3,11 +3,17 @@ require "rails_helper"
 RSpec.feature "Service configuration" do
   let!(:journey_configuration) { create(:journey_configuration, :student_loans) }
 
+  def future_close_at_form_value(days_from_now = 1)
+    Time.zone.now.in_time_zone("London").advance(days: days_from_now).strftime("%Y-%m-%dT%H:%M")
+  end
+
   scenario "when teacher id configurable for service" do
     sign_in_as_service_operator
 
     click_on "Manage services"
-    click_on "Change"
+    within(page.find("tr", text: journey_configuration.journey.full_name)) do
+      click_on "Change"
+    end
 
     expect(page).to have_content("Sign in with DfE Identity")
   end
@@ -18,7 +24,7 @@ RSpec.feature "Service configuration" do
     click_on "Manage services"
 
     expect(page).to have_content("Teachers: claim back your student loan repayments")
-    within(find("tr[data-policy-configuration-routing-name=\"#{journey_configuration.routing_name}\"]")) do
+    within(page.find("tr", text: journey_configuration.journey.full_name)) do
       expect(page).to have_content("Open")
       expect(page).not_to have_content("Closed")
       click_on "Change"
@@ -26,7 +32,7 @@ RSpec.feature "Service configuration" do
 
     within_fieldset("Service status") { choose("Open") }
 
-    find("#close-at").set("2026-08-01T14:30")
+    find("#close-at").set(future_close_at_form_value(7))
 
     within_fieldset("Service status") { choose("Closed") }
 
@@ -39,7 +45,9 @@ RSpec.feature "Service configuration" do
 
     # - Service operator opens a service for submissions
 
-    within(find("tr[data-policy-configuration-routing-name=\"#{journey_configuration.routing_name}\"]")) do
+    visit admin_journey_configurations_path
+
+    within(page.find("tr", text: journey_configuration.journey.full_name)) do
       expect(page).to have_content("Closed")
       expect(page).not_to have_content("Open")
 
@@ -48,11 +56,11 @@ RSpec.feature "Service configuration" do
 
     within_fieldset("Service status") { choose("Open") }
 
-    find("#close-at").set("2026-08-01T14:30")
+    find("#close-at").set(future_close_at_form_value(7))
 
     expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob).with { |arg| expect(arg).to eql(Journeys::TeacherStudentLoanReimbursement) }
 
-    expect(page).to have_content("Open")
+    expect(page).to have_content("Service open")
   end
 
   scenario "selecting Open shows close date and close time fields", js: true do
@@ -74,7 +82,7 @@ RSpec.feature "Service configuration" do
   end
 
   scenario "shows saved close date and close time values in the edit fields", js: true do
-    journey_configuration.update!(close_at: Time.zone.parse("2026-08-01 14:30"))
+    journey_configuration.update!(close_at: Time.zone.now.in_time_zone("London").advance(days: 7))
 
     sign_in_as_service_operator
 
@@ -86,7 +94,7 @@ RSpec.feature "Service configuration" do
 
     within_fieldset("Service status") { choose("Open") }
 
-    expect(page).to have_field("close-at", with: "2026-08-01T14:30")
+    expect(page).to have_field("close-at", with: journey_configuration.reload.close_at.in_time_zone("London").strftime("%Y-%m-%dT%H:%M"))
   end
 
   scenario "submitting Open with empty close date and close time shows errors for supported journeys", js: true do
@@ -130,7 +138,7 @@ RSpec.feature "Service configuration" do
       click_on "Manage services"
 
       expect(page).to have_content("Claim additional payments for teaching")
-      within(find("tr[data-policy-configuration-routing-name=\"#{journey_configuration.routing_name}\"]")) do
+      within(page.find("tr", text: journey_configuration.journey.full_name)) do
         expect(page).to have_content("Closed")
         expect(page).not_to have_content("Open")
         click_on "Change"
@@ -141,14 +149,14 @@ RSpec.feature "Service configuration" do
       end
 
       within_fieldset("Service status") { choose("Open") }
-      find("#close-at").set("2026-08-01T14:30")
+      find("#close-at").set(future_close_at_form_value(7))
       expect(page).to have_content(I18n.t("admin.journey_configuration.reminder_warning", count: count))
       # make sure email reminder job is queued
       expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob)
       expect(current_path).to eq(edit_admin_journey_configuration_path(journey_configuration))
 
-      expect(page).to have_content("Open")
-      expect(page).not_to have_content("Closed")
+      expect(page).to have_content("Service open")
+      expect(page).to have_css("input[name='journey_configuration[open_for_submissions]'][value='true'][checked]")
 
       expect(journey_configuration.reload.open_for_submissions).to be true
     end
@@ -165,7 +173,7 @@ RSpec.feature "Service configuration" do
       end
 
       select "2023/2024", from: "Accepting claims for academic year"
-      find("#close-at").set("2026-08-01T14:30")
+      find("#close-at").set(future_close_at_form_value(7))
       expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob).with { |arg| expect(arg).to eql(journey_configuration.journey) }
 
       expect(page).to have_content(AcademicYear.new(2023).to_s)

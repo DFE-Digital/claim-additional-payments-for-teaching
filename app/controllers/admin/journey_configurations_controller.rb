@@ -1,7 +1,7 @@
 module Admin
   class JourneyConfigurationsController < BaseAdminController
     helper_method :journey_configuration
-    before_action :ensure_service_operator, :set_journey_configuration
+    before_action :ensure_service_operator, :journey_configuration
     after_action :send_reminders, only: [:update]
 
     FILE_UPLOAD_TARGET_DATA_MODELS = {
@@ -70,9 +70,7 @@ module Admin
           :teacher_id_enabled
         )
 
-      if permitted[:close_at].present?
-        permitted[:close_at] = Time.zone.parse(permitted[:close_at]).in_time_zone("London")
-      end
+      permitted[:close_at] = Time.zone.parse(permitted[:close_at]).in_time_zone("London") if permitted[:close_at].present?
 
       permitted
     end
@@ -81,10 +79,6 @@ module Admin
       return unless journey_configuration.open_for_submissions
 
       SendReminderEmailsJob.perform_later(journey_configuration.journey)
-    end
-
-    def set_journey_configuration
-      @journey_configuration = Journeys::Configuration.find(params[:id]) if params[:id].present?
     end
   end
 end
