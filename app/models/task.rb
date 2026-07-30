@@ -88,8 +88,16 @@ class Task < ApplicationRecord
     name == "identity_confirmation"
   end
 
+  # We're migrating what it means for a task to be completed. Originally
+  # the task being persisted meant it was completed. Now incomplete tasks can be
+  # persisted sso we need to know if the task has an outcome to determine
+  # completeness.
   def completed?
-    persisted?
+    if name == "matching_details"
+      !passed.nil?
+    else
+      persisted?
+    end
   end
 
   def blocks_approval?

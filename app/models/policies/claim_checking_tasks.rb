@@ -58,7 +58,7 @@ module Policies
 
       return Claim.none if skip_matching_claims_check?
 
-      @matching_claims = Claims::Match.matches_shim(claim)
+      @matching_claims = Claim::MatchingAttributeFinder.new(claim).matching_claims
     end
 
     def task_exists?(name)

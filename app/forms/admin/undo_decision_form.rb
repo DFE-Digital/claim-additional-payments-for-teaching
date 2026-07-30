@@ -27,7 +27,11 @@ module Admin
       return false if invalid?
 
       amendment = Amendment.undo_decision(decision, amendment_params.merge(created_by: current_admin))
-      amendment.persisted?
+      return false unless amendment.persisted?
+
+      AutomatedChecks::ClaimVerifiers::MatchingClaims.new(claim: claim).perform
+
+      true
     end
 
     def processable?

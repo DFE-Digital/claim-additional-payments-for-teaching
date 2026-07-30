@@ -50,16 +50,6 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks, feature_f
       )
     end
 
-    let(:duplicate_claim) do
-      create(
-        :claim,
-        policy: Policies::FurtherEducationPayments,
-        email_address: claimant_email_address,
-        academic_year: academic_year,
-        eligibility: eligibility
-      )
-    end
-
     let(:invariant_tasks) do
       [
         "one_login_identity",
@@ -90,7 +80,7 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks, feature_f
     end
 
     context "when there are matching claims" do
-      before { duplicate_claim }
+      before { create(:task, name: "matching_details", claim: claim) }
       it { expect(subject.applicable_task_names).to include("matching_details") }
       it { expect(subject.applicable_task_names).to include(*invariant_tasks) }
     end

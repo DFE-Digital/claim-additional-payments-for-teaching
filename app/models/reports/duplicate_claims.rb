@@ -22,7 +22,7 @@ module Reports
         .includes(:eligibility)
         .approved
         .where(academic_year: AcademicYear.current)
-        .select { |claim| Claims::Match.matches_shim(claim).any? }
+        .select { |claim| Claim::MatchingAttributeFinder.new(claim).matching_claims.any? }
     end
 
     def to_csv

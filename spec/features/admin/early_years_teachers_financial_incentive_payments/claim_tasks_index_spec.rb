@@ -468,6 +468,18 @@ RSpec.describe "Task index page for EYTFI claims" do
       }
     )
 
+    claim.tasks.matching_details.build(
+      data: {
+        "matching_claims" => [duplicate_claim.reference]
+      }
+    ).save!(context: :claim_verifier)
+
+    duplicate_claim.tasks.matching_details.build(
+      data: {
+        "matching_claims" => [claim.reference]
+      }
+    ).save!(context: :claim_verifier)
+
     sign_in_as_service_admin
 
     visit admin_claim_tasks_path(claim)
