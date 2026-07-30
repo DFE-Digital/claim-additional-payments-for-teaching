@@ -13,6 +13,7 @@ RSpec.describe CloseExpiredJourneysJob do
       travel_to Time.zone.parse("2026-08-01 17:00:00") do
         described_class.new.perform
         expect(journey_configuration.reload.open_for_submissions).to be(false)
+        expect(journey_configuration.reload.close_at).to be_nil
       end
     end
   end

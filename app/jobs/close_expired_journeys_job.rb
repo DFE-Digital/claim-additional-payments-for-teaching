@@ -7,7 +7,7 @@ class CloseExpiredJourneysJob < ApplicationJob
       .where.not(close_at: nil)
       .where("close_at <= ?", now)
       .find_each do |journey_configuration|
-        journey_configuration.update!(open_for_submissions: false)
+        journey_configuration.update!(open_for_submissions: false, close_at: nil)
       end
   end
 end
