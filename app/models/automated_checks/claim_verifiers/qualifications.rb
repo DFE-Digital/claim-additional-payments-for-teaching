@@ -15,9 +15,13 @@ module AutomatedChecks
       end
 
       def perform
-        return unless awaiting_task?(TASK_NAME)
+        return if task_exists?
 
-        no_match || complete_match
+        if dqt_teacher_status.nil? || !dqt_teacher_status.eligible?
+          create_task(match: :none)
+        else
+          create_task(match: :all, passed: true)
+        end
       end
 
       private
@@ -25,14 +29,8 @@ module AutomatedChecks
       attr_accessor :admin_user, :claim
       attr_reader :dqt_teacher_status
 
-      def awaiting_task?(task_name)
-        claim.tasks.none? { |task| task.name == task_name }
-      end
-
-      def complete_match
-        return unless dqt_teacher_status.eligible?
-
-        create_task(match: :all, passed: true)
+      def task_exists?
+        claim.tasks.where(name: TASK_NAME).exists?
       end
 
       def create_note(match:)
@@ -40,7 +38,7 @@ module AutomatedChecks
           "[DQT Qualification] - Not eligible"
         else
           <<~HTML
-            [DQT Qualification] - #{(match == :none) ? "Ine" : "E"}ligible:
+            [DQT Qualification] - #{(match == :none) ? "Ineligible:" : "Eligible:"}
             <pre>
               ITT subjects: #{dqt_teacher_status.itt_subjects}
               ITT subject codes:  #{dqt_teacher_status.itt_subject_codes}
@@ -72,9 +70,10 @@ module AutomatedChecks
           }
         )
 
-        task.save!(context: :claim_verifier)
-
-        create_note(match: match)
+        ApplicationRecord.transaction do
+          task.save!(context: :claim_verifier)
+          create_note(match: match)
+        end
 
         task
       end
@@ -89,16 +88,6 @@ module AutomatedChecks
         end
 
         @dqt_teacher_status = claim.policy::DqtRecord.new(dqt_teacher_status, claim.eligibility)
-      end
-
-      def no_match
-        return unless dqt_teacher_status.nil? || !dqt_teacher_status.eligible?
-
-        create_task(match: :none)
-      end
-
-      def tasks=(tasks)
-        @tasks = tasks.map { |task| task.new(self) }
       end
     end
   end
