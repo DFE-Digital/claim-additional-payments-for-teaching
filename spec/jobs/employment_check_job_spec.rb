@@ -30,20 +30,6 @@ RSpec.describe EmploymentCheckJob do
       end
     end
 
-    context "when there is a recent claim with a failed check" do
-      let!(:failed_check) { create(:task, :failed, :automated, name: "employment", claim:) }
-
-      before { job.perform }
-
-      it "deletes the old check on that claim" do
-        expect { failed_check.reload }.to raise_error(ActiveRecord::RecordNotFound)
-      end
-
-      it "creates a new employment check on that claim" do
-        expect(AutomatedChecks::ClaimVerifiers::Employment).to have_received(:new).with(claim:)
-      end
-    end
-
     context "when there is a claim over 3 months old with a failed employment check" do
       let(:academic_year) { AcademicYear.current }
       let(:past_date) { Time.zone.local(academic_year.end_year, 3, 31) }

@@ -11,18 +11,24 @@ module AutomatedChecks
 
       def perform
         return unless required?
-        return unless awaiting_task?
+        return if task.has_result?
 
-        no_data || no_match || matched
+        if claimant_tps_records.empty?
+          create_task(match: nil)
+        elsif claimant_tps_records.empty? || !eligible?
+          create_task(match: :none)
+        else
+          create_task(match: :all, passed: true)
+        end
       end
 
       private
 
+      attr_accessor :admin_user, :claim
+
       def required?
         claim.eligibility.teacher_reference_number.present?
       end
-
-      attr_accessor :admin_user, :claim
 
       def awaiting_task?
         claim.tasks.where(name: TASK_NAME).count.zero?
@@ -35,32 +41,6 @@ module AutomatedChecks
 
       def end_of_previous_financial_year
         Date.new(Policies::StudentLoans.current_academic_year.start_year, 4, 5)
-      end
-
-      def no_data
-        return unless claimant_tps_records.empty?
-
-        create_task(match: nil)
-      end
-
-      def no_match
-        if claimant_tps_records.empty?
-          # call no_data first
-          raise "Attempting to create a no match when no tps records exist"
-        end
-
-        return if eligible?
-
-        create_task(match: :none)
-      end
-
-      def matched
-        unless eligible?
-          # call no_match first
-          raise "Attempting to create a match when the claim is not eligible"
-        end
-
-        create_task(match: :all, passed: true)
       end
 
       def eligible?
@@ -108,8 +88,11 @@ module AutomatedChecks
         )
       end
 
+      def task
+        @task ||= claim.tasks.find_or_initialize_by(name: TASK_NAME)
+      end
+
       def create_task(match:, passed: nil)
-        task = claim.tasks.find_or_initialize_by(name: TASK_NAME)
         task.claim_verifier_match = match
         task.passed = passed
         task.manual = false
