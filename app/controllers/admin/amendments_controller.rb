@@ -14,7 +14,7 @@ class Admin::AmendmentsController < Admin::BaseAdminController
   def create
     @form = form_class.new(
       claim: @claim,
-      admin_user: @admin_user,
+      admin_user: admin_user,
       params: amendment_params
     )
 
