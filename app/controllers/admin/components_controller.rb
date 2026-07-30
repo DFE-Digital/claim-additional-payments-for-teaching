@@ -140,8 +140,6 @@ module Admin
     end
 
     def create_prepopulated_preview_session!(journey, slug)
-      ensure_preview_journey_configuration!(journey)
-
       session_key = :"#{journey.routing_name}_journeys_session_id"
       session.delete(session_key)
 
@@ -177,13 +175,6 @@ module Admin
 
     def current_academic_year_for(journey)
       Journeys::Configuration.find_by(routing_name: journey.routing_name)&.current_academic_year || AcademicYear.current
-    end
-
-    def ensure_preview_journey_configuration!(journey)
-      Journeys::Configuration.find_or_create_by!(routing_name: journey.routing_name) do |configuration|
-        configuration.current_academic_year = AcademicYear.current
-        configuration.open_for_submissions = true
-      end
     end
 
     def ineligible_preview_answers_for(journey, slug)

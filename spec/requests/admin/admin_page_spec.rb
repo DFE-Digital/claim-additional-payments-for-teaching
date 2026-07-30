@@ -87,6 +87,7 @@ RSpec.describe "Admin page", type: :request do
       end
 
       it "opens all journey component routes" do
+        ensure_journey_configurations_exist!
         failures = []
 
         journey_component_routes.each do |route|
@@ -105,6 +106,7 @@ RSpec.describe "Admin page", type: :request do
       end
 
       it "renders all ineligible routes" do
+        ensure_journey_configurations_exist!
         failures = []
         create(:school, :further_education, :closed)
         allow_any_instance_of(OrdnanceSurvey::Client).to receive_message_chain(:api, :search_places, :index).and_return([])
@@ -125,6 +127,16 @@ RSpec.describe "Admin page", type: :request do
         end
 
         expect(failures).to be_empty, failures.join("\n")
+      end
+    end
+  end
+
+  def ensure_journey_configurations_exist!
+    journey_component_routes.map { |route| route[:journey] }.uniq.each do |journey_name|
+      Journeys::Configuration.find_or_create_by!(routing_name: journey_name) do |config|
+        config.current_academic_year = AcademicYear.current
+        config.close_at = 2.days.from_now
+        config.open_for_submissions = true
       end
     end
   end

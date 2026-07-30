@@ -26,7 +26,7 @@ RSpec.describe Journeys::Configuration do
   end
 
   it "validates academic years are formated like '2020/2021'" do
-    expect(described_class.new(routing_name: Journeys::TeacherStudentLoanReimbursement.routing_name, open_for_submissions: false)).not_to be_valid
+    expect(described_class.new(routing_name: Journeys::TeacherStudentLoanReimbursement.routing_name, current_academic_year: nil, open_for_submissions: false)).not_to be_valid
     expect(described_class.new(routing_name: Journeys::TeacherStudentLoanReimbursement.routing_name, current_academic_year: "2020-2021", open_for_submissions: false)).not_to be_valid
     expect(described_class.new(routing_name: Journeys::TeacherStudentLoanReimbursement.routing_name, current_academic_year: "2020/2021", open_for_submissions: false)).to be_valid
   end
@@ -43,6 +43,18 @@ RSpec.describe Journeys::Configuration do
       expect(configuration).to be_valid
       expect(configuration.save).to be true
       expect(configuration.close_at).to eq(Time.zone.parse("2026-08-01 14:30"))
+    end
+
+    it "requires close datetime to be present when the service is open" do
+      configuration = described_class.new(
+        routing_name: Journeys::TeacherStudentLoanReimbursement.routing_name,
+        current_academic_year: "2020/2021",
+        open_for_submissions: true,
+        close_at: ""
+      )
+
+      expect(configuration).not_to be_valid
+      expect(configuration.errors[:close_at]).to include("can't be blank")
     end
 
     it "requires close datetime to be in the future when the service is open" do

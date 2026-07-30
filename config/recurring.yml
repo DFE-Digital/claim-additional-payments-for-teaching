@@ -58,6 +58,3 @@ production: &production
     schedule: "0 * * * *" # hourly on the hour
 development:
   <<: *production
-  close_expired_journeys:
-    class: CloseExpiredJourneysJob
-    schedule: "* * * * *"
