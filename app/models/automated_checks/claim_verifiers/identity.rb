@@ -15,10 +15,59 @@ module AutomatedChecks
       end
 
       def perform
-        return unless awaiting_task?(TASK_NAME)
+        return if task_exists?
 
-        # Order of matching matters so that subsequent conditions in methods fall through to execute the right thing
-        no_match || partial_match || complete_match
+        if dqt_teacher_status.nil?
+          create_note(body: "[DQT Identity] - Not matched")
+          create_task(match: :none)
+        else
+          notes = []
+
+          unless national_insurance_number_matched?
+            notes << create_field_note(
+              name: "National Insurance number",
+              claimant: claim.national_insurance_number,
+              dqt: dqt_teacher_status.national_insurance_number
+            )
+          end
+
+          unless name_matched?
+            notes << create_field_note(
+              name: "First name or surname",
+              claimant: claim.full_name,
+              dqt: "#{dqt_teacher_status.first_name} #{dqt_teacher_status.surname}"
+            )
+          end
+
+          unless dob_matched?
+            notes << create_field_note(
+              name: "Date of birth",
+              claimant: claim.date_of_birth,
+              dqt: dqt_teacher_status.date_of_birth
+            )
+          end
+
+          unless trn_matched?
+            notes << create_field_note(
+              name: "Teacher reference number",
+              claimant: claim.eligibility.teacher_reference_number,
+              dqt: dqt_teacher_status.teacher_reference_number
+            )
+          end
+
+          if active_alert?
+            notes << create_note(
+              body: "IMPORTANT: Teacher’s identity has an active alert. Speak to manager before checking this claim.",
+              important: true
+            )
+          end
+
+          if notes.any?
+            create_task(match: :any)
+          else
+            create_task(match: :all, passed: true)
+          end
+        end
       end
 
       private
@@ -38,18 +87,8 @@ module AutomatedChecks
         dqt_teacher_status.active_alert?
       end
 
-      def awaiting_task?(task_name)
-        claim.tasks.none? { |task| task.name == task_name }
-      end
-
-      def complete_match
-        return unless trn_matched? &&
-          national_insurance_number_matched? &&
-          name_matched? &&
-          dob_matched? &&
-          !active_alert?
-
-        create_task(match: :all, passed: true)
+      def task_exists?
+        claim.tasks.where(name: TASK_NAME).exists?
       end
 
       def create_field_note(
@@ -106,57 +145,6 @@ module AutomatedChecks
 
       def national_insurance_number_matched?
         claim.national_insurance_number == dqt_teacher_status.national_insurance_number
-      end
-
-      def no_match
-        return unless dqt_teacher_status.nil?
-
-        create_note(body: "[DQT Identity] - Not matched")
-        create_task(match: :none)
-      end
-
-      def partial_match
-        notes = []
-
-        unless national_insurance_number_matched?
-          notes << create_field_note(
-            name: "National Insurance number",
-            claimant: claim.national_insurance_number,
-            dqt: dqt_teacher_status.national_insurance_number
-          )
-        end
-
-        unless name_matched?
-          notes << create_field_note(
-            name: "First name or surname",
-            claimant: claim.full_name,
-            dqt: "#{dqt_teacher_status.first_name} #{dqt_teacher_status.surname}"
-          )
-        end
-
-        unless dob_matched?
-          notes << create_field_note(
-            name: "Date of birth",
-            claimant: claim.date_of_birth,
-            dqt: dqt_teacher_status.date_of_birth
-          )
-        end
-
-        unless trn_matched?
-          notes << create_field_note(
-            name: "Teacher reference number",
-            claimant: claim.eligibility.teacher_reference_number,
-            dqt: dqt_teacher_status.teacher_reference_number
-          )
-        end
-
-        notes << create_note(body: "IMPORTANT: Teacher’s identity has an active alert. Speak to manager before checking this claim.", important: true) if active_alert?
-
-        create_task(match: :any) if notes.any?
-      end
-
-      def tasks=(tasks)
-        @tasks = tasks.map { |task| task.new(self) }
       end
 
       def trn_matched?
