@@ -9,7 +9,7 @@ module AutomatedChecks
       end
 
       def perform
-        return unless awaiting_task?(TASK_NAME)
+        return if task_exists?
 
         if claim.identity_confirmed_with_onelogin?
           create_task(passed: true)
@@ -22,8 +22,8 @@ module AutomatedChecks
 
       attr_accessor :claim
 
-      def awaiting_task?(task_name)
-        claim.tasks.none? { |task| task.name == task_name }
+      def task_exists?
+        claim.tasks.where(name: TASK_NAME).exists?
       end
 
       def create_task(passed:, reason: nil)
