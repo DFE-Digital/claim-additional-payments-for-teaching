@@ -25,9 +25,11 @@ module AutomatedChecks
           task.assign_attributes(claim_verifier_match: nil, passed: nil, reason: "incomplete")
         end
 
-        ApplicationRecord.transaction do
-          task.save!(context: :claim_verifier)
-          create_note(match: task.claim_verifier_match)
+        if !task.persisted? || (task.changed & %w[claim_verifier_match passed reason]).any?
+          ApplicationRecord.transaction do
+            task.save!(context: :claim_verifier)
+            create_note(match: task.claim_verifier_match)
+          end
         end
 
         task
