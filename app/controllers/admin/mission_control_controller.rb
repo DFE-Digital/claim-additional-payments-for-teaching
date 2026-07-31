@@ -1,5 +1,5 @@
 class Admin::MissionControlController < Admin::BaseAdminController
-  before_action :service_operator_signed_in?
+  before_action :ensure_service_operator
 
   private
 
