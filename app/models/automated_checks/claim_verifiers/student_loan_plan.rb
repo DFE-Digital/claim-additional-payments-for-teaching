@@ -13,22 +13,28 @@ module AutomatedChecks
         return unless claim.policy.auto_check_student_loan_plan_task?
         return if task.has_result?
 
+        note_text = nil
+
         if student_loans_data.any?
           if claim.student_loan_plan.blank?
             task.assign_attributes(claim_verifier_match: nil, passed: nil, reason: nil)
+            note_text = "Claim has no student loan plan set, but student loan data with matching DOB and NINO was found"
           else
             task.assign_attributes(claim_verifier_match: :all, passed: true, reason: nil)
+            note_text = note_body(match: task.claim_verifier_match)
           end
         elsif student_loans_data_nino_only.any?
           task.assign_attributes(claim_verifier_match: :none, reason: nil)
+          note_text = note_body(match: task.claim_verifier_match)
         else
           task.assign_attributes(claim_verifier_match: nil, passed: nil, reason: "incomplete")
+          note_text = note_body(match: task.claim_verifier_match)
         end
 
         if !task.persisted? || (task.changed & %w[claim_verifier_match passed reason]).any?
           ApplicationRecord.transaction do
             task.save!(context: :claim_verifier)
-            create_note(match: task.claim_verifier_match)
+            create_note(body: note_text)
           end
         end
 
@@ -77,10 +83,10 @@ module AutomatedChecks
         end
       end
 
-      def create_note(match:)
+      def create_note(body:)
         claim.notes.create!(
           {
-            body: note_body(match:),
+            body:,
             label: TASK_NAME,
             created_by: admin_user
           }

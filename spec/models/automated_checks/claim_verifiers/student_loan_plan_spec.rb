@@ -117,7 +117,7 @@ module AutomatedChecks
 
                 context "when the claim does not have a student_loan_plan" do
                   let(:claim_student_loan_plan) { nil }
-                  let(:expected_note) { "[SLC Student loan plan] - SLC data checked, no matching entry found" }
+                  let(:expected_note) { "Claim has no student loan plan set, but student loan data with matching DOB and NINO was found" }
                   let(:expected_to_pass?) { nil }
                   let(:expected_match_value) { nil }
 
