@@ -69,6 +69,12 @@ module DfeTeachersPaymentService
 
     config.active_record.yaml_column_permitted_classes = [BigDecimal, Date, Symbol]
 
+    # Claim never transforms uploaded images; claimant uploads are served as
+    # original blobs via rails_storage_proxy. Keeping the variant pipeline off
+    # avoids depending on image_processing/libvips, whose variant processing was
+    # the subject of CVE-2026-66066.
+    config.active_storage.variant_processor = :disabled
+
     # Max length is based on the lowest requirement on services Claim interacts, in this case Payroll
     # https://www.gov.uk/government/publications/real-time-information-internet-submissions-2024-to-2025-technical-specifications
     config.email_max_length = 129
