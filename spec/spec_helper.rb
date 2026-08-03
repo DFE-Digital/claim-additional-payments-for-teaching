@@ -1,20 +1,22 @@
-require "simplecov"
+require "simplecov" if ENV["COVERAGE"] == "true"
 require "faker"
 
 Faker::Config.locale = "en-GB"
 
-SimpleCov.start do
-  skip %r{^/spec/.*$}
-  skip %r{^/db/migrate/.*$}
-  skip %r{^/config/(?!routes\.rb).*$}
+if ENV["COVERAGE"] == "true"
+  SimpleCov.start do
+    skip %r{^/spec/.*$}
+    skip %r{^/db/migrate/.*$}
+    skip %r{^/config/(?!routes\.rb).*$}
 
-  group "Controllers", %r{^/app/controllers/}
-  group "Helpers", %r{^/app/helpers/}
-  group "Jobs", %r{^/app/jobs/}
-  group "Mailers", %r{^/app/mailers/}
-  group "Models", %r{^/app/models/}
-  group "Configs", %r{^/config/}
-  group "Libraries", %r{^/lib/}
+    group "Controllers", %r{^/app/controllers/}
+    group "Helpers", %r{^/app/helpers/}
+    group "Jobs", %r{^/app/jobs/}
+    group "Mailers", %r{^/app/mailers/}
+    group "Models", %r{^/app/models/}
+    group "Configs", %r{^/config/}
+    group "Libraries", %r{^/lib/}
+  end
 end
 
 require "rspec/retry"
