@@ -2,7 +2,6 @@
 
 relevant_policies = [
   Policies::StudentLoans,
-  Policies::EarlyCareerPayments,
   Policies::TargetedRetentionIncentivePayments
 ]
 
