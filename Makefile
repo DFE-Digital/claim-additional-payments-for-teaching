@@ -155,7 +155,7 @@ disable-maintenance: get-cluster-credentials
 	./maintenance_page/scripts/failback.sh
 
 set-pgserver:
-	$(eval SERVERNAME=)
+	$(eval SERVERNAME=s189p01-capt-pd-pg)
 
 list-pglogs: composed-variables set-pgserver set-azure-account
 	az postgres flexible-server server-logs list --resource-group ${RESOURCE_GROUP_NAME} --server-name ${SERVERNAME}
