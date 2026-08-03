@@ -65,7 +65,7 @@ Rails.application.configure do
   # config.action_view.annotate_rendered_view_with_filenames = true
 
   config.after_initialize do
-    Bullet.enable = true
+    Bullet.enable = ENV["CI"].blank?
     Bullet.bullet_logger = true
     Bullet.add_safelist type: :unused_eager_loading, class_name: "TslrClaim", association: :current_school
     Bullet.add_safelist type: :n_plus_one_query, class_name: "School", association: :local_authority
