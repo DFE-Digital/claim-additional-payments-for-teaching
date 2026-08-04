@@ -270,4 +270,119 @@ RSpec.feature "Admin task list filtering" do
     expect(page).not_to have_content("EMPNONE")
     expect(page).not_to have_content("EMPNODAT")
   end
+
+  scenario "filters claims by duplicate status" do
+    FeatureFlag.enable!(:persist_matching_claims)
+
+    create(
+      :claim,
+      :submitted,
+      :current_academic_year,
+      policy: Policies::TargetedRetentionIncentivePayments,
+      reference: "AAAAAA"
+    )
+
+    claim_with_completed_task = create(
+      :claim,
+      :submitted,
+      :current_academic_year,
+      policy: Policies::TargetedRetentionIncentivePayments,
+      reference: "BBBBBB",
+      national_insurance_number: "AB123456C"
+    )
+
+    claim_with_failed_task = create(
+      :claim,
+      :submitted,
+      :current_academic_year,
+      policy: Policies::TargetedRetentionIncentivePayments,
+      reference: "CCCCCC",
+      national_insurance_number: "AB123456C"
+    )
+
+    create(
+      :claim,
+      :submitted,
+      :current_academic_year,
+      policy: Policies::TargetedRetentionIncentivePayments,
+      reference: "DDDDDD",
+      national_insurance_number: "AB123456C"
+    )
+
+    Claim.all.each do |claim|
+      AutomatedChecks::ClaimVerifiers::MatchingClaims.new(claim: claim).perform
+    end
+
+    claim_with_completed_task.tasks.matching_details.sole.update!(passed: true)
+
+    claim_with_failed_task.tasks.matching_details.sole.update!(passed: false)
+
+    sign_in_as_service_operator
+
+    visit admin_task_lists_path
+
+    click_on "School Targeted Retention Incentive"
+
+    expect(page).to have_content("4 claims found")
+    expect(page).to have_content("AAAAAA")
+    expect(page).to have_content("BBBBBB")
+    expect(page).to have_content("CCCCCC")
+    expect(page).to have_content("DDDDDD")
+
+    click_on "Show filters"
+
+    within_fieldset "Matching details" do
+      uncheck "Passed"
+      uncheck "Failed"
+      uncheck "Incomplete"
+      check "Not applicable"
+    end
+
+    click_on "Apply"
+
+    expect(page).to have_content("1 claims found")
+    expect(page).to have_content("AAAAAA")
+    expect(page).not_to have_content("BBBBBB")
+    expect(page).not_to have_content("CCCCCC")
+    expect(page).not_to have_content("DDDDDD")
+
+    within_fieldset "Matching details" do
+      uncheck "Not applicable"
+      check "Passed"
+    end
+
+    click_on "Apply"
+
+    expect(page).to have_content("1 claims found")
+    expect(page).to have_content("BBBBBB")
+    expect(page).not_to have_content("AAAAAA")
+    expect(page).not_to have_content("CCCCCC")
+    expect(page).not_to have_content("DDDDDD")
+
+    within_fieldset "Matching details" do
+      uncheck "Passed"
+      check "Failed"
+    end
+
+    click_on "Apply"
+
+    expect(page).to have_content("1 claims found")
+    expect(page).to have_content("CCCCCC")
+    expect(page).not_to have_content("AAAAAA")
+    expect(page).not_to have_content("BBBBBB")
+    expect(page).not_to have_content("DDDDDD")
+
+    within_fieldset "Matching details" do
+      uncheck "Failed"
+      check "Incomplete"
+    end
+
+    click_on "Apply"
+
+    expect(page).to have_content("1 claims found")
+    expect(page).to have_content("DDDDDD")
+    expect(page).not_to have_content("AAAAAA")
+    expect(page).not_to have_content("BBBBBB")
+    expect(page).not_to have_content("CCCCCC")
+  end
 end
