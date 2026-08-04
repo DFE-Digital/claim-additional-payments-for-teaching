@@ -199,7 +199,7 @@ RSpec.describe "teacher route: completing the form" do
       )
     end
 
-    expect(page).to have_text(/Name on bank account\s?Walter Skinner/)
+    expect(page).to have_text(/Name on the bank account\s?Walter Skinner/)
     expect(page).to have_text(/Bank sort code\s?123456/)
     expect(page).to have_text(/Bank account number\s?12345678/)
 

@@ -122,7 +122,7 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
         )
 
         # - Enter bank account details
-        fill_in "Name on your account", with: bank_name
+        fill_in "Name on the account", with: bank_name
         fill_in "Sort code", with: sort_code
         fill_in "Account number", with: "1111111" # Invalid number
         click_on "Continue"
@@ -157,7 +157,7 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
         # shows an error and allows through after three attempts
 
         # - Enter bank account details
-        fill_in "Name on your account", with: bank_name
+        fill_in "Name on the account", with: bank_name
         fill_in "Sort code", with: sort_code
         fill_in "Account number", with: account_number
         click_on "Continue"
@@ -184,7 +184,7 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
       get_to_bank_details_page
 
       # - Enter bank account details
-      fill_in "Name on your account", with: bank_name
+      fill_in "Name on the account", with: bank_name
       fill_in "Sort code", with: sort_code
       fill_in "Account number", with: account_number
 

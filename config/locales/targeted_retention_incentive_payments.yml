@@ -61,6 +61,15 @@ en:
     reminders:
       full_name: Full name
     forms:
+      personal_bank_account:
+        legend: "Enter the bank account details your salary is paid into"
+        banking_name:
+          label: "Name on the account"
+          hint: "Enter your name as it appears on your bank statement or bank card"
+        bank_sort_code:
+          hint: "Must be 6 digits long"
+        bank_account_number:
+          hint: "Must be 8 digits long"
       sign_in_or_continue:
         errors:
           details_check: "Select an option to whether the details are correct or not"

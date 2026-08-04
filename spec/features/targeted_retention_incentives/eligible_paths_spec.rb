@@ -171,7 +171,7 @@ RSpec.describe "Targeted retention incentives eligible paths" do
     choose "No"
     click_on "Continue"
 
-    fill_in "Name on your account", with: "Seymour Skinner"
+    fill_in "Name on the account", with: "Seymour Skinner"
     fill_in "Sort code", with: "000000"
     fill_in "Account number", with: "00000000"
     click_on "Continue"
@@ -230,7 +230,7 @@ RSpec.describe "Targeted retention incentives eligible paths" do
     )
 
     expect(page).to have_summary_item(
-      key: "Name on bank account",
+      key: "Name on the bank account",
       value: "Seymour Skinner"
     )
 
@@ -693,7 +693,7 @@ RSpec.describe "Targeted retention incentives eligible paths" do
     click_on "Continue"
 
     # personal-bank-account
-    fill_in "Name on your account", with: "Seymour Skinner"
+    fill_in "Name on the account", with: "Seymour Skinner"
     fill_in "Sort code", with: "000000"
     fill_in "Account number", with: "12345678"
     click_on "Continue"

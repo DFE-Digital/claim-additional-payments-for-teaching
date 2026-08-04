@@ -26,7 +26,7 @@ module Journeys
 
     def payment_answers
       [].tap do |a|
-        a << ["Name on bank account", answers.banking_name, "personal-bank-account"]
+        a << ["Name on the bank account", answers.banking_name, "personal-bank-account"]
         a << ["Bank sort code", answers.bank_sort_code, "personal-bank-account"]
         a << ["Bank account number", answers.bank_account_number, "personal-bank-account"]
       end

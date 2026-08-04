@@ -62,6 +62,15 @@ en:
       gender:
         questions:
           payroll_gender: "Are you recorded as male or female on your employer’s payroll system?"
+      personal_bank_account:
+        legend: "Enter the bank account details your salary is paid into"
+        banking_name:
+          label: "Name on the account"
+          hint: "Enter your name as it appears on your bank statement or bank card"
+        bank_sort_code:
+          hint: "Must be 6 digits long"
+        bank_account_number:
+          hint: "Must be 8 digits long"
       details:
         errors:
           rating_inclusion: Select a rating

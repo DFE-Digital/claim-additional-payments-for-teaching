@@ -206,10 +206,10 @@ RSpec.feature "targeted_retention_incentive payments claims" do
     expect(page).not_to have_text("Enter the 6-digit passcode")
 
     # - Enter bank account details
-    expect(page).to have_text("Enter your personal bank account details")
+    expect(page).to have_text(I18n.t("questions.account_details"))
     expect(page).not_to have_text("Building society roll number")
 
-    fill_in "Name on your account", with: "Jo Bloggs"
+    fill_in "Name on the account", with: "Jo Bloggs"
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "87654321"
     click_on "Continue"

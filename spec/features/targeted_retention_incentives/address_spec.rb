@@ -113,7 +113,7 @@ RSpec.feature "TRI address", slow: true do
     click_on "Continue"
 
     # - Enter bank account details
-    fill_in "Name on your account", with: "Seymour Skinner"
+    fill_in "Name on the account", with: "Seymour Skinner"
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "87654321"
     click_on "Continue"

@@ -363,7 +363,7 @@ RSpec.describe "Changing answers" do
     choose "No"
     click_on "Continue"
 
-    fill_in "Name on your account", with: "Seymour Skinner"
+    fill_in "Name on the account", with: "Seymour Skinner"
     fill_in "Sort code", with: "000000"
     fill_in "Account number", with: "00000000"
     click_on "Continue"

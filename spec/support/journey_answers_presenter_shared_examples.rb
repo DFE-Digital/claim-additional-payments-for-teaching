@@ -199,7 +199,7 @@ RSpec.shared_examples "journey answers presenter" do
     context "when a personal bank account is selected" do
       it "returns an array of questions and answers for displaying to the user for review" do
         expected_answers = [
-          ["Name on bank account", "Jo Bloggs", "personal-bank-account"],
+          ["Name on the bank account", "Jo Bloggs", "personal-bank-account"],
           ["Bank sort code", "123456", "personal-bank-account"],
           ["Bank account number", "12345678", "personal-bank-account"]
         ]

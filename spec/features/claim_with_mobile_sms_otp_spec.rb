@@ -57,7 +57,7 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
         fill_in "claim-one-time-password-field", with: otp_code
         click_on "Confirm"
 
-        expect(page).to have_text("Enter your personal bank account details")
+        expect(page).to have_text(I18n.t("forms.personal_bank_account.legend"))
       end
     end
 
@@ -102,7 +102,7 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
         fill_in "claim-one-time-password-field", with: otp_code
         click_on "Confirm"
 
-        expect(page).to have_text("Enter your personal bank account details")
+        expect(page).to have_text(I18n.t("forms.personal_bank_account.legend"))
       end
     end
   end
