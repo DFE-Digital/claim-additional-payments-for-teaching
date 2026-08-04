@@ -1,7 +1,14 @@
 module Payroll
   class Projection
+    # NOTE: `claim_scope` joins the `with_award_amounts` union as `eligibilities`, and
+    # award_amount currently only exists on the eligibility tables. Passing a symbol
+    # would let Rails qualify it as `claims.award_amount` as soon as that column is
+    # added, silently summing an empty column instead of erroring. Qualify explicitly
+    # until the column has moved and the union is gone.
+    AWARD_AMOUNT = "eligibilities.award_amount"
+
     def total_award_amount
-      claim_scope.sum(:award_amount)
+      claim_scope.sum(AWARD_AMOUNT)
     end
 
     def number_of_claims_for_policy(policy)
@@ -9,7 +16,7 @@ module Payroll
     end
 
     def total_claim_amount_for_policy(policy)
-      claim_scope.by_policy(policy).sum(:award_amount)
+      claim_scope.by_policy(policy).sum(AWARD_AMOUNT)
     end
 
     def number_of_topups_for_policy(policy)
