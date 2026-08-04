@@ -1,15 +1,6 @@
 module AutomatedChecks
   module ClaimVerifiers
     class StudentLoanPlan
-      class MissingClaimPlanError < StandardError
-        def initialize(claim)
-          super(
-            "Claim #{claim.reference} has no student loan plan set. " \
-            "but student loan data with matching DOB and NINO was found"
-          )
-        end
-      end
-
       TASK_NAME = "student_loan_plan".freeze
       private_constant :TASK_NAME
 
@@ -20,10 +11,34 @@ module AutomatedChecks
 
       def perform
         return unless claim.policy.auto_check_student_loan_plan_task?
-        return unless claim.submitted_without_slc_data?
-        return unless awaiting_task?
+        return if task.has_result?
 
-        student_loan_data_exists || nino_only_match_found || no_student_loan_data_entry
+        note_text = nil
+
+        if student_loans_data.any?
+          if claim.student_loan_plan.blank?
+            task.assign_attributes(claim_verifier_match: nil, passed: nil, reason: nil)
+            note_text = "Claim has no student loan plan set, but student loan data with matching DOB and NINO was found"
+          else
+            task.assign_attributes(claim_verifier_match: :all, passed: true, reason: nil)
+            note_text = note_body(match: task.claim_verifier_match)
+          end
+        elsif student_loans_data_nino_only.any?
+          task.assign_attributes(claim_verifier_match: :none, reason: nil)
+          note_text = note_body(match: task.claim_verifier_match)
+        else
+          task.assign_attributes(claim_verifier_match: nil, passed: nil, reason: "incomplete")
+          note_text = note_body(match: task.claim_verifier_match)
+        end
+
+        if !task.persisted? || (task.changed & %w[claim_verifier_match passed reason]).any?
+          ApplicationRecord.transaction do
+            task.save!(context: :claim_verifier)
+            create_note(body: note_text)
+          end
+        end
+
+        task
       end
 
       private
@@ -36,6 +51,18 @@ module AutomatedChecks
 
       alias_method :nino, :national_insurance_number
 
+      def task
+        @task ||= claim.tasks.find_by(name: TASK_NAME) || new_task
+      end
+
+      def new_task
+        claim.tasks.build(
+          name: TASK_NAME,
+          manual: false,
+          created_by: admin_user
+        )
+      end
+
       def student_loans_data
         @student_loans_data ||= StudentLoansData.where(nino:, date_of_birth:)
       end
@@ -44,50 +71,10 @@ module AutomatedChecks
         @student_loans_data_nino_only ||= StudentLoansData.where(nino:).where.not(date_of_birth:)
       end
 
-      def awaiting_task?
-        claim.tasks.where(name: TASK_NAME).count.zero?
-      end
-
-      def student_loan_data_exists
-        if student_loans_data.any?
-          if claim.student_loan_plan.blank?
-            raise MissingClaimPlanError.new(claim)
-          end
-
-          create_task(match: :all, passed: true)
-        end
-      end
-
-      def nino_only_match_found
-        create_task(match: :none) if student_loans_data_nino_only.any?
-      end
-
-      def no_student_loan_data_entry
-        create_note(match: nil)
-      end
-
-      def create_task(match:, passed: nil)
-        task = claim.tasks.build(
-          {
-            name: TASK_NAME,
-            claim_verifier_match: match,
-            passed: passed,
-            manual: false,
-            created_by: admin_user
-          }
-        )
-
-        task.save!(context: :claim_verifier)
-
-        create_note(match: match)
-
-        task
-      end
-
       def note_body(match:)
         prefix = "[SLC Student loan plan]"
         return "#{prefix} - SLC data checked, no matching entry found" unless match
-        return "#{prefix} - No match - DOB does not match" if match == :none
+        return "#{prefix} - No match - DOB does not match" if match == "none"
 
         if slc_repaying_plan_types
           "#{prefix} - Matched - has a student loan"
@@ -96,10 +83,10 @@ module AutomatedChecks
         end
       end
 
-      def create_note(match:)
+      def create_note(body:)
         claim.notes.create!(
           {
-            body: note_body(match:),
+            body:,
             label: TASK_NAME,
             created_by: admin_user
           }

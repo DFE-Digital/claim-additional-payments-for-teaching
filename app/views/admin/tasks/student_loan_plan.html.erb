@@ -14,7 +14,7 @@
   </div>
 
   <div class="govuk-grid-column-two-thirds">
-    <% if @form.task.persisted? %>
+    <% if @form.task.has_result? %>
       <%= render "task_outcome", task: @form.task %>
     <% elsif @claim.policy.task_available?(@form.task) %>
       <div class="govuk-inset-text task-outcome">

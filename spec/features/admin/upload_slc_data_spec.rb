@@ -27,10 +27,20 @@ RSpec.feature "Upload SLC data" do
   }
 
   let!(:tri_claim_with_slc_data_no_student_loan) {
-    create(:claim, :submitted, policy: Policies::TargetedRetentionIncentivePayments,
-      eligibility: build(:targeted_retention_incentive_payments_eligibility, :eligible),
-      has_student_loan: nil, student_loan_plan: nil, submitted_using_slc_data: false)
+    create(
+      :claim,
+      :submitted,
+      policy: Policies::TargetedRetentionIncentivePayments,
+      eligibility: build(
+        :targeted_retention_incentive_payments_eligibility,
+        :eligible
+      ),
+      has_student_loan: nil,
+      student_loan_plan: nil,
+      submitted_using_slc_data: false
+    )
   }
+
   let!(:tri_claim_with_slc_data_with_student_loan) {
     create(:claim, :submitted, policy: Policies::TargetedRetentionIncentivePayments,
       eligibility: build(:targeted_retention_incentive_payments_eligibility, :eligible),
