@@ -37,6 +37,12 @@ class Admin::AmendmentForm
       message: "Teacher reference number must be 7 digits"
     }
 
+  validates :national_insurance_number,
+    length: {
+      maximum: 9,
+      message: "National Insurance number must be 9 characters or fewer"
+    }
+
   validates :email_address,
     presence: {
       message: "Enter an email address"
@@ -57,6 +63,21 @@ class Admin::AmendmentForm
       message: "Mobile number must be in the correct format"
     },
     if: -> { mobile_number.present? }
+
+  validates :address_line_1,
+    :address_line_2,
+    :address_line_3,
+    :address_line_4,
+    length: {
+      maximum: 100,
+      message: "Address lines must be 100 characters or fewer"
+    }
+
+  validates :postcode,
+    length: {
+      maximum: 11,
+      message: "Postcode must be 11 characters or fewer"
+    }
 
   validates :date_of_birth,
     presence: {

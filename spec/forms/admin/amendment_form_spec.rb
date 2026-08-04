@@ -46,6 +46,33 @@ RSpec.describe Admin::AmendmentForm, type: :model do
         .with_message("Enter a name on the account")
       )
     end
+
+    it "rejects values that exceed their database column limits" do
+      claim = build(:claim, :submitted)
+      form = described_class.new(
+        claim: claim,
+        admin_user: create(:dfe_signin_user),
+        params: {
+          notes: "made some changes",
+          national_insurance_number: "A" * 10,
+          address_line_1: "A" * 101,
+          address_line_2: "A" * 101,
+          address_line_3: "A" * 101,
+          address_line_4: "A" * 101,
+          postcode: "A" * 12
+        }
+      )
+
+      expect(form).not_to be_valid
+      expect(form.errors[:national_insurance_number]).to include(
+        "National Insurance number must be 9 characters or fewer"
+      )
+      expect(form.errors[:address_line_1]).to include("Address lines must be 100 characters or fewer")
+      expect(form.errors[:address_line_2]).to include("Address lines must be 100 characters or fewer")
+      expect(form.errors[:address_line_3]).to include("Address lines must be 100 characters or fewer")
+      expect(form.errors[:address_line_4]).to include("Address lines must be 100 characters or fewer")
+      expect(form.errors[:postcode]).to include("Postcode must be 11 characters or fewer")
+    end
   end
 
   describe "#save" do
