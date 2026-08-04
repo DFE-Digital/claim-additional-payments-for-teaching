@@ -95,7 +95,7 @@ jobs:
       CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
       CI_NODE_INDEX: ${{ matrix.ci_node_index }}
       PARALLEL_PROCESSES: 4
-      # turbo_tests numbers its workers 1-based (TEST_ENV_NUMBER 1..N), so the
+      # parallel_tests numbers its workers 1-based (TEST_ENV_NUMBER 1..N), so the
       # databases must be _test1.._testN. This makes parallel:create/load_schema
       # use the same 1-based numbering instead of leaving the first one blank.
       PARALLEL_TEST_FIRST_IS_1: "true"
@@ -131,19 +131,55 @@ jobs:
           path: |
             public/assets
           key: ${{ steps.assets-cache.outputs.cache-primary-key }}
+      - name: Restore test runtime log
+        uses: actions/cache/restore@v4
+        with:
+          path: tmp/parallel_runtime_rspec.log
+          key: parallel-runtime-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            parallel-runtime-
       - name: Prepare parallel test databases
         run: |
           bundle exec rake parallel:create[$PARALLEL_PROCESSES]
           bundle exec rake parallel:load_schema[$PARALLEL_PROCESSES]
-      - name: Run unit tests
-        env:
-          SPEC_TYPE: unit
+      - name: Run tests
         run: |
-          files="$(bin/test_splitter)"
-          bundle exec turbo_tests -n "$PARALLEL_PROCESSES" $files
-      - name: Run feature tests
-        env:
-          SPEC_TYPE: feature
+          previous_runtime_log=tmp/previous_parallel_runtime_rspec.log
+          mv tmp/parallel_runtime_rspec.log "$previous_runtime_log" 2>/dev/null || touch "$previous_runtime_log"
+          touch tmp/parallel_runtime_rspec.log
+          total_groups=$((CI_NODE_TOTAL * PARALLEL_PROCESSES))
+          start=$((CI_NODE_INDEX * PARALLEL_PROCESSES + 1))
+          groups=$(seq -s, $start $((start + PARALLEL_PROCESSES - 1)))
+          bundle exec parallel_rspec -n "$total_groups" \
+            --only-group "$groups" \
+            --group-by runtime \
+            --allowed-missing 100 \
+            --runtime-log "$previous_runtime_log"
+      - name: Upload node runtime log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: runtime-log-${{ matrix.ci_node_index }}
+          path: tmp/parallel_runtime_rspec.log
+          retention-days: 1
+
+  merge-runtime-logs:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all runtime logs
+        uses: actions/download-artifact@v4
+        with:
+          pattern: runtime-log-*
+          merge-multiple: true
+          path: logs
+      - name: Merge logs
         run: |
-          files="$(bin/test_splitter)"
-          bundle exec turbo_tests -n "$PARALLEL_PROCESSES" $files
+          mkdir -p tmp
+          awk -F: '!seen[$1]++' logs/* | sort > tmp/parallel_runtime_rspec.log
+          echo "Merged $(wc -l < tmp/parallel_runtime_rspec.log) entries"
+      - name: Save merged runtime log
+        uses: actions/cache/save@v4
+        with:
+          path: tmp/parallel_runtime_rspec.log
+          key: parallel-runtime-${{ github.run_id }}-${{ github.run_attempt }}
