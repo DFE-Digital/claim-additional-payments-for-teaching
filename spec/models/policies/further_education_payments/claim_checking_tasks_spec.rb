@@ -168,6 +168,22 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks, feature_f
         expect(subject.applicable_task_names).to include("fe_alternative_verification")
       end
     end
+
+    context "when fe_repeat_applicant_check has automatically passed" do
+      before do
+        create(
+          :task,
+          :passed,
+          :automated,
+          name: "fe_repeat_applicant_check",
+          claim:
+        )
+      end
+
+      it "is does not include fe_repeat_applicant_check" do
+        expect(subject.applicable_task_names).not_to include("fe_repeat_applicant_check")
+      end
+    end
   end
 
   describe "#identity_status" do
