@@ -1,1 +1,4 @@
+--require parallel_tests/rspec/runtime_logger
+--format progress
+--format ParallelTests::RSpec::RuntimeLogger
 --out tmp/parallel_runtime_rspec.log
