@@ -90,6 +90,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_18_000000) do
     t.string "address_line_3", limit: 100
     t.string "address_line_4", limit: 100
     t.string "assigned_to_id"
+    t.decimal "award_amount", precision: 7, scale: 2
     t.string "bank_account_number", limit: 8
     t.integer "bank_or_building_society"
     t.string "bank_sort_code", limit: 6
