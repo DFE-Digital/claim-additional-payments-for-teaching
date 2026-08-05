@@ -30,6 +30,13 @@ RSpec.describe "DfE Analytics on validation error" do
           ]
         }
       ])
+
+      expect(events.first.as_json["hidden_data"]).to eq([
+        {
+          "key" => "claimant_entered_values",
+          "value" => [{have_one_login_account: nil}.to_json]
+        }
+      ])
     end
 
     click_button "Continue"
