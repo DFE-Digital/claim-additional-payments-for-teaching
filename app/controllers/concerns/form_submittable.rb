@@ -110,6 +110,12 @@ module FormSubmittable
     end
 
     def notify_analytics!(form:, slug:)
+      errored_values = form.errors.map do |error|
+        {
+          error.attribute => form.try(error.attribute)
+        }
+      end
+
       event = DfE::Analytics::Event.new
         .with_type(:validation_error)
         .with_request_details(request)
@@ -117,6 +123,9 @@ module FormSubmittable
           data: {
             slug: slug,
             errors: form.errors.as_json
+          },
+          hidden_data: {
+            claimant_entered_values: errored_values
           }
         )
 
