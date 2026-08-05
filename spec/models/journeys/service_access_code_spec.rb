@@ -23,6 +23,14 @@ RSpec.describe Journeys::ServiceAccessCode, type: :model do
     end
   end
 
+  describe "defaults" do
+    it "defaults multiuse to false" do
+      code = described_class.new
+
+      expect(code.multiuse).to be false
+    end
+  end
+
   describe "#mark_as_used!" do
     it "marks the access code as used" do
       code = create(:service_access_code)
@@ -111,6 +119,46 @@ RSpec.describe Journeys::ServiceAccessCode, type: :model do
         )
 
         code = service_access_code.code
+
+        expect(
+          described_class.permits_access?(code: code, journey: journey)
+        ).to be false
+      end
+    end
+
+    context "when the code is used and multiuse" do
+      it "returns true" do
+        journey = Journeys::FurtherEducationPayments
+
+        service_access_code = create(
+          :service_access_code,
+          journey: journey,
+          used: true,
+          multiuse: true
+        )
+
+        code = service_access_code.code
+
+        expect(
+          described_class.permits_access?(code: code, journey: journey)
+        ).to be true
+      end
+    end
+
+    context "when the code is used, multiuse, and expired" do
+      it "returns false" do
+        journey = Journeys::FurtherEducationPayments
+
+        code = nil
+
+        travel_to 31.days.ago do
+          code = create(
+            :service_access_code,
+            journey: journey,
+            used: true,
+            multiuse: true
+          ).code
+        end
 
         expect(
           described_class.permits_access?(code: code, journey: journey)

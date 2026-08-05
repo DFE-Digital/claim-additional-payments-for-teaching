@@ -114,11 +114,22 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h2 class="govuk-heading-m">Create a service access link</h2>
+    <h2 class="govuk-heading-m">Create service access links</h2>
 
+    <p class="govuk-hint">
+      Single use links are for individual claimants and expire once used.
+    </p>
     <%= govuk_button_to(
       "Generate a new service access link",
       admin_service_access_links_path(journey: journey_configuration.routing_name)
+    ) %>
+
+    <p class="govuk-hint">
+      Multi use links are for eligible settings to provide access to multiple claimants.
+    </p>
+    <%= govuk_button_to(
+      "Generate a new multi use service access link",
+      admin_service_access_links_path(journey: journey_configuration.routing_name, multi_use: true)
     ) %>
   </div>
 </div>
