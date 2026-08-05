@@ -23,17 +23,16 @@
     </p>
 
     <p class="govuk-body">
-      This link will expire
-      on <strong><%= l(@service_access_code.expires_at.to_date) %></strong>
+      This link will expire on <strong><%= l(@service_access_code.expires_at.to_date) %></strong>, 
+      the claimant can restart the journey as many times as they like.
     </p>
 
     <p class="govuk-body">
-      The link can only be used to submit one claim.
-    </p>
-
-    <p class="govuk-body">
-      Until the link expires, the claimant can restart the journey as many times
-      as they like.
+      <% if @service_access_code.multiuse? %>
+        This link can be used multiple times.
+      <% else %>
+        The link can only be used to submit one claim.
+      <% end %>
     </p>
 
     <p class="govuk-body">

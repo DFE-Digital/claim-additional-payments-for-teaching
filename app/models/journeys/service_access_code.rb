@@ -37,7 +37,9 @@ module Journeys
     end
 
     def active?
-      !used && !expired?
+      return false if expired?
+
+      !used || multiuse?
     end
 
     private
