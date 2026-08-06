@@ -10,10 +10,6 @@ FactoryBot.define do
       routing_name { Journeys::GetATeacherRelocationPayment.routing_name }
     end
 
-    trait :international_relocation_payments do
-      routing_name { Journeys::GetATeacherRelocationPayment.routing_name }
-    end
-
     trait :targeted_retention_incentive_payments do
       routing_name { Journeys::TargetedRetentionIncentivePayments.routing_name }
     end

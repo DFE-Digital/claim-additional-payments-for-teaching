@@ -8,7 +8,6 @@ module Journeys
   JOURNEYS = [
     TargetedRetentionIncentivePayments,
     TeacherStudentLoanReimbursement,
-    GetATeacherRelocationPayment,
     FurtherEducationPayments,
     EarlyYearsPayment::Provider::Start,
     EarlyYearsPayment::Provider::Authenticated,

@@ -58,7 +58,9 @@ RSpec.describe ClaimMailer, type: :mailer do
   # Characteristics common to all policies
   [Policies::EarlyYearsTeachersFinancialIncentivePayments, Policies::FurtherEducationPayments, Policies::StudentLoans, Policies::TargetedRetentionIncentivePayments, Policies::InternationalRelocationPayments].each do |policy|
     context "with a #{policy} claim" do
-      let!(:journey_configuration) { create(:journey_configuration, policy.to_s.underscore) }
+      before do
+        create(:journey_configuration, :student_loans)
+      end
 
       describe "#submitted" do
         let(:claim) { build(:claim, :submitted, policy: policy) }

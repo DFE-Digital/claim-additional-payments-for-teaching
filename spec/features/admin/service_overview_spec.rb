@@ -132,44 +132,6 @@ RSpec.describe "Service Overview Page", type: :feature do
       ]
     )
 
-    3.times do
-      create(
-        :get_a_teacher_relocation_payment_session,
-        steps: %w[
-          previous-payment-received
-          application-route
-          state-funded-secondary-school
-          current-school
-          select-current-school
-          headteacher-details
-          contract-details
-          start-date
-          subject
-          changed-workplace-or-new-contract
-          breaks-in-employment
-          visa
-          entry-date
-          check-your-answers-part-one
-          information-provided
-          nationality
-          passport-number
-          personal-details
-          postcode-search
-          select-home-address
-          address
-          email-address
-          email-verification
-          provide-mobile-number
-          mobile-number
-          mobile-verification
-          personal-bank-account
-          gender
-          check-your-answers
-          confirmation
-        ]
-      )
-    end
-
     5.times do
       create(
         :targeted_retention_incentive_payments_session,
@@ -280,10 +242,6 @@ RSpec.describe "Service Overview Page", type: :feature do
     within '[data-test-id="further-education-payments"]' do
       expect(page).to have_content("have-one-login-account3")
       expect(page).to have_content("physics-courses1")
-    end
-
-    within '[data-test-id="get-a-teacher-relocation-payment"]' do
-      expect(page).to have_content("confirmation3")
     end
 
     within '[data-test-id="targeted-retention-incentive-payments"]' do
