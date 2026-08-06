@@ -94,6 +94,16 @@ class Claim < ApplicationRecord
   before_save :normalise_first_name, if: %i[first_name first_name_changed?]
   before_save :normalise_surname, if: %i[surname surname_changed?]
 
+  # NOTE: award_amount is moving from the eligibility tables onto claims.
+  # Eligibility is still the source of truth and the delegate below still serves
+  # every read; this only keeps claims.award_amount populated and correct so the
+  # read cutover is a one-line change. Remove once reads move to the column.
+  #
+  # Declared after `belongs_to :eligibility` so it runs after the autosave
+  # callback that association registers, by which point the eligibility has been
+  # saved and its in-memory award_amount is current.
+  before_save :copy_award_amount_from_eligibility
+
   scope :held, -> { where(held: true) }
   scope :not_held, -> { where(held: false) }
   scope :awaiting_decision, -> do
@@ -455,6 +465,15 @@ class Claim < ApplicationRecord
   end
 
   private
+
+  # Writes through `self[]` rather than `award_amount=` because the delegate
+  # shadows the generated attribute reader, so `claim.award_amount` and
+  # `claim[:award_amount]` deliberately differ until the read cutover.
+  def copy_award_amount_from_eligibility
+    return unless eligibility&.has_attribute?(:award_amount)
+
+    self[:award_amount] = eligibility.award_amount
+  end
 
   def one_login_idv_name_match?
     /\A#{first_name.strip.downcase} /.match?(onelogin_idv_full_name.strip.downcase) &&

@@ -113,6 +113,20 @@ RSpec.describe Payroll::Projection do
     it do
       is_expected.to eq(undecided_in_range.award_amount + approved.award_amount)
     end
+
+    # award_amount is mid-move onto claims and is not the source of truth yet, so
+    # these sums must resolve against the eligibility union rather than the claims
+    # column. Passing a bare symbol would let Rails silently qualify it as
+    # claims.award_amount and total zero for any claim not yet backfilled.
+    context "when the mirrored claims.award_amount is not populated" do
+      before do
+        Claim.update_all(award_amount: nil)
+      end
+
+      it "still sums the eligibility values" do
+        is_expected.to eq(undecided_in_range.award_amount + approved.award_amount)
+      end
+    end
   end
 
   describe "#number_of_claims_for_policy" do
