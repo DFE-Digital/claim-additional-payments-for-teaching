@@ -9,6 +9,10 @@ class ServiceOperatorPolicy
     service_operator?
   end
 
+  def respond_to_missing?(method_name, include_private = false)
+    method_name.to_s.ends_with?("?") || super
+  end
+
   private
 
   def service_operator?

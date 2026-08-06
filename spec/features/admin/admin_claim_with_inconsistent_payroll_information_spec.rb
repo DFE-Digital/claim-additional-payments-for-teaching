@@ -17,7 +17,7 @@ RSpec.feature "Admin checking a claim with inconsistent payroll information" do
   before do
     create(:journey_configuration, :student_loans)
     disable_claim_qa_flagging
-    sign_in_as_service_operator
+    sign_in_as_service_admin
   end
 
   scenario "cannot approve a second claim from an individual whilst the payroll information on the claims is inconsistent" do

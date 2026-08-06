@@ -40,7 +40,7 @@ RSpec.describe Amendment, type: :model do
         policy: Policies::EarlyCareerPayments).reload
     }
 
-    let(:dfe_signin_user) { create(:dfe_signin_user) }
+    let(:dfe_signin_user) { create(:dfe_signin_user, :service_admin) }
 
     context "given valid claim attributes and valid amendment attributes" do
       let(:claim_attributes) do

@@ -109,7 +109,21 @@ class Admin::AmendmentForm
       equal_to: ->(form) { form.claim.banking_name },
       message: "You do not have permission to change the banking name"
     },
-    if: :banking_name_disabled?
+    if: proc { |form| form.field_disabled?(:banking_name) }
+
+  validates :bank_sort_code,
+    comparison: {
+      equal_to: ->(form) { form.claim.bank_sort_code },
+      message: "You do not have permission to change the bank sort code"
+    },
+    if: proc { |form| form.field_disabled?(:bank_sort_code) }
+
+  validates :bank_account_number,
+    comparison: {
+      equal_to: ->(form) { form.claim.bank_account_number },
+      message: "You do not have permission to change the bank account number"
+    },
+    if: proc { |form| form.field_disabled?(:bank_account_number) }
 
   validates :award_amount,
     comparison: {
@@ -135,13 +149,30 @@ class Admin::AmendmentForm
   end
 
   def self.amendable_attributes(claim:, admin_user:)
+    instance = new(claim:, admin_user:)
+    instance.amendable_attributes
+  end
+
+  def field_disabled?(field)
+    amendable_attributes.exclude?(field)
+  end
+
+  def amendable_attributes
     array = Claim::AMENDABLE_ATTRIBUTES + claim.policy::Eligibility::AMENDABLE_ATTRIBUTES + [:notes]
 
+    set = Set.new(array)
+
     if admin_user.is_service_admin?
-      array << :banking_name
+      set << :banking_name
+      set << :bank_sort_code
+      set << :bank_account_number
+    else
+      set.delete :banking_name
+      set.delete :bank_sort_code
+      set.delete :bank_account_number
     end
 
-    array
+    set.to_a
   end
 
   def initialize(claim:, admin_user:, params: {})
@@ -219,10 +250,6 @@ class Admin::AmendmentForm
     end
 
     true
-  end
-
-  def banking_name_disabled?
-    !admin_user.is_service_admin?
   end
 
   private
