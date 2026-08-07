@@ -111,6 +111,10 @@ module Policies
       Award.by_academic_year(claim.academic_year).maximum(:award_amount)
     end
 
+    def award_amount_rules(record)
+      AwardAmountRules.new(record)
+    end
+
     def set_a_reminder?(itt_academic_year)
       selectable_itt_years_for_claim_year(AcademicYear.next).include?(itt_academic_year)
     end

@@ -91,4 +91,25 @@ RSpec.describe BasePolicy, type: :model do
       expect(Policies::TestPolicy.decision_deadline_date(claim)).to eql((claim.submitted_at + 19.weeks).to_date)
     end
   end
+
+  describe "#award_amount_rules" do
+    it "is nil for a policy that does not constrain award size" do
+      expect(Policies::TestPolicy.award_amount_rules(build(:claim))).to be_nil
+    end
+
+    # Guards the dispatch in each eligibility, which deliberately does not use safe
+    # navigation: if one of these overrides is dropped, award validation stops
+    # running entirely.
+    {
+      Policies::StudentLoans => Policies::StudentLoans::AwardAmountRules,
+      Policies::TargetedRetentionIncentivePayments =>
+        Policies::TargetedRetentionIncentivePayments::AwardAmountRules
+    }.each do |policy, rules_class|
+      it "returns #{rules_class} for #{policy}" do
+        record = build(:"#{policy.to_s.underscore}_eligibility")
+
+        expect(policy.award_amount_rules(record)).to be_a(rules_class)
+      end
+    end
+  end
 end

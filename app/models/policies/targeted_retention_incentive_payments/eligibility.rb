@@ -7,15 +7,13 @@ module Policies
         Policies::TargetedRetentionIncentivePayments
       end
 
-      include ActiveSupport::NumberHelper
-
       self.table_name = "targeted_retention_incentive_payments_eligibilities"
       has_one :claim, as: :eligibility, inverse_of: :eligibility
       belongs_to :current_school, optional: true, class_name: "School"
 
       before_validation :normalise_teacher_reference_number, if: :teacher_reference_number_changed?
 
-      validate :award_amount_must_be_in_range, on: :amendment
+      validate :validate_award_amount
       validates :teacher_reference_number, on: :amendment, presence: {message: "Enter your teacher reference number"}
       validate :validate_teacher_reference_number_length
 
@@ -62,13 +60,8 @@ module Policies
 
       private
 
-      def award_amount_must_be_in_range
-        claim_year = policy.current_academic_year
-        max = TargetedRetentionIncentivePayments::Award.by_academic_year(claim_year).maximum(:award_amount)
-
-        unless award_amount&.between?(1, max)
-          errors.add(:award_amount, "Enter a positive amount up to #{number_to_currency(max)} (inclusive)")
-        end
+      def validate_award_amount
+        policy.award_amount_rules(self).validate(context: validation_context)
       end
     end
   end
