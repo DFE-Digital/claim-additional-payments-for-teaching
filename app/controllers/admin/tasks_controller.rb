@@ -6,7 +6,7 @@ class Admin::TasksController < Admin::BaseAdminController
 
   def index
     @claim_checking_tasks = ClaimCheckingTasks.new(@claim)
-    @banner_messages = set_banner_messages
+    set_banner_messages
   end
 
   def show
@@ -90,6 +90,8 @@ class Admin::TasksController < Admin::BaseAdminController
     params[:name] == "matching_details" || action_name == "create"
   end
 
+  class BannerMessage < Struct.new(:type, :title, :body, keyword_init: true); end
+
   def set_banner_messages
     messages = []
 
@@ -112,7 +114,23 @@ class Admin::TasksController < Admin::BaseAdminController
       MSG
     end
 
-    messages
+    @banners = []
+
+    if messages.many?
+      @banners << BannerMessage.new(
+        type: :notification,
+        title: "This claim requires the following to be reviewed:",
+        body: view_context.govuk_list(messages, type: :bullet)
+      )
+    end
+
+    if messages.one?
+      @banners << BannerMessage.new(
+        type: :notification,
+        title: messages.first,
+        body: nil
+      )
+    end
   end
 
   def task_view(task)

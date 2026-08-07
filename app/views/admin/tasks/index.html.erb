@@ -4,8 +4,8 @@
   <%= govuk_back_link href: claims_backlink_path %>
 <% end %>
 
-<% if @banner_messages.any? %>
-  <%= render partial: "banner", locals: { messages: @banner_messages } %>
+<% @banners.each do |banner| %>
+  <%= render partial: "banner", locals: { banner: banner } %>
 <% end %>
 
 <% if @claim.attributes_flagged_by_risk_indicator.any? %>
