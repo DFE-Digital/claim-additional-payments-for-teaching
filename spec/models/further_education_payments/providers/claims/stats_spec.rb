@@ -332,6 +332,38 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
       end
     end
 
+    # `approved` joins both eligibilities and decisions, so summing over it
+    # directly counts a claim once per matching decision row. A validation
+    # normally prevents a second active approved decision, but nothing at the
+    # database level does — hence the subquery in #approved_amount.
+    context "when a claim somehow has two active approved decisions" do
+      it "counts the award once" do
+        eligibility = create(
+          :further_education_payments_eligibility,
+          :provider_verification_completed,
+          :with_award_amount,
+          school: provider.school
+        )
+
+        claim = create(
+          :claim,
+          :further_education,
+          :approved,
+          eligibility:,
+          academic_year: journey_configuration.current_academic_year
+        )
+
+        Decision.new(
+          claim: claim,
+          approved: true,
+          created_by: create(:dfe_signin_user)
+        ).save(validate: false)
+
+        expect(claim.decisions.active.approved.count).to eq(2)
+        expect(subject.amount).to eql(eligibility.award_amount)
+      end
+    end
+
     it "returns total approved award amount" do
       claims = 10.times.map do
         eligibility = create(

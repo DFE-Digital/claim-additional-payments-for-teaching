@@ -46,12 +46,11 @@ module FurtherEducationPayments
 
         private
 
+        # NOTE: sums via a subquery rather than `approved.sum(:award_amount)`.
+        # `approved` joins decisions, so summing over it directly would count a
+        # claim once per matching decision row.
         def approved_amount
-          approved_eligibilities = Policies::FurtherEducationPayments::Eligibility.where(
-            claim: approved
-          )
-
-          approved_eligibilities.sum(:award_amount)
+          ::Claim.where(id: approved).sum(:award_amount)
         end
 
         def topups
