@@ -31,8 +31,7 @@ module AutomatedChecks
       attr_accessor :admin_user, :claim
 
       delegate :national_insurance_number, :date_of_birth, :eligibility, to: :claim
-      delegate :student_loan_plan, to: :claim, prefix: :claim
-      delegate :award_amount, to: :eligibility, prefix: :claim
+      delegate :student_loan_plan, :award_amount, to: :claim, prefix: :claim
       delegate :repaying_plan_types, :total_repayment_amount, to: :student_loans_data, prefix: :slc
 
       alias_method :nino, :national_insurance_number
