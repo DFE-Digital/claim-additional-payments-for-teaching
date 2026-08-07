@@ -19,7 +19,7 @@ RSpec.describe Payment do
 
       payment = create(:payment, claims: [claim, topup_claim], topups: [topup])
 
-      expect(payment.reload.non_topup_claims).to eq([claim])
+      expect(payment.reload.non_topup_claims).to eq(["oh no"])
     end
   end
 
