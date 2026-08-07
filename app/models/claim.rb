@@ -161,28 +161,6 @@ class Claim < ApplicationRecord
     where.not(id: Claim.awaiting_further_education_provider_verification)
   end
 
-  scope :with_award_amounts, -> do
-    joins(
-      <<~SQL
-        JOIN (
-          #{
-            Policies::POLICIES.map do |policy|
-              "
-                SELECT
-                id,
-                award_amount AS award_amount,
-                '#{policy::Eligibility}' AS eligibility_type
-                FROM #{policy::Eligibility.table_name}
-              "
-            end.join(" UNION ALL ")
-          }
-        ) AS eligibilities
-        ON claims.eligibility_id = eligibilities.id
-        AND claims.eligibility_type = eligibilities.eligibility_type
-      SQL
-    )
-  end
-
   scope :require_in_progress_update_emails, -> {
     by_policies(Policies.all.select { |p| p.require_in_progress_update_emails? })
   }

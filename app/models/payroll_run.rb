@@ -59,8 +59,7 @@ class PayrollRun < ApplicationRecord
       .by_policies(policies)
 
     claims_without_topups_in_payroll_run = Claim
-      .select("claims.id AS id, eligibilities.award_amount AS award_amount")
-      .with_award_amounts
+      .select("claims.id AS id, claims.award_amount AS award_amount")
       .joins(:payments)
       .where(payments: {payroll_run_id: id})
       .where.not(id: claims_topped_up_in_payroll_run.reselect(:id))
@@ -78,9 +77,9 @@ class PayrollRun < ApplicationRecord
       ].join("\nUNION\n")
     end
 
-    # Claim delegates it's award amount to eligibility, so we want to return
-    # a non claim object ensuring the award amount is from the topup if there
-    # is one
+    # Returns a non claim object so that a topped up claim reports the topup's
+    # award amount rather than its own. Both branches of the UNION must keep
+    # selecting id and award_amount, in that order, to match LineItem.
     ActiveRecord::Base.connection.execute(sql).map(&LineItem.method(:new))
   end
 
