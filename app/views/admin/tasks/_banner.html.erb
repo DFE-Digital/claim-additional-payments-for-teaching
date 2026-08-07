@@ -5,22 +5,12 @@
     </h2>
   </div>
   <div class="govuk-notification-banner__content">
-    <% if messages.many? %>
-      <h3 class="govuk-notification-banner__heading">
-        This claim requires the following to be reviewed:
-      </h3>
+    <h3 class="govuk-notification-banner__heading">
+      <%= banner.title %>
+    </h3>
 
-      <ul>
-        <% messages.each do |message| %>
-          <li>
-            <%= message %>
-          </li>
-        <% end %>
-      </ul>
-    <% else %>
-      <p class="govuk-notification-banner__heading">
-        <%= messages.first %>
-      </p>
+    <% if banner.body.present? %>
+      <%= banner.body %>
     <% end %>
   </div>
 </div>
