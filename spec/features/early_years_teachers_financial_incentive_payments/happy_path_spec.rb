@@ -141,8 +141,8 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     fill_in "Enter your National Insurance number", with: "AB123456C"
     click_button "Continue"
 
-    expect(page).to have_text "Enter your personal bank account details"
-    fill_in "Name on your account", with: "John Doe"
+    expect(page).to have_text(I18n.t("questions.account_details"))
+    fill_in "Name on the account", with: "John Doe"
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "12345678"
     click_button "Continue"

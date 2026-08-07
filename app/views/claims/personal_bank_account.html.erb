@@ -15,12 +15,11 @@
           spellcheck: "false",
           autocomplete: "name",
           label: {
-            text: @form.t("banking_name.label", default: "Name on your account")
+            text: @form.t("banking_name.label", default: "Name on the account")
           },
           hint: {
             text: @form.t(
-              "banking_name.hint",
-              default: t("questions.account_hint")
+              "banking_name.hint"
             )
           }
         ) %>
@@ -33,7 +32,7 @@
           hint: {
             text: @form.t(
               "bank_sort_code.hint",
-              default: "For example: 309430"
+              default: "Must be 6 digits long"
             )
           } %>
 
@@ -45,7 +44,7 @@
           hint: {
             text: @form.t(
               "bank_account_number.hint",
-              default: "For example: 00733445"
+              default: "Must be 8 digits long"
             )
           } %>
       <% end %>

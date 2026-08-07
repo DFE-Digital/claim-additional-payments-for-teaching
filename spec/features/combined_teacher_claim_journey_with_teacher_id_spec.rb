@@ -175,7 +175,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     choose "01234567890"
     click_on "Continue"
 
-    fill_in "Name on your account", with: "John Doe"
+    fill_in "Name on the account", with: "John Doe"
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "87654321"
     click_on "Continue"

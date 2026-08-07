@@ -246,7 +246,7 @@ module GetATeacherRelocationPayment
     def and_i_provide_my_personal_bank_details
       assert_on_personal_bank_account_page!
 
-      fill_in("Name on your account", with: "Walter Skinner")
+      fill_in("Name on the account", with: "Walter Skinner")
       fill_in("Sort code", with: "123456")
       fill_in("Account number", with: "12345678")
 
@@ -354,7 +354,7 @@ module GetATeacherRelocationPayment
     end
 
     def assert_on_personal_bank_account_page!
-      expect(page).to have_text("Enter your personal bank account details")
+      expect(page).to have_text(I18n.t("questions.account_details"))
     end
 
     def assert_on_payroll_gender_step!

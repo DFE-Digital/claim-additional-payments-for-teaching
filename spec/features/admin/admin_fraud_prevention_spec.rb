@@ -258,7 +258,7 @@ RSpec.feature "Admin fraud prevention" do
     click_on "Continue"
 
     # /targeted-retention-incentive-payments/personal-bank-account
-    fill_in "Name on your account", with: "Seymour Skinner"
+    fill_in "Name on the account", with: "Seymour Skinner"
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "87654321"
     click_on "Continue"
