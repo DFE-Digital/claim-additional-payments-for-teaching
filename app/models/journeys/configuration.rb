@@ -26,6 +26,7 @@ module Journeys
     attribute :current_academic_year, AcademicYear::Type.new
 
     validates :current_academic_year_before_type_cast, format: {with: AcademicYear::ACADEMIC_YEAR_REGEXP}
+    validate :close_at_validations, if: -> { open_for_submissions == true }
 
     def targeted_retention_incentive_payments?
       journey == Journeys::TargetedRetentionIncentivePayments
@@ -39,6 +40,19 @@ module Journeys
 
     def journey
       Journeys.for_routing_name(routing_name)
+    end
+
+    private
+
+    def close_at_validations
+      errors.add(:close_at, :blank) if close_at.blank?
+
+      return if close_at.blank?
+
+      current_time = Time.current.in_time_zone("London")
+      return if close_at > current_time
+
+      errors.add(:close_at, "must be in the future")
     end
   end
 end

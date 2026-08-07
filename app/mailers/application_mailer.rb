@@ -10,6 +10,8 @@ class ApplicationMailer < Mail::Notify::Mailer
   TPS_CSV_PROCESSING_SUCCESS_ID = "5d817617-06c3-4df0-b228-f3d25510701e".freeze
   SLC_CSV_PROCESSING_ERROR_ID = "f40fa946-963b-4ddd-a896-7c1d6bd7da12".freeze
   SLC_CSV_PROCESSING_SUCCESS_ID = "ee4b950a-28bd-417f-a00a-bc592f18f93b".freeze
+  SERVICE_CLOSING_SOON_ID = "2bc99ba9-f9f9-4a2d-aed7-e0bf5e7d9ef2".freeze
+  SERVICE_CLOSING_SOON_REPLY_TO_ID = "2b8fbdcf-16da-49dc-ad07-4a4c45f0e7e6".freeze
 
   STUDENT_LOANS = {
     CLAIM_RECEIVED_NOTIFY_TEMPLATE_ID: "f9e39fcd-301a-4427-9159-6831fd484e39".freeze,

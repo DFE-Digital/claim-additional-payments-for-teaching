@@ -180,10 +180,16 @@ module Admin
     end
 
     def ensure_preview_journey_configuration!(journey)
-      Journeys::Configuration.find_or_create_by!(routing_name: journey.routing_name) do |configuration|
-        configuration.current_academic_year = AcademicYear.current
+      configuration = Journeys::Configuration.find_or_initialize_by(routing_name: journey.routing_name)
+      configuration.current_academic_year ||= AcademicYear.current
+
+      if configuration.new_record?
         configuration.open_for_submissions = true
+        configuration.close_at = 1.year.from_now.in_time_zone("London")
       end
+
+      configuration.save!
+      configuration
     end
 
     def ineligible_preview_answers_for(journey, slug)

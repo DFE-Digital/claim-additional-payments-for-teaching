@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_06_122602) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_29_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -519,6 +519,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_06_122602) do
 
   create_table "journey_configurations", primary_key: "routing_name", id: :string, force: :cascade do |t|
     t.string "availability_message"
+    t.datetime "close_at"
     t.datetime "created_at", precision: nil, null: false
     t.string "current_academic_year", limit: 9
     t.boolean "open_for_submissions", default: true, null: false
