@@ -126,4 +126,4 @@ gem "tzinfo-data", platforms: [:windows, :jruby]
 
 gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.15.17"
 
-gem "reactionview", "~> 0.1.2"
+gem "reactionview", "~> 0.3.0"
