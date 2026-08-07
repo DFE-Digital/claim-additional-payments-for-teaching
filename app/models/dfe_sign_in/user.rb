@@ -25,10 +25,9 @@ module DfeSignIn
     def self.from_session(session:, user_type:)
       user = where(dfe_sign_in_id: session.user_id, user_type:).first_or_initialize
 
-      return if user.deleted?
-
       user.role_codes = session.role_codes
       user.current_organisation_ukprn = session.organisation_ukprn
+      user.deleted_at = nil
 
       user
     end
