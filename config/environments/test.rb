@@ -8,7 +8,7 @@ require "active_support/core_ext/integer/time"
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  config.cache_classes = false
+  config.cache_classes = true
   config.action_view.cache_template_loading = true
 
   # Eager loading loads your whole application. When running a single test locally,
@@ -65,7 +65,7 @@ Rails.application.configure do
   # config.action_view.annotate_rendered_view_with_filenames = true
 
   config.after_initialize do
-    Bullet.enable = true
+    Bullet.enable = ENV["CI"].blank?
     Bullet.bullet_logger = true
     Bullet.add_safelist type: :unused_eager_loading, class_name: "TslrClaim", association: :current_school
     Bullet.add_safelist type: :n_plus_one_query, class_name: "School", association: :local_authority
