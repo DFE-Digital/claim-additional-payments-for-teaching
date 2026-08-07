@@ -87,6 +87,7 @@
   - code
   - used
   - journey
+  - multiuse
   - created_at
   - updated_at
   :feature_flags:
