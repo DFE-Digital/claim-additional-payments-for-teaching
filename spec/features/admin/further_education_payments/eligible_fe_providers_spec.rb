@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Admin of eligible FE providers" do
   scenario "manage eligible FE providers" do
     when_further_education_payments_journey_configuration_exists
-    sign_in_as_service_operator
+    sign_in_as_service_admin
 
     click_link "Manage services"
     click_link "Change Claim a targeted retention incentive payment for further education teachers"
