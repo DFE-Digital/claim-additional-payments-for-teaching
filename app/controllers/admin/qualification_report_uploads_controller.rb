@@ -2,7 +2,7 @@ module Admin
   class QualificationReportUploadsController < BaseAdminController
     include ActionView::Helpers::TextHelper
 
-    before_action :ensure_service_operator
+    before_action :ensure_service_admin
 
     rate_limit(
       to: 1,

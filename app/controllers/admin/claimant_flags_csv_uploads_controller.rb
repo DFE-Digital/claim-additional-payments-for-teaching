@@ -1,6 +1,6 @@
 module Admin
   class ClaimantFlagsCsvUploadsController < BaseAdminController
-    before_action :ensure_service_operator
+    before_action :ensure_service_admin
 
     def new
       @form = ClaimantFlagsCsvUploadForm.new(claimant_flags_csv_upload_params)

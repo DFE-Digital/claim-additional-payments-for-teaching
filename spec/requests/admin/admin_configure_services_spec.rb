@@ -15,7 +15,13 @@ RSpec.describe "Service configuration" do
         expect(response).to have_http_status(:unauthorized)
         expect(journey_configuration.reload.automatic_approvals).to be true
       end
+    end
+  end
 
+  context "when signed in as a service admin" do
+    before { sign_in_as_service_admin }
+
+    describe "admin_journey_configurations#update" do
       it "sets the configuration's availability message, status, and close datetime" do
         close_at = 2.days.from_now.change(sec: 0)
 
@@ -60,7 +66,7 @@ RSpec.describe "Service configuration" do
 
       it "parses a close datetime in the Europe/London timezone for BST" do
         travel_to Time.zone.parse("2026-07-15 12:00:00 +01:00") do
-          sign_in_as_service_operator
+          sign_in_as_service_admin
 
           patch admin_journey_configuration_path(journey_configuration, journey_configuration: {
             open_for_submissions: false,
@@ -74,7 +80,7 @@ RSpec.describe "Service configuration" do
 
       it "parses a close datetime in the Europe/London timezone for GMT" do
         travel_to Time.zone.parse("2026-12-15 12:00:00 +00:00") do
-          sign_in_as_service_operator
+          sign_in_as_service_admin
 
           patch admin_journey_configuration_path(journey_configuration, journey_configuration: {
             open_for_submissions: false,
@@ -88,7 +94,7 @@ RSpec.describe "Service configuration" do
 
       it "keeps the same UTC instant when the close datetime is read later in the year" do
         travel_to Time.zone.parse("2026-07-15 12:00:00 +01:00") do
-          sign_in_as_service_operator
+          sign_in_as_service_admin
 
           patch admin_journey_configuration_path(journey_configuration, journey_configuration: {
             open_for_submissions: false,

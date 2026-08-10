@@ -1,6 +1,6 @@
 module Admin
   class EligibleFeProvidersController < BaseAdminController
-    before_action :ensure_service_operator
+    before_action :ensure_service_admin
 
     helper_method :journey_configuration
 
