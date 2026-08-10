@@ -34,7 +34,7 @@
 
     <%= govuk_button_link_to "Reports", admin_reports_path, secondary: true %>
 
-    <% if FeatureFlag.enabled?(:claimant_flagging) %>
+    <% if FeatureFlag.enabled?(:claimant_flagging) && policy(:ClaimantFlagsCsvUpload).new? %>
       <%= govuk_button_link_to "Upload flagged claimants CSV", new_admin_claimant_flags_csv_upload_path, secondary: true %>
     <% end %>
 
