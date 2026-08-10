@@ -7,7 +7,10 @@
     </h1>
 
     <%= govuk_button_link_to "Download report request file", admin_claims_path(format: :csv), secondary: true %>
-    <%= govuk_button_link_to "Upload School Workforce Census data", new_admin_school_workforce_census_data_upload_path, secondary: true %>
+
+    <% if policy(:SchoolWorkforceCensusDataUpload).new? %>
+      <%= govuk_button_link_to "Upload School Workforce Census data", new_admin_school_workforce_census_data_upload_path, secondary: true %>
+    <% end %>
 
     <% if policy(:TpsDataUpload).new? %>
       <%= govuk_button_link_to "Upload TPS data", new_admin_tps_data_upload_path, secondary: true %>

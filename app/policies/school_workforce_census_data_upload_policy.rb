@@ -1,0 +1,2 @@
+class SchoolWorkforceCensusDataUploadPolicy < ServiceAdminPolicy
+end
