@@ -20,7 +20,10 @@
       <%= govuk_button_link_to "Upload DQT report", new_admin_qualification_report_upload_path, secondary: true %>
     <% end %>
 
-    <%= govuk_button_link_to "Upload DQT HE Qualifications", new_admin_dqt_higher_education_qualification_upload_path, secondary: true %>
+    <% if policy(:DqtHigherEducationQualificationUpload).new? %>
+      <%= govuk_button_link_to "Upload DQT HE Qualifications", new_admin_dqt_higher_education_qualification_upload_path, secondary: true %>
+    <% end %>
+
     <%= govuk_button_link_to "Upload SLC data", new_admin_student_loans_data_upload_path, secondary: true %>
     <%= govuk_button_link_to "Upload fraud prevention data", new_admin_fraud_risk_csv_upload_path, secondary: true %>
     <%= govuk_button_link_to "Reports", admin_reports_path, secondary: true %>
