@@ -1,0 +1,2 @@
+class QualificationReportUploadPolicy < ServiceAdminPolicy
+end
