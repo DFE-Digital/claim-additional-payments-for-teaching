@@ -11,20 +11,19 @@
       <%= journey_configuration.journey.full_name %>
     </h1>
 
-    <div class="govuk-panel govuk-panel--informational govuk-panel--small">
-      <% if journey_configuration.open_for_submissions? %>
-        <h2 class="govuk-panel__title">Service open</h2>
-        <p class="govuk-panel__body">
-          This service is currently open and accepting claims for the
-          <%= journey_configuration.current_academic_year%> academic year.
-        </p>
-      <% else %>
-        <h2 class="govuk-panel__title">Service closed</h2>
-        <p class="govuk-panel__body">
-          This service is currently closed. Users can not submit claims.
-        </p>
-      <% end %>
-    </div>
+    <% if journey_configuration.open_for_submissions? %>
+      <%= govuk_panel(
+        title_text: "Service open",
+        text: "This service is currently open and accepting claims for the #{journey_configuration.current_academic_year} academic year.",
+        classes: "govuk-panel--informational govuk-panel--small"
+      ) %>
+    <% else %>
+      <%= govuk_panel(
+        title_text: "Service closed",
+        text: "This service is currently closed. Users can not submit claims.",
+        classes: "govuk-panel--informational govuk-panel--small"
+      ) %>
+    <% end %>
 
     <% if journey_configuration.targeted_retention_incentive_payments? %>
       <div class="govuk-panel govuk-panel--informational govuk-panel--small">
