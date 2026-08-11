@@ -15,6 +15,8 @@ module Admin
     end
 
     def edit
+      @form = Admin::JourneyConfigurationForm.for_journey_configuration(@journey_configuration)
+
       @awards_upload_form = Policies::TargetedRetentionIncentivePayments::AwardCsvImporter.new(awards_upload_params.merge({admin_user:})) if journey_configuration.targeted_retention_incentive_payments?
 
       @upload_form = EligibleFeProvidersForm.new(upload_params, admin_user)

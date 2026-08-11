@@ -85,9 +85,7 @@ RSpec.feature "Service configuration" do
         click_on "Change"
       end
 
-      within(".govuk-radios__conditional--hidden#reminders-warning-message") do
-        expect(page).to have_content(I18n.t("admin.journey_configuration.reminder_warning", count: count))
-      end
+      expect(page).to have_content(I18n.t("admin.journey_configuration.reminder_warning", count: count))
 
       within_fieldset("Service status") { choose("Open") }
       expect(page).to have_content(I18n.t("admin.journey_configuration.reminder_warning", count: count))

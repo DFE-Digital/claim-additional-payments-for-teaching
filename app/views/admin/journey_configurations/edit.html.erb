@@ -39,68 +39,59 @@
       </div>
     <% end %>
 
-    <%= form_with model: [:admin, journey_configuration], url: admin_journey_configuration_path(journey_configuration), scope: "journey_configuration" do |f| %>
+    <%= form_with model: @form,
+      url: admin_journey_configuration_path(journey_configuration),
+      method: :patch,
+      scope: "journey_configuration",
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
 
-      <div class="govuk-form-group">
-        <%= f.label :current_academic_year, "Accepting claims for academic year", class: "govuk-label" %>
-        <%= f.select :current_academic_year, options_for_academic_year, {}, class: "govuk-select" %>
-      </div>
+      <%= f.govuk_collection_select :current_academic_year,
+        @form.academic_year_select_options,
+        :id,
+        :name,
+        label: { text: "Accepting claims for academic year" } %>
 
-      <div class="govuk-form-group">
-        <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend">
-            Service status
-          </legend>
-          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
-            <div class="govuk-radios__item">
-              <%= f.radio_button :open_for_submissions, true, class: "govuk-radios__input", data: { aria_controls: "reminders-warning-message" } %>
-              <%= f.label :open_for_submissions, "Open", value: true, class: "govuk-label govuk-radios__label" %>
-            </div>
-            <%= render 'admin/journey_configurations/reminder_warning' %>
-            <div class="govuk-radios__item">
-              <%= f.radio_button :open_for_submissions, false, class: "govuk-radios__input", data: { aria_controls: "conditional-availability-message-conditional" } %>
-              <%= f.label :open_for_submissions, "Closed", value: false, class: "govuk-label govuk-radios__label" %>
-            </div>
-            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-availability-message-conditional">
-              <div class="govuk-form-group">
-                <%= f.label :availability_message, "Availability message", class: "govuk-label" %>
-                <div class="govuk-hint" id="availability_message-hint">
-                  <p>
-                  This is an optional message that should provide an explanation of why the service is closed and / or when we expect it to open again.
-                  </p>
+      <%= f.govuk_radio_buttons_fieldset(
+        :open_for_submissions,
+        legend: {
+          size: 'm',
+          text: "Service status"
+        }) do %>
+        <%= f.govuk_radio_button :open_for_submissions,
+          true,
+          label: { text: "Open" },
+          link_errors: true do %>
+            <%= render "admin/journey_configurations/reminder_warning" %>
+        <% end %>
 
-                  <p>
-                  For example, "The service is closed for maintenance and will be available from 2pm today."
-                  </p>
-                </div>
-                <%= f.text_area :availability_message, class: "govuk-textarea", "aria-describedby" => "availability_message-hint", rows: 5 %>
-              </div>
-            </div>
-          </div>
-        </fieldset>
-      </div>
+        <%= f.govuk_radio_button :open_for_submissions,
+          false,
+          label: { text: "Closed" } do %>
+          <%= f.govuk_text_area :availability_message,
+            label: {
+              text: "Availability message"
+            },
+            hint: -> do %>
+              <p>
+                This is an optional message that should provide an explanation of why the service is closed and / or when we expect it to open again.
+              </p>
 
-      <% if journey_configuration.teacher_id_configurable? %>
-        <div class="govuk-form-group">
-          <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend">
-              Sign in with DfE Identity
-            </legend>
-            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
-              <div class="govuk-radios__item">
-                <%= f.radio_button :teacher_id_enabled, true, class: "govuk-radios__input" %>
-                <%= f.label :teacher_id_enabled, "Enabled", value: true, class: "govuk-label govuk-radios__label" %>
-              </div>
-              <div class="govuk-radios__item">
-                <%= f.radio_button :teacher_id_enabled, false, class: "govuk-radios__input" %>
-                <%= f.label :teacher_id_enabled, "Disabled", value: false, class: "govuk-label govuk-radios__label" %>
-              </div>
-            </div>
-          </fieldset>
-        </div>
+              <p>
+                For example, "The service is closed for maintenance and will be available from 2pm today."
+              </p>
+          <% end %>
+        <% end %>
       <% end %>
 
-      <%= f.submit "Save", class: "govuk-button", data: { module: "govuk-button" } %>
+      <% if journey_configuration.teacher_id_configurable? %>
+        <%= f.govuk_collection_radio_buttons :teacher_id_enabled,
+          @form.teacher_id_radio_options,
+          :id,
+          :name,
+          legend: { text: "Sign in with DfE Identity" } %>
+      <% end %>
+
+      <%= f.govuk_submit "Save" %>
     <% end %>
   </div>
 </div>
