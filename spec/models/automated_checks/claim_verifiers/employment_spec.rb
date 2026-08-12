@@ -48,7 +48,6 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::Employment do
     subject(:perform) { employment.perform }
 
     let(:policy) { Policies::TargetedRetentionIncentivePayments }
-
     let(:policy_underscored) { policy.to_s.underscore }
     let(:teacher_reference_number) { 1334425 }
 
@@ -68,28 +67,11 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::Employment do
 
         before { perform }
 
-        describe "#claim_verifier_match" do
-          subject(:claim_verifier_match) { employment_task.claim_verifier_match }
-
-          it { is_expected.to eq "all" }
-        end
-
-        describe "#created_by" do
-          subject(:created_by) { employment_task.created_by }
-
-          it { is_expected.to eq nil }
-        end
-
-        describe "#passed" do
-          subject(:passed) { employment_task.passed }
-
-          it { is_expected.to eq true }
-        end
-
-        describe "#manual" do
-          subject(:manual) { employment_task.manual }
-
-          it { is_expected.to eq false }
+        it "has correct attributes" do
+          expect(employment_task.claim_verifier_match).to eql("all")
+          expect(employment_task.created_by).to be_nil
+          expect(employment_task).to be_passed
+          expect(employment_task.manual).to eql false
         end
       end
 
@@ -98,24 +80,10 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::Employment do
 
         before { perform }
 
-        describe "#body" do
-          subject(:body) { note.body }
-
-          it "returns 'Eligible' with the school of employment" do
-            expect(subject).to eq("[Employment] - Eligible:\n<pre>Current school: LA Code: 370 / Establishment Number: 8091\n</pre>\n")
-          end
-        end
-
-        describe "#label" do
-          subject(:label) { note.label }
-
-          it { is_expected.to eq("employment") }
-        end
-
-        describe "#created_by" do
-          subject(:created_by) { note.created_by }
-
-          it { is_expected.to eq(nil) }
+        it "returns 'Eligible' with the school of employment" do
+          expect(note.body).to eql("[Employment] - Eligible:\n<pre>Current school: LA Code: 370 / Establishment Number: 8091\n</pre>\n")
+          expect(note.label).to eql("employment")
+          expect(note.created_by).to be_nil
         end
       end
     end
@@ -135,28 +103,11 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::Employment do
 
         before { perform }
 
-        describe "#claim_verifier_match" do
-          subject(:claim_verifier_match) { employment_task.claim_verifier_match }
-
-          it { is_expected.to eq "none" }
-        end
-
-        describe "#created_by" do
-          subject(:created_by) { employment_task.created_by }
-
-          it { is_expected.to eq nil }
-        end
-
-        describe "#passed" do
-          subject(:passed) { employment_task.passed }
-
-          it { is_expected.to eq(nil) }
-        end
-
-        describe "#manual" do
-          subject(:manual) { employment_task.manual }
-
-          it { is_expected.to eq false }
+        it "has correct attributes" do
+          expect(employment_task.claim_verifier_match).to eql("none")
+          expect(employment_task.created_by).to be_nil
+          expect(employment_task.passed).to be_nil
+          expect(employment_task.manual).to eql(false)
         end
       end
 
@@ -165,24 +116,10 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::Employment do
 
         before { perform }
 
-        describe "#body" do
-          subject(:body) { note.body }
-
-          it "returns 'Ineligible' with the school details" do
-            expect(subject).to eq("[Employment] - Ineligible:\n<pre>Current school: LA Code: 383 / Establishment Number: 4026\n</pre>\n")
-          end
-        end
-
-        describe "#label" do
-          subject(:label) { note.label }
-
-          it { is_expected.to eq("employment") }
-        end
-
-        describe "#created_by" do
-          subject(:created_by) { note.created_by }
-
-          it { is_expected.to eq(nil) }
+        it "returns 'Ineligible' with the school details" do
+          expect(note.body).to eql("[Employment] - Ineligible:\n<pre>Current school: LA Code: 383 / Establishment Number: 4026\n</pre>\n")
+          expect(note.label).to eql("employment")
+          expect(note.created_by).to be_nil
         end
       end
     end
@@ -195,28 +132,11 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::Employment do
 
         before { perform }
 
-        describe "#claim_verifier_match" do
-          subject(:claim_verifier_match) { teachers_pensions_service_task.claim_verifier_match }
-
-          it { is_expected.to be_nil }
-        end
-
-        describe "#created_by" do
-          subject(:created_by) { teachers_pensions_service_task.created_by }
-
-          it { is_expected.to eq nil }
-        end
-
-        describe "#passed" do
-          subject(:passed) { teachers_pensions_service_task.passed }
-
-          it { is_expected.to eq(nil) }
-        end
-
-        describe "#manual" do
-          subject(:manual) { teachers_pensions_service_task.manual }
-
-          it { is_expected.to eq false }
+        it "returns correct attributes" do
+          expect(teachers_pensions_service_task.claim_verifier_match).to be_nil
+          expect(teachers_pensions_service_task.created_by).to be_nil
+          expect(teachers_pensions_service_task.passed).to be_nil
+          expect(teachers_pensions_service_task.manual).to eql(false)
         end
       end
 
@@ -225,22 +145,10 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::Employment do
 
         before { perform }
 
-        describe "#body" do
-          subject(:body) { note.body }
-
-          it { is_expected.to eq("[Employment] - No data") }
-        end
-
-        describe "#label" do
-          subject(:label) { note.label }
-
-          it { is_expected.to eq("employment") }
-        end
-
-        describe "#created_by" do
-          subject(:created_by) { note.created_by }
-
-          it { is_expected.to eq(nil) }
+        it "returns correct attributes" do
+          expect(note.body).to eql("[Employment] - No data")
+          expect(note.label).to eql("employment")
+          expect(note.created_by).to be_nil
         end
       end
     end
