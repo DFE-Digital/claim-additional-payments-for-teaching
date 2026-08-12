@@ -21,7 +21,9 @@
           <th scope="col" class="govuk-table__header">Service</th>
           <th scope="col" class="govuk-table__header">Accepting claims for</th>
           <th scope="col" class="govuk-table__header">Status</th>
-          <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Actions</span></th>
+          <% if policy(:JourneyConfiguration).edit? %>
+            <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Actions</span></th>
+          <% end %>
         </tr>
       </thead>
       <tbody class="govuk-table__body">
@@ -30,11 +32,13 @@
             <th scope="row" class="govuk-table__header"><%= journey_configuration.journey.full_name %></th>
             <td class="govuk-table__cell"><%= journey_configuration.current_academic_year %></td>
             <td class="govuk-table__cell"><%= journey_configuration.open_for_submissions? ? "Open" : "Closed" %></td>
-            <td class="govuk-table__cell">
-              <%= govuk_link_to edit_admin_journey_configuration_path(journey_configuration) do %>
-                Change <span class="govuk-visually-hidden"><%= journey_configuration.journey.full_name %></span>
-              <% end %>
-            </td>
+            <% if policy(:JourneyConfiguration).edit? %>
+              <td class="govuk-table__cell">
+                <%= govuk_link_to edit_admin_journey_configuration_path(journey_configuration) do %>
+                  Change <span class="govuk-visually-hidden"><%= journey_configuration.journey.full_name %></span>
+                <% end %>
+              </td>
+            <% end %>
           </tr>
         <% end %>
       </tbody>

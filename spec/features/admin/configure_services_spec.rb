@@ -4,7 +4,7 @@ RSpec.feature "Service configuration" do
   let!(:journey_configuration) { create(:journey_configuration, :student_loans) }
 
   scenario "when teacher id configurable for service" do
-    sign_in_as_service_operator
+    sign_in_as_service_admin
 
     click_on "Manage services"
     click_on "Change"
@@ -13,7 +13,7 @@ RSpec.feature "Service configuration" do
   end
 
   scenario "Service operator closes a service for submissions" do
-    sign_in_as_service_operator
+    sign_in_as_service_admin
 
     click_on "Manage services"
 
@@ -30,12 +30,13 @@ RSpec.feature "Service configuration" do
 
     expect { click_on "Save" }.to_not enqueue_job(SendReminderEmailsJob)
 
-    expect(current_path).to eq(admin_journey_configurations_path)
+    expect(current_path).to eql(edit_admin_journey_configuration_path(journey_configuration))
 
     expect(journey_configuration.reload.open_for_submissions).to be false
     expect(journey_configuration.availability_message).to eq("You will be able to make a claim when the service enters public beta in November.")
 
     # - Service operator opens a service for submissions
+    click_on "Manage services"
 
     within(find("tr[data-policy-configuration-routing-name=\"#{journey_configuration.routing_name}\"]")) do
       expect(page).to have_content("Closed")
@@ -48,7 +49,8 @@ RSpec.feature "Service configuration" do
 
     expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob).with { |arg| expect(arg).to eql(Journeys::TeacherStudentLoanReimbursement) }
 
-    expect(current_path).to eq(admin_journey_configurations_path)
+    expect(current_path).to eql(edit_admin_journey_configuration_path(journey_configuration))
+    click_on "Manage services"
 
     within(find("tr[data-policy-configuration-routing-name=\"#{journey_configuration.routing_name}\"]")) do
       expect(page).to have_content("Open")
@@ -74,7 +76,7 @@ RSpec.feature "Service configuration" do
 
     scenario "Service operator opens an TRI service for submissions" do
       journey_configuration.update(open_for_submissions: false)
-      sign_in_as_service_operator
+      sign_in_as_service_admin
 
       click_on "Manage services"
 
@@ -89,9 +91,9 @@ RSpec.feature "Service configuration" do
 
       within_fieldset("Service status") { choose("Open") }
       expect(page).to have_content(I18n.t("admin.journey_configuration.reminder_warning", count: count))
-      # make sure email reminder job is queued
       expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob)
-      expect(current_path).to eq(admin_journey_configurations_path)
+      expect(current_path).to eql(edit_admin_journey_configuration_path(journey_configuration))
+      click_on "Manage services"
 
       within(find("tr[data-policy-configuration-routing-name=\"#{journey_configuration.routing_name}\"]")) do
         expect(page).to have_content("Open")
@@ -104,7 +106,7 @@ RSpec.feature "Service configuration" do
 
   scenario "Service operator changes the academic year a service is accepting payments for" do
     travel_to Date.new(2023) do
-      sign_in_as_service_operator
+      sign_in_as_service_admin
 
       click_on "Manage services"
 
@@ -114,6 +116,8 @@ RSpec.feature "Service configuration" do
 
       select "2023/2024", from: "Accepting claims for academic year"
       expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob).with { |arg| expect(arg).to eql(journey_configuration.journey) }
+
+      click_on "Manage services"
 
       within(find("tr[data-policy-configuration-routing-name=\"#{journey_configuration.routing_name}\"]")) do
         expect(page).to have_content("2023/2024")
@@ -129,7 +133,7 @@ RSpec.feature "Service configuration" do
 
   scenario "when teacher id not configurable for service" do
     given_journey_configuration
-    sign_in_as_service_operator
+    sign_in_as_service_admin
 
     click_on "Manage services"
     click_on "Change Claim a targeted retention incentive payment for further education teachers"
@@ -139,7 +143,7 @@ RSpec.feature "Service configuration" do
 
   scenario "toggle FE provider dashboard", feature_flag: [:fe_provider_dashboard] do
     given_journey_configuration
-    sign_in_as_service_operator
+    sign_in_as_service_admin
 
     click_on "Manage services"
     click_on "Change Claim a targeted retention incentive payment for further education teachers"

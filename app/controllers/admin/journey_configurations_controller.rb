@@ -1,7 +1,8 @@
 module Admin
   class JourneyConfigurationsController < BaseAdminController
     helper_method :journey_configuration
-    before_action :ensure_service_operator, :journey_configuration
+    before_action :journey_configuration
+    before_action :authorise_journey_configuration
     after_action :send_reminders, only: [:update]
 
     FILE_UPLOAD_TARGET_DATA_MODELS = {
@@ -36,10 +37,14 @@ module Admin
 
     def update
       journey_configuration.update!(journey_configuration_params)
-      redirect_to admin_journey_configurations_url
+      redirect_to edit_admin_journey_configuration_path(journey_configuration)
     end
 
     private
+
+    def authorise_journey_configuration
+      authorize :journey_configuration
+    end
 
     def awards_upload_params
       params.fetch(:targeted_retention_incentive_payments_awards_upload, {}).permit(:academic_year, :csv_data)

@@ -4,13 +4,13 @@ RSpec.describe "Service configuration" do
   let(:journey_configuration) { create(:journey_configuration, :student_loans) }
 
   context "when signed in as a service operator" do
-    before { sign_in_as_service_operator }
+    before { sign_in_as_service_admin }
 
     describe "admin_journey_configurations#update" do
       it "sets the configuration's availability message and status" do
         patch admin_journey_configuration_path(journey_configuration, journey_configuration: {open_for_submissions: false, availability_message: "Test message"})
 
-        expect(response).to redirect_to(admin_journey_configurations_path)
+        expect(response).to redirect_to(edit_admin_journey_configuration_path(journey_configuration))
 
         journey_configuration.reload
         expect(journey_configuration.open_for_submissions).to be false
