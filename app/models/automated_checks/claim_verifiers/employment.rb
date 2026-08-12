@@ -98,9 +98,10 @@ module AutomatedChecks
         task.manual = false
         task.created_by = admin_user
 
-        task.save!(context: :claim_verifier)
-
-        create_note(match: match)
+        ApplicationRecord.transaction do
+          task.save!(context: :claim_verifier)
+          create_note(match: match)
+        end
 
         task
       end
