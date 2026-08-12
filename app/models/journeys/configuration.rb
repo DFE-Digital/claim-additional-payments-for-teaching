@@ -23,9 +23,12 @@ module Journeys
     end
 
     # Use AcademicYear as custom ActiveRecord attribute type
-    attribute :current_academic_year, AcademicYear::Type.new
+    attribute :current_academic_year, AcademicYear::Type.new, default: -> { AcademicYear.current }
+    attribute :close_at, default: -> { 1.year.from_now.in_time_zone("London") }
 
     validates :current_academic_year_before_type_cast, format: {with: AcademicYear::ACADEMIC_YEAR_REGEXP}
+    validates :close_at, presence: true, if: :open_for_submissions?
+    validate :close_at_in_future, if: :open_for_submissions?
 
     def targeted_retention_incentive_payments?
       journey == Journeys::TargetedRetentionIncentivePayments
@@ -39,6 +42,15 @@ module Journeys
 
     def journey
       Journeys.for_routing_name(routing_name)
+    end
+
+    private
+
+    def close_at_in_future
+      return if close_at.blank?
+      return if close_at > Time.current.in_time_zone("London")
+
+      errors.add(:close_at, "must be in the future")
     end
   end
 end

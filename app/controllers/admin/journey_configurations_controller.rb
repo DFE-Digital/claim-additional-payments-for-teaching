@@ -15,6 +15,21 @@ module Admin
     end
 
     def edit
+      load_edit_data
+    end
+
+    def update
+      if journey_configuration.update(journey_configuration_params)
+        redirect_to edit_admin_journey_configuration_path(journey_configuration)
+      else
+        load_edit_data
+        render :edit, status: :unprocessable_entity
+      end
+    end
+
+    private
+
+    def load_edit_data
       @awards_upload_form = Policies::TargetedRetentionIncentivePayments::AwardCsvImporter.new(awards_upload_params.merge({admin_user:})) if journey_configuration.targeted_retention_incentive_payments?
 
       @upload_form = EligibleFeProvidersForm.new(upload_params, admin_user)
@@ -32,13 +47,6 @@ module Admin
       @flagged_fe_providers_form = FurtherEducationPayments::FlaggedProvidersCsvForm.new(admin: admin_user)
     end
 
-    def update
-      journey_configuration.update!(journey_configuration_params)
-      redirect_to admin_journey_configurations_url
-    end
-
-    private
-
     def awards_upload_params
       params.fetch(:targeted_retention_incentive_payments_awards_upload, {}).permit(:academic_year, :csv_data)
     end
@@ -48,20 +56,23 @@ module Admin
     end
 
     def journey_configuration
-      return unless params[:id].present?
-
-      @journey_configuration ||= Journeys::Configuration.find(params[:id])
+      @journey_configuration ||= Journeys::Configuration.find(params[:id]) if params[:id].present?
     end
 
     def journey_configuration_params
-      params
+      permitted = params
         .require(:journey_configuration)
         .permit(
           :availability_message,
+          :close_at,
           :open_for_submissions,
           :current_academic_year,
           :teacher_id_enabled
         )
+
+      permitted[:close_at] = Time.zone.parse(permitted[:close_at]).in_time_zone("London") if permitted[:close_at].present?
+
+      permitted
     end
 
     def send_reminders

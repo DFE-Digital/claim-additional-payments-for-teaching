@@ -37,7 +37,9 @@ module Seeders
         Journeys::Configuration
           .create!(
             routing_name: journey.routing_name,
-            current_academic_year: AcademicYear.current
+            current_academic_year: AcademicYear.current,
+            open_for_submissions: true,
+            close_at: 100.year.from_now.in_time_zone("London")
           )
       end
     end

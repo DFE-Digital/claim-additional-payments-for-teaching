@@ -519,6 +519,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_05_120000) do
 
   create_table "journey_configurations", primary_key: "routing_name", id: :string, force: :cascade do |t|
     t.string "availability_message"
+    t.datetime "close_at"
     t.datetime "created_at", precision: nil, null: false
     t.string "current_academic_year", limit: 9
     t.boolean "open_for_submissions", default: true, null: false
