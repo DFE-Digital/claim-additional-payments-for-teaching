@@ -18,7 +18,7 @@ gem "pg", ">= 0.18", "< 2.0"
 # Azure Blob Storage for Active Storage
 gem "azure-blob"
 # Use Puma as the app server
-gem "puma", "~> 7.2"
+gem "puma", "~> 8.0"
 # Use SCSS for stylesheets
 gem "dartsass-rails"
 gem "sprockets-rails"
