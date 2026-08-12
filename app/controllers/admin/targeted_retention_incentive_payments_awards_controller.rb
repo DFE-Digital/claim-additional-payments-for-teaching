@@ -1,5 +1,7 @@
 module Admin
   class TargetedRetentionIncentivePaymentsAwardsController < BaseAdminController
+    before_action :ensure_service_admin
+
     helper_method :journey_configuration
 
     def index
