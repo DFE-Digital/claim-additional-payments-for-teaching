@@ -115,8 +115,8 @@ RSpec.describe "TPS data upload" do
             expect(claim_matched.tasks.last.claim_verifier_match).to eq "all"
             expect(claim_no_match.tasks.last.claim_verifier_match).to eq "none"
             expect(claim_no_data.tasks.last.claim_verifier_match).to be_nil
-            expect(claim_matched.notes.last[:body]).to eq "[Employment] - Eligible:\n<pre>Current school: LA Code: #{school.local_authority.code} / Establishment Number: #{school.establishment_number}\n</pre>\n"
-            expect(claim_no_match.notes.last[:body]).to eq "[Employment] - Ineligible:\n<pre>Current school: LA Code: 111 / Establishment Number: 2222\n</pre>\n"
+            expect(claim_matched.notes.last[:body]).to eq "[Employment] - Eligible:\n<pre>Current school: LA Code: #{school.local_authority.code} / Establishment Number: #{school.establishment_number}\nEmployment dates: 1 July 2022 to 30 September 2022\n</pre>\n"
+            expect(claim_no_match.notes.last[:body]).to eq "[Employment] - Ineligible:\n<pre>Current school: LA Code: 111 / Establishment Number: 2222\nEmployment dates: 1 July 2022 to 30 September 2022\n</pre>\n"
             expect(claim_no_data.notes.last[:body]).to eq "[Employment] - No data"
 
             expect(response).to redirect_to(admin_claims_path)
@@ -233,7 +233,9 @@ RSpec.describe "TPS data upload" do
               <<~TEXT
                 [Employment] - Eligible:
                 <pre>Current school: LA Code: 371 / Establishment Number: 111123
+                Employment dates: 1 July 2022 to 30 September 2022
                 Claim school: LA Code: 371 / Establishment Number: 111123
+                Employment dates: 1 April 2021 to 30 March 2022
                 </pre>
               TEXT
             )
@@ -242,6 +244,7 @@ RSpec.describe "TPS data upload" do
               <<~TEXT
                 [Employment] - Ineligible:
                 <pre>Current school: LA Code: 111 / Establishment Number: 2222
+                Employment dates: 1 July 2022 to 30 September 2022
                 </pre>
               TEXT
             )
@@ -279,6 +282,7 @@ RSpec.describe "TPS data upload" do
                 <<~TEXT
                   [Employment] - Ineligible:
                   <pre>Claim school: LA Code: 371 / Establishment Number: 111123
+                  Employment dates: 1 July 2020 to 1 January 2022
                   </pre>
                 TEXT
               )
@@ -313,6 +317,7 @@ RSpec.describe "TPS data upload" do
                 <<~TEXT
                   [Employment] - Ineligible:
                   <pre>Current school: LA Code: 371 / Establishment Number: 111123
+                  Employment dates: 1 July 2022 to 30 September 2022
                   </pre>
                 TEXT
               )
@@ -348,7 +353,9 @@ RSpec.describe "TPS data upload" do
                 <<~TEXT
                   [Employment] - Eligible:
                   <pre>Current school: LA Code: 371 / Establishment Number: 111123
+                  Employment dates: 1 July 2022 to 30 September 2022
                   Claim school: LA Code: 371 / Establishment Number: 111123
+                  Employment dates: 1 July 2020 to 30 August 2020
                   </pre>
                 TEXT
               )

@@ -81,7 +81,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::Employment do
         before { perform }
 
         it "returns 'Eligible' with the school of employment" do
-          expect(note.body).to eql("[Employment] - Eligible:\n<pre>Current school: LA Code: 370 / Establishment Number: 8091\n</pre>\n")
+          expect(note.body).to eql("[Employment] - Eligible:\n<pre>Current school: LA Code: 370 / Establishment Number: 8091\nEmployment dates: 1 December 2021 to unknown end date\n</pre>\n")
           expect(note.label).to eql("employment")
           expect(note.created_by).to be_nil
         end
@@ -117,7 +117,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::Employment do
         before { perform }
 
         it "returns 'Ineligible' with the school details" do
-          expect(note.body).to eql("[Employment] - Ineligible:\n<pre>Current school: LA Code: 383 / Establishment Number: 4026\n</pre>\n")
+          expect(note.body).to eql("[Employment] - Ineligible:\n<pre>Current school: LA Code: 383 / Establishment Number: 4026\nEmployment dates: 1 December 2021 to unknown end date\n</pre>\n")
           expect(note.label).to eql("employment")
           expect(note.created_by).to be_nil
         end
