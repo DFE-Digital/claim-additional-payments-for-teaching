@@ -90,7 +90,11 @@ class Admin::TasksController < Admin::BaseAdminController
     params[:name] == "matching_details" || action_name == "create"
   end
 
-  class BannerMessage < Struct.new(:type, :title, :body, keyword_init: true); end
+  class BannerMessage < Struct.new(:type, :title, :body, keyword_init: true)
+    def success?
+      type.to_s == "success"
+    end
+  end
 
   def set_banner_messages
     messages = []
@@ -129,6 +133,22 @@ class Admin::TasksController < Admin::BaseAdminController
         type: :notification,
         title: messages.first,
         body: nil
+      )
+    end
+
+    if (claim_id = flash[:hmrc_bank_verification_claim_id])
+      flash.delete(:hmrc_bank_verification_claim_id)
+
+      claim = Claim.find(claim_id)
+
+      validation = Admin::HmrcBankVerificationPresenter.new(
+        claim.hmrc_bank_validation_responses.last
+      )
+
+      @banners << BannerMessage.new(
+        type: validation.success? ? :success : :notification,
+        title: validation.title,
+        body: view_context.govuk_list(validation.rows)
       )
     end
   end
