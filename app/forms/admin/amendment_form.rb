@@ -1,4 +1,22 @@
 class Admin::AmendmentForm
+  AMENDABLE_CLAIM_ATTRIBUTES = %i[
+    national_insurance_number
+    date_of_birth
+    email_address
+    mobile_number
+    student_loan_plan
+    has_student_loan
+    bank_sort_code
+    bank_account_number
+    building_society_roll_number
+    address_line_1
+    address_line_2
+    address_line_3
+    address_line_4
+    postcode
+    practitioner_email_address
+  ].freeze
+
   extend ActiveModel::Callbacks
 
   define_model_callbacks :validation
@@ -158,7 +176,7 @@ class Admin::AmendmentForm
   end
 
   def amendable_attributes
-    array = Claim::AMENDABLE_ATTRIBUTES + claim.policy::Eligibility::AMENDABLE_ATTRIBUTES + [:notes]
+    array = AMENDABLE_CLAIM_ATTRIBUTES + claim.policy::Eligibility::AMENDABLE_ATTRIBUTES + [:notes]
 
     set = Set.new(array)
 
@@ -300,7 +318,7 @@ class Admin::AmendmentForm
   end
 
   def claim_attributes
-    hash = attributes.slice(*Claim::AMENDABLE_ATTRIBUTES.map(&:to_s))
+    hash = attributes.slice(*AMENDABLE_CLAIM_ATTRIBUTES.map(&:to_s))
 
     if admin_user.is_service_admin?
       hash[:banking_name] = banking_name
