@@ -155,6 +155,9 @@ class Admin::AmendmentForm
 
   validate :validate_changes_present
 
+  validate :bank_sort_code_must_be_six_digits
+  validate :bank_account_number_must_be_eight_digits
+
   def self.form_for_claim(claim)
     case claim.policy
     when Policies::FurtherEducationPayments
@@ -271,6 +274,18 @@ class Admin::AmendmentForm
   end
 
   private
+
+  def normalised_bank_detail(bank_detail)
+    bank_detail&.gsub(/\s|-/, "")
+  end
+
+  def bank_sort_code_must_be_six_digits
+    errors.add(:bank_sort_code, "Sort code must be 6 digits") if bank_sort_code.present? && normalised_bank_detail(bank_sort_code) !~ /\A\d{6}\z/
+  end
+
+  def bank_account_number_must_be_eight_digits
+    errors.add(:bank_account_number, "Account number must be 8 digits") if bank_account_number.present? && normalised_bank_detail(bank_account_number) !~ /\A\d{8}\z/
+  end
 
   def nilify_student_loan_repayment_plan
     if student_loan_plan == ""
