@@ -7,6 +7,15 @@ RSpec.describe "Service configuration" do
     before { sign_in_as_service_operator }
 
     describe "admin_journey_configurations#update" do
+      it "does not allow automatic approvals to be edited" do
+        patch admin_journey_configuration_path(journey_configuration, journey_configuration: {
+          automatic_approvals: false
+        })
+
+        expect(response).to have_http_status(:unauthorized)
+        expect(journey_configuration.reload.automatic_approvals).to be true
+      end
+
       it "sets the configuration's availability message, status, and close datetime" do
         close_at = 2.days.from_now.change(sec: 0)
 
@@ -92,6 +101,21 @@ RSpec.describe "Service configuration" do
         travel_to Time.zone.parse("2026-12-15 12:00:00 +00:00") do
           expect(journey_configuration.reload.close_at.utc).to eq(Time.utc(2026, 7, 15, 16, 0, 0))
         end
+      end
+    end
+  end
+
+  context "when signed in as a service admin" do
+    before { sign_in_as_service_admin }
+
+    describe "admin_journey_configurations#update" do
+      it "allows automatic approvals to be edited" do
+        patch admin_journey_configuration_path(journey_configuration, journey_configuration: {
+          automatic_approvals: false
+        })
+
+        expect(response).to redirect_to(edit_admin_journey_configuration_path(journey_configuration))
+        expect(journey_configuration.reload.automatic_approvals).to be false
       end
     end
   end

@@ -23,6 +23,15 @@ RSpec.describe Journeys::Configuration do
         expect(student_loans.journey).to eq(Journeys::TeacherStudentLoanReimbursement)
       end
     end
+
+    describe "#configuration" do
+      it "raises when the journey configuration is missing" do
+        journey = Journeys::EarlyYearsPayment::Provider::Authenticated
+        Journeys::Configuration.where(routing_name: journey.routing_name).delete_all
+
+        expect { journey.configuration }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
   end
 
   it "validates academic years are formated like '2020/2021'" do

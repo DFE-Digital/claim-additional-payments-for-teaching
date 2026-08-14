@@ -18,6 +18,42 @@ RSpec.feature "Service configuration" do
     expect(page).to have_content("Sign in with DfE Identity")
   end
 
+  scenario "Service admin toggles automatic approvals for submitted claims" do
+    sign_in_as_service_admin
+
+    click_on "Manage services"
+    within(page.find("tr", text: journey_configuration.journey.full_name)) do
+      click_on "Change"
+    end
+
+    expect(page).to have_content("Automatic approvals for submitted claims")
+    expect(page).to have_content("Automatic approvals")
+    within_fieldset("Automatic approvals") { choose("Off") }
+
+    click_on "Save"
+
+    expect(journey_configuration.reload.automatic_approvals).to be false
+    expect(page).to have_content("Automatic approvals for submitted claims are turned off")
+  end
+
+  scenario "Service operator can't toggle automatic approvals for submitted claims" do
+    sign_in_as_service_operator
+
+    click_on "Manage services"
+    within(page.find("tr", text: journey_configuration.journey.full_name)) do
+      click_on "Change"
+    end
+
+    expect(page).to have_content("Automatic approvals for submitted claims")
+    expect(page).to have_content("Automatic approvals")
+    within_fieldset("Automatic approvals") { choose("Off") }
+
+    click_on "Save"
+
+    expect(journey_configuration.reload.automatic_approvals).to be true
+    expect(page).to have_content("Not authorised")
+  end
+
   scenario "Service operator closes a service for submissions", js: true do
     sign_in_as_service_operator
 

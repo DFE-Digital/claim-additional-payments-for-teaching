@@ -1,7 +1,9 @@
 module Journeys
   module Base
     def configuration
-      Configuration.find(routing_name)
+      # Intentionally fail fast if a journey configuration row has not been set up.
+      # The service is expected to create this record in admin configuration before use.
+      Configuration.find_by!(routing_name: routing_name)
     end
 
     def start_page_url

@@ -2,6 +2,7 @@ FactoryBot.define do
   factory :journey_configuration, class: "journeys/configuration" do
     current_academic_year { AcademicYear.current }
     close_at { 2.days.from_now }
+    automatic_approvals { true }
 
     trait :student_loans do
       routing_name { Journeys::TeacherStudentLoanReimbursement.routing_name }

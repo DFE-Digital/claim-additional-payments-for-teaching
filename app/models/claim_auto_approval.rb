@@ -6,7 +6,7 @@ class ClaimAutoApproval
   end
 
   def eligible?
-    approvable? && auto_approvable?
+    claim.policy.automatic_approvals? && approvable? && auto_approvable?
   end
 
   def auto_approve!
