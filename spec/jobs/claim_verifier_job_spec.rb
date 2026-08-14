@@ -9,9 +9,9 @@ RSpec.describe ClaimVerifierJob do
         eligibility_attributes: {teacher_reference_number: "1234567"}
       )
     end
-    let(:dbl) { double(find: mock_payload) }
+    let(:dbl) { double(find_raw: mock_payload) }
     let(:verifier) { double(perform: true) }
-    let(:mock_payload) { Dqt::Teacher.new({"mock" => "mock"}) }
+    let(:mock_payload) { {"mock" => "mock"} }
 
     before do
       allow(Dqt::TeacherResource).to receive(:new).and_return(dbl)
@@ -22,7 +22,7 @@ RSpec.describe ClaimVerifierJob do
       let(:dqt_teacher_status) { {"test" => "test"} }
 
       it "does not request a new DQT payload" do
-        expect(dbl).not_to receive(:find)
+        expect(dbl).not_to receive(:find_raw)
         described_class.new.perform(claim)
       end
 
@@ -36,12 +36,12 @@ RSpec.describe ClaimVerifierJob do
       let(:dqt_teacher_status) { {} }
 
       it "does requests a new DQT payload" do
-        expect(dbl).to receive(:find)
+        expect(dbl).to receive(:find_raw)
         described_class.new.perform(claim)
       end
 
       it "performs the verifier job" do
-        expect(AutomatedChecks::ClaimVerifier).to receive(:new).with(claim:, dqt_teacher_status: mock_payload)
+        expect(AutomatedChecks::ClaimVerifier).to receive(:new).with(claim:, dqt_teacher_status: Dqt::Teacher.new(mock_payload))
         described_class.new.perform(claim)
       end
 
@@ -57,7 +57,7 @@ RSpec.describe ClaimVerifierJob do
 
         it "performs the verifier job but doesn't request dqt info" do
           expect(AutomatedChecks::ClaimVerifier).to receive(:new)
-          expect(dbl).not_to receive(:find)
+          expect(dbl).not_to receive(:find_raw)
           described_class.new.perform(claim)
         end
       end
@@ -68,7 +68,7 @@ RSpec.describe ClaimVerifierJob do
 
       it "performs the verifier job but doesn't request dqt info" do
         expect(AutomatedChecks::ClaimVerifier).to receive(:new)
-        expect(dbl).not_to receive(:find)
+        expect(dbl).not_to receive(:find_raw)
         described_class.new.perform(claim)
       end
     end
@@ -77,12 +77,12 @@ RSpec.describe ClaimVerifierJob do
       let(:dqt_teacher_status) { nil }
 
       it "does requests a new DQT payload" do
-        expect(dbl).to receive(:find)
+        expect(dbl).to receive(:find_raw)
         described_class.new.perform(claim)
       end
 
       it "performs the verifier job" do
-        expect(AutomatedChecks::ClaimVerifier).to receive(:new).with(claim:, dqt_teacher_status: mock_payload)
+        expect(AutomatedChecks::ClaimVerifier).to receive(:new).with(claim:, dqt_teacher_status: Dqt::Teacher.new(mock_payload))
         described_class.new.perform(claim)
       end
 
@@ -98,7 +98,7 @@ RSpec.describe ClaimVerifierJob do
 
         it "performs the verifier job but doesn't request dqt info" do
           expect(AutomatedChecks::ClaimVerifier).to receive(:new)
-          expect(dbl).not_to receive(:find)
+          expect(dbl).not_to receive(:find_raw)
           described_class.new.perform(claim)
         end
       end

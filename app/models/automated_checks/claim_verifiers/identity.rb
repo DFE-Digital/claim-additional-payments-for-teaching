@@ -17,7 +17,7 @@ module AutomatedChecks
       def perform
         return if task_exists?
 
-        if dqt_teacher_status.nil?
+        if dqt_teacher_status.not_found?
           create_note(body: "[DQT Identity] - Not matched")
           create_task(match: :none)
         else
