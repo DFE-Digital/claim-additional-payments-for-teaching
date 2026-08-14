@@ -81,6 +81,7 @@ module FormSubmittable
           flash[:notice] = @form.flash_message if @form.flash_message
           redirect_to @form.redirect_to
         else
+          notify_analytics!(form: @form, slug: navigator.current_slug)
           render_template_for_current_slug
         end
       else
@@ -106,6 +107,29 @@ module FormSubmittable
       return if @form.auto_refresh.blank?
 
       response.headers["Refresh"] = @form.auto_refresh
+    end
+
+    def notify_analytics!(form:, slug:)
+      errored_values = form.errors.map do |error|
+        {
+          error.attribute => form.try(error.attribute)
+        }
+      end
+
+      event = DfE::Analytics::Event.new
+        .with_type(:validation_error)
+        .with_request_details(request)
+        .with_data(
+          data: {
+            slug: slug,
+            errors: form.errors.as_json
+          },
+          hidden_data: {
+            claimant_entered_values: errored_values
+          }
+        )
+
+      DfE::Analytics::SendEvents.do([event])
     end
   end
 end
