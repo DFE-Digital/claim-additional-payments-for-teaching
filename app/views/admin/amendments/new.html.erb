@@ -111,7 +111,7 @@
       <%= f.govuk_text_field :banking_name,
         label: nil,
         width: 10,
-        disabled: @form.field_disabled?(:banking_name) %>
+        disabled: @form.banking_name_disabled? %>
     </div>
   </div>
 
@@ -124,8 +124,7 @@
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_text_field :bank_sort_code,
         label: nil,
-        width: 10,
-        disabled: @form.field_disabled?(:bank_sort_code) %>
+        width: 10 %>
     </div>
   </div>
 
@@ -138,8 +137,7 @@
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_text_field :bank_account_number,
         label: nil,
-        width: 10,
-        disabled: @form.field_disabled?(:bank_account_number) %>
+        width: 10 %>
     </div>
   </div>
 

@@ -4,6 +4,23 @@ class Claim < ApplicationRecord
   NO_STUDENT_LOAN = "not_applicable"
   STUDENT_LOAN_PLAN_OPTIONS = StudentLoan::PLANS.dup << NO_STUDENT_LOAN
   ADDRESS_ATTRIBUTES = %w[address_line_1 address_line_2 address_line_3 address_line_4 postcode].freeze
+  AMENDABLE_ATTRIBUTES = %i[
+    national_insurance_number
+    date_of_birth
+    email_address
+    mobile_number
+    student_loan_plan
+    has_student_loan
+    bank_sort_code
+    bank_account_number
+    building_society_roll_number
+    address_line_1
+    address_line_2
+    address_line_3
+    address_line_4
+    postcode
+    practitioner_email_address
+  ].freeze
   DECISION_DEADLINE = 19.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
   CLAIMANT_MATCHING_ATTRIBUTES = %i[

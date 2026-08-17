@@ -85,8 +85,6 @@ gem "mission_control-jobs"
 gem "sentry-ruby"
 gem "sentry-rails"
 
-gem "pundit"
-
 group :development, :test do
   gem "rb-readline"
   gem "pry"
