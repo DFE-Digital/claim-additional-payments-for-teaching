@@ -25,6 +25,7 @@ module Journeys
     # Use AcademicYear as custom ActiveRecord attribute type
     attribute :current_academic_year, AcademicYear::Type.new, default: -> { AcademicYear.current }
     attribute :close_at, default: -> { 1.year.from_now.in_time_zone("London") }
+    attribute :automatic_approvals, :boolean, default: true
 
     validates :current_academic_year_before_type_cast, format: {with: AcademicYear::ACADEMIC_YEAR_REGEXP}
     validates :close_at, presence: true, if: :open_for_submissions?

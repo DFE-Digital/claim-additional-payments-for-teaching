@@ -80,8 +80,28 @@
               <%= f.label :open_for_submissions, "Closed", value: false, class: "govuk-label govuk-radios__label" %>
             </div>
           </div>
+
+          <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+          <h3 class="govuk-heading-s">Automatic approvals for submitted claims</h3>
+
+          <legend class="govuk-fieldset__legend">
+            Automatic approvals
+          </legend>
+
+          <div class="govuk-radios" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <%= f.radio_button :automatic_approvals, true, class: "govuk-radios__input" %>
+              <%= f.label :automatic_approvals, "On", value: true, class: "govuk-label govuk-radios__label" %>
+            </div>
+            <div class="govuk-radios__item">
+              <%= f.radio_button :automatic_approvals, false, class: "govuk-radios__input" %>
+              <%= f.label :automatic_approvals, "Off", value: false, class: "govuk-label govuk-radios__label" %>
+            </div>
+          </div>
         </fieldset>
       </div>
+
 
       <% if journey_configuration.teacher_id_configurable? %>
         <div class="govuk-form-group">

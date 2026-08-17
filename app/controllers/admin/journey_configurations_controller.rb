@@ -1,7 +1,8 @@
 module Admin
   class JourneyConfigurationsController < BaseAdminController
     helper_method :journey_configuration
-    before_action :ensure_service_operator, :journey_configuration
+    before_action :journey_configuration
+    before_action :ensure_service_admin, only: [:update], if: -> { automatic_approvals_update_requested? }
     after_action :send_reminders, only: [:update]
 
     FILE_UPLOAD_TARGET_DATA_MODELS = {
@@ -20,6 +21,7 @@ module Admin
 
     def update
       if journey_configuration.update(journey_configuration_params)
+        flash[:success] = automatic_approvals_flash_message if journey_configuration.saved_change_to_automatic_approvals?
         redirect_to edit_admin_journey_configuration_path(journey_configuration)
       else
         load_edit_data
@@ -67,7 +69,8 @@ module Admin
           :close_at,
           :open_for_submissions,
           :current_academic_year,
-          :teacher_id_enabled
+          :teacher_id_enabled,
+          :automatic_approvals
         )
 
       permitted[:close_at] = Time.zone.parse(permitted[:close_at]).in_time_zone("London") if permitted[:close_at].present?
@@ -75,10 +78,23 @@ module Admin
       permitted
     end
 
+    def automatic_approvals_update_requested?
+      return false unless params[:journey_configuration].key?(:automatic_approvals)
+
+      ActiveModel::Type::Boolean.new.cast(params[:journey_configuration][:automatic_approvals]) != journey_configuration.automatic_approvals
+    end
+
     def send_reminders
       return unless journey_configuration.open_for_submissions
 
       SendReminderEmailsJob.perform_later(journey_configuration.journey)
+    end
+
+    def automatic_approvals_flash_message
+      return unless journey_configuration.saved_change_to_automatic_approvals?
+
+      status = journey_configuration.automatic_approvals ? "on" : "off"
+      "Automatic approvals for submitted claims are turned #{status}"
     end
   end
 end

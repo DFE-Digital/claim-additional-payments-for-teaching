@@ -3,6 +3,10 @@ require "rails_helper"
 RSpec.describe ClaimAutoApproval do
   subject(:claim_auto_approval) { described_class.new(claim) }
 
+  before do
+    create(:journey_configuration, :student_loans)
+  end
+
   let(:claim) { create(:claim, :submitted) }
   let(:applicable_task_names) { ClaimCheckingTasks.new(claim).applicable_task_names }
 
@@ -48,6 +52,31 @@ RSpec.describe ClaimAutoApproval do
       end
 
       it { is_expected.to eq(true) }
+    end
+
+    context "when the policy disables automatic approvals" do
+      before do
+        allow(claim.policy).to receive(:automatic_approvals?).and_return(false)
+        applicable_task_names.each do |task|
+          create(:task, :automated, :passed, name: task, claim:)
+        end
+      end
+
+      it { is_expected.to eq(false) }
+    end
+
+    context "when the claim is approvable and auto-approvable but policy automatic approvals is false" do
+      before do
+        applicable_task_names.each do |task|
+          create(:task, :automated, :passed, name: task, claim:)
+        end
+
+        allow(claim.policy).to receive(:automatic_approvals?).and_return(false)
+      end
+
+      it "does not auto-approve the claim" do
+        expect { claim_auto_approval.auto_approve! }.not_to change(Decision, :count)
+      end
     end
 
     context "when some claim's tasks passed manually" do

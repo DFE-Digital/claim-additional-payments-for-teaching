@@ -102,6 +102,10 @@ module BasePolicy
     true
   end
 
+  def automatic_approvals?
+    Journeys.for_policy(self).configuration.automatic_approvals
+  end
+
   def admin_tasks_presenter(claim)
     self::AdminTasksPresenter.new(claim)
   end
