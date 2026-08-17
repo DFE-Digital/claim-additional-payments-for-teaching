@@ -35,3 +35,5 @@ GOVUK_APP_DOMAIN: ""
 GOVUK_WEBSITE_ROOT: ""
 
 SENTRY_ENVIRONMENT: "staging"
+
+SMOKE_TEST_APP_HOST: "https://staging.claim-additional-teaching-payment.service.gov.uk/admin/auth/sign-in"
