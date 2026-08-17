@@ -29,10 +29,10 @@ RSpec.feature "Admin amends a claim" do
 
   before do
     create(:journey_configuration, :student_loans)
-    @signed_in_user = sign_in_as_service_operator
+    @signed_in_user = sign_in_as_service_admin
   end
 
-  scenario "Service operator amends a claim" do
+  scenario "Service admin amends a claim" do
     visit admin_claim_url(claim)
 
     click_on "Amend claim"
@@ -403,5 +403,23 @@ RSpec.feature "Admin amends a claim" do
         expect(page).to have_field("Banking name", with: claim.banking_name, disabled: true)
       end
     end
+  end
+end
+
+RSpec.feature "service operator amends a claim" do
+  let(:claim) { create(:claim, :submitted) }
+  let(:admin) { sign_in_as_service_operator }
+
+  before do
+    admin
+  end
+
+  scenario "cannot change banking fields" do
+    visit admin_claim_url(claim)
+    click_on "Amend claim"
+
+    expect(page.find_by_id("amendment-banking-name-field")).to be_disabled
+    expect(page.find_by_id("amendment-bank-sort-code-field")).to be_disabled
+    expect(page.find_by_id("amendment-bank-account-number-field")).to be_disabled
   end
 end

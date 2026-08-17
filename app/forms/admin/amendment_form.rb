@@ -1,4 +1,22 @@
 class Admin::AmendmentForm
+  AMENDABLE_CLAIM_ATTRIBUTES = %i[
+    national_insurance_number
+    date_of_birth
+    email_address
+    mobile_number
+    student_loan_plan
+    has_student_loan
+    bank_sort_code
+    bank_account_number
+    building_society_roll_number
+    address_line_1
+    address_line_2
+    address_line_3
+    address_line_4
+    postcode
+    practitioner_email_address
+  ].freeze
+
   extend ActiveModel::Callbacks
 
   define_model_callbacks :validation
@@ -109,7 +127,21 @@ class Admin::AmendmentForm
       equal_to: ->(form) { form.claim.banking_name },
       message: "You do not have permission to change the banking name"
     },
-    if: :banking_name_disabled?
+    if: proc { |form| form.field_disabled?(:banking_name) }
+
+  validates :bank_sort_code,
+    comparison: {
+      equal_to: ->(form) { form.claim.bank_sort_code },
+      message: "You do not have permission to change the bank sort code"
+    },
+    if: proc { |form| form.field_disabled?(:bank_sort_code) }
+
+  validates :bank_account_number,
+    comparison: {
+      equal_to: ->(form) { form.claim.bank_account_number },
+      message: "You do not have permission to change the bank account number"
+    },
+    if: proc { |form| form.field_disabled?(:bank_account_number) }
 
   validates :award_amount,
     comparison: {
@@ -123,6 +155,9 @@ class Admin::AmendmentForm
 
   validate :validate_changes_present
 
+  validate :bank_sort_code_must_be_six_digits
+  validate :bank_account_number_must_be_eight_digits
+
   def self.form_for_claim(claim)
     case claim.policy
     when Policies::FurtherEducationPayments
@@ -135,13 +170,30 @@ class Admin::AmendmentForm
   end
 
   def self.amendable_attributes(claim:, admin_user:)
-    array = Claim::AMENDABLE_ATTRIBUTES + claim.policy::Eligibility::AMENDABLE_ATTRIBUTES + [:notes]
+    instance = new(claim:, admin_user:)
+    instance.amendable_attributes
+  end
+
+  def field_disabled?(field)
+    amendable_attributes.exclude?(field)
+  end
+
+  def amendable_attributes
+    array = AMENDABLE_CLAIM_ATTRIBUTES + claim.policy::Eligibility::AMENDABLE_ATTRIBUTES + [:notes]
+
+    set = Set.new(array)
 
     if admin_user.is_service_admin?
-      array << :banking_name
+      set << :banking_name
+      set << :bank_sort_code
+      set << :bank_account_number
+    else
+      set.delete :banking_name
+      set.delete :bank_sort_code
+      set.delete :bank_account_number
     end
 
-    array
+    set.to_a
   end
 
   def initialize(claim:, admin_user:, params: {})
@@ -221,11 +273,19 @@ class Admin::AmendmentForm
     true
   end
 
-  def banking_name_disabled?
-    !admin_user.is_service_admin?
+  private
+
+  def normalised_bank_detail(bank_detail)
+    bank_detail&.gsub(/\s|-/, "")
   end
 
-  private
+  def bank_sort_code_must_be_six_digits
+    errors.add(:bank_sort_code, "Sort code must be 6 digits") if bank_sort_code.present? && normalised_bank_detail(bank_sort_code) !~ /\A\d{6}\z/
+  end
+
+  def bank_account_number_must_be_eight_digits
+    errors.add(:bank_account_number, "Account number must be 8 digits") if bank_account_number.present? && normalised_bank_detail(bank_account_number) !~ /\A\d{8}\z/
+  end
 
   def nilify_student_loan_repayment_plan
     if student_loan_plan == ""
@@ -273,7 +333,7 @@ class Admin::AmendmentForm
   end
 
   def claim_attributes
-    hash = attributes.slice(*Claim::AMENDABLE_ATTRIBUTES.map(&:to_s))
+    hash = attributes.slice(*AMENDABLE_CLAIM_ATTRIBUTES.map(&:to_s))
 
     if admin_user.is_service_admin?
       hash[:banking_name] = banking_name
