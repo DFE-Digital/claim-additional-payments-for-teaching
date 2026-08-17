@@ -25,7 +25,7 @@ RSpec.describe Admin::AmendmentForm, type: :model do
 
   describe "validations" do
     let(:claim) { build(:claim, :submitted) }
-    let(:admin_user) { create(:dfe_signin_user) }
+    let(:admin_user) { create(:dfe_signin_user, :service_admin) }
     let(:notes) { "made some changes" }
 
     subject do
@@ -72,6 +72,18 @@ RSpec.describe Admin::AmendmentForm, type: :model do
       expect(form.errors[:address_line_3]).to include("Address lines must be 100 characters or fewer")
       expect(form.errors[:address_line_4]).to include("Address lines must be 100 characters or fewer")
       expect(form.errors[:postcode]).to include("Postcode must be 11 characters or fewer")
+    end
+
+    it do
+      is_expected.to validate_numericality_of(:bank_sort_code)
+        .is_in(100_000..999_999)
+        .with_message("Sort code must be 6 digits")
+    end
+
+    it do
+      is_expected.to validate_numericality_of(:bank_account_number)
+        .is_in(10_000_000..99_999_999)
+        .with_message("Account number must be 8 digits")
     end
   end
 
