@@ -2,8 +2,7 @@ module Admin
   class PayrollRunsController < BaseAdminController
     include Pagy::Backend
 
-    before_action :ensure_service_operator, only: [:index, :show]
-    before_action :ensure_service_admin, only: [:new, :create, :destroy]
+    before_action :ensure_service_operator
 
     def index
       @payroll_runs = PayrollRun.order(created_at: :desc)

@@ -4,7 +4,6 @@ module Admin
 
     include DfE::Analytics::Requests
     include HttpAuthConcern
-    include Pundit::Authorization
 
     layout "admin"
 
@@ -15,13 +14,7 @@ module Admin
     after_action :update_last_seen_at
     helper_method :admin_signed_in?, :admin_timeout_in_minutes, :service_operator_signed_in?
 
-    rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
-
     private
-
-    def user_not_authorized
-      render "admin/auth/failure", status: :unauthorized
-    end
 
     def ensure_authenticated_user
       if current_admin.null_user?
@@ -40,20 +33,16 @@ module Admin
     end
     helper_method :current_admin
 
-    def pundit_user
-      current_admin
-    end
-
     def service_operator_signed_in?
       admin_user.is_service_operator?
     end
 
     def ensure_service_operator
-      authorize :service_operator
+      render "admin/auth/failure", status: :unauthorized unless service_operator_signed_in?
     end
 
     def ensure_service_admin
-      authorize :service_admin
+      render "admin/auth/failure", status: :unauthorized unless current_admin.is_service_admin?
     end
 
     def update_last_seen_at
