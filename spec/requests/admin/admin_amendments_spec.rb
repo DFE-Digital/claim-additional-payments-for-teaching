@@ -13,8 +13,8 @@ RSpec.describe "Admin claim amendments" do
     )
   end
 
-  context "when signed in as a service operator" do
-    before { @signed_in_user = sign_in_as_service_operator }
+  context "when signed in as a service admin" do
+    before { @signed_in_user = sign_in_as_service_admin }
 
     describe "admin/amendments#index" do
       let(:claim) { create(:claim, :submitted, eligibility_attributes: {teacher_reference_number: "1234567"}) }
@@ -220,6 +220,29 @@ RSpec.describe "Admin claim amendments" do
                                                              notes: "Claimant made a typo"})
           expect(response.body).to include("This claim cannot be amended.")
         end
+      end
+    end
+  end
+
+  context "when signed in as service operator" do
+    before { @signed_in_user = sign_in_as_service_operator }
+
+    describe "#admin/amendments#create" do
+      it "cannot update any banking fields" do
+        request_params = {
+          amendment: {
+            banking_name: "new_name",
+            bank_sort_code: "111213",
+            bank_account_number: "77777777",
+            notes: "Claimant made a typo"
+          }
+        }
+
+        expect {
+          post admin_claim_amendments_url(claim, request_params)
+        }.not_to change { claim.reload.amendments.size }
+
+        expect(response.body).to include "To amend the claim you must change at least one value"
       end
     end
   end

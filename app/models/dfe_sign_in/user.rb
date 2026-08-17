@@ -7,6 +7,11 @@ module DfeSignIn
     SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE = "teacher_payments_access"
     SERVICE_ADMIN_DFE_SIGN_IN_ROLE_CODE = "teacher_payments_admin"
 
+    ROLE_MAPPING = {
+      service_admin: SERVICE_ADMIN_DFE_SIGN_IN_ROLE_CODE,
+      service_operator: SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE
+    }.freeze
+
     has_secure_token :session_token
 
     scope :admin, -> { where(user_type: "admin") }
@@ -57,6 +62,14 @@ module DfeSignIn
       else
         raise "user_type not found for client_id: #{client_id}"
       end
+    end
+
+    def has_role?(role)
+      role_code = ROLE_MAPPING[role]
+
+      raise "invalid role" if role_code.nil?
+
+      role_codes.include?(role_code)
     end
 
     def full_name
