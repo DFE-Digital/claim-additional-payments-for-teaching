@@ -102,7 +102,7 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
       it "saves errors on file upload" do
         subject.perform(file_upload)
 
-        expect(file_upload.reload.upload_errors).to eql(["Headers must be Provider URN, Provider name, Provider address line 1, Provider address line 2, Provider address line 3, Provider town, Postcode, Eligible, Max claims"])
+        expect(file_upload.reload.upload_errors).to eql(["Headers must be Provider URN, Provider name, Provider address line 1, Provider address line 2, Provider address line 3, Provider town, Postcode, Eligible, Max claims, COPD"])
       end
     end
   end
@@ -284,6 +284,33 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
         end
       end
 
+      context "when COPD is true" do
+        context "with missing URN, address and postcode" do
+          let(:row) do
+            CSV::Row.new(
+              described_class::HEADERS,
+              [
+                "",
+                "Some nursery",
+                "",
+                "",
+                "",
+                "Some Town",
+                "",
+                "TRUE",
+                "5",
+                "TRUE"
+              ],
+              true
+            )
+          end
+
+          it "skips URN, address and postcode validation" do
+            expect(subject).to be_valid
+          end
+        end
+      end
+
       context "is malformatted" do
         let(:row) do
           CSV::Row.new(
@@ -305,6 +332,34 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
         it "is not valid" do
           subject.valid?
           expect(subject.errors["Eligible"]).to be_present
+        end
+      end
+    end
+
+    context "copd" do
+      context "is missing" do
+        let(:row) do
+          CSV::Row.new(
+            described_class::HEADERS,
+            [
+              "123456",
+              "Some nursery",
+              "Some Road",
+              "Somewhere",
+              "Somewhere Else",
+              "Some Town",
+              "TE57 1NG",
+              "TRUE",
+              "5",
+              ""
+            ],
+            true
+          )
+        end
+
+        it "defaults to false" do
+          provider = subject.to_provider(file_upload:)
+          expect(provider.copd).to be false
         end
       end
     end
@@ -400,7 +455,8 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
           "London",
           "EC1N 2TD",
           "TRUE",
-          "5"
+          "5",
+          "FALSE"
         ],
         true
       )
@@ -419,6 +475,7 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
           postcode: "EC1N 2TD",
           eligible: true,
           max_claims: 5,
+          copd: false,
           file_upload:
         )
 

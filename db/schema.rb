@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_13_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_18_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -327,6 +327,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_13_000000) do
     t.text "address_line_1"
     t.text "address_line_2"
     t.text "address_line_3"
+    t.boolean "copd", default: false, null: false
     t.datetime "created_at", null: false
     t.boolean "eligible", null: false
     t.uuid "file_upload_id", null: false
