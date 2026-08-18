@@ -20,6 +20,7 @@ FactoryBot.define do
     town { Faker::Address.city }
     postcode { "EC1N 2TD" }
     eligible { true }
+    copd { false }
     max_claims { 5 }
   end
 end

@@ -12,7 +12,8 @@ module EarlyYearsTeachersFinancialIncentivePayments
         "Provider town",
         "Postcode",
         "Eligible",
-        "Max claims"
+        "Max claims",
+        "COPD"
       ]
 
       include ActiveModel::Validations
@@ -21,19 +22,22 @@ module EarlyYearsTeachersFinancialIncentivePayments
 
       validates "Provider URN",
         presence: true,
-        length: {in: 6..8}
+        length: {in: 6..8},
+        unless: :copd?
 
       validates "Provider name",
         presence: true
 
       validates "Provider address line 1",
-        presence: true
+        presence: true,
+        unless: :copd?
 
       validates "Provider town",
         presence: true
 
       validates "Postcode",
-        presence: true
+        presence: true,
+        unless: :copd?
 
       validates "Eligible",
         presence: true,
@@ -59,6 +63,7 @@ module EarlyYearsTeachersFinancialIncentivePayments
             town: row["Provider town"],
             postcode: row["Postcode"],
             eligible: cast_bool(row["Eligible"]),
+            copd: cast_bool(row["COPD"]),
             max_claims: row["Max claims"].presence || 5,
             file_upload:
           )
@@ -70,7 +75,13 @@ module EarlyYearsTeachersFinancialIncentivePayments
 
       private
 
+      def copd?
+        cast_bool(row["COPD"])
+      end
+
       def cast_bool(value)
+        return false if value.blank?
+
         case value
         when "TRUE"
           true
