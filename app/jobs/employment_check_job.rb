@@ -19,9 +19,13 @@ class EmploymentCheckJob < ApplicationJob
   private
 
   def claims_awaiting_decision_without_passed_check
-    claims_awaiting_decision.joins(:tasks).where(tasks: {name: "employment", passed: [nil, false]}).where(
-      "tasks.updated_at > ?", Date.today - 3.months
-    )
+    claims_awaiting_decision
+      .joins(:tasks)
+      .where(tasks: {
+        name: "employment",
+        passed: [nil, false]
+      })
+      .where("tasks.updated_at > ?", 3.months.ago)
   end
 
   def claims_awaiting_decision
