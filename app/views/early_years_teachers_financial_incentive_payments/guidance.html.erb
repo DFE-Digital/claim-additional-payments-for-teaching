@@ -5,6 +5,13 @@
       Claim an early years teacher recognition payment
     </h1>
 
+    <% unless Journeys::EarlyYearsTeachersFinancialIncentivePayments.configuration.open_for_submissions? %>
+      <p class="govuk-body">
+        Applications for the current window are now closed.
+        You can no longer claim for a payment
+      </p>
+    <% end %>
+
     <p class="govuk-body-l">
       How eligible early years teachers can apply for a recognition payment before 31 July 2026.
     </p>
