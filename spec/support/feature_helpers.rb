@@ -49,7 +49,14 @@ module FeatureHelpers
 
     expect(page).to have_text(/Which (additional )?school/) # there can be variations of the full text depending on which journey/page
     fill_in question, with: school.name.sub("The ", "").split(" ").first
-    click_button "Continue"
+
+    begin
+      find("button", text: "Continue").trigger("click")
+    rescue Capybara::NotSupportedByDriverError
+      # We're running this spec with no js so "trigger" isn't supported by the
+      # driver
+      click_button "Continue"
+    end
 
     # Wait for next page to load
     expect(page).to have_text school.name

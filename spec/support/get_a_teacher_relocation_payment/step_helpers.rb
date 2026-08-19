@@ -132,11 +132,19 @@ module GetATeacherRelocationPayment
         with: school.name
       )
 
-      click_button "Continue"
+      begin
+        find("button", text: "Continue").trigger("click")
+      rescue Capybara::NotSupportedByDriverError
+        click_button "Continue"
+      end
 
       unless page.has_text?("Select your school from the search results")
         # We've got stuck on the school search page, try again
-        click_button "Continue"
+        begin
+          find("button", text: "Continue").trigger("click")
+        rescue Capybara::NotSupportedByDriverError
+          click_button "Continue"
+        end
       end
 
       choose school.name
