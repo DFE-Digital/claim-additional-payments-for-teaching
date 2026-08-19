@@ -263,7 +263,8 @@ GEM
       activesupport (>= 7.2)
       html-attributes-utils (~> 1)
     hashdiff (1.2.1)
-    hashie (5.0.0)
+    hashie (5.1.0)
+      logger
     herb (0.10.3-aarch64-linux-musl)
     herb (0.10.3-arm64-darwin)
     herb (0.10.3-x86_64-darwin)
@@ -377,7 +378,7 @@ GEM
       logger
       rack (>= 2.2.3)
       rack-protection
-    omniauth-rails_csrf_protection (1.0.2)
+    omniauth-rails_csrf_protection (2.0.1)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
     omniauth_openid_connect (0.6.1)
@@ -423,7 +424,7 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (3.2.6)
+    rack (3.2.7)
     rack-mini-profiler (4.0.1)
       rack (>= 1.2.0)
     rack-oauth2 (1.21.3)
