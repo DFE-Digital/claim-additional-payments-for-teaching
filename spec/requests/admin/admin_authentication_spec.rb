@@ -119,7 +119,7 @@ RSpec.describe "Admin authentication", type: :request do
 
   describe "admin/auth#sign_out" do
     it "clears the session and redirects the user to the sign-in page" do
-      delete admin_sign_out_path
+      get admin_sign_out_path
 
       expect(session[:user_id]).to be_nil
       expect(session[:token]).to be_nil

@@ -102,7 +102,7 @@ module ApplicationHelper
       {text: "Payroll", href: admin_payroll_runs_path, active_when: admin_payroll_runs_path},
       {text: "Manage services", href: admin_journey_configurations_path, active_when: admin_journey_configurations_path},
       {text: "QA Reports", href: admin_reports_path, active_when: admin_reports_path},
-      {text: "Sign out", href: admin_sign_out_path}
+      {text: "Sign out", href: admin_sign_out_url}
     ]
   end
 
@@ -176,5 +176,26 @@ module ApplicationHelper
     return false if Rails.env.review_app_like?
 
     INDEXABLE_PATHS.any? { |path| current_page?(path) }
+  end
+
+  private
+
+  def admin_sign_out_url
+    if DfeSignIn::Config.instance.bypass?
+      return admin_sign_out_path
+    end
+
+    dfe_sign_out_redirect_uri = URI.join(ENV.fetch("DFE_SIGN_IN_ISSUER"), "/session/end")
+
+    post_logout_redirect_uri = URI.join(ENV.fetch("DFE_SIGN_IN_REDIRECT_BASE_URL"), "/admin/auth/sign-out")
+    client_id = DfeSignIn.configuration_for_client_id(ENV.fetch("DFE_SIGN_IN_INTERNAL_CLIENT_ID")).client_id
+
+    params = {
+      post_logout_redirect_uri:,
+      client_id:
+    }
+
+    dfe_sign_out_redirect_uri.query = URI.encode_www_form(params)
+    dfe_sign_out_redirect_uri.to_s
   end
 end
