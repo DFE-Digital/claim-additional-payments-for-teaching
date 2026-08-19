@@ -178,8 +178,6 @@ module ApplicationHelper
     INDEXABLE_PATHS.any? { |path| current_page?(path) }
   end
 
-  private
-
   def admin_sign_out_url
     if DfeSignIn::Config.instance.bypass?
       return admin_sign_out_path
