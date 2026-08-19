@@ -1,5 +1,5 @@
 <div class="hmcts-timeline__item">
-  <section<%= " class=banner" if note.important %>>
+  <section class="<%= class_names(banner: note.important) %>">
     <% if note.label.present? && display_description %>
       <p class="govuk-body govuk-!-font-weight-bold">
         <% if note.task_note? %>

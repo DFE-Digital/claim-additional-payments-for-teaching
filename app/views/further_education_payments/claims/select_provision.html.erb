@@ -10,7 +10,7 @@
           tag: "h1",
           size: "l"
         },
-        hint: -> { %>
+        hint: -> do %>
           <p class="govuk-body">
             You must be directly employed by the provider. You are not eligible for a targeted retention incentive if:
           </p>
@@ -21,7 +21,7 @@
             "you are employed as a contractor",
             "you are employed by an organisation that is subcontracting with an eligible FE provider"
           ], type: :bullet %>
-        <% } %>
+        <% end %>
 
       <%= f.govuk_submit %>
     <% end %>
