@@ -19,17 +19,10 @@ module Admin
     )
 
     def show
-      upload = FileUpload.latest_version_for(
-        Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider,
-        AcademicYear.current
-      ).order(created_at: :desc).first
-
-      upload_date = upload.created_at.to_date.iso8601
-
       send_data(
-        upload.body,
+        Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider.csv,
         type: "text/csv",
-        filename: "eytrp_nurseries-#{upload_date}.csv"
+        filename: "eytrp_nurseries-#{Time.zone.today.iso8601}.csv"
       )
     end
 

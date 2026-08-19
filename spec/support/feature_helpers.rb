@@ -51,6 +51,9 @@ module FeatureHelpers
     fill_in question, with: school.name.sub("The ", "").split(" ").first
     click_button "Continue"
 
+    # Wait for next page to load
+    expect(page).to have_text school.name
+
     choose school.name
     click_button "Continue"
   end

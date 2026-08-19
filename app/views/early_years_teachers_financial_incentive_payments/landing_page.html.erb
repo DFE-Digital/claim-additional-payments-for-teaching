@@ -2,6 +2,13 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">Claim an early years teacher recognition payment</h1>
 
+    <% unless @journey_open %>
+      <p class="govuk-body">
+        Applications for the current window are now closed.
+        You can no longer claim for a payment
+      </p>
+    <% end %>
+
     <p class="govuk-body">
       Use this service to claim a recognition payment of £4,500 after tax if you’re an eligible early years teacher.
     </p>

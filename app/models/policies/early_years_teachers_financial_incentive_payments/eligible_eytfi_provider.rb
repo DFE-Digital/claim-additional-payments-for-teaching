@@ -16,6 +16,38 @@ module Policies
         self.sanitised_postcode = postcode&.downcase&.delete(" ").presence
       end
 
+      def self.csv
+        CSV.generate(headers: true) do |csv|
+          csv << [
+            "Provider URN",
+            "Provider name",
+            "Provider address line 1",
+            "Provider address line 2",
+            "Provider address line 3",
+            "Provider town",
+            "Postcode",
+            "Eligible",
+            "Max claims",
+            "COPD"
+          ]
+
+          order(:name).find_each do |provider|
+            csv << [
+              provider.urn,
+              provider.name,
+              provider.address_line_1,
+              provider.address_line_2,
+              provider.address_line_3,
+              provider.town,
+              provider.postcode,
+              provider.eligible ? "TRUE" : "FALSE",
+              provider.max_claims,
+              provider.copd ? "TRUE" : "FALSE"
+            ]
+          end
+        end
+      end
+
       scope :search, ->(search_term) do
         search_field = :name
         sanitised_search_term = search_term.delete(" ")

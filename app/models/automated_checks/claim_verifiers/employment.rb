@@ -98,9 +98,10 @@ module AutomatedChecks
         task.manual = false
         task.created_by = admin_user
 
-        task.save!(context: :claim_verifier)
-
-        create_note(match: match)
+        ApplicationRecord.transaction do
+          task.save!(context: :claim_verifier)
+          create_note(match: match)
+        end
 
         task
       end
@@ -111,20 +112,20 @@ module AutomatedChecks
         notes = []
 
         uniq_tps_schools_in_month_of_claim = tps_records_during_month_of_claim
-          .map { |tps_record| [tps_record.la_urn, tps_record.school_urn] }
-          .uniq
+          .uniq { |tps_record| [tps_record.la_urn, tps_record.school_urn] }
 
-        uniq_tps_schools_in_month_of_claim.each do |la_urn, school_urn|
-          notes << "Current school: LA Code: #{la_urn} / Establishment Number: #{school_urn}"
+        uniq_tps_schools_in_month_of_claim.each do |tps_record|
+          notes << "Current school: LA Code: #{tps_record.la_urn} / Establishment Number: #{tps_record.school_urn}"
+          notes << employment_dates_copy_for_tps_record(tps_record)
         end
 
         if claim.policy == Policies::StudentLoans
           uniq_tps_schools_in_previous_financial_year = tps_records_during_previous_financial_year
-            .map { |tps_record| [tps_record.la_urn, tps_record.school_urn] }
-            .uniq
+            .uniq { |tps_record| [tps_record.la_urn, tps_record.school_urn] }
 
-          uniq_tps_schools_in_previous_financial_year.each do |la_urn, school_urn|
-            notes << "Claim school: LA Code: #{la_urn} / Establishment Number: #{school_urn}"
+          uniq_tps_schools_in_previous_financial_year.each do |tps_record|
+            notes << "Claim school: LA Code: #{tps_record.la_urn} / Establishment Number: #{tps_record.school_urn}"
+            notes << employment_dates_copy_for_tps_record(tps_record)
           end
         end
 
@@ -138,6 +139,13 @@ module AutomatedChecks
           #{prefix}
           <pre>#{schools_details}\n</pre>
         HTML
+      end
+
+      def employment_dates_copy_for_tps_record(tps_record)
+        start_date_text = tps_record.start_date.present? ? I18n.l(tps_record.start_date.to_date) : "unknown start date"
+        end_date_text = tps_record.end_date.present? ? I18n.l(tps_record.end_date.to_date) : "unknown end date"
+
+        "Employment dates: #{start_date_text} to #{end_date_text}"
       end
 
       def create_note(match:)
