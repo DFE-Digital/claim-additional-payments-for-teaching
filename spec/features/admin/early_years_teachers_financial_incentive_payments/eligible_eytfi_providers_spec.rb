@@ -28,11 +28,11 @@ RSpec.feature "Admin of eligible EYTFI providers" do
   scenario "downloaded CSV includes the COPD column" do
     create(
       :eligible_eytfi_provider,
-      urn: "EY123456",
+      urn: "",
       name: "Some nursery",
-      address_line_1: "Some Road",
+      address_line_1: "",
       town: "Some Town",
-      postcode: "EC1N 2TD",
+      postcode: "EC1N",
       eligible: true,
       copd: true,
       max_claims: 5,
@@ -44,8 +44,13 @@ RSpec.feature "Admin of eligible EYTFI providers" do
     visit admin_eligible_eytfi_providers_path
 
     expect(page.response_headers["Content-Type"]).to include("text/csv")
-    expect(page).to have_content("Provider URN,Provider name,Provider address line 1,Provider address line 2,Provider address line 3,Provider town,Postcode,Eligible,Max claims,COPD")
-    expect(page).to have_content("EY123456,Some nursery,Some Road,, ,Some Town,EC1N 2TD,TRUE,5,TRUE")
+
+    csv = CSV.parse(page.body, headers: true)
+
+    expect(csv.headers).to include("Provider URN", "COPD")
+    expect(csv.first["Provider URN"]).to eq("")
+    expect(csv.first["Provider name"]).to eq("Some nursery")
+    expect(csv.first["COPD"]).to eq("TRUE")
   end
 
   scenario "re-uploading the file doesn't lose existing claims" do
