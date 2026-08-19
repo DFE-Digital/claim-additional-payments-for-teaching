@@ -308,6 +308,13 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
           it "skips URN, address and postcode validation" do
             expect(subject).to be_valid
           end
+
+          it "normalises blank URN and postcode to empty strings for persistence" do
+            provider = subject.to_provider(file_upload:)
+
+            expect(provider.urn).to eq("")
+            expect(provider.postcode).to eq("")
+          end
         end
       end
 

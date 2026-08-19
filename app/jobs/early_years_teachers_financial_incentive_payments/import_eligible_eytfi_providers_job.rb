@@ -55,13 +55,13 @@ module EarlyYearsTeachersFinancialIncentivePayments
         Policies::
           EarlyYearsTeachersFinancialIncentivePayments::
           EligibleEytfiProvider.new(
-            urn: row["Provider URN"],
+            urn: row["Provider URN"].presence || "",
             name: row["Provider name"],
-            address_line_1: row["Provider address line 1"],
-            address_line_2: row["Provider address line 2"],
-            address_line_3: row["Provider address line 3"],
-            town: row["Provider town"],
-            postcode: row["Postcode"],
+            address_line_1: row["Provider address line 1"].presence || "",
+            address_line_2: row["Provider address line 2"].presence || "",
+            address_line_3: row["Provider address line 3"].presence || "",
+            town: row["Provider town"].presence || "",
+            postcode: row["Postcode"].presence || "",
             eligible: cast_bool(row["Eligible"]),
             copd: cast_bool(row["COPD"]),
             max_claims: row["Max claims"].presence || 5,
