@@ -8,7 +8,7 @@ module AutomatedChecks
       end
 
       def perform
-        return if claim.tasks.any? { |task| task.name == TASK_NAME }
+        return if task_exists?
 
         # Task always passes as only those with the expected teacher status can
         # complete the journey.
@@ -22,6 +22,10 @@ module AutomatedChecks
       end
 
       private
+
+      def task_exists?
+        claim.tasks.where(name: TASK_NAME).exists?
+      end
 
       attr_reader :claim
     end
