@@ -92,9 +92,11 @@
   <% f.object.dqt_grouped_qualification_options.each do |group_name, options| %>
     <optgroup label="<%= group_name.to_s.humanize %>">
       <% options.each do |option| %>
-        <option value="<%= option %>" <%= 'selected="selected"' if option == f.object.dqt_qualification %>>
-          <%= option %>
-        </option>
+        <%= tag.option(
+          option,
+          value: option,
+          selected: option == f.object.dqt_qualification
+        ) %>
       <% end %>
     </optgroup>
   <% end %>
@@ -114,9 +116,11 @@
     <% f.object.dqt_grouped_itt_subject_name_options.each do |group_name, options| %>
       <optgroup label="<%= group_name.to_s.humanize %>">
         <% options.each do |option| %>
-          <option value="<%= option %>" <%= 'selected="selected"' if option == f.object.send(:"dqt_itt_subject_#{n}_name") %>>
-            <%= option %>
-          </option>
+          <%= tag.option(
+            option,
+            value: option,
+            selected: option == f.object.send(:"dqt_itt_subject_#{n}_name")
+          ) %>
         <% end %>
       </optgroup>
     <% end %>

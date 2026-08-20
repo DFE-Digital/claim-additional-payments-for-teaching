@@ -34,9 +34,11 @@
           <% filter_form.status_grouped_select_options.each do |group_name, menu_items| %>
             <optgroup label="<%= group_name %>">
               <% menu_items.each do |name, value| %>
-                <option value="<%= value %>" <%= "selected" if @filter_form.status == value %>>
-                  <%= name %>
-                </option>
+                <%= tag.option(
+                  name,
+                  value: value,
+                  selected: @filter_form.status == value
+                ) %>
               <% end %>
             </optgroup>
           <% end %>
