@@ -14,6 +14,7 @@ module AutomatedChecks
       :qualification_name,
       :surname,
       :teacher_reference_number,
+      :not_found?,
       keyword_init: true
     )
 

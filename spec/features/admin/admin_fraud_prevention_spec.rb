@@ -129,7 +129,7 @@ RSpec.feature "Admin fraud prevention" do
     claim = submit_claim(national_insurance_number: "AB123456C")
 
     # Stub dqt api call in verifiers job
-    dqt_teacher_resource = instance_double(Dqt::TeacherResource, find: nil)
+    dqt_teacher_resource = instance_double(Dqt::TeacherResource, find_raw: nil)
     dqt_client = instance_double(Dqt::Client, teacher: dqt_teacher_resource)
     allow(Dqt::Client).to receive(:new).and_return(dqt_client)
 

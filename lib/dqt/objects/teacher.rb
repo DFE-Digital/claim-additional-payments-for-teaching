@@ -1,5 +1,9 @@
 module Dqt
   class Teacher < Object
+    def not_found?
+      to_h.empty?
+    end
+
     def email_address
       string_reader(emailAddress)
     end

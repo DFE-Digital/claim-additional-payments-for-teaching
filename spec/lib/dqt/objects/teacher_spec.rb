@@ -139,6 +139,20 @@ RSpec.describe Dqt::Teacher do
     }
   end
 
+  describe "#not_found?" do
+    it "is true when DQT did not return a record" do
+      teacher = described_class.new(nil)
+
+      expect(teacher).to be_not_found
+    end
+
+    it "is false when DQT returned a record" do
+      teacher = described_class.new(qualified_teaching_status_response)
+
+      expect(teacher).not_to be_not_found
+    end
+  end
+
   let(:dqt_higher_education_qualification_mathematics) do
     create(
       :dqt_higher_education_qualification,

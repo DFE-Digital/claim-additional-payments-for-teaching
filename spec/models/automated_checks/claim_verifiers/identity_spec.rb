@@ -60,9 +60,11 @@ module AutomatedChecks
       let(:identity_args) do
         {
           claim: claim_arg,
-          dqt_teacher_status: Dqt::Client.new.teacher.find(
-            claim_arg.eligibility.teacher_reference_number,
-            include: "alerts,induction,routesToProfessionalStatuses"
+          dqt_teacher_status: Dqt::Teacher.new(
+            Dqt::Client.new.teacher.find_raw(
+              claim_arg.eligibility.teacher_reference_number,
+              include: "alerts,induction,routesToProfessionalStatuses"
+            )
           )
         }
       end
