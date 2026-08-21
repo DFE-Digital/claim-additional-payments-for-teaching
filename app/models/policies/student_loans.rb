@@ -96,6 +96,10 @@ module Policies
       "962b3044-cdd4-4dbe-b6ea-c461530b3dc6"
     end
 
+    def award_amount_rules(record)
+      AwardAmountRules.new(record)
+    end
+
     # Returns the AcademicYear during or after which teachers must have completed
     # their Initial Teacher Training and been awarded QTS to be eligible to make
     # a claim. Anyone qualifying before this academic year should not be able to
