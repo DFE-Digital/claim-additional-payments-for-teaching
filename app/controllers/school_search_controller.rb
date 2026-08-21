@@ -4,7 +4,23 @@ class SchoolSearchController < ApplicationController
 
   def create
     search_schools
-    render status: errors.blank? ? :ok : :bad_request
+
+    if errors.blank?
+      render(
+        json: {
+          data: @schools.map do |school|
+            {
+              id: school.id,
+              name: school.name,
+              address: school.address,
+              closeDate: school.closed? ? I18n.l(school.close_date) : nil
+            }
+          end
+        }
+      )
+    else
+      render json: {errors: errors}, status: :bad_request
+    end
   end
 
   private
