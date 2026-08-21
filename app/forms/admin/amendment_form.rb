@@ -27,6 +27,7 @@ class Admin::AmendmentForm
 
   attr_reader :claim
   attr_reader :admin_user
+  attr_reader :amendment
 
   attribute :teacher_reference_number, :string
   attribute :national_insurance_number, :string
@@ -256,6 +257,8 @@ class Admin::AmendmentForm
       amendment = claim.amendments.build(**amendment_attributes)
       amendment.claim_changes = change_hash
       amendment.save!
+
+      @amendment = amendment
 
       eligibility.assign_attributes(eligibility_attributes)
       eligibility.save!

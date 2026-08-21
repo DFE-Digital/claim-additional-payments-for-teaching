@@ -22,7 +22,7 @@ RSpec.describe "admin/tasks/index.html.erb" do
       it "ues new task names" do
         assign(:claim, claim)
         assign(:claim_checking_tasks, claim_checking_tasks)
-        assign(:banner_messages, [])
+        assign(:banners, [])
 
         render
 
@@ -38,7 +38,7 @@ RSpec.describe "admin/tasks/index.html.erb" do
       it "ues old task names" do
         assign(:claim, claim)
         assign(:claim_checking_tasks, claim_checking_tasks)
-        assign(:banner_messages, [])
+        assign(:banners, [])
 
         render
 
