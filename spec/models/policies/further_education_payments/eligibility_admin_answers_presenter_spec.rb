@@ -18,7 +18,8 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
   let(:claim) do
     create(
       :claim,
-      academic_year: AcademicYear.new(2024)
+      academic_year: AcademicYear.new(2024),
+      award_amount: 6_000
     )
   end
 

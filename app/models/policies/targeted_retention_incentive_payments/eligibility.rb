@@ -19,7 +19,7 @@ module Policies
 
       delegate :name, to: :current_school, prefix: true, allow_nil: true
 
-      AMENDABLE_ATTRIBUTES = [:teacher_reference_number, :award_amount].freeze
+      AMENDABLE_ATTRIBUTES = [:teacher_reference_number].freeze
 
       FIRST_ITT_AY = "2017/2018"
 

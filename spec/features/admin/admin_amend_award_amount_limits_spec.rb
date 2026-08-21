@@ -54,16 +54,21 @@ RSpec.feature "Admin amends an award amount past its limit" do
     # The unconditional rule *does* run here, which is what proves the dispatch is
     # wired up and only the context-gated rule is being skipped. Admin::AmendmentForm
     # does not validate the award amount itself though — it only guards against
-    # changing it on policies that disallow it — so `eligibility.save!` raises instead
-    # of the form re-rendering with an error. That is a 500 for the operator, and is
-    # pre-existing: the rule was equally unconditional as `validates_numericality_of`
-    # before it was extracted into AwardAmountRules.
+    # changing it on policies that disallow it — so the save raises instead of the form
+    # re-rendering with an error. That is a 500 for the operator, and is pre-existing:
+    # the rule was equally unconditional as `validates_numericality_of` before it was
+    # extracted into AwardAmountRules.
+    #
+    # The message gained an "Eligibility " prefix when claims became the write target:
+    # the form now writes claim.award_amount, so the rule fires on the eligibility via
+    # the mirror and the claim's autosave, surfacing as a nested error from
+    # `claim.save!` rather than directly from `eligibility.save!`.
     scenario "the unconditional £99,999 limit raises rather than showing an error" do
       expect {
         amend_award_to(claim, "100001", label: "Student loan repayment amount")
       }.to raise_error(
         ActiveRecord::RecordInvalid,
-        /Award amount Enter a valid monetary amount/
+        /Eligibility award amount Enter a valid monetary amount/
       )
 
       expect(claim.reload.amendments).to be_empty

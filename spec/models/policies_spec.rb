@@ -18,8 +18,14 @@ RSpec.describe Policies, type: :model do
   describe "::AMENDABLE_ELIGIBILITY_ATTRIBUTES" do
     it do
       expect(described_class::AMENDABLE_ELIGIBILITY_ATTRIBUTES.sort).to eq([
-        :award_amount, :further_education_teaching_start_year, :teacher_reference_number
+        :further_education_teaching_start_year, :teacher_reference_number
       ])
+    end
+  end
+
+  describe "::AMENDABLE_CLAIM_ATTRIBUTES" do
+    it do
+      expect(described_class::AMENDABLE_CLAIM_ATTRIBUTES).to eq([:award_amount])
     end
   end
 

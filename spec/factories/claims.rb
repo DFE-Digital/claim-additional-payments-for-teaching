@@ -34,6 +34,16 @@ FactoryBot.define do
       claim_academic_year = AcademicYear.current
 
       claim.academic_year = claim_academic_year unless claim.academic_year_before_type_cast
+
+      # award_amount is mid-move onto claims. Production writers now set the claim
+      # column and the mirror carries it down, but the eligibility factories still
+      # seed the award, and specs overwhelmingly pass it as
+      # `eligibility_attributes: {award_amount: …}`. Bridge it here so those keep
+      # working rather than churning every call site twice. Goes when the award
+      # defaults move onto this factory.
+      if claim[:award_amount].nil? && claim.eligibility.has_attribute?(:award_amount)
+        claim[:award_amount] = claim.eligibility.award_amount
+      end
     end
 
     trait :current_academic_year do

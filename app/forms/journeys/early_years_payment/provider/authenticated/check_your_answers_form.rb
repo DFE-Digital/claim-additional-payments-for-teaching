@@ -54,6 +54,7 @@ module Journeys
           def build_claim
             Claim.new.tap do |claim|
               claim.eligibility ||= main_eligibility
+              claim.award_amount = Policies::EarlyYearsPayments.award_amount
               claim.policy ||= main_eligibility.policy
               claim.started_at = journey_session.created_at
               answers.attributes.each do |name, value|
@@ -68,13 +69,8 @@ module Journeys
             @eligibilities ||= journey.policies.map do |policy|
               policy::Eligibility.new.tap do |eligibility|
                 set_eligibility_attributes(eligibility)
-                calculate_award_amount(eligibility)
               end
             end
-          end
-
-          def calculate_award_amount(eligibility)
-            eligibility.award_amount = Policies::EarlyYearsPayments.award_amount
           end
 
           def set_eligibility_attributes(eligibility)

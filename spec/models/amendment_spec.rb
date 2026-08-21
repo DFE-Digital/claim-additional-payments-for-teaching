@@ -245,9 +245,7 @@ RSpec.describe Amendment, type: :model do
         end
 
         let(:claim_attributes) do
-          {
-            eligibility_attributes: {award_amount: 555}
-          }
+          {award_amount: 555}
         end
         let(:amendment_attributes) do
           {
@@ -268,11 +266,7 @@ RSpec.describe Amendment, type: :model do
         let(:ineligible_school) { create(:school, :student_loans_ineligible) }
 
         let(:claim_attributes) do
-          {
-            eligibility_attributes: {
-              award_amount: 555
-            }
-          }
+          {award_amount: 555}
         end
         let(:amendment_attributes) do
           {
@@ -309,11 +303,7 @@ RSpec.describe Amendment, type: :model do
           create(:claim, :submitted, policy: Policies::EarlyCareerPayments, eligibility: eligibility)
         end
         let(:claim_attributes) do
-          {
-            eligibility_attributes: {
-              award_amount: 2_500
-            }
-          }
+          {award_amount: 2_500}
         end
         let(:amendment_attributes) do
           {

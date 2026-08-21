@@ -100,6 +100,10 @@ module Policies
       AwardAmountRules.new(record)
     end
 
+    def amendable_claim_attributes
+      [:award_amount]
+    end
+
     # Returns the AcademicYear during or after which teachers must have completed
     # their Initial Teacher Training and been awarded QTS to be eligible to make
     # a claim. Anyone qualifying before this academic year should not be able to

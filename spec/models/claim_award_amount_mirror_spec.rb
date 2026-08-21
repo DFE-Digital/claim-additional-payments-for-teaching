@@ -1,24 +1,21 @@
 require "rails_helper"
 
-# award_amount is mid-move from the eligibility tables onto claims. Until the read
-# cutover, eligibility remains the source of truth and a before_save on Claim mirrors
-# the value onto claims.award_amount, so the cutover is a one-line change.
+# award_amount is mid-move from the eligibility tables onto claims. Claims is now the
+# write target, and a before_validation on Claim mirrors the value back down so the
+# eligibility stays current for the delegate and for the validations still declared on
+# it.
 #
-# These cover the paths where the mirror is not obvious: they write the eligibility
-# directly and rely on a later `claim.save` to carry the value across. The journey
-# submission paths are covered too, because three of the seven policies never touch
-# claims.award_amount themselves and depend entirely on the callback.
+# These cover every path that writes an award amount, asserting both columns agree
+# afterwards. That is the load-bearing guarantee of this stage: a writer that only set
+# one side would leave the other stale, and nothing else would notice.
 #
-# Delete this file at the read cutover, along with the callback.
+# Delete this file when the delegate, the mirror and the eligibility validations go.
 #
 # Note these assert `claim[:award_amount]`, not `claim.award_amount` — the latter is
-# the delegate, so comparing it against the eligibility would pass vacuously.
-RSpec.describe "mirroring award_amount onto claims" do
+# still the delegate, so comparing it against the eligibility would pass vacuously.
+RSpec.describe "mirroring award_amount onto the eligibility" do
   describe "Admin::AmendmentForm" do
-    # The form saves the eligibility and the claim as separate operations, so the
-    # mirror depends on `claim.save!` running the callback even when no other claim
-    # attribute changed.
-    it "mirrors an amended award amount" do
+    it "mirrors an amended award amount down to the eligibility" do
       claim = create(:claim, :submitted, eligibility_attributes: {award_amount: 1000})
 
       form = Admin::AmendmentForm.new(
@@ -28,13 +25,11 @@ RSpec.describe "mirroring award_amount onto claims" do
       )
 
       expect { form.save }.to change { claim.reload[:award_amount] }.from(1000).to(2000)
-      expect(claim[:award_amount]).to eq(claim.eligibility.award_amount)
+      expect(claim.eligibility.reload.award_amount).to eq(2000)
     end
   end
 
   describe "ClaimStudentLoanDetailsUpdater" do
-    # Writes through nested attributes via Amendment.amend_claim, which never calls
-    # Claim#award_amount= at all.
     it "mirrors an award amount amended from SLC data" do
       claim = create(
         :claim,
@@ -60,31 +55,42 @@ RSpec.describe "mirroring award_amount onto claims" do
           .update_claim_with_latest_data
       }.to change { claim.reload[:award_amount] }.from(0).to(50)
 
-      expect(claim[:award_amount]).to eq(claim.eligibility.award_amount)
+      expect(claim.eligibility.reload.award_amount).to eq(50)
     end
   end
 
-  describe "journey submission" do
-    # FE, TRI and TSLR declare award_amount on their session answers, so the duck-typed
-    # build_claim already assigns the column. The other four do not, and rely wholly on
-    # the callback — so those are the ones worth asserting.
+  describe "saving a claim" do
+    # FE, TRI and TSLR assign the column from their session answers via the duck typed
+    # build_claim; IRP, EYP and EYTFI assign it explicitly. Either way the mirror is
+    # what keeps the eligibility in step.
     [
       Policies::InternationalRelocationPayments,
       Policies::EarlyYearsPayments,
       Policies::EarlyYearsTeachersFinancialIncentivePayments,
       Policies::EarlyCareerPayments
     ].each do |policy|
-      it "mirrors on a #{policy} claim built from its eligibility" do
-        claim = create(
-          :claim,
-          :submitted,
-          policy: policy,
-          eligibility_attributes: {award_amount: 1500}
-        )
+      it "mirrors down on a #{policy} claim" do
+        claim = create(:claim, :submitted, policy: policy)
+        claim.update!(award_amount: 1500)
 
         expect(claim.reload[:award_amount]).to eq(1500)
-        expect(claim[:award_amount]).to eq(claim.eligibility.award_amount)
+        expect(claim.eligibility.reload.award_amount).to eq(1500)
       end
+    end
+
+    it "mirrors a nil award amount" do
+      claim = create(:claim, :submitted, eligibility_attributes: {award_amount: 1000})
+
+      claim.update!(award_amount: nil)
+
+      expect(claim.eligibility.reload.award_amount).to be_nil
+    end
+
+    it "does not mirror when the eligibility has no award_amount column" do
+      claim = build(:claim)
+      allow(claim.eligibility).to receive(:has_attribute?).with(:award_amount).and_return(false)
+
+      expect { claim.save! }.not_to raise_error
     end
   end
 end

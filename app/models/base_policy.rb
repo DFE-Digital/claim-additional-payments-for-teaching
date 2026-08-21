@@ -100,6 +100,12 @@ module BasePolicy
     nil
   end
 
+  # Claim attributes this policy allows an admin to amend, on top of the global
+  # Claim::AMENDABLE_ATTRIBUTES. Overwrite in policies that allow more.
+  def amendable_claim_attributes
+    []
+  end
+
   def current_academic_year
     Journeys.for_policy(self).configuration.current_academic_year
   end

@@ -113,7 +113,7 @@ class Admin::AmendmentForm
 
   validates :award_amount,
     comparison: {
-      equal_to: ->(form) { form.claim.eligibility.award_amount },
+      equal_to: ->(form) { form.claim.award_amount },
       message: "Award amount cannot be changed for this policy"
     },
     unless: :show_award_amount?
@@ -135,7 +135,10 @@ class Admin::AmendmentForm
   end
 
   def self.amendable_attributes(claim:, admin_user:)
-    array = Claim::AMENDABLE_ATTRIBUTES + claim.policy::Eligibility::AMENDABLE_ATTRIBUTES + [:notes]
+    array = Claim::AMENDABLE_ATTRIBUTES +
+      claim.policy.amendable_claim_attributes +
+      claim.policy::Eligibility::AMENDABLE_ATTRIBUTES +
+      [:notes]
 
     if admin_user.is_service_admin?
       array << :banking_name
@@ -168,7 +171,7 @@ class Admin::AmendmentForm
         address_line_3: claim.address_line_3,
         address_line_4: claim.address_line_4,
         postcode: claim.postcode,
-        award_amount: claim.eligibility.award_amount
+        award_amount: claim.award_amount
       )
     )
   rescue ActiveRecord::MultiparameterAssignmentErrors
@@ -192,9 +195,7 @@ class Admin::AmendmentForm
   end
 
   def show_award_amount?
-    return true if claim.policy == Policies::StudentLoans
-
-    claim.policy::Eligibility::AMENDABLE_ATTRIBUTES.include?(:award_amount)
+    claim.policy.amendable_claim_attributes.include?(:award_amount)
   end
 
   def save
@@ -273,7 +274,8 @@ class Admin::AmendmentForm
   end
 
   def claim_attributes
-    hash = attributes.slice(*Claim::AMENDABLE_ATTRIBUTES.map(&:to_s))
+    amendable = Claim::AMENDABLE_ATTRIBUTES + claim.policy.amendable_claim_attributes
+    hash = attributes.slice(*amendable.map(&:to_s))
 
     if admin_user.is_service_admin?
       hash[:banking_name] = banking_name

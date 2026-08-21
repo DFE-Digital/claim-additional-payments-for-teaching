@@ -22,9 +22,7 @@ class ClaimStudentLoanDetailsUpdater
     end
 
     if award_amount_changed?
-      claim_changes[:eligibility_attributes] = {
-        award_amount: student_loans_data.total_repayment_amount
-      }
+      claim_changes[:award_amount] = student_loans_data.total_repayment_amount
     end
 
     amend_claim(claim_changes) if claim_changes.present?
@@ -47,7 +45,7 @@ class ClaimStudentLoanDetailsUpdater
   def award_amount_changed?
     return false unless claim.has_tslr_policy?
 
-    claim.eligibility.award_amount != student_loans_data.total_repayment_amount
+    claim.award_amount != student_loans_data.total_repayment_amount
   end
 
   def amend_claim(claim_changes)

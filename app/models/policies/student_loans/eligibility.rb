@@ -12,7 +12,7 @@ module Policies
         :computing_taught,
         :languages_taught
       ].freeze
-      AMENDABLE_ATTRIBUTES = %i[teacher_reference_number award_amount].freeze
+      AMENDABLE_ATTRIBUTES = %i[teacher_reference_number].freeze
 
       self.table_name = "student_loans_eligibilities"
 

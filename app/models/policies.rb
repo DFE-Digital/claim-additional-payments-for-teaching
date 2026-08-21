@@ -13,6 +13,13 @@ module Policies
     policy::Eligibility::AMENDABLE_ATTRIBUTES
   end.flatten.uniq.freeze
 
+  # Claim attributes that only *some* policies allow amending. Kept separate from
+  # Claim::AMENDABLE_ATTRIBUTES, which is global and would expose these on every
+  # policy's amendment form.
+  AMENDABLE_CLAIM_ATTRIBUTES = POLICIES.map do |policy|
+    policy.amendable_claim_attributes
+  end.flatten.uniq.freeze
+
   def self.all
     POLICIES
   end

@@ -102,6 +102,10 @@ module Policies
       "89939786-7078-4267-b197-ee505dfad8ae"
     end
 
+    def amendable_claim_attributes
+      [:award_amount]
+    end
+
     def verification_due_date_for_claim(claim)
       provider_verification_deadline(claim)
     end

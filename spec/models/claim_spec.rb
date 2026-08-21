@@ -1593,33 +1593,31 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  # award_amount is mid-move from the eligibility tables onto claims. For now the
-  # eligibility remains the source of truth, the delegate serves every read, and a
-  # before_save mirrors the value onto claims.award_amount so the read cutover is a
-  # one-line change. All of this goes when reads move to the column.
-  describe "mirroring award_amount from eligibility" do
+  # award_amount is mid-move from the eligibility tables onto claims. Claims is now the
+  # write target, and a before_validation mirrors the value back down so the eligibility
+  # stays current for the delegate and for the validations still declared on it. All of
+  # this goes when the delegate and those validations move.
+  describe "mirroring award_amount to the eligibility" do
     it "mirrors on create" do
-      claim = create(:claim, eligibility_attributes: {award_amount: 1234})
+      claim = create(:claim, award_amount: 1234)
 
-      expect(claim.reload[:award_amount]).to eq(1234)
+      expect(claim.eligibility.reload.award_amount).to eq(1234)
     end
 
-    it "mirrors on update when the eligibility changes" do
-      claim = create(:claim, eligibility_attributes: {award_amount: 1234})
+    it "mirrors on update" do
+      claim = create(:claim, award_amount: 1234)
 
-      claim.eligibility.award_amount = 4321
-      claim.save!
+      claim.update!(award_amount: 4321)
 
-      expect(claim.reload[:award_amount]).to eq(4321)
+      expect(claim.eligibility.reload.award_amount).to eq(4321)
     end
 
     it "mirrors a nil award amount" do
-      claim = create(:claim, eligibility_attributes: {award_amount: 1234})
+      claim = create(:claim, award_amount: 1234)
 
-      claim.eligibility.award_amount = nil
-      claim.save!
+      claim.update!(award_amount: nil)
 
-      expect(claim.reload[:award_amount]).to be_nil
+      expect(claim.eligibility.reload.award_amount).to be_nil
     end
 
     it "does not mirror when the eligibility has no award_amount column" do
@@ -1627,14 +1625,13 @@ RSpec.describe Claim, type: :model do
       allow(claim.eligibility).to receive(:has_attribute?).with(:award_amount).and_return(false)
 
       expect { claim.save! }.not_to raise_error
-      expect(claim.reload[:award_amount]).to be_nil
     end
 
     describe "#award_amount" do
-      # The delegate shadows the generated attribute reader, so these two
-      # deliberately disagree until the read cutover.
-      it "still reads through to the eligibility, not the mirrored column" do
-        claim = create(:claim, eligibility_attributes: {award_amount: 1234})
+      # The delegate shadows the generated attribute reader, so a read still resolves
+      # to the eligibility. The mirror is what keeps the two in step.
+      it "reads through to the eligibility, not the column" do
+        claim = create(:claim, award_amount: 1234)
         claim.update_column(:award_amount, 9999)
 
         expect(claim.reload.award_amount).to eq(1234)

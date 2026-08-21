@@ -4,7 +4,6 @@ module Policies
       include ProviderVerificationConstants
 
       AMENDABLE_ATTRIBUTES = [
-        :award_amount,
         :teacher_reference_number,
         :further_education_teaching_start_year
       ].freeze

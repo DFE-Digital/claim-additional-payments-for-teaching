@@ -424,7 +424,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
           .to raise_error(described_class::StudentLoanUpdateError).with_message(
             "Failed to update claim #{claim.id} student loan data. " \
             "amendment_error: \"Claim must be amendable\" " \
-            "SLC data: {student_loan_plan: \"plan_2\", eligibility_attributes: {award_amount: 200.0}}"
+            "SLC data: {student_loan_plan: \"plan_2\", award_amount: 200.0}"
           )
       end
     end

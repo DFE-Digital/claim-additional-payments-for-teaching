@@ -58,6 +58,7 @@ module Journeys
       def build_claim
         Claim.new.tap do |claim|
           claim.eligibility ||= main_eligibility
+          claim.award_amount = Policies::EarlyYearsTeachersFinancialIncentivePayments.award_amount
           claim.policy ||= main_eligibility.policy
           claim.started_at = journey_session.created_at
 
@@ -99,7 +100,6 @@ module Journeys
           end
         end
 
-        eligibility.award_amount = Policies::EarlyYearsTeachersFinancialIncentivePayments.award_amount
         eligibility.eligible_eytfi_provider_urn = answers.nursery.urn
         eligibility.teacher_reference_number = answers.teacher_auth_teacher_reference_number
 
