@@ -7,7 +7,7 @@ RSpec.feature "Upload SLC data" do
     create(:journey_configuration, :further_education_payments)
     create(:journey_configuration, :early_years_payment_provider_start)
     create(:journey_configuration, :early_years_teachers_financial_incentive_payments)
-    sign_in_as_service_operator
+    sign_in_as_service_admin
   end
 
   let!(:sl_claim_with_slc_data_no_student_loan) {

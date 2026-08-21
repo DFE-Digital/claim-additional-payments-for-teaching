@@ -7,7 +7,7 @@ RSpec.feature "Admin of eligible EYTFI providers" do
 
   scenario "manage eligible EYTFI providers" do
     when_eytfi_journey_configuration_exists
-    sign_in_as_service_operator
+    sign_in_as_service_admin
 
     click_link "Manage services"
     click_link "Claim an early years teacher recognition payment"
@@ -40,7 +40,7 @@ RSpec.feature "Admin of eligible EYTFI providers" do
       academic_year: academic_year
     )
 
-    sign_in_as_service_operator
+    sign_in_as_service_admin
 
     visit admin_claim_tasks_path(claim)
 
