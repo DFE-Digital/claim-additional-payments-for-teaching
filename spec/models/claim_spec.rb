@@ -1593,10 +1593,10 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  # award_amount is mid-move from the eligibility tables onto claims. Claims is now the
-  # write target, and a before_validation mirrors the value back down so the eligibility
-  # stays current for the delegate and for the validations still declared on it. All of
-  # this goes when the delegate and those validations move.
+  # award_amount has moved from the eligibility tables onto claims. A before_validation
+  # mirrors the value back down so the eligibility copy stays current for the validations
+  # still declared there, and so the move stays reversible. All of this goes when those
+  # validations move.
   describe "mirroring award_amount to the eligibility" do
     it "mirrors on create" do
       claim = create(:claim, award_amount: 1234)
@@ -1628,14 +1628,11 @@ RSpec.describe Claim, type: :model do
     end
 
     describe "#award_amount" do
-      # The delegate shadows the generated attribute reader, so a read still resolves
-      # to the eligibility. The mirror is what keeps the two in step.
-      it "reads through to the eligibility, not the column" do
+      it "reads the claims column" do
         claim = create(:claim, award_amount: 1234)
         claim.update_column(:award_amount, 9999)
 
-        expect(claim.reload.award_amount).to eq(1234)
-        expect(claim[:award_amount]).to eq(9999)
+        expect(claim.reload.award_amount).to eq(9999)
       end
     end
   end

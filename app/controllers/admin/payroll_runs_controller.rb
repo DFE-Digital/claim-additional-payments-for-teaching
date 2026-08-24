@@ -10,7 +10,6 @@ module Admin
 
     def new
       @claims = Claim
-        .includes(:eligibility)
         .payrollable
         .order(submitted_at: :asc)
 

@@ -94,10 +94,10 @@ class Claim < ApplicationRecord
   before_save :normalise_first_name, if: %i[first_name first_name_changed?]
   before_save :normalise_surname, if: %i[surname surname_changed?]
 
-  # NOTE: award_amount is moving from the eligibility tables onto claims. Claims
-  # is now the write target, and this mirrors the value back down so the
-  # eligibility stays current for the delegate below and for the validations
-  # still declared on the eligibility. Remove once both have moved.
+  # NOTE: award_amount has moved from the eligibility tables onto claims. Nothing
+  # reads the eligibility copy any more except the validations still declared
+  # there, but this keeps it current so the move stays reversible while the new
+  # column beds in. Remove once those validations have moved too.
   #
   # before_validation rather than before_save: `belongs_to` registers its
   # autosave as a before_save, so a before_save here would run after the
@@ -142,8 +142,6 @@ class Claim < ApplicationRecord
       scope.where(attr => claim.public_send(attr))
     end
   end
-
-  delegate :award_amount, to: :eligibility
 
   scope :payrollable, -> { approved.not_awaiting_qa.left_joins(:payments).where(payments: nil) }
   scope :not_awaiting_qa, -> { approved.where("qa_required = false OR (qa_required = true AND qa_completed_at IS NOT NULL)") }
@@ -444,13 +442,10 @@ class Claim < ApplicationRecord
 
   private
 
-  # Reads through `self[]` rather than `award_amount` because the delegate
-  # shadows the generated attribute reader, so `claim.award_amount` still
-  # returns the eligibility's value until the read cutover.
   def copy_award_amount_to_eligibility
     return unless eligibility&.has_attribute?(:award_amount)
 
-    eligibility.award_amount = self[:award_amount]
+    eligibility.award_amount = award_amount
   end
 
   def one_login_idv_name_match?

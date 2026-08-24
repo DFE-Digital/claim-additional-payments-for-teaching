@@ -1,18 +1,14 @@
 require "rails_helper"
 
-# award_amount is mid-move from the eligibility tables onto claims. Claims is now the
-# write target, and a before_validation on Claim mirrors the value back down so the
-# eligibility stays current for the delegate and for the validations still declared on
-# it.
+# award_amount has moved from the eligibility tables onto claims. A before_validation on
+# Claim mirrors the value back down so the eligibility copy stays current for the
+# validations still declared there, and so the move stays reversible.
 #
 # These cover every path that writes an award amount, asserting both columns agree
 # afterwards. That is the load-bearing guarantee of this stage: a writer that only set
 # one side would leave the other stale, and nothing else would notice.
 #
-# Delete this file when the delegate, the mirror and the eligibility validations go.
-#
-# Note these assert `claim[:award_amount]`, not `claim.award_amount` — the latter is
-# still the delegate, so comparing it against the eligibility would pass vacuously.
+# Delete this file when the mirror and the eligibility validations go.
 RSpec.describe "mirroring award_amount onto the eligibility" do
   describe "Admin::AmendmentForm" do
     it "mirrors an amended award amount down to the eligibility" do
