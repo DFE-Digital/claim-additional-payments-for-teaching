@@ -27,8 +27,6 @@ gem "terser"
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'mini_racer', platforms: :ruby
 
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem "jbuilder", "~> 2.13"
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
