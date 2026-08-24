@@ -104,7 +104,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
       expect(claim.address_line_3).to be_nil
       expect(claim.address_line_4).to be_nil
       expect(claim.postcode).to be_nil
-      expect(claim.payroll_gender).to be_nil
+      expect(claim.payroll_gender).to eq("female")
       expect(claim.national_insurance_number).to be_nil
       expect(claim.bank_sort_code).to be_nil
       expect(claim.bank_account_number).to be_nil
@@ -178,7 +178,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
 
     def assert_amendment_personal_data_scrubbed(amendment)
       amendment.reload
-      expect(amendment.claim_changes["payroll_gender"]).to be_nil
+      expect(amendment.claim_changes["payroll_gender"]).to eq(["male", "female"])
       expect(amendment.claim_changes["date_of_birth"]).to be_nil
       expect(amendment.claim_changes["bank_sort_code"]).to be_nil
       expect(amendment.claim_changes["bank_account_number"]).to be_nil
@@ -536,7 +536,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
         expect(claim.national_insurance_number).to be nil
         expect(claim.mobile_number).to be nil
         expect(claim.hmrc_bank_validation_responses).to be nil
-        expect(claim.payroll_gender).to be nil
+        expect(claim.payroll_gender).to eq claim_attributes.fetch(:payroll_gender)
         expect(claim.onelogin_credentials).to be nil
         expect(claim.onelogin_idv_date_of_birth).to be nil
         expect(claim.onelogin_idv_first_name).to be nil

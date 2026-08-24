@@ -53,7 +53,7 @@ module Policies
           onelogin_uid: :inactive_claim_submitted_in_prior_academic_term?,
           onelogin_user_info: :inactive_claim_submitted_in_prior_academic_term?,
           paye_reference: :inactive_claim_submitted_in_prior_academic_term?,
-          payroll_gender: :inactive_claim_submitted_in_prior_academic_term?,
+          payroll_gender: :retained,
           personal_data_removed_at: :retained,
           policy: :retained,
           policy_options_provided: :retained,
