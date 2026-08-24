@@ -38,6 +38,7 @@ module Policies
           logged_in_with_onelogin: :retained,
           logged_in_with_tid: :retained,
           middle_name: :inactive_claim_over_two_years_old?,
+          matching_attributes_last_checked_at: :retained,
           mobile_check: :inactive_claim_submitted_in_prior_academic_term?,
           mobile_number: :inactive_claim_submitted_in_prior_academic_term?,
           mobile_verified: :retained,
