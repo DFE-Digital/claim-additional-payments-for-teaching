@@ -649,7 +649,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
           expect(claim.address_line_4).to eq claim_attributes.fetch(:address_line_4)
           expect(claim.postcode).to eq claim_attributes.fetch(:postcode)
           expect(claim.national_insurance_number).to eq claim_attributes.fetch(:national_insurance_number)
-          expect(claim.mobile_number).to eq claim_attributes.fetch(:mobile_number)
+          expect(claim.mobile_number).to be nil
           expect(claim.hmrc_bank_validation_responses).to eq claim_attributes.fetch(:hmrc_bank_validation_responses)
           expect(claim.payroll_gender).to eq claim_attributes.fetch(:payroll_gender)
           expect(claim.onelogin_uid).to eq claim_attributes.fetch(:onelogin_uid)

@@ -39,7 +39,7 @@ module Policies
           logged_in_with_tid: :retained,
           middle_name: :inactive_claim_over_five_years_old?,
           mobile_check: :inactive_claim_submitted_in_prior_academic_term?,
-          mobile_number: :inactive_claim_over_five_years_old?,
+          mobile_number: :inactive_claim_submitted_in_prior_academic_term?,
           mobile_verified: :retained,
           national_insurance_number: :inactive_claim_over_five_years_old?,
           onelogin_auth_at: :retained,
