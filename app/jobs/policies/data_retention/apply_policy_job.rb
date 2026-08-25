@@ -3,6 +3,7 @@ module Policies
     class ApplyPolicyJob < ApplicationJob
       def perform(claim)
         change_set = claim.policy::DataRetention::Policy.apply(claim)
+        expired_eligibility_attachments = change_set.expired_eligibility_attachments
 
         ApplicationRecord.transaction do
           claim.journey_session&.destroy!
@@ -14,6 +15,8 @@ module Policies
             amendment.update!(change_set.new_amendment_attributes(amendment))
           end
         end
+
+        expired_eligibility_attachments.each(&:purge)
       end
 
       def priority

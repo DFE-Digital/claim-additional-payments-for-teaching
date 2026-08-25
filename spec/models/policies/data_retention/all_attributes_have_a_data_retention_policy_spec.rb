@@ -10,10 +10,6 @@ RSpec.describe "All policies have a data retention policy for all attributes" do
   Policies.all.each do |policy|
     describe "#{policy} data retention policy" do
       it "has a data retention policy for all attributes" do
-        next if policy.in?([
-          Policies::EarlyYearsTeachersFinancialIncentivePayments
-        ])
-
         expect(
           Object.const_defined?("Policies::#{policy}::DataRetention::Policy")
         ).to be(true), <<~TEXT

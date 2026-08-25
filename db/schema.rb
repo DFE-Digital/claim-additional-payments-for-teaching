@@ -299,6 +299,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_12_141454) do
     t.jsonb "hmrc_response_body"
     t.integer "hmrc_response_status"
     t.text "nursery_id"
+    t.jsonb "redacted_attributes", default: {}
     t.datetime "teacher_auth_completed_at"
     t.citext "teacher_auth_email"
     t.text "teacher_auth_one_login_uid"

@@ -9,18 +9,11 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
 
     let(:school) { create(:school, :targeted_retention_incentive_payments_eligible) }
 
-    # Run the job on Nov 1, 2025 — in AY 2025/2026
-    # AcademicYear.current = AcademicYear.new(2025)
-    # start_of_academic_year = Sep 1, 2025
-    #
-    # "Old" = before Sep 1, 2025
-    # "Current" = on or after Sep 1, 2025
     let(:job_run_date) { Date.new(2025, 11, 1) }
 
     def create_claim_with_all_attributes
       create(:claim, :submitted,
         policy: Policies::TargetedRetentionIncentivePayments,
-        # --- Scrubbed attributes (19) ---
         first_name: "John",
         middle_name: "Michael",
         surname: "Smith",
@@ -40,7 +33,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
         mobile_number: "07474000123",
         teacher_id_user_info: {"given_name" => "John"},
         dqt_teacher_status: {"trn" => "1234567"},
-        # --- Retained attributes ---
+        academic_year: AcademicYear.previous,
         email_address: "test@example.com",
         email_verified: true,
         provide_mobile_number: true,
@@ -53,7 +46,6 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
         held: false,
         qa_required: false,
         submitted_using_slc_data: false,
-        # --- Eligibility ---
         eligibility_attributes: {
           teacher_reference_number: "1234567",
           award_amount: 2000.0,
@@ -244,8 +236,13 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
       let!(:claim) do
         claim = create_claim_with_all_attributes
         create(:decision, :approved, claim: claim)
-        create(:payment, :confirmed, :with_figures, claims: [claim],
-          scheduled_payment_date: Date.new(2024, 10, 15))
+        create(
+          :payment,
+          :confirmed,
+          :with_figures,
+          claims: [claim],
+          scheduled_payment_date: Date.new(2024, 10, 15)
+        )
         claim
       end
 
@@ -1748,6 +1745,39 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
           expect(eligibility.teaching_subject_now).to eq eligibility_attributes.fetch(:teaching_subject_now)
         end
       end
+    end
+  end
+
+  context "when the policy is EarlyYearsTeachersFinancialIncentivePayments" do
+    it "removes expired employment proof attachments" do
+      claim = nil
+      blob = nil
+
+      travel_to(Time.zone.local(2025, 9, 1, 12)) do
+        claim = create(
+          :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          academic_year: AcademicYear.new(2025),
+          submitted_at: Time.current,
+          eligibility_attributes: {confirmed_employment_proof_blob_ids: []}
+        )
+        create(:decision, :rejected, claim: claim)
+        claim.eligibility.employment_proofs.attach(
+          io: StringIO.new("employment proof"),
+          filename: "employment-proof.pdf",
+          content_type: "application/pdf"
+        )
+        blob = claim.eligibility.employment_proofs.blobs.first
+        claim.eligibility.update!(confirmed_employment_proof_blob_ids: [blob.id])
+      end
+
+      travel_to(Time.zone.local(2026, 9, 1, 12)) do
+        perform_enqueued_jobs { described_class.perform_now }
+      end
+
+      expect(claim.reload.eligibility.confirmed_employment_proof_blob_ids).to be_nil
+      expect(claim.eligibility.employment_proofs).not_to be_attached
+      expect { blob.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 end
