@@ -296,6 +296,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_02_144451) do
     t.string "eligible_eytfi_provider_urn"
     t.boolean "has_eligible_qualification"
     t.text "nursery_id"
+    t.jsonb "redacted_attributes", default: {}
     t.datetime "teacher_auth_completed_at"
     t.citext "teacher_auth_email"
     t.text "teacher_auth_one_login_uid"

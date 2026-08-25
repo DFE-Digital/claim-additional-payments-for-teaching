@@ -3,6 +3,7 @@ module Policies
     class BasePolicy
       class_attribute :claim_attributes, instance_writer: false
       class_attribute :eligibility_attributes, instance_writer: false
+      class_attribute :eligibility_attachments_to_destroy, instance_writer: false, default: {}
 
       def self.claim_redacted_attributes
         claim_attributes.reject { |k, v| v == :retained }.keys
@@ -40,22 +41,32 @@ module Policies
           # columns
           default_value = Claim.new.send(attr)
 
-          empty = if !default_value.nil?
-            [nil, default_value]
-          end
+          if default_value.is_a?(Array)
+            claim_scope.where.not(attr => default_value).where.not(attr => nil)
+          else
+            empty = if !default_value.nil?
+              [nil, default_value]
+            end
 
-          claim_scope.where.not(attr => empty)
+            claim_scope.where.not(attr => empty)
+          end
         end.reduce(&:or)
 
         if eligibility_redacted_attributes.any?
           claim_scope = eligibility_redacted_attributes.map(&:to_s).map do |attr|
             default_value = policy::Eligibility.new.send(attr.to_s)
 
-            empty = if !default_value.nil?
-              [nil, default_value]
-            end
+            qualified_attribute = "#{policy::Eligibility.table_name}.#{attr}"
 
-            claim_scope.where.not("#{policy::Eligibility.table_name}.#{attr}" => empty)
+            if default_value.is_a?(Array)
+              claim_scope.where.not(qualified_attribute => default_value).where.not(qualified_attribute => nil)
+            else
+              empty = if !default_value.nil?
+                [nil, default_value]
+              end
+
+              claim_scope.where.not(qualified_attribute => empty)
+            end
           end.reduce(&:or)
         end
 

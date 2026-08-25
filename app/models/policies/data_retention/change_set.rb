@@ -74,6 +74,12 @@ module Policies
         )
       end
 
+      def expired_eligibility_attachments
+        data_retention_policy.eligibility_attachments_to_destroy.flat_map do |name, attribute|
+          claim.eligibility.public_send(name).to_a if expired_eligibility_attributes.include?(attribute.to_s)
+        end
+      end
+
       def attribute_changed?(attr)
         claim_attribute_changed?(attr) || eligibility_attribute_changed?(attr)
       end
