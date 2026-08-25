@@ -145,7 +145,7 @@ class Admin::AmendmentForm
 
   validates :award_amount,
     comparison: {
-      equal_to: ->(form) { form.claim.eligibility.award_amount },
+      equal_to: ->(form) { form.claim.award_amount },
       message: "Award amount cannot be changed for this policy"
     },
     unless: :show_award_amount?
@@ -220,7 +220,7 @@ class Admin::AmendmentForm
         address_line_3: claim.address_line_3,
         address_line_4: claim.address_line_4,
         postcode: claim.postcode,
-        award_amount: claim.eligibility.award_amount
+        award_amount: claim.award_amount
       )
     )
   rescue ActiveRecord::MultiparameterAssignmentErrors
