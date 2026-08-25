@@ -99,7 +99,7 @@ RSpec.feature "Upload SLC data" do
     then_the_student_loan_amount_task_should_show_as(state: "No match", for_claim: claim)
     expect(claim.reload.student_loan_plan).to eq "not_applicable"
     expect(claim.has_student_loan).to be false
-    expect(claim.eligibility.award_amount).to eq 0
+    expect(claim.award_amount).to eq 0
 
     claim = sl_claim_with_slc_data_with_student_loan
     visit admin_claims_path
@@ -107,13 +107,13 @@ RSpec.feature "Upload SLC data" do
     then_the_student_loan_amount_task_should_show_as(state: "Passed", for_claim: claim)
     expect(claim.reload.student_loan_plan).to eq "plan_1"
     expect(claim.has_student_loan).to eq true
-    expect(claim.eligibility.award_amount).to eq 100
+    expect(claim.award_amount).to eq 100
 
     claim = sl_claim_no_slc_data
     then_the_student_loan_amount_task_should_show_as(state: "No data", for_claim: claim)
     expect(claim.reload.student_loan_plan).to be nil
     expect(claim.has_student_loan).to be nil
-    expect(claim.eligibility.award_amount).to eq 0
+    expect(claim.award_amount).to eq 0
 
     # Early Career Payments
 

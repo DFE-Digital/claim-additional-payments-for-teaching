@@ -208,7 +208,7 @@ RSpec.feature "Admin amends a claim" do
       expect(amendment.notes).to eq("The claimant calculated the incorrect student loan repayment amount")
       expect(amendment.created_by).to eq(@signed_in_user)
 
-      expect(claim.eligibility.award_amount).to eq(300)
+      expect(claim.award_amount).to eq(300)
 
       click_on "Claim amendments"
 

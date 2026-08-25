@@ -97,7 +97,7 @@ RSpec.feature "Early years payment provider" do
     expect(claim.submitted_at).to be_nil
     expect(claim.eligibility.reload.provider_claim_submitted_at).to be_present
     expect(claim.eligibility.provider_email_address).to eq email_address
-    expect(claim.eligibility.award_amount).to eq 1000
+    expect(claim.award_amount).to eq 1000
     expect(claim.eligibility.provider_entered_contract_type).to eq "permanent"
 
     # Note the spec revisits some steps

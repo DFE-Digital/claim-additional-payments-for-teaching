@@ -72,7 +72,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
         it "updates the claim with the student plan and the repayment total" do
           expect { call }.to change { claim.reload.has_student_loan }.to(true)
             .and change { claim.student_loan_plan }.to(StudentLoan::PLAN_1_AND_2)
-            .and change { claim.eligibility.award_amount }.to(110)
+            .and change { claim.award_amount }.to(110)
         end
 
         it "creates an amendment" do
@@ -136,7 +136,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
         it "updates the claim with the student plan and the repayment total" do
           expect { call }.to change { claim.reload.has_student_loan }.to(false)
             .and change { claim.student_loan_plan }.to(Claim::NO_STUDENT_LOAN)
-            .and change { claim.eligibility.award_amount }.to(0)
+            .and change { claim.award_amount }.to(0)
         end
 
         it "creates an amendment with the student plan change" do
@@ -207,7 +207,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
       it "updates the claim with the student plan and the repayment total" do
         expect { call }.to change { claim.reload.has_student_loan }.to(true)
           .and change { claim.student_loan_plan }.to(StudentLoan::PLAN_1)
-          .and change { claim.eligibility.award_amount }.to(50)
+          .and change { claim.award_amount }.to(50)
       end
 
       it "creates an amendment" do

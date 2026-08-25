@@ -47,7 +47,7 @@ class ClaimStudentLoanDetailsUpdater
   def award_amount_changed?
     return false unless claim.has_tslr_policy?
 
-    claim.eligibility.award_amount != student_loans_data.total_repayment_amount
+    claim.award_amount != student_loans_data.total_repayment_amount
   end
 
   def amend_claim(claim_changes)
