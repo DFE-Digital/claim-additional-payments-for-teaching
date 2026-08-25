@@ -1,3 +1,11 @@
+DEFAULT_AWARD_AMOUNTS = {
+  Policies::StudentLoans => 1_000,
+  Policies::EarlyCareerPayments => 5_000.0,
+  Policies::TargetedRetentionIncentivePayments => 2_000.0,
+  Policies::InternationalRelocationPayments => Policies::InternationalRelocationPayments.award_amount,
+  Policies::FurtherEducationPayments => 3_000
+}.freeze
+
 FactoryBot.define do
   sequence(:email_address) { |n| "person#{n}@example.com" }
   sequence(:teacher_reference_number, 1000000) { |n| n }
@@ -35,15 +43,10 @@ FactoryBot.define do
 
       claim.academic_year = claim_academic_year unless claim.academic_year_before_type_cast
 
-      # award_amount is mid-move onto claims. Production writers now set the claim
-      # column and the mirror carries it down, but the eligibility factories still
-      # seed the award, and specs overwhelmingly pass it as
-      # `eligibility_attributes: {award_amount: …}`. Bridge it here so those keep
-      # working rather than churning every call site twice. Goes when the award
-      # defaults move onto this factory.
-      if claim[:award_amount].nil? && claim.eligibility.has_attribute?(:award_amount)
-        claim[:award_amount] = claim.eligibility.award_amount
-      end
+      # award_amount lives on the claim, so its default belongs here rather than on
+      # the eligibility factories. Only the policies that previously seeded one get
+      # a default; EYP and EYTFI never did.
+      claim.award_amount ||= DEFAULT_AWARD_AMOUNTS[claim.policy]
     end
 
     trait :current_academic_year do

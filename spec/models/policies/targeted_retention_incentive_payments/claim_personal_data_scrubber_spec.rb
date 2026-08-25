@@ -13,9 +13,9 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::ClaimPersonalDataSc
   let(:user) { create(:dfe_signin_user) }
 
   it "does not delete details from a claim that has a payment, but has a payrollable topup" do
-    eligibility = create(:targeted_retention_incentive_payments_eligibility, :eligible, award_amount: 1500.0)
+    eligibility = create(:targeted_retention_incentive_payments_eligibility, :eligible)
 
-    claim = create(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments, eligibility: eligibility)
+    claim = create(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments, eligibility: eligibility, award_amount: 1500.0)
 
     create(:payment, :confirmed, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
     create(:topup, payment: nil, claim: claim, award_amount: 500, created_by: user)
@@ -27,8 +27,8 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::ClaimPersonalDataSc
     claim = nil
 
     travel_to 2.months.ago do
-      eligibility = create(:targeted_retention_incentive_payments_eligibility, :eligible, award_amount: 1500.0)
-      claim = create(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments, eligibility: eligibility)
+      eligibility = create(:targeted_retention_incentive_payments_eligibility, :eligible)
+      claim = create(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments, eligibility: eligibility, award_amount: 1500.0)
       create(:payment, :confirmed, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
     end
 

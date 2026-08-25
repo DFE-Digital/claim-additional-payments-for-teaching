@@ -42,7 +42,6 @@ RSpec.describe Reports::FailedFeProviderVerificationV2 do
     create(
       :further_education_payments_eligibility,
       :eligible,
-      :with_award_amount,
       :provider_verifiable,
       :provider_verification_employment_checked,
       :provider_verification_started,

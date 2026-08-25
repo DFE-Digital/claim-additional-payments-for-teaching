@@ -20,10 +20,10 @@ RSpec.describe "Task index page for EYTFI claims" do
       date_of_birth: Date.new(1970, 1, 1),
       national_insurance_number: "ab123456c",
       email_address: "e.krabappel@springfield-elementary.edu",
+      award_amount: 4500,
       eligibility_attributes: {
         teacher_reference_number: "T1234567",
         eligible_eytfi_provider_urn: eligible_eytfi_provider.urn,
-        award_amount: 4500
       }
     )
 

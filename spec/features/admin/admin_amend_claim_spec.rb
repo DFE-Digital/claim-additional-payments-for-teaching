@@ -126,9 +126,7 @@ RSpec.feature "Admin amends a claim" do
       :submitted,
       policy: Policies::EarlyYearsPayments,
       practitioner_email_address: "old-practitioner-address@example.com",
-      eligibility_attributes: {
-        award_amount: 0
-      }
+      award_amount: 0
     )
 
     visit admin_claim_url(claim)
@@ -189,7 +187,7 @@ RSpec.feature "Admin amends a claim" do
 
   context "with a Student Loans claim" do
     let(:claim) do
-      create(:claim, :submitted, eligibility: build(:student_loans_eligibility, :eligible, award_amount: 550))
+      create(:claim, :submitted, award_amount: 550, eligibility: build(:student_loans_eligibility, :eligible))
     end
 
     scenario "Service operator amends the student loan repayment amount" do

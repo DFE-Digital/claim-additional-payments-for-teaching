@@ -204,11 +204,6 @@ FactoryBot.define do
       provider_verification_completed_at { Time.zone.now }
       provider_verification_verified_by_id { create(:dfe_signin_user).id }
     end
-
-    trait :with_award_amount do
-      award_amount { [2_000, 2_500, 3_000, 4_000, 5_000, 6_000].sample }
-    end
-
     trait :provider_verification_employment_checked do
       provider_verification_claimant_employed_by_college { true }
       provider_verification_claimant_date_of_birth { Date.new(1990, 1, 1) }

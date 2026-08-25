@@ -45,8 +45,7 @@ RSpec.describe Claim::ClaimsPreventingPaymentFinder do
       it "includes the other claim where a topup is payrollable" do
         targeted_retention_incentive_eligibility = create(
           :targeted_retention_incentive_payments_eligibility,
-          :eligible,
-          award_amount: 1500.0
+          :eligible
         )
 
         other_claim = create(
@@ -54,7 +53,8 @@ RSpec.describe Claim::ClaimsPreventingPaymentFinder do
           :approved,
           inconsistent_personal_details.merge(
             policy: Policies::TargetedRetentionIncentivePayments,
-            eligibility: targeted_retention_incentive_eligibility
+            eligibility: targeted_retention_incentive_eligibility,
+            award_amount: 1500.0
           )
         )
         create(:payment, claims: [other_claim])

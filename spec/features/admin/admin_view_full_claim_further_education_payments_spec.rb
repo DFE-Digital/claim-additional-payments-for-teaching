@@ -30,14 +30,14 @@ RSpec.feature "Admin views claim details for FurtherEducationPayments" do
         half_teaching_hours: true,
         teaching_qualification: "yes",
         subject_to_formal_performance_action: false,
-        subject_to_disciplinary_action: false,
-        award_amount: 6_000
+        subject_to_disciplinary_action: false
       )
 
       claim = create(
         :claim,
         :further_education,
         eligibility:,
+        award_amount: 6_000,
         first_name: "Edna",
         surname: "Krabappel",
         date_of_birth: Date.new(1945, 7, 3),

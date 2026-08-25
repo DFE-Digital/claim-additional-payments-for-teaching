@@ -13,6 +13,7 @@ RSpec.describe Policies::EarlyYearsPayments::AdminClaimDetailsPresenter do
       practitioner_email_address: "practitioner@example.com",
       paye_reference: "123/A",
       provider_contact_name: "John Doe",
+      award_amount: 1000,
       eligibility_attributes: {
         nursery_urn: eligible_ey_provider.urn,
         start_date: Date.new(2020, 1, 1),
@@ -22,7 +23,6 @@ RSpec.describe Policies::EarlyYearsPayments::AdminClaimDetailsPresenter do
         returner_worked_with_children: false,
         returner_contract_type: "casual or temporary",
         provider_claim_submitted_at: Date.new(2020, 1, 2),
-        award_amount: 1000,
         provider_entered_contract_type: "permanent"
       }
     )
@@ -50,6 +50,7 @@ RSpec.describe Policies::EarlyYearsPayments::AdminClaimDetailsPresenter do
       banking_name: "B Wayne",
       bank_account_number: "12345678",
       bank_sort_code: "123456",
+      award_amount: 1000,
       eligibility_attributes: {
         nursery_urn: eligible_ey_provider.urn,
         start_date: Date.new(2020, 1, 1),
@@ -57,7 +58,6 @@ RSpec.describe Policies::EarlyYearsPayments::AdminClaimDetailsPresenter do
         returning_within_6_months: true,
         returner_worked_with_children: false,
         provider_claim_submitted_at: Date.new(2020, 1, 2),
-        award_amount: 1000,
         practitioner_claim_started_at: Date.new(2020, 1, 3)
       }
     )

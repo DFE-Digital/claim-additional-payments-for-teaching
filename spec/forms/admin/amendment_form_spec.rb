@@ -162,9 +162,7 @@ RSpec.describe Admin::AmendmentForm, type: :model do
             claim = create(
               :claim,
               :submitted,
-              eligibility_attributes: {
-                award_amount: 1000
-              }
+              award_amount: 1000
             )
 
             form = described_class.new(
@@ -192,9 +190,7 @@ RSpec.describe Admin::AmendmentForm, type: :model do
               :claim,
               :submitted,
               policy: Policies::EarlyYearsPayments,
-              eligibility_attributes: {
-                award_amount: 1000
-              }
+              award_amount: 1000
             )
 
             form = described_class.new(

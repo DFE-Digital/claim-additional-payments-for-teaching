@@ -84,9 +84,7 @@ RSpec.describe Form, type: :model do
             build(
               :claim,
               first_name: "existing-name",
-              eligibility_attributes: {
-                award_amount: 100
-              },
+              award_amount: 100,
               policy: Policies::StudentLoans
             )
           ]

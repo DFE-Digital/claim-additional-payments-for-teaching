@@ -25,8 +25,8 @@ RSpec.describe PayrollRun, type: :model do
 
   describe "#total_award_amount" do
     it "returns the sum of the award amounts of its claims" do
-      payment_1 = build(:payment, claims: [build(:claim, :approved, eligibility_attributes: {award_amount: 1500})])
-      payment_2 = build(:payment, claims: [build(:claim, :approved, eligibility_attributes: {award_amount: 2000})])
+      payment_1 = build(:payment, claims: [build(:claim, :approved, award_amount: 1500)])
+      payment_2 = build(:payment, claims: [build(:claim, :approved, award_amount: 2000)])
 
       payroll_run = PayrollRun.create!(created_by: user, payments: [payment_1, payment_2])
 
@@ -37,7 +37,7 @@ RSpec.describe PayrollRun, type: :model do
   describe "#number_of_claims_for_policy" do
     it "returns the correct number of claims under each policy" do
       payment_1 = build(:payment, claims: [
-        build(:claim, :approved, eligibility_attributes: {award_amount: 1500})
+        build(:claim, :approved, award_amount: 1500)
       ])
       payment_2 = build(:payment, claims: [
         build(:claim, :approved, policy: Policies::EarlyCareerPayments)
@@ -57,7 +57,7 @@ RSpec.describe PayrollRun, type: :model do
   describe "#total_claim_amount_for_policy" do
     it "returns the correct total amount claimed under each policy" do
       payment_1 = build(:payment, claims: [
-        build(:claim, :approved, policy: Policies::StudentLoans, eligibility_attributes: {award_amount: 1500})
+        build(:claim, :approved, policy: Policies::StudentLoans, award_amount: 1500)
       ])
       payment_2 = build(:payment, claims: [
         build(:claim, :approved, policy: Policies::EarlyCareerPayments)
@@ -66,11 +66,11 @@ RSpec.describe PayrollRun, type: :model do
         build(:claim, :approved, policy: Policies::EarlyCareerPayments)
       ])
       payment_4 = build(:payment, claims: [
-        build(:claim, :approved, eligibility_attributes: {award_amount: 1000})
+        build(:claim, :approved, award_amount: 1000)
       ])
       payment_5 = build(:payment, claims: [
         build(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments, bank_sort_code: "123456", bank_account_number: "12345678", national_insurance_number: "1234567"),
-        build(:claim, :approved, bank_sort_code: "123456", bank_account_number: "12345678", national_insurance_number: "1234567", eligibility_attributes: {award_amount: 1000})
+        build(:claim, :approved, bank_sort_code: "123456", bank_account_number: "12345678", national_insurance_number: "1234567", award_amount: 1000)
       ])
 
       payroll_run = PayrollRun.create!(created_by: user, payments: [payment_1, payment_2, payment_3, payment_4, payment_5])
@@ -91,7 +91,7 @@ RSpec.describe PayrollRun, type: :model do
           bank_sort_code: "123456",
           bank_account_number: "12345678",
           national_insurance_number: "1234567",
-          eligibility_attributes: {award_amount: 100}
+          award_amount: 100
         )
 
         topped_up_claim_2 = build(
@@ -101,7 +101,7 @@ RSpec.describe PayrollRun, type: :model do
           bank_sort_code: "123456",
           bank_account_number: "12345678",
           national_insurance_number: "1234567",
-          eligibility_attributes: {award_amount: 100}
+          award_amount: 100
         )
 
         non_topped_up_claim_1 = build(
@@ -111,7 +111,7 @@ RSpec.describe PayrollRun, type: :model do
           bank_account_number: "12345678",
           national_insurance_number: "1234567",
           policy: Policies::TargetedRetentionIncentivePayments,
-          eligibility_attributes: {award_amount: 101}
+          award_amount: 101
         )
 
         non_topped_up_claim_2 = build(
@@ -121,7 +121,7 @@ RSpec.describe PayrollRun, type: :model do
           bank_account_number: "12345678",
           national_insurance_number: "1234567",
           policy: Policies::TargetedRetentionIncentivePayments,
-          eligibility_attributes: {award_amount: 103}
+          award_amount: 103
         )
 
         targeted_retention_incentive_payment_1 = build(
@@ -203,18 +203,14 @@ RSpec.describe PayrollRun, type: :model do
         :claim,
         :approved,
         policy: Policies::EarlyCareerPayments,
-        eligibility_attributes: {
-          award_amount: 1
-        }
+        award_amount: 1
       )
 
       claim_2 = create(
         :claim,
         :approved,
         policy: Policies::EarlyCareerPayments,
-        eligibility_attributes: {
-          award_amount: 7
-        },
+        award_amount: 7,
         date_of_birth: claim_1.date_of_birth,
         student_loan_plan: claim_1.student_loan_plan,
         bank_sort_code: claim_1.bank_sort_code,

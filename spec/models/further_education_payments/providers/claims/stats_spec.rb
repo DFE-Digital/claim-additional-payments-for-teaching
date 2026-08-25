@@ -341,7 +341,6 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
         eligibility = create(
           :further_education_payments_eligibility,
           :provider_verification_completed,
-          :with_award_amount,
           school: provider.school
         )
 
@@ -360,7 +359,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
         ).save(validate: false)
 
         expect(claim.decisions.active.approved.count).to eq(2)
-        expect(subject.amount).to eql(eligibility.award_amount)
+        expect(subject.amount).to eql(claim.award_amount)
       end
     end
 
@@ -369,7 +368,6 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
         eligibility = create(
           :further_education_payments_eligibility,
           :provider_verification_completed,
-          :with_award_amount,
           school: provider.school
         )
 
@@ -390,7 +388,6 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
         eligibility = create(
           :further_education_payments_eligibility,
           :provider_verification_completed,
-          :with_award_amount,
           school: provider.school
         )
 
@@ -414,7 +411,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
           payment:
         )
 
-        expected = eligibility.award_amount + topup.award_amount
+        expected = claim.award_amount + topup.award_amount
         expect(subject.amount).to eql(expected)
       end
     end

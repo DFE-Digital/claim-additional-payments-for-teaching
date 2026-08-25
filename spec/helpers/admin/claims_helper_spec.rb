@@ -66,7 +66,8 @@ RSpec.describe Admin::ClaimsHelper do
       build(
         :claim,
         student_loan_plan: :plan_1,
-        eligibility: build(:student_loans_eligibility, award_amount: 1234)
+        award_amount: 1234,
+        eligibility: build(:student_loans_eligibility)
       )
     end
 

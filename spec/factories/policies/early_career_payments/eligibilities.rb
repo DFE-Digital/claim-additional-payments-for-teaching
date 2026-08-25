@@ -1,7 +1,5 @@
 FactoryBot.define do
   factory :early_career_payments_eligibility, class: "Policies::EarlyCareerPayments::Eligibility" do
-    award_amount { 5000.0 }
-
     itt_academic_year do
       AcademicYear.current - 3
     end

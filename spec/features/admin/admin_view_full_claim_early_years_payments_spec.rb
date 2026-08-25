@@ -24,10 +24,10 @@ RSpec.feature "Admin views claim details for EarlyYearsPayments" do
         provider_contact_name: "John Doe",
         started_at: DateTime.new(2020, 1, 1, 12, 0, 0),
         student_loan_plan: "not_applicable",
+        award_amount: 1000,
         eligibility_attributes: {
           nursery_urn: eligible_ey_provider.urn,
           start_date: Date.new(2018, 1, 1),
-          award_amount: 1000,
           provider_email_address: "provider@example.com",
           child_facing_confirmation_given: true,
           returning_within_6_months: true,
@@ -85,10 +85,10 @@ RSpec.feature "Admin views claim details for EarlyYearsPayments" do
         started_at: DateTime.new(2020, 1, 1, 12, 0, 0),
         submitted_at: DateTime.new(2020, 1, 4, 12, 0, 0),
         student_loan_plan: "not_applicable",
+        award_amount: 1000,
         eligibility_attributes: {
           nursery_urn: eligible_ey_provider.urn,
           start_date: Date.new(2026, 1, 1),
-          award_amount: 1000,
           provider_email_address: "provider@example.com",
           child_facing_confirmation_given: true,
           returning_within_6_months: true,

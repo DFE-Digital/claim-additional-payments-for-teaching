@@ -29,8 +29,8 @@ RSpec.describe Reports::FailedProviderCheckClaims do
         first_name: "Elizabeth",
         surname: "Hoover",
         qa_required: true,
+        award_amount: 2_000,
         eligibility_attributes: {
-          award_amount: 2_000,
           contract_type: "permanent",
           verification: {
             assertions: [
@@ -84,8 +84,8 @@ RSpec.describe Reports::FailedProviderCheckClaims do
         policy: Policies::FurtherEducationPayments,
         first_name: "Edna",
         surname: "Krabappel",
+        award_amount: 3_000,
         eligibility_attributes: {
-          award_amount: 3_000,
           contract_type: "variable_hours",
           verification: {
             assertions: [

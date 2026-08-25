@@ -6,7 +6,7 @@ RSpec.describe "Admin payroll runs" do
 
     describe "admin_payroll_runs#new" do
       it "displays a preview of the payrollable claims" do
-        create(:claim, :approved, eligibility: create(:student_loans_eligibility, award_amount: 100))
+        create(:claim, :approved, award_amount: 100, eligibility: create(:student_loans_eligibility))
 
         get new_admin_payroll_run_path
 

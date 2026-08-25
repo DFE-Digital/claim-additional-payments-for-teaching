@@ -43,7 +43,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
           let(:policy_attributes) do
             {
               policy: Policies::StudentLoans,
-              eligibility_attributes: {award_amount: 0}
+              award_amount: 0
             }
           end
 
@@ -95,7 +95,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
           let(:policy_attributes) do
             {
               policy: Policies::StudentLoans,
-              eligibility_attributes: {award_amount: 0}
+              award_amount: 0
             }
           end
 
@@ -186,7 +186,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
           let(:policy_attributes) do
             {
               policy: Policies::StudentLoans,
-              eligibility_attributes: {award_amount: 50}
+              award_amount: 50
             }
           end
 
@@ -271,7 +271,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
           let(:policy_attributes) do
             {
               policy: Policies::StudentLoans,
-              eligibility_attributes: {award_amount: 50}
+              award_amount: 50
             }
           end
 
@@ -345,7 +345,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
           let(:policy_attributes) do
             {
               policy: Policies::StudentLoans,
-              eligibility_attributes: {award_amount: 100}
+              award_amount: 100
             }
           end
 
@@ -414,7 +414,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
           has_student_loan: true,
           student_loan_plan: StudentLoan::PLAN_1,
           policy: Policies::StudentLoans,
-          eligibility_attributes: {award_amount: 50},
+          award_amount: 50,
           personal_data_removed_at: DateTime.now # make the claim unaamendable
         )
       end

@@ -80,13 +80,8 @@ RSpec.shared_examples "a claim personal data scrubber" do |policy|
     claim = nil
 
     travel_to 2.months.ago do
-      eligibility = build(eligibility_factory, :eligible)
-      # Student loans don't have a settable award amount
-      if eligibility.has_attribute?(:award_amount)
-        eligibility.award_amount = 1500.0
-      end
-      eligibility.save!
-      claim = create(:claim, :approved, policy: policy, eligibility: eligibility)
+      eligibility = create(eligibility_factory, :eligible)
+      claim = create(:claim, :approved, policy: policy, eligibility: eligibility, award_amount: 1500.0)
       create(:payment, :confirmed, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
     end
 

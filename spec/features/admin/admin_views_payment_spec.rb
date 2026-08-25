@@ -23,9 +23,7 @@ RSpec.describe "Admin views payment spec" do
       :claim,
       :approved,
       policy: Policies::FurtherEducationPayments,
-      eligibility_attributes: {
-        award_amount: 111.11
-      }
+      award_amount: 111.11
     )
 
     personal_details = Payment::PERSONAL_CLAIM_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES.map do |attr|
@@ -36,9 +34,7 @@ RSpec.describe "Admin views payment spec" do
       :claim,
       :approved,
       **personal_details,
-      eligibility_attributes: {
-        award_amount: 222.22
-      },
+      award_amount: 222.22,
       created_at: claim_1.created_at + 1.second
     )
 

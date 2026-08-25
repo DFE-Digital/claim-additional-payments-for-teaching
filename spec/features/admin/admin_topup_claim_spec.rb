@@ -6,9 +6,7 @@ RSpec.describe "Admin Topup Claim" do
       :claim,
       :approved,
       policy: Policies::EarlyCareerPayments,
-      eligibility_attributes: {
-        award_amount: 1_000.00
-      }
+      award_amount: 1_000.00
     )
   end
 

@@ -1,7 +1,5 @@
 FactoryBot.define do
   factory :targeted_retention_incentive_payments_eligibility, class: "Policies::TargetedRetentionIncentivePayments::Eligibility" do
-    award_amount { 2000.0 }
-
     trait :eligible do
       teacher_reference_number { generate(:teacher_reference_number) }
       eligible_now

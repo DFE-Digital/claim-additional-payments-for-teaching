@@ -12,7 +12,7 @@ require "rails_helper"
 RSpec.describe "mirroring award_amount onto the eligibility" do
   describe "Admin::AmendmentForm" do
     it "mirrors an amended award amount down to the eligibility" do
-      claim = create(:claim, :submitted, eligibility_attributes: {award_amount: 1000})
+      claim = create(:claim, :submitted, award_amount: 1000)
 
       form = Admin::AmendmentForm.new(
         claim: claim,
@@ -33,7 +33,7 @@ RSpec.describe "mirroring award_amount onto the eligibility" do
         policy: Policies::StudentLoans,
         has_student_loan: nil,
         student_loan_plan: nil,
-        eligibility_attributes: {award_amount: 0}
+        award_amount: 0
       )
       claim.reload
 
@@ -75,7 +75,7 @@ RSpec.describe "mirroring award_amount onto the eligibility" do
     end
 
     it "mirrors a nil award amount" do
-      claim = create(:claim, :submitted, eligibility_attributes: {award_amount: 1000})
+      claim = create(:claim, :submitted, award_amount: 1000)
 
       claim.update!(award_amount: nil)
 

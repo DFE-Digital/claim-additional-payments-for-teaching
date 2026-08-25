@@ -15,8 +15,8 @@ RSpec.feature "Payroll" do
 
     paid_targeted_retention_incentive_claim = nil
     travel_to 2.months.ago do
-      targeted_retention_incentive_eligibility = create(:targeted_retention_incentive_payments_eligibility, :eligible, award_amount: 1500.0)
-      paid_targeted_retention_incentive_claim = create(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments, eligibility: targeted_retention_incentive_eligibility)
+      targeted_retention_incentive_eligibility = create(:targeted_retention_incentive_payments_eligibility, :eligible)
+      paid_targeted_retention_incentive_claim = create(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments, eligibility: targeted_retention_incentive_eligibility, award_amount: 1500.0)
       create(:payment, :with_figures, claims: [paid_targeted_retention_incentive_claim])
     end
 

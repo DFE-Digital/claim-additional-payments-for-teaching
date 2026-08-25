@@ -26,7 +26,8 @@ RSpec.feature "Admin amends an award amount past its limit" do
       create(
         :claim,
         :submitted,
-        eligibility: build(:student_loans_eligibility, :eligible, award_amount: 550)
+        award_amount: 550,
+        eligibility: build(:student_loans_eligibility, :eligible)
       )
     end
 
@@ -82,11 +83,8 @@ RSpec.feature "Admin amends an award amount past its limit" do
         :claim,
         :submitted,
         policy: Policies::TargetedRetentionIncentivePayments,
-        eligibility: build(
-          :targeted_retention_incentive_payments_eligibility,
-          :eligible,
-          award_amount: 2_000
-        )
+        award_amount: 2_000,
+        eligibility: build(:targeted_retention_incentive_payments_eligibility, :eligible)
       )
     end
 
@@ -114,11 +112,8 @@ RSpec.feature "Admin amends an award amount past its limit" do
         :claim,
         :submitted,
         policy: Policies::FurtherEducationPayments,
-        eligibility: build(
-          :further_education_payments_eligibility,
-          :eligible,
-          award_amount: 2_000
-        )
+        award_amount: 2_000,
+        eligibility: build(:further_education_payments_eligibility, :eligible)
       )
     end
 

@@ -6,10 +6,10 @@ RSpec.describe Policies::StudentLoans::AdminTasksPresenter, type: :model do
     build(:claim,
       academic_year: "2019/2020",
       student_loan_plan: StudentLoan::PLAN_1,
+      award_amount: "670.99",
       eligibility: build(
         :student_loans_eligibility,
         :eligible,
-        award_amount: "670.99",
         chemistry_taught: true,
         physics_taught: nil,
         languages_taught: true

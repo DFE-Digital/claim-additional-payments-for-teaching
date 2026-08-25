@@ -16,7 +16,7 @@ RSpec.describe "fix_tslr_student_loan_amounts", nullify_stdout: true do
 
   let(:claim_1) do
     create(:claim, :submitted, policy: Policies::StudentLoans, academic_year: AcademicYear.current, national_insurance_number: "AB123456A", date_of_birth: Date.new(1980, 1, 1),
-      eligibility_attributes: {award_amount: 150})
+      award_amount: 150)
   end
 
   let(:claim_2) do
@@ -27,9 +27,7 @@ RSpec.describe "fix_tslr_student_loan_amounts", nullify_stdout: true do
       academic_year: AcademicYear.current,
       national_insurance_number: "AB123456B",
       date_of_birth: Date.new(1990, 1, 1),
-      eligibility_attributes: {
-        award_amount: 120
-      }
+      award_amount: 120
     )
   end
 

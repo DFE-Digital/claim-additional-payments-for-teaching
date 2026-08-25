@@ -8,9 +8,7 @@ RSpec.describe Payroll::Projection do
       :claim,
       policy: Policies::FurtherEducationPayments,
       decision_deadline: 2.months.from_now,
-      eligibility_attributes: {
-        award_amount: 2
-      }
+      award_amount: 2
     )
   end
 
@@ -19,9 +17,7 @@ RSpec.describe Payroll::Projection do
       :claim,
       policy: Policies::FurtherEducationPayments,
       decision_deadline: 3.weeks.from_now,
-      eligibility_attributes: {
-        award_amount: 3
-      }
+      award_amount: 3
     )
   end
 
@@ -32,9 +28,7 @@ RSpec.describe Payroll::Projection do
       :approved,
       policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
       decision_deadline: 2.months.from_now,
-      eligibility_attributes: {
-        award_amount: 5
-      }
+      award_amount: 5
     )
   end
 
@@ -45,9 +39,7 @@ RSpec.describe Payroll::Projection do
       :rejected,
       policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
       decision_deadline: 1.day.from_now,
-      eligibility_attributes: {
-        award_amount: 7
-      }
+      award_amount: 7
     )
   end
 
@@ -58,9 +50,7 @@ RSpec.describe Payroll::Projection do
       :approved,
       policy: Policies::StudentLoans,
       decision_deadline: 2.months.from_now,
-      eligibility_attributes: {
-        award_amount: 11
-      }
+      award_amount: 11
     ).tap do |claim|
       create(:payment, claims: [claim], payroll_run: previous_payroll_run)
     end
@@ -73,9 +63,7 @@ RSpec.describe Payroll::Projection do
       :approved,
       policy: Policies::StudentLoans,
       decision_deadline: 6.months.ago,
-      eligibility_attributes: {
-        award_amount: 13
-      }
+      award_amount: 13
     ).tap do |claim|
       create(:payment, claims: [claim], payroll_run: previous_payroll_run)
 
@@ -90,9 +78,7 @@ RSpec.describe Payroll::Projection do
       :approved,
       policy: Policies::TargetedRetentionIncentivePayments,
       decision_deadline: 6.months.ago,
-      eligibility_attributes: {
-        award_amount: 19
-      }
+      award_amount: 19
     ).tap do |claim|
       create(:payment, claims: [claim], payroll_run: previous_payroll_run)
 
