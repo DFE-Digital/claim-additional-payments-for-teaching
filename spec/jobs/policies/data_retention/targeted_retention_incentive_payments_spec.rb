@@ -162,7 +162,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
       end
 
       context "when the claim is paid" do
-        it "scrubs personal data" do
+        before do
           create(:decision, :approved, claim: claim)
           create(
             :payment,
@@ -178,7 +178,9 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
 
           claim.reload
           claim.eligibility.reload
+        end
 
+        it "scrubs personal data" do
           aggregate_failures do
             expect(claim).to(
               have_attributes(scrubbed_claim_attributes.index_with(nil))
@@ -192,6 +194,21 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
               eligibility_attributes.merge(teacher_reference_number: "")
             )
           end
+        end
+
+        it "creates a recovery record" do
+          recovery = Policies::DataRetention::Recovery.find_by!(claim: claim)
+
+          expect(recovery.payload).to include(
+            "claim_attributes" => include(
+              "id" => claim.id,
+              "first_name" => "John"
+            ),
+            "eligibility_attributes" => include(
+              "id" => claim.eligibility_id,
+              "teacher_reference_number" => "1234567"
+            )
+          )
         end
       end
     end

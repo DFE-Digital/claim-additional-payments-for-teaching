@@ -201,3 +201,10 @@
   - description
   - created_at
   - updated_at
+  :policies_data_retention_recoveries:
+  - id
+  - claim_id
+  - created_at
+  - destroy_at
+  - payload
+  - updated_at
