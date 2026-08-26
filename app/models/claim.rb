@@ -156,6 +156,28 @@ class Claim < ApplicationRecord
     )
   end
 
+  scope :with_eligibility_award_amounts, -> do
+    joins(
+      <<~SQL
+        JOIN (
+          #{
+            Policies::POLICIES.map do |policy|
+              "
+                SELECT
+                id,
+                award_amount AS eligibility_award_amount,
+                '#{policy::Eligibility}' AS eligibility_type
+                FROM #{policy::Eligibility.table_name}
+              "
+            end.join(" UNION ALL ")
+          }
+        ) AS eligibilities
+        ON claims.eligibility_id = eligibilities.id
+        AND claims.eligibility_type = eligibilities.eligibility_type
+      SQL
+    )
+  end
+
   scope :require_in_progress_update_emails, -> {
     by_policies(Policies.all.select { |p| p.require_in_progress_update_emails? })
   }
