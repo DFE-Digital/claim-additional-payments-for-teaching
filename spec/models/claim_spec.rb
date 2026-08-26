@@ -1592,4 +1592,54 @@ RSpec.describe Claim, type: :model do
       end
     end
   end
+
+  describe "#award_amount" do
+    context "when nil and eligibility#award_amount is nil" do
+      subject do
+        create(
+          :claim,
+          award_amount: nil,
+          eligibility_attributes: {
+            award_amount: nil
+          }
+        )
+      end
+
+      it "returns nil" do
+        expect(subject.award_amount).to be_nil
+      end
+    end
+
+    context "when nil and eligibility#award_amount is present" do
+      subject do
+        create(
+          :claim,
+          award_amount: nil,
+          eligibility_attributes: {
+            award_amount: 100
+          }
+        )
+      end
+
+      it "returns eligibility#award_amount" do
+        expect(subject.award_amount).to eql(100)
+      end
+    end
+
+    context "when present and eligibility#award_amount is present" do
+      subject do
+        create(
+          :claim,
+          award_amount: 200,
+          eligibility_attributes: {
+            award_amount: 100
+          }
+        )
+      end
+
+      it "returns claim#award_amount" do
+        expect(subject.award_amount).to eql(200)
+      end
+    end
+  end
 end

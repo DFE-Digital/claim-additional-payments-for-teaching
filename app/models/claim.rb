@@ -116,8 +116,6 @@ class Claim < ApplicationRecord
     end
   end
 
-  delegate :award_amount, to: :eligibility
-
   scope :payrollable, -> { approved.not_awaiting_qa.left_joins(:payments).where(payments: nil) }
   scope :not_awaiting_qa, -> { approved.where("qa_required = false OR (qa_required = true AND qa_completed_at IS NOT NULL)") }
   scope :awaiting_qa, -> { approved.qa_required.where(qa_completed_at: nil) }
@@ -184,6 +182,10 @@ class Claim < ApplicationRecord
 
   scope :with_verifier, ->(verifier) do
     by_policies(Policies.all.select { it.has_verifier?(verifier) })
+  end
+
+  def award_amount
+    read_attribute(:award_amount) || eligibility.award_amount
   end
 
   def hold!(reason:, user:)
