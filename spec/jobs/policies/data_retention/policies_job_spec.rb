@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.describe Policies::DataRetention::PoliciesJob do
+  before do
+    FeatureFlag.enable!(:apply_data_retention_policy)
+  end
+
   context "When the policy is TargetedRetentionIncentivePayments" do
     let!(:journey_configuration) do
       create(:journey_configuration, :targeted_retention_incentive_payments,
