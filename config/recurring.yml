@@ -38,6 +38,9 @@ production: &production
   purge_unsubmitted_claims:
     class: PurgeUnsubmittedClaimsJob
     schedule: "0 0 * * *"
+  remove_recovery_records:
+    class: Policies::DataRetention::RemoveRecoveryRecordsJob
+    schedule: "30 1 * * 0"
   school_data_import:
     class: SchoolDataImporterJob
     schedule: "0 12 * * *"
