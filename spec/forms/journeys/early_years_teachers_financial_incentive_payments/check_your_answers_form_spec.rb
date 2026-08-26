@@ -50,6 +50,14 @@ RSpec.describe Journeys::EarlyYearsTeachersFinancialIncentivePayments::CheckYour
   end
 
   describe "#save" do
+    it "creates claim and eligiiblity models correctly" do
+      subject.save
+
+      claim = subject.claim
+
+      expect(claim.read_attribute(:award_amount)).to eql(Policies::EarlyYearsTeachersFinancialIncentivePayments.award_amount)
+    end
+
     it "attaches employment proofs to the eligibility" do
       form.save
       expect(form.claim.eligibility.employment_proofs).to be_attached

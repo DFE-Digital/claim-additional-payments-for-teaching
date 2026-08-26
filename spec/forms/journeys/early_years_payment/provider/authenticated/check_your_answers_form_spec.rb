@@ -60,6 +60,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::CheckYourAn
       subject.save
 
       expect(claim.policy).to eql(Policies::EarlyYearsPayments)
+      expect(claim.read_attribute(:award_amount)).to eql(1000)
       expect(claim.email_address).to be nil
       expect(claim.submitted_at).to be_nil
       expect(claim.eligibility_type).to eq "Policies::EarlyYearsPayments::Eligibility"
