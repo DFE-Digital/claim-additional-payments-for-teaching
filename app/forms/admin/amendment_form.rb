@@ -261,6 +261,9 @@ class Admin::AmendmentForm
       eligibility.save!
 
       claim.assign_attributes(claim_attributes)
+      if amendable_attributes.include?(:award_amount)
+        claim.award_amount = award_amount
+      end
       claim.save!
 
       AutomatedChecks::ClaimVerifiers::MatchingClaims.new(claim: claim).perform
