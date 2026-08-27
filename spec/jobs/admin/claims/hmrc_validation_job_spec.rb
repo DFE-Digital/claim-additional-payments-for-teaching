@@ -126,4 +126,34 @@ RSpec.describe Admin::Claims::HmrcValidationJob do
       )
     end
   end
+
+  describe "#perform when the HMRC API times out", :with_stubbed_hmrc_client do
+    it "records the timeout as an error response" do
+      claim = create(
+        :claim,
+        :submitted,
+        banking_name: "Seymour Skinner",
+        bank_sort_code: "010203",
+        bank_account_number: "47274828",
+        hmrc_bank_validation_responses: []
+      )
+
+      stub_request(
+        :post,
+        "#{HMRC_TEST_BASE_URL}/misc/bank-account/verify/personal"
+      ).to_timeout
+
+      expect { described_class.new.perform(claim) }.to(
+        change { claim.reload.hmrc_bank_validation_responses }
+        .from([]).to(
+          [
+            {
+              "code" => 504,
+              "body" => "HMRC bank validation request timed out"
+            }
+          ]
+        )
+      )
+    end
+  end
 end
