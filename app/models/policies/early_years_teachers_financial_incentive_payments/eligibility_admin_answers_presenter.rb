@@ -28,7 +28,7 @@ module Policies
         [
           [
             I18n.t("early_years_teachers_financial_incentive_payments.policy_short_name"),
-            number_to_currency(eligibility.award_amount, precision: 0)
+            number_to_currency(eligibility.claim.award_amount, precision: 0)
           ]
         ]
       end
