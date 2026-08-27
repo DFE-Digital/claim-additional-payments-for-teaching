@@ -67,7 +67,7 @@ module Journeys
             end
           end
 
-          claim.write_attribute(:award_amount, Policies::EarlyYearsTeachersFinancialIncentivePayments.award_amount)
+          claim.award_amount = Policies::EarlyYearsTeachersFinancialIncentivePayments.award_amount
 
           claim.onelogin_uid = answers.teacher_auth_one_login_uid
 
