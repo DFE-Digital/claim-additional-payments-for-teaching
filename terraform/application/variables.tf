@@ -136,6 +136,13 @@ variable "container_delete_retention_days" {
   }
 }
 
+variable "extra_databases" {
+  type        = list(string)
+  default     = []
+  nullable    = false
+  description = "Additional PostgreSQL databases to create on the same PostgreSQL server"
+}
+
 locals {
   postgres_ssl_mode       = var.enable_postgres_ssl ? "require" : "disable"
   canonical_hostname      = var.canonical_hostname != null ? var.canonical_hostname : "${var.service_name}-${var.environment}-web.test.teacherservices.cloud"
