@@ -6,7 +6,7 @@ module Policies
         expired_eligibility_attachments = change_set.expired_eligibility_attachments
 
         ApplicationRecord.transaction do
-          claim.journey_session&.destroy!
+          claim.journey_session&.update!(answers: {})
 
           claim.update!(change_set.new_claim_attributes)
           claim.eligibility.update!(change_set.new_eligibility_attributes)
