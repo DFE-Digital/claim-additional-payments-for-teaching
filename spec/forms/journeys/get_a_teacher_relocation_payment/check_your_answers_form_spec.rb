@@ -91,6 +91,9 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::CheckYourAnswersForm do
       end
 
       expect(claim.policy).to eql(Policies::InternationalRelocationPayments)
+      expect(claim.read_attribute(:award_amount)).to eql(
+        Policies::InternationalRelocationPayments.award_amount
+      )
 
       expect(claim.submitted_at).to be_present
       expect(claim.reference).to be_present

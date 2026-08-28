@@ -36,6 +36,7 @@ module Journeys
           claim.eligibility ||= main_eligibility
           claim.eligibility.award_amount = Policies::InternationalRelocationPayments.award_amount
           claim.policy ||= main_eligibility.policy
+          claim.award_amount = Policies::InternationalRelocationPayments.award_amount
           claim.started_at = journey_session.created_at
           answers.attributes.each do |name, value|
             if claim.respond_to?(:"#{name}=")

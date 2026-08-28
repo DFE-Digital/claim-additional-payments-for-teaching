@@ -51,7 +51,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
             expect { described_class.new(claim, admin).update_claim_with_latest_data }
               .to not_change { claim.reload.has_student_loan }
               .and not_change { claim.student_loan_plan }
-              .and not_change { claim.eligibility.award_amount }
+              .and not_change { claim.award_amount }
           end
 
           it "doesn't create an ammendment" do
@@ -103,7 +103,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
             expect { described_class.new(claim, admin).update_claim_with_latest_data }
               .to change { claim.reload.has_student_loan }.from(nil).to(true)
               .and change { claim.student_loan_plan }.from(nil).to(StudentLoan::PLAN_1)
-              .and change { claim.eligibility.award_amount }.from(0).to(50)
+              .and change { claim.award_amount }.from(0).to(50)
           end
 
           it "creates an ammendment" do
@@ -194,7 +194,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
             expect { described_class.new(claim, admin).update_claim_with_latest_data }
               .to not_change { claim.reload.has_student_loan }
               .and change { claim.student_loan_plan }.from(StudentLoan::PLAN_1).to(StudentLoan::PLAN_2)
-              .and change { claim.eligibility.award_amount }.from(50).to(100)
+              .and change { claim.award_amount }.from(50).to(100)
           end
 
           it "creates an ammendment" do
@@ -279,7 +279,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
             expect { described_class.new(claim, admin).update_claim_with_latest_data }
               .to not_change { claim.reload.has_student_loan }
               .and change { claim.student_loan_plan }.from(StudentLoan::PLAN_1).to(StudentLoan::PLAN_1_AND_2)
-              .and change { claim.eligibility.award_amount }.from(50).to(300)
+              .and change { claim.award_amount }.from(50).to(300)
           end
 
           it "creates an ammendment" do
@@ -358,7 +358,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
               )
               .and not_change { claim.reload.has_student_loan }
               .and not_change { claim.student_loan_plan }
-              .and not_change { claim.eligibility.award_amount }
+              .and not_change { claim.award_amount }
           end
         end
 

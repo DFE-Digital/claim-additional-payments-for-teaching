@@ -84,7 +84,7 @@ module Admin
     def admin_student_loan_details(claim)
       [].tap do |a|
         if claim.policy == Policies::StudentLoans
-          a << [translate("student_loans.admin.student_loan_repayment_amount"), number_to_currency(claim.eligibility.award_amount)]
+          a << [translate("student_loans.admin.student_loan_repayment_amount"), number_to_currency(claim.award_amount)]
         end
         a << [translate("student_loans.admin.student_loan_repayment_plan"), claim.student_loan_plan&.humanize]
       end

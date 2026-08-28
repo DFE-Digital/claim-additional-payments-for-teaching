@@ -82,7 +82,7 @@ module Policies
         [
           [
             I18n.t("further_education_payments.policy_short_name"),
-            number_to_currency(eligibility.award_amount, precision: 0)
+            number_to_currency(eligibility.claim.award_amount, precision: 0)
           ]
         ]
       end

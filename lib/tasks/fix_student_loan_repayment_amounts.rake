@@ -14,7 +14,7 @@ task fix_tslr_student_loan_amounts: :environment do |task, args|
 
   puts "#{claims.count} claims to update"
   claims.each do |claim|
-    old_amount = claim.eligibility.award_amount
+    old_amount = claim.award_amount
     new_amount = StudentLoansData.where(nino: claim.national_insurance_number, date_of_birth: claim.date_of_birth).total_repayment_amount
 
     if new_amount != old_amount
