@@ -221,4 +221,8 @@ module FeatureHelpers
       "//h2[contains(@class, 'app-task-list__section') and contains(., '#{task_name}')]/following-sibling::ul//strong[contains(@class, 'govuk-tag')]"
     ).text
   end
+
+  def tri_start_year
+    Policies::TargetedRetentionIncentivePayments::POLICY_START_YEAR.to_s(:long)
+  end
 end

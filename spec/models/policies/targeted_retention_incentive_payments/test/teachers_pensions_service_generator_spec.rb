@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.describe Policies::TargetedRetentionIncentivePayments::Test::TeachersPensionsServiceGenerator do
+  let(:current_year) do
+    AcademicYear.current.start_year
+  end
+
   let!(:eligible_school) do
     create(
       :school,
@@ -47,20 +51,20 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::Test::TeachersPensi
 
     it "returns correct output" do
       expected = <<STRING.gsub(/^\s+/, "")
-       3013047,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013048,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013049,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013050,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013051,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013052,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1002,#{ineligible_school.establishment_number},
-       3013053,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013054,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013055,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013056,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013057,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013058,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013059,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013060,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013047,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013048,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013049,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013050,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013051,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013052,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1002,#{ineligible_school.establishment_number},
+       3013053,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013054,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013055,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013056,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013057,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013058,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013059,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013060,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
 STRING
 
       expect(subject.to_csv.to_s).to end_with(expected)
@@ -71,20 +75,20 @@ STRING
     it "writes csv to disk" do
       expected = <<STRING.gsub(/^\s+/, "")
        Teacher reference number,NINO,Start Date,End Date,Employer ID,LA URN,School URN
-       3013047,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013048,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013049,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013050,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013051,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013052,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1002,#{ineligible_school.establishment_number},
-       3013053,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013054,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013055,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013056,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013057,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013058,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013059,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
-       3013060,2025-04-05 00:00:00 +0100,2024-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013047,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013048,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013049,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013050,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013051,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013052,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1002,#{ineligible_school.establishment_number},
+       3013053,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013054,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013055,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013056,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013057,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013058,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013059,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
+       3013060,#{current_year}-04-05 00:00:00 +0100,#{current_year - 1}-04-06 00:00:00 +0100,,1001,#{eligible_school.establishment_number},
 STRING
 
       file = described_class.to_file

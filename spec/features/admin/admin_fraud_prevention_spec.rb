@@ -199,7 +199,7 @@ RSpec.feature "Admin fraud prevention" do
     click_on "Continue"
 
     # /targeted-retention-incentive-payments/itt-year
-    choose "2020 to 2021"
+    choose tri_start_year.to_s
     click_on "Continue"
 
     # /targeted-retention-incentive-payments/eligible-itt-subject

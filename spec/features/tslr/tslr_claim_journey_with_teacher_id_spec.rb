@@ -6,8 +6,8 @@ RSpec.feature "TSLR journey with Teacher ID" do
 
   let!(:journey_configuration) { create(:journey_configuration, :student_loans) }
   let!(:school) { create(:school, :student_loans_eligible) }
-  let(:eligible_itt_years) { Policies::TargetedRetentionIncentivePayments.selectable_itt_years_for_claim_year(journey_configuration.current_academic_year) }
-  let(:academic_date) { Date.new(eligible_itt_years.first.start_year, 12, 1) }
+  let(:eligible_itt_year) { Policies::StudentLoans::POLICY_END_YEAR.start_year }
+  let(:academic_date) { Date.new(eligible_itt_year, 12, 1) }
   let(:itt_year) { AcademicYear.for(academic_date) }
   let(:trn) { 1234567 }
   let(:date_of_birth) { "1981-01-01" }
