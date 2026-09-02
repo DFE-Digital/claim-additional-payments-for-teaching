@@ -765,6 +765,130 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
         end
       end
     end
+
+    context "scrubbing after 6 years when the claim has already been scrubbed" do
+      before do |example|
+        travel_to(Time.utc(2026, 9, 1, 12, 0, 0)) do
+          claim
+
+          perform_enqueued_jobs do
+            described_class.perform_now
+          end
+
+          claim.reload
+        end
+
+        travel_to(Time.utc(2030, 9, 1, 12, 0, 0)) do
+          claim
+
+          perform_enqueued_jobs do
+            described_class.perform_now
+          end
+
+          claim.reload
+        end
+      end
+
+      it "scrubs all pii attributes" do
+        expect(claim.first_name).to be nil
+        expect(claim.middle_name).to be nil
+        expect(claim.surname).to be nil
+        expect(claim.date_of_birth).to be nil
+        expect(claim.address_line_1).to be nil
+        expect(claim.address_line_2).to be nil
+        expect(claim.address_line_3).to be nil
+        expect(claim.address_line_4).to be nil
+        expect(claim.postcode).to be nil
+        expect(claim.national_insurance_number).to be nil
+        expect(claim.mobile_number).to be nil
+        expect(claim.hmrc_bank_validation_responses).to be nil
+        expect(claim.payroll_gender).to eq claim_attributes.fetch(:payroll_gender)
+        expect(claim.onelogin_credentials).to be nil
+        expect(claim.onelogin_idv_date_of_birth).to be nil
+        expect(claim.onelogin_idv_first_name).to be nil
+        expect(claim.onelogin_idv_full_name).to be nil
+        expect(claim.onelogin_idv_last_name).to be nil
+        expect(claim.onelogin_idv_return_codes).to be nil
+        expect(claim.onelogin_uid).to be nil
+        expect(claim.onelogin_user_info).to be nil
+        expect(claim.email_address).to be nil
+        expect(claim.bank_sort_code).to be nil
+        expect(claim.bank_account_number).to be nil
+        expect(claim.banking_name).to be nil
+
+        eligibility = claim.eligibility
+
+        expect(eligibility.claimant_date_of_birth).to be nil
+        expect(eligibility.claimant_national_insurance_number).to be nil
+        expect(eligibility.claimant_passport_number).to be nil
+        expect(eligibility.claimant_postcode).to be nil
+        expect(eligibility.passport_number).to be nil
+        expect(eligibility.provider_verification_claimant_date_of_birth).to be nil
+        expect(eligibility.provider_verification_claimant_email).to be nil
+        expect(eligibility.provider_verification_claimant_national_insurance_number).to be nil
+        expect(eligibility.provider_verification_claimant_postcode).to be nil
+        expect(eligibility.teacher_reference_number).to be nil
+        expect(eligibility.verification).to be nil
+        expect(eligibility.work_email).to be nil
+        expect(eligibility.provider_assigned_to_id).to eq nil
+
+        expect(eligibility.provider_verification_verified_by_id).to eq eligibility_attributes.fetch(:provider_verification_verified_by_id)
+        expect(eligibility.award_amount).to eq eligibility_attributes.fetch(:award_amount)
+        expect(eligibility.building_construction_courses).to eq eligibility_attributes.fetch(:building_construction_courses)
+        expect(eligibility.chemistry_courses).to eq eligibility_attributes.fetch(:chemistry_courses)
+        expect(eligibility.claimant_identity_verified_at).to eq eligibility_attributes.fetch(:claimant_identity_verified_at)
+        expect(eligibility.claimant_valid_passport).to eq eligibility_attributes.fetch(:claimant_valid_passport)
+        expect(eligibility.computing_courses).to eq eligibility_attributes.fetch(:computing_courses)
+        expect(eligibility.contract_type).to eq eligibility_attributes.fetch(:contract_type)
+        expect(eligibility.early_years_courses).to eq eligibility_attributes.fetch(:early_years_courses)
+        expect(eligibility.engineering_manufacturing_courses).to eq eligibility_attributes.fetch(:engineering_manufacturing_courses)
+        expect(eligibility.fixed_term_full_year).to eq eligibility_attributes.fetch(:fixed_term_full_year)
+        expect(eligibility.flagged_as_duplicate).to eq eligibility_attributes.fetch(:flagged_as_duplicate)
+        expect(eligibility.flagged_as_mismatch_on_teaching_start_year).to eq eligibility_attributes.fetch(:flagged_as_mismatch_on_teaching_start_year)
+        expect(eligibility.flagged_as_previously_start_year_matches_claim_false).to eq eligibility_attributes.fetch(:flagged_as_previously_start_year_matches_claim_false)
+        expect(eligibility.further_education_teaching_start_year).to eq eligibility_attributes.fetch(:further_education_teaching_start_year)
+        expect(eligibility.half_teaching_hours).to eq eligibility_attributes.fetch(:half_teaching_hours)
+        expect(eligibility.hours_teaching_eligible_subjects).to eq eligibility_attributes.fetch(:hours_teaching_eligible_subjects)
+        expect(eligibility.maths_courses).to eq eligibility_attributes.fetch(:maths_courses)
+        expect(eligibility.physics_courses).to eq eligibility_attributes.fetch(:physics_courses)
+        expect(eligibility.possible_school_id).to eq eligibility_attributes.fetch(:possible_school_id)
+        expect(eligibility.provider_verification_chase_email_last_sent_at).to eq eligibility_attributes.fetch(:provider_verification_chase_email_last_sent_at)
+        expect(eligibility.provider_verification_claimant_bank_details_match).to eq eligibility_attributes.fetch(:provider_verification_claimant_bank_details_match)
+        expect(eligibility.provider_verification_claimant_employed_by_college).to eq eligibility_attributes.fetch(:provider_verification_claimant_employed_by_college)
+        expect(eligibility.provider_verification_claimant_employment_check_declaration).to eq eligibility_attributes.fetch(:provider_verification_claimant_employment_check_declaration)
+        expect(eligibility.provider_verification_completed_at).to eq eligibility_attributes.fetch(:provider_verification_completed_at)
+        expect(eligibility.provider_verification_continued_employment).to eq eligibility_attributes.fetch(:provider_verification_continued_employment)
+        expect(eligibility.provider_verification_contract_covers_full_academic_year).to eq eligibility_attributes.fetch(:provider_verification_contract_covers_full_academic_year)
+        expect(eligibility.provider_verification_contract_type).to eq eligibility_attributes.fetch(:provider_verification_contract_type)
+        expect(eligibility.provider_verification_deadline).to eq eligibility_attributes.fetch(:provider_verification_deadline)
+        expect(eligibility.provider_verification_declaration).to eq eligibility_attributes.fetch(:provider_verification_declaration)
+        expect(eligibility.provider_verification_disciplinary_action).to eq eligibility_attributes.fetch(:provider_verification_disciplinary_action)
+        expect(eligibility.provider_verification_email_count).to eq eligibility_attributes.fetch(:provider_verification_email_count)
+        expect(eligibility.provider_verification_email_last_sent_at).to eq eligibility_attributes.fetch(:provider_verification_email_last_sent_at)
+        expect(eligibility.provider_verification_half_teaching_hours).to eq eligibility_attributes.fetch(:provider_verification_half_teaching_hours)
+        expect(eligibility.provider_verification_half_timetabled_teaching_time).to eq eligibility_attributes.fetch(:provider_verification_half_timetabled_teaching_time)
+        expect(eligibility.provider_verification_not_started_qualification_reason_other).to eq eligibility_attributes.fetch(:provider_verification_not_started_qualification_reason_other)
+        expect(eligibility.provider_verification_not_started_qualification_reasons).to eq eligibility_attributes.fetch(:provider_verification_not_started_qualification_reasons)
+        expect(eligibility.provider_verification_performance_measures).to eq eligibility_attributes.fetch(:provider_verification_performance_measures)
+        expect(eligibility.provider_verification_started_at).to eq eligibility_attributes.fetch(:provider_verification_started_at)
+        expect(eligibility.provider_verification_taught_at_least_one_academic_term).to eq eligibility_attributes.fetch(:provider_verification_taught_at_least_one_academic_term)
+        expect(eligibility.provider_verification_teaching_hours_per_week).to eq eligibility_attributes.fetch(:provider_verification_teaching_hours_per_week)
+        expect(eligibility.provider_verification_teaching_qualification).to eq eligibility_attributes.fetch(:provider_verification_teaching_qualification)
+        expect(eligibility.provider_verification_teaching_responsibilities).to eq eligibility_attributes.fetch(:provider_verification_teaching_responsibilities)
+        expect(eligibility.provider_verification_teaching_start_year).to eq eligibility_attributes.fetch(:provider_verification_teaching_start_year)
+        expect(eligibility.provision_search).to eq eligibility_attributes.fetch(:provision_search)
+        expect(eligibility.school_id).to eq eligibility_attributes.fetch(:school_id)
+        expect(eligibility.subject_to_disciplinary_action).to eq eligibility_attributes.fetch(:subject_to_disciplinary_action)
+        expect(eligibility.subject_to_formal_performance_action).to eq eligibility_attributes.fetch(:subject_to_formal_performance_action)
+        expect(eligibility.subjects_taught).to eq eligibility_attributes.fetch(:subjects_taught)
+        expect(eligibility.taught_at_least_one_term).to eq eligibility_attributes.fetch(:taught_at_least_one_term)
+        expect(eligibility.teaching_hours_per_week).to eq eligibility_attributes.fetch(:teaching_hours_per_week)
+        expect(eligibility.teaching_qualification).to eq eligibility_attributes.fetch(:teaching_qualification)
+        expect(eligibility.teaching_responsibilities).to eq eligibility_attributes.fetch(:teaching_responsibilities)
+        expect(eligibility.valid_passport).to eq eligibility_attributes.fetch(:valid_passport)
+        expect(eligibility.work_email_verified).to eq eligibility_attributes.fetch(:work_email_verified)
+      end
+    end
   end
 
   context "when the policy is student loans" do
@@ -1320,7 +1444,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
         nationality: "British",
         one_year: true,
         passport_number: "123456789",
-        previous_year_claim_ids: [create(:claim).id],
+        previous_year_claim_ids: [create(:claim, :approved).id],
         school_headteacher_name: "Seymour Skinner",
         start_date: Date.new(2025, 2, 1),
         state_funded_secondary_school: true,
