@@ -7,7 +7,7 @@ RSpec.describe "SLC (Student Loans Company) data upload " do
   let!(:journey_configuration_ey) { create(:journey_configuration, :early_years_payment_provider_start) }
   let!(:journey_configuration_eytrp) { create(:journey_configuration, :early_years_teachers_financial_incentive_payments) }
 
-  before { @signed_in_user = sign_in_as_service_operator }
+  before { @signed_in_user = sign_in_as_service_admin }
 
   describe "#new" do
     it "shows the upload form" do

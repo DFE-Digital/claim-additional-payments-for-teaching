@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "TPS data upload" do
   before do
-    @signed_in_user = sign_in_as_service_operator
+    @signed_in_user = sign_in_as_service_admin
   end
 
   describe "#new" do

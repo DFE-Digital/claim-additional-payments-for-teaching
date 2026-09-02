@@ -30,7 +30,7 @@ RSpec.feature "Admin fraud prevention" do
         national_insurance_number: "AB123456C"
       )
 
-      sign_in_as_service_operator
+      sign_in_as_service_admin
       visit new_admin_fraud_risk_csv_upload_path
       attach_file "Upload fraud risk CSV file", fraud_risk_csv.path
       click_on "Upload"
@@ -110,7 +110,7 @@ RSpec.feature "Admin fraud prevention" do
   end
 
   it "allows for downloading the csv" do
-    sign_in_as_service_operator
+    sign_in_as_service_admin
     visit new_admin_fraud_risk_csv_upload_path
     attach_file "Upload fraud risk CSV file", fraud_risk_csv.path
     click_on "Upload"
