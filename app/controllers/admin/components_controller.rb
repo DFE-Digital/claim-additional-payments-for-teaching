@@ -49,7 +49,7 @@ module Admin
     end
 
     def open
-      journey = Journeys.for_routing_name(params[:journey])
+      journey = Journeys.available.find { |j| j.routing_name == params[:journey] }
       slug = params[:slug].to_s
 
       if journey.blank? || !journey.slug_sequence::SLUGS.include?(slug)
@@ -82,7 +82,7 @@ module Admin
     end
 
     def load_journey_components
-      Journeys.all.sort_by(&:routing_name).filter_map do |journey|
+      Journeys.available.sort_by(&:routing_name).filter_map do |journey|
         constants = slug_constants_for(journey)
         next if constants.empty?
 

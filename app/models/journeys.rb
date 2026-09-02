@@ -7,6 +7,7 @@ module Journeys
 
   JOURNEYS = [
     TargetedRetentionIncentivePayments,
+    SchoolTargetedRetentionIncentivePayments,
     TeacherStudentLoanReimbursement,
     GetATeacherRelocationPayment,
     FurtherEducationPayments,
@@ -19,6 +20,10 @@ module Journeys
 
   def all
     JOURNEYS
+  end
+
+  def available
+    all.select(&:available?)
   end
 
   def landing_page_journeys
