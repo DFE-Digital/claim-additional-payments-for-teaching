@@ -37,7 +37,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
         mobile_number: "07474000123",
         teacher_id_user_info: {"given_name" => "John"},
         dqt_teacher_status: {"trn" => "1234567"},
-        academic_year: AcademicYear.previous,
+        academic_year: AcademicYear.for(job_run_date).previous,
         email_address: "test@example.com",
         email_verified: true,
         provide_mobile_number: true,
