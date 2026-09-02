@@ -41,7 +41,7 @@ RSpec.feature "Backlinking during a claim" do
     click_on "Continue"
 
     expect(page).to have_content("In which academic year did you complete your undergraduate initial teacher training (ITT)?")
-    choose "2020 to 2021"
+    choose tri_start_year
     click_on "Continue"
 
     expect(page).to have_content("Which subject did you do your undergraduate initial teacher training (ITT) in?")

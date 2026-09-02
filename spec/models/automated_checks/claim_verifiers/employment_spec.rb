@@ -91,8 +91,8 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::Employment do
     context "with no matching Employment record" do
       let!(:data_for_matching) do
         [
-          create(:teachers_pensions_service, :"#{policy_underscored}_unmatched_unmatched_jan_2022"),
-          create(:teachers_pensions_service, :"#{policy_underscored}_unmatched_december_2021")
+          create(:teachers_pensions_service, :"#{policy_underscored}_unmatched_december_2021"),
+          create(:teachers_pensions_service, :"#{policy_underscored}_unmatched_unmatched_jan_2022")
         ]
       end
 

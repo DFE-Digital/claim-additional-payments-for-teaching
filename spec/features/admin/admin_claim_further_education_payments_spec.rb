@@ -229,7 +229,7 @@ RSpec.feature "Admin claim further education payments" do
 
             expect(page).to have_content(
               "A reminder to complete the provider verification check was " \
-              "last sent on 1 September 2025 11:00am"
+              "last sent on 1 September #{AcademicYear.current.start_year} 11:00am"
             )
           end
 
@@ -483,7 +483,7 @@ RSpec.feature "Admin claim further education payments" do
 
               expect(page).to have_content(
                 "This task was performed by an automated check on 9 " \
-                "September 2025 11:00am"
+                "September #{AcademicYear.current.start_year} 11:00am"
               )
             end
           end
@@ -593,7 +593,7 @@ RSpec.feature "Admin claim further education payments" do
               expect(find(".govuk-tag")).to have_text("Failed")
               expect(page).to have_content(
                 "This task was performed by an automated check on 9 " \
-                "September 2025 11:00am"
+                "September #{AcademicYear.current.start_year} 11:00am"
               )
             end
           end
