@@ -140,7 +140,7 @@ module Policies
           provider_verification_teaching_qualification: :retained,
           provider_verification_teaching_responsibilities: :retained,
           provider_verification_teaching_start_year: :retained,
-          provider_verification_verified_by_id: :inactive_claim_submitted_in_prior_academic_term?,
+          provider_verification_verified_by_id: :retained,
           provision_search: :retained,
           redacted_attributes: :retained,
           school_id: :retained,
