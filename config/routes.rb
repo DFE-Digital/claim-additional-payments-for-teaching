@@ -57,7 +57,7 @@ Rails.application.routes.draw do
   end
 
   # Define the generic routes that aren't specific to any given journey
-  scope path: ":journey", constraints: {journey: %r{#{Journeys.all_routing_names.join("|")}}} do
+  scope path: ":journey", constraints: {journey: %r{#{Journeys.all.map(&:routing_name).join("|")}}} do
     get "claim", as: :new_claim, to: "claims#new"
     post "claim", as: :claims, to: "claims#create"
     get "existing-session", as: :existing_session, to: "claims#existing_session"
@@ -122,7 +122,7 @@ Rails.application.routes.draw do
       get "auth/failure", to: "journeys/early_years_teachers_financial_incentive_payments/auth#failure"
     end
 
-    scope path: "/", constraints: {journey: Regexp.new(Journeys.all_routing_names.join("|"))} do
+    scope path: "/", constraints: {journey: Regexp.new(Journeys.all.map(&:routing_name).join("|"))} do
       get "landing-page", to: "static_pages#landing_page", as: :landing_page
     end
   end

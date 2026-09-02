@@ -10,7 +10,7 @@ module JourneyConcern
   end
 
   def journey
-    @journey ||= Journeys.for_routing_name(current_journey_routing_name)
+    @journey ||= Journeys.available.find { |j| j.routing_name == current_journey_routing_name }
   end
 
   def journey_configuration
