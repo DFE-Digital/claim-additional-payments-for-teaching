@@ -5,10 +5,15 @@ RSpec.feature "Admin user session timeout", js: true, flaky: true do
   let(:two_seconds_in_minutes) { 2 / 60.to_f }
 
   before do
+    allow(DfeSignIn::Config.instance).to receive(:bypass?).and_return(true)
+
+    Rails.application.reload_routes!
+
     allow_any_instance_of(Admin::BaseAdminController).to receive(:admin_timeout_in_minutes) { two_seconds_in_minutes }
     allow_any_instance_of(Admin::BaseAdminController).to receive(:timeout_warning_in_minutes) { one_second_in_minutes }
 
-    sign_in_as_service_operator
+    visit admin_sign_in_path
+    click_button "Sign in as service operator (bypass DfE Sign-in)"
   end
 
   scenario "Dialog warns user their session will timeout" do

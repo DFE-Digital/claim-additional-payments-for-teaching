@@ -156,7 +156,7 @@ Rails.application.routes.draw do
     resource :service_overview, only: [:show], path: "service-overview"
 
     get "/auth/sign-in" => "auth#sign_in", :as => :sign_in
-    delete "/auth/sign-out" => "auth#sign_out", :as => :sign_out
+    get "/auth/sign-out" => "auth#sign_out", :as => :sign_out
 
     # DfE Sign-in OpenID routes
     get "/auth/callback", to: "auth#callback"
