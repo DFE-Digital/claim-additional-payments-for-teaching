@@ -353,7 +353,7 @@ shared:
     - half_teaching_hours # boolean, claimant spend at least half teaching hours to relevant groups
     - flagged_as_duplicate # boolean, is this possibly a duplicate
     - provider_verification_email_last_sent_at # datetime, DEPRECATED
-    - provider_verification_chase_email_last_sent_at # datetime, DEPRECATED
+    - provider_verification_chase_email_last_sent_at # datetime, timestamp for FE provider verification
     - teacher_reference_number # string, external identifier
     - provider_verification_email_count # integer, DEPRECATED, how many times have we reminded provider to verify claim
     - claimant_identity_verified_at # datetime, DEPRECATED
