@@ -6,7 +6,7 @@ class Admin::TasksController < Admin::BaseAdminController
 
   def index
     @claim_checking_tasks = ClaimCheckingTasks.new(@claim)
-    @banner_messages = set_banner_messages
+    set_banner_messages
   end
 
   def show
@@ -90,6 +90,12 @@ class Admin::TasksController < Admin::BaseAdminController
     params[:name] == "matching_details" || action_name == "create"
   end
 
+  class BannerMessage < Struct.new(:type, :title, :body, keyword_init: true)
+    def success?
+      type.to_s == "success"
+    end
+  end
+
   def set_banner_messages
     messages = []
 
@@ -112,7 +118,39 @@ class Admin::TasksController < Admin::BaseAdminController
       MSG
     end
 
-    messages
+    @banners = []
+
+    if messages.many?
+      @banners << BannerMessage.new(
+        type: :notification,
+        title: "This claim requires the following to be reviewed:",
+        body: view_context.govuk_list(messages, type: :bullet)
+      )
+    end
+
+    if messages.one?
+      @banners << BannerMessage.new(
+        type: :notification,
+        title: messages.first,
+        body: nil
+      )
+    end
+
+    if (claim_id = flash[:hmrc_bank_verification_claim_id])
+      flash.delete(:hmrc_bank_verification_claim_id)
+
+      claim = Claim.find(claim_id)
+
+      validation = Admin::HmrcBankVerificationPresenter.new(
+        claim.hmrc_bank_validation_responses.last
+      )
+
+      @banners << BannerMessage.new(
+        type: validation.success? ? :success : :notification,
+        title: validation.title,
+        body: view_context.govuk_list(validation.rows)
+      )
+    end
   end
 
   def task_view(task)

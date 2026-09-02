@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Admin claim amendments" do
+RSpec.describe "Admin claim amendments", :with_stubbed_hmrc_client do
   let(:claim) do
     create(
       :claim,
