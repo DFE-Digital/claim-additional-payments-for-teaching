@@ -566,8 +566,8 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
         expect(eligibility.verification).to be nil
         expect(eligibility.work_email).to be nil
         expect(eligibility.provider_assigned_to_id).to eq nil
-        expect(eligibility.provider_verification_verified_by_id).to eq nil
 
+        expect(eligibility.provider_verification_verified_by_id).to eq eligibility_attributes.fetch(:provider_verification_verified_by_id)
         expect(eligibility.award_amount).to eq eligibility_attributes.fetch(:award_amount)
         expect(eligibility.building_construction_courses).to eq eligibility_attributes.fetch(:building_construction_courses)
         expect(eligibility.chemistry_courses).to eq eligibility_attributes.fetch(:chemistry_courses)
@@ -682,8 +682,8 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
           expect(eligibility.verification).to be nil
           expect(eligibility.work_email).to be nil
           expect(eligibility.provider_assigned_to_id).to eq nil
-          expect(eligibility.provider_verification_verified_by_id).to eq nil
 
+          expect(eligibility.provider_verification_verified_by_id).to eq eligibility_attributes.fetch(:provider_verification_verified_by_id)
           expect(eligibility.award_amount).to eq eligibility_attributes.fetch(:award_amount)
           expect(eligibility.building_construction_courses).to eq eligibility_attributes.fetch(:building_construction_courses)
           expect(eligibility.chemistry_courses).to eq eligibility_attributes.fetch(:chemistry_courses)
