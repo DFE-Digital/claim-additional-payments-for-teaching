@@ -1,6 +1,7 @@
 ---
 shared:
   :journey_configurations:
+    - id # uuid, that uniquely identifies this journey configuration
     - routing_name # string, path used in URL for this journey
     - open_for_submissions # boolean, can this journey accept claims
     - availability_message # string, optional message users see when journey is closed
@@ -11,7 +12,7 @@ shared:
     - teacher_id_enabled # boolean, is teacher ID enabled for this journey
     - close_at # datetime, when this journey configuration is scheduled to close
   :reminders:
-    - id # uuid, that uniquely this reminder
+    - id # uuid, that uniquely identifies this reminder
     - created_at # datetime, when this reminder was created
     - updated_at # datetime, when this reminder was last updated
     - email_verified # boolean, has this email address been verified by OTP
@@ -260,7 +261,7 @@ shared:
     - breaks_in_employment # boolean, did claimant have any large gaps in employment
     - employment_history # jsonb, claimants employment history
   :schools:
-    - id # uuid, that internally idenitfies the school
+    - id # uuid, that internally identifies the school
     - urn # string, external school identifier
     - name # string, name of the school
     - street # string, location

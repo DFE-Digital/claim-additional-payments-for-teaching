@@ -11,7 +11,7 @@ module Admin
       with: -> do
         redirect_to(
           edit_admin_journey_configuration_path(
-            Journeys::EarlyYearsPayment::Provider::Authenticated.routing_name
+            journey_configuration
           ),
           alert: "Too many requests"
         )
@@ -27,7 +27,7 @@ module Admin
         @upload_form.run_import!
         flash[:notice] = @upload_form.importer.results_message
 
-        redirect_to edit_admin_journey_configuration_path(Journeys::EarlyYearsPayment::Provider::Authenticated.routing_name)
+        redirect_to edit_admin_journey_configuration_path(journey_configuration)
       end
     end
 
