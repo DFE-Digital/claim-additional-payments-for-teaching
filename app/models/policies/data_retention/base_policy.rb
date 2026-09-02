@@ -25,7 +25,7 @@ module Policies
         data_retention = module_parent #=> Policies::<PolicyName>::DataRetention
         policy = data_retention.module_parent #=> Policies::<PolicyName> eg tri
 
-        claim_scope = Claim
+        base_scope = Claim
           .after_academic_year(AcademicYear.new(2023)) # Don't try and scrub very old claims
           .before_academic_year(AcademicYear.current)
           .joins(
@@ -42,32 +42,34 @@ module Policies
           default_value = Claim.new.send(attr)
 
           if default_value.is_a?(Array)
-            claim_scope.where.not(attr => default_value).where.not(attr => nil)
+            base_scope.where.not(attr => default_value).where.not(attr => nil)
           else
             empty = if !default_value.nil?
               [nil, default_value]
             end
 
-            claim_scope.where.not(attr => empty)
+            base_scope.where.not(attr => empty)
           end
         end.reduce(&:or)
 
         if eligibility_redacted_attributes.any?
-          claim_scope = eligibility_redacted_attributes.map(&:to_s).map do |attr|
+          eligibility_scope = eligibility_redacted_attributes.map(&:to_s).map do |attr|
             default_value = policy::Eligibility.new.send(attr.to_s)
 
             qualified_attribute = "#{policy::Eligibility.table_name}.#{attr}"
 
             if default_value.is_a?(Array)
-              claim_scope.where.not(qualified_attribute => default_value).where.not(qualified_attribute => nil)
+              base_scope.where.not(qualified_attribute => default_value).where.not(qualified_attribute => nil)
             else
               empty = if !default_value.nil?
                 [nil, default_value]
               end
 
-              claim_scope.where.not(qualified_attribute => empty)
+              base_scope.where.not(qualified_attribute => empty)
             end
           end.reduce(&:or)
+
+          claim_scope = claim_scope.or(eligibility_scope)
         end
 
         claim_scope
