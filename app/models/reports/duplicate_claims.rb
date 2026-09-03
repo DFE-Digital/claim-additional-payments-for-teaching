@@ -21,7 +21,7 @@ module Reports
       @claims = Claim
         .includes(:eligibility)
         .approved
-        .where(academic_year: AcademicYear.current)
+        .where(academic_year: [AcademicYear.current, AcademicYear.previous])
         .select { |claim| Claim::MatchingAttributeFinder.new(claim).matching_claims.any? }
     end
 
