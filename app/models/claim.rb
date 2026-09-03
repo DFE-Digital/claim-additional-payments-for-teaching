@@ -475,6 +475,10 @@ class Claim < ApplicationRecord
     most_recent_scheduled_payment_date.present?
   end
 
+  def scrubbed?(key)
+    redacted_attributes.key?(key.to_s)
+  end
+
   private
 
   def one_login_idv_name_match?
