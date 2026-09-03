@@ -511,9 +511,9 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
       end
     end
 
-    context "when the claim is more than 5 academic years old" do
+    context "when the claim is more than 6 academic years old" do
       before do |example|
-        travel_to(Time.utc(2030, 9, 1, 12, 0, 0)) do
+        travel_to(Time.utc(2031, 9, 1, 12, 0, 0)) do
           claim
 
           perform_enqueued_jobs do
@@ -778,7 +778,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
           claim.reload
         end
 
-        travel_to(Time.utc(2030, 9, 1, 12, 0, 0)) do
+        travel_to(Time.utc(2031, 9, 1, 12, 0, 0)) do
           claim
 
           perform_enqueued_jobs do
