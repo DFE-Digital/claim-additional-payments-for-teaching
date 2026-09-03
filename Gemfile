@@ -77,7 +77,7 @@ gem "pagy"
 
 gem "ostruct"
 
-gem "solid_queue", "~> 1.4"
+gem "solid_queue", "~> 1.7"
 gem "mission_control-jobs"
 
 gem "sentry-ruby"
