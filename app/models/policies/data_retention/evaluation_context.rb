@@ -21,8 +21,8 @@ module Policies
         inactive? && claim.academic_year <= (AcademicYear.current - 2)
       end
 
-      def inactive_claim_over_five_years_old?
-        inactive? && claim.academic_year <= (AcademicYear.current - 5)
+      def inactive_claim_over_six_years_old?
+        inactive? && claim.academic_year <= (AcademicYear.current - 6)
       end
 
       def submitted_in_prior_academic_term?
