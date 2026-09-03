@@ -33,6 +33,9 @@
 .env
 google_cloud_storage.json
 
+# Ignore local PII scrubber scripts shared by request only
+/lib/pii_scrubber.rb
+
 # Ignore development certificates
 localhost.crt
 localhost.key

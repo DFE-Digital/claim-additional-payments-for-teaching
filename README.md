@@ -41,6 +41,17 @@ Architecture decision records can be found in the
 - [ShellCheck](https://www.shellcheck.net/)
 - [Yarn](https://yarnpkg.com/en/docs/install)
 
+## PII scrubber
+
+A local PII scrubber is available for sanitising development data. It is not kept in the repository, so ask another developer for it if you need it locally.
+
+To run it locally from the Rails console or a one-off script:
+
+```ruby
+require Rails.root.join("lib/pii_scrubber")
+PiiScrubber.run!
+```
+
 ## Setting up the app locally
 
 1. In order to integrate with DfE Sign-in's Open ID Connect service we are
