@@ -11,7 +11,7 @@ module Admin
       with: -> do
         redirect_to(
           edit_admin_journey_configuration_path(
-            Journeys::FurtherEducationPayments.routing_name
+            journey_configuration
           ),
           alert: "Too many requests"
         )

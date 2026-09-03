@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_18_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_02_144451) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -519,15 +519,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_18_000000) do
     t.index ["current_school_id"], name: "index_irb_eligibilities_on_current_school_id"
   end
 
-  create_table "journey_configurations", primary_key: "routing_name", id: :string, force: :cascade do |t|
+  create_table "journey_configurations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.boolean "automatic_approvals", default: true, null: false
     t.string "availability_message"
     t.datetime "close_at"
     t.datetime "created_at", precision: nil, null: false
     t.string "current_academic_year", limit: 9
     t.boolean "open_for_submissions", default: true, null: false
+    t.string "routing_name", null: false
     t.boolean "teacher_id_enabled", default: true
     t.datetime "updated_at", precision: nil, null: false
+    t.index ["id"], name: "index_journey_configurations_on_id", unique: true
   end
 
   create_table "journeys_service_access_codes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
