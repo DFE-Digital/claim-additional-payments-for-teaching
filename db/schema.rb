@@ -638,6 +638,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_02_144451) do
     t.index ["updated_at"], name: "index_payroll_runs_on_updated_at"
   end
 
+  create_table "policies_data_retention_recoveries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "claim_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "destroy_at", null: false
+    t.jsonb "payload"
+    t.datetime "updated_at", null: false
+    t.index ["claim_id"], name: "index_policies_data_retention_recoveries_on_claim_id"
+  end
+
   create_table "reminders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "deleted_at"
@@ -999,6 +1008,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_02_144451) do
   add_foreign_key "payroll_runs", "dfe_sign_in_users", column: "confirmation_report_uploaded_by_id"
   add_foreign_key "payroll_runs", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "payroll_runs", "dfe_sign_in_users", column: "downloaded_by_id"
+  add_foreign_key "policies_data_retention_recoveries", "claims"
   add_foreign_key "schools", "local_authority_districts"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade

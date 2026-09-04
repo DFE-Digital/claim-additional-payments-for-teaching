@@ -84,6 +84,10 @@ module Policies
         claim_attribute_changed?(attr) || eligibility_attribute_changed?(attr)
       end
 
+      def any_changes?
+        expired_claim_attributes.any? || expired_eligibility_attributes.any?
+      end
+
       private
 
       def claim_attribute_changed?(attr)
