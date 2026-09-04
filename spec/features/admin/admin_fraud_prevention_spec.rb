@@ -5,6 +5,10 @@ RSpec.feature "Admin fraud prevention" do
     File.open(Rails.root.join("spec", "fixtures", "files", "fraud_risk.csv"))
   end
 
+  before do
+    allow(AcademicYear).to receive(:current).and_return(AcademicYear.new(2024))
+  end
+
   context "when updating the list of flagged attributes" do
     it "flags any matching claims" do
       flagged_claim_trn = create(
