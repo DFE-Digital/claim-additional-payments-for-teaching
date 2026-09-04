@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Policies::DataRetention::EvaluationContext do
+RSpec.describe DataRetention::EvaluationContext do
   let(:evaluation_context) { described_class.new(claim) }
 
   let(:current_academic_year) { AcademicYear.new(2025) }
