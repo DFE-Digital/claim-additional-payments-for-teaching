@@ -1,7 +1,7 @@
 module Policies
-  module EarlyYearsPayments
+  module InternationalRelocationPayments
     module DataRetention
-      class Policy < Policies::DataRetention::BasePolicy
+      class RetentionSchedule < ::DataRetention::BaseSchedule
         self.claim_attributes = {
           id: :retained,
           academic_year: :retained,
@@ -14,7 +14,7 @@ module Policies
           bank_or_building_society: :retained,
           bank_sort_code: :inactive_claim_over_six_years_old?,
           banking_name: :inactive_claim_over_six_years_old?,
-          building_society_roll_number: :inactive_claim_submitted_in_prior_academic_term?,
+          building_society_roll_number: :inactive_claim_over_six_years_old?,
           claimant_declaration: :retained,
           column_to_remove_teacher_reference_number: :retained,
           created_at: :retained,
@@ -89,32 +89,23 @@ module Policies
           id: :retained,
           created_at: :retained,
           updated_at: :retained,
-          alternative_idv_claimant_bank_details_match: :retained,
-          alternative_idv_claimant_date_of_birth: :inactive_claim_submitted_in_prior_academic_term?,
-          alternative_idv_claimant_email: :inactive_claim_submitted_in_prior_academic_term?,
-          alternative_idv_claimant_employed_by_nursery: :retained,
-          alternative_idv_claimant_employment_check_declaration: :retained,
-          alternative_idv_claimant_national_insurance_number: :inactive_claim_submitted_in_prior_academic_term?,
-          alternative_idv_claimant_postcode: :inactive_claim_submitted_in_prior_academic_term?,
-          alternative_idv_completed_at: :retained,
-          alternative_idv_reference: :retained,
+          application_route: :retained,
           award_amount: :retained,
-          child_facing_confirmation_given: :retained,
-          nursery_urn: :retained,
-          practitioner_claim_started_at: :retained,
-          practitioner_first_name: :inactive_claim_submitted_in_prior_academic_term?,
-          practitioner_reminder_email_last_sent_at: :retained,
-          practitioner_reminder_email_sent_count: :retained,
-          practitioner_surname: :inactive_claim_submitted_in_prior_academic_term?,
-          provider_claim_submitted_at: :retained,
-          provider_email_address: :inactive_claim_submitted_in_prior_academic_term?,
-          provider_entered_contract_type: :retained,
-          provider_six_month_employment_reminder_sent_at: :retained,
+          breaks_in_employment: :retained,
+          changed_workplace_or_new_contract: :retained,
+          current_school_id: :retained,
+          date_of_entry: :retained,
+          employment_history: :retained,
+          nationality: :retained,
+          one_year: :retained,
+          passport_number: :inactive_claim_over_two_years_old?,
+          previous_year_claim_ids: :retained,
           redacted_attributes: :retained,
-          returner_contract_type: :retained,
-          returner_worked_with_children: :retained,
-          returning_within_6_months: :retained,
-          start_date: :retained
+          school_headteacher_name: :inactive_claim_over_two_years_old?,
+          start_date: :retained,
+          state_funded_secondary_school: :retained,
+          subject: :retained,
+          visa_type: :retained
         }
       end
     end
