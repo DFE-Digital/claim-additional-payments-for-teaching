@@ -142,7 +142,7 @@ RSpec.describe "Admin page", type: :request do
   end
 
   def journey_component_routes
-    Journeys.all.sort_by(&:routing_name).flat_map do |journey|
+    Journeys.available.sort_by(&:routing_name).flat_map do |journey|
       journey.slug_sequence.constants(false).flat_map do |constant_name|
         constant_value = journey.slug_sequence.const_get(constant_name)
         next [] unless constant_value.is_a?(Array)

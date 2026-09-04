@@ -7,6 +7,7 @@ RSpec.describe Journeys do
     it "returns all the journeys" do
       expect(described_class.all).to eq([
         Journeys::TargetedRetentionIncentivePayments,
+        Journeys::SchoolTargetedRetentionIncentivePayments,
         Journeys::TeacherStudentLoanReimbursement,
         Journeys::GetATeacherRelocationPayment,
         Journeys::FurtherEducationPayments,
@@ -23,6 +24,7 @@ RSpec.describe Journeys do
     it "returns all the journeys' routing names" do
       expect(described_class.all_routing_names).to eq([
         Journeys::TargetedRetentionIncentivePayments.routing_name,
+        Journeys::SchoolTargetedRetentionIncentivePayments.routing_name,
         Journeys::TeacherStudentLoanReimbursement.routing_name,
         Journeys::GetATeacherRelocationPayment.routing_name,
         Journeys::FurtherEducationPayments.routing_name,

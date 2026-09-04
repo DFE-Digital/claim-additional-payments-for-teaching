@@ -108,10 +108,15 @@ RSpec.describe AutomatedChecks::ClaimVerifier do
       end
 
       context "when the Claim#policy VERIFIERS is not present" do
-        let(:mock_policy) { Class.new }
+        let(:policy_with_no_verifiers) do
+          Module.new do
+            include BasePolicy
+            extend self
+          end
+        end
 
         before do
-          allow(claim).to receive(:policy).and_return(mock_policy)
+          allow(claim).to receive(:policy).and_return(policy_with_no_verifiers)
         end
 
         it { is_expected.to eq(0) }
