@@ -334,6 +334,7 @@ module Policies
 
       def provider_and_claimant_names_match?
         return false unless verified?
+        return false if claim.scrubbed?(:first_name) || claim.scrubbed?(:surname)
 
         provider_user.given_name&.downcase == claim.first_name.downcase &&
           provider_user.family_name&.downcase == claim.surname.downcase
@@ -341,6 +342,7 @@ module Policies
 
       def provider_and_claimant_emails_match?
         return false unless verified?
+        return false if claim.scrubbed?(:email_address)
 
         provider_user&.email&.downcase == claim.email_address.downcase
       end
