@@ -1,0 +1,175 @@
+name: Auto-add Dependabot PRs to project
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review]
+
+jobs:
+  add-to-project:
+    if: github.event.pull_request.user.login == 'app/dependabot' || github.event.pull_request.user.login == 'dependabot[bot]' || github.event.pull_request.user.login == 'app/dependabot-preview' || github.event.pull_request.user.login == '1993jamesgrant'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      repository-projects: write
+
+    steps:
+      - name: Add label and project item
+        uses: actions/github-script@v7
+        env:
+          PROJECT_NUMBER: "101"
+        with:
+          github-token: ${{ secrets.PROJECT_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const projectNumber = Number(process.env.PROJECT_NUMBER);
+            const prNumber = context.payload.pull_request.number;
+            const prNodeId = context.payload.pull_request.node_id;
+
+            await github.rest.issues.addLabels({
+              owner,
+              repo,
+              issue_number: prNumber,
+              labels: ['Development']
+            });
+
+            const orgQuery = `
+              query($org:String!, $projectNumber:Int!) {
+                organization(login:$org) {
+                  projectV2(number:$projectNumber) {
+                    id
+                  }
+                }
+              }
+            `;
+
+            const orgResult = await github.graphql(orgQuery, { org: owner, projectNumber });
+            const projectId = orgResult.organization.projectV2.id;
+
+            const existingItemsResult = await github.graphql(`
+              query($projectId: ID!) {
+                node(id: $projectId) {
+                  ... on ProjectV2 {
+                    items(first: 100) {
+                      nodes {
+                        id
+                        content {
+                          ... on PullRequest {
+                            id
+                          }
+                          ... on Issue {
+                            id
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            `, { projectId });
+
+            const existingItem = existingItemsResult.node.items.nodes.find(item => item.content?.id === prNodeId);
+            const itemId = existingItem?.id || (
+              await github.graphql(
+                `mutation($projectId:ID!, $contentId:ID!) {
+                  addProjectV2ItemById(input: {projectId: $projectId, contentId: $contentId}) {
+                    item {
+                      id
+                    }
+                  }
+                }`,
+                {
+                  projectId,
+                  contentId: prNodeId
+                }
+              )
+            ).addProjectV2ItemById.item.id;
+
+            if (existingItem) {
+              core.info(`PR #${prNumber} already exists in project ${projectNumber}; updating the existing item.`);
+            } else {
+              core.info(`Added PR #${prNumber} to project ${projectNumber}.`);
+            }
+
+            const fieldData = await github.graphql(`
+              query($projectId: ID!) {
+                node(id: $projectId) {
+                  ... on ProjectV2 {
+                    fields(first: 50) {
+                      nodes {
+                        ... on ProjectV2SingleSelectField {
+                          id
+                          name
+                          options {
+                            id
+                            name
+                          }
+                        }
+                        ... on ProjectV2TextField {
+                          id
+                          name
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            `, { projectId });
+
+            const statusField = fieldData.node.fields.nodes.find(field => field.name === 'Status');
+            const backlogOption = statusField.options.find(option => option.name === 'Backlog');
+
+            await github.graphql(`
+              mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+                updateProjectV2ItemFieldValue(input: {
+                  projectId: $projectId,
+                  itemId: $itemId,
+                  fieldId: $fieldId,
+                  value: { singleSelectOptionId: $optionId }
+                }) {
+                  projectV2Item {
+                    id
+                  }
+                }
+              }
+            `, {
+              projectId,
+              itemId,
+              fieldId: statusField.id,
+              optionId: backlogOption.id
+            });
+
+            const descriptionField = fieldData.node.fields.nodes.find(field => field.name === 'Description');
+            if (!descriptionField) {
+              throw new Error("Project field 'Description' not found.");
+            }
+
+            const description = [
+              `Dependabot PR #${prNumber}`,
+              context.payload.pull_request.title,
+              context.payload.pull_request.html_url
+            ].join('\n\n');
+
+            await github.graphql(`
+              mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $text: String!) {
+                updateProjectV2ItemFieldValue(input: {
+                  projectId: $projectId,
+                  itemId: $itemId,
+                  fieldId: $fieldId,
+                  value: { text: $text }
+                }) {
+                  projectV2Item {
+                    id
+                  }
+                }
+              }
+            `, {
+              projectId,
+              itemId,
+              fieldId: descriptionField.id,
+              text: description
+            });
+
+            core.info(`Added PR #${prNumber} to project ${projectNumber}, labelled it Development, set Backlog, and added the project description.`);
