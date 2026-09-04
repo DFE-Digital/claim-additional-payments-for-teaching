@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pull-requests: read
+      pull-requests: write
       issues: write
       repository-projects: write
 
@@ -20,7 +20,7 @@ jobs:
         env:
           PROJECT_NUMBER: "101"
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.PROJECT_TOKEN }}
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
