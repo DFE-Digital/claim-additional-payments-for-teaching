@@ -1,10 +1,10 @@
 module AutomatedChecks
   class ClaimVerifier
     def initialize(claim:, dqt_teacher_status:, admin_user: nil, verifiers: nil)
-      self.admin_user = admin_user
-      self.claim = claim
-      self.dqt_teacher_status = dqt_teacher_status
-      self.verifiers = verifiers || build_verifiers
+      @admin_user = admin_user
+      @claim = claim
+      @dqt_teacher_status = dqt_teacher_status
+      @verifiers = verifiers || build_verifiers
     end
 
     def perform
@@ -18,9 +18,7 @@ module AutomatedChecks
     attr_accessor :admin_user, :claim, :dqt_teacher_status, :verifiers
 
     def build_verifiers
-      return [] unless claim.policy.const_defined?(:VERIFIERS)
-
-      claim.policy::VERIFIERS.map do |verifier|
+      claim.policy.verifiers_for_claim(claim).map do |verifier|
         args = verifier.instance_method(:initialize).parameters.map do |params|
           key = params[-1]
           value = send(key)

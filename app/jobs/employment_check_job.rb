@@ -7,11 +7,12 @@ class EmploymentCheckJob < ApplicationJob
     end
 
     claims_without_tasks = claims_awaiting_decision
-      .with_verifier(AutomatedChecks::ClaimVerifiers::Employment)
       .awaiting_task("employment")
       .includes(eligibility: [:current_school, :claim_school])
 
     claims_without_tasks.each do |claim|
+      next unless claim.policy.has_verifier_for_claim?(claim:, verifier: AutomatedChecks::ClaimVerifiers::Employment)
+
       AutomatedChecks::ClaimVerifiers::Employment.new(claim:).perform
     end
   end

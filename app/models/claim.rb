@@ -180,10 +180,6 @@ class Claim < ApplicationRecord
     by_policies(Policies.all.select { |p| p.require_in_progress_update_emails? })
   }
 
-  scope :with_verifier, ->(verifier) do
-    by_policies(Policies.all.select { it.has_verifier?(verifier) })
-  end
-
   def award_amount
     read_attribute(:award_amount) || eligibility.award_amount
   end

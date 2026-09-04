@@ -110,7 +110,13 @@ module BasePolicy
     self::AdminTasksPresenter.new(claim)
   end
 
-  def has_verifier?(verifier)
-    self::VERIFIERS.include?(verifier)
+  def has_verifier_for_claim?(verifier:, claim:)
+    verifiers_for_claim(claim).include?(verifier)
+  end
+
+  def verifiers_for_claim(claim)
+    return [] unless claim.policy.const_defined?(:VERIFIERS)
+
+    self::VERIFIERS
   end
 end
