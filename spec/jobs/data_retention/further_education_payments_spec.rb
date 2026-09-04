@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Policies::DataRetention::PoliciesJob do
+RSpec.describe DataRetention::PoliciesJob do
   before do
     FeatureFlag.enable!(:apply_data_retention_policy)
   end

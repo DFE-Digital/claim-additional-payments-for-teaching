@@ -8,27 +8,27 @@ RSpec.describe "All policies have a data retention policy for all attributes" do
   end
 
   Policies.all.each do |policy|
-    describe "#{policy} data retention policy" do
-      it "has a data retention policy for all attributes" do
+    describe "#{policy} data retention schedule" do
+      it "has a data retention schedule for all attributes" do
         expect(
-          Object.const_defined?("Policies::#{policy}::DataRetention::Policy")
+          Object.const_defined?("Policies::#{policy}::DataRetention::RetentionSchedule")
         ).to be(true), <<~TEXT
-          Policies::#{policy} does not have a data retention policy
-          Create a new `Policies::#{policy}::DataRetention::Policy`
+          Policies::#{policy} does not have a data retention schedule
+          Create a new `Policies::#{policy}::DataRetention::RetentionSchedule`
           class.
         TEXT
 
-        data_retention_policy = policy::DataRetention::Policy
+        retention_schedule = policy::DataRetention::RetentionSchedule
 
         Claim.column_names.each do |name|
           next if deprecated_attributes[policy]&.include?(name)
 
           expect(
-            data_retention_policy.claim_attributes.keys
+            retention_schedule.claim_attributes.keys
           ).to include(name.to_sym), <<~TEXT
-            Expected Policies::#{policy}::DataRetention::Policy to define a
+            Expected Policies::#{policy}::DataRetention::RetentionSchedule to define a
             retention period for Claim attribute #{name}.
-            Update Policies::#{policy}::DataRetention::Policy.claim_attributes
+            Update Policies::#{policy}::DataRetention::RetentionSchedule.claim_attributes
             with a retention period for #{name}.
           TEXT
         end
@@ -37,12 +37,12 @@ RSpec.describe "All policies have a data retention policy for all attributes" do
           next if deprecated_attributes[policy]&.include?(name)
 
           expect(
-            data_retention_policy.eligibility_attributes.keys
+            retention_schedule.eligibility_attributes.keys
           ).to include(name.to_sym), <<~TEXT
-            Expected Policies::#{policy}::DataRetention::Policy to define a
+            Expected Policies::#{policy}::DataRetention::RetentionSchedule to define a
             retention period for Eligibility attribute #{name}.
             Update
-            Policies::#{policy}::DataRetention::Policy.eligibility_attributes
+            Policies::#{policy}::DataRetention::RetentionSchedule.eligibility_attributes
             with a retention period for #{name}.
           TEXT
         end

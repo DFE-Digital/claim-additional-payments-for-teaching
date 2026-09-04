@@ -1,7 +1,7 @@
 module Policies
-  module EarlyCareerPayments
+  module InternationalRelocationPayments
     module DataRetention
-      class Policy < Policies::DataRetention::BasePolicy
+      class RetentionSchedule < ::DataRetention::BaseSchedule
         self.claim_attributes = {
           id: :retained,
           academic_year: :retained,
@@ -10,11 +10,11 @@ module Policies
           address_line_3: :inactive_claim_over_six_years_old?,
           address_line_4: :inactive_claim_over_six_years_old?,
           assigned_to_id: :retained,
-          bank_account_number: :inactive_claim_submitted_in_prior_academic_term?,
+          bank_account_number: :inactive_claim_over_six_years_old?,
           bank_or_building_society: :retained,
           bank_sort_code: :inactive_claim_over_six_years_old?,
           banking_name: :inactive_claim_over_six_years_old?,
-          building_society_roll_number: :inactive_claim_submitted_in_prior_academic_term?,
+          building_society_roll_number: :inactive_claim_over_six_years_old?,
           claimant_declaration: :retained,
           column_to_remove_teacher_reference_number: :retained,
           created_at: :retained,
@@ -87,24 +87,25 @@ module Policies
 
         self.eligibility_attributes = {
           id: :retained,
-          award_amount: :retained,
           created_at: :retained,
+          updated_at: :retained,
+          application_route: :retained,
+          award_amount: :retained,
+          breaks_in_employment: :retained,
+          changed_workplace_or_new_contract: :retained,
           current_school_id: :retained,
-          eligible_itt_subject: :retained,
-          employed_as_supply_teacher: :retained,
-          employed_directly: :retained,
-          has_entire_term_contract: :retained,
-          induction_completed: :retained,
-          itt_academic_year: :retained,
-          nqt_in_academic_year_after_itt: :retained,
-          qualification: :retained,
+          date_of_entry: :retained,
+          employment_history: :retained,
+          nationality: :retained,
+          one_year: :retained,
+          passport_number: :inactive_claim_over_two_years_old?,
+          previous_year_claim_ids: :retained,
           redacted_attributes: :retained,
-          school_somewhere_else: :retained,
-          subject_to_disciplinary_action: :retained,
-          subject_to_formal_performance_action: :retained,
-          teacher_reference_number: :inactive_claim_over_six_years_old?,
-          teaching_subject_now: :retained,
-          updated_at: :retained
+          school_headteacher_name: :inactive_claim_over_two_years_old?,
+          start_date: :retained,
+          state_funded_secondary_school: :retained,
+          subject: :retained,
+          visa_type: :retained
         }
       end
     end

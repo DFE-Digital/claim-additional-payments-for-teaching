@@ -1,6 +1,6 @@
 production: &production
   apply_data_retention_policy:
-    class: Policies::DataRetention::PoliciesJob
+    class: DataRetention::PoliciesJob
     schedule: "30 5 * * 7" # At 05:30 AM, Sundays
   auto_approve_claims:
     class: AutoApproveClaimsJob
@@ -36,7 +36,7 @@ production: &production
     class: PurgeUnsubmittedClaimsJob
     schedule: "0 0 * * *"
   remove_recovery_records:
-    class: Policies::DataRetention::RemoveRecoveryRecordsJob
+    class: DataRetention::RemoveRecoveryRecordsJob
     schedule: "30 1 * * 0"
   school_data_import:
     class: SchoolDataImporterJob
