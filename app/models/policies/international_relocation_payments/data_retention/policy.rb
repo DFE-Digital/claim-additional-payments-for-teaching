@@ -81,7 +81,8 @@ module Policies
           surname: :inactive_claim_over_two_years_old?,
           teacher_id_user_info: :inactive_claim_submitted_in_prior_academic_term?,
           updated_at: :retained,
-          verified_at: :retained
+          verified_at: :retained,
+          award_amount: :retained
         }
 
         self.eligibility_attributes = {
