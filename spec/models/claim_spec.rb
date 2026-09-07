@@ -617,6 +617,96 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  describe "#most_recent_scheduled_payment_date" do
+    let(:claim) { create(:claim, :approved) }
+
+    context "when the claim has no payments or topups" do
+      it "returns nil" do
+        expect(claim.most_recent_scheduled_payment_date).to be_nil
+      end
+    end
+
+    context "when the claim has one payment" do
+      it "returns the payment's scheduled_payment_date" do
+        create(
+          :payment,
+          claims: [claim],
+          scheduled_payment_date: Date.new(2024, 3, 1)
+        )
+
+        expect(claim.most_recent_scheduled_payment_date).to eq(Date.new(2024, 3, 1))
+      end
+    end
+
+    context "when the claim has multiple payments" do
+      it "returns the most recent scheduled_payment_date" do
+        earlier_payroll_run = create(:payroll_run, created_at: 2.months.ago)
+        create(
+          :payment,
+          claims: [claim],
+          payroll_run: earlier_payroll_run,
+          scheduled_payment_date: Date.new(2024, 3, 1)
+        )
+
+        later_payroll_run = create(:payroll_run, created_at: 1.month.ago)
+        create(
+          :payment,
+          claims: [claim],
+          payroll_run: later_payroll_run,
+          scheduled_payment_date: Date.new(2024, 6, 1)
+        )
+
+        expect(claim.most_recent_scheduled_payment_date).to eq(Date.new(2024, 6, 1))
+      end
+    end
+
+    context "when the claim has multiple payments and one of the payments is topped up" do
+      context "when the top up is the most recent payment" do
+        it "returns the top up payment's scheduled_payment_date" do
+          earlier_payroll_run = create(:payroll_run, created_at: 2.months.ago)
+          create(
+            :payment,
+            claims: [claim],
+            payroll_run: earlier_payroll_run,
+            scheduled_payment_date: Date.new(2024, 3, 1)
+          )
+
+          later_payroll_run = create(:payroll_run, created_at: 1.month.ago)
+          topup_payment = create(
+            :payment,
+            payroll_run: later_payroll_run,
+            scheduled_payment_date: Date.new(2024, 9, 1)
+          )
+          create(:topup, claim: claim, payment: topup_payment)
+
+          expect(claim.most_recent_scheduled_payment_date).to eq(Date.new(2024, 9, 1))
+        end
+      end
+
+      context "when a direct payment is more recent than the top up's payment" do
+        it "returns the direct payment's scheduled_payment_date" do
+          earlier_payroll_run = create(:payroll_run, created_at: 2.months.ago)
+          create(
+            :payment,
+            claims: [claim],
+            payroll_run: earlier_payroll_run,
+            scheduled_payment_date: Date.new(2024, 9, 1)
+          )
+
+          later_payroll_run = create(:payroll_run, created_at: 1.month.ago)
+          topup_payment = create(
+            :payment,
+            payroll_run: later_payroll_run,
+            scheduled_payment_date: Date.new(2024, 3, 1)
+          )
+          create(:topup, claim: claim, payment: topup_payment)
+
+          expect(claim.most_recent_scheduled_payment_date).to eq(Date.new(2024, 9, 1))
+        end
+      end
+    end
+  end
+
   describe "#full_name" do
     it "joins the first name and surname together" do
       expect(Claim.new(first_name: "Isambard", surname: "Brunel").full_name).to eq "Isambard Brunel"
