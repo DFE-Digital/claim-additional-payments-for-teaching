@@ -457,7 +457,18 @@ class Claim < ApplicationRecord
     @claim_checking_tasks ||= policy::ClaimCheckingTasks.new(self)
   end
 
+  def assign_new_reference
+    self.reference = generate_reference
+  end
+
   private
+
+  def generate_reference
+    loop {
+      ref = Reference.new.to_s
+      break ref unless Claim.exists?(reference: ref)
+    }
+  end
 
   def one_login_idv_name_match?
     /\A#{first_name.strip.downcase} /.match?(onelogin_idv_full_name.strip.downcase) &&

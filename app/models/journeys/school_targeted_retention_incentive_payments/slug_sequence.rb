@@ -3,13 +3,15 @@ module Journeys
     class SlugSequence
       ELIGIBILITY_SLUGS = [
         "check-eligibility-intro",
-        "hello"
+        "hello",
+        "check-your-answers",
+        "confirmation"
       ]
 
       RESTRICTED_SLUGS = []
 
       DEAD_END_SLUGS = [
-        "hello"
+        "confirmation"
       ]
 
       SLUGS = ELIGIBILITY_SLUGS.freeze

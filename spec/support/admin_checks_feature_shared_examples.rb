@@ -30,7 +30,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
     create(:task, :automated, :passed, name: "student_loan_plan", claim:)
   end
 
-  def targeted_retention_incentive_claim_checking_steps
+  def targeted_retention_incentive_claim_checking_steps_2025_2026_or_before
     visit admin_claims_path
     find("a[href='#{admin_claim_tasks_path(claim)}']").click
 
@@ -86,6 +86,25 @@ RSpec.shared_examples "Admin Checks" do |policy|
     expect(page).not_to have_button("Save and continue")
 
     click_link "Next:Decision"
+
+    expect(page).to have_content("Claim decision")
+    expect(page).not_to have_link("Next")
+    expect(page).to have_link("Previous:Student loan plan")
+
+    choose "Approve"
+    fill_in "Decision notes", with: "All checks passed!"
+    click_on "Confirm decision"
+
+    expect(page).to have_content("Claim has been approved successfully")
+    expect(claim.latest_decision).to be_approved
+    expect(claim.latest_decision.created_by).to eq(@signed_in_user)
+  end
+
+  def targeted_retention_incentive_claim_checking_steps_2026_2027_or_after
+    visit admin_claims_path
+    find("a[href='#{admin_claim_tasks_path(claim)}']").click
+
+    click_link "Approve or reject this claim"
 
     expect(page).to have_content("Claim decision")
     expect(page).not_to have_link("Next")
@@ -318,7 +337,11 @@ RSpec.shared_examples "Admin Checks" do |policy|
 
   def claim_checking_steps(policy)
     if policy == Policies::TargetedRetentionIncentivePayments
-      targeted_retention_incentive_claim_checking_steps
+      if claim.academic_year <= AcademicYear.new("2025")
+        targeted_retention_incentive_claim_checking_steps_2025_2026_or_before
+      else
+        targeted_retention_incentive_claim_checking_steps_2026_2027_or_after
+      end
     elsif policy == Policies::EarlyCareerPayments
       ecp_claim_checking_steps
     elsif policy == Policies::StudentLoans

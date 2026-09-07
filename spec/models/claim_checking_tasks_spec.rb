@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe ClaimCheckingTasks do
   let(:checking_tasks) { described_class.new(claim) }
-  let(:claim) { create(:claim, :submitted, policy:) }
+  let(:claim) { create(:claim, :submitted, policy:, academic_year: AcademicYear.new("2025")) }
   let(:policy) { Policies::TargetedRetentionIncentivePayments }
   let(:base_tasks) { %w[identity_confirmation qualifications employment census_subjects_taught] }
   let(:ecp_tasks) { base_tasks + %w[induction_confirmation student_loan_plan] }
@@ -71,17 +71,6 @@ RSpec.describe ClaimCheckingTasks do
     context "EarlyCareerPayments claim" do
       let(:policy) { Policies::EarlyCareerPayments }
       let(:applicable_tasks) { ecp_tasks }
-
-      include_examples :common_tasks
-      include_examples :payroll_gender_task
-      include_examples :matching_details_task
-      include_examples :payroll_details_task
-      include_examples :student_loan_plan_task
-    end
-
-    context "TargetedRetentionIncentivePayments claim" do
-      let(:policy) { Policies::TargetedRetentionIncentivePayments }
-      let(:applicable_tasks) { targeted_retention_incentive_tasks }
 
       include_examples :common_tasks
       include_examples :payroll_gender_task

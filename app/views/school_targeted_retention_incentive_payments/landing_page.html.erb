@@ -1,1 +1,10 @@
-new stri landing page goes here
+<p class="govuk-body">
+  new stri landing page goes here
+</p>
+
+<p class="govuk-body">
+  <%= govuk_start_button(
+    text: "Start now",
+    href: claim_path(current_journey_routing_name, "claim", answers: { service_access_code: params[:service_access_code] })
+  ) %>
+</p>
