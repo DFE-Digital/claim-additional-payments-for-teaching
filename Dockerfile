@@ -10,6 +10,7 @@ ENV DEPS_HOME=/deps
 ENV RAILS_ENV=production
 
 RUN apk update
+RUN apk add util-linux=~2.42.3-r1 # force vulnerability fix
 RUN apk add icu pcre2 zlib nodejs bash postgresql-dev tzdata curl libc6-compat shared-mime-info
 
 # ------------------------------------------------------------------------------
