@@ -41,7 +41,7 @@ DfE::Analytics.configure do |config|
   # enable analytics. You might want to hook this up to a feature flag or
   # environment variable.
   #
-  config.enable_analytics = proc { Rails.env.production? }
+  config.enable_analytics = proc { Rails.env.production? || Rails.env.review? }
 
   # Enable entity table check job
   #
