@@ -177,6 +177,43 @@ RSpec.describe "TSLR claim with teacher auth by pass" do
       click_button "Confirm and send"
 
       expect(page).to have_content "Claim submitted"
+
+      match = page.text.match(/Your reference number (?<ref>.*)\n/)
+
+      claim = Claim.find_by! reference: match[:ref]
+
+      sign_in_as_service_admin
+
+      visit admin_claim_tasks_path(claim)
+
+      expect(page).to have_summary_item(key: "TRN", value: "1234567")
+      expect(page).to have_summary_item(key: "NI number", value: "AA123456C")
+      expect(page).to(
+        have_summary_item(key: "Full name", value: "Walter Seymour Skinner")
+      )
+      expect(page).to(
+        have_summary_item(key: "Date of birth", value: "1 January 1980")
+      )
+      expect(page).to(
+        have_summary_item(
+          key: "Email address",
+          value: "seymour.skinner@springfield-elementary.edu"
+        )
+      )
+      expect(page).to have_summary_item(
+        key: "Claim route",
+        value: "Signed in with teacher auth"
+      )
+
+      expect(task_status("Identity confirmation")).to eq "Passed"
+      expect(task_status("Qualifications")).to eq "Passed"
+
+      click_on "Confirm the claimant made the claim"
+      expect(page).to have "check we've updated the task notes"
     end
+  end
+
+  def task(name)
+    page.find("h2", text: name).sibling("*").find("strong", class: ["app-task-list__task-completed"])
   end
 end
