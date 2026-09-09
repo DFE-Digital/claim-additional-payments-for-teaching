@@ -139,6 +139,16 @@ module Journeys
 
         dqt_record.itt_subjects.map(&:titleize)
       end
+
+      # NOTE getting the trn from answers.teacher_id_user_info was the previous
+      # implementation, TODO switch to `answers.teacher_reference_number` as it's
+      # set in the sign in or continue form at the same time.
+      def recent_tps_school
+        @recent_tps_school ||= TeachersPensionsService.recent_tps_school(
+          claim_date: session.created_at,
+          teacher_reference_number: teacher_id_user_info["trn"]
+        )
+      end
     end
   end
 end
