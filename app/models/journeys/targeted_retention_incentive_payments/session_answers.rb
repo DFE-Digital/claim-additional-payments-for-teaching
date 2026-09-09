@@ -149,6 +149,10 @@ module Journeys
           teacher_reference_number: teacher_id_user_info["trn"]
         )
       end
+
+      def authenticated_email_address
+        teacher_id_user_info["email"]
+      end
     end
   end
 end
