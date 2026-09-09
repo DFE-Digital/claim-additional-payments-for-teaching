@@ -18,6 +18,14 @@ module Journeys
       attribute :claim_school_somewhere_else, :boolean, pii: false
       attribute :student_loan_amount_seen, :boolean, pii: false
 
+      attribute :teacher_auth_teacher_reference_number, :string, pii: true
+      attribute :teacher_auth_email, :string, pii: true
+      attribute :teacher_auth_verified_name, :string, pii: true
+      attribute :teacher_auth_verified_date_of_birth, :date, pii: false
+      attribute :teacher_auth_one_login_uid, :string, pii: true
+      attribute :teacher_auth_completed_at, :datetime, pii: false
+      attribute :trs_data_fetched_at, :datetime, pii: false
+
       def dqt_teacher_record
         return unless dqt_teacher_status.present?
 
@@ -83,18 +91,35 @@ module Journeys
       def tps_school_for_student_loan_in_previous_financial_year
         @tps_school_for_student_loan_in_previous_financial_year ||=
           TeachersPensionsService.tps_school_for_student_loan_in_previous_financial_year(
-            teacher_reference_number: teacher_id_user_info["trn"]
+            teacher_reference_number: authenticated_trn
           )
       end
 
-      # NOTE getting the trn from answers.teacher_id_user_info was the previous
-      # implementation, TODO switch to `answers.teacher_reference_number` as it's
-      # set in the sign in or continue form at the same time.
       def recent_tps_school
         @recent_tps_school ||= TeachersPensionsService.recent_tps_school(
           claim_date: session.created_at,
-          teacher_reference_number: teacher_id_user_info["trn"]
+          teacher_reference_number: authenticated_trn
         )
+      end
+
+      def has_recent_tps_school?
+        recent_tps_school.present?
+      end
+
+      def authenticated_trn
+        if FeatureFlag.enabled?(:student_loans_teacher_auth)
+          teacher_auth_teacher_reference_number
+        else
+          teacher_id_user_info["trn"]
+        end
+      end
+
+      def authenticated_email_address
+        if FeatureFlag.enabled?(:student_loans_teacher_auth)
+          teacher_auth_email
+        else
+          teacher_id_user_info["email"]
+        end
       end
     end
   end

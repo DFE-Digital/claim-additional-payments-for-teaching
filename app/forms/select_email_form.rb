@@ -22,7 +22,7 @@ class SelectEmailForm < Form
 
   def determine_dependant_attributes
     if email_address_check == true
-      self.email_address = email_address_from_teacher_id
+      self.email_address = authenticated_email_address
       self.email_verified = true
     else
       self.email_address = nil
@@ -30,7 +30,7 @@ class SelectEmailForm < Form
     end
   end
 
-  def email_address_from_teacher_id
-    answers.teacher_id_user_info["email"]
+  def authenticated_email_address
+    answers.authenticated_email_address
   end
 end

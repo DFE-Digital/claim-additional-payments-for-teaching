@@ -1,0 +1,78 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:title),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><%= @form.t(:title) %></h1>
+
+    <% if TeacherAuth::Config.instance.bypass? %>
+      <h2 class="govuk-heading-l">Bypass Teacher Auth</h2>
+
+      <%= form_with(
+        model: @form,
+        url: "/student-loans/bypass-auth/teacher",
+        method: :post,
+        builder: GOVUKDesignSystemFormBuilder::FormBuilder
+      ) do |f| %>
+        <%= f.govuk_text_field(
+          :first_name,
+          label: { text: "First name" },
+          width: 20
+        ) %>
+
+        <%= f.govuk_text_field(
+          :middle_name,
+          label: { text: "Middle name" },
+          width: 20
+        ) %>
+
+        <%= f.govuk_text_field(
+          :last_name,
+          label: { text: "Last name" },
+          width: 20
+        ) %>
+
+        <%= f.govuk_date_field(
+          :date_of_birth,
+          date_of_birth: true,
+          legend: { text: "Date of Birth" }
+        ) %>
+
+        <%= f.govuk_text_field(
+          :national_insurance_number,
+          label: { text: "National Insurance number" }
+        ) %>
+
+
+        <%= f.govuk_text_field(
+          :email,
+          width: 20
+        ) %>
+
+        <%= f.govuk_text_field(
+          :trn,
+          width: 10,
+          label: { text: "TRN" }
+        ) %>
+
+        <%= f.govuk_text_field(
+          :sub,
+          label: { text: "One Login UID" }
+        ) %>
+
+        <%= f.govuk_date_field(
+          :qts_award_date,
+          legend: { text: "QTS award date" }
+        ) %>
+
+        <%= f.govuk_submit %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
