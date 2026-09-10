@@ -44,8 +44,6 @@ module Journeys
     end
 
     def available?
-      return true if Rails.env.test?
-
       FeatureFlag.disabled?(:new_stri)
     end
   end
