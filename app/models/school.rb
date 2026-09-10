@@ -134,6 +134,7 @@ class School < ApplicationRecord
   before_save :sanitise_postcode_search_index
 
   def self.search(search_term, fe_only: false)
+    search_term = search_term.to_s
     raise ArgumentError, SEARCH_NOT_ENOUGH_CHARACTERS_ERROR if search_term.length < SEARCH_MINIMUM_LENGTH
 
     search_field = :name
