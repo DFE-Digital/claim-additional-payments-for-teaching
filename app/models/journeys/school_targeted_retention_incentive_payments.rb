@@ -14,8 +14,6 @@ module Journeys
     ].freeze
 
     def available?
-      return false if Rails.env.test?
-
       FeatureFlag.enabled?(:new_stri)
     end
 
