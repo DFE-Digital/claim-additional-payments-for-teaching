@@ -16,6 +16,8 @@ module Journeys
           attribute :sub, :string
           attribute :qts_award_date, :date
           attribute :national_insurance_number, :string
+          attribute :active_alert, :boolean
+          attribute :qts_record_found, :boolean
 
           validates :first_name, presence: true
           validates :last_name, presence: true
@@ -23,7 +25,7 @@ module Journeys
           validates :email, presence: true
           validates :trn, presence: true
           validates :sub, presence: true
-          validates :qts_award_date, presence: true
+          validates :qts_award_date, presence: true, if: :qts_record_found
 
           # Base form makes it tricky to do this nicely
           after_initialize do
@@ -46,6 +48,10 @@ module Journeys
               nil
             end
             self.qts_award_date = qts_award_date if qts_award_date
+
+            if !qts_record_found
+              self.qts_award_date = nil
+            end
           end
 
           def default_qts_award_date
@@ -79,6 +85,14 @@ module Journeys
             ].join
           end
 
+          def default_active_alert
+            false
+          end
+
+          def default_qts_record_found
+            true
+          end
+
           def save
             return false unless valid?
 
@@ -100,19 +114,42 @@ module Journeys
 
           private
 
-          # These details will be pulled from the TRS /v3/person end point
+          # These details will be pulled from the TRS API
+          # We write them to the personal details fields on the claim and store
+          # them separatley so we can check if they've changed.
           def details_requested_from_api_call
-            {
-              dqt_teacher_status: {
+            dqt_teacher_status = {}
+
+            if qts_record_found
+              dqt_teacher_status = dqt_teacher_status.merge(
                 qts: {
                   holdsFrom: qts_award_date.iso8601
                 }
-              },
+              )
+            end
+
+            if active_alert
+              dqt_teacher_status = dqt_teacher_status.merge(
+                alerts: [
+                  {
+                    startDate: "2026-09-01",
+                    endDate: nil
+                  }
+                ]
+              )
+            end
+
+            {
+              dqt_teacher_status: dqt_teacher_status,
               first_name: first_name,
               middle_name: middle_name,
               surname: last_name,
               national_insurance_number: national_insurance_number,
-              date_of_birth: date_of_birth
+              date_of_birth: date_of_birth,
+              teacher_auth_first_name: first_name,
+              teacher_auth_last_name: last_name,
+              teacher_auth_national_insurance_number: national_insurance_number,
+              teacher_auth_date_of_birth: date_of_birth
             }
           end
 
