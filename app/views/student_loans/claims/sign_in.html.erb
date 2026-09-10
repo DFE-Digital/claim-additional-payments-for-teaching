@@ -66,10 +66,44 @@
           label: { text: "One Login UID" }
         ) %>
 
-        <%= f.govuk_date_field(
-          :qts_award_date,
-          legend: { text: "QTS award date" }
-        ) %>
+        <%= f.govuk_radio_buttons_fieldset(
+          :qts_record_found,
+          legend: {
+            size: "m",
+            text: "QTS record found"
+          }
+        ) do %>
+          <%= f.govuk_radio_button(
+            :qts_record_found,
+            true,
+            label: { text: "yes"}
+          ) do %>
+            <%= f.govuk_date_field(
+              :qts_award_date,
+              legend: { text: "QTS award date" }
+            ) %>
+          <% end %>
+
+          <%= f.govuk_radio_button(
+            :qts_record_found,
+            false,
+            label: { text: "no"}
+          ) %>
+        <% end %>
+
+        <%= f.govuk_check_boxes_fieldset(
+          :active_alert,
+          multiple: false,
+          legend: { text: "Active alert" }
+        ) do %>
+          <%= f.govuk_check_box(
+            :active_alert,
+            1,
+            0,
+            multiple: false,
+            label: { text: "Enable" }
+          ) %>
+        <% end %>
 
         <%= f.govuk_submit %>
       <% end %>
