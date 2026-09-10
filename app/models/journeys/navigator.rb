@@ -129,6 +129,8 @@ module Journeys
           return false
         end
       end
+
+      false
     end
 
     # ignoring the current_slug
