@@ -5,7 +5,8 @@
     "@govuk-one-login/service-header": "^6.0.0",
     "a11y-dialog": "^8.1.5",
     "accessible-autocomplete": "^3.0.1",
-    "govuk-frontend": "^6.4.0"
+    "govuk-frontend": "^6.4.0",
+    "mermaid": "10.9.3"
   },
   "devDependencies": {
     "prettier": "^3.9.6"

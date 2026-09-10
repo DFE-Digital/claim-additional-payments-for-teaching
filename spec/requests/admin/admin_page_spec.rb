@@ -28,7 +28,22 @@ RSpec.describe "Admin page", type: :request do
       expect(response).to be_successful
       expect(response.body).to include(admin_components_journey_components_path)
       expect(response.body).to include(admin_components_landing_page_journeys_path)
+      expect(response.body).to include(admin_components_journey_flows_path)
+      expect(response.body).to include("Journey flows")
       expect(response.body).to include("href=\"/admin\"")
+    end
+  end
+
+  describe "GET /admin/components/journey-flows" do
+    let!(:sign_in) { sign_in_as_service_operator }
+
+    it "loads the journey flows page" do
+      get admin_components_journey_flows_path
+
+      expect(response).to be_successful
+      expect(response.body).to include("Journey flows")
+      expect(response.body).to include(Journeys::TargetedRetentionIncentivePayments.full_name)
+      expect(response.body).to include(Journeys::EarlyYearsTeachersFinancialIncentivePayments.full_name)
     end
   end
 

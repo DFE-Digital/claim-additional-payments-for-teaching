@@ -10,16 +10,23 @@ Rails.application.config.content_security_policy do |policy|
   policy.img_src :self, :https, :data
   policy.object_src :none
   policy.script_src :self, "https://www.googletagmanager.com/gtm.js"
+  policy.script_src_elem :self, "https://www.googletagmanager.com/gtm.js"
   policy.connect_src :self, "https://www.google-analytics.com"
-  if Rails.env.development?
-    policy.style_src :self, :unsafe_inline
-  else
+
+  if Rails.env.production? && !Rails.env.review_app_like?
     policy.style_src :self
+  else
+    policy.style_src :self, :https, "'unsafe-inline'"
+    policy.script_src :self, :https, "https://www.googletagmanager.com/gtm.js"
+    policy.script_src_elem :self, :https, "https://www.googletagmanager.com/gtm.js"
   end
 
   # Specify URI for violation reports
   # policy.report_uri "/csp-violation-report-endpoint"
 end
+
+Rails.application.config.content_security_policy_nonce_generator = ->(request) { request.session.id.to_s }
+Rails.application.config.content_security_policy_nonce_directives = %w[script-src script-src-elem]
 # Rails.application.configure do
 #   config.content_security_policy do |policy|
 #     policy.default_src :self, :https
