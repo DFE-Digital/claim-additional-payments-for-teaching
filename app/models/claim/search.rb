@@ -7,7 +7,7 @@ class Claim
     include ActiveModel::Attributes
 
     attribute :search_term, :string
-    attribute :current_year_only, :boolean, default: true
+    attribute :current_year_only, :boolean, default: false
 
     SEARCHABLE_CLAIM_ATTRIBUTES = %w[
       reference
