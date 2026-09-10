@@ -74,6 +74,10 @@
           </div>
 
           <div>
+            <%= f.govuk_collection_select :academic_year, @filter_form.academic_year_select_options, :id, :name %>
+          </div>
+
+          <div>
             <%= f.govuk_submit "Apply filters", secondary: true, class: "admin-filter-group__button" %>
             <%= govuk_link_to "Clear filters", admin_claims_path(filter: {reset: true}, anchor: "filter"), class: "button-link admin-filter-group__button" %>
           </div>
