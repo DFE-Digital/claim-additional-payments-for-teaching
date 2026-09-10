@@ -11,6 +11,11 @@ Rails.application.config.content_security_policy do |policy|
   policy.object_src :none
   policy.script_src :self, "https://www.googletagmanager.com/gtm.js"
   policy.connect_src :self, "https://www.google-analytics.com"
+
+  if !Rails.env.production?
+    policy.script_src :self, "https://cdn.jsdelivr.net"
+  end
+
   if Rails.env.development?
     policy.style_src :self, :unsafe_inline
   else

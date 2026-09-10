@@ -1,0 +1,72 @@
+<% content_for(:page_title) { page_title(@journey_name) } %>
+
+<p class="govuk-body">
+  <%= link_to "Back", admin_components_journey_flows_path, class: "govuk-back-link" %>
+</p>
+
+<h1 class="govuk-heading-l">Journey flow</h1>
+
+<h2 class="govuk-heading-m"><%= @journey_name %></h2>
+
+<p class="govuk-body">
+  This page shows the route for the selected journey and highlights the main decision points and end states.
+  It includes the key branches people may take through the journey, including cases where they are not eligible or end early.
+  It is intended to help developers and testers understand how the customer journey is structured in practice.
+</p>
+
+<div class="govuk-body">
+  <div class="mermaid govuk-visually-hidden" id="journey-flow-diagram"><%= @mermaid_diagram %></div>
+</div>
+
+<%= javascript_include_tag "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js", nonce: content_security_policy_nonce %>
+<%= javascript_include_tag "mermaid_journey_flow", defer: true %>
+
+
+<!--
+You are a senior Ruby on Rails engineer and product analyst.
+
+Inspect the codebase and identify the real user journey flow for all journeys currently available in the application. Use the implementation, route definitions, slug sequences, session answers, policy eligibility checker, and conditional logic as the source of truth. Do not infer flow from titles, URLs, or PR metadata.
+
+Your task is to:
+1. Read the journey definitions, slug sequences, session answers, policy eligibility checkers, branch logic, validation states, eligibility checks, dead ends, and any alternative pathways for every active journey in the app.
+2. Identify the actual start page, success path, conditional branches, and exits such as ineligible, cancelled, validation failed, or abandoned flow for each journey.
+3. Include every ineligible journey path and alternative exit in the graph for each journey, using the policy eligibility checker and session answers to identify when a user is rejected.
+4. Use the structured journey YAML as the source of truth when present, for example:
+   app/models/journey_flow_definitions/<journey_id>.yml
+
+   Example shape:
+   {
+     "id": "early-years-teachers-recognition-payments",
+     "name": "Early years teachers financial incentive payments",
+     "nodes": [
+       { "id": "start", "label": "Start", "type": "start" },
+       { "id": "check_eligibility", "label": "Check eligibility", "type": "page" },
+       { "id": "ineligible", "label": "Ineligible", "type": "end" }
+     ],
+     "edges": [
+       { "from": "start", "to": "check_eligibility", "label": "begin" },
+       { "from": "check_eligibility", "to": "ineligible", "label": "ineligible" }
+     ]
+   }
+5. Convert that structured model into valid Mermaid syntax.
+6. Humanize node labels from IDs by converting underscores and hyphens to spaces, e.g. "check_eligibility" becomes "Check eligibility".
+7. Include a link indicator in each node label using the unicode symbol ↗, for example: "Check eligibility ↗".
+8. Ensure each Mermaid node has a working click target to the correct page or component route, using the actual route helper logic as the source of truth. For the start node, use the journey start page URL. For other nodes, use the relevant slug route, e.g. admin_components_open_component_path(journey: ..., slug: "check-eligibility").
+9. Prefer a complete, reviewable graph that shows the real flow and key branch conditions for each active journey, rather than a noisy or partial diagram.
+10. If a journey is not fully implemented, infer the likely flow from the code architecture and conditional checks, but clearly label assumptions.
+
+Output format:
+- First: the structured route model for all active journeys
+- Second: the updated YAML content for every file under app/models/journey_flow_definitions/*.yml
+- Third: a Mermaid code block for each journey, or a combined set of diagrams grouped by journey
+- Fourth: a short explanation of the key branching conditions for each journey
+
+Requirements:
+- Use the actual journey code and logic as the source of truth; never guess from PR titles, issue labels, or project metadata.
+- Use human-readable labels, not raw slug IDs.
+- Include hyperlink-style labels and clickable page URLs in the Mermaid output.
+- Update every journey YAML file in app/models/journey_flow_definitions to reflect the real journey flow before generating the Mermaid output.
+- Keep all YAML files and the generated Mermaid diagrams in sync with the real journey flow.
+- The output should be ready to commit directly into the repository.
+- This should identify all journeys currently available in the application, not just a single target journey.
+-->
