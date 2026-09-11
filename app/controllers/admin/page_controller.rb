@@ -3,7 +3,7 @@ module Admin
     before_action :ensure_service_operator
 
     def index
-      flash[:notice] = "There is currently no School Workforce Census data present" if SchoolWorkforceCensus.all.size.zero?
+      flash.now[:notice] = "There is currently no School Workforce Census data present" if SchoolWorkforceCensus.all.size.zero?
 
       @dashboard = Dashboard.new(academic_year: selected_academic_year)
     end
