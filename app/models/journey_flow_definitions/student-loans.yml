@@ -1,0 +1,221 @@
+id: student-loans
+name: "Teachers: claim back your student loan repayments"
+nodes:
+  - id: start
+    label: Start
+    type: start
+  - id: sign_in_or_continue
+    label: Sign in or continue
+    type: page
+  - id: reset_claim
+    label: Reset claim
+    type: page
+  - id: qualification_details
+    label: Qualification details
+    type: page
+  - id: qts_year
+    label: QTS year
+    type: page
+  - id: select_claim_school
+    label: Select claim school
+    type: page
+  - id: claim_school
+    label: Claim school
+    type: page
+  - id: claim_school_results
+    label: Claim school results
+    type: page
+  - id: subjects_taught
+    label: Subjects taught
+    type: page
+  - id: still_teaching
+    label: Still teaching
+    type: page
+  - id: still_teaching_tps
+    label: Still teaching TPS
+    type: page
+  - id: current_school
+    label: Current school
+    type: page
+  - id: select_current_school
+    label: Select current school
+    type: page
+  - id: leadership_position
+    label: Leadership position
+    type: page
+  - id: mostly_performed_leadership_duties
+    label: Mostly performed leadership duties
+    type: page
+  - id: eligibility_confirmed
+    label: Eligibility confirmed
+    type: page
+  - id: information_provided
+    label: Information provided
+    type: page
+  - id: personal_details
+    label: Personal details
+    type: page
+  - id: student_loan_amount
+    label: Student loan amount
+    type: page
+  - id: postcode_search
+    label: Postcode search
+    type: page
+  - id: select_home_address
+    label: Select home address
+    type: page
+  - id: address
+    label: Address
+    type: page
+  - id: select_email
+    label: Select email
+    type: page
+  - id: email_address
+    label: Email address
+    type: page
+  - id: email_verification
+    label: Email verification
+    type: page
+  - id: select_mobile
+    label: Select mobile
+    type: page
+  - id: provide_mobile_number
+    label: Provide mobile number
+    type: page
+  - id: mobile_number
+    label: Mobile number
+    type: page
+  - id: mobile_verification
+    label: Mobile verification
+    type: page
+  - id: personal_bank_account
+    label: Personal bank account
+    type: page
+  - id: gender
+    label: Gender
+    type: page
+  - id: teacher_reference_number
+    label: Teacher reference number
+    type: page
+  - id: check_your_answers
+    label: Check your answers
+    type: page
+  - id: confirmation
+    label: Confirmation
+    type: end
+  - id: ineligible
+    label: Ineligible
+    type: end
+
+edges:
+  - from: start
+    to: sign_in_or_continue
+    label: begin
+  - from: sign_in_or_continue
+    to: reset_claim
+    label: details_check_false
+  - from: reset_claim
+    to: qualification_details
+    label: continue
+  - from: qualification_details
+    to: qts_year
+    label: continue
+  - from: qts_year
+    to: select_claim_school
+    label: continue
+  - from: select_claim_school
+    to: claim_school
+    label: continue
+  - from: claim_school
+    to: claim_school_results
+    label: continue
+  - from: claim_school_results
+    to: subjects_taught
+    label: continue
+  - from: subjects_taught
+    to: still_teaching_tps
+    label: logged_in_with_tid
+  - from: subjects_taught
+    to: still_teaching
+    label: continue
+  - from: still_teaching_tps
+    to: eligibility_confirmed
+    label: continue
+  - from: still_teaching
+    to: current_school
+    label: continue
+  - from: current_school
+    to: select_current_school
+    label: continue
+  - from: select_current_school
+    to: leadership_position
+    label: continue
+  - from: leadership_position
+    to: mostly_performed_leadership_duties
+    label: had_leadership_position
+  - from: mostly_performed_leadership_duties
+    to: eligibility_confirmed
+    label: continue
+  - from: eligibility_confirmed
+    to: information_provided
+    label: continue
+  - from: information_provided
+    to: personal_details
+    label: continue
+  - from: personal_details
+    to: student_loan_amount
+    label: continue
+  - from: student_loan_amount
+    to: postcode_search
+    label: continue
+  - from: postcode_search
+    to: select_home_address
+    label: postcode_searched
+  - from: postcode_search
+    to: address
+    label: postcode_not_searched
+  - from: select_home_address
+    to: select_email
+    label: continue
+  - from: address
+    to: select_email
+    label: continue
+  - from: select_email
+    to: email_address
+    label: continue
+  - from: email_address
+    to: email_verification
+    label: continue
+  - from: email_verification
+    to: select_mobile
+    label: continue
+  - from: select_mobile
+    to: provide_mobile_number
+    label: continue
+  - from: provide_mobile_number
+    to: mobile_number
+    label: phone_needed
+  - from: provide_mobile_number
+    to: mobile_verification
+    label: no_phone
+  - from: mobile_number
+    to: mobile_verification
+    label: continue
+  - from: mobile_verification
+    to: personal_bank_account
+    label: continue
+  - from: personal_bank_account
+    to: gender
+    label: continue
+  - from: gender
+    to: teacher_reference_number
+    label: continue
+  - from: teacher_reference_number
+    to: check_your_answers
+    label: continue
+  - from: check_your_answers
+    to: confirmation
+    label: submit
+  - from: check_your_answers
+    to: ineligible
+    label: ineligible

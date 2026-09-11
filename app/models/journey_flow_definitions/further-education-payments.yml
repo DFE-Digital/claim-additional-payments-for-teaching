@@ -1,0 +1,419 @@
+id: further-education-payments
+name: Claim a targeted retention incentive payment for further education teachers
+nodes:
+  - id: start
+    label: Start
+    type: start
+  - id: have_one_login_account
+    label: Have one login account
+    type: page
+  - id: previously_claimed
+    label: Previously claimed
+    type: page
+  - id: sign_in
+    label: Sign in
+    type: page
+  - id: existing_progress
+    label: Existing progress
+    type: page
+  - id: check_eligibility_intro
+    label: Check eligibility intro
+    type: page
+  - id: teaching_responsibilities
+    label: Teaching responsibilities
+    type: page
+  - id: further_education_provision_search
+    label: Further education provision search
+    type: page
+  - id: select_provision
+    label: Select provision
+    type: page
+  - id: further_education_teaching_start_year
+    label: Further education teaching start year
+    type: page
+  - id: teaching_qualification
+    label: Teaching qualification
+    type: page
+  - id: contract_type
+    label: Contract type
+    type: page
+  - id: fixed_term_contract
+    label: Fixed term contract
+    type: page
+  - id: taught_at_least_one_term
+    label: Taught at least one term
+    type: page
+  - id: teaching_hours_per_week
+    label: Teaching hours per week
+    type: page
+  - id: half_teaching_hours
+    label: Half teaching hours
+    type: page
+  - id: subjects_taught
+    label: Subjects taught
+    type: page
+  - id: building_construction_courses
+    label: Building construction courses
+    type: page
+  - id: chemistry_courses
+    label: Chemistry courses
+    type: page
+  - id: computing_courses
+    label: Computing courses
+    type: page
+  - id: early_years_courses
+    label: Early years courses
+    type: page
+  - id: engineering_manufacturing_courses
+    label: Engineering manufacturing courses
+    type: page
+  - id: maths_courses
+    label: Maths courses
+    type: page
+  - id: physics_courses
+    label: Physics courses
+    type: page
+  - id: check_your_answers_part_one
+    label: Check your answers part one
+    type: page
+  - id: eligible
+    label: Eligible
+    type: page
+  - id: identity_verification
+    label: Identity verification
+    type: page
+  - id: work_email_access
+    label: Work email access
+    type: page
+  - id: no_work_email_access
+    label: No work email access
+    type: end
+  - id: work_email
+    label: Work email
+    type: page
+  - id: work_email_verification
+    label: Work email verification
+    type: page
+  - id: information_provided
+    label: Information provided
+    type: page
+  - id: full_name
+    label: Full name
+    type: page
+  - id: date_of_birth
+    label: Date of birth
+    type: page
+  - id: national_insurance_number
+    label: National insurance number
+    type: page
+  - id: postcode_search
+    label: Postcode search
+    type: page
+  - id: select_home_address
+    label: Select home address
+    type: page
+  - id: address
+    label: Address
+    type: page
+  - id: email_address
+    label: Email address
+    type: page
+  - id: email_verification
+    label: Email verification
+    type: page
+  - id: provide_mobile_number
+    label: Provide mobile number
+    type: page
+  - id: mobile_number
+    label: Mobile number
+    type: page
+  - id: mobile_verification
+    label: Mobile verification
+    type: page
+  - id: personal_bank_account
+    label: Personal bank account
+    type: page
+  - id: gender
+    label: Gender
+    type: page
+  - id: check_your_answers
+    label: Check your answers
+    type: page
+  - id: confirmation
+    label: Confirmation
+    type: end
+  - id: ineligible_lack_teaching_responsibilities
+    label: Not eligible - lack teaching responsibilities
+    type: end
+  - id: ineligible_fe_provider
+    label: Not eligible - FE provider
+    type: end
+  - id: ineligible_employed_by_another_organisation
+    label: Not eligible - employed by another organisation
+    type: end
+  - id: ineligible_must_teach_at_least_one_term
+    label: Not eligible - must teach at least one term
+    type: end
+  - id: ineligible_must_be_recent_further_education_teacher
+    label: Not eligible - not a recent FE teacher
+    type: end
+  - id: ineligible_teaching_less_than_2_5
+    label: Not eligible - teaching less than 2.5 hours
+    type: end
+  - id: ineligible_teaching_less_than_2_5_next_term
+    label: Not eligible - next term teaching less than 2.5 hours
+    type: end
+  - id: ineligible_subject_to_problematic_actions
+    label: Not eligible - subject to problematic action
+    type: end
+  - id: ineligible_lacks_teacher_qualification_or_enrolment
+    label: Not eligible - missing teacher qualification or enrolment
+    type: end
+  - id: ineligible_must_at_least_half_hours_teaching_fe
+    label: Not eligible - fewer than half teaching hours
+    type: end
+  - id: ineligible_subject
+    label: Not eligible - subject ineligible
+    type: end
+  - id: ineligible_courses
+    label: Not eligible - all selected courses ineligible
+    type: end
+  - id: ineligible_less_than_half_hours_teaching_eligible_courses
+    label: Not eligible - not enough eligible course hours
+    type: end
+  - id: ineligible_claim_already_submitted_this_policy_year
+    label: Not eligible - already submitted this year
+    type: end
+
+edges:
+  - from: start
+    to: have_one_login_account
+    label: begin
+  - from: have_one_login_account
+    to: sign_in
+    label: has one login
+  - from: have_one_login_account
+    to: previously_claimed
+    label: no login
+  - from: previously_claimed
+    to: sign_in
+    label: continue
+  - from: sign_in
+    to: check_eligibility_intro
+    label: continue
+  - from: check_eligibility_intro
+    to: teaching_responsibilities
+    label: continue
+  - from: teaching_responsibilities
+    to: ineligible_lack_teaching_responsibilities
+    label: no
+  - from: teaching_responsibilities
+    to: further_education_provision_search
+    label: yes
+  - from: further_education_provision_search
+    to: select_provision
+    label: continue
+  - from: select_provision
+    to: ineligible_fe_provider
+    label: provider ineligible or closed
+  - from: select_provision
+    to: further_education_teaching_start_year
+    label: valid provider
+  - from: further_education_teaching_start_year
+    to: teaching_qualification
+    label: continue
+  - from: teaching_qualification
+    to: contract_type
+    label: continue
+  - from: contract_type
+    to: ineligible_employed_by_another_organisation
+    label: employed_by_another_organisation
+  - from: contract_type
+    to: fixed_term_contract
+    label: fixed_term
+  - from: contract_type
+    to: teaching_hours_per_week
+    label: permanent
+  - from: contract_type
+    to: taught_at_least_one_term
+    label: variable_hours
+  - from: fixed_term_contract
+    to: ineligible_must_teach_at_least_one_term
+    label: fixed term not full year
+  - from: fixed_term_contract
+    to: teaching_hours_per_week
+    label: full year
+  - from: taught_at_least_one_term
+    to: ineligible_must_teach_at_least_one_term
+    label: no
+  - from: taught_at_least_one_term
+    to: teaching_hours_per_week
+    label: yes
+  - from: teaching_hours_per_week
+    to: ineligible_teaching_less_than_2_5
+    label: less than 2.5
+  - from: teaching_hours_per_week
+    to: half_teaching_hours
+    label: continue
+  - from: half_teaching_hours
+    to: ineligible_must_at_least_half_hours_teaching_fe
+    label: no
+  - from: half_teaching_hours
+    to: subjects_taught
+    label: yes
+  - from: subjects_taught
+    to: ineligible_subject
+    label: none selected
+  - from: subjects_taught
+    to: building_construction_courses
+    label: building_construction
+  - from: subjects_taught
+    to: chemistry_courses
+    label: chemistry
+  - from: subjects_taught
+    to: computing_courses
+    label: computing
+  - from: subjects_taught
+    to: early_years_courses
+    label: early_years
+  - from: subjects_taught
+    to: engineering_manufacturing_courses
+    label: engineering_manufacturing
+  - from: subjects_taught
+    to: maths_courses
+    label: maths
+  - from: subjects_taught
+    to: physics_courses
+    label: physics
+  - from: building_construction_courses
+    to: ineligible_courses
+    label: all courses ineligible
+  - from: chemistry_courses
+    to: ineligible_courses
+    label: all courses ineligible
+  - from: computing_courses
+    to: ineligible_courses
+    label: all courses ineligible
+  - from: early_years_courses
+    to: ineligible_courses
+    label: all courses ineligible
+  - from: engineering_manufacturing_courses
+    to: ineligible_courses
+    label: all courses ineligible
+  - from: maths_courses
+    to: ineligible_courses
+    label: all courses ineligible
+  - from: physics_courses
+    to: ineligible_courses
+    label: all courses ineligible
+  - from: building_construction_courses
+    to: check_your_answers_part_one
+    label: continue
+  - from: chemistry_courses
+    to: check_your_answers_part_one
+    label: continue
+  - from: computing_courses
+    to: check_your_answers_part_one
+    label: continue
+  - from: early_years_courses
+    to: check_your_answers_part_one
+    label: continue
+  - from: engineering_manufacturing_courses
+    to: check_your_answers_part_one
+    label: continue
+  - from: maths_courses
+    to: check_your_answers_part_one
+    label: continue
+  - from: physics_courses
+    to: check_your_answers_part_one
+    label: continue
+  - from: check_your_answers_part_one
+    to: ineligible_must_be_recent_further_education_teacher
+    label: not recent FE teacher
+  - from: check_your_answers_part_one
+    to: ineligible_lacks_teacher_qualification_or_enrolment
+    label: no qualification or enrolment
+  - from: check_your_answers_part_one
+    to: ineligible_subject_to_problematic_actions
+    label: problematic actions
+  - from: check_your_answers_part_one
+    to: ineligible_teaching_less_than_2_5_next_term
+    label: next term < 2.5
+  - from: check_your_answers_part_one
+    to: ineligible_less_than_half_hours_teaching_eligible_courses
+    label: insufficient eligible course hours
+  - from: check_your_answers_part_one
+    to: eligible
+    label: eligible
+  - from: eligible
+    to: identity_verification
+    label: continue
+  - from: identity_verification
+    to: work_email_access
+    label: continue
+  - from: work_email_access
+    to: no_work_email_access
+    label: no access
+  - from: work_email_access
+    to: work_email
+    label: has access
+  - from: work_email
+    to: work_email_verification
+    label: continue
+  - from: work_email_verification
+    to: information_provided
+    label: continue
+  - from: information_provided
+    to: full_name
+    label: continue
+  - from: full_name
+    to: date_of_birth
+    label: continue
+  - from: date_of_birth
+    to: national_insurance_number
+    label: continue
+  - from: national_insurance_number
+    to: postcode_search
+    label: continue
+  - from: postcode_search
+    to: select_home_address
+    label: postcode_searched
+  - from: postcode_search
+    to: address
+    label: postcode_not_searched
+  - from: select_home_address
+    to: email_address
+    label: continue
+  - from: address
+    to: email_address
+    label: continue
+  - from: email_address
+    to: email_verification
+    label: continue
+  - from: email_verification
+    to: provide_mobile_number
+    label: continue
+  - from: provide_mobile_number
+    to: mobile_number
+    label: phone_needed
+  - from: provide_mobile_number
+    to: mobile_verification
+    label: no_phone
+  - from: mobile_number
+    to: mobile_verification
+    label: continue
+  - from: mobile_verification
+    to: personal_bank_account
+    label: continue
+  - from: personal_bank_account
+    to: gender
+    label: continue
+  - from: gender
+    to: check_your_answers
+    label: continue
+  - from: check_your_answers
+    to: confirmation
+    label: submit
+  - from: check_your_answers
+    to: ineligible_claim_already_submitted_this_policy_year
+    label: already claimed this year

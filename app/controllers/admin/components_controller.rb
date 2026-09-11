@@ -56,14 +56,8 @@ module Admin
         return redirect_to(admin_components_journey_components_path, alert: "Journey or component not found")
       end
 
-      create_prepopulated_preview_session!(journey, slug)
-
-      session[:admin_component_preview] = {
-        journey: journey.routing_name,
-        expires_at: Time.zone.now.to_i + PREVIEW_SESSION_LENGTH_IN_SECONDS
-      }
-
-      redirect_to claim_path(journey.routing_name, slug, skip_landing_page: true)
+      ::JourneyComponentPreviewUrlBuilder.call!(journey:, slug:, session:, controller: self)
+      redirect_to ::JourneyComponentPreviewUrlBuilder.call(journey:, slug:)
     end
 
     private
@@ -137,23 +131,6 @@ module Admin
         .split("::")
         .map { |part| part.titleize }
         .join(" / ")
-    end
-
-    def create_prepopulated_preview_session!(journey, slug)
-      session_key = :"#{journey.routing_name}_journeys_session_id"
-      session.delete(session_key)
-
-      journey_session = journey::Session.create!(
-        journey: journey.routing_name,
-        answers: {
-          academic_year: current_academic_year_for(journey),
-          **default_answers_for(journey, slug)
-        },
-        steps: journey.slug_sequence::SLUGS
-      )
-
-      session[session_key] = journey_session.id
-      session[:current_journey_routing_name] = journey.routing_name
     end
 
     def default_answers_for(journey, slug)

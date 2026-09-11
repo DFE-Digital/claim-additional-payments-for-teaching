@@ -1,0 +1,104 @@
+id: early-years-payment-provider
+name: Early years financial incentive payment service - Provider claim
+nodes:
+  - id: start
+    label: Start
+    type: start
+  - id: consent
+    label: Consent
+    type: page
+  - id: current_nursery
+    label: Current nursery
+    type: page
+  - id: paye_reference
+    label: PAYE reference
+    type: page
+  - id: claimant_name
+    label: Claimant name
+    type: page
+  - id: start_date
+    label: Start date
+    type: page
+  - id: contract_type
+    label: Contract type
+    type: page
+  - id: child_facing
+    label: Child facing
+    type: page
+  - id: returner
+    label: Returner
+    type: page
+  - id: returner_worked_with_children
+    label: Returner worked with children
+    type: page
+  - id: returner_contract_type
+    label: Returner contract type
+    type: page
+  - id: employee_email
+    label: Employee email
+    type: page
+  - id: check_your_answers
+    label: Check your answers
+    type: page
+  - id: confirmation
+    label: Confirmation
+    type: end
+  - id: expired_link
+    label: Expired link
+    type: end
+  - id: ineligible
+    label: Ineligible
+    type: end
+
+edges:
+  - from: start
+    to: consent
+    label: begin
+  - from: consent
+    to: expired_link
+    label: invalid magic link
+  - from: consent
+    to: current_nursery
+    label: continue
+  - from: current_nursery
+    to: paye_reference
+    label: continue
+  - from: paye_reference
+    to: claimant_name
+    label: continue
+  - from: claimant_name
+    to: start_date
+    label: continue
+  - from: start_date
+    to: contract_type
+    label: continue
+  - from: contract_type
+    to: child_facing
+    label: continue
+  - from: child_facing
+    to: returner
+    label: continue
+  - from: returner
+    to: returner_worked_with_children
+    label: returning within 6 months
+  - from: returner
+    to: employee_email
+    label: not returning within 6 months
+  - from: returner_worked_with_children
+    to: returner_contract_type
+    label: yes
+  - from: returner_worked_with_children
+    to: employee_email
+    label: no
+  - from: returner_contract_type
+    to: employee_email
+    label: continue
+  - from: employee_email
+    to: check_your_answers
+    label: continue
+  - from: check_your_answers
+    to: confirmation
+    label: submit
+  - from: check_your_answers
+    to: ineligible
+    label: ineligible

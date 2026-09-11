@@ -1,0 +1,162 @@
+id: early-years-teachers-recognition-payments
+name: Early years teachers financial incentive payments
+nodes:
+  - id: start
+    label: Start
+    type: start
+  - id: nursery_search
+    label: Nursery search
+    type: page
+  - id: nursery_select
+    label: Nursery select
+    type: page
+  - id: teaching_qualification_confirmation
+    label: Teaching qualification confirmation
+    type: page
+  - id: check_eligibility
+    label: Check eligibility
+    type: page
+  - id: eligible_teaching_qualification_held
+    label: Eligible teaching qualification held
+    type: page
+  - id: ineligible
+    label: Ineligible
+    type: end
+  - id: sign_in
+    label: Sign in
+    type: page
+  - id: qualifications_check
+    label: Qualifications check
+    type: page
+  - id: continue_claim
+    label: Continue claim
+    type: page
+  - id: claim_cancelled
+    label: Claim cancelled
+    type: end
+  - id: upload_employment_proof
+    label: Upload employment proof
+    type: page
+  - id: review_employment_proof
+    label: Review employment proof
+    type: page
+  - id: information_provided
+    label: Information provided
+    type: page
+  - id: postcode_search
+    label: Postcode search
+    type: page
+  - id: select_home_address
+    label: Select home address
+    type: page
+  - id: address
+    label: Address
+    type: page
+  - id: gender
+    label: Gender
+    type: page
+  - id: national_insurance_number
+    label: National insurance number
+    type: page
+  - id: personal_bank_account
+    label: Personal bank account
+    type: page
+  - id: check_your_answers
+    label: Check your answers
+    type: page
+  - id: confirmation
+    label: Confirmation
+    type: end
+
+edges:
+  - from: start
+    to: nursery_search
+    label: begin
+
+  - from: nursery_search
+    to: nursery_select
+    label: nursery_id blank
+
+  - from: nursery_search
+    to: teaching_qualification_confirmation
+    label: nursery selected
+
+  - from: nursery_select
+    to: teaching_qualification_confirmation
+    label: continue
+
+  - from: teaching_qualification_confirmation
+    to: check_eligibility
+    label: continue
+
+  - from: check_eligibility
+    to: eligible_teaching_qualification_held
+    label: eligible
+
+  - from: check_eligibility
+    to: ineligible
+    label: ineligible
+
+  - from: eligible_teaching_qualification_held
+    to: sign_in
+    label: continue
+
+  - from: sign_in
+    to: qualifications_check
+    label: continue
+
+  - from: qualifications_check
+    to: continue_claim
+    label: continue
+
+  - from: continue_claim
+    to: claim_cancelled
+    label: continue_claim == false
+
+  - from: continue_claim
+    to: upload_employment_proof
+    label: continue
+
+  - from: upload_employment_proof
+    to: review_employment_proof
+    label: continue
+
+  - from: review_employment_proof
+    to: information_provided
+    label: continue
+
+  - from: information_provided
+    to: postcode_search
+    label: continue
+
+  - from: postcode_search
+    to: select_home_address
+    label: postcode_searched
+
+  - from: postcode_search
+    to: address
+    label: postcode not searched
+
+  - from: select_home_address
+    to: gender
+    label: continue
+
+  - from: address
+    to: gender
+    label: continue
+
+  - from: gender
+    to: national_insurance_number
+    label: continue
+
+  - from: national_insurance_number
+    to: personal_bank_account
+    label: continue
+
+  - from: personal_bank_account
+    to: check_your_answers
+    label: continue
+
+  - from: check_your_answers
+    to: confirmation
+    label: submit

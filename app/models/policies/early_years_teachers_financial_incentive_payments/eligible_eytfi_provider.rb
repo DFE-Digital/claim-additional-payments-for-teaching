@@ -18,6 +18,7 @@ module Policies
 
       scope :search, ->(search_term) do
         search_field = :name
+        search_term = search_term.to_s
         sanitised_search_term = search_term.delete(" ")
 
         # Some school names may start with a postcode-resembling pattern, so the following check is not meant
