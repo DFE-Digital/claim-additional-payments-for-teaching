@@ -1,10 +1,133 @@
-<p class="govuk-body">
-  new stri landing page goes here
-</p>
+<% content_for(:page_title, page_title(t("school_targeted_retention_incentive_payments.landing_page"), journey: current_journey_routing_name)) %>
 
-<p class="govuk-body">
-  <%= govuk_start_button(
-    text: "Start now",
-    href: claim_path(current_journey_routing_name, "claim", answers: { service_access_code: params[:service_access_code] })
-  ) %>
-</p>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl"><%= t("school_targeted_retention_incentive_payments.landing_page") %></h1>
+
+    <p class="govuk-body">
+      Use this service to find out if you can get an early career teacher payment.
+    </p>
+
+    <p class="govuk-body">
+      You may be eligible if you:
+    </p>
+
+    <%= govuk_list [
+      "teach chemistry",
+      "teach mathematics",
+      "teach physics",
+      "work in a disadvantaged school"
+    ], type: :bullet %>
+
+    <p class="govuk-body">
+      You must meet the eligibility criteria to receive a payment. Read the guidance for full details about who can apply and how the payment scheme works.
+    </p>
+
+    <p class="govuk-body">
+      You must apply between ??? and ???.
+    </p>
+
+    <h2 class="govuk-heading-m">
+      How much you could get
+    </h2>
+
+    <p class="govuk-body">
+      If you’re eligible, you could receive between £3,000 and £6,000.
+    </p>
+
+    <p class="govuk-body">
+      The amount you get depends on:
+    </p>
+
+    <%= govuk_list [
+      "the subject you teach",
+      "the school you work in",
+      "when you started your initial teacher training (ITT) course, if you took a postgraduate route",
+      "when you completed your ITT course, if you took an undergraduate route"
+    ], type: :bullet %>
+
+    <h2 class="govuk-heading-m">
+      What you need
+    </h2>
+
+    <div class="app-grey-box govuk-!-padding-5 govuk-!-margin-bottom-5">
+      <p class="govuk-body">
+        You’ll need:
+      </p>
+
+      <%= govuk_list [
+        "your Teacher Reference Number (TRN)",
+        "a GOV.UK One Login account to prove your identity - you’ll need a UK passport, UK photo driving licence or biometric residence permit to set it up",
+        "your bank details, including the full name on the account, sort code and account number",
+        "your gender as it appears on payroll"
+      ], type: :bullet %>
+    </div>
+
+    <h2 class="govuk-heading-m">
+      Before you start
+    </h2>
+
+    <p class="govuk-body">
+      If you need to <%= govuk_link_to "find a lost TRN", "https://find-a-lost-trn.education.gov.uk/start" %>, do this before you claim. It can take 5 working days to recover your TRN.
+    </p>
+
+    <p class="govuk-body">
+      If you need to set up a GOV.UK One Login account, this can take 2 weeks.
+    </p>
+
+    <% if journey_configuration.open_for_submissions? %>
+      <%= govuk_start_button(
+        text: "Start now",
+        href: claim_path(current_journey_routing_name, "claim", answers: { service_access_code: params[:service_access_code] })
+      ) %>
+    <% end %>
+
+    <h2 class="govuk-heading-m">
+      How long it takes to claim
+    </h2>
+
+    <p class="govuk-body">
+      If you have your TRN and One Login account it takes around 10 minutes to submit a claim.
+    </p>
+
+    <h2 class="govuk-heading-m">
+      How we’ll check your eligibility
+    </h2>
+
+    <p class="govuk-body">
+      If you are eligible, we will collect personal information to verify your claim and process your payment.
+    </p>
+
+    <p class="govuk-body">
+      We use HMRC data to confirm that you work at the nursery you selected. This is only used to verify your eligibility and will not affect your personal records, pay, tax or benefits.
+    </p>
+
+    <p class="govuk-body">
+      If you’d rather not use this check, you can upload a payslip. We’ll check this manually, which will take longer.
+    </p>
+
+    <h2 class="govuk-heading-m">
+      What happens after you submit a claim
+    </h2>
+
+    <p class="govuk-body">
+      If you’re eligible, you’ll be paid within 25 weeks.
+    </p>
+
+    <h2 class="govuk-heading-m">
+      Claim back your student loan repayments
+    </h2>
+
+    <p class="govuk-body">
+      If you have a student loan, you may be able to claim back student loan repayments (opens in new tab) [LINK NEEDED ???] made while employed as a teacher. This is separate and you can apply for this whether or not you receive a school targeted retention incentive payment.
+    </p>
+
+    <h2 class="govuk-heading-m">
+      Contact us
+    </h2>
+
+    <p class="govuk-body">
+      If you have any questions, email <%= govuk_mail_to t("school_targeted_retention_incentive_payments.feedback_email") %>.
+    </p>
+  </div>
+</div>
