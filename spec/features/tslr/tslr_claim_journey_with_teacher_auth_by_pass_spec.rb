@@ -174,7 +174,9 @@ RSpec.describe "TSLR claim with teacher auth by pass" do
       expect(page).to have_content("student loan repayment amount")
       click_button "Continue"
 
-      click_button "Confirm and send"
+      perform_enqueued_jobs do
+        click_button "Confirm and send"
+      end
 
       expect(page).to have_content "Claim submitted"
 
@@ -205,11 +207,33 @@ RSpec.describe "TSLR claim with teacher auth by pass" do
         value: "Signed in with teacher auth"
       )
 
-      expect(task_status("Identity confirmation")).to eq "Passed"
+      expect(task_status("Identity confirmation")).to eq "Partial match"
       expect(task_status("Qualifications")).to eq "Passed"
 
       click_on "Confirm the claimant made the claim"
-      expect(page).to have "check we've updated the task notes"
+      expect(page).to have_text("[Teacher Auth Identity] - Name not matched:")
+      expect(page).to have_text(
+        'Claimant: "Walter Seymour Skinner" Teacher Auth: "Seymour Skinner"'
+      )
+      expect(page).to have_text(
+        "[Teacher Auth Identity] - National insurance number not matched:"
+      )
+      expect(page).to have_text(
+        'Claimant: "AA123456C" Teacher Auth: "AB123456C"'
+      )
+      # Date of birth wasn't changed from check answers page
+      expect(page).not_to have_text(
+        "[Teacher Auth Identity] - Date of birth not matched:"
+      )
+
+      choose "Yes"
+      click_on "Save and continue"
+
+      expect(page).to have_text "Qualifications"
+
+      within ".hmcts-timeline" do
+        expect(page).to have_text "QTS award date: #{qts_year}-09-01"
+      end
     end
   end
 
