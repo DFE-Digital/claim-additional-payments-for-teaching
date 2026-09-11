@@ -10,6 +10,28 @@
       <%= @presenter.policy.short_name %>
     </h1>
 
+    <section id="academic-year-filter">
+      <%= form_with(
+        model: @presenter,
+        url: admin_task_lists_path,
+        method: :get,
+        builder: GOVUKDesignSystemFormBuilder::FormBuilder
+      ) do |f| %>
+        <% preserved_params = @presenter.applied_params.transform_values { |params| params.except(:academic_year) } %>
+        <% URI.decode_www_form(preserved_params.to_query).each do |name, value| %>
+          <%= hidden_field_tag name, value, id: nil %>
+        <% end %>
+        <%= f.govuk_collection_select(
+          :academic_year,
+          @presenter.academic_year_select_options,
+          :id,
+          :name,
+          label: { text: "Academic year" }
+        ) %>
+        <%= f.govuk_submit "Select academic year" %>
+      <% end %>
+    </section>
+
     <section id="policy-buttons">
       <% Policies.all.select(&:active?).each do |policy| %>
         <%= govuk_button_link_to(
@@ -17,6 +39,7 @@
           admin_task_lists_path(
             @presenter.applied_params(
               policy_name: policy.locale_key,
+              clear_statuses: false,
               statuses: {}
             )
           ),
@@ -55,6 +78,7 @@
         builder: GOVUKDesignSystemFormBuilder::FormBuilder
       ) do |f| %>
         <%= f.hidden_field :policy_name, value: f.object.policy.locale_key %>
+        <%= f.hidden_field :academic_year, id: nil %>
         <%= f.hidden_field(
           :show_filter_controls,
           value: f.object.show_filter_controls?
@@ -64,7 +88,7 @@
           <%= govuk_button_link_to(
             "Check all",
             admin_task_lists_path(
-              f.object.applied_params(statuses: f.object.all_statuses)
+              f.object.applied_params(statuses: f.object.all_statuses, clear_statuses: false)
             ),
             secondary: true,
           ) %>
