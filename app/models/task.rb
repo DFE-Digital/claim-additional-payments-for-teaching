@@ -11,6 +11,7 @@ class Task < ApplicationRecord
     one_login_identity
     previous_payment
     identity_confirmation
+    teacher_auth_identity_confirmation
     alternative_identity_verification
     fe_alternative_verification
     ey_eoi_cross_reference

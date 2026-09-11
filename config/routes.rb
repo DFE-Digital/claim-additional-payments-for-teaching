@@ -125,6 +125,15 @@ Rails.application.routes.draw do
     scope path: "/", constraints: {journey: Regexp.new(Journeys.all.map(&:routing_name).join("|"))} do
       get "landing-page", to: "static_pages#landing_page", as: :landing_page
     end
+
+    scope constraints: {journey: "student-loans"} do
+      if TeacherAuth::Config.instance.bypass? || Rails.env.test?
+        post(
+          "bypass-auth/teacher",
+          to: "journeys/teacher_student_loan_reimbursement/bypass_auth#callback"
+        )
+      end
+    end
   end
 
   constraints lambda { |req| req.format == :json } do
