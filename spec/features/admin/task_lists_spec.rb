@@ -1,6 +1,52 @@
 require "rails_helper"
 
 RSpec.feature "Admin task list filtering" do
+  scenario "selects an academic year and preserves it across policy and filter changes" do
+    travel_to Date.new(2026, 9, 1) do
+      current_claim = create(:claim, :submitted, policy: Policies::StudentLoans, academic_year: "2026/2027")
+      previous_claim = create(:claim, :submitted, policy: Policies::StudentLoans, academic_year: "2025/2026")
+      create(:claim, :submitted, policy: Policies::StudentLoans, academic_year: "2024/2025")
+
+      sign_in_as_service_operator
+      visit admin_task_lists_path
+      click_on "Student Loans"
+
+      expect(page).to have_select("Academic year", selected: "2026 / 2027", options: ["2025 / 2026", "2026 / 2027"])
+      expect(page).to have_link(current_claim.reference)
+      expect(page).not_to have_link(previous_claim.reference)
+
+      select "2025 / 2026", from: "Academic year"
+      click_on "Select academic year"
+
+      expect(page).to have_content("1 claims found")
+      expect(page).to have_link(previous_claim.reference)
+      expect(page).not_to have_link(current_claim.reference)
+
+      click_on "Show filters"
+      click_on "Apply"
+      expect(page).to have_link(previous_claim.reference)
+      expect(page).to have_select("Academic year", selected: "2025 / 2026")
+
+      click_on "Uncheck all"
+      select "2026 / 2027", from: "Academic year"
+      click_on "Select academic year"
+      expect(page).to have_content("0 claims found")
+
+      click_on "Check all"
+      expect(page).to have_link(current_claim.reference)
+      select "2025 / 2026", from: "Academic year"
+      click_on "Select academic year"
+
+      click_on "Early Years Financial Incentive Payments"
+      click_on "Student Loans"
+      expect(page).to have_link(previous_claim.reference)
+
+      click_on "Export CSV"
+      expect(page.body).to include(previous_claim.reference)
+      expect(page.body).not_to include(current_claim.reference)
+    end
+  end
+
   scenario "filters claims by task statuses and assignee" do
     admin_alice = create(
       :dfe_signin_user,
