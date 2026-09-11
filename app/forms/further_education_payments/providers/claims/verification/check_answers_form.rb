@@ -48,7 +48,7 @@ module FurtherEducationPayments
             else
               Policies::FurtherEducationPayments::EligibleAcademicYear.new(
                 candidate_academic_year: provider_verification_teaching_start_year,
-                current_academic_year: AcademicYear.current
+                current_academic_year: claim.academic_year
               ).to_s
             end
           end
