@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_09_151033) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_10_103252) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -869,7 +869,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_09_151033) do
     t.decimal "student_loan_repayment_amount", precision: 7, scale: 2
     t.boolean "taught_eligible_subjects"
     t.datetime "teacher_auth_completed_at"
+    t.date "teacher_auth_date_of_birth"
     t.citext "teacher_auth_email"
+    t.string "teacher_auth_first_name"
+    t.string "teacher_auth_last_name"
+    t.string "teacher_auth_national_insurance_number"
     t.text "teacher_auth_one_login_uid"
     t.string "teacher_auth_teacher_reference_number"
     t.date "teacher_auth_verified_date_of_birth"

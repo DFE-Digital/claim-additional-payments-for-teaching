@@ -13,15 +13,24 @@ module Policies
 
     extend self
 
-    VERIFIERS = [
-      AutomatedChecks::ClaimVerifiers::Identity,
-      AutomatedChecks::ClaimVerifiers::Qualifications,
-      AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
-      AutomatedChecks::ClaimVerifiers::Employment,
-      AutomatedChecks::ClaimVerifiers::StudentLoanAmount,
-      AutomatedChecks::ClaimVerifiers::FraudRisk,
-      AutomatedChecks::ClaimVerifiers::MatchingClaims
-    ].freeze
+    def verifiers_for_claim(claim)
+      verifiers = []
+
+      verifiers << if claim.eligibility.teacher_auth_completed_at
+        AutomatedChecks::ClaimVerifiers::TeacherAuthIdentityConfirmation
+      else
+        AutomatedChecks::ClaimVerifiers::Identity
+      end
+
+      verifiers + [
+        AutomatedChecks::ClaimVerifiers::Qualifications,
+        AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
+        AutomatedChecks::ClaimVerifiers::Employment,
+        AutomatedChecks::ClaimVerifiers::StudentLoanAmount,
+        AutomatedChecks::ClaimVerifiers::FraudRisk,
+        AutomatedChecks::ClaimVerifiers::MatchingClaims
+      ].freeze
+    end
 
     POLICY_START_YEAR = AcademicYear.new(2013).freeze
     POLICY_END_YEAR = AcademicYear.new(2020).freeze
