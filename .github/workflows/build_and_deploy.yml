@@ -16,7 +16,6 @@ on:
           - review
           - staging
           - production
-          - test
       docker-image-tag:
         description: "Docker image tag to deploy"
         required: true
