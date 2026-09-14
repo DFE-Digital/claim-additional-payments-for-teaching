@@ -29,6 +29,15 @@
     - teacher_reference_number
   :student_loans_eligibilities:
     - teacher_reference_number
+    - teacher_auth_date_of_birth
+    - teacher_auth_email
+    - teacher_auth_first_name
+    - teacher_auth_last_name
+    - teacher_auth_national_insurance_number
+    - teacher_auth_one_login_uid
+    - teacher_auth_teacher_reference_number
+    - teacher_auth_verified_date_of_birth
+    - teacher_auth_verified_name
   :further_education_payments_eligibilities:
     - teacher_reference_number
     - claimant_date_of_birth
