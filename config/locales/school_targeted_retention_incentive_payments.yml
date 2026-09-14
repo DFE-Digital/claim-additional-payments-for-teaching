@@ -46,3 +46,12 @@ en:
         heading:
           current_school: "The school you have selected is not eligible"
           generic: "You are not eligible"
+      current_school:
+        question: What school do you teach at?
+        errors:
+          blank: Enter a school or postcode
+          min_length: Enter a school name or postcode that is at least 3 characters long
+      select_current_school:
+        heading: Which school do you teach at?
+        errors:
+          blank: Select the school you teach at

@@ -2,7 +2,8 @@ module Journeys
   module SchoolTargetedRetentionIncentivePayments
     class SlugSequence
       ELIGIBILITY_SLUGS = [
-        "check-eligibility-intro",
+        "current-school",
+        "select-current-school",
         "hello",
         "check-your-answers",
         "confirmation"

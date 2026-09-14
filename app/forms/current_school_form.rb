@@ -11,9 +11,16 @@ class CurrentSchoolForm < Form
 
   validate :validate_possible_school_exists
   validate :validate_possible_school_must_be_open
+  validate :validate_must_have_results
+
+  def validate_must_have_results
+    if no_results?
+      errors.add(:provision_search, "No results match that search term. Try again.")
+    end
+  end
 
   def save
-    return false if invalid? || no_results?
+    return false if invalid?
 
     if possible_school_id.present? && changed_possible_school?
       journey_session.answers.assign_attributes(

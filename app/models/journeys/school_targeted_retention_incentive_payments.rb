@@ -7,7 +7,9 @@ module Journeys
 
     POLICIES = [Policies::TargetedRetentionIncentivePayments].freeze
     FORMS = [
-      CheckEligibilityIntroForm,
+      CurrentSchoolForm,
+      SelectCurrentSchoolForm,
+      IneligibleForm,
       HelloForm,
       CheckYourAnswersForm,
       ConfirmationForm

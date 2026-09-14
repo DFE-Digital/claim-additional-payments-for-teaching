@@ -109,7 +109,7 @@ class ClaimsController < BasePublicController
   end
 
   def prepend_view_path_for_journey
-    prepend_view_path("app/views/#{current_journey_routing_name.underscore}")
+    prepend_view_path("app/views/#{journey.view_path}")
   end
 
   def handle_magic_link
