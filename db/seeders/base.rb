@@ -33,7 +33,7 @@ module Seeders
     end
 
     def create_journey_configurations
-      Journeys.all.each do |journey|
+      Journeys.available.each do |journey|
         Journeys::Configuration
           .create!(
             routing_name: journey.routing_name,
