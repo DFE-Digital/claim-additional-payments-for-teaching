@@ -1,8 +1,14 @@
 function initJourneyFlowDiagram() {
   if (!window.mermaid) return;
 
+  var restoreCreateElement = function() {};
+
   if (window.mermaidCspNonce) {
     var originalCreateElement = document.createElement.bind(document);
+    restoreCreateElement = function() {
+      document.createElement = originalCreateElement;
+    };
+
     document.createElement = function(tagName) {
       var element = originalCreateElement(tagName);
       if (tagName && tagName.toLowerCase() === "style" && !element.hasAttribute("nonce")) {
@@ -27,7 +33,20 @@ function initJourneyFlowDiagram() {
     }
   });
 
-  mermaid.run({ nodes: [node] });
+  var runResult;
+
+  try {
+    runResult = mermaid.run({ nodes: [node] });
+  } catch (error) {
+    restoreCreateElement();
+    throw error;
+  }
+
+  if (runResult && typeof runResult.finally === "function") {
+    runResult.finally(restoreCreateElement);
+  } else {
+    restoreCreateElement();
+  }
 
   var wrapper = document.createElement("div");
   wrapper.className = "journey-flow-wrapper";

@@ -29,6 +29,8 @@ class JourneyFlowDefinition
       end
 
       data[:nodes].each do |node|
+        next unless linkable_node?(journey, node[:id])
+
         lines << "    click #{node[:id]} href \"#{node_url_for(journey, node[:id])}\""
       end
 
@@ -48,6 +50,10 @@ class JourneyFlowDefinition
         journey: journey.routing_name,
         slug: slug
       )
+    end
+
+    def linkable_node?(journey, node_id)
+      node_id.to_s == "start" || journey.slug_sequence::SLUGS.include?(node_id.to_s.tr("_", "-"))
     end
   end
 end
