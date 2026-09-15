@@ -12,7 +12,7 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
     )
   end
 
-  scenario "happy path" do
+  scenario "when ineligible school chosen" do
     visit landing_page_path(Journeys::SchoolTargetedRetentionIncentivePayments.routing_name)
     expect(page).to have_text "Use this service to find out if you can get an early career teacher payment."
     click_link "Start now"
@@ -26,9 +26,9 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
     click_button "Continue"
 
     expect(page).to have_text "Do you spend at least half of your contracted"
-    choose "Yes"
+    choose "No"
     click_button "Continue"
 
-    expect(page).to have_text "hello"
+    expect(page).to have_text "You are not eligible for this payment"
   end
 end
