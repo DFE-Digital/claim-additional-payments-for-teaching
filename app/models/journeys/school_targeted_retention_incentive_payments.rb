@@ -7,15 +7,15 @@ module Journeys
 
     POLICIES = [Policies::TargetedRetentionIncentivePayments].freeze
     FORMS = [
-      CheckEligibilityIntroForm,
+      CurrentSchoolForm,
+      SelectCurrentSchoolForm,
+      IneligibleForm,
       HelloForm,
       CheckYourAnswersForm,
       ConfirmationForm
     ].freeze
 
     def available?
-      return false if Rails.env.test?
-
       FeatureFlag.enabled?(:new_stri)
     end
 
