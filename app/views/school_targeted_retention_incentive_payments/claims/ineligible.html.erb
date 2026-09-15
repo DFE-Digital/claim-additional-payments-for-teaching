@@ -8,11 +8,8 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= content_tag(:h1, @form.heading, class: "govuk-heading-xl") %>
-
-    <% case @form.ineligibility_reason %>
-    <% when :school_ineligible %>
-      <%= render partial: "ineligible_current_school" %>
+    <% if lookup_context.exists?("#{journey.view_path}/claims/_ineligible_#{@form.ineligibility_reason}") %>
+      <%= render partial: "ineligible_#{@form.ineligibility_reason}" %>
     <% else %>
       <% Sentry.capture_message("unknown ineligibility reason #{@form.ineligibility_reason}") %>
       <%= render partial: "generic" %>

@@ -44,8 +44,9 @@ en:
         btn_text: Accept and send
       ineligible:
         heading:
-          current_school: "The school you have selected is not eligible"
-          generic: "You are not eligible"
+          generic: You are not eligible
+          school_ineligible: The school you have selected is not eligible
+          at_least_half_contracted_hours: You are not eligible for this payment
       current_school:
         question: What school do you teach at?
         errors:

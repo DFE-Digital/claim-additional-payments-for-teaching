@@ -2,11 +2,9 @@ module Journeys
   module SchoolTargetedRetentionIncentivePayments
     class IneligibleForm < Form
       def heading
-        if ineligibility_reason == :school_ineligible
-          t(["heading", "current_school"])
-        else
-          t(["heading", "generic"])
-        end
+        key = ineligibility_reason.presence || "generic"
+
+        t(["heading", key])
       end
 
       def ineligibility_reason
