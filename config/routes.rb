@@ -258,6 +258,8 @@ Rails.application.routes.draw do
       get "journey-components", to: "components#journey_components", as: :journey_components
       get "landing-page-journeys", to: "components#landing_page_journeys", as: :landing_page_journeys
       get "journey-components/open", to: "components#open", as: :open_component
+      get "journey-flows", to: "journey_flows#index", as: :journey_flows
+      get "journey-flows/:journey_key", to: "journey_flows#show", as: :show_journey_flow
     end
   end
 

@@ -28,4 +28,48 @@
 @use "components/train";
 @use "components/contents_list";
 
+.journey-flow-container {
+  border: 1px solid #b1b4b6;
+  background: #fff;
+  padding: 16px;
+  overflow: hidden;
+}
+
+.journey-flow-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.journey-flow-controls button {
+  appearance: none;
+  border: 1px solid #b1b4b6;
+  background: #fff;
+  color: #0b0c0c;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.journey-flow-canvas {
+  position: relative;
+  overflow: hidden;
+  height: calc((100vh - 180px) * 2);
+  max-height: calc((100vh - 180px) * 2);
+  border: 0;
+  background: #fff;
+  touch-action: none;
+}
+
+.journey-flow-svg {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  user-select: none;
+  -webkit-user-select: none;
+  transform-origin: 0 0;
+}
+
 @import "@govuk-one-login/service-header/dist/styles/service-header-no-imports";

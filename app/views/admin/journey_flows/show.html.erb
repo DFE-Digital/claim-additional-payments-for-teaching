@@ -1,0 +1,189 @@
+<% content_for(:page_title) { page_title(@journey_name) } %>
+
+<p class="govuk-body">
+  <%= link_to "Back", admin_components_journey_flows_path, class: "govuk-back-link" %>
+</p>
+
+<h1 class="govuk-heading-l">Journey flow</h1>
+
+<h2 class="govuk-heading-m"><%= @journey_name %></h2>
+
+<p class="govuk-body">
+  This page shows the route for the selected journey and highlights the main decision points and end states.
+  It includes the key branches people may take through the journey, including cases where they are not eligible or end early.
+  It is intended to help developers and testers understand how the customer journey is structured in practice.
+</p>
+
+<div class="govuk-body">
+  <div class="journey-flow-container" data-journey-flow-rendered="svg">
+    <div class="journey-flow-controls" aria-label="Journey flow controls">
+      <button type="button" class="journey-flow-zoom-in" aria-label="Zoom in">+</button>
+      <button type="button" class="journey-flow-zoom-out" aria-label="Zoom out">−</button>
+      <button type="button" class="journey-flow-reset" aria-label="Reset view">Reset</button>
+    </div>
+
+    <div id="journey-flow-diagram" aria-label="Journey flow diagram" class="journey-flow-canvas">
+      <%= @journey_diagram %>
+    </div>
+  </div>
+</div>
+
+<script nonce="<%= content_security_policy_nonce %>">
+  (function() {
+    var container = document.querySelector(".journey-flow-container");
+    if (!container) return;
+
+    var canvas = container.querySelector("#journey-flow-diagram");
+    var svg = canvas ? canvas.querySelector("svg") : null;
+    if (!canvas || !svg) return;
+
+    canvas.style.position = "relative";
+    canvas.style.overflow = "hidden";
+    canvas.style.height = "calc((100vh - 180px) * 2)";
+    canvas.style.maxHeight = "calc((100vh - 180px) * 2)";
+    canvas.style.background = "#fff";
+    canvas.style.touchAction = "none";
+
+    var state = {
+      scale: 1,
+      minScale: 0.4,
+      maxScale: 4,
+      translateX: 0,
+      translateY: 0,
+      dragging: false,
+      startX: 0,
+      startY: 0,
+      originX: 0,
+      originY: 0,
+      dragThreshold: 6
+    };
+
+    function applyTransform() {
+      var bounds = {
+        width: canvas.clientWidth || 1,
+        height: canvas.clientHeight || 1
+      };
+      var svgWidth = svg.viewBox.baseVal && svg.viewBox.baseVal.width ? svg.viewBox.baseVal.width : (svg.getBoundingClientRect().width || 0);
+      var svgHeight = svg.viewBox.baseVal && svg.viewBox.baseVal.height ? svg.viewBox.baseVal.height : (svg.getBoundingClientRect().height || 0);
+      var scaledWidth = svgWidth * state.scale;
+      var scaledHeight = svgHeight * state.scale;
+      var maxTranslateX = Math.max(0, scaledWidth - bounds.width);
+      var maxTranslateY = Math.max(0, scaledHeight - bounds.height);
+
+      state.translateX = clamp(state.translateX, -maxTranslateX, 0);
+      state.translateY = clamp(state.translateY, -maxTranslateY, 0);
+
+      svg.style.position = "absolute";
+      svg.style.left = "0";
+      svg.style.top = "0";
+      svg.style.width = svgWidth + "px";
+      svg.style.height = svgHeight + "px";
+      svg.style.transform = "translate(" + state.translateX + "px, " + state.translateY + "px) scale(" + state.scale + ")";
+      svg.style.transformOrigin = "0 0";
+      svg.style.transition = "transform 0.08s ease-out";
+      svg.style.cursor = state.dragging ? "grabbing" : "grab";
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(Math.max(value, min), max);
+    }
+
+    function zoomBy(factor) {
+      state.scale = clamp(state.scale * factor, state.minScale, state.maxScale);
+      applyTransform();
+    }
+
+    function resetView() {
+      state.scale = 1;
+      state.translateX = 0;
+      state.translateY = 0;
+      applyTransform();
+    }
+
+    document.querySelector(".journey-flow-zoom-in").addEventListener("click", function() {
+      zoomBy(1.15);
+    });
+
+    document.querySelector(".journey-flow-zoom-out").addEventListener("click", function() {
+      zoomBy(0.85);
+    });
+
+    document.querySelector(".journey-flow-reset").addEventListener("click", function() {
+      resetView();
+    });
+
+    svg.addEventListener("wheel", function(event) {
+      event.preventDefault();
+      if (!event.deltaY) return;
+
+      var factor = event.deltaY > 0 ? 0.9 : 1.1;
+      var currentScale = state.scale;
+      var nextScale = clamp(currentScale * factor, state.minScale, state.maxScale);
+
+      if (nextScale === currentScale) return;
+
+      var rect = canvas.getBoundingClientRect();
+      var pointerX = event.clientX - rect.left;
+      var pointerY = event.clientY - rect.top;
+
+      var svgWidth = svg.viewBox.baseVal && svg.viewBox.baseVal.width ? svg.viewBox.baseVal.width : (svg.getBoundingClientRect().width || 1);
+      var svgHeight = svg.viewBox.baseVal && svg.viewBox.baseVal.height ? svg.viewBox.baseVal.height : (svg.getBoundingClientRect().height || 1);
+      var zoomRatioX = (pointerX - state.translateX) / (svgWidth * currentScale);
+      var zoomRatioY = (pointerY - state.translateY) / (svgHeight * currentScale);
+
+      state.scale = nextScale;
+      state.translateX = pointerX - (svgWidth * currentScale * zoomRatioX * (nextScale / currentScale));
+      state.translateY = pointerY - (svgHeight * currentScale * zoomRatioY * (nextScale / currentScale));
+      applyTransform();
+    }, { passive: false });
+
+    svg.addEventListener("pointerdown", function(event) {
+      var target = event.target;
+      if (target && target.closest && target.closest("a")) return;
+
+      if (target && target.closest && target.closest("text")) return;
+      if (target && target.closest && target.closest("rect")) return;
+      if (target && target.closest && target.closest("path")) return;
+
+      state.dragging = false;
+      state.startX = event.clientX;
+      state.startY = event.clientY;
+      state.originX = state.translateX;
+      state.originY = state.translateY;
+      svg.setPointerCapture(event.pointerId);
+    });
+
+    svg.addEventListener("pointermove", function(event) {
+      if (!svg.hasPointerCapture(event.pointerId)) return;
+
+      if (state.dragging) {
+        state.translateX = state.originX + (event.clientX - state.startX);
+        state.translateY = state.originY + (event.clientY - state.startY);
+        applyTransform();
+        return;
+      }
+
+      var deltaX = Math.abs(event.clientX - state.startX);
+      var deltaY = Math.abs(event.clientY - state.startY);
+      if (deltaX > state.dragThreshold || deltaY > state.dragThreshold) {
+        state.dragging = true;
+        state.translateX = state.originX + (event.clientX - state.startX);
+        state.translateY = state.originY + (event.clientY - state.startY);
+        applyTransform();
+      }
+    });
+
+    svg.addEventListener("pointerup", function(event) {
+      state.dragging = false;
+      if (event.pointerId != null && svg.hasPointerCapture(event.pointerId)) {
+        svg.releasePointerCapture(event.pointerId);
+      }
+    });
+
+    svg.addEventListener("pointerleave", function() {
+      state.dragging = false;
+    });
+
+    applyTransform();
+  })();
+</script>

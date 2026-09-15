@@ -1,0 +1,26 @@
+id: early-years-payment
+name: Early years financial incentive payment service - Provider start journey
+nodes:
+  - id: start
+    label: Start
+    type: start
+  - id: email_address
+    label: Email address
+    type: page
+  - id: check_your_email
+    label: Check your email
+    type: page
+  - id: ineligible
+    label: Ineligible
+    type: end
+
+edges:
+  - from: start
+    to: email_address
+    label: begin
+  - from: email_address
+    to: check_your_email
+    label: continue
+  - from: check_your_email
+    to: ineligible
+    label: ineligible

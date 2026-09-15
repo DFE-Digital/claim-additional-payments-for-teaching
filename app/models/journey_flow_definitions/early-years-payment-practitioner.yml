@@ -1,0 +1,128 @@
+id: early-years-payment-practitioner
+name: Early years financial incentive payment service - Practitioner journey
+nodes:
+  - id: start
+    label: Start
+    type: start
+  - id: find_reference
+    label: Find reference
+    type: page
+  - id: sign_in
+    label: Sign in
+    type: page
+  - id: how_we_use_your_information
+    label: How we use your information
+    type: page
+  - id: full_name
+    label: Full name
+    type: page
+  - id: date_of_birth
+    label: Date of birth
+    type: page
+  - id: national_insurance_number
+    label: National insurance number
+    type: page
+  - id: postcode_search
+    label: Postcode search
+    type: page
+  - id: select_home_address
+    label: Select home address
+    type: page
+  - id: address
+    label: Address
+    type: page
+  - id: email_address
+    label: Email address
+    type: page
+  - id: email_verification
+    label: Email verification
+    type: page
+  - id: provide_mobile_number
+    label: Provide mobile number
+    type: page
+  - id: mobile_number
+    label: Mobile number
+    type: page
+  - id: mobile_verification
+    label: Mobile verification
+    type: page
+  - id: personal_bank_account
+    label: Personal bank account
+    type: page
+  - id: gender
+    label: Gender
+    type: page
+  - id: check_your_answers
+    label: Check your answers
+    type: page
+  - id: confirmation
+    label: Confirmation
+    type: end
+  - id: ineligible
+    label: Ineligible
+    type: end
+
+edges:
+  - from: start
+    to: find_reference
+    label: begin
+  - from: find_reference
+    to: sign_in
+    label: continue
+  - from: sign_in
+    to: how_we_use_your_information
+    label: continue
+  - from: how_we_use_your_information
+    to: full_name
+    label: continue
+  - from: full_name
+    to: date_of_birth
+    label: continue
+  - from: date_of_birth
+    to: national_insurance_number
+    label: continue
+  - from: national_insurance_number
+    to: postcode_search
+    label: continue
+  - from: postcode_search
+    to: select_home_address
+    label: postcode_searched
+  - from: postcode_search
+    to: address
+    label: postcode_not_searched
+  - from: select_home_address
+    to: email_address
+    label: continue
+  - from: address
+    to: email_address
+    label: continue
+  - from: email_address
+    to: email_verification
+    label: continue
+  - from: email_verification
+    to: provide_mobile_number
+    label: continue
+  - from: provide_mobile_number
+    to: mobile_number
+    label: phone_needed
+  - from: provide_mobile_number
+    to: mobile_verification
+    label: no_phone
+  - from: mobile_number
+    to: mobile_verification
+    label: continue
+  - from: mobile_verification
+    to: personal_bank_account
+    label: continue
+  - from: personal_bank_account
+    to: gender
+    label: continue
+  - from: gender
+    to: check_your_answers
+    label: continue
+  - from: check_your_answers
+    to: confirmation
+    label: submit
+  - from: check_your_answers
+    to: ineligible
+    label: ineligible
