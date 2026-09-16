@@ -4,7 +4,8 @@ RSpec.feature "Postcode journey desired behavior", feature_flag: [:eytfi_journey
   let(:mock_teacher) do
     instance_double(
       "Dqt::Teacher",
-      has_eligible_eytfi_qualification?: true
+      has_eligible_eytfi_qualification?: true,
+      national_insurance_number: nil
     )
   end
 

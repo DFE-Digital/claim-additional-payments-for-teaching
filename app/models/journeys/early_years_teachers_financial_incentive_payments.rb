@@ -26,6 +26,7 @@ module Journeys
       end
 
       array += [
+        ConfirmNationalInsuranceNumberForm,
         QualificationsCheckForm,
         ContinueClaimForm,
         ClaimCancelledForm,
