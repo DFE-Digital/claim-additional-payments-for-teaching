@@ -11,6 +11,7 @@ module Journeys
         qualifications-check
         continue-claim
         claim-cancelled
+        confirm-national-insurance-number
         upload-employment-proof
         review-employment-proof
         information-provided
@@ -71,6 +72,14 @@ module Journeys
           array << SLUGS_HASH["claim-cancelled"]
         end
 
+        if FeatureFlag.enabled?(:eytrp_hmrc_integration)
+          array << if answers.trs_national_insurance_number.present?
+            SLUGS_HASH["confirm-national-insurance-number"]
+          else
+            SLUGS_HASH["national-insurance-number"]
+          end
+        end
+
         array << SLUGS_HASH["upload-employment-proof"]
         array << SLUGS_HASH["review-employment-proof"]
         array << SLUGS_HASH["information-provided"]
@@ -83,7 +92,11 @@ module Journeys
         end
 
         array << SLUGS_HASH["gender"]
-        array << SLUGS_HASH["national-insurance-number"]
+
+        if FeatureFlag.disabled?(:eytrp_hmrc_integration)
+          array << SLUGS_HASH["national-insurance-number"]
+        end
+
         array << SLUGS_HASH["personal-bank-account"]
         array << SLUGS_HASH["check-your-answers"]
         array << SLUGS_HASH["confirmation"]

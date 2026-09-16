@@ -2,7 +2,8 @@ RSpec.shared_examples "stub_teacher_auth" do
   let(:mock_teacher) do
     instance_double(
       "Dqt::Teacher",
-      has_eligible_eytfi_qualification?: true
+      has_eligible_eytfi_qualification?: true,
+      national_insurance_number: nil
     )
   end
 
@@ -29,7 +30,8 @@ RSpec.shared_examples "stub_teacher_auth_with_ineligible_qualification" do
   let(:mock_teacher) do
     instance_double(
       "Dqt::Teacher",
-      has_eligible_eytfi_qualification?: false
+      has_eligible_eytfi_qualification?: false,
+      national_insurance_number: nil
     )
   end
 

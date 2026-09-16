@@ -4,7 +4,8 @@ RSpec.describe "EYTFI - Claim cancelled", feature_flag: [:eytfi_journey] do
   let(:mock_teacher) do
     instance_double(
       "Dqt::Teacher",
-      has_eligible_eytfi_qualification?: true
+      has_eligible_eytfi_qualification?: true,
+      national_insurance_number: nil
     )
   end
 

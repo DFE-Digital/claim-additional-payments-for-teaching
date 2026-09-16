@@ -4,7 +4,11 @@ require "rails_helper"
 
 RSpec.feature "EYTFI employment proof upload validation", feature_flag: [:eytfi_journey] do
   let(:mock_teacher) do
-    instance_double("Dqt::Teacher", has_eligible_eytfi_qualification?: true)
+    instance_double(
+      "Dqt::Teacher",
+      has_eligible_eytfi_qualification?: true,
+      national_insurance_number: nil
+    )
   end
 
   let(:mock_teacher_resource) do
