@@ -62,7 +62,7 @@ jobs:
         with:
           terraform_version: 1.14.5
       - run: terraform fmt -check -diff
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         name: Cache tflint plugin dir
         with:
           path: ~/.tflint.d/plugins
@@ -114,7 +114,7 @@ jobs:
           bundler-cache: true
       - name: Restore assets cache
         id: assets-cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: |
             public/assets
@@ -126,13 +126,13 @@ jobs:
         run: bin/rails assets:precompile
       - name: Save assets cache
         if: ${{ steps.assets-cache.outputs.cache-hit != 'true' }}
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: |
             public/assets
           key: ${{ steps.assets-cache.outputs.cache-primary-key }}
       - name: Restore test runtime log
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: tmp/parallel_runtime_rspec.log
           key: parallel-runtime-${{ github.run_id }}-${{ github.run_attempt }}
@@ -179,7 +179,7 @@ jobs:
           awk -F: '!seen[$1]++' logs/* | sort > tmp/parallel_runtime_rspec.log
           echo "Merged $(wc -l < tmp/parallel_runtime_rspec.log) entries"
       - name: Save merged runtime log
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: tmp/parallel_runtime_rspec.log
           key: parallel-runtime-${{ github.run_id }}-${{ github.run_attempt }}
