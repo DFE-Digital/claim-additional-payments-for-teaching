@@ -14,23 +14,37 @@ class Admin::ClaimsFilterForm
   end
 
   def filters_changed?
-    if filters[:team_member].blank? ||
-        filters[:policy].blank? ||
-        filters[:status].blank?
+    if filters[:team_member].blank?
+      || filters[:policy].blank?
+      || filters[:status].blank?
+      || filters[:academic_year] == default_academic_year.to_s
       return false
     end
 
     session_filters = session[:filter]
 
-    (filters[:team_member] != session_filters["team_member"]) ||
-      (filters[:policy] != session_filters["policy"]) ||
-      (filters[:status] != session_filters["status"])
+    (filters[:team_member] != session_filters["team_member"])
+    || (filters[:policy] != session_filters["policy"])
+    || (filters[:status] != session_filters["status"])
+    || (filters[:academic_year] != session_filters["academic_year"])
   end
 
   def team_member
     return "all" if reset?
 
     @team_member ||= filters[:team_member] || session[:filter]["team_member"] || "all"
+  end
+
+  def academic_year
+    return default_academic_year if reset?
+
+    @academic_year ||= if filters[:academic_year].present?
+      AcademicYear.new(filters[:academic_year])
+    elsif session[:filter]["academic_year"].present?
+      AcademicYear.new(session[:filter]["academic_year"])
+    else
+      default_academic_year
+    end
   end
 
   def policy
@@ -61,25 +75,25 @@ class Admin::ClaimsFilterForm
     @claims =
       case status
       when "approved"
-        Claim.current_academic_year.approved
+        Claim.where(academic_year:).approved
       when "approved_awaiting_qa"
         Claim.approved.awaiting_qa
       when "approved_awaiting_payroll"
         approved_awaiting_payroll
       when "automatically_approved"
-        Claim.current_academic_year.auto_approved
+        Claim.where(academic_year:).auto_approved
       when "quality_assured"
         Claim
-          .current_academic_year
+          .where(academic_year:)
           .where.not(qa_completed_at: nil)
       when "quality_assured_approved"
         Claim
-          .current_academic_year
+          .where(academic_year:)
           .where.not(qa_completed_at: nil)
           .approved
       when "quality_assured_rejected"
         Claim
-          .current_academic_year
+          .where(academic_year:)
           .where.not(qa_completed_at: nil)
           .rejected
       when "automatically_approved_awaiting_payroll"
@@ -87,7 +101,7 @@ class Admin::ClaimsFilterForm
           .payrollable.auto_approved
       when "rejected"
         Claim
-          .current_academic_year.rejected
+          .where(academic_year:).rejected
       when "rejected_awaiting_qa"
         Claim
           .rejected_awaiting_qa
@@ -203,17 +217,29 @@ class Admin::ClaimsFilterForm
     end
   end
 
+  def academic_year_select_options
+    [
+      OpenStruct.new(id: AcademicYear.previous, name: AcademicYear.previous),
+      OpenStruct.new(id: AcademicYear.current, name: AcademicYear.current)
+    ]
+  end
+
   def save_to_session!
     session[:filter] = {
       "team_member" => team_member,
       "policy" => policy,
-      "status" => status
+      "status" => status,
+      "academic_year" => academic_year.to_s
     }
 
     session[:page] = page
   end
 
   private
+
+  def default_academic_year
+    AcademicYear.current
+  end
 
   def approved_awaiting_payroll
     claim_ids_with_payrollable_topups = Topup.payrollable.pluck(:claim_id)

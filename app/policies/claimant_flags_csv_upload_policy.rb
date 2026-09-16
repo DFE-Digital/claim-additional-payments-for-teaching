@@ -1,0 +1,2 @@
+class ClaimantFlagsCsvUploadPolicy < ServiceAdminPolicy
+end

@@ -116,8 +116,6 @@ class Claim < ApplicationRecord
     end
   end
 
-  delegate :award_amount, to: :eligibility
-
   scope :payrollable, -> { approved.not_awaiting_qa.left_joins(:payments).where(payments: nil) }
   scope :not_awaiting_qa, -> { approved.where("qa_required = false OR (qa_required = true AND qa_completed_at IS NOT NULL)") }
   scope :awaiting_qa, -> { approved.qa_required.where(qa_completed_at: nil) }
@@ -156,12 +154,34 @@ class Claim < ApplicationRecord
     )
   end
 
+  scope :with_eligibility_award_amounts, -> do
+    joins(
+      <<~SQL
+        JOIN (
+          #{
+            Policies::POLICIES.map do |policy|
+              "
+                SELECT
+                id,
+                award_amount AS eligibility_award_amount,
+                '#{policy::Eligibility}' AS eligibility_type
+                FROM #{policy::Eligibility.table_name}
+              "
+            end.join(" UNION ALL ")
+          }
+        ) AS eligibilities
+        ON claims.eligibility_id = eligibilities.id
+        AND claims.eligibility_type = eligibilities.eligibility_type
+      SQL
+    )
+  end
+
   scope :require_in_progress_update_emails, -> {
     by_policies(Policies.all.select { |p| p.require_in_progress_update_emails? })
   }
 
-  scope :with_verifier, ->(verifier) do
-    by_policies(Policies.all.select { it.has_verifier?(verifier) })
+  def award_amount
+    read_attribute(:award_amount) || eligibility.award_amount
   end
 
   def hold!(reason:, user:)
@@ -437,7 +457,18 @@ class Claim < ApplicationRecord
     @claim_checking_tasks ||= policy::ClaimCheckingTasks.new(self)
   end
 
+  def assign_new_reference
+    self.reference = generate_reference
+  end
+
   private
+
+  def generate_reference
+    loop {
+      ref = Reference.new.to_s
+      break ref unless Claim.exists?(reference: ref)
+    }
+  end
 
   def one_login_idv_name_match?
     /\A#{first_name.strip.downcase} /.match?(onelogin_idv_full_name.strip.downcase) &&

@@ -49,7 +49,7 @@
       <% end %>
     <% end %>
 
-    <%= render("timeout_dialog", timeout_in_minutes: admin_timeout_in_minutes, path_on_timeout: admin_sign_in_path, refresh_session_path: admin_refresh_session_path) if admin_signed_in? %>
+    <%= render("timeout_dialog", timeout_in_minutes: admin_timeout_in_minutes, path_on_timeout: admin_sign_out_url, refresh_session_path: admin_refresh_session_path) if admin_signed_in? %>
 
     <%= render "admin/cookie_banner" %>
 

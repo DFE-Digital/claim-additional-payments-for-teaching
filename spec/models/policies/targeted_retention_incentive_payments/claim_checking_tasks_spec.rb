@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Policies::TargetedRetentionIncentivePayments::ClaimCheckingTasks do
-  subject(:identity_status) { described_class.new(claim).identity_status }
+  subject { described_class.new(claim) }
 
   describe "#identity_status" do
     let(:claim) do
@@ -17,7 +17,9 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::ClaimCheckingTasks 
     context "when there is no identity_confirmation task" do
       let(:claim_tasks) { [] }
 
-      it { is_expected.to eq("Unverified") }
+      it "returns Unverified" do
+        expect(subject.identity_status).to eql("Unverified")
+      end
     end
 
     context "when the task passed" do
@@ -32,7 +34,9 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::ClaimCheckingTasks 
         ]
       end
 
-      it { is_expected.to eq("Passed") }
+      it "returns Passed" do
+        expect(subject.identity_status).to eql("Passed")
+      end
     end
 
     context "when the task failed" do
@@ -47,7 +51,9 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::ClaimCheckingTasks 
         ]
       end
 
-      it { is_expected.to eq("Failed") }
+      it "returns Failed" do
+        expect(subject.identity_status).to eql("Failed")
+      end
     end
 
     context "when the task is incomplete with a full claim verifier match" do
@@ -62,7 +68,9 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::ClaimCheckingTasks 
         ]
       end
 
-      it { is_expected.to eq("Full match") }
+      it "returns Full match" do
+        expect(subject.identity_status).to eql("Full match")
+      end
     end
 
     context "when the task is incomplete with a partial claim verifier match" do
@@ -77,7 +85,9 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::ClaimCheckingTasks 
         ]
       end
 
-      it { is_expected.to eq("Partial match") }
+      it "returns Partial match" do
+        expect(subject.identity_status).to eql("Partial match")
+      end
     end
 
     context "when the task is incomplete with no claim verifier match" do
@@ -92,7 +102,35 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::ClaimCheckingTasks 
         ]
       end
 
-      it { is_expected.to eq("No match") }
+      it "returns No match" do
+        expect(subject.identity_status).to eql("No match")
+      end
+    end
+  end
+
+  describe "#applicable_task_names" do
+    context "when 2025/2026 claim" do
+      let(:claim) do
+        build(
+          :claim,
+          policy: Policies::TargetedRetentionIncentivePayments,
+          academic_year: AcademicYear.new(2025)
+        )
+      end
+
+      it "returns corrects task names" do
+        expected = [
+          "identity_confirmation",
+          "qualifications",
+          "census_subjects_taught",
+          "employment",
+          "student_loan_plan",
+          "payroll_details",
+          "payroll_gender"
+        ]
+
+        expect(subject.applicable_task_names).to eql(expected)
+      end
     end
   end
 end

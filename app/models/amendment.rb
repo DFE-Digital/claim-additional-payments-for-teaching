@@ -8,6 +8,12 @@
 # - an array [old_value, new_value]
 # - nil, meaning that this personal data has been removed from the amendment
 class Amendment < ApplicationRecord
+  BANK_DETAIL_ATTRIBUTES = %w[
+    banking_name
+    bank_sort_code
+    bank_account_number
+  ].freeze
+
   belongs_to :claim
   belongs_to :created_by, class_name: "DfeSignIn::User"
   serialize :claim_changes, type: Hash
@@ -83,6 +89,11 @@ class Amendment < ApplicationRecord
   rescue ActiveRecord::RecordInvalid
     amendment.errors.merge!(decision.errors)
     amendment
+  end
+
+  def bank_details_changed?
+    change_keys = claim_changes.stringify_keys.keys
+    BANK_DETAIL_ATTRIBUTES.any? { |bank_attr| change_keys.include?(bank_attr) }
   end
 
   private

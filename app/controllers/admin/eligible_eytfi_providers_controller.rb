@@ -1,6 +1,6 @@
 module Admin
   class EligibleEytfiProvidersController < BaseAdminController
-    before_action :ensure_service_operator
+    before_action :ensure_service_admin
 
     helper_method :journey_configuration
 
@@ -11,7 +11,7 @@ module Admin
       with: -> do
         redirect_to(
           edit_admin_journey_configuration_path(
-            Journeys::FurtherEducationPayments.routing_name
+            journey_configuration
           ),
           alert: "Too many requests"
         )

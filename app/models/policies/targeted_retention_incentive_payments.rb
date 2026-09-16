@@ -19,7 +19,7 @@ module Policies
     SEARCHABLE_ELIGIBILITY_ATTRIBUTES = %w[teacher_reference_number].freeze
 
     POLICY_START_YEAR = AcademicYear.new(2022).freeze
-    POLICY_END_YEAR = AcademicYear.new(2026).freeze
+    POLICY_END_YEAR = AcademicYear.new(2027).freeze
     POLICY_RANGE = POLICY_START_YEAR..POLICY_END_YEAR
 
     # Percentage of approved claims to QA
@@ -69,6 +69,14 @@ module Policies
     # Claims from before this date will have their retained attributes deleted
     # NOOP as PERSONAL_DATA_ATTRIBUTES_TO_RETAIN_FOR_EXTENDED_PERIOD is empty
     EXTENDED_PERIOD_END_DATE = ->(start_of_academic_year) {}
+
+    def verifiers_for_claim(claim)
+      if claim.academic_year <= AcademicYear.new(2025)
+        self::VERIFIERS
+      else
+        []
+      end
+    end
 
     def notify_reply_to_id
       "03ece7eb-2a5b-461b-9c91-6630d0051aa6"

@@ -16,6 +16,8 @@ module FormSubmittable
       render_template_for_current_slug
     rescue ActionView::Template::Error => e
       if e.cause.is_a?(Journeys::ConfirmationForm::SubmittedClaimNotFound)
+        Rails.logger.debug "Journeys::ConfirmationForm::SubmittedClaimNotFound redirecting to start page..."
+
         redirect_to journey.start_page_url
       else
         raise e

@@ -4,9 +4,7 @@
   <%= govuk_back_link href: claims_backlink_path %>
 <% end %>
 
-<% if @banner_messages.any? %>
-  <%= render partial: "banner", locals: { messages: @banner_messages } %>
-<% end %>
+<%= render partial: "banner", collection: @banners %>
 
 <% if @claim.attributes_flagged_by_risk_indicator.any? %>
   <div class="govuk-warning-text">

@@ -5,6 +5,10 @@ RSpec.feature "Admin fraud prevention" do
     File.open(Rails.root.join("spec", "fixtures", "files", "fraud_risk.csv"))
   end
 
+  before do
+    allow(AcademicYear).to receive(:current).and_return(AcademicYear.new(2024))
+  end
+
   context "when updating the list of flagged attributes" do
     it "flags any matching claims" do
       flagged_claim_trn = create(
@@ -30,7 +34,7 @@ RSpec.feature "Admin fraud prevention" do
         national_insurance_number: "AB123456C"
       )
 
-      sign_in_as_service_operator
+      sign_in_as_service_admin
       visit new_admin_fraud_risk_csv_upload_path
       attach_file "Upload fraud risk CSV file", fraud_risk_csv.path
       click_on "Upload"
@@ -110,7 +114,7 @@ RSpec.feature "Admin fraud prevention" do
   end
 
   it "allows for downloading the csv" do
-    sign_in_as_service_operator
+    sign_in_as_service_admin
     visit new_admin_fraud_risk_csv_upload_path
     attach_file "Upload fraud risk CSV file", fraud_risk_csv.path
     click_on "Upload"
@@ -199,7 +203,7 @@ RSpec.feature "Admin fraud prevention" do
     click_on "Continue"
 
     # /targeted-retention-incentive-payments/itt-year
-    choose "2020 to 2021"
+    choose tri_start_year.to_s
     click_on "Continue"
 
     # /targeted-retention-incentive-payments/eligible-itt-subject

@@ -61,6 +61,7 @@ module Journeys
                   claim.public_send(:"#{name}=", value)
                 end
               end
+              claim.award_amount = Policies::EarlyYearsPayments.award_amount
             end
           end
 
@@ -68,13 +69,9 @@ module Journeys
             @eligibilities ||= journey.policies.map do |policy|
               policy::Eligibility.new.tap do |eligibility|
                 set_eligibility_attributes(eligibility)
-                calculate_award_amount(eligibility)
+                eligibility.award_amount = Policies::EarlyYearsPayments.award_amount
               end
             end
-          end
-
-          def calculate_award_amount(eligibility)
-            eligibility.award_amount = Policies::EarlyYearsPayments.award_amount
           end
 
           def set_eligibility_attributes(eligibility)

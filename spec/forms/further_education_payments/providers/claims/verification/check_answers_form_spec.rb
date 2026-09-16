@@ -119,4 +119,42 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::CheckA
       end
     end
   end
+
+  describe "#in_first_five_years" do
+    context "when current academic year ahead of claim academic year" do
+      before do
+        claim.eligibility.update!(
+          provider_verification_teaching_start_year: Date.new(2021).year
+        )
+
+        claim.update!(
+          academic_year: AcademicYear.new(2025)
+        )
+
+        allow(AcademicYear).to receive(:current).and_return(AcademicYear.new(2026))
+      end
+
+      it do
+        expect(subject.in_first_five_years).to eql("September 2021 to August 2022")
+      end
+    end
+
+    context "when claim academic year matches current academic year" do
+      before do
+        claim.eligibility.update!(
+          provider_verification_teaching_start_year: Date.new(2021).year
+        )
+
+        claim.update!(
+          academic_year: AcademicYear.new(2025)
+        )
+
+        allow(AcademicYear).to receive(:current).and_return(AcademicYear.new(2025))
+      end
+
+      it do
+        expect(subject.in_first_five_years).to eql("September 2021 to August 2022")
+      end
+    end
+  end
 end

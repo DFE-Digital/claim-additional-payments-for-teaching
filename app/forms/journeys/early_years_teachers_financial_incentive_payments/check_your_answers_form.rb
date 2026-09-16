@@ -67,6 +67,8 @@ module Journeys
             end
           end
 
+          claim.award_amount = Policies::EarlyYearsTeachersFinancialIncentivePayments.award_amount
+
           claim.onelogin_uid = answers.teacher_auth_one_login_uid
 
           claim.email_address = answers.teacher_auth_email

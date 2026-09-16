@@ -125,6 +125,40 @@ RSpec.describe Hmrc::Client do
       end
     end
 
+    it "applies an optional timeout to the token and verification requests" do
+      token_request_options = Struct.new(:timeout, :open_timeout).new
+      verification_request_options = Struct.new(:timeout, :open_timeout).new
+      requests = [
+        double(options: token_request_options),
+        double(options: verification_request_options)
+      ]
+      response = double(
+        body: {
+          "access_token" => token,
+          "expires_in" => token_expiry
+        }.to_json,
+        success?: true,
+        status: 200
+      )
+
+      allow(http_client).to receive(:post) do |*, &block|
+        block.call(requests.shift)
+        response
+      end
+
+      client.verify_personal_bank_account(
+        sort_code,
+        account_number,
+        name,
+        timeout: 5
+      )
+
+      expect(token_request_options.timeout).to eq(5)
+      expect(token_request_options.open_timeout).to eq(5)
+      expect(verification_request_options.timeout).to eq(5)
+      expect(verification_request_options.open_timeout).to eq(5)
+    end
+
     context "when there is a response error" do
       let(:response_code) { 429 }
       let(:response_success) { false }

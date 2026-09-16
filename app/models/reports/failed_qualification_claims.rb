@@ -24,7 +24,7 @@ module Reports
     def initialize
       @claims = Claim
         .approved
-        .where(academic_year: AcademicYear.current)
+        .where(academic_year: [AcademicYear.current, AcademicYear.previous])
         .joins(:tasks).merge(
           Task.qualifications.where(passed: false).or(
             Task.qualifications.claim_verifier_match_none

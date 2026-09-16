@@ -36,7 +36,7 @@ module Reports
       @claims ||= Claim
         .approved
         .by_policy(Policies::FurtherEducationPayments)
-        .where(academic_year:)
+        .where(academic_year: [AcademicYear.current, AcademicYear.previous])
         .joins(:tasks)
         .merge(failed_provider_tasks)
         .includes(:eligibility, decisions: :created_by)
@@ -46,10 +46,6 @@ module Reports
       Task
         .where(name: "fe_provider_verification_v2")
         .failed
-    end
-
-    def academic_year
-      AcademicYear.new("2025/2026")
     end
 
     class ClaimPresenter

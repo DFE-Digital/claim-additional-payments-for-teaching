@@ -48,7 +48,7 @@ RSpec.feature "Combined claim journey dependent answers" do
 
     # - In which academic year did you complete your postgraduate ITT?
     expect(page).to have_text("In which academic year did you start your postgraduate initial teacher training (ITT)?")
-    choose "2020 to 2021"
+    choose tri_start_year
     click_on "Continue"
 
     # - Which subject did you do your undergraduate ITT in
@@ -68,7 +68,7 @@ RSpec.feature "Combined claim journey dependent answers" do
     click_on "Continue"
 
     expect(page).to have_text("In which academic year did you complete your undergraduate initial teacher training (ITT)?")
-    choose "2020 to 2021"
+    choose tri_start_year
     click_on "Continue"
 
     # User should be redirected to the next question which was previously answered but wiped by the attribute dependency

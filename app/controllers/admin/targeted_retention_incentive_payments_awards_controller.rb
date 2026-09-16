@@ -1,6 +1,6 @@
 module Admin
   class TargetedRetentionIncentivePaymentsAwardsController < BaseAdminController
-    before_action :ensure_service_operator
+    before_action :ensure_service_admin
 
     helper_method :journey_configuration
 
@@ -9,6 +9,7 @@ module Admin
     end
 
     def create
+      @form = Admin::JourneyConfigurationForm.for_journey_configuration(journey_configuration)
       @awards_upload_form = Policies::TargetedRetentionIncentivePayments::AwardCsvImporter.new(awards_upload_params.merge({admin_user:})) if journey_configuration.targeted_retention_incentive_payments?
 
       if @awards_upload_form.process

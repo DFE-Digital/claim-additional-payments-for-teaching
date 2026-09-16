@@ -147,6 +147,7 @@ module Admin
     include ActiveModel::Attributes
 
     attribute :policy_name, :string, default: "early_years_payments"
+    attribute :academic_year, :string, default: -> { AcademicYear.current.to_s }
     attribute :show_filter_controls, :boolean, default: false
     attribute :statuses, default: {}
     attribute :clear_statuses, :boolean, default: false
@@ -163,6 +164,12 @@ module Admin
 
     def policy
       @policy ||= Policies.all.find { |p| p.locale_key == policy_name }
+    end
+
+    def academic_year_select_options
+      (AcademicYear.new(2025)..AcademicYear.current).map do |year|
+        Form::Option.new(id: year.to_s, name: year.to_s.gsub("/", " / "))
+      end
     end
 
     def show_filter_controls?
@@ -254,7 +261,9 @@ module Admin
       {
         model_name.param_key => {
           policy_name: policy_name,
+          academic_year: academic_year,
           statuses: statuses,
+          clear_statuses: clear_statuses,
           show_filter_controls: show_filter_controls?,
           assignee_id: assignee_id
         }.merge(merge)
@@ -288,7 +297,7 @@ module Admin
       return @claim_scope if defined?(@claim_scope)
 
       @claim_scope = Claim
-        .by_academic_year(AcademicYear.current)
+        .by_academic_year(academic_year)
         .awaiting_decision
         .by_policy(policy)
 

@@ -2,7 +2,7 @@
 DFE_SIGN_IN_API_CLIENT_ID: teacherpayments
 DFE_SIGN_IN_API_ENDPOINT: https://test-api.signin.education.gov.uk/
 DFE_SIGN_IN_IDENTIFIER: teacherpayments
-DFE_SIGN_IN_ISSUER: https://test-oidc.signin.education.gov.uk:443
+DFE_SIGN_IN_ISSUER: https://test-oidc.signin.education.gov.uk
 DFE_SIGN_IN_REDIRECT_BASE_URL: https://test.claim-additional-teaching-payment.service.gov.uk
 
 DFE_SIGN_IN_INTERNAL_CLIENT_ID: teacherpaymentsadmin

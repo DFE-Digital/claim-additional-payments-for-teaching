@@ -19,6 +19,12 @@ class Admin::AmendmentsController < Admin::BaseAdminController
     )
 
     if @form.valid? && @form.save
+      if @form.amendment.bank_details_changed?
+        Admin::Claims::HmrcValidationJob.perform_now(@claim)
+
+        flash[:hmrc_bank_verification_claim_id] = @claim.id
+      end
+
       redirect_to admin_claim_tasks_url(@claim), notice: "Claim has been amended successfully"
     else
       render "new"

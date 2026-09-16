@@ -11,7 +11,7 @@ RSpec.feature "Managing targeted_retention_incentive Payments school awards" do
   let(:csv_file_without_headers) { "spec/fixtures/files/targeted_retention_incentive_school_awards_no_headers.csv" }
 
   before do
-    sign_in_as_service_operator
+    sign_in_as_service_admin
 
     click_on "Manage services"
 

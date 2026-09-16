@@ -119,7 +119,7 @@ RSpec.feature "Combined journey with Teacher ID email check" do
     click_on "Continue"
 
     expect(page).to have_text("In which academic year did you complete your undergraduate initial teacher training (ITT)?")
-    choose "2020 to 2021"
+    choose tri_start_year
     click_on "Continue"
 
     # User should be redirected to the next question which was previously answered but wiped by the attribute dependency

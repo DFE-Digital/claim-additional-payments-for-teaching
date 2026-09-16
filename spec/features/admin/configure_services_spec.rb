@@ -8,7 +8,7 @@ RSpec.feature "Service configuration" do
   end
 
   scenario "when teacher id configurable for service" do
-    sign_in_as_service_operator
+    sign_in_as_service_admin
 
     click_on "Manage services"
     within(page.find("tr", text: journey_configuration.journey.full_name)) do
@@ -36,26 +36,8 @@ RSpec.feature "Service configuration" do
     expect(page).to have_content("Automatic approvals for submitted claims are turned off")
   end
 
-  scenario "Service operator can't toggle automatic approvals for submitted claims" do
-    sign_in_as_service_operator
-
-    click_on "Manage services"
-    within(page.find("tr", text: journey_configuration.journey.full_name)) do
-      click_on "Change"
-    end
-
-    expect(page).to have_content("Automatic approvals for submitted claims")
-    expect(page).to have_content("Automatic approvals")
-    within_fieldset("Automatic approvals") { choose("Off") }
-
-    click_on "Save"
-
-    expect(journey_configuration.reload.automatic_approvals).to be true
-    expect(page).to have_content("Not authorised")
-  end
-
-  scenario "Service operator closes a service for submissions", js: true do
-    sign_in_as_service_operator
+  scenario "Service admin closes a service for submissions" do
+    sign_in_as_service_admin
 
     click_on "Manage services"
 
@@ -74,12 +56,12 @@ RSpec.feature "Service configuration" do
 
     expect { click_on "Save" }.to_not enqueue_job(SendReminderEmailsJob)
 
-    expect(current_path).to eq(edit_admin_journey_configuration_path(journey_configuration))
+    expect(current_path).to eql(edit_admin_journey_configuration_path(journey_configuration))
 
     expect(page).to have_content("Closed")
     expect(journey_configuration.reload.open_for_submissions).to be false
 
-    # - Service operator opens a service for submissions
+    click_on "Manage services"
 
     visit admin_journey_configurations_path
 
@@ -97,10 +79,11 @@ RSpec.feature "Service configuration" do
     expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob).with { |arg| expect(arg).to eql(Journeys::TeacherStudentLoanReimbursement) }
 
     expect(page).to have_content("Service open")
+    expect(current_path).to eql(edit_admin_journey_configuration_path(journey_configuration))
   end
 
-  scenario "selecting Open shows close date and close time fields", js: true do
-    sign_in_as_service_operator
+  scenario "selecting Open shows close date and close time fields" do
+    sign_in_as_service_admin
 
     click_on "Manage services"
 
@@ -117,10 +100,10 @@ RSpec.feature "Service configuration" do
     expect(page).to have_css("#close-at[min]")
   end
 
-  scenario "shows saved close date and close time values in the edit fields", js: true do
+  scenario "shows saved close date and close time values in the edit fields" do
     journey_configuration.update!(close_at: Time.zone.now.in_time_zone("London").advance(days: 7))
 
-    sign_in_as_service_operator
+    sign_in_as_service_admin
 
     click_on "Manage services"
 
@@ -133,10 +116,10 @@ RSpec.feature "Service configuration" do
     expect(page).to have_field("close-at", with: journey_configuration.reload.close_at.in_time_zone("London").strftime("%Y-%m-%dT%H:%M"))
   end
 
-  scenario "submitting Open with empty close date and close time shows errors for supported journeys", js: true do
+  scenario "submitting Open with empty close date and close time shows errors for supported journeys" do
     eytfi_journey_configuration = create(:journey_configuration, :early_years_teachers_financial_incentive_payments)
 
-    sign_in_as_service_operator
+    sign_in_as_service_admin
 
     [journey_configuration, eytfi_journey_configuration].each do |configuration|
       visit admin_journey_configurations_path
@@ -167,9 +150,9 @@ RSpec.feature "Service configuration" do
       create_list(:reminder, 3, :with_fe_reminder, email_verified: true, itt_academic_year: AcademicYear.current)
     end
 
-    scenario "Service operator opens an TRI service for submissions" do
-      journey_configuration.update_column(:open_for_submissions, false)
-      sign_in_as_service_operator
+    scenario "Service admin opens an TRI service for submissions" do
+      journey_configuration.update(open_for_submissions: false)
+      sign_in_as_service_admin
 
       click_on "Manage services"
 
@@ -180,16 +163,13 @@ RSpec.feature "Service configuration" do
         click_on "Change"
       end
 
-      within(".govuk-radios__conditional--hidden#reminders-warning-message") do
-        expect(page).to have_content(I18n.t("admin.journey_configuration.reminder_warning", count: count))
-      end
+      expect(page).to have_content(I18n.t("admin.journey_configuration.reminder_warning", count: count))
 
       within_fieldset("Service status") { choose("Open") }
       find("#close-at").set(future_close_at_form_value(7))
       expect(page).to have_content(I18n.t("admin.journey_configuration.reminder_warning", count: count))
-      # make sure email reminder job is queued
       expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob)
-      expect(current_path).to eq(edit_admin_journey_configuration_path(journey_configuration))
+      expect(current_path).to eql(edit_admin_journey_configuration_path(journey_configuration))
 
       expect(page).to have_content("Service open")
       expect(page).to have_css("input[name='journey_configuration[open_for_submissions]'][value='true'][checked]")
@@ -198,9 +178,9 @@ RSpec.feature "Service configuration" do
     end
   end
 
-  scenario "Service operator changes the academic year a service is accepting payments for" do
+  scenario "Service admin changes the academic year a service is accepting payments for" do
     travel_to Date.new(2023) do
-      sign_in_as_service_operator
+      sign_in_as_service_admin
 
       click_on "Manage services"
 
@@ -213,6 +193,11 @@ RSpec.feature "Service configuration" do
       expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob).with { |arg| expect(arg).to eql(journey_configuration.journey) }
 
       expect(page).to have_content(AcademicYear.new(2023).to_s)
+      click_on "Manage services"
+
+      within(find("tr[data-policy-configuration-routing-name=\"#{journey_configuration.routing_name}\"]")) do
+        expect(page).to have_content("2023/2024")
+      end
 
       expect(journey_configuration.reload.current_academic_year).to eq AcademicYear.new(2023)
     end
@@ -224,7 +209,7 @@ RSpec.feature "Service configuration" do
 
   scenario "when teacher id not configurable for service" do
     given_journey_configuration
-    sign_in_as_service_operator
+    sign_in_as_service_admin
 
     click_on "Manage services"
     click_on "Change Claim a targeted retention incentive payment for further education teachers"
@@ -234,7 +219,7 @@ RSpec.feature "Service configuration" do
 
   scenario "toggle FE provider dashboard", feature_flag: [:fe_provider_dashboard] do
     given_journey_configuration
-    sign_in_as_service_operator
+    sign_in_as_service_admin
 
     click_on "Manage services"
     click_on "Change Claim a targeted retention incentive payment for further education teachers"

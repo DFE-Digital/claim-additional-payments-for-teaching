@@ -191,9 +191,8 @@ RSpec.describe Admin::AmendmentForm, type: :model do
             expect(form).to be_valid
 
             expect { form.save }.to(
-              change { claim.reload.eligibility.award_amount }
-                .from(1000)
-                .to(2000)
+              change { claim.reload.eligibility.award_amount }.from(1000).to(2000)
+              .and(change { claim.reload.read_attribute(:award_amount) }.to(2000))
             )
           end
         end
@@ -224,8 +223,10 @@ RSpec.describe Admin::AmendmentForm, type: :model do
               "Award amount cannot be changed for this policy"
             )
 
-            expect { form.save }.to_not(
-              change { claim.reload.eligibility.award_amount }
+            expect { form.save }.to(
+              not_change { claim.reload.eligibility.award_amount }.and(
+                not_change { claim.read_attribute(:award_amount) }
+              )
             )
           end
         end

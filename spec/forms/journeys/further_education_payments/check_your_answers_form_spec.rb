@@ -67,12 +67,14 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
       end
     end
 
-    it "saves all answers into the Eligibility model" do
+    it "saves all answers into the claim and eligibility models" do
       subject
+
       claim = form.claim
       eligibility = form.claim.eligibility
 
       expect(claim.policy).to eql(Policies::FurtherEducationPayments)
+      expect(claim.read_attribute(:award_amount)).to eql(answers.award_amount)
 
       expect(claim.identity_confirmed_with_onelogin).to eq(answers.identity_confirmed_with_onelogin)
       expect(claim.logged_in_with_onelogin).to eq(answers.logged_in_with_onelogin)

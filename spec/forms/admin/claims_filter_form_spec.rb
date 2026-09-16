@@ -365,6 +365,44 @@ RSpec.describe Admin::ClaimsFilterForm, type: :model do
         expect(subject.claims).to include(claim_previous_ay)
       end
     end
+
+    context "filtering by academic year" do
+      let!(:claim_in_previous_academic_year) do
+        create(
+          :claim,
+          :auto_approved,
+          academic_year: AcademicYear.previous,
+          policy: Policies::FurtherEducationPayments
+        )
+      end
+
+      let!(:claim_in_current_academic_year) do
+        create(
+          :claim,
+          :auto_approved,
+          academic_year: AcademicYear.current,
+          policy: Policies::FurtherEducationPayments
+        )
+      end
+
+      context "when no academic year selected" do
+        let(:filters) { {team_member: "all", policy: "all", status: "approved"} }
+
+        it "defaults to current academic year" do
+          expect(subject.claims).to include(claim_in_current_academic_year)
+          expect(subject.claims).not_to include(claim_in_previous_academic_year)
+        end
+      end
+
+      context "when academic year selected" do
+        let(:filters) { {team_member: "all", policy: "all", status: "approved", academic_year: AcademicYear.previous.to_s} }
+
+        it "returns claims from selected year" do
+          expect(subject.claims).not_to include(claim_in_current_academic_year)
+          expect(subject.claims).to include(claim_in_previous_academic_year)
+        end
+      end
+    end
   end
 
   describe "#save_to_session!" do
@@ -378,7 +416,8 @@ RSpec.describe Admin::ClaimsFilterForm, type: :model do
       expect(session[:filter]).to eq({
         "team_member" => "user-123",
         "policy" => "further-education-payments",
-        "status" => "approved"
+        "status" => "approved",
+        "academic_year" => AcademicYear.current.to_s
       })
     end
 

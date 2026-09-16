@@ -1,4 +1,6 @@
 class StaticPagesController < BasePublicController
+  before_action :check_journey_exists
+
   def accessibility_statement
     journey_accessibility_statement = "#{journey.view_path}/accessibility_statement"
 
@@ -104,5 +106,13 @@ class StaticPagesController < BasePublicController
 
   def current_user
     DfeSignIn::NullUser.new
+  end
+
+  def check_journey_exists
+    if journey.nil?
+      render file: Rails.root.join("public", "404.html"),
+        status: :not_found,
+        layout: false
+    end
   end
 end

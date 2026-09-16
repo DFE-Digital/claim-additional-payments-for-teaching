@@ -35,9 +35,15 @@ RSpec.feature "Admin decisions" do
 
       context "when some tasks have not been completed" do
         let(:claim) {
-          create(:claim, :submitted, policy: Policies::TargetedRetentionIncentivePayments, tasks: [
-            build(:task, name: "qualifications")
-          ])
+          create(
+            :claim,
+            :submitted,
+            academic_year: AcademicYear.new(2025),
+            policy: Policies::TargetedRetentionIncentivePayments,
+            tasks: [
+              build(:task, name: "qualifications")
+            ]
+          )
         }
 
         it "warns the service operator about those tasks" do

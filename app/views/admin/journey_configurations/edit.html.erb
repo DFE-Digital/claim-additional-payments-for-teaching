@@ -11,20 +11,19 @@
       <%= journey_configuration.journey.full_name %>
     </h1>
 
-    <div class="govuk-panel govuk-panel--informational govuk-panel--small">
-      <% if journey_configuration.open_for_submissions? %>
-        <h2 class="govuk-panel__title">Service open</h2>
-        <p class="govuk-panel__body">
-          This service is currently open and accepting claims for the
-          <%= journey_configuration.current_academic_year%> academic year.
-        </p>
-      <% else %>
-        <h2 class="govuk-panel__title">Service closed</h2>
-        <p class="govuk-panel__body">
-          This service is currently closed. Users can not submit claims.
-        </p>
-      <% end %>
-    </div>
+    <% if journey_configuration.open_for_submissions? %>
+      <%= govuk_panel(
+        title_text: "Service open",
+        text: "This service is currently open and accepting claims for the #{journey_configuration.current_academic_year} academic year.",
+        classes: "govuk-panel--informational govuk-panel--small"
+      ) %>
+    <% else %>
+      <%= govuk_panel(
+        title_text: "Service closed",
+        text: "This service is currently closed. Users can not submit claims.",
+        classes: "govuk-panel--informational govuk-panel--small"
+      ) %>
+    <% end %>
 
     <% if journey_configuration.targeted_retention_incentive_payments? %>
       <div class="govuk-panel govuk-panel--informational govuk-panel--small">
@@ -40,90 +39,80 @@
       </div>
     <% end %>
 
-    <%= form_with model: [:admin, journey_configuration], url: admin_journey_configuration_path(journey_configuration), scope: "journey_configuration" do |f| %>
+    <%= form_with model: @form,
+      url: admin_journey_configuration_path(journey_configuration),
+      method: :patch,
+      scope: "journey_configuration",
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
 
-      <div class="govuk-form-group">
-        <%= f.label :current_academic_year, "Accepting claims for academic year", class: "govuk-label" %>
-        <%= f.select :current_academic_year, options_for_academic_year, {}, class: "govuk-select" %>
-      </div>
+      <%= f.govuk_collection_select :current_academic_year,
+        @form.academic_year_select_options,
+        :id,
+        :name,
+        label: { text: "Accepting claims for academic year" } %>
 
-      <div class="govuk-form-group">
-        <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend">
-            Service status
-          </legend>
-          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
-            <div class="govuk-radios__item">
-              <%= f.radio_button :open_for_submissions, true, class: "govuk-radios__input", data: { aria_controls: "reminders-warning-message" } %>
-              <%= f.label :open_for_submissions, "Open", value: true, class: "govuk-label govuk-radios__label" %>
+      <%= f.govuk_radio_buttons_fieldset(
+        :open_for_submissions,
+        legend: {
+          size: 'm',
+          text: "Service status"
+        }) do %>
+        <%= f.govuk_radio_button :open_for_submissions,
+          true,
+          label: { text: "Open" },
+          link_errors: true do %>
+            <%= render "admin/journey_configurations/reminder_warning" %>
+
+            <div class="govuk-form-group <%= 'govuk-form-group--error' if f.object.errors[:close_at].any? %>">
+              <%= f.label :close_at, "Close at (Europe/London)", class: "govuk-label", for: "close-at" %>
+              <% if f.object.errors[:close_at].any? %>
+                <p class="govuk-error-message">
+                  <span class="govuk-visually-hidden">Error:</span>
+                  <%= f.object.errors.full_messages_for(:close_at).first %>
+                </p>
+              <% end %>
+              <%= f.datetime_local_field :close_at,
+                class: "govuk-input govuk-!-width-one-third",
+                id: "close-at",
+                min: Time.current.in_time_zone("London").strftime("%Y-%m-%dT%H:%M"),
+                value: f.object.close_at&.in_time_zone("London")&.strftime("%Y-%m-%dT%H:%M") %>
             </div>
-            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="reminders-warning-message">
-              <%= render 'admin/journey_configurations/reminder_warning' %>
+        <% end %>
 
-              <div class="govuk-form-group <%= 'govuk-form-group--error' if f.object.errors[:close_at].any? %>">
-                <%= f.label :close_at, "Close at (Europe/London)", class: "govuk-label", for: "close-at" %>
-                <% if f.object.errors[:close_at].any? %>
-                  <p class="govuk-error-message">
-                    <span class="govuk-visually-hidden">Error:</span>
-                    <%= f.object.errors.full_messages_for(:close_at).first %>
-                  </p>
-                <% end %>
-                <%= f.datetime_local_field :close_at,
-                  class: "govuk-input govuk-!-width-one-third",
-                  id: "close-at",
-                  min: Time.current.in_time_zone("London").strftime("%Y-%m-%dT%H:%M"),
-                  value: f.object.close_at&.in_time_zone("London")&.strftime("%Y-%m-%dT%H:%M") %>
-              </div>
-            </div>
-            <div class="govuk-radios__item">
-              <%= f.radio_button :open_for_submissions, false, class: "govuk-radios__input" %>
-              <%= f.label :open_for_submissions, "Closed", value: false, class: "govuk-label govuk-radios__label" %>
-            </div>
-          </div>
+        <%= f.govuk_radio_button :open_for_submissions,
+          false,
+          label: { text: "Closed" } do %>
+          <%= f.govuk_text_area :availability_message,
+            label: {
+              text: "Availability message"
+            },
+            hint: -> do %>
+              <p>
+                This is an optional message that should provide an explanation of why the service is closed and / or when we expect it to open again.
+              </p>
 
-          <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-
-          <h3 class="govuk-heading-s">Automatic approvals for submitted claims</h3>
-
-          <legend class="govuk-fieldset__legend">
-            Automatic approvals
-          </legend>
-
-          <div class="govuk-radios" data-module="govuk-radios">
-            <div class="govuk-radios__item">
-              <%= f.radio_button :automatic_approvals, true, class: "govuk-radios__input" %>
-              <%= f.label :automatic_approvals, "On", value: true, class: "govuk-label govuk-radios__label" %>
-            </div>
-            <div class="govuk-radios__item">
-              <%= f.radio_button :automatic_approvals, false, class: "govuk-radios__input" %>
-              <%= f.label :automatic_approvals, "Off", value: false, class: "govuk-label govuk-radios__label" %>
-            </div>
-          </div>
-        </fieldset>
-      </div>
-
-
-      <% if journey_configuration.teacher_id_configurable? %>
-        <div class="govuk-form-group">
-          <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend">
-              Sign in with DfE Identity
-            </legend>
-            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
-              <div class="govuk-radios__item">
-                <%= f.radio_button :teacher_id_enabled, true, class: "govuk-radios__input" %>
-                <%= f.label :teacher_id_enabled, "Enabled", value: true, class: "govuk-label govuk-radios__label" %>
-              </div>
-              <div class="govuk-radios__item">
-                <%= f.radio_button :teacher_id_enabled, false, class: "govuk-radios__input" %>
-                <%= f.label :teacher_id_enabled, "Disabled", value: false, class: "govuk-label govuk-radios__label" %>
-              </div>
-            </div>
-          </fieldset>
-        </div>
+              <p>
+                For example, "The service is closed for maintenance and will be available from 2pm today."
+              </p>
+          <% end %>
+        <% end %>
       <% end %>
 
-      <%= f.submit "Save", class: "govuk-button", data: { module: "govuk-button" } %>
+      <%= f.govuk_collection_radio_buttons :automatic_approvals,
+        @form.automatic_approvals_radio_options,
+        :id,
+        :name,
+        legend: { text: "Automatic approvals for submitted claims" } %>
+
+      <% if journey_configuration.teacher_id_configurable? %>
+        <%= f.govuk_collection_radio_buttons :teacher_id_enabled,
+          @form.teacher_id_radio_options,
+          :id,
+          :name,
+          legend: { text: "Sign in with DfE Identity" } %>
+      <% end %>
+
+      <%= f.govuk_submit "Save" %>
     <% end %>
   </div>
 </div>

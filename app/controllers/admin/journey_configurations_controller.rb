@@ -2,7 +2,7 @@ module Admin
   class JourneyConfigurationsController < BaseAdminController
     helper_method :journey_configuration
     before_action :journey_configuration
-    before_action :ensure_service_admin, only: [:update], if: -> { automatic_approvals_update_requested? }
+    before_action :authorise_journey_configuration
     after_action :send_reminders, only: [:update]
 
     FILE_UPLOAD_TARGET_DATA_MODELS = {
@@ -20,7 +20,10 @@ module Admin
     end
 
     def update
-      if journey_configuration.update(journey_configuration_params)
+      @form = Admin::JourneyConfigurationForm.for_journey_configuration(@journey_configuration)
+      @form.assign_attributes(journey_configuration_params)
+
+      if @form.save
         flash[:success] = automatic_approvals_flash_message if journey_configuration.saved_change_to_automatic_approvals?
         redirect_to edit_admin_journey_configuration_path(journey_configuration)
       else
@@ -32,6 +35,8 @@ module Admin
     private
 
     def load_edit_data
+      @form = Admin::JourneyConfigurationForm.for_journey_configuration(@journey_configuration)
+
       @awards_upload_form = Policies::TargetedRetentionIncentivePayments::AwardCsvImporter.new(awards_upload_params.merge({admin_user:})) if journey_configuration.targeted_retention_incentive_payments?
 
       @upload_form = EligibleFeProvidersForm.new(upload_params, admin_user)
@@ -47,6 +52,12 @@ module Admin
       @feature_flags_form.load_data
 
       @flagged_fe_providers_form = FurtherEducationPayments::FlaggedProvidersCsvForm.new(admin: admin_user)
+    end
+
+    private
+
+    def authorise_journey_configuration
+      authorize :journey_configuration
     end
 
     def awards_upload_params

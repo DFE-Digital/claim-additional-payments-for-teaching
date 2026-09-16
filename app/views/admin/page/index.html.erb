@@ -2,30 +2,38 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-one-half">
-    <h2 class="govuk-heading-m">Claims received (<%= AcademicYear.current %>)</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= @claims_received %></p>
+    <div class="govuk-body">
+      <%= @dashboard.academic_year == AcademicYear.previous ? AcademicYear.previous : govuk_link_to(AcademicYear.previous, url_for(academic_year: AcademicYear.previous.start_year)) %> | <%= @dashboard.academic_year == AcademicYear.current ? AcademicYear.current : govuk_link_to(AcademicYear.current, url_for) %>
+    </div>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-half">
+    <h2 class="govuk-heading-m">Claims received (<%= @dashboard.academic_year %>)</h2>
+    <p class="govuk-body govuk-!-font-size-36"><%= @dashboard.claims_received_for_year %></p>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
-    <h2 class="govuk-heading-m">Claims approved (<%= AcademicYear.current %>)</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= @claims_approved %></p>
+    <h2 class="govuk-heading-m">Claims approved (<%= @dashboard.academic_year %>)</h2>
+    <p class="govuk-body govuk-!-font-size-36"><%= @dashboard.claims_approved_for_year %></p>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
-    <h2 class="govuk-heading-m">Claims rejected (<%= AcademicYear.current %>)</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= @claims_rejected %></p>
+    <h2 class="govuk-heading-m">Claims rejected (<%= @dashboard.academic_year %>)</h2>
+    <p class="govuk-body govuk-!-font-size-36"><%= @dashboard.claims_rejected_for_year %></p>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
   </div>
 
   <div class="govuk-grid-column-one-half">
     <h2 class="govuk-heading-m">Total claims received</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= @total_claims_received %></p>
+    <p class="govuk-body govuk-!-font-size-36"><%= @dashboard.all_claims_received %></p>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
     <h2 class="govuk-heading-m">Claims approaching deadline</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= @claims_approaching_deadline %></p>
+    <p class="govuk-body govuk-!-font-size-36"><%= @dashboard.claims_approaching_deadline %></p>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
     <h2 class="govuk-heading-m">Claims passed deadline</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= @claims_passed_decision_deadline %></p>
+    <p class="govuk-body govuk-!-font-size-36"><%= @dashboard.claims_passed_decision_deadline %></p>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
   </div>
 </div>
@@ -41,13 +49,13 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-one-half">
     <h2 class="govuk-heading-m">No data</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= number_to_percentage(@no_data_census_subjects_taught_count, precision: 1) %></p>
+    <p class="govuk-body govuk-!-font-size-36"><%= number_to_percentage(@dashboard.no_data_census_subjects_taught_count, precision: 1) %></p>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
   </div>
 
   <div class="govuk-grid-column-one-half">
     <h2 class="govuk-heading-m">Any matches</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= number_to_percentage(@any_match_count, precision: 1) %></p>
+    <p class="govuk-body govuk-!-font-size-36"><%= number_to_percentage(@dashboard.any_match_count, precision: 1) %></p>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
   </div>
 </div>
@@ -62,8 +70,8 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-one-half">
-    <h2 class="govuk-heading-m">Provider verification tasks automatically passed (<%= AcademicYear.current %>) </h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= @fe_provider_verfication_tasks_automatically_passed %></p>
+    <h2 class="govuk-heading-m">Provider verification tasks automatically passed (<%= @dashboard.academic_year %>) </h2>
+    <p class="govuk-body govuk-!-font-size-36"><%= @dashboard.fe_provider_verfication_tasks_automatically_passed %></p>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
   </div>
 </div>

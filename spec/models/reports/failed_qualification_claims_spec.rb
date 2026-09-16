@@ -77,7 +77,7 @@ RSpec.describe Reports::FailedQualificationClaims do
         :claim,
         :approved,
         policy: Policies::EarlyCareerPayments,
-        academic_year: AcademicYear.new(2023)
+        academic_year: AcademicYear.new(2022)
       )
 
       create(

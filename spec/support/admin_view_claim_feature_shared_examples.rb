@@ -175,7 +175,11 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     when Policies::StudentLoans
       ["Identity confirmation", "Qualifications", "Census subjects taught", "Employment", "Student loan amount", "Decision"]
     when Policies::TargetedRetentionIncentivePayments
-      ["Identity confirmation", "Qualifications", "Census subjects taught", "Employment", "Student loan plan", "Decision"]
+      if academic_year <= AcademicYear.new(2025)
+        ["Identity confirmation", "Qualifications", "Census subjects taught", "Employment", "Student loan plan", "Decision"]
+      else
+        ["Decision"]
+      end
     when Policies::EarlyCareerPayments
       ["Identity confirmation", "Qualifications", "Induction confirmation", "Census subjects taught", "Employment", "Student loan plan", "Decision"]
     when Policies::InternationalRelocationPayments

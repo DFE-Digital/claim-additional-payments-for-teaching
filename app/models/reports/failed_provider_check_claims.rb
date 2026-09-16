@@ -28,7 +28,7 @@ module Reports
       @claims = Claim
         .by_policy(Policies::FurtherEducationPayments)
         .approved
-        .where(academic_year: AcademicYear.current)
+        .where(academic_year: [AcademicYear.current, AcademicYear.previous])
         .joins(:tasks)
         .merge(Task.where(name: "provider_verification", passed: false))
         .includes(:eligibility, decisions: :created_by)

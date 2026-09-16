@@ -14,8 +14,8 @@ module Hmrc
       self.logger = logger
     end
 
-    def verify_personal_bank_account(sort_code, account_number, name)
-      refresh_token_if_required!
+    def verify_personal_bank_account(sort_code, account_number, name, timeout: nil)
+      refresh_token_if_required!(timeout: timeout)
 
       payload = {
         account: {
@@ -27,7 +27,12 @@ module Hmrc
         }
       }.to_json
 
-      response = post_request("/misc/bank-account/verify/personal", payload, request_headers)
+      response = post_request(
+        "/misc/bank-account/verify/personal",
+        payload,
+        request_headers,
+        timeout: timeout
+      )
 
       BankAccountVerificationResponse.new(response)
     rescue ResponseError => e
@@ -39,11 +44,15 @@ module Hmrc
 
     attr_accessor :base_url, :client_id, :client_secret, :http_client, :logger, :token, :token_expiry
 
-    def refresh_token_if_required!
+    def refresh_token_if_required!(timeout:)
       return unless token_invalid?
 
       request_time = Time.zone.now
-      response = post_request!("/oauth/token", token_request_payload)
+      response = post_request!(
+        "/oauth/token",
+        token_request_payload,
+        timeout: timeout
+      )
 
       body = JSON.parse(response.body)
 
@@ -72,16 +81,19 @@ module Hmrc
       }
     end
 
-    def post_request(path, payload, headers = nil)
+    def post_request(path, payload, headers = nil, timeout: nil)
       http_client.post(
         "#{base_url}#{path}",
         payload,
         headers
-      )
+      ) do |request|
+        request.options.timeout = timeout if timeout
+        request.options.open_timeout = timeout if timeout
+      end
     end
 
-    def post_request!(path, payload, headers = nil)
-      response = post_request(path, payload, headers)
+    def post_request!(path, payload, headers = nil, timeout: nil)
+      response = post_request(path, payload, headers, timeout: timeout)
 
       if !response.success?
         logger.info("HMRC API error: response code #{response.status}")

@@ -89,6 +89,6 @@ class Admin::ClaimsController < Admin::BaseAdminController
   def filter_params
     params
       .fetch(:filter, {})
-      .permit(:team_member, :policy, :status, :reset)
+      .permit(:team_member, :policy, :status, :academic_year, :reset)
   end
 end

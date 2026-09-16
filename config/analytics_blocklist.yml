@@ -21,6 +21,7 @@
   - onelogin_idv_last_name
   - onelogin_idv_full_name
   - onelogin_idv_date_of_birth
+  - award_amount
   :claimant_flags:
   - identification_attribute
   - identification_value

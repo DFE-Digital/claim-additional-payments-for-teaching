@@ -352,8 +352,8 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
         first_name: "Edna",
         surname: "Krabappel",
         reference: "AB123456",
-        submitted_at: DateTime.new(2025, 3, 1, 9, 0, 0),
-        academic_year: AcademicYear.new(2025),
+        submitted_at: DateTime.new(AcademicYear.current.end_year, 3, 1, 9, 0, 0),
+        academic_year: AcademicYear.current,
         eligibility_attributes: {
           school: fe_provider,
           subjects_taught: ["building_construction"],
@@ -379,7 +379,9 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       end
 
       # Check details in the dropdown
-      expect(summary_row("Date submitted")).to have_content("1 March 2025")
+      expect(summary_row("Date submitted")).to have_content(
+        "1 March #{AcademicYear.current.end_year}"
+      )
 
       within_fieldset(
         "Is Edna Krabappel a member of staff with the responsibilities of a teacher?"
@@ -403,7 +405,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       # Second screen with additional questions for fixed term contracts
       within_fieldset(
         "Does Edna Krabappel have a fixed-term contract " \
-        "for the full 2025 to 2026 " \
+        "for the full #{AcademicYear.current.to_s(:long)} " \
         "academic year?"
       ) { choose "Yes" }
 
@@ -714,8 +716,8 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
         first_name: "Edna",
         surname: "Krabappel",
         reference: "AB123456",
-        submitted_at: DateTime.new(2025, 10, 1, 9, 0, 0),
-        academic_year: AcademicYear.new(2025),
+        submitted_at: DateTime.new(AcademicYear.current.end_year, 10, 1, 9, 0, 0),
+        academic_year: AcademicYear.current,
         eligibility_attributes: {
           school: fe_provider
         }
@@ -832,7 +834,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       # Second screen with additional questions for fixed term contracts
       within_fieldset(
         "Does Edna Krabappel have a fixed-term contract " \
-        "for the full 2025 to 2026 academic year?"
+        "for the full #{AcademicYear.current.to_s(:long)} academic year?"
       ) { choose "No" }
 
       click_on "Continue"
@@ -940,8 +942,8 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
         first_name: "Edna",
         surname: "Krabappel",
         reference: "AB123456",
-        submitted_at: DateTime.new(2025, 10, 1, 9, 0, 0),
-        academic_year: AcademicYear.new(2025),
+        submitted_at: DateTime.new(AcademicYear.current.end_year, 10, 1, 9, 0, 0),
+        academic_year: AcademicYear.current,
         eligibility_attributes: {
           school: fe_provider
         }
@@ -986,12 +988,12 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       # Expect to see fixed term specific question
       expect(page).to have_content(
         "Does Edna Krabappel have a fixed-term contract " \
-        "for the full 2025 to 2026 academic year?"
+        "for the full #{AcademicYear.current.to_s(:long)} academic year?"
       )
 
       within_fieldset(
         "Does Edna Krabappel have a fixed-term contract " \
-        "for the full 2025 to 2026 academic year?"
+        "for the full #{AcademicYear.current.to_s(:long)} academic year?"
       ) { choose "Yes" }
 
       click_on "Continue"
@@ -1002,7 +1004,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       # Expect to see fixed term specific question
       expect(page).to have_content(
         "Does Edna Krabappel have a fixed-term contract " \
-        "for the full 2025 to 2026 academic year?"
+        "for the full #{AcademicYear.current.to_s(:long)} academic year?"
       )
     end
   end
@@ -1025,8 +1027,8 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
         first_name: "Edna",
         surname: "Krabappel",
         reference: "AB123456",
-        submitted_at: DateTime.new(2025, 10, 1, 9, 0, 0),
-        academic_year: AcademicYear.new(2025),
+        submitted_at: DateTime.new(AcademicYear.current.end_year, 10, 1, 9, 0, 0),
+        academic_year: AcademicYear.current,
         eligibility_attributes: {
           school: fe_provider
         }
@@ -1067,7 +1069,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
 
       expect(page).to have_content(
         "Does Edna Krabappel have a fixed-term contract " \
-        "for the full 2025 to 2026 " \
+        "for the full #{AcademicYear.current.to_s(:long)} " \
         "academic year?"
       )
       click_on "Save and come back later"
@@ -1081,7 +1083,7 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
       # First incomplete form
       expect(page).to have_content(
         "Does Edna Krabappel have a fixed-term contract " \
-        "for the full 2025 to 2026 " \
+        "for the full #{AcademicYear.current.to_s(:long)} " \
         "academic year?"
       )
     end
@@ -1368,8 +1370,8 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
         :further_education,
         :submitted,
         onelogin_uid: "123",
-        academic_year: AcademicYear.new("2024/2025"),
-        submitted_at: DateTime.new(2024, 4, 1, 9, 0, 0),
+        academic_year: AcademicYear.previous,
+        submitted_at: DateTime.new(AcademicYear.previous.end_year, 4, 1, 9, 0, 0),
         first_name: "Edna",
         surname: "Krabappel",
         eligibility_attributes: {
@@ -1386,8 +1388,8 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
         :further_education,
         :submitted,
         onelogin_uid: "123",
-        academic_year: AcademicYear.new("2025/2026"),
-        submitted_at: DateTime.new(2025, 4, 1, 9, 0, 0),
+        academic_year: AcademicYear.current,
+        submitted_at: DateTime.new(AcademicYear.current.end_year, 4, 1, 9, 0, 0),
         first_name: "Edna",
         surname: "Krabappel",
         eligibility_attributes: {
@@ -1504,8 +1506,8 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
         :further_education,
         :submitted,
         onelogin_uid: "123",
-        academic_year: AcademicYear.new("2024/2025"),
-        submitted_at: DateTime.new(2024, 4, 1, 9, 0, 0),
+        academic_year: AcademicYear.previous,
+        submitted_at: DateTime.new(AcademicYear.previous.end_year, 4, 1, 9, 0, 0),
         first_name: "Edna",
         surname: "Krabappel",
         eligibility_attributes: {
@@ -1522,8 +1524,8 @@ RSpec.feature "Provider verifying claims", feature_flag: [:fe_provider_dashboard
         :further_education,
         :submitted,
         onelogin_uid: "123",
-        academic_year: AcademicYear.new("2025/2026"),
-        submitted_at: DateTime.new(2025, 4, 1, 9, 0, 0),
+        academic_year: AcademicYear.current,
+        submitted_at: DateTime.new(AcademicYear.current.end_year, 4, 1, 9, 0, 0),
         first_name: "Edna",
         surname: "Krabappel",
         eligibility_attributes: {

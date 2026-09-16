@@ -57,7 +57,7 @@ module Policies
 
       def policy_options_provided
         [
-          [translate("early_years_payments.policy_full_name"), number_to_currency(claim.eligibility.award_amount, precision: 0)]
+          [translate("early_years_payments.policy_full_name"), number_to_currency(claim.award_amount, precision: 0)]
         ]
       end
 

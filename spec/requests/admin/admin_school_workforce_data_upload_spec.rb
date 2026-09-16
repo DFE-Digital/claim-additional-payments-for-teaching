@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "School workforce census data upload" do
-  before { @signed_in_user = sign_in_as_service_operator }
+  before { @signed_in_user = sign_in_as_service_admin }
 
   describe "school_workforce_census_data_upload#new" do
     it "shows the upload form" do

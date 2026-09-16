@@ -44,6 +44,12 @@ module Dqt
       date_reader(qts&.holdsFrom)
     end
 
+    def routes_to_professional_statuses
+      return [] if routesToProfessionalStatuses.blank?
+
+      routesToProfessionalStatuses
+    end
+
     def itt_subject_codes
       return [] if routesToProfessionalStatuses.blank?
 

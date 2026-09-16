@@ -1,0 +1,2 @@
+class FraudRiskCsvUploadPolicy < ServiceAdminPolicy
+end

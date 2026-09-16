@@ -47,7 +47,7 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
     click_on "Continue"
 
     # - In which academic year did you complete your postgraduate ITT?
-    choose "2020 to 2021"
+    choose tri_start_year
     click_on "Continue"
 
     # - Which subject did you do your undergraduate ITT in

@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Admin claim tasks update with DQT CSV" do
   before do
     create(:journey_configuration, :student_loans)
-    sign_in_as_service_operator
+    sign_in_as_service_admin
   end
 
   scenario "Service operators can upload and run automated DQT checks" do

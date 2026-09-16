@@ -47,6 +47,7 @@ module Seeders
     def toggle_feature_flags
       FeatureFlag.enable!("fe_provider_dashboard")
       FeatureFlag.enable!("eytfi_journey")
+      FeatureFlag.enable!("new_stri")
     end
 
     def seed_payroll_runs

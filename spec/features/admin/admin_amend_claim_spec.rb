@@ -5,7 +5,7 @@ require "rails_helper"
 # and Targeted Retention Incentive instead. Keeping these here because they
 # at least cover TSLR and Maths & Physics (which
 # themselves are slightly different from ECP and Targeted Retention Incentive).
-RSpec.feature "Admin amends a claim" do
+RSpec.feature "Admin amends a claim", :with_stubbed_hmrc_client do
   let(:claim) do
     create(
       :claim,
@@ -208,7 +208,7 @@ RSpec.feature "Admin amends a claim" do
       expect(amendment.notes).to eq("The claimant calculated the incorrect student loan repayment amount")
       expect(amendment.created_by).to eq(@signed_in_user)
 
-      expect(claim.eligibility.award_amount).to eq(300)
+      expect(claim.award_amount).to eq(300)
 
       click_on "Claim amendments"
 
@@ -266,7 +266,7 @@ RSpec.feature "Admin amends a claim" do
   end
 end
 
-RSpec.feature "Admin amends a claim" do
+RSpec.feature "Admin amends a claim", :with_stubbed_hmrc_client do
   before do
     create(:journey_configuration, :student_loans)
   end

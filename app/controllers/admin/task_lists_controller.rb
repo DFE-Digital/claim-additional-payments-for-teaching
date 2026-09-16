@@ -22,6 +22,7 @@ module Admin
     def task_list_params
       params.fetch(Admin::TaskListForm.model_name.param_key, {}).permit(
         :policy_name,
+        :academic_year,
         :show_filter_controls,
         :clear_statuses,
         :assignee_id,

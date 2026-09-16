@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Admin checking a claim with inconsistent payroll information" do
+RSpec.feature "Admin checking a claim with inconsistent payroll information", :with_stubbed_hmrc_client do
   let(:personal_details) do
     {
       national_insurance_number: generate(:national_insurance_number),

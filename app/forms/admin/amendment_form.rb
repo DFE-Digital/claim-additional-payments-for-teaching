@@ -27,6 +27,7 @@ class Admin::AmendmentForm
 
   attr_reader :claim
   attr_reader :admin_user
+  attr_reader :amendment
 
   attribute :teacher_reference_number, :string
   attribute :national_insurance_number, :string
@@ -145,7 +146,7 @@ class Admin::AmendmentForm
 
   validates :award_amount,
     comparison: {
-      equal_to: ->(form) { form.claim.eligibility.award_amount },
+      equal_to: ->(form) { form.claim.award_amount },
       message: "Award amount cannot be changed for this policy"
     },
     unless: :show_award_amount?
@@ -220,7 +221,7 @@ class Admin::AmendmentForm
         address_line_3: claim.address_line_3,
         address_line_4: claim.address_line_4,
         postcode: claim.postcode,
-        award_amount: claim.eligibility.award_amount
+        award_amount: claim.award_amount
       )
     )
   rescue ActiveRecord::MultiparameterAssignmentErrors
@@ -257,10 +258,15 @@ class Admin::AmendmentForm
       amendment.claim_changes = change_hash
       amendment.save!
 
+      @amendment = amendment
+
       eligibility.assign_attributes(eligibility_attributes)
       eligibility.save!
 
       claim.assign_attributes(claim_attributes)
+      if amendable_attributes.include?(:award_amount)
+        claim.award_amount = award_amount
+      end
       claim.save!
 
       AutomatedChecks::ClaimVerifiers::MatchingClaims.new(claim: claim).perform

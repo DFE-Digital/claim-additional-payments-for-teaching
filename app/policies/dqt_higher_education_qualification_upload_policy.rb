@@ -1,0 +1,2 @@
+class DqtHigherEducationQualificationUploadPolicy < ServiceAdminPolicy
+end
