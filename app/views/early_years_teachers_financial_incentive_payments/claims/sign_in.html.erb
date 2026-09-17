@@ -57,6 +57,37 @@
             } %>
         <% end %>
 
+        <%= f.govuk_radio_buttons_fieldset(
+          :has_national_insurance_number_on_trs,
+          legend: {
+            size: "m",
+            text: "Has National Insurance number on TRS?"
+          }
+        ) do %>
+          <%= f.govuk_radio_button(
+            :has_national_insurance_number_on_trs,
+            true,
+            label: {
+              text: "Yes"
+            }
+          ) do %>
+            <%= f.govuk_text_field(
+              :trs_national_insurance_number,
+              label: {
+                text: "National Insurance number"
+              }
+            ) %>
+          <% end %>
+
+          <%= f.govuk_radio_button(
+            :has_national_insurance_number_on_trs,
+            false,
+            label: {
+              text: "No"
+            }
+          ) %>
+        <% end %>
+
         <%= f.govuk_submit %>
       <% end %>
     <% end %>
