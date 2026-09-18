@@ -16,7 +16,8 @@ module EarlyYearsTeachersFinancialIncentivePayments
       journey_session.answers.assign_attributes(
         trs_data: trs_data.as_json(without_table: true),
         trs_data_fetched_at: Time.zone.now,
-        has_eligible_qualification: trs_data.has_eligible_eytfi_qualification?
+        has_eligible_qualification: trs_data.has_eligible_eytfi_qualification?,
+        trs_national_insurance_number: trs_data.national_insurance_number
       )
 
       journey_session.save!
