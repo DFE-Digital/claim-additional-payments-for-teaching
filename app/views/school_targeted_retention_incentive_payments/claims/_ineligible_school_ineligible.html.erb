@@ -1,0 +1,33 @@
+<%= content_tag(:h1, @form.heading, class: "govuk-heading-xl") %>
+
+<h2 class="govuk-heading-m">
+  School selected
+</h2>
+
+<%= govuk_summary_list do |summary_list| %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key(text: "Name") %>
+    <% row.with_value(text: journey_session.answers.current_school.name) %>
+  <% end %>
+
+  <% summary_list.with_row do |row| %>
+    <% row.with_key(text: "Address") %>
+    <% row.with_value(text: journey_session.answers.current_school.address) %>
+  <% end %>
+<% end %>
+
+<div class="govuk-body">
+  This could be because:
+</div>
+
+<%= govuk_list [
+  "the payment is only available to schools that need teachers, and your school may not be eligible",
+  "the school you selected has closed, changed status (for example, become an academy), or changed its name",
+  "the school name does not match our records because of a spelling or punctuation difference, such as an apostrophe"
+], type: :bullet %>
+
+<div class="govuk-body">
+  If you think your school is eligible, check the spelling of your school’s name and try searching again. Check the [eligibility criteria](missing link???) for more information.
+</div>
+
+<%= govuk_button_link_to "Change school", claim_path(current_journey_routing_name, "current-school") %>
