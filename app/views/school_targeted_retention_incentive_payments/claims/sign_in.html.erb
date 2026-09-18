@@ -1,0 +1,53 @@
+<h1 class="govuk-heading-l">
+  Sign in with GOV.UK One Login
+</h1>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <p class="govuk-body">
+      You will need to sign in to your GOV.UK One Login account to apply. If you don't have an account yet, we will help you create one.
+    </p>
+
+    <p class="govuk-body">
+      To create a GOV.UK One Login account, you will need:
+    </p>
+
+    <%= govuk_list [
+      "an email address",
+      "a way to get security codes - this can be a mobile phone number or an authenticator app"
+    ], type: :bullet %>
+
+    <p class="govuk-body">
+      When you have signed in to GOV.UK One Login, you will return to this service to complete your application.
+    </p>
+
+    <p class="govuk-body">
+      You must prove your identity using the GOV.UK One Login service to submit a claim for a recognition payment.
+    </p>
+
+    <% unless TeacherAuth::SchoolConfig.instance.bypass? %>
+      <p class="govuk-body">
+        <%= govuk_button_to "Continue", "/targeted-retention-incentive-payments/auth/teacher_school" %>
+      </p>
+    <% else %>
+      <h2 class="govuk-heading-l">Bypass Teacher Auth</h2>
+
+      <%= form_with model: @form, url: "/targeted-retention-incentive-payments/bypass-auth/teacher_school", method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+        <%= f.govuk_text_field :verified_name, label: { text: "Full name" }, width: 20 %>
+        <%= f.govuk_date_field :verified_date_of_birth, date_of_birth: true, legend: { text: "Date of Birth" } %>
+        <%= f.govuk_text_field :email, width: 20 %>
+        <%= f.govuk_text_field :trn, width: 10, label: { text: "TRN" } %>
+        <%= f.govuk_text_field :sub, label: { text: "One Login UID" } %>
+
+        <%= f.govuk_radio_buttons_fieldset(:has_national_insurance_number, legend: { text: "National Insurance number" }) do %>
+          <%= f.govuk_radio_button :has_national_insurance_number, true, label: { text: "Yes" }, link_errors: true do %>
+            <%= f.govuk_text_field :national_insurance_number, label: { text: "National Insurance number" } %>
+          <% end %>
+          <%= f.govuk_radio_button :has_national_insurance_number, false, label: { text: "No" } %>
+        <% end %>
+
+        <%= f.govuk_submit %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
