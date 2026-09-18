@@ -5,6 +5,7 @@ module Journeys
         "current-school",
         "select-current-school",
         "half-contracted-hours",
+        "sign-in",
         "hello",
         "check-your-answers",
         "confirmation"

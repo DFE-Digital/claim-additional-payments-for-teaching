@@ -11,10 +11,32 @@ module Journeys
       SelectCurrentSchoolForm,
       IneligibleForm,
       HalfContractedHoursForm,
+      SignInForm,
       HelloForm,
       CheckYourAnswersForm,
       ConfirmationForm
     ].freeze
+
+    def forms
+      array = [
+        CurrentSchoolForm,
+        SelectCurrentSchoolForm,
+        IneligibleForm,
+        HalfContractedHoursForm
+      ]
+
+      array << if TeacherAuth::SchoolConfig.instance.bypass?
+        Debug::TeacherAuth::School::SignInForm
+      else
+        SignInForm
+      end
+
+      array += [HelloForm,
+        CheckYourAnswersForm,
+        ConfirmationForm]
+
+      array
+    end
 
     def available?
       FeatureFlag.enabled?(:new_stri)
