@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Policies::TargetedRetentionIncentivePayments::DataRetention::Policy do
+RSpec.describe Policies::TargetedRetentionIncentivePayments::DataRetention::RetentionSchedule do
   describe ".claims_to_scrub" do
     it "doesn't return unscrubbed claims from the current academic year" do
       create(
