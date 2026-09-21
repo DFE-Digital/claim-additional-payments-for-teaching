@@ -17,9 +17,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # - display: AKS infrastructure
-          #   validation_plan: aks-infra
-          #   terraform_base: terraform/application
+          - display: AKS infrastructure
+            validation_plan: aks-infra
+            terraform_base: terraform/application
           - display: Domains infrastructure
             validation_plan: domains-infra
             terraform_base: terraform/domains/infrastructure

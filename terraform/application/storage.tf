@@ -20,4 +20,7 @@ module "storage_private" {
 
   blob_delete_after_days = var.blob_delete_after_days
 
+  # Storage account encryption scope settings
+  infrastructure_encryption_required = true
+
 }

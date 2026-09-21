@@ -91,8 +91,8 @@ variable "postgres_enable_high_availability" {
 }
 
 variable "server_version" {
-  type = number
-  default = 16
+  type        = number
+  default     = 16
   description = "Version number of Postgres to use"
 }
 variable "enable_logit" {
