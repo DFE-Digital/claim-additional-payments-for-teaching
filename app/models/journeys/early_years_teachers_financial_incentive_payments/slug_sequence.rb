@@ -12,6 +12,7 @@ module Journeys
         continue-claim
         claim-cancelled
         confirm-national-insurance-number
+        hmrc-loading-screen
         upload-employment-proof
         review-employment-proof
         information-provided
@@ -78,6 +79,8 @@ module Journeys
           else
             SLUGS_HASH["national-insurance-number"]
           end
+
+          array << SLUGS_HASH["hmrc-loading-screen"]
         end
 
         array << SLUGS_HASH["upload-employment-proof"]

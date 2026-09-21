@@ -27,6 +27,8 @@ module Journeys
 
       array += [
         ConfirmNationalInsuranceNumberForm,
+        NationalInsuranceNumberForm,
+        HmrcLoadingScreenForm,
         QualificationsCheckForm,
         ContinueClaimForm,
         ClaimCancelledForm,
