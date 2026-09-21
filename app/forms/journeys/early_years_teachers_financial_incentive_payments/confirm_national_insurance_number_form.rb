@@ -48,6 +48,10 @@ module Journeys
 
         journey_session.save!
 
+        ::EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob.perform_later(
+          journey_session
+        )
+
         true
       end
 

@@ -313,6 +313,11 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
 
   context "NINO journeys" do
     before do
+      stub_const(
+        "EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob::JOB_TIMEOUT_SECONDS",
+        0
+      )
+
       FeatureFlag.enable!(:eytrp_hmrc_integration)
     end
 
@@ -372,6 +377,10 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         expect(page).to have_content "AB123456C"
         choose "Yes"
         click_button "Continue"
+
+        expect(page).to have_content "Loading"
+        perform_enqueued_jobs
+        visit current_path # save waiting for the page to reload
 
         expect(page).to have_content "Upload document"
         attach_file(
@@ -475,6 +484,10 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         fill_in "What is your National Insurance number?", with: "BB123456C"
         click_button "Continue"
 
+        expect(page).to have_content "Loading"
+        perform_enqueued_jobs
+        visit current_path # save waiting for the page to reload
+
         expect(page).to have_content "Upload document"
         attach_file(
           "Upload document",
@@ -575,6 +588,10 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         fill_in "Enter your National Insurance number", with: "AB123123C"
         click_button "Continue"
 
+        expect(page).to have_content "Loading"
+        perform_enqueued_jobs
+        visit current_path # save waiting for the page to reload
+
         expect(page).to have_content "Upload document"
         attach_file(
           "Upload document",
@@ -616,6 +633,124 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
           key: "National Insurance number",
           value: "AB123123C"
         )
+      end
+    end
+  end
+
+  context "HMRC journeys" do
+    before do
+      FeatureFlag.enable!(:eytrp_hmrc_integration)
+    end
+
+    let(:mock_teacher) do
+      instance_double(
+        "Dqt::Teacher",
+        has_eligible_eytfi_qualification?: true,
+        national_insurance_number: "AB123456C"
+      )
+    end
+
+    context "Response error from HMRC" do
+      scenario "User continues on the upload employment evidence journey" do
+        stub_const(
+          "EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob::JOB_TIMEOUT_SECONDS",
+          0
+        )
+
+        create(
+          :eligible_eytfi_provider,
+          name: "Springfield nursery"
+        )
+
+        visit landing_page_path(
+          journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
+        )
+
+        click_link "Start now"
+
+        expect(page).to have_text "Which nursery do you teach in?"
+        find_field("claim[nursery_search_query]").set("Springfield nursery")
+        click_button "Continue"
+
+        expect(page).to have_text "Which nursery do you teach in?"
+        choose "Springfield nursery"
+        click_button "Continue"
+
+        expect(page).to have_text(
+          "Do you hold one of these teaching qualifications?"
+        )
+        choose "Yes"
+        click_button "Continue"
+
+        expect(page).to have_text "Check if you’re eligible"
+        check "I spend at least half"
+        check "I’m not currently subject"
+        click_button "Confirm and continue"
+
+        expect(page).to have_text "You’re eligible to apply"
+        click_button "Continue"
+
+        expect(page).to have_text "Sign in with GOV.UK One Login"
+        perform_enqueued_jobs do
+          click_button "Continue"
+        end
+
+        expect(page).to have_text "You may be eligible for a recognition payment"
+        choose "Yes"
+        click_button "Continue"
+
+        expect(page).to have_content("Is this your National Insurance number?")
+        expect(page).to have_content "AB123456C"
+        choose "Yes"
+        click_button "Continue"
+
+        expect(page).to have_content "Loading"
+        perform_enqueued_jobs
+        visit current_path # save waiting for the page to reload
+
+        expect(page).to have_content(
+          "We could not confirm that you work at the nursery you selected"
+        )
+        expect(page).to have_content(
+          "You selected Springfield nursery as your workplace"
+        )
+        expect(page).to have_content "Upload document"
+        attach_file(
+          "Upload document",
+          Rails.root.join("spec/fixtures/files/employment_proof.pdf")
+        )
+        click_button "Upload"
+
+        expect(page).to have_content "Check your document"
+        choose "Yes, add this file"
+        click_button "Continue"
+
+        expect(page).to have_text "How we’ll use your information"
+        click_button "Continue"
+
+        expect(page).to have_text "What is your home address?"
+        click_button "Enter your address manually"
+
+        fill_in "House number or name", with: "1"
+        fill_in "Building and street", with: "Grey Street"
+        fill_in "Town or city", with: "Newcastle upon Tyne"
+        fill_in "County", with: "Tyne and Wear"
+        fill_in "Postcode", with: "NE1 6EE"
+        click_button "Continue"
+
+        expect(page).to have_text(
+          "Are you recorded as male or female on your employer’s payroll system?"
+        )
+        choose "I don’t know"
+        click_button "Continue"
+
+        expect(page).to have_text(I18n.t("questions.account_details"))
+        fill_in "Name on the account", with: "John Doe"
+        fill_in "Sort code", with: "123456"
+        fill_in "Account number", with: "12345678"
+        click_button "Continue"
+
+        expect(page).to have_text "Confirm your details and complete your claim"
       end
     end
   end
