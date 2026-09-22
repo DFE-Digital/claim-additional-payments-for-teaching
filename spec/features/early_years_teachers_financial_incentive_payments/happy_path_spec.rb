@@ -633,6 +633,17 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
           key: "National Insurance number",
           value: "AB123123C"
         )
+
+        click_on "Change national insurance number", visible: :all
+
+        expect(page).to have_content "Enter your National Insurance number"
+        fill_in "Enter your National Insurance number", with: "BB123123C"
+        click_button "Continue"
+
+        # Expect to be back on the hmrc screen
+        expect(page).to have_content "Loading"
+        perform_enqueued_jobs
+        visit current_path # save waiting for the page to reload
       end
     end
   end
