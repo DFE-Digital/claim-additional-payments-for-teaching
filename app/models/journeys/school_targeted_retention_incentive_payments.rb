@@ -12,6 +12,7 @@ module Journeys
       IneligibleForm,
       HalfContractedHoursForm,
       SignInForm,
+      QueryNationalInsuranceNumberForm,
       HelloForm,
       CheckYourAnswersForm,
       ConfirmationForm
@@ -31,9 +32,15 @@ module Journeys
         SignInForm
       end
 
-      array += [HelloForm,
+      array += [
+        QueryNationalInsuranceNumberForm,
+        VerifyNationalInsuranceNumberForm,
+        NationalInsuranceNumberForm,
+        TeacherDetailsForm,
+        HelloForm,
         CheckYourAnswersForm,
-        ConfirmationForm]
+        ConfirmationForm
+      ]
 
       array
     end

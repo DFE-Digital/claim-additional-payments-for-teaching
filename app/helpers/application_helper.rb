@@ -196,4 +196,16 @@ module ApplicationHelper
     dfe_sign_out_redirect_uri.query = URI.encode_www_form(params)
     dfe_sign_out_redirect_uri.to_s
   end
+
+  def display_national_insurance_number(national_insurance_number)
+    input = national_insurance_number.strip
+
+    [
+      input[0..1],
+      input[2..3],
+      input[4..5],
+      input[6..7],
+      input[7..7]
+    ].join(" ")
+  end
 end
