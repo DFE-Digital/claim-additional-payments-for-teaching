@@ -39,18 +39,26 @@ module Journeys
       end
 
       def save
+        nino_was = answers.national_insurance_number
+
         return false if invalid?
 
-        journey_session.answers.assign_attributes(
+        journey_session.answers.update!(
           confirm_national_insurance_number: confirm_national_insurance_number,
           national_insurance_number: confirmed_national_insurance_number
         )
 
-        journey_session.save!
+        # If nino is changed fetch new data from hmrc
+        if nino_was != answers.national_insurance_number
+          journey_session.answers.update!(
+            hmrc_employment_check_status: nil,
+            hmrc_api_job_completed: false
+          )
 
-        ::EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob.perform_later(
-          journey_session
-        )
+          ::EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob.perform_later(
+            journey_session
+          )
+        end
 
         true
       end
