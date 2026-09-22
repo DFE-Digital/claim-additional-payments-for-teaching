@@ -6,6 +6,10 @@ module Journeys
         "select-current-school",
         "half-contracted-hours",
         "sign-in",
+        "query-national-insurance-number",
+        "verify-national-insurance-number",
+        "national-insurance-number",
+        "teacher-details",
         "hello",
         "check-your-answers",
         "confirmation"
@@ -35,9 +39,20 @@ module Journeys
       end
 
       def slugs
-        [].tap do |sequence|
-          sequence.push(*SLUGS)
-        end
+        array = []
+
+        array << "current-school"
+        array << "select-current-school"
+        array << "half-contracted-hours"
+        array << "sign-in"
+        array << "query-national-insurance-number"
+
+        array << "verify-national-insurance-number" if show_verify_national_insurance_number?
+        array << "national-insurance-number" if show_national_insurance_number?
+        array << "teacher-details"
+        array << "hello"
+        array << "check-your-answers"
+        array << "confirmation"
       end
 
       def journey
@@ -45,6 +60,16 @@ module Journeys
       end
 
       private
+
+      def show_verify_national_insurance_number?
+        journey_session.answers.trs_national_insurance_number_completed_at.present?
+          && journey_session.answers.trs_national_insurance_number.present?
+      end
+
+      def show_national_insurance_number?
+        journey_session.answers.trs_national_insurance_number_completed_at.present?
+          && journey_session.answers.trs_national_insurance_number.blank?
+      end
     end
   end
 end
