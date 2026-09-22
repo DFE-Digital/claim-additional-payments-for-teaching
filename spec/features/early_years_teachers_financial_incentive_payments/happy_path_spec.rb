@@ -369,10 +369,6 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
           click_button "Continue"
         end
 
-        expect(page).to have_text "You may be eligible for a recognition payment"
-        choose "Yes"
-        click_button "Continue"
-
         expect(page).to have_content("Is this your National Insurance number?")
         expect(page).to have_content "AB123456C"
         choose "Yes"
@@ -393,7 +389,8 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         choose "Yes, add this file"
         click_button "Continue"
 
-        expect(page).to have_text "How we’ll use your information"
+        expect(page).to have_text "You may be eligible for a recognition payment"
+        choose "Yes"
         click_button "Continue"
 
         expect(page).to have_text "What is your home address?"
@@ -474,10 +471,6 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
           click_button "Continue"
         end
 
-        expect(page).to have_text "You may be eligible for a recognition payment"
-        choose "Yes"
-        click_button "Continue"
-
         expect(page).to have_content("Is this your National Insurance number?")
         expect(page).to have_content "AB123456C"
         choose "No"
@@ -499,7 +492,8 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         choose "Yes, add this file"
         click_button "Continue"
 
-        expect(page).to have_text "How we’ll use your information"
+        expect(page).to have_text "You may be eligible for a recognition payment"
+        choose "Yes"
         click_button "Continue"
 
         expect(page).to have_text "What is your home address?"
@@ -580,10 +574,6 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
           click_button "Continue"
         end
 
-        expect(page).to have_text "You may be eligible for a recognition payment"
-        choose "Yes"
-        click_button "Continue"
-
         expect(page).to have_content "Enter your National Insurance number"
         fill_in "Enter your National Insurance number", with: "AB123123C"
         click_button "Continue"
@@ -603,7 +593,8 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         choose "Yes, add this file"
         click_button "Continue"
 
-        expect(page).to have_text "How we’ll use your information"
+        expect(page).to have_text "You may be eligible for a recognition payment"
+        choose "Yes"
         click_button "Continue"
 
         expect(page).to have_text "What is your home address?"
@@ -706,10 +697,6 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
           click_button "Continue"
         end
 
-        expect(page).to have_text "You may be eligible for a recognition payment"
-        choose "Yes"
-        click_button "Continue"
-
         expect(page).to have_content("Is this your National Insurance number?")
         expect(page).to have_content "AB123456C"
         choose "Yes"
@@ -736,7 +723,8 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         choose "Yes, add this file"
         click_button "Continue"
 
-        expect(page).to have_text "How we’ll use your information"
+        expect(page).to have_text "You may be eligible for a recognition payment"
+        choose "Yes"
         click_button "Continue"
 
         expect(page).to have_text "What is your home address?"

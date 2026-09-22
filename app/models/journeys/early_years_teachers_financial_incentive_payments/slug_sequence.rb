@@ -54,57 +54,11 @@ module Journeys
       end
 
       def slugs
-        array = []
-
-        array << SLUGS_HASH["nursery-search"]
-
-        if answers.nursery_id.blank?
-          array << SLUGS_HASH["nursery-select"]
-        end
-
-        array << SLUGS_HASH["teaching-qualification-confirmation"]
-        array << SLUGS_HASH["check-eligibility"]
-        array << SLUGS_HASH["eligible-teaching-qualification-held"]
-        array << SLUGS_HASH["sign-in"]
-        array << SLUGS_HASH["qualifications-check"]
-        array << SLUGS_HASH["continue-claim"]
-
-        if answers.continue_claim == false
-          array << SLUGS_HASH["claim-cancelled"]
-        end
-
         if FeatureFlag.enabled?(:eytrp_hmrc_integration)
-          array << if answers.trs_national_insurance_number.present?
-            SLUGS_HASH["confirm-national-insurance-number"]
-          else
-            SLUGS_HASH["national-insurance-number"]
-          end
-
-          array << SLUGS_HASH["hmrc-loading-screen"]
-        end
-
-        array << SLUGS_HASH["upload-employment-proof"]
-        array << SLUGS_HASH["review-employment-proof"]
-        array << SLUGS_HASH["information-provided"]
-        array << SLUGS_HASH["postcode-search"]
-
-        array << if answers.postcode_searched?
-          SLUGS_HASH["select-home-address"]
+          hmrc_employment_journey_slugs
         else
-          SLUGS_HASH["address"]
+          original_journey_slugs
         end
-
-        array << SLUGS_HASH["gender"]
-
-        if FeatureFlag.disabled?(:eytrp_hmrc_integration)
-          array << SLUGS_HASH["national-insurance-number"]
-        end
-
-        array << SLUGS_HASH["personal-bank-account"]
-        array << SLUGS_HASH["check-your-answers"]
-        array << SLUGS_HASH["confirmation"]
-
-        array
       end
 
       def journey
@@ -125,6 +79,100 @@ module Journeys
           session: {}
         )
       end
+
+      def hmrc_employment_journey_slugs
+        array = []
+
+        array << SLUGS_HASH["nursery-search"]
+
+        if answers.nursery_id.blank?
+          array << SLUGS_HASH["nursery-select"]
+        end
+
+        array << SLUGS_HASH["teaching-qualification-confirmation"]
+        array << SLUGS_HASH["check-eligibility"]
+        array << SLUGS_HASH["eligible-teaching-qualification-held"]
+        array << SLUGS_HASH["sign-in"]
+        array << SLUGS_HASH["qualifications-check"]
+
+        array << if answers.trs_national_insurance_number.present?
+          SLUGS_HASH["confirm-national-insurance-number"]
+        else
+          SLUGS_HASH["national-insurance-number"]
+        end
+
+        array << SLUGS_HASH["hmrc-loading-screen"]
+
+        if answers.hmrc_employment_check_status == "failed"
+          array << SLUGS_HASH["upload-employment-proof"]
+          array << SLUGS_HASH["review-employment-proof"]
+        else
+          # Currenlty a no op until we wire the job up
+        end
+
+        array << SLUGS_HASH["continue-claim"]
+
+        if answers.continue_claim == false
+          array << SLUGS_HASH["claim-cancelled"]
+        end
+
+        array << SLUGS_HASH["postcode-search"]
+
+        array << if answers.postcode_searched?
+          SLUGS_HASH["select-home-address"]
+        else
+          SLUGS_HASH["address"]
+        end
+
+        array << SLUGS_HASH["gender"]
+
+        array << SLUGS_HASH["personal-bank-account"]
+        array << SLUGS_HASH["check-your-answers"]
+        array << SLUGS_HASH["confirmation"]
+
+        array
+      end
+
+      def original_journey_slugs
+        array = []
+
+        array << SLUGS_HASH["nursery-search"]
+
+        if answers.nursery_id.blank?
+          array << SLUGS_HASH["nursery-select"]
+        end
+
+        array << SLUGS_HASH["teaching-qualification-confirmation"]
+        array << SLUGS_HASH["check-eligibility"]
+        array << SLUGS_HASH["eligible-teaching-qualification-held"]
+        array << SLUGS_HASH["sign-in"]
+        array << SLUGS_HASH["qualifications-check"]
+        array << SLUGS_HASH["continue-claim"]
+
+        if answers.continue_claim == false
+          array << SLUGS_HASH["claim-cancelled"]
+        end
+
+        array << SLUGS_HASH["upload-employment-proof"]
+        array << SLUGS_HASH["review-employment-proof"]
+        array << SLUGS_HASH["information-provided"]
+        array << SLUGS_HASH["postcode-search"]
+
+        array << if answers.postcode_searched?
+          SLUGS_HASH["select-home-address"]
+        else
+          SLUGS_HASH["address"]
+        end
+
+        array << SLUGS_HASH["gender"]
+        array << SLUGS_HASH["national-insurance-number"]
+        array << SLUGS_HASH["personal-bank-account"]
+        array << SLUGS_HASH["check-your-answers"]
+        array << SLUGS_HASH["confirmation"]
+
+        array
+      end
+
     end
   end
 end
