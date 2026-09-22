@@ -6,7 +6,7 @@ module Journeys
         "select-current-school",
         "half-contracted-hours",
         "sign-in",
-        "query-national-insurance-number",
+        "query-teacher-details",
         "verify-national-insurance-number",
         "national-insurance-number",
         "teacher-details",
@@ -45,7 +45,7 @@ module Journeys
         array << "select-current-school"
         array << "half-contracted-hours"
         array << "sign-in"
-        array << "query-national-insurance-number"
+        array << "query-teacher-details"
 
         array << "verify-national-insurance-number" if show_verify_national_insurance_number?
         array << "national-insurance-number" if show_national_insurance_number?

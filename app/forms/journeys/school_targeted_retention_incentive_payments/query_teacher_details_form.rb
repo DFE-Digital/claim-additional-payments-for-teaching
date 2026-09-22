@@ -1,6 +1,6 @@
 module Journeys
   module SchoolTargetedRetentionIncentivePayments
-    class QueryNationalInsuranceNumberForm < Form
+    class QueryTeacherDetailsForm < Form
       def save
         true
       end
