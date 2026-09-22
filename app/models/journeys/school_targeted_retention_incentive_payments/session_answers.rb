@@ -14,8 +14,19 @@ module Journeys
       attribute :trs_national_insurance_number, :string, pii: true
       attribute :trs_national_insurance_number_completed_at, :datetime, pii: false
 
+      attribute :national_insurance_number_correct, :boolean, pii: false
+      attribute :national_insurance_number, :string, pii: true
+
       def policy
         Policies::TargetedRetentionIncentivePayments
+      end
+
+      def national_insurance_number_to_display
+        if national_insurance_number_correct
+          trs_national_insurance_number
+        else
+          national_insurance_number
+        end
       end
     end
   end

@@ -6,7 +6,7 @@ module Journeys
 
         # TODO: async api call to fetch other needed data from TRS
 
-        redirect_to claim_path(current_journey_routing_name, "hello")
+        redirect_to claim_path(current_journey_routing_name, "query-national-insurance-number")
       end
 
       def failure
