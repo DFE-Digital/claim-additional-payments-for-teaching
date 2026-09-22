@@ -45,6 +45,9 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
     expect(page).to have_text "You will need to sign in to your GOV.UK One Login account to apply"
     click_button "Continue"
 
+    expect(page).to have_text "Querying National Insurance number"
+    click_button "Continue"
+
     expect(page).to have_text "hello"
   end
 end

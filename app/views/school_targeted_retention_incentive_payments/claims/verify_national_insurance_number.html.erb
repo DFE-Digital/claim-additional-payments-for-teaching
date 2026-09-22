@@ -1,0 +1,27 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_radio_buttons_fieldset(:national_insurance_number_correct,
+                                         legend: {
+                                           size: "l",
+                                           text: @form.t(:title)
+                                         }, hint: -> { %>
+                                                       <%= govuk_summary_list(actions: false) do |summary_list| %>
+                                                         <%= summary_list.with_row do |row| %>
+                                                           <%= row.with_key { "National Insurance number" } %>
+                                                           <%= row.with_value { display_national_insurance_number(answers.trs_national_insurance_number) } %>
+                                                         <% end %>
+                                                       <% end %>
+                                           <% }) do %>
+        <%= f.govuk_radio_button :national_insurance_number_correct, true, label: { text: "Yes" }, link_errors: true %>
+        <%= f.govuk_radio_button :national_insurance_number_correct, false, label: { text: "No" } do %>
+          <%= f.govuk_text_field :national_insurance_number, extra_letter_spacing: true, label: { text: "What is your National Insurance number?" } %>
+        <% end %>
+      <% end %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>
