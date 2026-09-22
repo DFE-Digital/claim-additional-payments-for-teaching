@@ -56,7 +56,7 @@ en:
         heading: Which school do you teach at?
         errors:
           blank: Select the school you teach at
-      query_national_insurance_number:
-        title: Querying National Insurance number
+      query_teacher_details:
+        title: Querying teacher details
       verify_national_insurance_number:
         title: Is this your National Insurance number?

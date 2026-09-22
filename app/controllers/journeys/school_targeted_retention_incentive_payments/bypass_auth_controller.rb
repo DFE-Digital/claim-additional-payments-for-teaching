@@ -12,7 +12,7 @@ module Journeys
             national_insurance_number: form.national_insurance_number
           )
 
-        redirect_to claim_path(current_journey_routing_name, "query-national-insurance-number")
+        redirect_to claim_path(current_journey_routing_name, "query-teacher-details")
       end
 
       private
