@@ -9,10 +9,11 @@ RSpec.describe School, type: :model do
   it { should validate_presence_of(:school_type) }
   it { should validate_presence_of(:phase) }
 
-  describe ".search" do
+  describe "::search" do
     let!(:first_school) { create(:school, name: "Community School London", postcode: "SW1P 3BT") }
     let!(:second_school) { create(:school, name: "Unity School London", postcode: "SW1P 3BT") }
     let!(:third_school) { create(:school, :further_education, name: "The Unity College Manchester", postcode: "M1 2WD") }
+    let!(:fourth_school) { create(:school, name: "St John's cul-de-sac, limited (LTD)", postcode: "EC1N 2TD") }
 
     it "returns schools with a name matching the search term" do
       expect(School.search("School")).to match_array([first_school, second_school])
@@ -42,6 +43,14 @@ RSpec.describe School, type: :model do
     context "when searching for FE only" do
       it "only returns FE bodies" do
         expect(School.search("Unity", fe_only: true)).to eq([third_school])
+      end
+    end
+
+    context "handling non-alphanumeric characters", aggregate_failures: true do
+      it "returns correct results" do
+        expect(School.search("john's")).to include(fourth_school)
+        expect(School.search("john-s")).to include(fourth_school)
+        expect(School.search("johns")).to include(fourth_school)
       end
     end
   end

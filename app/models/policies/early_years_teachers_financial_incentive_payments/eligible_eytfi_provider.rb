@@ -14,7 +14,7 @@ module Policies
 
       before_save do
         self.sanitised_postcode = postcode&.downcase&.delete(" ").presence
-        self.sanitised_name = (name || "" ).downcase.gsub(/\W/, "")
+        self.sanitised_name = (name || "").downcase.gsub(/\W/, "")
       end
 
       scope :search, ->(search_term) do
