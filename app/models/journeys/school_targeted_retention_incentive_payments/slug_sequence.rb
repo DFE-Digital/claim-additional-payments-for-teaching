@@ -62,13 +62,13 @@ module Journeys
       private
 
       def show_verify_national_insurance_number?
-        journey_session.answers.trs_national_insurance_number_completed_at.present?
-          && journey_session.answers.trs_national_insurance_number.present?
+        journey_session.answers.trs_data_fetched_at.present?
+          && journey_session.answers.trs_data["nationalInsuranceNumber"].present?
       end
 
       def show_national_insurance_number?
-        journey_session.answers.trs_national_insurance_number_completed_at.present?
-          && journey_session.answers.trs_national_insurance_number.blank?
+        journey_session.answers.trs_data_fetched_at.present?
+          && journey_session.answers.trs_data["nationalInsuranceNumber"].blank?
       end
     end
   end
