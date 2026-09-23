@@ -6,7 +6,7 @@ module Journeys
       end
 
       def redirect_to_next_slug?
-        journey_session.answers.trs_national_insurance_number_completed_at.present?
+        journey_session.answers.trs_data_fetched_at.present?
       end
 
       def auto_refresh

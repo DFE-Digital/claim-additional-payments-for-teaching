@@ -21,7 +21,7 @@
 
       <% summary_list.with_row do |row| %>
         <% row.with_key { "National Insurance number" } %>
-        <% row.with_value { journey_session.answers.national_insurance_number_to_display } %>
+        <% row.with_value { display_national_insurance_number(journey_session.answers.national_insurance_number_to_display) } %>
       <% end %>
 
       <% summary_list.with_row do |row| %>
@@ -43,6 +43,30 @@
     <h2 class="govuk-heading-m">
       Qualifications you hold
     </h2>
+
+    <% journey_session.answers.qualifications_from_trs_data.each do |qualification| %>
+      <%= govuk_summary_list(actions: false) do |summary_list| %>
+        <% summary_list.with_row do |row| %>
+          <% row.with_key { "Name" } %>
+          <% row.with_value { qualification.name } %>
+        <% end %>
+
+        <% summary_list.with_row do |row| %>
+          <% row.with_key { "Professional status" } %>
+          <% row.with_value { qualification.professional_status } %>
+        <% end %>
+
+        <% summary_list.with_row do |row| %>
+          <% row.with_key { "Valid from" } %>
+          <% row.with_value { l(qualification.valid_from) } %>
+        <% end %>
+
+        <% summary_list.with_row do |row| %>
+          <% row.with_key { "Subjects" } %>
+          <% row.with_value { qualification.subjects.join(", ") } %>
+        <% end %>
+      <% end %>
+    <% end %>
 
     <h2 class="govuk-heading-m">
       Teaching details
