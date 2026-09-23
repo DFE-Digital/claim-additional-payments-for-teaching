@@ -654,10 +654,13 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
 
     context "Response error from HMRC" do
       scenario "User continues on the upload employment evidence journey" do
-        stub_const(
-          "EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob::JOB_TIMEOUT_SECONDS",
-          0
+        employment_history = double(
+          "HMRC::EmploymentHistory",
+          request!: nil,
+          request_successful?: false
         )
+
+        allow(Hmrc::EmploymentHistory).to receive(:new) { employment_history }
 
         create(
           :eligible_eytfi_provider,
@@ -750,6 +753,193 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         click_button "Continue"
 
         expect(page).to have_text "Confirm your details and complete your claim"
+      end
+    end
+
+    context "Hmrc not employed at setting" do
+      scenario "User needs to upload employment evidence" do
+        employment_history = double(
+          "Hmrc::EmploymentHistory",
+          request!: nil,
+          request_successful?: true,
+          employments: [
+            {
+              startDate: "2026-01-01",
+              endDate: nil,
+              payFrequency: "MONTHLY",
+              employer: {
+                name: "Not an eligibile nursery",
+                payeReference: "247/A1987CB",
+                address: {
+                  line1: "Unit 23",
+                  line2: "Utilitarian Industrial Park",
+                  line3: "Utilitown",
+                  line4: "County Durham",
+                  line5: "UK",
+                  postcode: "DH4 4YY"
+                }
+              },
+              payment: [
+                {
+                  date: "2026-01-31",
+                  paidTaxablePay: 4765.32
+                }
+              ]
+            }
+          ]
+        )
+        allow(Hmrc::EmploymentHistory).to receive(:new) { employment_history }
+
+        create(
+          :eligible_eytfi_provider,
+          name: "Springfield nursery"
+        )
+
+        visit landing_page_path(
+          journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
+        )
+
+        click_link "Start now"
+
+        expect(page).to have_text "Which nursery do you teach in?"
+        find_field("claim[nursery_search_query]").set("Springfield nursery")
+        click_button "Continue"
+
+        expect(page).to have_text "Which nursery do you teach in?"
+        choose "Springfield nursery"
+        click_button "Continue"
+
+        expect(page).to have_text(
+          "Do you hold one of these teaching qualifications?"
+        )
+        choose "Yes"
+        click_button "Continue"
+
+        expect(page).to have_text "Check if you’re eligible"
+        check "I spend at least half"
+        check "I’m not currently subject"
+        click_button "Confirm and continue"
+
+        expect(page).to have_text "You’re eligible to apply"
+        click_button "Continue"
+
+        expect(page).to have_text "Sign in with GOV.UK One Login"
+        perform_enqueued_jobs do
+          click_button "Continue"
+        end
+
+        expect(page).to have_content("Is this your National Insurance number?")
+        expect(page).to have_content "AB123456C"
+        choose "Yes"
+        click_button "Continue"
+
+        expect(page).to have_content "Loading"
+        perform_enqueued_jobs
+        visit current_path # save waiting for the page to reload
+
+        expect(page).to have_content(
+          "We could not confirm that you work at the nursery you selected"
+        )
+        expect(page).to have_content(
+          "You selected Springfield nursery as your workplace"
+        )
+        expect(page).to have_content "Upload document"
+        attach_file(
+          "Upload document",
+          Rails.root.join("spec/fixtures/files/employment_proof.pdf")
+        )
+        click_button "Upload"
+
+        choose "Yes, add this file"
+
+        click_button "Continue"
+
+        expect(page).to have_text "You may be eligible for a recognition payment"
+      end
+    end
+
+    context "Hmrc employed at setting" do
+      scenario "User doesn't need to upload employment evidence" do
+        employment_history = double(
+          "Hmrc::EmploymentHistory",
+          request!: nil,
+          request_successful?: true,
+          employments: [
+            {
+              startDate: "2026-01-01",
+              endDate: nil,
+              payFrequency: "MONTHLY",
+              employer: {
+                name: "Springfield nursery",
+                payeReference: "247/A1987CB",
+                address: {
+                  line1: "Unit 23",
+                  line2: "Utilitarian Industrial Park",
+                  line3: "Utilitown",
+                  line4: "County Durham",
+                  line5: "UK",
+                  postcode: "DH4 4YY"
+                }
+              },
+              payment: [
+                {
+                  date: "2026-01-31",
+                  paidTaxablePay: 4765.32
+                }
+              ]
+            }
+          ]
+        )
+        allow(Hmrc::EmploymentHistory).to receive(:new) { employment_history }
+
+        create(
+          :eligible_eytfi_provider,
+          name: "Springfield nursery"
+        )
+
+        visit landing_page_path(
+          journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
+        )
+
+        click_link "Start now"
+
+        expect(page).to have_text "Which nursery do you teach in?"
+        find_field("claim[nursery_search_query]").set("Springfield nursery")
+        click_button "Continue"
+
+        expect(page).to have_text "Which nursery do you teach in?"
+        choose "Springfield nursery"
+        click_button "Continue"
+
+        expect(page).to have_text(
+          "Do you hold one of these teaching qualifications?"
+        )
+        choose "Yes"
+        click_button "Continue"
+
+        expect(page).to have_text "Check if you’re eligible"
+        check "I spend at least half"
+        check "I’m not currently subject"
+        click_button "Confirm and continue"
+
+        expect(page).to have_text "You’re eligible to apply"
+        click_button "Continue"
+
+        expect(page).to have_text "Sign in with GOV.UK One Login"
+        perform_enqueued_jobs do
+          click_button "Continue"
+        end
+
+        expect(page).to have_content("Is this your National Insurance number?")
+        expect(page).to have_content "AB123456C"
+        choose "Yes"
+        click_button "Continue"
+
+        expect(page).to have_content "Loading"
+        perform_enqueued_jobs
+        visit current_path # save waiting for the page to reload
+
+        expect(page).to have_text "You may be eligible for a recognition payment"
       end
     end
   end

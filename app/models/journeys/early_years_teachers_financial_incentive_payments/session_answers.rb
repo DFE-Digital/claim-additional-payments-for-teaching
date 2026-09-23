@@ -25,6 +25,7 @@ module Journeys
 
       attribute :hmrc_api_job_completed, :boolean, default: false, pii: false
       attribute :hmrc_employment_check_status, :string, pii: false
+      attribute :hmrc_employment_history, pii: false
 
       attribute :eligible_teaching_qualification_held_clicked, :boolean, pii: false
       attribute :continue_claim, :boolean, pii: false

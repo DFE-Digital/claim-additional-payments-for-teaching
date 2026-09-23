@@ -1,0 +1,121 @@
+<% @backlink_path = landing_page_path %>
+<% content_for(
+  :page_title,
+  page_title(
+    "HMRC bypass form",
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">HMRC bypass form</h1>
+
+      <%= hidden_field_tag "claim[employments_submitted]", "1" %>
+
+      <%= f.fields_for(:employments) do |ff| %>
+        <h2 class="govuk-heading-m">Employment <%= ff.index + 1 %></h2>
+
+        <%= ff.govuk_date_field(
+          :start_date,
+          legend: {
+            text: "Start date"
+          }
+        ) %>
+
+        <%= ff.govuk_date_field(
+          :end_date,
+          legend: {
+            text: "End date"
+          }
+        ) %>
+
+        <%= ff.govuk_text_field(
+          :pay_frequency,
+          label: {
+            text: "Pay frequency"
+          }
+        ) %>
+
+        <%= ff.govuk_text_field(
+          :employer_name,
+          label: {
+            text: "Employer name"
+          }
+        ) %>
+
+        <%= ff.govuk_text_field(
+          :employer_address_line_1,
+          label: {
+            text: "Employer address line 1"
+          }
+        ) %>
+
+        <%= ff.govuk_text_field(
+          :employer_address_line_2,
+          label: {
+            text: "Employer address line 2"
+          }
+        ) %>
+
+        <%= ff.govuk_text_field(
+          :employer_address_line_3,
+          label: {
+            text: "Employer address line 3"
+          }
+        ) %>
+
+        <%= ff.govuk_text_field(
+          :employer_postcode,
+          label: {
+            text: "Employer postcode"
+          }
+        ) %>
+
+        <%= ff.govuk_date_field(
+          :payment_date,
+          legend: {
+            text: "Latest payment date"
+          }
+        ) %>
+
+        <%= ff.govuk_number_field(
+          :payment_paid_taxable_pay,
+          prefix_text: "£",
+          label: {
+            text: "Latest payment amount"
+          }
+        ) %>
+        <%= f.govuk_submit(
+          "Remove employment #{ff.index + 1}",
+          secondary: true,
+          name: "commit",
+          value: "Remove employment #{ff.index + 1}",
+          formnovalidate: true
+        ) %>
+      <% end %>
+
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          <%= f.govuk_submit(
+            "Add another employment",
+            secondary: true,
+            name: "commit",
+            value: "Add another employment",
+            formnovalidate: true
+          ) %>
+        </div>
+      </div>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

@@ -13,6 +13,7 @@ module Journeys
         claim-cancelled
         confirm-national-insurance-number
         hmrc-loading-screen
+        hmrc-bypass
         upload-employment-proof
         review-employment-proof
         information-provided
@@ -101,6 +102,10 @@ module Journeys
           SLUGS_HASH["national-insurance-number"]
         end
 
+        if Rails.configuration.x.hmrc_employment_check_bypass
+          array << SLUGS_HASH["hmrc-bypass"]
+        end
+
         array << SLUGS_HASH["hmrc-loading-screen"]
 
         if answers.hmrc_employment_check_status == "failed"
@@ -172,7 +177,6 @@ module Journeys
 
         array
       end
-
     end
   end
 end
