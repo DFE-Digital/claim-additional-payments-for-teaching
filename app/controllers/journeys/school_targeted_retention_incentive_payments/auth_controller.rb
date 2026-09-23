@@ -4,7 +4,7 @@ module Journeys
       def callback
         persist_callback_to_session
 
-        # TODO: async api call to fetch other needed data from TRS
+        ::SchoolTargetedRetentionIncentivePayments::FetchTrsDataJob.perform_later(journey_session:)
 
         redirect_to claim_path(current_journey_routing_name, "query-teacher-details")
       end
