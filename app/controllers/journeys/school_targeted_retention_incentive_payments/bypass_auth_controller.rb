@@ -4,7 +4,7 @@ module Journeys
       def callback
         persist_callback_to_session
 
-        Debug::FetchNinoBypassJob
+        Debug::StriBypassJob
           .set(wait: 5.seconds)
           .perform_later(
             journey_session:,
