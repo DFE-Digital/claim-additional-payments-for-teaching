@@ -7,6 +7,8 @@ module Journeys
       end
 
       def passed?
+        return false if employments.none?
+
         employments.last.fetch("employer").fetch("name") == setting.name
       end
 
