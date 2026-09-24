@@ -72,7 +72,8 @@ module Journeys
         # Set hmrc_api_job_completed so we skip the HmrcEmploymentCheckJob
         journey_session.answers.assign_attributes(
           hmrc_api_job_completed: true,
-          hmrc_employment_history: employments.map(&:to_h)
+          hmrc_employment_history: employments.map(&:to_h),
+          hmrc_employent_api_call_status: "success"
         )
 
         employment_check = EmploymentCheck.new(
@@ -80,10 +81,8 @@ module Journeys
           employments: answers.hmrc_employment_history
         )
 
-        employment_check_status = employment_check.passed? ? "success" : "failed"
-
         journey_session.answers.assign_attributes(
-          hmrc_employment_check_status: employment_check_status
+          hmrc_employment_check_passed: employment_check.passed?
         )
 
         journey_session.save!

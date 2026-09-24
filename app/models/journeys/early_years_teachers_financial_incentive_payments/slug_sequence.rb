@@ -108,7 +108,7 @@ module Journeys
 
         array << SLUGS_HASH["hmrc-loading-screen"]
 
-        if answers.hmrc_employment_check_status == "failed"
+        if answers.hmrc_employment_check_passed == false
           array << SLUGS_HASH["upload-employment-proof"]
           array << SLUGS_HASH["review-employment-proof"]
         else
