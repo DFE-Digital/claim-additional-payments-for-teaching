@@ -26,6 +26,7 @@ module Journeys
       end
 
       array += [
+        HmrcBypassForm,
         ConfirmNationalInsuranceNumberForm,
         NationalInsuranceNumberForm,
         HmrcLoadingScreenForm,
