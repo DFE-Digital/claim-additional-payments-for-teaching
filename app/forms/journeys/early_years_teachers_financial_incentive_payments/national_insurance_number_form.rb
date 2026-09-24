@@ -8,8 +8,10 @@ module Journeys
 
         if nino_was != answers.national_insurance_number
           journey_session.answers.update!(
-            hmrc_employment_check_status: nil,
-            hmrc_api_job_completed: false
+            hmrc_employment_check_passed: nil,
+            hmrc_api_job_completed: false,
+            hmrc_employment_history: nil,
+            hmrc_employent_api_call_status: nil
           )
 
           ::EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob.perform_later(

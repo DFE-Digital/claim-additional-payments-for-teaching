@@ -15,7 +15,8 @@ module EarlyYearsTeachersFinancialIncentivePayments
 
       if !employment_history.request_successful?
         journey_session.answers.update!(
-          hmrc_employment_check_status: "failed",
+          hmrc_employment_check_passed: false,
+          hmrc_employent_api_call_status: "failed",
           hmrc_employment_history: nil,
           hmrc_api_job_completed: true
         )
@@ -25,7 +26,8 @@ module EarlyYearsTeachersFinancialIncentivePayments
 
       journey_session.answers.assign_attributes(
         hmrc_employment_history: employment_history.employments,
-        hmrc_api_job_completed: true
+        hmrc_api_job_completed: true,
+        hmrc_employent_api_call_status: "success"
       )
 
       employment_check = Journeys::EarlyYearsTeachersFinancialIncentivePayments::EmploymentCheck.new(
@@ -33,15 +35,9 @@ module EarlyYearsTeachersFinancialIncentivePayments
         employments: journey_session.answers.hmrc_employment_history
       )
 
-      if employment_check.passed?
-        journey_session.answers.assign_attributes(
-          hmrc_employment_check_status: "success"
-        )
-      else
-        journey_session.answers.assign_attributes(
-          hmrc_employment_check_status: "failed"
-        )
-      end
+      journey_session.answers.assign_attributes(
+        hmrc_employment_check_passed: employment_check.passed?
+      )
 
       journey_session.save!
     end
