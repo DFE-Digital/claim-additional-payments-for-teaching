@@ -14,11 +14,12 @@ module Policies
 
       before_save do
         self.sanitised_postcode = postcode&.downcase&.delete(" ").presence
+        self.sanitised_name = (name || "").downcase.gsub(/\W/, "")
       end
 
       scope :search, ->(search_term) do
-        search_field = :name
-        sanitised_search_term = search_term.delete(" ")
+        search_field = :sanitised_name
+        sanitised_search_term = search_term.gsub(/\W/, "")
 
         # Some school names may start with a postcode-resembling pattern, so the following check is not meant
         # to provide 100% accurate inference, but rather cover most cases and still allow partial-postcode search.
@@ -26,7 +27,7 @@ module Policies
           search_field, search_term = [:sanitised_postcode, sanitised_search_term]
         end
 
-        where("#{search_field} ILIKE ?", "%#{sanitize_sql_like(search_term)}%")
+        where("#{search_field} ILIKE ?", "%#{sanitize_sql_like(sanitised_search_term)}%")
           .order(sanitize_sql_for_order([Arel.sql("similarity(#{search_field}, ?) DESC"), search_term]))
           .order(:name)
           .limit(School::SEARCH_RESULTS_LIMIT)

@@ -283,6 +283,7 @@ shared:
     - open_date # date, when the school opend
     - ukprn # string, external identifier of school
     - postcode_sanitised # string, postcode
+    - name_sanitised # string, name of school normalised for searching
   :dfe_sign_in_users:
     - id # uuid, identifies DSI user
     - dfe_sign_in_id # string, external identifier
@@ -518,6 +519,7 @@ shared:
     - eligible # boolean, whether or not this provider is eligible for payment
     - file_upload_id # uuid, associated file upload. use this to work out academic year and latest version as this table is append only
     - sanitised_postcode # string, postcode of the provider normalised
+    - sanitised_name # string, name of provider normalised for searching
     - max_claims # integer, max number of claims permitted for this nursery
     - copd # boolean, is this provider childcare on domestic premises
   :active_storage_variant_records:

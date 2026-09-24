@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_02_144451) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_23_144715) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -335,6 +335,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_02_144451) do
     t.integer "max_claims", default: 5, null: false
     t.text "name", null: false
     t.text "postcode", null: false
+    t.citext "sanitised_name", default: "", null: false
     t.text "sanitised_postcode"
     t.text "town"
     t.datetime "updated_at", null: false
@@ -684,6 +685,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_02_144451) do
     t.uuid "local_authority_id"
     t.string "locality"
     t.string "name", null: false
+    t.citext "name_sanitised", default: "", null: false
     t.date "open_date"
     t.string "phase", null: false
     t.string "phone_number", limit: 20
