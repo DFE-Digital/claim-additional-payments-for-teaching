@@ -20,6 +20,7 @@ module Journeys
       end
 
       array + [
+        NationalInsuranceNumberForm,
         ClaimSchoolForm,
         ClaimSchoolResultsForm,
         QualificationsCheckForm,

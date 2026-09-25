@@ -21,22 +21,6 @@ module AutomatedChecks
           )
         end
 
-        unless name_matched?
-          notes << create_field_note(
-            field: "Name",
-            claimant: claim.full_name,
-            teacher_auth: "#{eligibility.teacher_auth_first_name} #{eligibility.teacher_auth_last_name}"
-          )
-        end
-
-        unless date_of_birth_matched?
-          notes << create_field_note(
-            field: "Date of birth",
-            claimant: claim.date_of_birth,
-            teacher_auth: eligibility.teacher_auth_date_of_birth
-          )
-        end
-
         if Dqt::Teacher.new(claim.dqt_teacher_status).active_alert?
           notes << claim.notes.create!(
             label: TASK_NAME,
@@ -72,19 +56,6 @@ module AutomatedChecks
 
       def national_insurance_number_matched?
         claim.national_insurance_number == eligibility.teacher_auth_national_insurance_number
-      end
-
-      def name_matched?
-        claim.first_name == eligibility.teacher_auth_first_name
-        && claim.surname == eligibility.teacher_auth_last_name
-      end
-
-      def date_of_birth_matched?
-        claim.date_of_birth == eligibility.teacher_auth_date_of_birth
-      end
-
-      def active_alert?
-        claim.dqt_teacher_record.active_alert?
       end
 
       def create_field_note(field:, claimant:, teacher_auth:)

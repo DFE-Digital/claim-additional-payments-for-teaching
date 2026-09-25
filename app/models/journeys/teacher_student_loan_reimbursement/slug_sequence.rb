@@ -30,6 +30,7 @@ module Journeys
         "eligibility-confirmed",
         "information-provided",
         "personal-details",
+        "national-insurance-number",
         "student-loan-amount",
         "postcode-search",
         "select-home-address",
@@ -119,17 +120,8 @@ module Journeys
       def teacher_auth_personal_details_slugs
         [].tap do |slugs|
           slugs << "information-provided"
-          # Checking the payroll gender here is a work around for how the
-          # navigator behaves. When initially going through the journey we want
-          # to skip the personal details form as we've pulled that data from
-          # TRS, however we still want to let the user correct the data from
-          # check the answers page. payroll_gender is the last question in the
-          # journey so if that's set then we can put the personal details form
-          # in the slug sequence for the navigator to pick it up and allow
-          # changing the answer.
-          # Occasionally TRS data may be missing the NINO so we also have a check
-          # that the personal details form is valid.
-          slugs << "personal-details" if personal_details_form.invalid? || answers.payroll_gender.present?
+          # TRS may not provide a National Insurance number.
+          slugs << "national-insurance-number" if answers.teacher_auth_national_insurance_number.blank?
           slugs << "student-loan-amount"
           slugs << "postcode-search"
           slugs << "select-home-address" if answers.postcode_searched?
