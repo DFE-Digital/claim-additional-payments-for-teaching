@@ -1,0 +1,3 @@
+files:
+  exclude:
+    - "app/views/school_targeted_retention_incentive_payments/claims/verify_national_insurance_number.html.erb"

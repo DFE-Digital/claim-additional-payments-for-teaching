@@ -24,7 +24,7 @@ jobs:
       - name: Linting - Standardrb
         run: bin/rails standard
       - name: Linting - Herb ERB Analysis
-        run: bundle exec herb analyze ./app
+        run: bundle exec herb analyze .
 
   lint-dfe-analytics:
     runs-on: ubuntu-latest
