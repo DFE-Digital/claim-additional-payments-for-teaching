@@ -9,6 +9,8 @@ module Journeys
         if FeatureFlag.enabled?(:student_loans_teacher_auth)
           super.reject do |label, answer, slug|
             slug.in? %w[personal-details teacher-reference-number]
+          end.tap do |array|
+            array << national_insurance_number if answers.teacher_auth_national_insurance_number.blank?
           end
         else
           super
@@ -86,6 +88,14 @@ module Journeys
           mostly_performed_leadership_duties_question,
           (answers.mostly_performed_leadership_duties? ? "Yes" : "No"),
           "mostly-performed-leadership-duties"
+        ]
+      end
+
+      def national_insurance_number
+        [
+          t("questions.national_insurance_number"),
+          answers.national_insurance_number,
+          "national-insurance-number"
         ]
       end
     end
