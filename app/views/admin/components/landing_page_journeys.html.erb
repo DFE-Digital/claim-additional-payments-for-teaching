@@ -17,9 +17,15 @@
     <ul class="govuk-list govuk-list--bullet">
       <% landing_page_journeys.each do |journey| %>
         <li>
-          <%= link_to journey.full_name, journey.start_page_url, class: "govuk-link govuk-link--no-visited-state" %>
+          <%= govuk_link_to journey.full_name, journey.start_page_url %>
+          <span class="govuk-body-s govuk-!-margin-left-2">
+            (<%= govuk_link_to "Go to start of journey", admin_components_open_component_path(journey: journey.routing_name, slug: journey.slug_sequence::SLUGS.first) %>)
+          </span>
         </li>
       <% end %>
+      <li>
+        <%= govuk_link_to "Further Education provider dashboard", further_education_payments_providers_claims_path %>
+      </li>
     </ul>
   </div>
 </div>
