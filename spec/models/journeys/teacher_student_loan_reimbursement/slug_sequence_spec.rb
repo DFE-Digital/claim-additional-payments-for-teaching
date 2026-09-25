@@ -22,6 +22,33 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
   let(:dqt_teacher_status) { nil }
 
   describe "The sequence as defined by #slugs" do
+    it "asks only for an NI number when Teacher Auth did not supply one" do
+      FeatureFlag.enable!(:student_loans_teacher_auth)
+      session = create(:student_loans_session, answers: {teacher_auth_national_insurance_number: nil})
+
+      slugs = described_class.new(session).slugs
+
+      expect(slugs).to include("national-insurance-number")
+      expect(slugs).not_to include("personal-details")
+    end
+
+    it "skips both personal details and NI number when Teacher Auth supplied the number" do
+      FeatureFlag.enable!(:student_loans_teacher_auth)
+      session = create(:student_loans_session, answers: {teacher_auth_national_insurance_number: "AB123456C"})
+
+      expect(described_class.new(session).slugs).not_to include("personal-details", "national-insurance-number")
+    end
+
+    it "keeps the personal details page on the legacy route" do
+      FeatureFlag.disable!(:student_loans_teacher_auth)
+      session = build(:student_loans_session)
+
+      slugs = described_class.new(session).slugs
+
+      expect(slugs).to include("personal-details")
+      expect(slugs).not_to include("national-insurance-number")
+    end
+
     it "excludes “current-school” if the claimant still works at the school they are claiming against" do
       journey_session.answers.employment_status = :claim_school
 

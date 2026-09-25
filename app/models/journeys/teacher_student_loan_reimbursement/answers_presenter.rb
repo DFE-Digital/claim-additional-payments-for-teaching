@@ -5,6 +5,16 @@ module Journeys
       include Policies::StudentLoans::PresenterMethods
       include ActiveSupport::NumberHelper
 
+      def identity_answers
+        if FeatureFlag.enabled?(:student_loans_teacher_auth)
+          super.reject do |label, answer, slug|
+            slug.in? %w[personal-details teacher-reference-number]
+          end
+        else
+          super
+        end
+      end
+
       def eligibility_checker
         Policies::StudentLoans::PolicyEligibilityChecker.new(answers: answers)
       end
