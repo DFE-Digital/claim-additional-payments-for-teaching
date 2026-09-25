@@ -1,0 +1,18 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.heading,
+    journey: current_journey_routing_name
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <% if lookup_context.exists?("#{journey.view_path}/claims/_ineligible_#{@form.ineligibility_reason}") %>
+      <%= render partial: "ineligible_#{@form.ineligibility_reason}" %>
+    <% else %>
+      <% Sentry.capture_message("unknown ineligibility reason #{@form.ineligibility_reason}") %>
+      <%= render partial: "generic" %>
+    <% end %>
+  </div>
+</div>

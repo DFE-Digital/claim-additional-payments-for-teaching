@@ -1,6 +1,8 @@
+require "faker"
+
 module Journeys
   module SchoolTargetedRetentionIncentivePayments
-    class CheckEligibilityIntroForm < Form
+    class TeacherDetailsForm < Form
       def save
         true
       end
