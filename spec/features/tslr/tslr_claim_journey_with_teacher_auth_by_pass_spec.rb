@@ -162,6 +162,7 @@ RSpec.describe "TSLR claim with teacher auth by pass" do
       expect(page).not_to have_link(href: /personal-details/)
       expect(page).not_to have_content("teacher reference number")
       expect(page).not_to have_link(href: /teacher-reference-number/)
+      expect(page).not_to have_link(href: /national-insurance-number/)
 
       perform_enqueued_jobs do
         click_button "Confirm and send"
@@ -380,6 +381,7 @@ RSpec.describe "TSLR claim with teacher auth by pass" do
       expect(page).not_to have_link(href: /personal-details/)
       expect(page).not_to have_content("teacher reference number")
       expect(page).not_to have_link(href: /teacher-reference-number/)
+      expect(page).to have_link(href: /national-insurance-number/)
 
       perform_enqueued_jobs do
         click_button "Confirm and send"
