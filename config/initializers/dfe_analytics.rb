@@ -2,7 +2,7 @@ DfE::Analytics.configure do |config|
   # Whether to log events instead of sending them to BigQuery.
   #
   # config.log_only = true
-  config.log_only = (%w[development test].include?(ENV["RAILS_ENV"]) || ENV["ENVIRONMENT_NAME"].start_with?("review") || ENV["ENVIRONMENT_NAME"] == "staging")
+  config.log_only = (%w[development test].include?(ENV["RAILS_ENV"]) || ENV["ENVIRONMENT_NAME"] == "staging")
 
   # Whether to use ActiveJob or dispatch events immediately.
   #
@@ -41,7 +41,7 @@ DfE::Analytics.configure do |config|
   # enable analytics. You might want to hook this up to a feature flag or
   # environment variable.
   #
-  config.enable_analytics = proc { Rails.env.production? }
+  config.enable_analytics = proc { Rails.env.production? || Rails.env.review? }
 
   # Enable entity table check job
   #
