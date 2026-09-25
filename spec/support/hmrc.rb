@@ -14,8 +14,8 @@ RSpec.shared_context "with stubbed HMRC client", shared_context: :metadata do
   end
 
   before do
-    @old_base_url = Hmrc.configuration.base_url
-    Hmrc.configuration.base_url = HMRC_TEST_BASE_URL
+    @old_base_url = Hmrc::BankValidations.configuration.base_url
+    Hmrc::BankValidations.configuration.base_url = HMRC_TEST_BASE_URL
 
     stub_request(:post, "#{HMRC_TEST_BASE_URL}/oauth/token")
       .to_return(
@@ -33,33 +33,33 @@ RSpec.shared_context "with stubbed HMRC client", shared_context: :metadata do
   end
 
   after do
-    Hmrc.configuration.base_url = @old_base_url
+    Hmrc::BankValidations.configuration.base_url = @old_base_url
   end
 end
 
 RSpec.shared_context "with HMRC bank validation enabled", shared_context: :metadata do
   before do
-    Hmrc.configure { |config| config.enabled = true }
+    Hmrc::BankValidations.configure { |config| config.enabled = true }
   end
 
   after do
-    Hmrc.configure { |config| config.enabled = false }
+    Hmrc::BankValidations.configure { |config| config.enabled = false }
   end
 end
 
 RSpec.shared_context "with failing HMRC bank validation API request", shared_context: :metadata do
   before do
-    @old_base_url = Hmrc.configuration.base_url
-    Hmrc.configuration.base_url = HMRC_TEST_BASE_URL
+    @old_base_url = Hmrc::BankValidations.configuration.base_url
+    Hmrc::BankValidations.configuration.base_url = HMRC_TEST_BASE_URL
 
-    Hmrc.client.send(:token=, nil)
+    Hmrc::BankValidations.client.send(:token=, nil)
 
     stub_request(:post, "#{HMRC_TEST_BASE_URL}/oauth/token")
       .to_return(status: 429, body: "Test failure")
   end
 
   after do
-    Hmrc.configuration.base_url = @old_base_url
+    Hmrc::BankValidations.configuration.base_url = @old_base_url
   end
 end
 

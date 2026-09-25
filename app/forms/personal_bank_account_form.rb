@@ -54,9 +54,9 @@ class PersonalBankAccountForm < Form
   end
 
   def validate_with_hmrc!
-    return unless Hmrc.configuration.enabled?
+    return unless Hmrc::BankValidations.configuration.enabled?
 
-    hmrc_response = Hmrc.client.verify_personal_bank_account(
+    hmrc_response = Hmrc::BankValidations.client.verify_personal_bank_account(
       normalised_bank_detail(bank_sort_code),
       normalised_bank_detail(bank_account_number),
       banking_name

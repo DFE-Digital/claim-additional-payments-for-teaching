@@ -1,5 +1,21 @@
 module Hmrc
   module Employments
+    def self.client
+      @client ||= Client.new
+    end
+
+    def self.client=(client)
+      @client = client
+    end
+
+    def self.configuration
+      @configuration ||= Configuration.new
+    end
+
+    def self.configure
+      yield(configuration) if block_given?
+    end
+
     class Client < Hmrc::BaseClient
       def initialize(
         base_url: Employments.configuration.base_url,

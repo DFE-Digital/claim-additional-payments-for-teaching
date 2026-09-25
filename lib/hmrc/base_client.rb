@@ -12,8 +12,8 @@ module Hmrc
 
     attr_accessor :base_url, :client_id, :client_secret, :http_client, :logger
 
-    def post_request(path, payload, headers = nil, timeout: nil)
-      http_client.post(
+    def post_request!(path, payload, headers = nil, timeout: nil)
+      response = http_client.post(
         "#{base_url}#{path}",
         payload,
         headers
@@ -21,21 +21,6 @@ module Hmrc
         request.options.timeout = timeout if timeout
         request.options.open_timeout = timeout if timeout
       end
-    end
-
-    def get_request(path, headers = nil, timeout: nil)
-      http_client.get(
-        "#{base_url}#{path}",
-        nil,
-        headers
-      ) do |request|
-        request.options.timeout = timeout if timeout
-        request.options.open_timeout = timeout if timeout
-      end
-    end
-
-    def post_request!(path, payload, headers = nil, timeout: nil)
-      response = post_request(path, payload, headers, timeout: timeout)
 
       if !response.success?
         logger.info("HMRC API error: response code #{response.status}")
@@ -46,7 +31,14 @@ module Hmrc
     end
 
     def get_request!(path, headers = nil, timeout: nil)
-      response = get_request(path, headers, timeout: timeout)
+      response = http_client.get(
+        "#{base_url}#{path}",
+        nil,
+        headers
+      ) do |request|
+        request.options.timeout = timeout if timeout
+        request.options.open_timeout = timeout if timeout
+      end
 
       if !response.success?
         logger.info("HMRC API error: response code #{response.status}")

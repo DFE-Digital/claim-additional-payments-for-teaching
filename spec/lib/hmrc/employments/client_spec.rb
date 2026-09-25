@@ -254,5 +254,4 @@ RSpec.describe Hmrc::Employments::Client do
       ).to eq(JSON.parse(response_body))
     end
   end
-
 end

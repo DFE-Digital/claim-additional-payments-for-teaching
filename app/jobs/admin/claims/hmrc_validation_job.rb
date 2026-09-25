@@ -4,7 +4,7 @@ module Admin
       TIMEOUT_SECONDS = 5
 
       def perform(claim)
-        response = Hmrc.client.verify_personal_bank_account(
+        response = Hmrc::BankValidations.client.verify_personal_bank_account(
           claim.bank_sort_code,
           claim.bank_account_number,
           claim.banking_name,
