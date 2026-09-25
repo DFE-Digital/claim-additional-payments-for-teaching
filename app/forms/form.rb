@@ -39,6 +39,10 @@ class Form
     Claim.model_name
   end
 
+  def self.form_key
+    name.demodulize.underscore.downcase.dasherize.gsub(/-form$/, "")
+  end
+
   def self.i18n_error_message(path, args = {})
     ->(object, _) { object.i18n_errors_path(path, args) }
   end

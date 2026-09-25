@@ -11,9 +11,11 @@ module Journeys
     # reflects the sequence based on the claim's current state.
     class SlugSequence
       SLUGS = [
+        "sign-in",
         "sign-in-or-continue",
         "reset-claim",
         "qualification-details",
+        "qualifications-check",
         "qts-year",
         "select-claim-school",
         "claim-school",
@@ -28,6 +30,7 @@ module Journeys
         "eligibility-confirmed",
         "information-provided",
         "personal-details",
+        "national-insurance-number",
         "student-loan-amount",
         "postcode-search",
         "select-home-address",
@@ -63,11 +66,20 @@ module Journeys
       end
 
       def slugs
-        [].tap do |sequence|
-          sequence.push(*eligibility_slugs)
-          sequence.push(*personal_details_slugs)
-          sequence.push(*payment_details_slugs)
-          sequence.push(*results_slugs)
+        if FeatureFlag.enabled?(:student_loans_teacher_auth)
+          [].tap do |sequence|
+            sequence.push(*teacher_auth_eligibility_slugs)
+            sequence.push(*teacher_auth_personal_details_slugs)
+            sequence.push(*teacher_auth_payment_details_slugs)
+            sequence.push(*results_slugs)
+          end
+        else
+          [].tap do |sequence|
+            sequence.push(*eligibility_slugs)
+            sequence.push(*personal_details_slugs)
+            sequence.push(*payment_details_slugs)
+            sequence.push(*results_slugs)
+          end
         end
       end
 
@@ -84,6 +96,51 @@ module Journeys
       end
 
       private
+
+      def teacher_auth_eligibility_slugs
+        [].tap do |slugs|
+          slugs << "sign-in"
+          slugs << "qualifications-check" if answers.trs_data_fetched_at.blank?
+          slugs << "qualification-details" if answers.has_dqt_data_for_claim?
+          slugs << "qts-year" unless answers.qualifications_details_check?
+          slugs << "select-claim-school" if answers.has_tps_school_for_student_loan_in_previous_financial_year?
+          slugs << "claim-school" if answers.claim_school_somewhere_else != false
+          slugs << "claim-school-results" if answers.claim_school_id.blank? || answers.provision_search.present?
+          slugs << "subjects-taught"
+          slugs << "still-teaching-tps" if answers.has_recent_tps_school?
+          slugs << "still-teaching" unless answers.has_recent_tps_school?
+          slugs << "current-school" unless answers.employed_at_claim_school? || answers.employed_at_recent_tps_school?
+          slugs << "select-current-school" unless answers.employed_at_claim_school? || answers.employed_at_recent_tps_school?
+          slugs << "leadership-position"
+          slugs << "mostly-performed-leadership-duties" if answers.had_leadership_position?
+          slugs << "eligibility-confirmed"
+        end
+      end
+
+      def teacher_auth_personal_details_slugs
+        [].tap do |slugs|
+          slugs << "information-provided"
+          # TRS may not provide a National Insurance number.
+          slugs << "national-insurance-number" if answers.teacher_auth_national_insurance_number.blank?
+          slugs << "student-loan-amount"
+          slugs << "postcode-search"
+          slugs << "select-home-address" if answers.postcode_searched?
+          slugs << "address" unless answers.postcode_searched?
+          slugs << "select-email" if answers.teacher_auth_email
+          slugs << "email-address" unless answers.email_address_check?
+          slugs << "email-verification" unless answers.email_address_check? || answers.email_verified?
+          slugs << "provide-mobile-number"
+          slugs << "mobile-number" unless doesnt_want_to_provide_mobile_number?
+          slugs << "mobile-verification" unless doesnt_want_to_provide_mobile_number?
+        end
+      end
+
+      def teacher_auth_payment_details_slugs
+        [].tap do |slugs|
+          slugs << "personal-bank-account"
+          slugs << "gender"
+        end
+      end
 
       def eligibility_slugs
         [].tap do |slugs|

@@ -870,7 +870,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_23_144715) do
     t.string "qts_award_year"
     t.decimal "student_loan_repayment_amount", precision: 7, scale: 2
     t.boolean "taught_eligible_subjects"
+    t.datetime "teacher_auth_completed_at"
+    t.date "teacher_auth_date_of_birth"
+    t.citext "teacher_auth_email"
+    t.string "teacher_auth_first_name"
+    t.string "teacher_auth_last_name"
+    t.string "teacher_auth_national_insurance_number"
+    t.text "teacher_auth_one_login_uid"
+    t.string "teacher_auth_teacher_reference_number"
+    t.date "teacher_auth_verified_date_of_birth"
+    t.text "teacher_auth_verified_name"
     t.string "teacher_reference_number", limit: 11
+    t.datetime "trs_data_fetched_at"
     t.datetime "updated_at", precision: nil, null: false
     t.index ["claim_school_id"], name: "index_student_loans_eligibilities_on_claim_school_id"
     t.index ["created_at"], name: "index_student_loans_eligibilities_on_created_at"
