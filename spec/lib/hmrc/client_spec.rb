@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Hmrc::Client do
+RSpec.describe Hmrc::BankValidations::Client do
   let(:base_url) { "test" }
   let(:client_id) { "test" }
   let(:client_secret) { "test" }

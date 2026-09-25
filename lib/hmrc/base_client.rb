@@ -18,19 +18,10 @@ module Hmrc
         payload,
         headers
       ) do |request|
-        request.options.timeout = timeout if timeout
-        request.options.open_timeout = timeout if timeout
-      end
-    end
-
-    def get_request(path, headers = nil, timeout: nil)
-      http_client.get(
-        "#{base_url}#{path}",
-        nil,
-        headers
-      ) do |request|
-        request.options.timeout = timeout if timeout
-        request.options.open_timeout = timeout if timeout
+        if timeout
+          request.options.timeout = timeout
+          request.options.open_timeout = timeout
+        end
       end
     end
 
@@ -46,7 +37,16 @@ module Hmrc
     end
 
     def get_request!(path, headers = nil, timeout: nil)
-      response = get_request(path, headers, timeout: timeout)
+      response = http_client.get(
+        "#{base_url}#{path}",
+        nil,
+        headers
+      ) do |request|
+        if timeout
+          request.options.timeout = timeout
+          request.options.open_timeout = timeout
+        end
+      end
 
       if !response.success?
         logger.info("HMRC API error: response code #{response.status}")

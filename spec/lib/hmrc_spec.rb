@@ -1,22 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Hmrc do
-  describe ".client" do
-    it "returns same Client instance" do
-      expect(described_class.send(:client))
-        .to be_an_instance_of(Hmrc::Client)
-        .and equal(described_class.send(:client))
-    end
-  end
-
-  describe ".configuration" do
-    it "returns same Configuration instance" do
-      expect(described_class.send(:configuration))
-        .to be_an_instance_of(Hmrc::Configuration)
-        .and equal(described_class.send(:configuration))
-    end
-  end
-
   describe "bank validations namespace" do
     it "exposes the nested bank validations client and configuration" do
       expect(Hmrc::BankValidations.client).to be_an_instance_of(Hmrc::BankValidations::Client)
@@ -24,14 +8,10 @@ RSpec.describe Hmrc do
     end
   end
 
-  describe ".configure" do
-    it "yields current configuration" do
-      block = proc { |config| expect(config).to equal(described_class.send(:configuration)) }
-
-      described_class.send(
-        :configure,
-        &block
-      )
+  describe "employments namespace" do
+    it "exposes the nested employment client and configuration" do
+      expect(Hmrc::Employments.client).to be_an_instance_of(Hmrc::Employments::Client)
+      expect(Hmrc::Employments.configuration).to be_an_instance_of(Hmrc::Employments::Configuration)
     end
   end
 end

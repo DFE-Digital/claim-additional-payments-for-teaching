@@ -19,50 +19,6 @@ module Hmrc
         self.totp_secret = totp_secret
       end
 
-      def fetch_access_token(timeout: nil)
-        response = post_request!(
-          "/oauth/token",
-          oauth_token_request_payload,
-          oauth_request_headers,
-          timeout: timeout
-        )
-
-        body = JSON.parse(response.body)
-        @access_token = body.fetch("access_token")
-        @access_token_expiry = Time.current + body.fetch("expires_in").to_i
-        @access_token
-      end
-
-      def access_token(timeout: nil)
-        @access_token = fetch_access_token(timeout: timeout) if @access_token.nil? || token_expired?
-        @access_token
-      end
-
-      def authenticated_headers(timeout: nil)
-        {
-          "Authorization" => "Bearer #{access_token(timeout: timeout)}",
-          "Accept" => "application/json"
-        }
-      end
-
-      def match_individual(first_name:, last_name:, nino:, date_of_birth:, correlation_id: nil, timeout: nil)
-        request = MatchingRequest.new(
-          first_name: first_name,
-          last_name: last_name,
-          nino: nino,
-          date_of_birth: date_of_birth
-        )
-
-        response = post_request!(
-          request.path,
-          request.payload,
-          request.headers(access_token: access_token, correlation_id: correlation_id),
-          timeout: timeout
-        )
-
-        request.match_id_from_response(response.body)
-      end
-
       def employment_history(match_id:, from_date:, to_date: nil, paye_reference: nil, correlation_id: nil, timeout: nil)
         request = EmploymentHistoryRequest.new(
           match_id: match_id,
@@ -71,24 +27,32 @@ module Hmrc
           paye_reference: paye_reference
         )
 
-        response = get_request!(
+        get_request!(
           request.path,
-          request.headers(access_token: access_token, correlation_id: correlation_id),
+          request.headers(access_token: access_token(timeout: timeout), correlation_id: correlation_id),
           timeout: timeout
         )
-
-        request.parse_response(response.body)
+      rescue Hmrc::ResponseError => e
+        raise Hmrc::Employments::ResponseError.new(e.response)
       end
 
       def employment_history_for_individual(first_name:, last_name:, nino:, date_of_birth:, from_date: nil, to_date: nil, paye_reference: nil, correlation_id: nil, timeout: nil)
-        match_id = match_individual(
+        request = MatchingRequest.new(
           first_name: first_name,
           last_name: last_name,
           nino: nino,
-          date_of_birth: date_of_birth,
-          correlation_id: correlation_id,
+          date_of_birth: date_of_birth
+        )
+
+        matching_response = post_request!(
+          request.path,
+          request.payload,
+          request.headers(access_token: access_token(timeout: timeout), correlation_id: correlation_id),
           timeout: timeout
         )
+
+        match_id = request.match_id_from_response(matching_response.body)
+        return nil if match_id.nil?
 
         employment_history(
           match_id: match_id,
@@ -98,9 +62,44 @@ module Hmrc
           correlation_id: correlation_id,
           timeout: timeout
         )
+      rescue Hmrc::ResponseError => e
+        raise Hmrc::Employments::ResponseError.new(e.response) unless no_match_response?(e.response)
+
+        nil
       end
 
       private
+
+      def access_token(timeout: nil)
+        if @access_token.nil? || token_expired?
+          response = post_request!(
+            "/oauth/token",
+            oauth_token_request_payload,
+            oauth_request_headers,
+            timeout: timeout
+          )
+
+          body = JSON.parse(response.body)
+          @access_token = body.fetch("access_token")
+          @access_token_expiry = Time.current + body.fetch("expires_in").to_i
+        end
+
+        @access_token
+      end
+
+      def no_match_response?(response)
+        return false if response.nil?
+
+        return false unless response.respond_to?(:status) && response.status == 404
+
+        body = response.respond_to?(:body) ? response.body : nil
+        return false if body.nil?
+
+        parsed = JSON.parse(body)
+        parsed.is_a?(Hash) && parsed["code"] == "MATCHING_FAILED"
+      rescue JSON::ParserError
+        false
+      end
 
       attr_accessor :base_url, :client_id, :client_secret, :totp_secret, :http_client, :logger, :token, :token_expiry
 

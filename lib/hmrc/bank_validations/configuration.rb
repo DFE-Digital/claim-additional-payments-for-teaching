@@ -18,5 +18,3 @@ module Hmrc
     end
   end
 end
-
-Hmrc::Configuration = Hmrc::BankValidations::Configuration unless defined?(Hmrc::Configuration)
