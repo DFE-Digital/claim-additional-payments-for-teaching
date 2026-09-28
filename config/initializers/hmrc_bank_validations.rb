@@ -5,6 +5,8 @@ Hmrc::BankValidations.configure do |config|
   config.enabled = ENV["HMRC_API_BANK_VALIDATION_ENABLED"] == "true"
 end
 
-Rails.configuration.x.hmrc_employment_check_bypass = (
-  Rails.env.development? || Rails.env.review_app_like?
-)
+Rails.configuration.after_initialize do
+  Rails.configuration.x.hmrc_employment_check_bypass = (
+    Rails.env.development? || Rails.env.review_app_like?
+  )
+end
