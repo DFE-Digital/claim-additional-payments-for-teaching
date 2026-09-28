@@ -120,8 +120,14 @@ module Journeys
       def teacher_auth_personal_details_slugs
         [].tap do |slugs|
           slugs << "information-provided"
-          # TRS may not provide a National Insurance number.
-          slugs << "national-insurance-number" if answers.teacher_auth_national_insurance_number.blank?
+          # We only want to show national insurance number during the journey if
+          # teacher auth failed to return a NINO, however we want to allow
+          # claiamnt's to chage their answer from the check answers screen, so
+          # we add the NINO page in once the last step before check answers is
+          # completed (gender question)
+          if answers.teacher_auth_national_insurance_number.blank? || answers.payroll_gender.present?
+            slugs << "national-insurance-number"
+          end
           slugs << "student-loan-amount"
           slugs << "postcode-search"
           slugs << "select-home-address" if answers.postcode_searched?

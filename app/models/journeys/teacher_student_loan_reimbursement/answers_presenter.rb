@@ -10,7 +10,7 @@ module Journeys
           super.reject do |label, answer, slug|
             slug.in? %w[personal-details teacher-reference-number]
           end.tap do |array|
-            array << national_insurance_number if answers.teacher_auth_national_insurance_number.blank?
+            array << national_insurance_number
           end
         else
           super

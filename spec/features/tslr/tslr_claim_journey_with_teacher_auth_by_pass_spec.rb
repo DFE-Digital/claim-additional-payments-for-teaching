@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "TSLR claim with teacher auth by pass" do
   context "when QTS year is confirmed and a TPS school is found" do
-    it "uses Teacher Auth details when the NI number is supplied" do
+    it "allows changing the NI number supplied by Teacher Auth" do
       FeatureFlag.enable!(:student_loans_teacher_auth)
       allow(TeacherAuth::Config.instance).to receive(:bypass?) { true }
 
@@ -162,7 +162,22 @@ RSpec.describe "TSLR claim with teacher auth by pass" do
       expect(page).not_to have_link(href: /personal-details/)
       expect(page).not_to have_content("teacher reference number")
       expect(page).not_to have_link(href: /teacher-reference-number/)
-      expect(page).not_to have_link(href: /national-insurance-number/)
+
+      expect(page).to have_content("AB123456C")
+      expect(page).to have_link(href: /national-insurance-number/)
+
+      click_on "Change what is your national insurance number?", visible: :all
+      expect(page).to have_content("Enter your National Insurance number")
+      expect(page).to have_field("Enter your National Insurance number", with: "AB123456C")
+      fill_in "Enter your National Insurance number", with: "AB654321C"
+      click_button "Continue"
+
+      expect(page).to have_content("student loan repayment amount")
+      click_button "Continue"
+
+      expect(page).to have_content("Check your answers before sending your application")
+      expect(page).to have_content("AB654321C")
+      expect(page).not_to have_content("AB123456C")
 
       perform_enqueued_jobs do
         click_button "Confirm and send"
@@ -179,7 +194,7 @@ RSpec.describe "TSLR claim with teacher auth by pass" do
       visit admin_claim_tasks_path(claim)
 
       expect(page).to have_summary_item(key: "TRN", value: "1234567")
-      expect(page).to have_summary_item(key: "NI number", value: "AB123456C")
+      expect(page).to have_summary_item(key: "NI number", value: "AB654321C")
       expect(page).to(
         have_summary_item(key: "Full name", value: "Seymour T Skinner")
       )
@@ -197,12 +212,15 @@ RSpec.describe "TSLR claim with teacher auth by pass" do
         value: "Signed in with teacher auth"
       )
 
-      expect(task_status("Identity confirmation")).to eq "Passed"
+      expect(task_status("Identity confirmation")).to eq "Partial match"
       expect(task_status("Qualifications")).to eq "Passed"
 
       click_on "Confirm the claimant made the claim"
       expect(page).not_to have_text("Name not matched:")
       expect(page).not_to have_text("Date of birth not matched:")
+      expect(page).to have_text("National insurance number not matched:")
+      expect(page).to have_text('Claimant: "AB654321C"')
+      expect(page).to have_text('Teacher Auth: "AB123456C"')
 
       click_on "Qualifications"
       expect(page).to have_text "Qualifications"
