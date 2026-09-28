@@ -1,7 +1,7 @@
 module Policies
   module EarlyCareerPayments
     module DataRetention
-      class Policy < Policies::DataRetention::BasePolicy
+      class RetentionSchedule < ::DataRetention::BaseSchedule
         self.claim_attributes = {
           id: :retained,
           academic_year: :retained,
