@@ -205,7 +205,7 @@ module ApplicationHelper
       input[2..3],
       input[4..5],
       input[6..7],
-      input[7..7]
+      input[8..8]
     ].join(" ")
   end
 end
