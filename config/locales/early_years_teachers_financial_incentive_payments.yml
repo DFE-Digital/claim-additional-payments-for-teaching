@@ -59,6 +59,17 @@ en:
           false: "No"
         errors:
           blank: Select yes if you would like to continue with your claim
+      confirm_national_insurance_number:
+        title: "Is this your National Insurance number?"
+        summary_key: "National Insurance number"
+        national_insurance_number:
+          label: "What is your National Insurance number?"
+        options:
+          true: "Yes"
+          false: "No"
+        errors:
+          blank: Select yes if this is your National Insurance number
+          national_insurance_number_format: "Enter a National Insurance number in the correct format"
       gender:
         questions:
           payroll_gender: "Are you recorded as male or female on your employer’s payroll system?"

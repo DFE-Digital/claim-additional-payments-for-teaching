@@ -13,6 +13,8 @@ module Debug
       attribute :trn, :string
       attribute :sub, :string
       attribute :has_eligible_qualification, :boolean
+      attribute :has_national_insurance_number_on_trs, :boolean
+      attribute :trs_national_insurance_number, :string
 
       def default_email
         "#{@default_verified_name.downcase.tr(" ", ".")}@example.com"
@@ -36,6 +38,24 @@ module Debug
 
       def default_has_eligible_qualification
         true
+      end
+
+      def default_has_national_insurance_number_on_trs
+        true
+      end
+
+      def default_trs_national_insurance_number
+        [
+          ("A".."Z").to_a.sample(2).flatten +
+            (0..9).to_a.sample(6).flatten +
+            [("A".."D").to_a.sample]
+        ].join
+      end
+
+      def trs_national_insurance_number
+        if has_national_insurance_number_on_trs
+          super
+        end
       end
 
       def journey

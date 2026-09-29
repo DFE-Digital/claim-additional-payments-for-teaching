@@ -20,6 +20,11 @@ module Journeys
       attribute :trs_data, pii: true
       attribute :trs_data_fetched_at, :datetime, pii: false
       attribute :has_eligible_qualification, :boolean, pii: false
+      attribute :trs_national_insurance_number, :string, pii: true
+      attribute :confirm_national_insurance_number, :boolean, pii: false
+
+      attribute :hmrc_api_job_completed, :boolean, default: false, pii: false
+      attribute :hmrc_employment_check_status, :string, pii: false
 
       attribute :eligible_teaching_qualification_held_clicked, :boolean, pii: false
       attribute :continue_claim, :boolean, pii: false

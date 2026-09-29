@@ -36,7 +36,11 @@ module Journeys
           a << ["Email address", answers.teacher_auth_email, nil]
           a << ["Home address", address, answers.postcode_searched? ? "postcode-search" : "address"]
           a << gender
-          a << ["National Insurance number", answers.national_insurance_number, "national-insurance-number"]
+          a << [
+            "National Insurance number",
+            answers.national_insurance_number,
+            answers.trs_national_insurance_number.present? ? "confirm-national-insurance-number" : "national-insurance-number"
+          ]
         end
       end
 

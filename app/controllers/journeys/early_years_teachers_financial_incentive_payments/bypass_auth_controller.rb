@@ -35,7 +35,8 @@ module Journeys
           teacher_auth_completed_at: Time.zone.now,
           has_eligible_qualification: form.has_eligible_qualification,
           identity_confirmed_with_onelogin: true,
-          onelogin_idv_at: Time.zone.now
+          onelogin_idv_at: Time.zone.now,
+          trs_national_insurance_number: form.trs_national_insurance_number
         )
         journey_session.save!
       end

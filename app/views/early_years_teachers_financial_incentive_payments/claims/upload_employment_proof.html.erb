@@ -5,11 +5,41 @@
     <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false, multipart: true } do |f| %>
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-l">Upload your payslip</h1>
+      <% if FeatureFlag.enabled?(:eytrp_hmrc_integration) %>
+        <h1 class="govuk-heading-l">
+          We could not confirm that you work at the nursery you selected
+        </h1>
 
-      <p class="govuk-body">
-        Upload a recent payslip to show that you work at <%= @form.nursery_name %>.
-      </p>
+        <%= govuk_warning_text(
+          text: "You selected #{@form.nursery_name} as your workplace, but we could not confirm this using HMRC records."
+        ) %>
+
+        <p class="govuk-body">
+          If you work at <%= @form.nursery_name %>, you can upload a payslip
+          to confirm this.
+        </p>
+
+        <p class="govuk-body">
+          If you selected the wrong nursery, go back and
+          <%= govuk_link_to(
+            "choose a different nursery",
+            claim_path(
+              current_journey_routing_name,
+              "nursery-search",
+              claim: {
+                nursery_search_query: "",
+                nursery_id: ""
+              }
+            )
+          ) %>
+        </p>
+      <% else %>
+        <h1 class="govuk-heading-l">Upload your payslip</h1>
+
+        <p class="govuk-body">
+          Upload a recent payslip to show that you work at <%= @form.nursery_name %>.
+        </p>
+      <% end %>
 
       <p class="govuk-body">The document must:</p>
 
