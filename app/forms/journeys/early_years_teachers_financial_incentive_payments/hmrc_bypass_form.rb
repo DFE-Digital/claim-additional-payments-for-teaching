@@ -90,6 +90,10 @@ module Journeys
         true
       end
 
+      def completed?
+        answers.hmrc_api_job_completed?
+      end
+
       def employments
         @employments ||= [EmploymentForm.new(
           start_date: 1.month.ago.to_date,
