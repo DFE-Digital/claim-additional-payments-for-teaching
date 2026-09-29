@@ -14,9 +14,14 @@ module Journeys
             hmrc_employent_api_call_status: nil
           )
 
-          ::EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob.perform_later(
-            journey_session
-          )
+          # If we're by passing hmrc don't run the job. As we're setting
+          # hmrc_api_job_completed to false we'll rerender the hmrc employment
+          # check form.
+          unless Rails.configuration.x.hmrc_employment_check_bypass
+            ::EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob.perform_later(
+              journey_session
+            )
+          end
         end
 
         true
