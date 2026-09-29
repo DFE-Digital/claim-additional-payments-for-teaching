@@ -1,22 +1,35 @@
+require "logger"
+require "faraday"
+
 module Hmrc
-  def self.client
-    @client ||= Client.new
+  class ResponseError < StandardError
+    attr_reader :response
+
+    def initialize(response = nil)
+      @response = response
+      super(response.respond_to?(:body) ? response.body : response.to_s)
+    end
   end
 
-  def self.client=(client)
-    @client = client
-  end
+  module ClientConfiguration
+    def client
+      @client ||= const_get(:Client).new
+    end
 
-  def self.configuration
-    @configuration ||= Configuration.new
-  end
+    def client=(client)
+      @client = client
+    end
 
-  def self.configure
-    yield(configuration) if block_given?
+    def configuration
+      @configuration ||= const_get(:Configuration).new
+    end
+
+    def configure
+      yield(configuration) if block_given?
+    end
   end
 end
 
-require_relative "hmrc/bank_account_verification_response"
-require_relative "hmrc/client"
-require_relative "hmrc/configuration"
-require_relative "hmrc/response_error"
+require_relative "hmrc/base_client"
+require_relative "hmrc/bank_validations"
+require_relative "hmrc/employments"
