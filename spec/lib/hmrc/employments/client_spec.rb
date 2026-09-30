@@ -36,6 +36,7 @@ RSpec.describe Hmrc::Employments::Client do
         "#{base_url}/oauth/token",
         {
           grant_type: "client_credentials",
+          scope: "assigned",
           client_id: client_id,
           client_secret: "#{totp_value}#{client_secret}"
         },
