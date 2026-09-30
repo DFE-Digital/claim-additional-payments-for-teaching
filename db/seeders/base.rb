@@ -1,4 +1,5 @@
 require "factory_bot"
+require "tempfile"
 
 module Seeders
   class Base
@@ -22,6 +23,9 @@ module Seeders
 
       puts "Importing schools from GIAS..."
       SchoolDataImporterJob.perform_now if School.count < 500
+
+      puts "Seeding eligible STRI schools..."
+      seed_eligible_stri_schools
     end
 
     private
@@ -33,7 +37,7 @@ module Seeders
     end
 
     def create_journey_configurations
-      Journeys.all.each do |journey|
+      Journeys.available.each do |journey|
         Journeys::Configuration
           .create!(
             routing_name: journey.routing_name,
@@ -112,6 +116,33 @@ module Seeders
 
       Policies::FurtherEducationPayments::EligibleFeProvidersImporter.new(file, AcademicYear.current).run(file_upload.id)
       file_upload.completed_processing!
+    end
+
+    def seed_eligible_stri_schools
+      academic_year = Journeys::TargetedRetentionIncentivePayments
+        .configuration.current_academic_year
+
+      admin_user = DfeSignIn::User.first
+
+      csv_data = <<~CSV
+        school_urn,award_amount
+        106653,3000
+      CSV
+
+      file = Tempfile.new
+      file.write(csv_data)
+      file.rewind
+
+      importer = Policies::TargetedRetentionIncentivePayments::AwardCsvImporter.new(
+        academic_year:,
+        csv_data: file,
+        admin_user:
+      )
+
+      importer.process
+
+      file.close
+      file.unlink
     end
   end
 end

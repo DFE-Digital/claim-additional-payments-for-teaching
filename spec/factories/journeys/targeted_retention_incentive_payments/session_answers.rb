@@ -102,10 +102,14 @@ FactoryBot.define do
 
     # FIXME RL rename this to just eligible
     trait :targeted_retention_incentive_eligible do
+      transient do
+        current_school { create(:school, :targeted_retention_incentive_payments_eligible) }
+      end
+
       first_targeted_retention_incentive_claim_year
       itt_year_good_for_life_of_targeted_retention_incentive_policy
-      current_school_id { create(:school, :targeted_retention_incentive_payments_eligible).id }
-      provision_search { "some school" }
+      current_school_id { current_school.id }
+      provision_search { current_school.name }
       nqt_in_academic_year_after_itt { true }
       employed_as_supply_teacher { false }
       subject_to_formal_performance_action { false }
