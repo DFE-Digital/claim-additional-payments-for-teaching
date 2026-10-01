@@ -1,8 +1,8 @@
-# generates 3 csvs
+# generates many csvs
 # for the specified academic year
 # file 1 contains list of FE providers with claim counts
 # file 2 contains list of approved claims at FE providers
-# file 3 contains notify compatible list mail shot
+# reaminging files are notify compatible CSVs batched by number of claims
 # this script is NOT optimised and will perform many n+1 queries
 
 academic_year = AcademicYear.new(2025)
@@ -13,6 +13,7 @@ headers2 = [
   "provider_name",
   "claim_reference",
   "claimant",
+  "provider_verification_teaching_start_year",
   "subjects",
   "submitted_at",
   "verifier",
@@ -54,6 +55,7 @@ Policies::FurtherEducationPayments::EligibleFeProvider
       "\"#{claim.school.name}\"",
       claim.reference,
       claim.full_name,
+      claim.eligibility.provider_verification_teaching_start_year,
       "\"#{claim.eligibility.subjects_taught.join(",")}\"",
       claim.submitted_at,
       claim.eligibility.verified_by&.full_name,
@@ -64,24 +66,6 @@ Policies::FurtherEducationPayments::EligibleFeProvider
     file2.write(array.join(",") + "\n")
   end
 end
-
-additional_headers = max_claim_count_for_providers.times.flat_map do |index|
-  [
-    "claim_reference_#{index+1}",
-    "claimant_#{index+1}",
-    "provider_verification_teaching_start_year_#{index+1}",
-    "subjects_#{index+1}",
-    "submitted_at_#{index+1}",
-    "verifier_#{index+1}",
-    "verified_at_#{index+1}",
-    "award_amount_#{index+1}"
-  ]
-end
-
-headers3 = ["ukprn", "name", "total", "approved", "rejected", "max_award_amount", "lower_award_amount"] + additional_headers
-
-file3 = File.open("fe-notify.csv", "w")
-file3.write(headers3.join(",") + "\n")
 
 Policies::FurtherEducationPayments::EligibleFeProvider
   .by_academic_year(academic_year)
@@ -96,6 +80,9 @@ Policies::FurtherEducationPayments::EligibleFeProvider
     provider.lower_award_amount
   ]
 
+  claims_count = provider.claims.where(academic_year:).approved.count
+  filename = "fe-notify-#{claims_count}.csv"
+
   provider.claims.where(academic_year:).approved.each do |claim|
     array += [
       claim.reference,
@@ -109,7 +96,31 @@ Policies::FurtherEducationPayments::EligibleFeProvider
     ]
   end
 
-  file3.write(array.join(",") + "\n")
+  if !File.exist?(filename)
+    additional_headers = claims_count.times.flat_map do |index|
+      [
+        "claim_reference_#{index+1}",
+        "claimant_#{index+1}",
+        "provider_verification_teaching_start_year_#{index+1}",
+        "subjects_#{index+1}",
+        "submitted_at_#{index+1}",
+        "verifier_#{index+1}",
+        "verified_at_#{index+1}",
+        "award_amount_#{index+1}"
+      ]
+    end
+
+    batch_headers = ["ukprn", "name", "total", "approved", "rejected", "max_award_amount", "lower_award_amount"] + additional_headers
+
+    batch_file = File.open(filename, "w")
+    batch_file.write(batch_headers.join(",") + "\n")
+
+    batch_file.write(array.join(",") + "\n")
+  else
+    batch_file = File.open(filename, "a")
+
+    batch_file.write(array.join(",") + "\n")
+  end
 end
 
 nil
