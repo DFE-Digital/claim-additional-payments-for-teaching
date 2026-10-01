@@ -1,0 +1,21 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.heading,
+    journey: current_journey_routing_name
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= content_tag(:h1, @form.heading, class: "govuk-heading-xl") %>
+
+    <% case @form.ineligibility_reason %>
+    <% when :school_ineligible %>
+      <%= render partial: "ineligible_current_school" %>
+    <% else %>
+      <% Sentry.capture_message("unknown ineligibility reason #{@form.ineligibility_reason}") %>
+      <%= render partial: "generic" %>
+    <% end %>
+  </div>
+</div>
