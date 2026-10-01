@@ -4,9 +4,3 @@ Hmrc::BankValidations.configure do |config|
   config.client_secret = ENV["HMRC_API_CLIENT_SECRET"]
   config.enabled = ENV["HMRC_API_BANK_VALIDATION_ENABLED"] == "true"
 end
-
-Rails.configuration.after_initialize do
-  Rails.configuration.x.hmrc_employment_check_bypass = (
-    Rails.env.development? || Rails.env.review_app_like?
-  )
-end

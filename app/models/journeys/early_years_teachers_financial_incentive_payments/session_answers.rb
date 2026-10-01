@@ -55,6 +55,22 @@ module Journeys
           .where.not(onelogin_uid: nil)
           .find_by(onelogin_uid: teacher_auth_one_login_uid)
       end
+
+      def teacher_auth_verified_first_name
+        teacher_auth_verified_name_parts.first
+      end
+
+      def teacher_auth_verified_last_name
+        teacher_auth_verified_name_parts.last
+      end
+
+      private
+
+      def teacher_auth_verified_name_parts
+        return [] unless teacher_auth_verified_name.present?
+
+        teacher_auth_verified_name.split(" ")
+      end
     end
   end
 end
