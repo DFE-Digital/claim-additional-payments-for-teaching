@@ -69,6 +69,7 @@ additional_headers = max_claim_count_for_providers.times.flat_map do |index|
   [
     "claim_reference_#{index+1}",
     "claimant_#{index+1}",
+    "provider_verification_teaching_start_year_#{index+1}",
     "subjects_#{index+1}",
     "submitted_at_#{index+1}",
     "verifier_#{index+1}",
@@ -99,6 +100,7 @@ Policies::FurtherEducationPayments::EligibleFeProvider
     array += [
       claim.reference,
       claim.full_name,
+      claim.eligibility.provider_verification_teaching_start_year,
       "\"#{claim.eligibility.subjects_taught.join(",")}\"",
       claim.submitted_at,
       claim.eligibility.verified_by&.full_name,
