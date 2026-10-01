@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Add label and project item
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           PROJECT_NUMBER: "101"
         with:
