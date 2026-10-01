@@ -102,7 +102,7 @@ module Journeys
           SLUGS_HASH["national-insurance-number"]
         end
 
-        if Rails.configuration.x.hmrc_employment_check_bypass
+        unless ::EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob.enabled?
           array << SLUGS_HASH["hmrc-bypass"]
         end
 
@@ -111,8 +111,6 @@ module Journeys
         if answers.hmrc_employment_check_passed == false
           array << SLUGS_HASH["upload-employment-proof"]
           array << SLUGS_HASH["review-employment-proof"]
-        else
-          # Currenlty a no op until we wire the job up
         end
 
         array << SLUGS_HASH["continue-claim"]
