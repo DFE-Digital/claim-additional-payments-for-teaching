@@ -81,7 +81,7 @@ module Journeys
         return unless school
 
         @eligible_fe_provider ||= Policies::FurtherEducationPayments::EligibleFeProvider
-          .by_academic_year(AcademicYear.current)
+          .by_academic_year(Journeys::FurtherEducationPayments.configuration.current_academic_year)
           .where(ukprn: school.ukprn)
           .exists?
       end
