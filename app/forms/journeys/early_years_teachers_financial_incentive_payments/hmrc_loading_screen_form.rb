@@ -6,7 +6,7 @@ module Journeys
       end
 
       def completed?
-        answers.hmrc_api_job_completed?
+        answers.hmrc_response_received?
       end
 
       def redirect_to_next_slug?

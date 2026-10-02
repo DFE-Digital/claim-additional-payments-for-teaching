@@ -159,4 +159,45 @@ RSpec.describe Hmrc::Employments::Client do
       expect(response.body).to include("employments")
     end
   end
+
+  it "returns the matching response when no claimant is found" do
+    client = described_class.new(
+      base_url: "https://example.test",
+      client_id: "client-id",
+      client_secret: "client-secret",
+      totp_secret: nil,
+      http_client: Faraday,
+      logger: Rails.logger
+    )
+    stub_request(:post, "https://example.test/oauth/token")
+      .to_return(
+        status: 200,
+        body: {access_token: "abc123", expires_in: 3600}.to_json
+      )
+    stub_request(:post, "https://example.test/individuals/matching/")
+      .with(
+        body: {
+          firstName: "John",
+          lastName: "Doe",
+          nino: "AB123456C",
+          dateOfBirth: "1970-12-13"
+        }
+      ).to_return(
+        status: 404,
+        body: {code: "MATCHING_FAILED"}.to_json
+      )
+
+    response = client.employment_history_for_individual(
+      first_name: "John",
+      last_name: "Doe",
+      nino: "AB123456C",
+      date_of_birth: "1970-12-13"
+    )
+
+    expect(response.status).to eq(404)
+    expect(response.body).to eq({code: "MATCHING_FAILED"}.to_json)
+    expect(
+      a_request(:get, %r{https://example.test/individuals/employments/paye})
+    ).not_to have_been_made
+  end
 end

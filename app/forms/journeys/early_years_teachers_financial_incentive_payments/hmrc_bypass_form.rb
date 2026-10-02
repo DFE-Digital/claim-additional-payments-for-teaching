@@ -69,29 +69,17 @@ module Journeys
           return false
         end
 
-        # Set hmrc_api_job_completed so we skip the HmrcEmploymentCheckJob
-        journey_session.answers.assign_attributes(
-          hmrc_api_job_completed: true,
-          hmrc_employment_history: employments.map(&:to_h),
-          hmrc_employent_api_call_status: "success"
+        # Store a synthetic response so review journeys use the same check.
+        journey_session.answers.update!(
+          hmrc_response_status: 200,
+          hmrc_response_body: {employments: employments.map(&:to_h)}.to_json
         )
-
-        employment_check = EmploymentCheck.new(
-          setting: answers.nursery,
-          employments: answers.hmrc_employment_history
-        )
-
-        journey_session.answers.assign_attributes(
-          hmrc_employment_check_passed: employment_check.passed?
-        )
-
-        journey_session.save!
 
         true
       end
 
       def completed?
-        answers.hmrc_api_job_completed?
+        answers.hmrc_response_received?
       end
 
       def employments

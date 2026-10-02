@@ -32,7 +32,7 @@ module Hmrc
 
       def match_id_from_response(body)
         href = JSON.parse(body).dig("_links", "individual", "href")
-        href.split("/").last
+        href&.split("/")&.last
       end
     end
   end

@@ -47,7 +47,13 @@ RSpec.describe "EYTFIP with teacher auth bypass", feature_flag: [:eytfi_journey]
     expect(find_field("Email").value).to be_present
     expect(find_field("TRN").value).to be_present
     expect(find_field("One Login UID").value).to be_present
+    fill_in "Day", with: "23"
+    fill_in "Month", with: "7"
+    fill_in "Year", with: "1985"
     click_button "Continue"
+
+    expect(Journeys::EarlyYearsTeachersFinancialIncentivePayments::Session.last.answers.teacher_auth_verified_date_of_birth)
+      .to eq(Date.new(1985, 7, 23))
   end
 
   scenario "can emulate no eligible qualification pathway" do

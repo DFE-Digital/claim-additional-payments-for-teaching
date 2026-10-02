@@ -1,43 +1,46 @@
 module EarlyYearsTeachersFinancialIncentivePayments
   class HmrcEmploymentCheckJob < ApplicationJob
-    def perform(journey_session)
-      return if journey_session.answers.hmrc_api_job_completed?
+    # Enable `eytrp_hmrc_integration` to turn on the new HMRC journey.
+    # Hmrc api call is off by default in review environments, turn it on in
+    # these environments by enabling
+    # `eytrp_perform_hmrc_api_call_in_review_environments`
+    def self.enabled?
+      return false unless FeatureFlag.enabled?(:eytrp_hmrc_integration)
 
-      employment_history = Hmrc::EmploymentHistory.new(
-        full_name: journey_session.answers.teacher_auth_verified_name,
-        date_of_birth: journey_session.answers.teacher_auth_verified_date_of_birth,
-        national_insurance_number: journey_session.answers.national_insurance_number
-      )
-
-      employment_history.request!
-
-      if !employment_history.request_successful?
-        journey_session.answers.update!(
-          hmrc_employment_check_passed: false,
-          hmrc_employent_api_call_status: "failed",
-          hmrc_employment_history: nil,
-          hmrc_api_job_completed: true
-        )
-
-        return
+      if Rails.env.development? || Rails.env.review_app_like?
+        FeatureFlag.enabled?(:eytrp_perform_hmrc_api_call_in_review_environments)
+      else
+        true
       end
+    end
 
-      journey_session.answers.assign_attributes(
-        hmrc_employment_history: employment_history.employments,
-        hmrc_api_job_completed: true,
-        hmrc_employent_api_call_status: "success"
+    def perform(journey_session)
+      return unless self.class.enabled?
+
+      return if journey_session.answers.hmrc_response_received?
+
+      response = fetch_employment_history(journey_session.answers)
+
+      journey_session.answers.update!(
+        hmrc_response_status: response.status,
+        hmrc_response_body: response.body
       )
+    end
 
-      employment_check = Journeys::EarlyYearsTeachersFinancialIncentivePayments::EmploymentCheck.new(
-        setting: journey_session.answers.nursery,
-        employments: journey_session.answers.hmrc_employment_history
+    private
+
+    def fetch_employment_history(answers)
+      Hmrc::Employments.client.employment_history_for_individual(
+        first_name: answers.teacher_auth_verified_first_name,
+        last_name: answers.teacher_auth_verified_last_name,
+        date_of_birth: answers.teacher_auth_verified_date_of_birth,
+        nino: answers.national_insurance_number,
+        from_date: Journeys::EarlyYearsTeachersFinancialIncentivePayments::EmploymentCheck.earliest_date_to_check
       )
+    rescue Hmrc::ResponseError => e
+      Sentry.capture_exception(e)
 
-      journey_session.answers.assign_attributes(
-        hmrc_employment_check_passed: employment_check.passed?
-      )
-
-      journey_session.save!
+      e.response
     end
   end
 end
