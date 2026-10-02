@@ -27,7 +27,7 @@ RSpec.describe(
 
   context "when the HMRC API call fails" do
     context "when an error is returned from the HMRC API" do
-      it "persists the failed check when employment history returns an error" do
+      it "stores the error response from employment history" do
         nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
 
         journey_session = create(
@@ -82,12 +82,16 @@ RSpec.describe(
           }.to_json
         )
 
+        response_body = {
+          code: "INTERNAL_SERVER_ERROR"
+        }.to_json
+
         employment_request = stub_request(
           :get,
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-07-30",
+            fromDate: "2026-08-30",
             matchId: "12345"
           },
           headers: {
@@ -96,9 +100,7 @@ RSpec.describe(
           }
         ).to_return(
           status: 500,
-          body: {
-            code: "INTERNAL_SERVER_ERROR"
-          }.to_json,
+          body: response_body,
           headers: {
             "Content-Type" => "application/json"
           }
@@ -107,15 +109,15 @@ RSpec.describe(
         described_class.perform_now(journey_session)
 
         answers = journey_session.reload.answers
-        expect(answers.hmrc_api_job_completed).to eq(true)
-        expect(answers.hmrc_employent_api_call_status).to eq("failed")
+        expect(answers.hmrc_response_received?).to eq(true)
+        expect(answers.hmrc_response_status).to eq(500)
         expect(answers.hmrc_employment_check_passed).to eq(false)
-        expect(answers.hmrc_employment_history).to be_nil
+        expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
 
-      it "persists the failed check when matching returns an error" do
+      it "stores the error response from matching" do
         nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
 
         journey_session = create(
@@ -145,6 +147,10 @@ RSpec.describe(
           }.to_json
         )
 
+        response_body = {
+          code: "INTERNAL_SERVER_ERROR"
+        }.to_json
+
         matching_request = stub_request(
           :post,
           "https://test-api.service.hmrc.gov.uk/individuals/matching/"
@@ -161,18 +167,16 @@ RSpec.describe(
           }
         ).to_return(
           status: 500,
-          body: {
-            code: "INTERNAL_SERVER_ERROR"
-          }.to_json
+          body: response_body
         )
 
         described_class.perform_now(journey_session)
 
         answers = journey_session.reload.answers
-        expect(answers.hmrc_api_job_completed).to eq(true)
-        expect(answers.hmrc_employent_api_call_status).to eq("failed")
+        expect(answers.hmrc_response_received?).to eq(true)
+        expect(answers.hmrc_response_status).to eq(500)
         expect(answers.hmrc_employment_check_passed).to eq(false)
-        expect(answers.hmrc_employment_history).to be_nil
+        expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(
           a_request(
@@ -214,6 +218,10 @@ RSpec.describe(
           }.to_json
         )
 
+        response_body = {
+          code: "MATCHING_FAILED"
+        }.to_json
+
         matching_request = stub_request(
           :post,
           "https://test-api.service.hmrc.gov.uk/individuals/matching/"
@@ -230,18 +238,16 @@ RSpec.describe(
           }
         ).to_return(
           status: 404,
-          body: {
-            code: "MATCHING_FAILED"
-          }.to_json
+          body: response_body
         )
 
         described_class.perform_now(journey_session)
 
         answers = journey_session.reload.answers
-        expect(answers.hmrc_api_job_completed).to eq(true)
-        expect(answers.hmrc_employent_api_call_status).to eq("failed")
+        expect(answers.hmrc_response_received?).to eq(true)
+        expect(answers.hmrc_response_status).to eq(404)
         expect(answers.hmrc_employment_check_passed).to eq(false)
-        expect(answers.hmrc_employment_history).to be_nil
+        expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(
           a_request(
@@ -281,6 +287,8 @@ RSpec.describe(
           }.to_json
         )
 
+        response_body = {}.to_json
+
         matching_request = stub_request(
           :post,
           "https://test-api.service.hmrc.gov.uk/individuals/matching/"
@@ -297,16 +305,16 @@ RSpec.describe(
           }
         ).to_return(
           status: 200,
-          body: {}.to_json
+          body: response_body
         )
 
         described_class.perform_now(journey_session)
 
         answers = journey_session.reload.answers
-        expect(answers.hmrc_api_job_completed).to eq(true)
-        expect(answers.hmrc_employent_api_call_status).to eq("failed")
+        expect(answers.hmrc_response_received?).to eq(true)
+        expect(answers.hmrc_response_status).to eq(200)
         expect(answers.hmrc_employment_check_passed).to eq(false)
-        expect(answers.hmrc_employment_history).to be_nil
+        expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(
           a_request(
@@ -373,12 +381,14 @@ RSpec.describe(
           }.to_json
         )
 
+        response_body = "not JSON"
+
         employment_request = stub_request(
           :get,
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-07-30",
+            fromDate: "2026-08-30",
             matchId: "12345"
           },
           headers: {
@@ -387,7 +397,7 @@ RSpec.describe(
           }
         ).to_return(
           status: 200,
-          body: "not JSON",
+          body: response_body,
           headers: {
             "Content-Type" => "application/json"
           }
@@ -396,10 +406,10 @@ RSpec.describe(
         described_class.perform_now(journey_session)
 
         answers = journey_session.reload.answers
-        expect(answers.hmrc_api_job_completed).to eq(true)
-        expect(answers.hmrc_employent_api_call_status).to eq("failed")
+        expect(answers.hmrc_response_received?).to eq(true)
+        expect(answers.hmrc_response_status).to eq(200)
         expect(answers.hmrc_employment_check_passed).to eq(false)
-        expect(answers.hmrc_employment_history).to be_nil
+        expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -459,12 +469,14 @@ RSpec.describe(
           }.to_json
         )
 
+        response_body = {}.to_json
+
         employment_request = stub_request(
           :get,
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-07-30",
+            fromDate: "2026-08-30",
             matchId: "12345"
           },
           headers: {
@@ -473,7 +485,7 @@ RSpec.describe(
           }
         ).to_return(
           status: 200,
-          body: {}.to_json,
+          body: response_body,
           headers: {
             "Content-Type" => "application/json"
           }
@@ -482,10 +494,10 @@ RSpec.describe(
         described_class.perform_now(journey_session)
 
         answers = journey_session.reload.answers
-        expect(answers.hmrc_api_job_completed).to eq(true)
-        expect(answers.hmrc_employent_api_call_status).to eq("failed")
+        expect(answers.hmrc_response_received?).to eq(true)
+        expect(answers.hmrc_response_status).to eq(200)
         expect(answers.hmrc_employment_check_passed).to eq(false)
-        expect(answers.hmrc_employment_history).to be_nil
+        expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -545,12 +557,14 @@ RSpec.describe(
           }.to_json
         )
 
+        response_body = [].to_json
+
         employment_request = stub_request(
           :get,
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-07-30",
+            fromDate: "2026-08-30",
             matchId: "12345"
           },
           headers: {
@@ -559,7 +573,7 @@ RSpec.describe(
           }
         ).to_return(
           status: 200,
-          body: [].to_json,
+          body: response_body,
           headers: {
             "Content-Type" => "application/json"
           }
@@ -568,10 +582,10 @@ RSpec.describe(
         described_class.perform_now(journey_session)
 
         answers = journey_session.reload.answers
-        expect(answers.hmrc_api_job_completed).to eq(true)
-        expect(answers.hmrc_employent_api_call_status).to eq("failed")
+        expect(answers.hmrc_response_received?).to eq(true)
+        expect(answers.hmrc_response_status).to eq(200)
         expect(answers.hmrc_employment_check_passed).to eq(false)
-        expect(answers.hmrc_employment_history).to be_nil
+        expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -631,12 +645,16 @@ RSpec.describe(
           }.to_json
         )
 
+        response_body = {
+          employments: nil
+        }.to_json
+
         employment_request = stub_request(
           :get,
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-07-30",
+            fromDate: "2026-08-30",
             matchId: "12345"
           },
           headers: {
@@ -645,9 +663,7 @@ RSpec.describe(
           }
         ).to_return(
           status: 200,
-          body: {
-            employments: nil
-          }.to_json,
+          body: response_body,
           headers: {
             "Content-Type" => "application/json"
           }
@@ -656,10 +672,10 @@ RSpec.describe(
         described_class.perform_now(journey_session)
 
         answers = journey_session.reload.answers
-        expect(answers.hmrc_api_job_completed).to eq(true)
-        expect(answers.hmrc_employent_api_call_status).to eq("failed")
+        expect(answers.hmrc_response_received?).to eq(true)
+        expect(answers.hmrc_response_status).to eq(200)
         expect(answers.hmrc_employment_check_passed).to eq(false)
-        expect(answers.hmrc_employment_history).to be_nil
+        expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -719,12 +735,16 @@ RSpec.describe(
           }.to_json
         )
 
+        response_body = {
+          employments: {}
+        }.to_json
+
         employment_request = stub_request(
           :get,
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-07-30",
+            fromDate: "2026-08-30",
             matchId: "12345"
           },
           headers: {
@@ -733,9 +753,7 @@ RSpec.describe(
           }
         ).to_return(
           status: 200,
-          body: {
-            employments: {}
-          }.to_json,
+          body: response_body,
           headers: {
             "Content-Type" => "application/json"
           }
@@ -744,10 +762,10 @@ RSpec.describe(
         described_class.perform_now(journey_session)
 
         answers = journey_session.reload.answers
-        expect(answers.hmrc_api_job_completed).to eq(true)
-        expect(answers.hmrc_employent_api_call_status).to eq("failed")
+        expect(answers.hmrc_response_received?).to eq(true)
+        expect(answers.hmrc_response_status).to eq(200)
         expect(answers.hmrc_employment_check_passed).to eq(false)
-        expect(answers.hmrc_employment_history).to be_nil
+        expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -807,12 +825,18 @@ RSpec.describe(
           }.to_json
         )
 
+        response_body = {
+          employments: [
+            nil
+          ]
+        }.to_json
+
         employment_request = stub_request(
           :get,
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-07-30",
+            fromDate: "2026-08-30",
             matchId: "12345"
           },
           headers: {
@@ -821,11 +845,7 @@ RSpec.describe(
           }
         ).to_return(
           status: 200,
-          body: {
-            employments: [
-              nil
-            ]
-          }.to_json,
+          body: response_body,
           headers: {
             "Content-Type" => "application/json"
           }
@@ -834,10 +854,10 @@ RSpec.describe(
         described_class.perform_now(journey_session)
 
         answers = journey_session.reload.answers
-        expect(answers.hmrc_api_job_completed).to eq(true)
-        expect(answers.hmrc_employent_api_call_status).to eq("failed")
+        expect(answers.hmrc_response_received?).to eq(true)
+        expect(answers.hmrc_response_status).to eq(200)
         expect(answers.hmrc_employment_check_passed).to eq(false)
-        expect(answers.hmrc_employment_history).to be_nil
+        expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -897,12 +917,20 @@ RSpec.describe(
           }.to_json
         )
 
+        response_body = {
+          employments: [
+            {
+              employer: "invalid"
+            }
+          ]
+        }.to_json
+
         employment_request = stub_request(
           :get,
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-07-30",
+            fromDate: "2026-08-30",
             matchId: "12345"
           },
           headers: {
@@ -911,13 +939,7 @@ RSpec.describe(
           }
         ).to_return(
           status: 200,
-          body: {
-            employments: [
-              {
-                employer: "invalid"
-              }
-            ]
-          }.to_json,
+          body: response_body,
           headers: {
             "Content-Type" => "application/json"
           }
@@ -926,10 +948,10 @@ RSpec.describe(
         described_class.perform_now(journey_session)
 
         answers = journey_session.reload.answers
-        expect(answers.hmrc_api_job_completed).to eq(true)
-        expect(answers.hmrc_employent_api_call_status).to eq("failed")
+        expect(answers.hmrc_response_received?).to eq(true)
+        expect(answers.hmrc_response_status).to eq(200)
         expect(answers.hmrc_employment_check_passed).to eq(false)
-        expect(answers.hmrc_employment_history).to be_nil
+        expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -989,12 +1011,22 @@ RSpec.describe(
           }.to_json
         )
 
+        response_body = {
+          employments: [
+            {
+              employer: {
+                name: 123
+              }
+            }
+          ]
+        }.to_json
+
         employment_request = stub_request(
           :get,
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-07-30",
+            fromDate: "2026-08-30",
             matchId: "12345"
           },
           headers: {
@@ -1003,15 +1035,7 @@ RSpec.describe(
           }
         ).to_return(
           status: 200,
-          body: {
-            employments: [
-              {
-                employer: {
-                  name: 123
-                }
-              }
-            ]
-          }.to_json,
+          body: response_body,
           headers: {
             "Content-Type" => "application/json"
           }
@@ -1020,10 +1044,10 @@ RSpec.describe(
         described_class.perform_now(journey_session)
 
         answers = journey_session.reload.answers
-        expect(answers.hmrc_api_job_completed).to eq(true)
-        expect(answers.hmrc_employent_api_call_status).to eq("failed")
+        expect(answers.hmrc_response_received?).to eq(true)
+        expect(answers.hmrc_response_status).to eq(200)
         expect(answers.hmrc_employment_check_passed).to eq(false)
-        expect(answers.hmrc_employment_history).to be_nil
+        expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -1083,12 +1107,20 @@ RSpec.describe(
           }.to_json
         )
 
+        response_body = {
+          employments: [
+            {
+              startDate: "2026-01-01"
+            }
+          ]
+        }.to_json
+
         employment_request = stub_request(
           :get,
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-07-30",
+            fromDate: "2026-08-30",
             matchId: "12345"
           },
           headers: {
@@ -1097,13 +1129,7 @@ RSpec.describe(
           }
         ).to_return(
           status: 200,
-          body: {
-            employments: [
-              {
-                startDate: "2026-01-01"
-              }
-            ]
-          }.to_json,
+          body: response_body,
           headers: {
             "Content-Type" => "application/json"
           }
@@ -1112,10 +1138,10 @@ RSpec.describe(
         described_class.perform_now(journey_session)
 
         answers = journey_session.reload.answers
-        expect(answers.hmrc_api_job_completed).to eq(true)
-        expect(answers.hmrc_employent_api_call_status).to eq("failed")
+        expect(answers.hmrc_response_received?).to eq(true)
+        expect(answers.hmrc_response_status).to eq(200)
         expect(answers.hmrc_employment_check_passed).to eq(false)
-        expect(answers.hmrc_employment_history).to be_nil
+        expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -1175,12 +1201,20 @@ RSpec.describe(
           }.to_json
         )
 
+        response_body = {
+          employments: [
+            {
+              employer: {}
+            }
+          ]
+        }.to_json
+
         employment_request = stub_request(
           :get,
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-07-30",
+            fromDate: "2026-08-30",
             matchId: "12345"
           },
           headers: {
@@ -1189,13 +1223,7 @@ RSpec.describe(
           }
         ).to_return(
           status: 200,
-          body: {
-            employments: [
-              {
-                employer: {}
-              }
-            ]
-          }.to_json,
+          body: response_body,
           headers: {
             "Content-Type" => "application/json"
           }
@@ -1204,10 +1232,10 @@ RSpec.describe(
         described_class.perform_now(journey_session)
 
         answers = journey_session.reload.answers
-        expect(answers.hmrc_api_job_completed).to eq(true)
-        expect(answers.hmrc_employent_api_call_status).to eq("failed")
+        expect(answers.hmrc_response_received?).to eq(true)
+        expect(answers.hmrc_response_status).to eq(200)
         expect(answers.hmrc_employment_check_passed).to eq(false)
-        expect(answers.hmrc_employment_history).to be_nil
+        expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -1279,12 +1307,16 @@ RSpec.describe(
           }.to_json
         )
 
+        response_body = {
+          employments: employments
+        }.to_json
+
         employment_request = stub_request(
           :get,
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-07-30",
+            fromDate: "2026-08-30",
             matchId: "12345"
           },
           headers: {
@@ -1293,9 +1325,7 @@ RSpec.describe(
           }
         ).to_return(
           status: 200,
-          body: {
-            employments: employments
-          }.to_json,
+          body: response_body,
           headers: {
             "Content-Type" => "application/json"
           }
@@ -1304,12 +1334,10 @@ RSpec.describe(
         described_class.perform_now(journey_session)
 
         answers = journey_session.reload.answers
-        expect(answers.hmrc_api_job_completed).to eq(true)
-        expect(answers.hmrc_employent_api_call_status).to eq("success")
+        expect(answers.hmrc_response_received?).to eq(true)
+        expect(answers.hmrc_response_status).to eq(200)
         expect(answers.hmrc_employment_check_passed).to eq(true)
-        expect(answers.hmrc_employment_history).to eq(
-          JSON.parse(employments.to_json)
-        )
+        expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -1379,12 +1407,16 @@ RSpec.describe(
           }.to_json
         )
 
+        response_body = {
+          employments: employments
+        }.to_json
+
         employment_request = stub_request(
           :get,
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-07-30",
+            fromDate: "2026-08-30",
             matchId: "12345"
           },
           headers: {
@@ -1393,9 +1425,7 @@ RSpec.describe(
           }
         ).to_return(
           status: 200,
-          body: {
-            employments: employments
-          }.to_json,
+          body: response_body,
           headers: {
             "Content-Type" => "application/json"
           }
@@ -1404,12 +1434,10 @@ RSpec.describe(
         described_class.perform_now(journey_session)
 
         answers = journey_session.reload.answers
-        expect(answers.hmrc_api_job_completed).to eq(true)
-        expect(answers.hmrc_employent_api_call_status).to eq("success")
+        expect(answers.hmrc_response_received?).to eq(true)
+        expect(answers.hmrc_response_status).to eq(200)
         expect(answers.hmrc_employment_check_passed).to eq(true)
-        expect(answers.hmrc_employment_history).to eq(
-          JSON.parse(employments.to_json)
-        )
+        expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -1479,12 +1507,16 @@ RSpec.describe(
           }.to_json
         )
 
+        response_body = {
+          employments: employments
+        }.to_json
+
         employment_request = stub_request(
           :get,
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-07-30",
+            fromDate: "2026-08-30",
             matchId: "12345"
           },
           headers: {
@@ -1493,9 +1525,7 @@ RSpec.describe(
           }
         ).to_return(
           status: 200,
-          body: {
-            employments: employments
-          }.to_json,
+          body: response_body,
           headers: {
             "Content-Type" => "application/json"
           }
@@ -1504,12 +1534,10 @@ RSpec.describe(
         described_class.perform_now(journey_session)
 
         answers = journey_session.reload.answers
-        expect(answers.hmrc_api_job_completed).to eq(true)
-        expect(answers.hmrc_employent_api_call_status).to eq("success")
+        expect(answers.hmrc_response_received?).to eq(true)
+        expect(answers.hmrc_response_status).to eq(200)
         expect(answers.hmrc_employment_check_passed).to eq(false)
-        expect(answers.hmrc_employment_history).to eq(
-          JSON.parse(employments.to_json)
-        )
+        expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -1571,12 +1599,16 @@ RSpec.describe(
           }.to_json
         )
 
+        response_body = {
+          employments: employments
+        }.to_json
+
         employment_request = stub_request(
           :get,
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-07-30",
+            fromDate: "2026-08-30",
             matchId: "12345"
           },
           headers: {
@@ -1585,9 +1617,7 @@ RSpec.describe(
           }
         ).to_return(
           status: 200,
-          body: {
-            employments: employments
-          }.to_json,
+          body: response_body,
           headers: {
             "Content-Type" => "application/json"
           }
@@ -1596,12 +1626,10 @@ RSpec.describe(
         described_class.perform_now(journey_session)
 
         answers = journey_session.reload.answers
-        expect(answers.hmrc_api_job_completed).to eq(true)
-        expect(answers.hmrc_employent_api_call_status).to eq("success")
+        expect(answers.hmrc_response_received?).to eq(true)
+        expect(answers.hmrc_response_status).to eq(200)
         expect(answers.hmrc_employment_check_passed).to eq(false)
-        expect(answers.hmrc_employment_history).to eq(
-          JSON.parse(employments.to_json)
-        )
+        expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -1613,10 +1641,38 @@ RSpec.describe(
       journey_session = create(
         :eytfi_session,
         answers: {
-          hmrc_api_job_completed: true,
-          hmrc_employment_check_passed: true,
-          hmrc_employent_api_call_status: "success",
-          hmrc_employment_history: []
+          hmrc_response_status: 200,
+          hmrc_response_body: {employments: []}.to_json
+        }
+      )
+      original_answers = journey_session.answers.attributes
+
+      described_class.perform_now(journey_session)
+
+      expect(journey_session.reload.answers.attributes).to eq(original_answers)
+      expect(a_request(:any, /service\.hmrc\.gov\.uk/)).not_to have_been_made
+    end
+
+    it "skips HTTP requests when only a status is stored" do
+      journey_session = create(
+        :eytfi_session,
+        answers: {
+          hmrc_response_status: 404
+        }
+      )
+      original_answers = journey_session.answers.attributes
+
+      described_class.perform_now(journey_session)
+
+      expect(journey_session.reload.answers.attributes).to eq(original_answers)
+      expect(a_request(:any, /service\.hmrc\.gov\.uk/)).not_to have_been_made
+    end
+
+    it "skips HTTP requests when only a body is stored" do
+      journey_session = create(
+        :eytfi_session,
+        answers: {
+          hmrc_response_body: {employments: []}.to_json
         }
       )
       original_answers = journey_session.answers.attributes
