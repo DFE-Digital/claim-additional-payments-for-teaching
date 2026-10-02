@@ -10,6 +10,7 @@ module Journeys
       CurrentSchoolForm,
       SelectCurrentSchoolForm,
       IneligibleForm,
+      HalfContractedHoursForm,
       HelloForm,
       CheckYourAnswersForm,
       ConfirmationForm

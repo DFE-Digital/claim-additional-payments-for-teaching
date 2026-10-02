@@ -4,6 +4,7 @@ module Journeys
       ELIGIBILITY_SLUGS = [
         "current-school",
         "select-current-school",
+        "half-contracted-hours",
         "hello",
         "check-your-answers",
         "confirmation"
@@ -12,6 +13,7 @@ module Journeys
       RESTRICTED_SLUGS = []
 
       DEAD_END_SLUGS = [
+        "ineligible",
         "confirmation"
       ]
 
