@@ -203,6 +203,17 @@ shared:
     - mostly_performed_leadership_duties # boolean, was the claimant mostly fulfilling leadship duties
     - claim_school_somewhere_else # boolean, are they claiming against another school
     - teacher_reference_number # string, TRN external identifier
+    - teacher_auth_completed_at # datetime, when the user completed teacher auth
+    - teacher_auth_date_of_birth # date, date of birth returned from TRS
+    - teacher_auth_email # string, email returned from TRS
+    - teacher_auth_first_name # string, first name returned from TRS
+    - teacher_auth_last_name # string, last name returned from TRS
+    - teacher_auth_national_insurance_number # string, NINO returned from TRS
+    - teacher_auth_one_login_uid # string, OL identifier
+    - teacher_auth_teacher_reference_number # string, TRN from TRS
+    - teacher_auth_verified_date_of_birth # date, date of birth from TRS
+    - teacher_auth_verified_name # string, full name returned from TRS
+    - trs_data_fetched_at # datetime, when we fetched qualfications from TRS
   :early_career_payments_eligibilities:
     - id # uuid, that identifies the eligiblity
     - nqt_in_academic_year_after_itt # boolean, is claimant teaching as newly qualified teacher
