@@ -69,6 +69,20 @@ module Debug
       def completed?
         journey_session.answers.teacher_auth_completed_at
       end
+
+      private
+
+      def attributes_with_current_value
+        date_parts = permitted_params.slice(
+          "verified_date_of_birth(1i)",
+          "verified_date_of_birth(2i)",
+          "verified_date_of_birth(3i)"
+        )
+
+        return super if date_parts.empty?
+
+        super.except("verified_date_of_birth").merge(date_parts)
+      end
     end
   end
 end
