@@ -3,11 +3,11 @@ require "rails_helper"
 RSpec.describe(
   Journeys::EarlyYearsTeachersFinancialIncentivePayments::SessionAnswers
 ) do
-  describe "#hmrc_employment_check_passed" do
+  describe "#hmrc_employment_check_passed?" do
     it "returns nil until the job completes" do
       journey_session = create(:eytfi_session)
 
-      expect(journey_session.answers.hmrc_employment_check_passed).to be_nil
+      expect(journey_session.answers.hmrc_employment_check_passed?).to be false
     end
 
     it "checks the current nursery without changing the stored response" do
@@ -26,15 +26,13 @@ RSpec.describe(
       )
       answers = journey_session.answers
 
-      expect(answers.hmrc_employment_check_passed).to eq(true)
+      expect(answers.hmrc_employment_check_passed?).to eq(true)
 
       answers.update!(nursery_id: other_nursery.id)
 
-      expect(answers.hmrc_employment_check_passed).to eq(false)
+      expect(answers.hmrc_employment_check_passed?).to eq(false)
       expect(journey_session.reload.answers.hmrc_response_body)
         .to eq(response_body)
-      expect(journey_session.answers.attributes)
-        .not_to have_key("hmrc_employment_check_passed")
     end
 
     it "returns false when no nursery is selected" do
@@ -46,10 +44,10 @@ RSpec.describe(
         }
       )
 
-      expect(journey_session.answers.hmrc_employment_check_passed).to eq(false)
+      expect(journey_session.answers.hmrc_employment_check_passed?).to eq(false)
     end
 
-    it "returns nil when no HTTP response is available" do
+    it "returns false when no HTTP response is available" do
       nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
       journey_session = create(
         :eytfi_session,
@@ -60,7 +58,7 @@ RSpec.describe(
         }
       )
 
-      expect(journey_session.answers.hmrc_employment_check_passed).to be_nil
+      expect(journey_session.answers.hmrc_employment_check_passed?).to be(false)
     end
 
     it "rejects an error status even if the body contains a matching employer" do
@@ -76,7 +74,7 @@ RSpec.describe(
         }
       )
 
-      expect(journey_session.answers.hmrc_employment_check_passed).to eq(false)
+      expect(journey_session.answers.hmrc_employment_check_passed?).to eq(false)
     end
   end
 

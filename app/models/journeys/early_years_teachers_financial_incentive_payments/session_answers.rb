@@ -40,8 +40,8 @@ module Journeys
         hmrc_response_status.present? || hmrc_response_body.present?
       end
 
-      def hmrc_employment_check_passed
-        return false unless nursery
+      def hmrc_employment_check_passed?
+        return false unless nursery && hmrc_response_received?
 
         EmploymentCheck.new(
           setting: nursery,
