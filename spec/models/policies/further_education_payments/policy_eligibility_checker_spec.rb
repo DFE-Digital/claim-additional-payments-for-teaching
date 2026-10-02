@@ -1,6 +1,13 @@
 require "rails_helper"
 
 RSpec.describe Policies::FurtherEducationPayments::PolicyEligibilityChecker do
+  before do
+    create(
+      :journey_configuration,
+      :further_education_payments
+    )
+  end
+
   let(:answers) do
     build(
       :further_education_payments_answers,
