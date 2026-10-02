@@ -30,6 +30,18 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
   end
 
   before do
+    allow(Hmrc::Employments).to receive(:configuration) do
+      double(
+        base_url: "https://test-api.service.hmrc.gov.uk",
+        client_id: "claim-hmrc-employments-client",
+        client_secret: "client-secret",
+        totp_secret: "totpsecret",
+        enabled: true,
+        http_client: Faraday,
+        logger: Rails.logger
+      )
+    end
+
     FeatureFlag.enable!(:eytrp_hmrc_integration)
 
     create(
@@ -102,7 +114,7 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
     scenario "User continues on the upload employment evidence journey" do
       stub_request(
         :get,
-        "https://test-api.service.hmrc.gov.uk/individuals/employments/paye?fromDate=2026-07-30&matchId=12345"
+        "https://test-api.service.hmrc.gov.uk/individuals/employments/paye?fromDate=2026-08-30&matchId=12345"
       ).with(
         headers: {
           "Authorization" => "Bearer abc123"
@@ -206,7 +218,7 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
     scenario "User needs to upload employment evidence" do
       stub_request(
         :get,
-        "https://test-api.service.hmrc.gov.uk/individuals/employments/paye?fromDate=2026-07-30&matchId=12345"
+        "https://test-api.service.hmrc.gov.uk/individuals/employments/paye?fromDate=2026-08-30&matchId=12345"
       ).with(
         headers: {
           "Authorization" => "Bearer abc123"
@@ -312,7 +324,7 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
     scenario "User doesn't need to upload employment evidence" do
       stub_request(
         :get,
-        "https://test-api.service.hmrc.gov.uk/individuals/employments/paye?fromDate=2026-07-30&matchId=12345"
+        "https://test-api.service.hmrc.gov.uk/individuals/employments/paye?fromDate=2026-08-30&matchId=12345"
       ).with(
         headers: {
           "Authorization" => "Bearer abc123"
@@ -402,7 +414,7 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
     scenario "User changes setting and now needs to upload employment info" do
       stub_request(
         :get,
-        "https://test-api.service.hmrc.gov.uk/individuals/employments/paye?fromDate=2026-07-30&matchId=12345"
+        "https://test-api.service.hmrc.gov.uk/individuals/employments/paye?fromDate=2026-08-30&matchId=12345"
       ).with(
         headers: {
           "Authorization" => "Bearer abc123"
@@ -551,7 +563,7 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
     scenario "User changes NINO and now needs to upload employment info" do
       stub_request(
         :get,
-        "https://test-api.service.hmrc.gov.uk/individuals/employments/paye?fromDate=2026-07-30&matchId=12345"
+        "https://test-api.service.hmrc.gov.uk/individuals/employments/paye?fromDate=2026-08-30&matchId=12345"
       ).with(
         headers: {
           "Authorization" => "Bearer abc123"
@@ -616,7 +628,7 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
 
       stub_request(
         :get,
-        "https://test-api.service.hmrc.gov.uk/individuals/employments/paye?fromDate=2026-07-30&matchId=67890"
+        "https://test-api.service.hmrc.gov.uk/individuals/employments/paye?fromDate=2026-08-30&matchId=67890"
       ).with(
         headers: {
           "Authorization" => "Bearer abc123"
@@ -747,7 +759,7 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
 
       stub_request(
         :get,
-        "https://test-api.service.hmrc.gov.uk/individuals/employments/paye?fromDate=2026-07-30&matchId=12345"
+        "https://test-api.service.hmrc.gov.uk/individuals/employments/paye?fromDate=2026-08-30&matchId=12345"
       ).with(
         headers: {
           "Authorization" => "Bearer abc123"
@@ -788,7 +800,7 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
 
       stub_request(
         :get,
-        "https://test-api.service.hmrc.gov.uk/individuals/employments/paye?fromDate=2026-07-30&matchId=67890"
+        "https://test-api.service.hmrc.gov.uk/individuals/employments/paye?fromDate=2026-08-30&matchId=67890"
       ).with(
         headers: {
           "Authorization" => "Bearer abc123"

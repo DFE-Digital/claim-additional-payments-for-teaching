@@ -7,7 +7,7 @@ module EarlyYearsTeachersFinancialIncentivePayments
     def self.enabled?
       return false unless FeatureFlag.enabled?(:eytrp_hmrc_integration)
 
-      if (Rails.env.development? || Rails.env.review_app_like?)
+      if Rails.env.development? || Rails.env.review_app_like?
         FeatureFlag.enabled?(:eytrp_perform_hmrc_api_call_in_review_environments)
       else
         true
@@ -60,7 +60,7 @@ module EarlyYearsTeachersFinancialIncentivePayments
         last_name: answers.teacher_auth_verified_last_name,
         date_of_birth: answers.teacher_auth_verified_date_of_birth,
         nino: answers.national_insurance_number,
-        from_date: 2.months.ago.to_date
+        from_date: Journeys::EarlyYearsTeachersFinancialIncentivePayments::EmploymentCheck.earliest_date_to_check
       )
 
       return HmrcResponse.failure(:no_match) if response.nil?
@@ -130,7 +130,10 @@ module EarlyYearsTeachersFinancialIncentivePayments
         return false unless body.is_a?(Hash) && body["employments"].is_a?(Array)
 
         body["employments"].all? do |employment|
-          Journeys::EarlyYearsTeachersFinancialIncentivePayments::EmploymentCheck::Employment.new(employment).valid?
+          employment.is_a?(Hash) &&
+            employment["employer"].is_a?(Hash) &&
+            employment["employer"]["name"].is_a?(String) &&
+            employment["employer"]["name"].present?
         end
       end
     end
