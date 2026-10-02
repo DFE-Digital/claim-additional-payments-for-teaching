@@ -27,5 +27,6 @@
 @use "components/text";
 @use "components/train";
 @use "components/contents_list";
+@import "components/journey_components";
 
 @import "@govuk-one-login/service-header/dist/styles/service-header-no-imports";
