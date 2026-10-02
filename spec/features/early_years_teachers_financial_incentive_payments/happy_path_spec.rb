@@ -315,15 +315,15 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     before do
       FeatureFlag.enable!(:eytrp_hmrc_integration)
 
-      # Set the hmrc client to raise errors so we don't need to stub things in
+      # Set the hmrc client to return errors so we don't need to stub things in
       # the spec
-      raising_client = double("Hmrc::Employments::Client")
+      error_client = double("Hmrc::Employments::Client")
 
-      allow(raising_client).to receive(:employment_history_for_individual) do
-        raise Hmrc::ResponseError
+      allow(error_client).to receive(:employment_history_for_individual) do
+        double(status: 500, body: "Oh no!")
       end
 
-      allow(Hmrc::Employments).to receive(:client) { raising_client }
+      allow(Hmrc::Employments).to receive(:client) { error_client }
     end
 
     context "NINO returned from TRS and confirmed" do
