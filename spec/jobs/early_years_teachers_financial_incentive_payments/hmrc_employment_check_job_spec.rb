@@ -111,7 +111,7 @@ RSpec.describe(
         answers = journey_session.reload.answers
         expect(answers.hmrc_response_received?).to eq(true)
         expect(answers.hmrc_response_status).to eq(500)
-        expect(answers.hmrc_employment_check_passed).to eq(false)
+        expect(answers.hmrc_employment_check_passed?).to eq(false)
         expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
@@ -175,7 +175,7 @@ RSpec.describe(
         answers = journey_session.reload.answers
         expect(answers.hmrc_response_received?).to eq(true)
         expect(answers.hmrc_response_status).to eq(500)
-        expect(answers.hmrc_employment_check_passed).to eq(false)
+        expect(answers.hmrc_employment_check_passed?).to eq(false)
         expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(
@@ -246,7 +246,7 @@ RSpec.describe(
         answers = journey_session.reload.answers
         expect(answers.hmrc_response_received?).to eq(true)
         expect(answers.hmrc_response_status).to eq(404)
-        expect(answers.hmrc_employment_check_passed).to eq(false)
+        expect(answers.hmrc_employment_check_passed?).to eq(false)
         expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(
@@ -313,7 +313,7 @@ RSpec.describe(
         answers = journey_session.reload.answers
         expect(answers.hmrc_response_received?).to eq(true)
         expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed).to eq(false)
+        expect(answers.hmrc_employment_check_passed?).to eq(false)
         expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(
@@ -408,7 +408,7 @@ RSpec.describe(
         answers = journey_session.reload.answers
         expect(answers.hmrc_response_received?).to eq(true)
         expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed).to eq(false)
+        expect(answers.hmrc_employment_check_passed?).to eq(false)
         expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
@@ -496,7 +496,7 @@ RSpec.describe(
         answers = journey_session.reload.answers
         expect(answers.hmrc_response_received?).to eq(true)
         expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed).to eq(false)
+        expect(answers.hmrc_employment_check_passed?).to eq(false)
         expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
@@ -584,7 +584,7 @@ RSpec.describe(
         answers = journey_session.reload.answers
         expect(answers.hmrc_response_received?).to eq(true)
         expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed).to eq(false)
+        expect(answers.hmrc_employment_check_passed?).to eq(false)
         expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
@@ -674,7 +674,7 @@ RSpec.describe(
         answers = journey_session.reload.answers
         expect(answers.hmrc_response_received?).to eq(true)
         expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed).to eq(false)
+        expect(answers.hmrc_employment_check_passed?).to eq(false)
         expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
@@ -764,7 +764,7 @@ RSpec.describe(
         answers = journey_session.reload.answers
         expect(answers.hmrc_response_received?).to eq(true)
         expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed).to eq(false)
+        expect(answers.hmrc_employment_check_passed?).to eq(false)
         expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
@@ -856,7 +856,7 @@ RSpec.describe(
         answers = journey_session.reload.answers
         expect(answers.hmrc_response_received?).to eq(true)
         expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed).to eq(false)
+        expect(answers.hmrc_employment_check_passed?).to eq(false)
         expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
@@ -950,7 +950,7 @@ RSpec.describe(
         answers = journey_session.reload.answers
         expect(answers.hmrc_response_received?).to eq(true)
         expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed).to eq(false)
+        expect(answers.hmrc_employment_check_passed?).to eq(false)
         expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
@@ -1046,7 +1046,7 @@ RSpec.describe(
         answers = journey_session.reload.answers
         expect(answers.hmrc_response_received?).to eq(true)
         expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed).to eq(false)
+        expect(answers.hmrc_employment_check_passed?).to eq(false)
         expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
@@ -1140,7 +1140,7 @@ RSpec.describe(
         answers = journey_session.reload.answers
         expect(answers.hmrc_response_received?).to eq(true)
         expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed).to eq(false)
+        expect(answers.hmrc_employment_check_passed?).to eq(false)
         expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
@@ -1234,7 +1234,7 @@ RSpec.describe(
         answers = journey_session.reload.answers
         expect(answers.hmrc_response_received?).to eq(true)
         expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed).to eq(false)
+        expect(answers.hmrc_employment_check_passed?).to eq(false)
         expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
@@ -1336,7 +1336,7 @@ RSpec.describe(
         answers = journey_session.reload.answers
         expect(answers.hmrc_response_received?).to eq(true)
         expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed).to eq(true)
+        expect(answers.hmrc_employment_check_passed?).to eq(true)
         expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
@@ -1436,7 +1436,7 @@ RSpec.describe(
         answers = journey_session.reload.answers
         expect(answers.hmrc_response_received?).to eq(true)
         expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed).to eq(true)
+        expect(answers.hmrc_employment_check_passed?).to eq(true)
         expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
@@ -1536,7 +1536,7 @@ RSpec.describe(
         answers = journey_session.reload.answers
         expect(answers.hmrc_response_received?).to eq(true)
         expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed).to eq(false)
+        expect(answers.hmrc_employment_check_passed?).to eq(false)
         expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
@@ -1628,7 +1628,7 @@ RSpec.describe(
         answers = journey_session.reload.answers
         expect(answers.hmrc_response_received?).to eq(true)
         expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed).to eq(false)
+        expect(answers.hmrc_employment_check_passed?).to eq(false)
         expect(answers.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once

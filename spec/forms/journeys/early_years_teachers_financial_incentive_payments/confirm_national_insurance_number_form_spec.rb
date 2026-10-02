@@ -249,6 +249,6 @@ RSpec.describe Journeys::EarlyYearsTeachersFinancialIncentivePayments::ConfirmNa
     expect(answers.hmrc_response_status).to be_nil
     expect(answers.hmrc_response_body).to be_nil
     expect(answers.hmrc_response_received?).to eq(false)
-    expect(answers.hmrc_employment_check_passed).to be_nil
+    expect(answers.hmrc_employment_check_passed?).to eq(false)
   end
 end
