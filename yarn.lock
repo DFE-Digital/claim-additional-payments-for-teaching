@@ -21,10 +21,10 @@ a11y-dialog@^8.1.5:
   dependencies:
     focusable-selectors "^0.8.0"
 
-accessible-autocomplete@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.npmjs.org/accessible-autocomplete/-/accessible-autocomplete-3.0.1.tgz"
-  integrity sha512-xMshgc2LT5addvvfCTGzIkRrvhbOFeylFSnSMfS/PdjvvvElZkakCwxO3/yJYBWyi1hi3tZloqOJQ5kqqJtH4g==
+accessible-autocomplete@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/accessible-autocomplete/-/accessible-autocomplete-3.0.2.tgz#1d6cdd4917ca83083c6af840f9f71b13b516231a"
+  integrity sha512-po7fS9YyTFFZjzaenYKtV4JUcb6xh2eFttTsspg5NIX5epQCbderffjW8evYOTuDh+FgJyYPwL9B7qTkhND3gA==
 
 asap@^2.0.3:
   version "2.0.6"
