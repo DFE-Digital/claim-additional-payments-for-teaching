@@ -165,7 +165,7 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
 
       expect(page).to have_content "Loading"
       perform_enqueued_jobs
-      visit current_path # save waiting for the page to reload
+      visit current_url # save waiting for the page to reload
 
       expect(page).to have_content(
         "We could not confirm that you work at the nursery you selected"
@@ -297,7 +297,7 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
 
       expect(page).to have_content "Loading"
       perform_enqueued_jobs
-      visit current_path # save waiting for the page to reload
+      visit current_url # save waiting for the page to reload
 
       expect(page).to have_content(
         "We could not confirm that you work at the nursery you selected"
@@ -403,7 +403,7 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
 
       expect(page).to have_content "Loading"
       perform_enqueued_jobs
-      visit current_path # save waiting for the page to reload
+      visit current_url # save waiting for the page to reload
       expect(page).to have_text "You may be eligible for a recognition payment"
     end
 
@@ -493,7 +493,7 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
 
       expect(page).to have_content "Loading"
       perform_enqueued_jobs
-      visit current_path # save waiting for the page to reload
+      visit current_url # save waiting for the page to reload
 
       # Complete rest of the journey up to check answers
       expect(page).to have_text "You may be eligible for a recognition payment"
@@ -683,7 +683,7 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
 
       expect(page).to have_content "Loading"
       perform_enqueued_jobs
-      visit current_path # save waiting for the page to reload
+      visit current_url # save waiting for the page to reload
 
       # Complete rest of the journey up to check answers
       expect(page).to have_text "You may be eligible for a recognition payment"
@@ -723,7 +723,7 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
 
       expect(page).to have_content "Loading"
       perform_enqueued_jobs
-      visit current_path # save waiting for the page to reload
+      visit current_url # save waiting for the page to reload
 
       expect(page).to have_content(
         "We could not confirm that you work at the nursery you selected"
@@ -739,14 +739,6 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
       expect(page).to have_content "Check your document"
       choose "Yes, add this file"
       click_button "Continue"
-
-      # FIXME - currenlty going from check answers -> to upload employment
-      # loses the fact that we're changing an answers so we have to
-      # re-navigate the journey, fixing this is outside the scope of this PR
-      visit claim_path(
-        Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name,
-        "check-your-answers"
-      )
 
       expect(page).to have_text "Confirm your details and complete your claim"
       expect(page).to have_content("Uploaded payslip")
@@ -879,7 +871,7 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
 
       expect(page).to have_content "Loading"
       perform_enqueued_jobs
-      visit current_path # save waiting for the page to reload
+      visit current_url # save waiting for the page to reload
 
       expect(page).to have_content(
         "We could not confirm that you work at the nursery you selected"
@@ -933,14 +925,7 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
 
       expect(page).to have_content "Loading"
       perform_enqueued_jobs
-      visit current_path # save waiting for the page to reload
-
-      # FIXME - currently we're dropping the fact that we're changing answer
-      # so have to go through the rest of the journey
-      visit claim_path(
-        Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name,
-        "check-your-answers"
-      )
+      visit current_url # save waiting for the page to reload
 
       expect(page).to have_text "Confirm your details and complete your claim"
       expect(page).to have_content("Uploaded payslip")
