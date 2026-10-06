@@ -1,5 +1,3 @@
-require "faker"
-
 module Debug
   module TeacherAuth
     module School
@@ -25,8 +23,6 @@ module Debug
         end
 
         def default_verified_name
-          Faker::Config.locale = "en-GB"
-
           @default_verified_name ||= Faker::Name.unique.name
         end
 
