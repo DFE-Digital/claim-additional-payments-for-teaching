@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_23_144715) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_06_142851) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -292,6 +292,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_23_144715) do
     t.datetime "created_at", null: false
     t.string "eligible_eytfi_provider_urn"
     t.boolean "has_eligible_qualification"
+    t.jsonb "hmrc_response_body"
+    t.integer "hmrc_response_status"
     t.text "nursery_id"
     t.datetime "teacher_auth_completed_at"
     t.citext "teacher_auth_email"
