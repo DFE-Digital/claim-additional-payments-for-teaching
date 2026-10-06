@@ -1,5 +1,3 @@
-require "faker"
-
 module Journeys
   module SchoolTargetedRetentionIncentivePayments
     class TeacherDetailsForm < Form
