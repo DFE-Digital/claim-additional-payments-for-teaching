@@ -14,7 +14,8 @@ module Journeys
       end
 
       def ineligibility_reason
-        :school_ineligible if indicated_ineligible_school?
+        return :school_ineligible if indicated_ineligible_school?
+        :at_least_half_contracted_hours if not_at_least_half_contracted_hours?
       end
 
       private
@@ -29,6 +30,10 @@ module Journeys
 
       def school_eligibility_class
         Policies::TargetedRetentionIncentivePayments::SchoolEligibility
+      end
+
+      def not_at_least_half_contracted_hours?
+        !answers.half_contracted_hours.nil? && answers.half_contracted_hours == false
       end
     end
   end
