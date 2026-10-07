@@ -47,6 +47,14 @@
 
     <p class="govuk-body">If you have your TRN and One Login account it takes around 10 minutes to submit a claim.</p>
 
+    <% if FeatureFlag.enabled?(:eytrp_hmrc_integration) %>
+      <h2 class="govuk-heading-m">How we'll check where you work</h2>
+
+      <p class="govuk-body">We use HMRC data to confirm that you work at the nursery you selected. This is only used to verify 
+      your eligibility and will not affect your personal records, pay, tax or benefits. If we cannot confirm where you work through HMRC, 
+      we'll ask you to upload a payslip.</p>
+    <% end %>
+
     <h2 class="govuk-heading-m">What happens after you submit a claim</h2>
 
     <p class="govuk-body">You’ll get an email to tell you if you’re eligible.</p>
