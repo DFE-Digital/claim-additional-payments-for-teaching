@@ -52,7 +52,7 @@ module Hmrc
         )
 
         match_id = request.match_id_from_response(matching_response.body)
-        return nil if match_id.nil?
+        return matching_response if match_id.nil?
 
         employment_history(
           match_id: match_id,
@@ -65,7 +65,7 @@ module Hmrc
       rescue Hmrc::ResponseError => e
         raise Hmrc::Employments::ResponseError.new(e.response) unless no_match_response?(e.response)
 
-        nil
+        e.response
       end
 
       private

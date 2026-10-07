@@ -222,4 +222,33 @@ RSpec.describe Journeys::EarlyYearsTeachersFinancialIncentivePayments::ConfirmNa
       end
     end
   end
+
+  it "clears the stored HMRC response when the NI number changes" do
+    journey_session = create(
+      :eytfi_session,
+      answers: {
+        national_insurance_number: "AB123456C",
+        hmrc_response_status: 200,
+        hmrc_response_body: {employments: []}.to_json
+      }
+    )
+    form = described_class.new(
+      journey_session: journey_session,
+      journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments,
+      params: ActionController::Parameters.new(
+        claim: {
+          confirm_national_insurance_number: false,
+          national_insurance_number: "BB123456C"
+        }
+      )
+    )
+
+    expect(form.save).to eq(true)
+
+    answers = journey_session.reload.answers
+    expect(answers.hmrc_response_status).to be_nil
+    expect(answers.hmrc_response_body).to be_nil
+    expect(answers.hmrc_response_received?).to eq(false)
+    expect(answers.hmrc_employment_check_passed?).to eq(false)
+  end
 end

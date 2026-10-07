@@ -23,17 +23,30 @@ module Journeys
       attribute :trs_national_insurance_number, :string, pii: true
       attribute :confirm_national_insurance_number, :boolean, pii: false
 
-      attribute :hmrc_api_job_completed, :boolean, default: false, pii: false
-      attribute :hmrc_employment_check_status, :string, pii: false
+      attribute :hmrc_response_status, :integer, pii: false
+      attribute :hmrc_response_body, :string, pii: true
 
       attribute :eligible_teaching_qualification_held_clicked, :boolean, pii: false
       attribute :continue_claim, :boolean, pii: false
       attribute :claimant_declaration, :boolean, pii: false
 
       def nursery
-        @nursery ||= Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider.find_by(
+        Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider.find_by(
           id: nursery_id
         )
+      end
+
+      def hmrc_response_received?
+        hmrc_response_status.present? || hmrc_response_body.present?
+      end
+
+      def hmrc_employment_check_passed?
+        return false unless nursery && hmrc_response_received?
+
+        EmploymentCheck.new(
+          setting: nursery,
+          employments: employments_from_hmrc_response
+        ).passed?
       end
 
       # required for student loan details updater
@@ -52,6 +65,42 @@ module Journeys
           .where.not(id: submitted_claim_id)
           .where.not(onelogin_uid: nil)
           .find_by(onelogin_uid: teacher_auth_one_login_uid)
+      end
+
+      def teacher_auth_verified_first_name
+        teacher_auth_verified_name_parts.first
+      end
+
+      def teacher_auth_verified_last_name
+        teacher_auth_verified_name_parts.last
+      end
+
+      private
+
+      def teacher_auth_verified_name_parts
+        return [] unless teacher_auth_verified_name.present?
+
+        teacher_auth_verified_name.split(" ")
+      end
+
+      def employments_from_hmrc_response
+        return [] unless hmrc_response_received?
+        return [] unless hmrc_response_status == 200
+
+        body = JSON.parse(hmrc_response_body.to_s)
+        return [] unless body.is_a?(Hash) && body["employments"].is_a?(Array)
+
+        employments = body.fetch("employments")
+        return [] unless employments.all? do |employment|
+          employment.is_a?(Hash) &&
+            employment["employer"].is_a?(Hash) &&
+            employment["employer"]["name"].is_a?(String) &&
+            employment["employer"]["name"].present?
+        end
+
+        employments
+      rescue JSON::ParserError
+        []
       end
     end
   end
