@@ -468,6 +468,7 @@ shared:
     - has_eligible_qualification # boolean, does the user have a eligible qualifcation for this policy
     - continue_claim # boolean, did the user choose to continue with their claim
     - hmrc_response_status # integer, response code from hmrc employment check
+    - hmrc_employment_check_passed # boolean, whether or not the hmrc employment check passed
   :school_workforce_censuses:
     - id # uuid, identifies the school workforce census record
     - teacher_reference_number # string, external identifier for teacher
