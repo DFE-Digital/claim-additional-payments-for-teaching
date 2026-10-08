@@ -20,6 +20,12 @@ module Journeys
         )
       end
 
+      def load_current_value(attribute)
+        return super unless attribute == :meets_eligibility_criteria
+
+        answers.fifty_percent_time_as_eyt
+      end
+
       def completed?
         check_eligibility_answered
       end
