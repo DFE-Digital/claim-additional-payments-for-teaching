@@ -70,8 +70,7 @@ RSpec.describe "EYTFI - Claim cancelled", feature_flag: [:eytfi_journey] do
     click_button "Continue"
 
     expect(page).to have_text("Check if you’re eligible")
-    check "I spend at least half"
-    check "I’m not currently subject"
+    choose "Yes"
     click_button "Confirm and continue"
 
     expect(page).to have_text "You’re eligible to apply"

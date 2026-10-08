@@ -17,13 +17,35 @@ RSpec.describe Journeys::EarlyYearsTeachersFinancialIncentivePayments::CheckElig
     )
   end
 
+  describe "#load_current_value" do
+    context "when a previous answer exists" do
+      let(:answers) { build(:eytfi_answers, fifty_percent_time_as_eyt: true, not_subject_to_performance_and_disciplinary: true) }
+
+      it "prefills the radio button from the persisted eligibility answer" do
+        expect(subject.send(:load_current_value, :meets_eligibility_criteria)).to be(true)
+      end
+    end
+  end
+
   describe "#save" do
-    context "when both boxes are checked" do
+    context "when no value is submitted" do
+      let(:params) do
+        ActionController::Parameters.new(
+          claim: {}
+        )
+      end
+
+      it "requires the user to select an answer" do
+        expect(subject).not_to be_valid
+        expect(subject.errors[:meets_eligibility_criteria]).to include("Select yes or no to tell us if you meet the eligibility criteria")
+      end
+    end
+
+    context "when the user selects yes" do
       let(:params) do
         ActionController::Parameters.new(
           claim: {
-            fifty_percent_time_as_eyt: "1",
-            not_subject_to_performance_and_disciplinary: "1"
+            meets_eligibility_criteria: "true"
           }
         )
       end
@@ -35,12 +57,11 @@ RSpec.describe Journeys::EarlyYearsTeachersFinancialIncentivePayments::CheckElig
       end
     end
 
-    context "when neither box is checked" do
+    context "when the user selects no" do
       let(:params) do
         ActionController::Parameters.new(
           claim: {
-            fifty_percent_time_as_eyt: "0",
-            not_subject_to_performance_and_disciplinary: "0"
+            meets_eligibility_criteria: "false"
           }
         )
       end
@@ -52,14 +73,13 @@ RSpec.describe Journeys::EarlyYearsTeachersFinancialIncentivePayments::CheckElig
       end
     end
 
-    context "when unchecking a previously checked box" do
+    context "when a previously-yes answer is changed to no" do
       let(:answers) { build(:eytfi_answers, fifty_percent_time_as_eyt: true, not_subject_to_performance_and_disciplinary: true) }
 
       let(:params) do
         ActionController::Parameters.new(
           claim: {
-            fifty_percent_time_as_eyt: "0",
-            not_subject_to_performance_and_disciplinary: "0"
+            meets_eligibility_criteria: "false"
           }
         )
       end
