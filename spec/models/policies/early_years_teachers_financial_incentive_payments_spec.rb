@@ -41,4 +41,19 @@ RSpec.describe Policies::EarlyYearsTeachersFinancialIncentivePayments do
       expect(described_class.decision_deadline_in_weeks).to eq(10.weeks)
     end
   end
+
+  describe "PolicyEligibilityChecker#ineligibility_reason" do
+    before do
+      create(:journey_configuration, :early_years_teachers_financial_incentive_payments)
+    end
+
+    it "returns the dedicated check-eligibility ineligible reason when the single eligibility radio is answered no" do
+      answers = build(:eytfi_answers, meets_eligibility_criteria: false)
+
+      checker = Policies::EarlyYearsTeachersFinancialIncentivePayments::PolicyEligibilityChecker.new(answers: answers)
+
+      expect(checker).to be_ineligible
+      expect(checker.ineligibility_reason).to eq(:check_eligibility_not_confirmed)
+    end
+  end
 end
