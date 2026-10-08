@@ -34,10 +34,6 @@ en:
           heading: You’re not eligible based on your qualification
         check_eligibility_not_confirmed:
           heading: You’re not eligible for this payment
-        fifty_percent_time_as_eyt_not_confirmed:
-          heading: You’re not eligible for this payment
-        not_subject_to_performance_and_disciplinary_not_confirmed:
-          heading: You’re not eligible for this payment
         claim_already_submitted_this_policy_year:
           heading: "You’ve already submited a claim in this claim window"
       check_eligibility:

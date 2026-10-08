@@ -13,16 +13,16 @@ module Journeys
       attribute :teaching_qualification_confirmation, :boolean, pii: false
 
       attribute :check_eligibility_answered, :boolean, pii: false
-      attribute :meets_eligibility_criteria, :boolean, pii: false
+      attribute :meets_teaching_standards, :boolean, pii: false
       attribute :fifty_percent_time_as_eyt, :boolean, pii: false
       attribute :not_subject_to_performance_and_disciplinary, :boolean, pii: false
       attribute :confirmed_employment_proof_blob_ids, default: [], pii: true
 
-      def meets_eligibility_criteria
+      def meets_teaching_standards
         fifty_percent_time_as_eyt
       end
 
-      def meets_eligibility_criteria=(value)
+      def meets_teaching_standards=(value)
         self.fifty_percent_time_as_eyt = value
         self.not_subject_to_performance_and_disciplinary = value
       end

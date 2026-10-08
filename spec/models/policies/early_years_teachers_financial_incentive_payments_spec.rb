@@ -48,7 +48,7 @@ RSpec.describe Policies::EarlyYearsTeachersFinancialIncentivePayments do
     end
 
     it "returns the dedicated check-eligibility ineligible reason when the single eligibility radio is answered no" do
-      answers = build(:eytfi_answers, meets_eligibility_criteria: false)
+      answers = build(:eytfi_answers, meets_teaching_standards: false)
 
       checker = Policies::EarlyYearsTeachersFinancialIncentivePayments::PolicyEligibilityChecker.new(answers: answers)
 

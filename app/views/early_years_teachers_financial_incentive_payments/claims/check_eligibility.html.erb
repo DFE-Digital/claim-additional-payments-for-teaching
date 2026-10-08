@@ -27,10 +27,10 @@
         "not be subject to any formal performance management or disciplinary action"
       ], type: :bullet, classes: "govuk-!-margin-bottom-6" %>
 
-      <%= f.govuk_radio_buttons_fieldset :meets_eligibility_criteria,
+      <%= f.govuk_radio_buttons_fieldset :meets_teaching_standards,
         legend: { text: "Do you meet this eligibility criteria?", tag: "h2", size: "m" } do %>
-        <%= f.govuk_radio_button :meets_eligibility_criteria, true, label: { text: "Yes" } %>
-        <%= f.govuk_radio_button :meets_eligibility_criteria, false, label: { text: "No" } %>
+        <%= f.govuk_radio_button :meets_teaching_standards, true, label: { text: "Yes" } %>
+        <%= f.govuk_radio_button :meets_teaching_standards, false, label: { text: "No" } %>
       <% end %>
 
       <%= f.govuk_submit "Confirm and continue" %>

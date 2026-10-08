@@ -1,10 +1,10 @@
 module Journeys
   module EarlyYearsTeachersFinancialIncentivePayments
     class CheckEligibilityForm < Form
-      attribute :meets_eligibility_criteria, :boolean
+      attribute :meets_teaching_standards, :boolean
       attribute :check_eligibility_answered, :boolean
 
-      validates :meets_eligibility_criteria,
+      validates :meets_teaching_standards,
         inclusion: {
           in: [true, false],
           message: "Select yes or no to tell us if you meet the eligibility criteria"
@@ -15,13 +15,13 @@ module Journeys
 
         journey_session.answers.update!(
           check_eligibility_answered: true,
-          fifty_percent_time_as_eyt: meets_eligibility_criteria,
-          not_subject_to_performance_and_disciplinary: meets_eligibility_criteria
+          fifty_percent_time_as_eyt: meets_teaching_standards,
+          not_subject_to_performance_and_disciplinary: meets_teaching_standards
         )
       end
 
       def load_current_value(attribute)
-        return super unless attribute == :meets_eligibility_criteria
+        return super unless attribute == :meets_teaching_standards
 
         answers.fifty_percent_time_as_eyt
       end
