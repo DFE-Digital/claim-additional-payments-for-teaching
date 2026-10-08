@@ -210,6 +210,30 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
       click_button "Continue"
 
       expect(page).to have_text "Confirm your details and complete your claim"
+
+      check "I confirm that I understand and accept these conditions."
+
+      perform_enqueued_jobs do
+        click_button "Confirm and claim"
+      end
+
+      claim = Claim.last
+
+      sign_in_as_service_admin
+
+      visit admin_claim_tasks_path(claim)
+
+      expect(task_status("Employment")).to eq "Incomplete"
+
+      click_link "Check employment information"
+      expect(page).not_to have_content "Employment verified by HMRC"
+      expect(page).to have_content "Employment evidence uploaded by claimant"
+      expect(page).to have_content "employment_proof.pdf"
+
+      within ".hmcts-timeline" do
+        expect(page).to have_content "HMRC API STATUS: Error"
+        expect(page).to have_content "HMRC EMPLOYMENTS: []"
+      end
     end
   end
 
@@ -315,6 +339,59 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
       click_button "Continue"
 
       expect(page).to have_text "You may be eligible for a recognition payment"
+      choose "Yes"
+      click_button "Continue"
+
+      expect(page).to have_text "What is your home address?"
+      click_button "Enter your address manually"
+
+      fill_in "House number or name", with: "1"
+      fill_in "Building and street", with: "Grey Street"
+      fill_in "Town or city", with: "Newcastle upon Tyne"
+      fill_in "County", with: "Tyne and Wear"
+      fill_in "Postcode", with: "NE1 6EE"
+      click_button "Continue"
+
+      expect(page).to have_text(
+        "Are you recorded as male or female on your employer’s payroll system?"
+      )
+      choose "I don’t know"
+      click_button "Continue"
+
+      expect(page).to have_text(I18n.t("questions.account_details"))
+      fill_in "Name on the account", with: "John Doe"
+      fill_in "Sort code", with: "123456"
+      fill_in "Account number", with: "12345678"
+      click_button "Continue"
+
+      expect(page).to have_text "Confirm your details and complete your claim"
+
+      check "I confirm that I understand and accept these conditions."
+
+      perform_enqueued_jobs do
+        click_button "Confirm and claim"
+      end
+
+      claim = Claim.last
+
+      sign_in_as_service_admin
+
+      visit admin_claim_tasks_path(claim)
+
+      expect(task_status("Employment")).to eq "Incomplete"
+
+      click_link "Check employment information"
+
+      expect(page).not_to have_content "Employment verified by HMRC"
+      expect(page).to have_content "Employment evidence uploaded by claimant"
+      expect(page).to have_content "employment_proof.pdf"
+
+      within ".hmcts-timeline" do
+        expect(page).to have_content "HMRC API STATUS: Success"
+        expect(page).to have_content(
+          'HMRC EMPLOYMENTS: ["Not an eligibile nursery"]'
+        )
+      end
     end
   end
 
@@ -402,6 +479,56 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
       perform_enqueued_jobs
       visit current_url # save waiting for the page to reload
       expect(page).to have_text "You may be eligible for a recognition payment"
+      choose "Yes"
+      click_button "Continue"
+
+      expect(page).to have_text "What is your home address?"
+      click_button "Enter your address manually"
+
+      fill_in "House number or name", with: "1"
+      fill_in "Building and street", with: "Grey Street"
+      fill_in "Town or city", with: "Newcastle upon Tyne"
+      fill_in "County", with: "Tyne and Wear"
+      fill_in "Postcode", with: "NE1 6EE"
+      click_button "Continue"
+
+      expect(page).to have_text(
+        "Are you recorded as male or female on your employer’s payroll system?"
+      )
+      choose "I don’t know"
+      click_button "Continue"
+
+      expect(page).to have_text(I18n.t("questions.account_details"))
+      fill_in "Name on the account", with: "John Doe"
+      fill_in "Sort code", with: "123456"
+      fill_in "Account number", with: "12345678"
+      click_button "Continue"
+
+      expect(page).to have_text "Confirm your details and complete your claim"
+
+      check "I confirm that I understand and accept these conditions."
+
+      perform_enqueued_jobs do
+        click_button "Confirm and claim"
+      end
+
+      claim = Claim.last
+
+      sign_in_as_service_admin
+
+      visit admin_claim_tasks_path(claim)
+
+      expect(task_status("Employment")).to eq "Passed"
+
+      click_link "Check employment information"
+
+      expect(page).to have_content "Employment verified by HMRC"
+      expect(page).not_to have_content "Employment evidence uploaded by claimant"
+
+      within ".hmcts-timeline" do
+        expect(page).to have_content "HMRC API STATUS: Success"
+        expect(page).to have_content('HMRC EMPLOYMENTS: ["Springfield nursery"]')
+      end
     end
 
     # Complete journey with nursery matching hmrc, change the nursery on the
@@ -550,6 +677,36 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
         "Confirm your details and complete your claim"
       )
       expect(page).to have_content("Uploaded payslip")
+
+      check "I confirm that I understand and accept these conditions."
+
+      perform_enqueued_jobs do
+        click_button "Confirm and claim"
+      end
+
+      claim = Claim.last
+
+      sign_in_as_service_admin
+
+      visit admin_claim_tasks_path(claim)
+
+      expect(task_status("Employment")).to eq "Incomplete"
+
+      click_link "Check employment information"
+      expect(page).to have_content "Employment evidence uploaded by claimant"
+      expect(page).to have_content "employment_proof.pdf"
+
+      provider_dd = page.all("dt", text: "Provider name").first
+      provider_name = provider_dd.sibling("dd").text
+
+      expect(provider_name).to eq("Other nursery")
+
+      within ".hmcts-timeline" do
+        expect(page).to have_content "HMRC API STATUS: Success"
+        # NOTE that we passed employment check for Springfield nursery then
+        # changed school to "Other nursery"
+        expect(page).to have_content 'HMRC EMPLOYMENTS: ["Springfield nursery"]'
+      end
     end
 
     # Complete journey with nursery matching HMRC, change national insurance
@@ -737,6 +894,30 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
 
       expect(page).to have_text "Confirm your details and complete your claim"
       expect(page).to have_content("Uploaded payslip")
+
+      check "I confirm that I understand and accept these conditions."
+
+      perform_enqueued_jobs do
+        click_button "Confirm and claim"
+      end
+
+      claim = Claim.last
+
+      sign_in_as_service_admin
+
+      visit admin_claim_tasks_path(claim)
+
+      expect(task_status("Employment")).to eq "Incomplete"
+
+      click_link "Check employment information"
+
+      expect(page).to have_content "Employment evidence uploaded by claimant"
+      expect(page).to have_content "employment_proof.pdf"
+
+      within ".hmcts-timeline" do
+        expect(page).to have_content "HMRC API STATUS: Success"
+        expect(page).to have_content "HMRC EMPLOYMENTS: []"
+      end
     end
 
     # Complete the journey with a nursery not matching HMRC, change national
@@ -924,6 +1105,30 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
       expect(page).to have_text "Confirm your details and complete your claim"
       expect(page).to have_content("Uploaded payslip")
       expect(page).to have_content("BB123456C")
+
+      check "I confirm that I understand and accept these conditions."
+
+      perform_enqueued_jobs do
+        click_button "Confirm and claim"
+      end
+
+      claim = Claim.last
+
+      sign_in_as_service_admin
+
+      visit admin_claim_tasks_path(claim)
+
+      expect(task_status("Employment")).to eq "Passed"
+
+      click_link "Check employment information"
+      expect(page).to have_content "Employment verified by HMRC"
+      expect(page).not_to have_content "Employment evidence uploaded by claimant"
+      expect(page).not_to have_content "employment_proof.pdf"
+
+      within ".hmcts-timeline" do
+        expect(page).to have_content "HMRC API STATUS: Success"
+        expect(page).to have_content 'HMRC EMPLOYMENTS: ["Springfield nursery"]'
+      end
     end
   end
 end
