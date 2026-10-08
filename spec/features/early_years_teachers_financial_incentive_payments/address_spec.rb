@@ -50,8 +50,7 @@ RSpec.feature "EYTFI address", feature_flag: [:eytfi_journey], slow: true do
     choose "Yes"
     click_button "Continue"
 
-    check "I spend at least half"
-    check "I’m not currently subject"
+    choose "Yes"
     click_button "Confirm and continue"
 
     click_button "Continue"

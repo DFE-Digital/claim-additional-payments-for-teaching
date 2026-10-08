@@ -33,8 +33,7 @@ RSpec.feature "EYTFI review employment proof preview", feature_flag: [:eytfi_jou
     choose "Yes"
     click_button "Continue"
 
-    check "I spend at least half"
-    check "I’m not currently subject"
+    choose "Yes"
     click_button "Confirm and continue"
 
     click_button "Continue"

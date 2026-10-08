@@ -83,8 +83,7 @@ RSpec.feature "EYTFI employment proof upload validation", feature_flag: [:eytfi_
     choose "Yes"
     click_button "Continue"
 
-    check "I spend at least half"
-    check "I’m not currently subject"
+    choose "Yes"
     click_button "Confirm and continue"
 
     click_button "Continue"
