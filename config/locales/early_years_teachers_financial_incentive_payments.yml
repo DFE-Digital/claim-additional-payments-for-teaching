@@ -23,17 +23,16 @@ en:
         errors:
           inclusion: Select yes if you hold one of the listed qualifications
       ineligible:
+        heading: "You’re not eligible for this payment"
+        ineligible:
+          heading: "You’re not eligible for this payment"
         teaching_qualification_not_confirmed:
           heading: You’re not eligible for this payment
         ineligible_provider:
           heading: The nursery you selected may not be eligible
         teaching_qualification_ineligible:
           heading: You’re not eligible based on your qualification
-        check_eligibility_both_not_confirmed:
-          heading: You’re not eligible for this payment
-        fifty_percent_time_as_eyt_not_confirmed:
-          heading: You’re not eligible for this payment
-        not_subject_to_performance_and_disciplinary_not_confirmed:
+        check_eligibility_not_confirmed:
           heading: You’re not eligible for this payment
         claim_already_submitted_this_policy_year:
           heading: "You’ve already submited a claim in this claim window"

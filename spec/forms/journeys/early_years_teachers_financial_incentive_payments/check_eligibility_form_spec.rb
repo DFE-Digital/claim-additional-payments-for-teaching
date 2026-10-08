@@ -22,7 +22,7 @@ RSpec.describe Journeys::EarlyYearsTeachersFinancialIncentivePayments::CheckElig
       let(:answers) { build(:eytfi_answers, fifty_percent_time_as_eyt: true, not_subject_to_performance_and_disciplinary: true) }
 
       it "prefills the radio button from the persisted eligibility answer" do
-        expect(subject.send(:load_current_value, :meets_eligibility_criteria)).to be(true)
+        expect(subject.send(:load_current_value, :meets_teaching_standards)).to be(true)
       end
     end
   end
@@ -37,7 +37,7 @@ RSpec.describe Journeys::EarlyYearsTeachersFinancialIncentivePayments::CheckElig
 
       it "requires the user to select an answer" do
         expect(subject).not_to be_valid
-        expect(subject.errors[:meets_eligibility_criteria]).to include("Select yes or no to tell us if you meet the eligibility criteria")
+        expect(subject.errors[:meets_teaching_standards]).to include("Select yes or no to tell us if you meet the eligibility criteria")
       end
     end
 
@@ -45,7 +45,7 @@ RSpec.describe Journeys::EarlyYearsTeachersFinancialIncentivePayments::CheckElig
       let(:params) do
         ActionController::Parameters.new(
           claim: {
-            meets_eligibility_criteria: "true"
+            meets_teaching_standards: "true"
           }
         )
       end
@@ -61,7 +61,7 @@ RSpec.describe Journeys::EarlyYearsTeachersFinancialIncentivePayments::CheckElig
       let(:params) do
         ActionController::Parameters.new(
           claim: {
-            meets_eligibility_criteria: "false"
+            meets_teaching_standards: "false"
           }
         )
       end
@@ -79,7 +79,7 @@ RSpec.describe Journeys::EarlyYearsTeachersFinancialIncentivePayments::CheckElig
       let(:params) do
         ActionController::Parameters.new(
           claim: {
-            meets_eligibility_criteria: "false"
+            meets_teaching_standards: "false"
           }
         )
       end
