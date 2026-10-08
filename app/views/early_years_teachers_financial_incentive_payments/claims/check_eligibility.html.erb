@@ -16,37 +16,21 @@
         <%= @form.t(:title) %>
       </h1>
 
-      <div class="govuk-hint">
-        You’ll need to meet the
-        <%= govuk_link_to "eligiblity criteria and expectations", eytfi_guidance_path(anchor: "eligibility"), new_tab: true %>
-        for the early years recognition payment. Select all that apply.
-      </div>
+      <p class="govuk-body">
+        You must meet the eligibility criteria for the early years teacher recognition payment.
+      </p>
 
-      <%= f.govuk_check_boxes_fieldset :fifty_percent_time_as_eyt,
-        multiple: false,
-        legend: nil do %>
-        <%= f.govuk_check_box :fifty_percent_time_as_eyt,
-          1,
-          0,
-          multiple: false,
-          label: {
-            text: @form.t("labels.fifty_percent_time_as_eyt",
-              standards_link: govuk_link_to(
-                "Early years teacher standards",
-                "https://www.gov.uk/government/publications/early-years-teachers-standards",
-                new_tab: true
-            )).html_safe
-          } %>
-      <% end %>
+      <p class="govuk-body">To be eligible, you must:</p>
 
-      <%= f.govuk_check_boxes_fieldset :not_subject_to_performance_and_disciplinary,
-        multiple: false,
-        legend: nil do %>
-        <%= f.govuk_check_box :not_subject_to_performance_and_disciplinary,
-          1,
-          0,
-          multiple: false,
-          label: { text: @form.t("labels.not_subject_to_performance_and_disciplinary") } %>
+      <%= govuk_list [
+        "spend at least half of your working time fulfilling the role of an early years teacher, as set out in the Early years teacher standards",
+        "not be subject to any formal performance management or disciplinary action"
+      ], type: :bullet, classes: "govuk-!-margin-bottom-6" %>
+
+      <%= f.govuk_radio_buttons_fieldset :meets_eligibility_criteria,
+        legend: { text: "Do you meet this eligibility criteria?", tag: "h2", size: "m" } do %>
+        <%= f.govuk_radio_button :meets_eligibility_criteria, true, label: { text: "Yes" } %>
+        <%= f.govuk_radio_button :meets_eligibility_criteria, false, label: { text: "No" } %>
       <% end %>
 
       <%= f.govuk_submit "Confirm and continue" %>

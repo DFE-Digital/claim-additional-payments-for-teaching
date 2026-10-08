@@ -102,8 +102,7 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
       click_button "Continue"
 
       expect(page).to have_text "Check if you’re eligible"
-      check "I spend at least half"
-      check "I’m not currently subject"
+      choose "Yes"
       click_button "Confirm and continue"
 
       expect(page).to have_text "You’re eligible to apply"
@@ -146,8 +145,7 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
       click_button "Continue"
 
       expect(page).to have_text "Check if you’re eligible"
-      check "I spend at least half"
-      check "I’m not currently subject"
+      choose "Yes"
       click_button "Confirm and continue"
 
       expect(page).to have_text "You’re eligible to apply"
@@ -210,8 +208,7 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
       click_button "Continue"
 
       expect(page).to have_text "Check if you’re eligible"
-      check "I spend at least half"
-      check "I’m not currently subject"
+      choose "Yes"
       click_button "Confirm and continue"
 
       expect(page).to have_text "You’re eligible to apply"
@@ -290,8 +287,7 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
       click_button "Continue"
 
       expect(page).to have_text "Check if you’re eligible"
-      check "I spend at least half"
-      check "I’m not currently subject"
+      choose "Yes"
       click_button "Confirm and continue"
 
       expect(page).to have_text "You’re eligible to apply"
