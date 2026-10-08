@@ -142,6 +142,12 @@ variable "container_delete_retention_days" {
   }
 }
 
+variable "pg_airbyte_enabled" {
+  type        = bool
+  default     = false
+  description = "A boolean to indicate whether to enable wal for Airbyte integration for Postgres"
+}
+
 locals {
   postgres_ssl_mode       = var.enable_postgres_ssl ? "require" : "disable"
   canonical_hostname      = var.canonical_hostname != null ? var.canonical_hostname : "${var.service_name}-${var.environment}-web.test.teacherservices.cloud"
