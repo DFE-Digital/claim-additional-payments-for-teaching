@@ -22,6 +22,8 @@ module Policies
           .first!
       end
 
+      alias_method :nursery, :eligible_eytfi_provider
+
       def ey_qualification
         if dqt_teacher.has_valid_qts?
           "Qualified Teacher Status"
