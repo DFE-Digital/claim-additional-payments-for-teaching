@@ -159,6 +159,10 @@ class AcademicYear
     AcademicYear.new(start_year - 1)
   end
 
+  def next
+    AcademicYear.new(start_year + 1)
+  end
+
   def start_of_autumn_term
     Date.new(start_year, AUTUMN_TERM_START_MONTH, AUTUMN_TERM_START_DAY)
   end
