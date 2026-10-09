@@ -1,0 +1,75 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Teacher details
+    </h1>
+
+    <h2 class="govuk-heading-m">
+      Personal details
+    </h2>
+
+    <%= govuk_summary_list(actions: false) do |summary_list| %>
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Name" } %>
+        <% row.with_value { journey_session.answers.teacher_auth_verified_name } %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Date of birth" } %>
+        <% row.with_value { l(journey_session.answers.teacher_auth_verified_date_of_birth) } %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "National Insurance number" } %>
+        <% row.with_value { display_national_insurance_number(journey_session.answers.national_insurance_number_to_display) } %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Teacher reference number" } %>
+        <% row.with_value { journey_session.answers.teacher_auth_teacher_reference_number } %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Gender" } %>
+        <% row.with_value { "???" } %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Email address" } %>
+        <% row.with_value { journey_session.answers.teacher_auth_email } %>
+      <% end %>
+    <% end %>
+
+    <h2 class="govuk-heading-m">
+      Qualifications you hold
+    </h2>
+
+    <% journey_session.answers.qualifications_from_trs_data.each do |qualification| %>
+      <%= govuk_summary_list(actions: false) do |summary_list| %>
+        <% summary_list.with_row do |row| %>
+          <% row.with_key { "Name" } %>
+          <% row.with_value { qualification.name } %>
+        <% end %>
+
+        <% summary_list.with_row do |row| %>
+          <% row.with_key { "Professional status" } %>
+          <% row.with_value { qualification.professional_status } %>
+        <% end %>
+
+        <% summary_list.with_row do |row| %>
+          <% row.with_key { "Valid from" } %>
+          <% row.with_value { l(qualification.valid_from) } %>
+        <% end %>
+
+        <% summary_list.with_row do |row| %>
+          <% row.with_key { "Subjects" } %>
+          <% row.with_value { qualification.subjects.join(", ") } %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <h2 class="govuk-heading-m">
+      Teaching details
+    </h2>
+  </div>
+</div>

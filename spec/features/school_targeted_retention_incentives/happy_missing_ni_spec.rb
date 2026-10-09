@@ -1,5 +1,11 @@
 require "rails_helper"
 
+# this is an alternative happy path
+# after coming back from Teacher Auth
+# we call TRS with TRN
+# this payload is missing NI number
+# so user must enter missing NI number
+
 RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
   before do
     create(:journey_configuration, :targeted_retention_incentive_payments)
@@ -27,7 +33,7 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
         "firstName" => "John",
         "middleName" => "",
         "dateOfBirth" => "1970-12-13",
-        "nationalInsuranceNumber" => "AB123456C",
+        "nationalInsuranceNumber" => "",
         "emailAddress" => "john.doe@example.com",
         "qts" => nil,
         "eyts" => {
@@ -88,7 +94,7 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
     )
   end
 
-  scenario "happy path" do
+  scenario "partial happy path with missing NI data" do
     visit landing_page_path(Journeys::SchoolTargetedRetentionIncentivePayments.routing_name)
     expect(page).to have_text "Use this service to find out if you can get an early career teacher payment."
     click_link "Start now"
@@ -112,8 +118,8 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
     perform_enqueued_jobs
     click_button "Continue"
 
-    expect(page).to have_text "Is this your National Insurance number?"
-    choose "Yes"
+    expect(page).to have_text "Enter your National Insurance number"
+    fill_in "Enter your National Insurance number", with: "AB123456C"
     click_button "Continue"
 
     expect(page).to have_text "Teacher details"
