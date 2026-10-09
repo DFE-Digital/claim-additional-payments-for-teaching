@@ -201,3 +201,5 @@
   - description
   - created_at
   - updated_at
+  :early_years_teachers_financial_incentive_payments_eligibilities:
+  - hmrc_response_body

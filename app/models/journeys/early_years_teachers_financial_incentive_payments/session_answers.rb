@@ -55,7 +55,8 @@ module Journeys
 
         EmploymentCheck.new(
           setting: nursery,
-          employments: employments_from_hmrc_response
+          hmrc_response_status: hmrc_response_status,
+          hmrc_response_body: hmrc_response_body
         ).passed?
       end
 
@@ -91,26 +92,6 @@ module Journeys
         return [] unless teacher_auth_verified_name.present?
 
         teacher_auth_verified_name.split(" ")
-      end
-
-      def employments_from_hmrc_response
-        return [] unless hmrc_response_received?
-        return [] unless hmrc_response_status == 200
-
-        body = JSON.parse(hmrc_response_body.to_s)
-        return [] unless body.is_a?(Hash) && body["employments"].is_a?(Array)
-
-        employments = body.fetch("employments")
-        return [] unless employments.all? do |employment|
-          employment.is_a?(Hash) &&
-            employment["employer"].is_a?(Hash) &&
-            employment["employer"]["name"].is_a?(String) &&
-            employment["employer"]["name"].present?
-        end
-
-        employments
-      rescue JSON::ParserError
-        []
       end
     end
   end
