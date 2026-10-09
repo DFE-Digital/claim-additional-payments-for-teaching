@@ -5,6 +5,8 @@ en:
       prepared_date: "31 July 2019"
       updated_date: "28 July 2022"
     forms:
+      sign_in:
+        title: "Sign in with GOV.UK One Login"
       claim_school:
         questions:
           claim_school: "Which school were you employed to teach at between %{financial_year}?"
@@ -102,6 +104,8 @@ en:
       qualification_details:
         errors:
           qualifications_details_check: "Select yes if your qualification details are correct"
+      qualifications_check:
+        title: "Checking qualifications"
       email_verification:
         errors:
           one_time_password:

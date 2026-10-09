@@ -87,6 +87,9 @@ en:
       identity_confirmation:
         name: Identity confirmation
         title: "Confirm the claimant made the claim"
+      teacher_auth_identity_confirmation:
+        name: Identity confirmation
+        title: "Confirm the claimant made the claim"
       fe_provider_check:
         name: Provider flagging
         title: "Check the provider's response"
@@ -218,6 +221,12 @@ en:
       student_loan_repayment_amount: "Student loan repayment amount"
       student_loan_repayment_plan: "Student loan repayment plan"
       task_questions:
+        teacher_auth_identity_confirmation:
+          title: "Did %{claim_full_name} submit the claim?"
+          body:
+            match:
+              any: "The claimant’s identity matches teacher auth's records. See %{link}."
+              all: "The claimant’s identity matches teacher auth's records. See %{link}."
         identity_confirmation:
           title: "Did %{claim_full_name} submit the claim?"
           body:
