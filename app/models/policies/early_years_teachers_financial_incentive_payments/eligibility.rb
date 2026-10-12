@@ -36,6 +36,10 @@ module Policies
         end
       end
 
+      def personal_data_removed?
+        claim.personal_data_removed?
+      end
+
       private
 
       def dqt_teacher

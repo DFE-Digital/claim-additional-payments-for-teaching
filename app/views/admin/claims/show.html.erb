@@ -29,4 +29,10 @@
   </div>
 </div>
 
-<%= render("admin/claims/policies/#{@claim.policy.to_s.underscore}/claim") %>
+<%= render(
+  partial: "admin/claims/policies/#{@claim.policy.to_s.underscore}/claim",
+  locals: {
+    claim: @claim,
+    matching_claims: @matching_claims
+  }
+) %>

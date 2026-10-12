@@ -3,6 +3,7 @@ module Admin
     include Policies::StudentLoans::PresenterMethods
     include PresenterMethods
     include Pagy::Frontend
+    extend self
 
     # Take user back to where View Claim was clicked from
     def claims_backlink_path
