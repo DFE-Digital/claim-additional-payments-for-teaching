@@ -60,9 +60,9 @@
     <% end %>
 
     <div class="govuk-width-container">
-      <%= content_for(:back_link) %>
-
       <main class="govuk-main-wrapper app-main-class" id="main-content" role="main">
+        <%= content_for(:back_link) %>
+
         <% flash.each do |name, msg| %>
           <% if name == "success" %>
             <%= govuk_notification_banner(title_text: "Success", success: true) { |nb| nb.with_heading(text: msg) } %>
