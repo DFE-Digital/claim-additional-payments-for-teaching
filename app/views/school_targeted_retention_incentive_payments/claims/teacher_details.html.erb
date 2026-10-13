@@ -44,26 +44,31 @@
       Qualifications you hold
     </h2>
 
-    <% journey_session.answers.qualifications_from_trs_data.each do |qualification| %>
+    <% journey_session.answers.dqt_record.record.held_routes_to_professional_statuses.each do |route| %>
       <%= govuk_summary_list(actions: false) do |summary_list| %>
         <% summary_list.with_row do |row| %>
           <% row.with_key { "Name" } %>
-          <% row.with_value { qualification.name } %>
+          <% row.with_value { route.name } %>
         <% end %>
 
         <% summary_list.with_row do |row| %>
           <% row.with_key { "Professional status" } %>
-          <% row.with_value { qualification.professional_status } %>
+          <% row.with_value { route.type } %>
+        <% end %>
+
+        <% summary_list.with_row do |row| %>
+          <% row.with_key { "Training start date" } %>
+          <% row.with_value { l(route.start_date) } %>
         <% end %>
 
         <% summary_list.with_row do |row| %>
           <% row.with_key { "Valid from" } %>
-          <% row.with_value { l(qualification.valid_from) } %>
+          <% row.with_value { l(route.holds_from) } %>
         <% end %>
 
         <% summary_list.with_row do |row| %>
           <% row.with_key { "Subjects" } %>
-          <% row.with_value { qualification.subjects.join(", ") } %>
+          <% row.with_value { route.subjects_formatted_s } %>
         <% end %>
       <% end %>
     <% end %>
@@ -71,5 +76,12 @@
     <h2 class="govuk-heading-m">
       Teaching details
     </h2>
+
+    <%= govuk_summary_list(actions: false) do |summary_list| %>
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Academic year started teaching" } %>
+        <% row.with_value { "TBD" } %>
+      <% end %>
+    <% end %>
   </div>
 </div>
