@@ -10,29 +10,23 @@ RSpec.describe(
   end
 
   before do
-    # Fix config caching preventing our stub from being picked up
-    @config_was = Hmrc::Employments.configuration
-
-    configuration = double(
-      base_url: "https://test-api.service.hmrc.gov.uk",
-      client_id: "claim-hmrc-employments-client",
-      client_secret: "client-secret",
-      totp_secret: "totpsecret",
-      enabled: true,
-      http_client: Faraday,
-      logger: Rails.logger
-    )
-
-    allow(Hmrc::Employments).to receive(:configuration) { configuration }
-
-    # Fix config caching preventing our stub from being picked up
-    Hmrc::Employments.instance_variable_set(:@configuration, configuration)
-
     FeatureFlag.enable!(:eytrp_hmrc_integration)
-  end
 
-  after do
-    Hmrc::Employments.instance_variable_set(:@configuration, @config_was)
+    allow_any_instance_of(
+      Hmrc::Employments::Configuration
+    ).to receive(:base_url) { "https://test-api.service.hmrc.gov.uk" }
+
+    allow_any_instance_of(
+      Hmrc::Employments::Configuration
+    ).to receive(:client_id) { "claim-hmrc-employments-client" }
+
+    allow_any_instance_of(
+      Hmrc::Employments::Configuration
+    ).to receive(:client_secret) { "client-secret" }
+
+    allow_any_instance_of(
+      Hmrc::Employments::Configuration
+    ).to receive(:totp_secret) { "totpsecret" }
   end
 
   context "when the HMRC API call fails" do
