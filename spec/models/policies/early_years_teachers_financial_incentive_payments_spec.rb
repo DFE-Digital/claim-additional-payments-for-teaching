@@ -7,7 +7,8 @@ RSpec.describe Policies::EarlyYearsTeachersFinancialIncentivePayments do
         AutomatedChecks::ClaimVerifiers::OneLoginIdentity,
         AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
         AutomatedChecks::ClaimVerifiers::EyQualificationCheck,
-        AutomatedChecks::ClaimVerifiers::MatchingClaims
+        AutomatedChecks::ClaimVerifiers::MatchingClaims,
+        AutomatedChecks::ClaimVerifiers::EarlyYearsTeachersFinancialIncentivePayments::Employment
       ])
     end
   end

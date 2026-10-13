@@ -1,0 +1,67 @@
+<p class="govuk-body">
+  Employment evidence uploaded by claimant on
+  <%= claim.submitted_at.strftime("%-d/%-m/%Y") %>
+</p>
+
+<% provider = claim.eligibility.eligible_eytfi_provider %>
+
+<h3 class="govuk-heading-m">Selected nursery</h3>
+
+<%= govuk_summary_list do |summary_list| %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { "Provider URN" } %>
+    <% row.with_value { provider.urn } %>
+  <% end %>
+
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { "Provider name" } %>
+    <% row.with_value { provider.name } %>
+  <% end %>
+
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { "Provider address line 1" } %>
+    <% row.with_value { provider.address_line_1 } %>
+  <% end %>
+
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { "Provider address line 2" } %>
+    <% row.with_value { provider.address_line_2 } %>
+  <% end %>
+
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { "Provider address line 3" } %>
+    <% row.with_value { provider.address_line_3 } %>
+  <% end %>
+
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { "Provider town" } %>
+    <% row.with_value { provider.town } %>
+  <% end %>
+
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { "Postcode" } %>
+    <% row.with_value { provider.postcode } %>
+  <% end %>
+<% end %>
+
+<h3 class="govuk-heading-m">Uploaded evidence</h3>
+
+<ul class="govuk-list">
+  <% claim.eligibility.employment_proofs.each do |proof| %>
+    <li>
+      <% if proof.blob.malware_scan_passed? %>
+        <%= link_to(
+          proof.filename.to_s,
+          rails_blob_url(proof),
+          class: "govuk-link",
+          target: "_blank",
+          rel: "noopener"
+        ) %>
+      <% elsif proof.blob.malware_scan_failed? %>
+        <%= "#{proof.filename} (malware scan failed)" %>
+      <% else %>
+        <%= "#{proof.filename} (malware scan pending)" %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
