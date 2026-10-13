@@ -8,17 +8,28 @@ module Policies
       end
 
       def personal_details
-        [
+        a = [
           teacher_reference_number,
           full_name,
-          date_of_birth,
-          national_insurance_number,
+          date_of_birth
+        ]
+
+        if @claim.academic_year >= AcademicYear.new(2026)
+          a.push(
+            trs_national_insurance_number,
+            national_insurance_number_entered_by_claimant
+          )
+        else
+          a.push(national_insurance_number)
+        end
+
+        a.push(
           address,
           email_address,
           banking_name,
           bank_account_number,
           bank_sort_code
-        ]
+        )
       end
 
       private
@@ -83,6 +94,23 @@ module Policies
         [
           "Bank sort code",
           Admin::ClaimsHelper.personal_data(claim, :bank_sort_code)
+        ]
+      end
+
+      def trs_national_insurance_number
+        [
+          "National Insurance number held by teacher pension service",
+          Admin::ClaimsHelper.personal_data(
+            claim.eligibility,
+            :trs_national_insurance_number
+          )
+        ]
+      end
+
+      def national_insurance_number_entered_by_claimant
+        [
+          "National Insurance number entered",
+          Admin::ClaimsHelper.personal_data(claim, :national_insurance_number)
         ]
       end
 
