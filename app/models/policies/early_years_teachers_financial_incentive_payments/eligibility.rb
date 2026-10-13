@@ -40,6 +40,14 @@ module Policies
         claim.personal_data_removed?
       end
 
+      def hmrc_employment_check_errored?
+        (500...599).cover? hmrc_response_status.to_i
+      end
+
+      def hmrc_employment_check_not_found?
+        hmrc_response_status.to_i == 404
+      end
+
       private
 
       def dqt_teacher
