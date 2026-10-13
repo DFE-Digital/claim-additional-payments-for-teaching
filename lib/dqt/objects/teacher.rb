@@ -4,6 +4,10 @@ module Dqt
       to_h.empty?
     end
 
+    def found?
+      !not_found?
+    end
+
     def email_address
       string_reader(emailAddress)
     end
