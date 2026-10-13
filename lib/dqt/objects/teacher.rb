@@ -54,6 +54,11 @@ module Dqt
       routesToProfessionalStatuses
     end
 
+    def held_routes_to_professional_statuses
+      routes = routesToProfessionalStatuses.map {|r| Route.new(r) }
+      routes.select { |r| r.holds? }
+    end
+
     def itt_subject_codes
       return [] if routesToProfessionalStatuses.blank?
 
