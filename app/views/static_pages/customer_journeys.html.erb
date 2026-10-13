@@ -1,12 +1,9 @@
 <% content_for(:page_title) { page_title("Customer journeys") } %>
+<% content_for(:back_link) { link_to "Back", root_path, class: "govuk-back-link" } %>
 
 <%
   landing_page_journeys = Journeys.landing_page_journeys
 %>
-
-<p class="govuk-body">
-  <%= link_to "Back", root_path, class: "govuk-back-link" %>
-</p>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
