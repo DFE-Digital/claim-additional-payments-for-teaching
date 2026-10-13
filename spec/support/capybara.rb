@@ -1,5 +1,6 @@
 require "capybara/rspec"
 require "capybara/cuprite"
+require "capybara_accessibility_audit"
 
 Capybara.register_driver(:cuprite) do |app|
   Capybara::Cuprite::Driver.new(
