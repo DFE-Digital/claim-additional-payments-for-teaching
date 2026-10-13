@@ -80,7 +80,7 @@
     <%= govuk_summary_list(actions: false) do |summary_list| %>
       <% summary_list.with_row do |row| %>
         <% row.with_key { "Academic year started teaching" } %>
-        <% row.with_value { "TBD" } %>
+        <% row.with_value { journey_session.answers.dqt_record.academic_year_started_teaching&.to_s(:long) } %>
       <% end %>
     <% end %>
   </div>
