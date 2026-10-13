@@ -52,14 +52,13 @@
 
     <%= render "shared/cookie_banner" %>
 
-    <%= govuk_skip_link %>
-
     <% if @journey_session&.answers&.logged_in_with_onelogin? %>
       <%= render "shared/one_login_header" %>
     <% elsif lookup_context.exists?(Pathname.new(journey.view_path).join("_header")) %>
       <%= render Pathname.new(journey.view_path).join("header").to_s %>
     <% else %>
       <%= govuk_header do |header| %>
+        <%= govuk_skip_link %>
         <% header.with_service_navigation(
           service_name: journey_service_name(current_journey_routing_name),
           service_url: start_page_url(current_journey_routing_name)) %>
@@ -72,7 +71,7 @@
     <div class="govuk-width-container">
       <%= render "shared/backlink" %>
 
-      <main class="govuk-main-wrapper app-main-class" id="main-content">
+      <main class="govuk-main-wrapper app-main-class" id="main-content" role="main">
         <% flash.each do |name, msg| %>
           <% if name == "success" %>
             <%= govuk_notification_banner(title_text: "Success", success: true) { |nb| nb.with_heading(text: msg) } %>
