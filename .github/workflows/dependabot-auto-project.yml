@@ -1,12 +1,16 @@
 name: Auto-add Dependabot PRs to project
 
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, reopened, ready_for_review]
 
 jobs:
   add-to-project:
-    if: github.event.pull_request.user.login == 'app/dependabot' || github.event.pull_request.user.login == 'dependabot[bot]' || github.event.pull_request.user.login == 'app/dependabot-preview'
+    if: |
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      (github.event.pull_request.user.login == 'app/dependabot' ||
+       github.event.pull_request.user.login == 'dependabot[bot]' ||
+       github.event.pull_request.user.login == 'app/dependabot-preview')
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -20,7 +24,7 @@ jobs:
         env:
           PROJECT_NUMBER: "101"
         with:
-          github-token: ${{ secrets.PROJECT_TOKEN }}
+          github-token: ${{ secrets.PROJECT_TOKEN || github.token }}
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
