@@ -17,6 +17,8 @@ module Journeys
       attribute :national_insurance_number_correct, :boolean, pii: false
       attribute :national_insurance_number, :string, pii: true
 
+      attribute :correct_details, :boolean, pii: false
+
       def policy
         Policies::TargetedRetentionIncentivePayments
       end

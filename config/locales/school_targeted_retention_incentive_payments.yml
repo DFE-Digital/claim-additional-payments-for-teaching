@@ -50,6 +50,7 @@ en:
           ineligible_subject: You are not eligible due to subject
           ineligible_qualification: You are not eligible due to qualification
           teaching_years_exceeded: You are not eligible as teaching years exceeded
+          incorrect_details: You need to update your details before you submit a claim
       current_school:
         question: What school do you teach at?
         errors:
