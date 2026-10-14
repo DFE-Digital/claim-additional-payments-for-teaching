@@ -121,6 +121,7 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
     click_button "Continue"
 
     expect(page).to have_text "Teacher details"
+    choose "Yes"
     click_button "Continue"
 
     expect(page).to have_text "You are not eligible due to qualification"
