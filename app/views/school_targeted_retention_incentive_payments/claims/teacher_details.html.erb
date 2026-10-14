@@ -83,5 +83,9 @@
         <% row.with_value { journey_session.answers.dqt_record.academic_year_started_teaching&.to_s(:long) } %>
       <% end %>
     <% end %>
+
+    <%= form_with model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_submit %>
+    <% end %>
   </div>
 </div>

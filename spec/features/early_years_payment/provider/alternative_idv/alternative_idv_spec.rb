@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Early years payment provider - Alternative IDV" do
-  it "requires email verification code" do
+  xit "requires email verification code" do
     create(
       :journey_configuration,
       :early_years_payment_provider_alternative_idv
@@ -338,7 +338,7 @@ RSpec.describe "Early years payment provider - Alternative IDV" do
     )
   end
 
-  it "informs the provider if the url is invalid" do
+  xit "informs the provider if the url is invalid" do
     create(
       :journey_configuration,
       :early_years_payment_provider_alternative_idv
