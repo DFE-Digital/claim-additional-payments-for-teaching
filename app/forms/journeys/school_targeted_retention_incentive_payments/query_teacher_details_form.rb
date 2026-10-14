@@ -1,6 +1,10 @@
 module Journeys
   module SchoolTargetedRetentionIncentivePayments
     class QueryTeacherDetailsForm < Form
+      def self.skip_eligibility_check?
+        true
+      end
+
       def save
         true
       end

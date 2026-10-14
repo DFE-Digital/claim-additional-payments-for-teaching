@@ -16,6 +16,10 @@ module Journeys
           message: "Enter your National Insurance number"
         }
 
+      def self.skip_eligibility_check?
+        true
+      end
+
       def save
         return false if invalid?
 

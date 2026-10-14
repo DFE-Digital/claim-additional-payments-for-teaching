@@ -55,7 +55,7 @@ module Dqt
     end
 
     def held_routes_to_professional_statuses
-      routes = routesToProfessionalStatuses.map {|r| Route.new(r) }
+      routes = routesToProfessionalStatuses.map { |r| Route.new(r) }
       routes.select { |r| r.holds? }
     end
 

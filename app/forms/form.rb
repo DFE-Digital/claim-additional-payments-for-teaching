@@ -43,6 +43,10 @@ class Form
     ->(object, _) { object.i18n_errors_path(path, args) }
   end
 
+  def self.skip_eligibility_check?
+    false
+  end
+
   # TODO RL: remove journey param and pull it from the journey_session
   def initialize(journey_session:, journey:, params:, session: {})
     run_callbacks :initialize do
