@@ -56,4 +56,7 @@ DfE::Analytics.configure do |config|
 
   # Allow sending soft deleted records - e.g. EligibleEyProvider
   config.ignore_default_scope = true
+
+  # Perform airbyte checks on startup and allow airbyte config generation
+  config.airbyte_enabled = Rails.env.in?(%w[review]) && ENV["BIGQUERY_AIRBYTE_DATASET"].present?
 end
