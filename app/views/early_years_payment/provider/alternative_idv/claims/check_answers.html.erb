@@ -41,7 +41,7 @@
         <%= f.govuk_check_boxes_fieldset(
           :claimant_employment_check_declaration,
           multiple: false,
-          legend: nil
+          legend: { text: f.object.t("claimant_employment_check_declaration.question"), hidden: true }
         ) do %>
           <%= f.govuk_check_box(
             :claimant_employment_check_declaration,
