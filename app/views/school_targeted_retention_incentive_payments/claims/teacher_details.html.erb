@@ -1,90 +1,98 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">
-      Teacher details
-    </h1>
+    <%= form_with model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
 
-    <h2 class="govuk-heading-m">
-      Personal details
-    </h2>
+      <h1 class="govuk-heading-l">
+        Teacher details
+      </h1>
 
-    <%= govuk_summary_list(actions: false) do |summary_list| %>
-      <% summary_list.with_row do |row| %>
-        <% row.with_key { "Name" } %>
-        <% row.with_value { journey_session.answers.teacher_auth_verified_name } %>
-      <% end %>
+      <h2 class="govuk-heading-m">
+        Personal details
+      </h2>
 
-      <% summary_list.with_row do |row| %>
-        <% row.with_key { "Date of birth" } %>
-        <% row.with_value { l(journey_session.answers.teacher_auth_verified_date_of_birth) } %>
-      <% end %>
-
-      <% summary_list.with_row do |row| %>
-        <% row.with_key { "National Insurance number" } %>
-        <% row.with_value { display_national_insurance_number(journey_session.answers.national_insurance_number_to_display) } %>
-      <% end %>
-
-      <% summary_list.with_row do |row| %>
-        <% row.with_key { "Teacher reference number" } %>
-        <% row.with_value { journey_session.answers.teacher_auth_teacher_reference_number } %>
-      <% end %>
-
-      <% summary_list.with_row do |row| %>
-        <% row.with_key { "Gender" } %>
-        <% row.with_value { "???" } %>
-      <% end %>
-
-      <% summary_list.with_row do |row| %>
-        <% row.with_key { "Email address" } %>
-        <% row.with_value { journey_session.answers.teacher_auth_email } %>
-      <% end %>
-    <% end %>
-
-    <h2 class="govuk-heading-m">
-      Qualifications you hold
-    </h2>
-
-    <% journey_session.answers.dqt_record.record.held_routes_to_professional_statuses.each do |route| %>
       <%= govuk_summary_list(actions: false) do |summary_list| %>
         <% summary_list.with_row do |row| %>
           <% row.with_key { "Name" } %>
-          <% row.with_value { route.name } %>
+          <% row.with_value { journey_session.answers.teacher_auth_verified_name } %>
         <% end %>
 
         <% summary_list.with_row do |row| %>
-          <% row.with_key { "Professional status" } %>
-          <% row.with_value { route.type } %>
+          <% row.with_key { "Date of birth" } %>
+          <% row.with_value { l(journey_session.answers.teacher_auth_verified_date_of_birth) } %>
         <% end %>
 
         <% summary_list.with_row do |row| %>
-          <% row.with_key { "Training start date" } %>
-          <% row.with_value { l(route.start_date) } %>
+          <% row.with_key { "National Insurance number" } %>
+          <% row.with_value { display_national_insurance_number(journey_session.answers.national_insurance_number_to_display) } %>
         <% end %>
 
         <% summary_list.with_row do |row| %>
-          <% row.with_key { "Valid from" } %>
-          <% row.with_value { l(route.holds_from) } %>
+          <% row.with_key { "Teacher reference number" } %>
+          <% row.with_value { journey_session.answers.teacher_auth_teacher_reference_number } %>
         <% end %>
 
         <% summary_list.with_row do |row| %>
-          <% row.with_key { "Subjects" } %>
-          <% row.with_value { route.subjects_formatted_s } %>
+          <% row.with_key { "Gender" } %>
+          <% row.with_value { "???" } %>
+        <% end %>
+
+        <% summary_list.with_row do |row| %>
+          <% row.with_key { "Email address" } %>
+          <% row.with_value { journey_session.answers.teacher_auth_email } %>
         <% end %>
       <% end %>
-    <% end %>
 
-    <h2 class="govuk-heading-m">
-      Teaching details
-    </h2>
+      <h2 class="govuk-heading-m">
+        Qualifications you hold
+      </h2>
 
-    <%= govuk_summary_list(actions: false) do |summary_list| %>
-      <% summary_list.with_row do |row| %>
-        <% row.with_key { "Academic year started teaching" } %>
-        <% row.with_value { journey_session.answers.dqt_record.academic_year_started_teaching&.to_s(:long) } %>
+      <% journey_session.answers.dqt_record.record.held_routes_to_professional_statuses.each do |route| %>
+        <%= govuk_summary_list(actions: false) do |summary_list| %>
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { "Name" } %>
+            <% row.with_value { route.name } %>
+          <% end %>
+
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { "Professional status" } %>
+            <% row.with_value { route.type } %>
+          <% end %>
+
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { "Training start date" } %>
+            <% row.with_value { l(route.start_date) } %>
+          <% end %>
+
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { "Valid from" } %>
+            <% row.with_value { l(route.holds_from) } %>
+          <% end %>
+
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { "Subjects" } %>
+            <% row.with_value { route.subjects_formatted_s } %>
+          <% end %>
+        <% end %>
       <% end %>
-    <% end %>
 
-    <%= form_with model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <h2 class="govuk-heading-m">
+        Teaching details
+      </h2>
+
+      <%= govuk_summary_list(actions: false) do |summary_list| %>
+        <% summary_list.with_row do |row| %>
+          <% row.with_key { "Academic year started teaching" } %>
+          <% row.with_value { journey_session.answers.dqt_record.academic_year_started_teaching&.to_s(:long) } %>
+        <% end %>
+      <% end %>
+
+      <%= f.govuk_collection_radio_buttons :correct_details,
+        @form.radio_options,
+        :id,
+        :name,
+        legend: { text: "Are these details correct?" } %>
+
       <%= f.govuk_submit %>
     <% end %>
   </div>
