@@ -8,6 +8,10 @@ module Policies
         @answers = answers
       end
 
+      def qts_award_date
+        record.qts_award_date
+      end
+
       # returns a date
       # relevant date of qualification for eligibility purposes
       # different qualifications use different date data point
@@ -37,8 +41,30 @@ module Policies
         AcademicYear.for(academic_date)
       end
 
-      def qts_award_date
-        record.qts_award_date
+      def stri_eligible?
+        qualification_eligible?
+          && starting_teaching_year_eligible?
+          && subject_eligible?
+      end
+
+      def starting_teaching_year_eligible?
+        return false if academic_year_started_teaching.blank?
+
+        current_academic_year = Journeys::SchoolTargetedRetentionIncentivePayments.configuration.current_academic_year
+
+        academic_year_started_teaching >= current_academic_year - 5
+      end
+
+      def qualification_eligible?
+        record.held_routes_to_professional_statuses.any? do |route|
+          route.eligible_stri_qualification?
+        end
+      end
+
+      def subject_eligible?
+        record.held_routes_to_professional_statuses.any? do |route|
+          route.eligible_stri_subject?
+        end
       end
     end
   end

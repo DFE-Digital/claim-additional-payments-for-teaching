@@ -12,7 +12,7 @@
       <%= render partial: "ineligible_#{@form.ineligibility_reason}" %>
     <% else %>
       <% Sentry.capture_message("unknown ineligibility reason #{@form.ineligibility_reason}") %>
-      <%= render partial: "generic" %>
+      <%= render partial: "ineligible_generic" %>
     <% end %>
   </div>
 </div>
