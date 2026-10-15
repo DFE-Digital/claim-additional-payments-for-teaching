@@ -99,6 +99,7 @@ group :development, :test do
   gem "factory_bot_rails"
   gem "dotenv-rails"
   gem "herb", require: false
+  gem "capybara_accessibility_audit", "~> 0.3.0"
 end
 
 group :development do

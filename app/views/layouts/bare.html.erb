@@ -49,12 +49,14 @@
 
     <%= render "shared/cookie_banner" %>
 
-    <%= govuk_skip_link %>
+    <header>
+      <%= govuk_skip_link %>
+    </header>
 
     <div class="govuk-width-container">
       <%= render 'shared/backlink'%>
 
-      <main class="govuk-main-wrapper app-main-class" id="main-content">
+      <main class="govuk-main-wrapper app-main-class" id="main-content" role="main">
         <% flash.each do |name, msg| %>
           <% if name == "success" %>
             <%= govuk_notification_banner(title_text: "Success", success: true) { |nb| nb.with_heading(text: msg) } %>

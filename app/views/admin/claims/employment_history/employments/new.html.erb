@@ -64,7 +64,7 @@
         f.object.employment_contract_of_at_least_one_year_options,
         :id,
         :name,
-        legend: nil,
+        legend: { text: f.object.t(%i[employment_contract_of_at_least_one_year question]), hidden: true },
         inline: true,
       ) %>
     </div>
@@ -77,7 +77,7 @@
       </legend>
     </div>
     <div class="govuk-grid-column-one-third">
-      <%= f.govuk_date_field(:employment_start_date, legend: nil) %>
+      <%= f.govuk_date_field(:employment_start_date, legend: { text: f.object.t(%i[employment_start_date question]), hidden: true }) %>
     </div>
   </div>
 
@@ -88,7 +88,7 @@
       </legend>
     </div>
     <div class="govuk-grid-column-one-third">
-      <%= f.govuk_date_field(:employment_end_date, legend: nil) %>
+      <%= f.govuk_date_field(:employment_end_date, legend: { text: f.object.t(%i[employment_end_date question]), hidden: true }) %>
     </div>
   </div>
 
@@ -127,7 +127,7 @@
         :id,
         :name,
         inline: true,
-        legend: nil,
+        legend: { text: f.object.t(%i[met_minimum_teaching_hours question]), hidden: true },
       ) %>
     </div>
   </div>

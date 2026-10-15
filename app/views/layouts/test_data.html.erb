@@ -18,10 +18,12 @@
   <body class="govuk-template__body">
     <%= javascript_include_tag 'js_check' %>
 
-    <%= govuk_skip_link %>
+    <header>
+      <%= govuk_skip_link %>
+    </header>
 
     <div class="govuk-width-container">
-      <main class="govuk-main-wrapper app-main-class" id="main-content">
+      <main class="govuk-main-wrapper app-main-class" id="main-content" role="main">
         <%= yield %>
       </main>
     </div>

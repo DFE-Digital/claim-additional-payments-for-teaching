@@ -1,24 +1,24 @@
 <ul class="govuk-tabs__list">
-  <li class="<%= class_names("govuk-tabs__list-item", { "govuk-tabs__list-item--selected" => current_page?({controller: "tasks"}) }) %>" role="presentation">
+  <li class="<%= class_names("govuk-tabs__list-item", { "govuk-tabs__list-item--selected" => current_page?({controller: "tasks"}) }) %>">
     <%= link_to_unless_current "Tasks", admin_claim_tasks_path(claim), class: "govuk-tabs__tab" %>
   </li>
 
-  <li class="<%= class_names("govuk-tabs__list-item", { "govuk-tabs__list-item--selected" => current_page?({controller: "notes"}) }) %>" role="presentation">
+  <li class="<%= class_names("govuk-tabs__list-item", { "govuk-tabs__list-item--selected" => current_page?({controller: "notes"}) }) %>">
     <%= link_to_unless_current "Notes and support", admin_claim_notes_path(@claim), class: "govuk-tabs__tab" %>
     <%= "(#{claim.notes.count})" if claim.notes.any? %>
   </li>
 
-  <li class="<%= class_names("govuk-tabs__list-item", { "govuk-tabs__list-item--selected" => current_page?({controller: "amendments"}) }) %>" role="presentation">
+  <li class="<%= class_names("govuk-tabs__list-item", { "govuk-tabs__list-item--selected" => current_page?({controller: "amendments"}) }) %>">
     <%= link_to_unless_current "Claim amendments", admin_claim_amendments_path(@claim), class: "govuk-tabs__tab" %>
     <%= "(#{claim.amendments.count})" if claim.amendments.any? %>
   </li>
 
-  <li class="<%= class_names("govuk-tabs__list-item", { "govuk-tabs__list-item--selected" => current_page?({controller: "events"}) }) %>" role="presentation">
+  <li class="<%= class_names("govuk-tabs__list-item", { "govuk-tabs__list-item--selected" => current_page?({controller: "events"}) }) %>">
     <%= link_to_unless_current "Claim timeline", admin_claim_events_path(@claim), class: "govuk-tabs__tab" %>
   </li>
 
   <% if @claim.payrolled? || @claim.topups.present? %>
-    <li class="<%= class_names("govuk-tabs__list-item", { "govuk-tabs__list-item--selected" => current_page?({controller: "payments"}) }) %>" role="presentation">
+    <li class="<%= class_names("govuk-tabs__list-item", { "govuk-tabs__list-item--selected" => current_page?({controller: "payments"}) }) %>">
       <%= link_to_unless_current "Claim payments", admin_claim_payments_path(@claim), class: "govuk-tabs__tab" %>
     </li>
   <% end %>

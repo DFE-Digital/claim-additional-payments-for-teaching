@@ -1,4 +1,6 @@
-<%= govuk_header(homepage_url: "https://www.gov.uk") %>
+<%= govuk_header(homepage_url: "https://www.gov.uk") do %>
+  <%= govuk_skip_link %>
+<% end %>
 
 <%= govuk_service_navigation(
   service_name: "Claim additional payments for teaching",

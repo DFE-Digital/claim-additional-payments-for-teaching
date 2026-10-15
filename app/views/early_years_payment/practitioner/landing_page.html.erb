@@ -65,6 +65,6 @@
         guidance_path(Journeys::EarlyYearsPayment::Provider::Start.routing_name) %>.
     </div>
 
-    <%= govuk_start_button(text: "Start now", href: claim_path(current_journey_routing_name, "claim")) %>
+    <%= govuk_start_button(text: "Start now", href: new_claim_path(current_journey_routing_name)) %>
   </div>
 </div>
