@@ -9,7 +9,8 @@ module Journeys
           .perform_later(
             journey_session:,
             has_national_insurance_number: form.has_national_insurance_number,
-            national_insurance_number: form.national_insurance_number
+            national_insurance_number: form.national_insurance_number,
+            ineligible_options: form.ineligible_options
           )
 
         redirect_to claim_path(current_journey_routing_name, "query-teacher-details")
