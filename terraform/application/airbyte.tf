@@ -6,7 +6,7 @@ module "airbyte" {
   environment           = var.environment
   azure_resource_prefix = var.azure_resource_prefix
   service_short         = var.service_short
-  service_name          = var.service_name
+  service_name          = join("-", slice(split("-", var.service_name), 0, 3))
   docker_image          = var.docker_image
   postgres_version      = var.server_version
   postgres_url          = module.postgres.url
