@@ -26,7 +26,7 @@ class Admin::JourneyConfigurationForm
   end
 
   def academic_year_select_options
-    (0..3).map do |relative_year|
+    (-1..3).map do |relative_year|
       Form::Option.new(
         id: AcademicYear.current + relative_year,
         name: AcademicYear.current + relative_year
