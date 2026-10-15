@@ -65,5 +65,6 @@ RSpec.feature "EYTFI review employment proof preview", feature_flag: [:eytfi_jou
     expect(page).to have_text("Check your document")
     expect(page).not_to have_css("img")
     expect(page).to have_css("a", text: "employment_proof.pdf")
+    expect(page).to have_css("a[aria-label='employment_proof.pdf - Download file']")
   end
 end
