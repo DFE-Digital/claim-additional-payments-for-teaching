@@ -1,6 +1,14 @@
 require "rails_helper"
 
 RSpec.describe Journeys::FurtherEducationPayments::FurtherEducationTeachingStartYearForm, type: :model do
+  before do
+    create(
+      :journey_configuration,
+      :further_education_payments,
+      current_academic_year: AcademicYear.new(2024)
+    )
+  end
+
   let(:journey) { Journeys::FurtherEducationPayments }
   let(:journey_session) { create(:further_education_payments_session, answers:) }
   let(:answers) { build(:further_education_payments_answers, answers_hash) }

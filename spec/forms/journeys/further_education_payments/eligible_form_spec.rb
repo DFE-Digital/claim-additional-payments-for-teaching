@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.describe Journeys::FurtherEducationPayments::EligibleForm, type: :model do
+  before do
+    create(:journey_configuration, :further_education_payments)
+  end
+
   let(:journey) { Journeys::FurtherEducationPayments }
   let(:journey_session) { create(:further_education_payments_session, answers:) }
 
