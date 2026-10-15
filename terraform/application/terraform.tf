@@ -32,9 +32,9 @@ provider "azurerm" {
 provider "airbyte" {
   server_url = var.airbyte_enabled ? "https://airbyte-${var.namespace}.${module.cluster_data.ingress_domain}/api/public/v1" : ""
 
-  client_id = var.airbyte_enabled ? module.secrets.map.AIRBYTE-CLIENT-ID : ""
+  client_id = var.airbyte_enabled ? module.infrastructure_secrets.map.AIRBYTE-CLIENT-ID : ""
 
-  client_secret = var.airbyte_enabled ? module.secrets.map.AIRBYTE-CLIENT-SECRET : ""
+  client_secret = var.airbyte_enabled ? module.infrastructure_secrets.map.AIRBYTE-CLIENT-SECRET : ""
 }
 
 provider "kubernetes" {
