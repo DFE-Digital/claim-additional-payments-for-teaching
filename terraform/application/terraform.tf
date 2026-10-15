@@ -13,6 +13,10 @@ terraform {
       source  = "StatusCakeDev/statuscake"
       version = "2.2.2"
     }
+    airbyte = {
+      source  = "airbytehq/airbyte"
+      version = "0.10.0"
+    }
   }
   backend "azurerm" {
     container_name = "terraform-state"
@@ -23,6 +27,14 @@ provider "azurerm" {
   features {}
 
   resource_provider_registrations = "none"
+}
+
+provider "airbyte" {
+  server_url = var.airbyte_enabled ? "https://airbyte-${var.namespace}.${module.cluster_data.ingress_domain}/api/public/v1" : ""
+
+  client_id = var.airbyte_enabled ? module.secrets.map.AIRBYTE-CLIENT-ID : ""
+
+  client_secret = var.airbyte_enabled ? module.secrets.map.AIRBYTE-CLIENT-SECRET : ""
 }
 
 provider "kubernetes" {
