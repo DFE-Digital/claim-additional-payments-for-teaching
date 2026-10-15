@@ -15,12 +15,11 @@ module Journeys
             a << [
               "Uploaded payslip",
               safe_join([
-                govuk_link_to(rails_storage_proxy_path(blob, only_path: true), new_tab: true) {
-                  safe_join([
-                    content_tag(:span, "Download file ",
-                      class: "govuk-visually-hidden"), "#{blob.filename} (opens in new tab)"
-                  ])
-                },
+                govuk_link_to(
+                  rails_storage_proxy_path(blob, only_path: true),
+                  new_tab: true,
+                  aria: {label: "#{blob.filename} - Download file"}
+                ) { "#{blob.filename} (opens in new tab)" },
                 ", #{number_to_human_size(blob.byte_size)}"
               ]),
               "review-employment-proof"
