@@ -17,19 +17,6 @@ GIT
     activerecord-nulldb-adapter (1.1.1)
       activerecord (>= 6.1, < 8.2)
 
-GIT
-  remote: https://github.com/thoughtbot/capybara_accessibility_audit.git
-  revision: eaf6a9ab8488e8fb5e4b4a549da39eeadc6c4edc
-  specs:
-    capybara_accessibility_audit (0.3.0)
-      axe-core-api
-      bigdecimal
-      capybara
-      drb
-      mutex_m
-      rails (>= 6.1)
-      zeitwerk
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -140,6 +127,14 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
+    capybara_accessibility_audit (0.3.0)
+      axe-core-api
+      bigdecimal
+      capybara
+      drb
+      mutex_m
+      rails (>= 6.1)
+      zeitwerk
     cgi (0.5.1)
     childprocess (5.1.0)
       logger (~> 1.5)
@@ -684,7 +679,7 @@ DEPENDENCIES
   brakeman
   bullet
   capybara
-  capybara_accessibility_audit!
+  capybara_accessibility_audit (~> 0.3.0)
   cuprite
   dartsass-rails
   dfe-analytics!
