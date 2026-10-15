@@ -1,8 +1,41 @@
 module Debug
   class StriBypassJob < ApplicationJob
-    def perform(journey_session:, has_national_insurance_number:, national_insurance_number:)
+    def perform(
+      journey_session:,
+      has_national_insurance_number:,
+      national_insurance_number:,
+      ineligible_options:
+    )
       national_insurance_number_to_store = if has_national_insurance_number
         national_insurance_number
+      end
+
+      ineligible_start_year = ineligible_options.reject(&:blank?).include?("ineligible-start-year")
+      ineligible_subject = ineligible_options.reject(&:blank?).include?("ineligible-subject")
+      ineligible_qualification = ineligible_options.reject(&:blank?).include?("ineligible-qualification")
+
+      training_subjects = if ineligible_subject
+        [{
+          name: "ineligible subject",
+          reference: "999999"
+        }]
+      else
+        [{
+          name: "applied computing",
+          reference: "100358"
+        }]
+      end
+
+      route_name = if ineligible_qualification
+        "Ineligible qualification route"
+      else
+        "Assessment Only"
+      end
+
+      holds_from = if ineligible_start_year
+        "2000-01-01"
+      else
+        "2026-01-01"
       end
 
       journey_session.answers.update!(
@@ -10,12 +43,12 @@ module Debug
           qts: {
             routes: [{
               routeToProfessionalStatusType: {
-                name: "Assessment Only",
+                name: route_name,
                 professionalStatusType: "QualifiedTeacherStatus",
                 routeToProfessionalStatusTypeId: "57b86cef-98e2-4962-a74a-d47c7a34b838"
               }
             }],
-            holdsFrom: "2010-01-01"
+            holdsFrom: holds_from
           },
           trn: "3013822",
           eyts: {
@@ -26,7 +59,7 @@ module Debug
                 routeToProfessionalStatusTypeId: "11b66de5-4670-4c82-86aa-20e42df723b7"
               }
             }],
-            holdsFrom: "2026-01-01"
+            holdsFrom: holds_from
           },
           alerts: [],
           lastName: "John",
@@ -44,15 +77,12 @@ module Debug
           nationalInsuranceNumber: national_insurance_number_to_store,
           routesToProfessionalStatuses: [{
             status: "Holds",
-            holdsFrom: "2010-01-01",
+            holdsFrom: holds_from,
             degreeType: nil,
             trainingCountry: nil,
             trainingEndDate: nil,
             trainingProvider: nil,
-            trainingSubjects: [{
-              name: "applied computing",
-              reference: "100358"
-            }],
+            trainingSubjects: training_subjects,
             trainingStartDate: "2024-09-01",
             inductionExemption: {
               isExempt: false,
@@ -61,13 +91,13 @@ module Debug
             trainingAgeSpecialism: nil,
             routeToProfessionalStatusId: "3a4ecf1a-0b9d-487c-b71d-4965b289aaed",
             routeToProfessionalStatusType: {
-              name: "Assessment Only",
+              name: route_name,
               professionalStatusType: "QualifiedTeacherStatus",
               routeToProfessionalStatusTypeId: "57b86cef-98e2-4962-a74a-d47c7a34b838"
             }
           }, {
             status: "Holds",
-            holdsFrom: "2026-01-01",
+            holdsFrom: holds_from,
             degreeType: {
               name: "BA Education",
               degreeTypeId: "84e541d5-d55a-4d44-bc52-983322c1453f"
@@ -81,9 +111,7 @@ module Debug
               name: "University of Nottingham",
               ukprn: "10007154"
             },
-            trainingSubjects: [{
-              name: "English", reference: "Q300"
-            }],
+            trainingSubjects: training_subjects,
             trainingStartDate: "2025-12-21",
             inductionExemption: {
               isExempt: false,

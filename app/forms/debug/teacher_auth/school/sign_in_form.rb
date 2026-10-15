@@ -15,6 +15,7 @@ module Debug
         attribute :sub, :string
         attribute :has_national_insurance_number, :boolean
         attribute :national_insurance_number, :string
+        attribute :ineligible_options, default: []
 
         def has_national_insurance_number?
           has_national_insurance_number
@@ -50,6 +51,10 @@ module Debug
           Faker::IdNumber.valid
         end
 
+        def default_ineligible_options
+          [""]
+        end
+
         def journey
           Journeys::SchoolTargetedRetentionIncentivePayments
         end
@@ -60,6 +65,23 @@ module Debug
 
         def completed?
           journey_session.answers.teacher_auth_completed_at
+        end
+
+        def ineligible_checkbox_options
+          [
+            Form::Option.new(
+              id: "ineligible-qualification",
+              name: "Ineligible qualification"
+            ),
+            Form::Option.new(
+              id: "ineligible-start-year",
+              name: "Ineligible start year"
+            ),
+            Form::Option.new(
+              id: "ineligible-subject",
+              name: "Ineligible subject"
+            )
+          ]
         end
       end
     end

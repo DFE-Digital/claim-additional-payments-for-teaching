@@ -46,6 +46,12 @@
           <%= f.govuk_radio_button :has_national_insurance_number, false, label: { text: "No" } %>
         <% end %>
 
+        <%= f.govuk_collection_check_boxes :ineligible_options,
+          @form.ineligible_checkbox_options,
+          :id,
+          :name,
+          legend: { text: "Ineligible options" } %>
+
         <%= f.govuk_submit %>
       <% end %>
     <% end %>
