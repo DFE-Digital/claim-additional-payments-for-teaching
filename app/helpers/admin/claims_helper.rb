@@ -144,7 +144,11 @@ module Admin
     end
 
     def claim_route(claim)
-      claim.logged_in_with_tid? ? I18n.t("admin.claim_route_with_tid") : I18n.t("admin.claim_route_not_tid")
+      if claim.policy == Policies::StudentLoans && claim.eligibility.teacher_auth_completed_at
+        "Signed in with teacher auth"
+      else
+        claim.logged_in_with_tid? ? I18n.t("admin.claim_route_with_tid") : I18n.t("admin.claim_route_not_tid")
+      end
     end
 
     def identity_confirmation_task_claim_verifier_match_status_tag(claim)

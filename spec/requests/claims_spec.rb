@@ -48,6 +48,7 @@ RSpec.describe "Claims", type: :request do
 
     context "student loans claim" do
       it "created for the current academic year and redirects to the next question in the sequence" do
+        FeatureFlag.enable!(:student_loans_teacher_auth)
         @journey_configuration = create(:journey_configuration, :student_loans)
 
         check_claims_created
