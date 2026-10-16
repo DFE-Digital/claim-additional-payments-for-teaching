@@ -1,6 +1,13 @@
 require "rails_helper"
 
 RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::CheckAnswersForm, type: :model do
+  let!(:journey_configuration) do
+    create(
+      :journey_configuration,
+      :further_education_payments
+    )
+  end
+
   let(:user) { create(:dfe_signin_user) }
 
   let(:claim) do
