@@ -1,643 +1,553 @@
 require "rails_helper"
 
-RSpec.describe Journeys::EarlyYearsTeachersFinancialIncentivePayments::EmploymentCheck do
+RSpec.describe(
+  Journeys::EarlyYearsTeachersFinancialIncentivePayments::EmploymentCheck
+) do
+  def employment(
+    name: "Oak Tree Nursery",
+    postcode: "SW1A 1AA"
+  )
+    {
+      "employer" => {
+        "name" => name,
+        "address" => {
+          "postcode" => postcode
+        }
+      }
+    }
+  end
+
+  def check_for(
+    employments: [employment],
+    setting_name: "Oak Tree Nursery",
+    setting_postcode: "SW1A 1AA",
+    status: 200,
+    body: nil
+  )
+    setting = build(
+      :eligible_eytfi_provider,
+      name: setting_name,
+      postcode: setting_postcode
+    )
+    described_class.new(
+      setting: setting,
+      hmrc_response_status: status,
+      hmrc_response_body: body || {
+        "employments" => employments
+      }.to_json
+    )
+  end
+
+  describe ".earliest_date_to_check" do
+    it "looks back one calendar month, including across a year boundary" do
+      travel_to Time.zone.local(2026, 1, 15, 12) do
+        expect(
+          described_class.earliest_date_to_check
+        ).to eq(Date.new(2025, 12, 15))
+      end
+    end
+
+    it "uses the last available day when the previous month is shorter" do
+      travel_to Time.zone.local(2026, 3, 31, 12) do
+        expect(
+          described_class.earliest_date_to_check
+        ).to eq(Date.new(2026, 2, 28))
+      end
+    end
+  end
+
   describe "#passed?" do
-    it "does not pass a partial name match worth only 50 points" do
-      nursery = build(
-        :eligible_eytfi_provider,
-        name: "Springfield Nursery"
-      )
+    it "passes for identical names and postcodes" do
+      check = check_for
 
-      check = described_class.new(
-        setting: nursery,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: [
-            {
-              employer: {
-                name: "Springfield Childcare"
-              }
-            }
-          ]
-        }.to_json
-      )
-
-      expect(check.passed?).to eq(false)
+      expect(check.passed?).to be(true)
     end
 
-    it "does not pass 98 points from a partial name and all address lines and town" do
-      setting = build(
-        :eligible_eytfi_provider,
-        name: "Springfield Nursery",
-        address_line_1: "1 High Street",
-        address_line_2: "Village",
-        address_line_3: "District",
-        town: "Bristol"
+    it "normalizes case, whitespace, commas, hyphens and straight and curly apostrophes" do
+      check = check_for(
+        employments: [
+          employment(
+            name: "  OAK’S-TREE, Nursery  ",
+            postcode: " sw1a1aa "
+          )
+        ],
+        setting_name: "Oak'sTree Nursery"
       )
 
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: [
-            {
-              employer: {
-                name: "Springfield Childcare",
-                address: {
-                  line1: "1 HIGH STREET",
-                  line2: "Village",
-                  line3: "District",
-                  line4: "Bristol"
-                }
-              }
-            }
-          ]
-        }.to_json
-      )
-
-      expect(check.passed?).to eq(false)
+      expect(check.passed?).to be(true)
     end
 
-    it "does not pass matching addresses when the names do not match" do
-      setting = build(
-        :eligible_eytfi_provider,
-        name: "Springfield Nursery",
-        address_line_1: "1 High Street",
-        address_line_2: "Village",
-        address_line_3: "District",
-        town: "Bristol"
+    it "removes all ignored words and the optional full stop" do
+      check = check_for(
+        employments: [
+          employment(
+            name: "Private Oak Day Tree Preschool Nursery Limited Ltd."
+          )
+        ]
       )
 
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: [
-            {
-              employer: {
-                name: "Other Nursery",
-                address: {
-                  line1: "1 High Street",
-                  line2: "Village",
-                  line3: "District",
-                  line4: "Bristol",
-                  postcode: setting.postcode
-                }
-              }
-            }
-          ]
-        }.to_json
-      )
-
-      expect(check.passed?).to eq(false)
+      expect(check.passed?).to be(true)
     end
 
-    it "normalizes case and punctuation in postcode comparisons" do
-      setting = build(
-        :eligible_eytfi_provider,
-        name: "Springfield Nursery",
-        postcode: "EC1N 2TD"
+    it "expands ampersands to and" do
+      check = check_for(
+        employments: [
+          employment(
+            name: "Oak & Tree Nursery"
+          )
+        ],
+        setting_name: "Oak and Tree Nursery"
       )
 
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: [
-            {
-              employer: {
-                name: "Springfield Childcare",
-                address: {
-                  postcode: " ec1n 2td.,- "
-                }
-              }
-            }
-          ]
-        }.to_json
-      )
-
-      expect(check.passed?).to eq(true)
+      expect(check.passed?).to be(true)
     end
 
-    it "does not combine scores from different employments" do
-      setting = build(
-        :eligible_eytfi_provider,
-        name: "Springfield Nursery"
+    it "expands at signs to at" do
+      check = check_for(
+        employments: [
+          employment(
+            name: "Oak @ Tree Nursery"
+          )
+        ],
+        setting_name: "Oak at Tree Nursery"
       )
 
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: [
-            {
-              employer: {
-                name: "Springfield Childcare"
-              }
-            },
-            {
-              employer: {
-                name: "Springfield Group"
-              }
-            }
-          ]
-        }.to_json
-      )
-
-      expect(check.passed?).to eq(false)
+      expect(check.passed?).to be(true)
     end
 
-    it "passes an exact name match without address or employment dates" do
-      setting = build(
-        :eligible_eytfi_provider,
-        name: "Springfield Nursery"
+    it "does not remove ignored words embedded in other words" do
+      check = check_for(
+        employments: [
+          employment(
+            name: "Daylight Nursery"
+          )
+        ],
+        setting_name: "Light Nursery"
       )
 
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: [
-            {
-              employer: {
-                name: "Springfield Nursery"
-              }
-            }
-          ]
-        }.to_json
-      )
-
-      expect(check.passed?).to eq(true)
+      expect(check.passed?).to be(false)
     end
 
-    it "ignores case, surrounding spaces and Ltd. in names" do
-      setting = build(
-        :eligible_eytfi_provider,
-        name: "  SPRINGFIELD Nursery Ltd.  "
+    it "passes at exactly the two thirds similarity threshold" do
+      check = check_for(
+        employments: [
+          employment(
+            name: "Oak"
+          )
+        ]
       )
 
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: [
-            {
-              employer: {
-                name: "springfield nursery"
-              }
-            }
-          ]
-        }.to_json
-      )
-
-      expect(check.passed?).to eq(true)
+      expect(check.passed?).to be(true)
     end
 
-    it "removes Ltd from company names" do
-      setting = build(
-        :eligible_eytfi_provider,
-        name: "Springfield Nursery Ltd"
+    it "rejects a name below the similarity threshold" do
+      check = check_for(
+        employments: [
+          employment(
+            name: "Oak Red Blue"
+          )
+        ]
       )
 
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: [
-            {
-              employer: {
-                name: "Springfield Nursery"
-              }
-            }
-          ]
-        }.to_json
-      )
-
-      expect(check.passed?).to eq(true)
+      expect(check.passed?).to be(false)
     end
 
-    it "removes Limited from company names" do
-      setting = build(
-        :eligible_eytfi_provider,
-        name: "Springfield Nursery"
+    it "finds a shared subsequence across intervening words" do
+      check = check_for(
+        employments: [
+          employment(
+            name: "Red Oak Blue Tree"
+          )
+        ]
       )
 
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: [
-            {
-              employer: {
-                name: "Springfield Nursery Limited"
-              }
-            }
-          ]
-        }.to_json
-      )
-
-      expect(check.passed?).to eq(true)
+      expect(check.passed?).to be(true)
     end
 
-    it "passes at 100 points when the postcode matches and the employer name contains the setting name's first word" do
-      setting = build(
-        :eligible_eytfi_provider,
-        name: "Springfield Nursery",
-        postcode: "EC1N 2TD"
+    it "rejects names with no shared words" do
+      check = check_for(
+        employments: [
+          employment(
+            name: "Willow Grove Nursery"
+          )
+        ]
       )
 
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: [
-            {
-              employer: {
-                name: "The Springfield Childcare Group",
-                address: {
-                  postcode: "EC1N 2TD"
-                }
-              }
-            }
-          ]
-        }.to_json
-      )
-
-      expect(check.passed?).to eq(true)
+      expect(check.passed?).to be(false)
     end
 
-    it "passes at 100 points when the postcode matches and the setting name contains the employer name's first word" do
-      setting = build(
-        :eligible_eytfi_provider,
-        name: "The Springfield Nursery",
-        postcode: "EC1N 2TD"
-      )
-
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: [
-            {
-              employer: {
-                name: "Springfield Childcare",
-                address: {
-                  postcode: "EC1N 2TD"
-                }
-              }
-            }
-          ]
-        }.to_json
-      )
-
-      expect(check.passed?).to eq(true)
-    end
-
-    it "matches first words as substrings as in the VB rules" do
-      setting = build(
-        :eligible_eytfi_provider,
-        name: "Spring Nursery"
-      )
-
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: [
-            {
-              employer: {
-                name: "Springfield Childcare",
-                address: {
-                  postcode: "EC1N 2TD"
-                }
-              }
-            }
-          ]
-        }.to_json
-      )
-
-      expect(check.passed?).to eq(true)
-    end
-
-    it "does not match names that share only a later word" do
-      setting = build(
-        :eligible_eytfi_provider,
-        name: "Springfield Nursery"
-      )
-
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: [
-            {
-              employer: {
-                name: "Other Nursery"
-              }
-            }
-          ]
-        }.to_json
-      )
-
-      expect(check.passed?).to eq(false)
-    end
-
-    it "does not pass a blank setting name" do
-      setting = build(
-        :eligible_eytfi_provider,
-        name: "  "
-      )
-
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: [
-            {
-              employer: {
-                name: "Springfield Nursery"
-              }
-            }
-          ]
-        }.to_json
-      )
-
-      expect(check.passed?).to eq(false)
-    end
-
-    it "does not match a setting name consisting only of a company suffix" do
-      setting = build(
-        :eligible_eytfi_provider,
-        name: "Limited"
-      )
-
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: [
-            {
-              employer: {
-                name: "Springfield Nursery"
-              }
-            }
-          ]
-        }.to_json
-      )
-
-      expect(check.passed?).to eq(false)
-    end
-
-    it "does not match an employer name consisting only of a company suffix" do
-      setting = build(
-        :eligible_eytfi_provider,
-        name: "Springfield Nursery"
-      )
-
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: [
-            {
-              employer: {
-                name: "Ltd."
-              }
-            }
-          ]
-        }.to_json
-      )
-
-      expect(check.passed?).to eq(false)
-    end
-
-    it "does not pass an unsuccessful response even when the employer matches" do
-      setting = build(
-        :eligible_eytfi_provider,
-        name: "Springfield Nursery"
-      )
-
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 500,
-        hmrc_response_body: {
-          employments: [
-            {
-              employer: {
-                name: setting.name
-              }
-            }
-          ]
-        }.to_json
-      )
-
-      expect(check.passed?).to eq(false)
-    end
-
-    it "does not pass invalid JSON" do
-      setting = build(
-        :eligible_eytfi_provider
-      )
-
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: "not JSON"
-      )
-
-      expect(check.passed?).to eq(false)
-    end
-
-    it "does not pass a missing response body" do
-      setting = build(
-        :eligible_eytfi_provider
-      )
-
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: nil
-      )
-
-      expect(check.passed?).to eq(false)
-    end
-
-    it "does not pass an empty employment history" do
-      setting = build(
-        :eligible_eytfi_provider
-      )
-
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: []
-        }.to_json
-      )
-
-      expect(check.passed?).to eq(false)
-    end
-
-    it "does not pass a response without an employments array" do
-      setting = build(
-        :eligible_eytfi_provider
-      )
-
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: {
-            employer: {
-              name: "Springfield Nursery"
+    it "rejects a missing postcode" do
+      check = check_for(
+        employments: [
+          {
+            "employer" => {
+              "name" => "Oak Tree Nursery",
+              "address" => {}
             }
           }
-        }.to_json
+        ]
       )
 
-      expect(check.passed?).to eq(false)
+      expect(check.passed?).to be(false)
     end
 
-    it "rejects malformed employment records even alongside a matching employer" do
-      setting = build(
-        :eligible_eytfi_provider,
-        name: "Springfield Nursery"
+    it "rejects a missing address" do
+      check = check_for(
+        employments: [
+          {
+            "employer" => {
+              "name" => "Oak Tree Nursery"
+            }
+          }
+        ]
       )
 
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: [
-            {
-              employer: {
-                name: setting.name
-              }
-            },
-            {
-              employer: nil
+      expect(check.passed?).to be(false)
+    end
+
+    it "rejects a null postcode" do
+      check = check_for(
+        employments: [
+          employment(
+            postcode: nil
+          )
+        ]
+      )
+
+      expect(check.passed?).to be(false)
+    end
+
+    it "rejects a whitespace only postcode" do
+      check = check_for(
+        employments: [
+          employment(
+            postcode: "  "
+          )
+        ]
+      )
+
+      expect(check.passed?).to be(false)
+    end
+
+    it "passes when a later employment matches" do
+      check = check_for(
+        employments: [
+          employment(
+            name: "Willow Grove"
+          ),
+          employment
+        ]
+      )
+
+      expect(check.passed?).to be(true)
+    end
+
+    it "rejects when no employment matches" do
+      check = check_for(
+        employments: [
+          employment(
+            name: "Willow Grove"
+          ),
+          employment(
+            name: "Elm House"
+          )
+        ]
+      )
+
+      expect(check.passed?).to be(false)
+    end
+
+    it "does not combine name words across employments" do
+      check = check_for(
+        employments: [
+          employment(
+            name: "Oak Red Blue"
+          ),
+          employment(
+            name: "Tree Green Yellow"
+          )
+        ]
+      )
+
+      expect(check.passed?).to be(false)
+    end
+
+    it "does not inspect employment dates in the returned history" do
+      check = check_for(
+        employments: [
+          employment.merge(
+            "employment" => {
+              "startDate" => "2000-01-01",
+              "endDate" => "2000-02-01"
             }
-          ]
+          )
+        ]
+      )
+
+      expect(check.passed?).to be(true)
+    end
+
+    it "rejects an empty employment history" do
+      check = check_for(
+        employments: []
+      )
+
+      expect(check.passed?).to be(false)
+    end
+
+    it "rejects an unsuccessful response even when its body matches" do
+      check = check_for(
+        status: 500
+      )
+
+      expect(check.passed?).to be(false)
+    end
+
+    it "rejects a response whose status has not arrived" do
+      check = check_for(
+        status: nil
+      )
+
+      expect(check.passed?).to be(false)
+    end
+
+    it "rejects malformed JSON" do
+      check = check_for(
+        body: "{"
+      )
+
+      expect(check.passed?).to be(false)
+    end
+
+    it "rejects a blank response body" do
+      check = check_for(
+        body: ""
+      )
+
+      expect(check.passed?).to be(false)
+    end
+
+    it "rejects a JSON array at the top level" do
+      check = check_for(
+        body: "[]"
+      )
+
+      expect(check.passed?).to be(false)
+    end
+
+    it "rejects JSON null" do
+      check = check_for(
+        body: "null"
+      )
+
+      expect(check.passed?).to be(false)
+    end
+
+    it "rejects a missing employments key" do
+      check = check_for(
+        body: "{}"
+      )
+
+      expect(check.passed?).to be(false)
+    end
+
+    it "rejects employments that is not an array" do
+      check = check_for(
+        body: {
+          "employments" => {}
         }.to_json
       )
 
-      expect(check.passed?).to eq(false)
+      expect(check.passed?).to be(false)
+    end
+
+    it "rejects an employment that is not an object" do
+      check = check_for(
+        employments: [
+          nil
+        ]
+      )
+
+      expect(check.passed?).to be(false)
+    end
+
+    it "rejects a missing employer" do
+      check = check_for(
+        employments: [
+          {}
+        ]
+      )
+
+      expect(check.passed?).to be(false)
+    end
+
+    it "rejects an employer that is not an object" do
+      check = check_for(
+        employments: [
+          {
+            "employer" => "Oak Tree Nursery"
+          }
+        ]
+      )
+
+      expect(check.passed?).to be(false)
+    end
+
+    it "rejects a missing employer name" do
+      check = check_for(
+        employments: [
+          {
+            "employer" => {
+              "address" => {
+                "postcode" => "SW1A 1AA"
+              }
+            }
+          }
+        ]
+      )
+
+      expect(check.passed?).to be(false)
+    end
+
+    it "rejects a nonstring employer name" do
+      check = check_for(
+        employments: [
+          employment(
+            name: 123
+          )
+        ]
+      )
+
+      expect(check.passed?).to be(false)
+    end
+
+    it "rejects a blank employer name" do
+      check = check_for(
+        employments: [
+          employment(
+            name: "  "
+          )
+        ]
+      )
+
+      expect(check.passed?).to be(false)
     end
   end
 
   describe "#employer_names" do
-    it "preserves the original employer names for admin notes" do
-      setting = build(
-        :eligible_eytfi_provider
+    it "returns names in the order supplied by HMRC" do
+      check = check_for(
+        employments: [
+          employment(
+            name: "Oak Ltd"
+          ),
+          employment(
+            name: "Willow Ltd"
+          )
+        ]
       )
 
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: [
-            {
-              employer: {
-                name: "SPRINGFIELD Nursery Ltd."
-              }
-            },
-            {
-              employer: {
-                name: "Other Nursery Limited"
-              }
-            }
-          ]
-        }.to_json
+      expect(check.employer_names).to eq(["Oak Ltd", "Willow Ltd"])
+    end
+
+    it "returns no names for an invalid response" do
+      check = check_for(
+        body: "invalid"
       )
 
-      expect(check.employer_names).to eq(["SPRINGFIELD Nursery Ltd.", "Other Nursery Limited"])
+      expect(check.employer_names).to eq([])
     end
   end
 
-  describe "pathological matching outcomes" do
-    it "passes an exact name match with repeated whitespace even without an address" do
-      setting = build(
-        :eligible_eytfi_provider,
-        name: "Little Acorns Nursery"
+  describe "adversarial examples documenting current behavior" do
+    it "rejects identical names made entirely of ignored words" do
+      check = check_for(
+        setting_name: "Private Day Nursery Ltd",
+        employments: [
+          employment(
+            name: "Private Day Nursery Ltd"
+          )
+        ]
       )
 
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: [
-            {
-              employer: {
-                name: "Little  Acorns\tNursery Limited"
-              }
-            }
-          ]
-        }.to_json
-      )
-
-      expect(check.passed?).to eq(true)
+      expect(check.passed?).to be(false)
     end
 
-    it "passes a partial name match when the postcode differs only in whitespace" do
-      setting = build(
-        :eligible_eytfi_provider,
-        name: "Little Acorns Nursery",
-        postcode: "BS8 1AA"
+    it "rejects the same two meaningful words in reversed order" do
+      check = check_for(
+        employments: [
+          employment(
+            name: "Tree Oak Nursery"
+          )
+        ]
       )
 
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: [
-            {
-              employer: {
-                name: "Little Acorns Childcare",
-                address: {
-                  postcode: "BS81AA"
-                }
-              }
-            }
-          ]
-        }.to_json
-      )
-
-      expect(check.passed?).to eq(true)
+      expect(check.passed?).to be(false)
     end
 
-    it "passes the correct nursery when only name and postcode spacing differ" do
-      setting = build(
-        :eligible_eytfi_provider,
-        name: "Little Acorns Nursery",
-        address_line_1: "1 High Street",
-        address_line_2: "Clifton",
-        address_line_3: "Avon",
-        town: "Bristol",
-        postcode: "BS8 1AA"
+    it "passes a different branch name when two of three meaningful words agree" do
+      check = check_for(
+        setting_name: "Oak Tree North Nursery",
+        employments: [
+          employment(
+            name: "Oak Tree South Nursery"
+          )
+        ]
       )
 
-      check = described_class.new(
-        setting: setting,
-        hmrc_response_status: 200,
-        hmrc_response_body: {
-          employments: [
-            {
-              employer: {
-                name: "Little  Acorns Nursery",
-                address: {
-                  line1: "1 High Street",
-                  line2: "Clifton",
-                  line3: "Avon",
-                  line4: "Bristol",
-                  postcode: "BS81AA"
-                }
-              }
+      expect(check.passed?).to be(true)
+    end
+
+    it "rejects repeated words that dilute an otherwise identical name" do
+      check = check_for(
+        employments: [
+          employment(
+            name: "Oak Oak Oak Oak Tree Nursery"
+          )
+        ]
+      )
+
+      expect(check.passed?).to be(false)
+    end
+
+    it "rejects a full stop on a meaningful word" do
+      check = check_for(
+        setting_name: "Oak Nursery",
+        employments: [
+          employment(
+            name: "Oak. Nursery"
+          )
+        ]
+      )
+
+      expect(check.passed?).to be(false)
+    end
+
+    it "rejects a hyphen used as a word separator because it joins the words" do
+      check = check_for(
+        employments: [
+          employment(
+            name: "Oak-Tree Nursery"
+          )
+        ]
+      )
+
+      expect(check.passed?).to be(false)
+    end
+
+    it "rejects a valid matching employment when another entry is malformed" do
+      check = check_for(
+        employments: [
+          employment,
+          {
+            "employer" => {
+              "name" => nil
             }
-          ]
-        }.to_json
+          }
+        ]
       )
 
-      expect(check.passed?).to eq(true)
+      expect(check.passed?).to be(false)
     end
   end
 end
