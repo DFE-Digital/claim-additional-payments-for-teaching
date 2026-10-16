@@ -46,7 +46,7 @@ module FurtherEducationPayments
 
           def eligible_academic_years
             Policies::FurtherEducationPayments
-              .selectable_teaching_start_academic_years(AcademicYear.current)
+              .selectable_teaching_start_academic_years(Journeys::FurtherEducationPayments.configuration.current_academic_year)
           end
 
           def before_year

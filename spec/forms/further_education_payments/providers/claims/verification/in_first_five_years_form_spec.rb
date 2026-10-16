@@ -1,6 +1,13 @@
 require "rails_helper"
 
 RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::InFirstFiveYearsForm, type: :model do
+  let!(:journey_configuration) do
+    create(
+      :journey_configuration,
+      :further_education_payments
+    )
+  end
+
   let(:fe_provider) do
     create(:school, :fe_eligible, name: "Springfield College")
   end
