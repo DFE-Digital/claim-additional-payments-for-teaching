@@ -122,6 +122,15 @@ Rails.application.routes.draw do
       get "auth/failure", to: "journeys/early_years_teachers_financial_incentive_payments/auth#failure"
     end
 
+    scope constraints: {journey: "targeted-retention-incentive-payments"} do
+      if TeacherAuth::SchoolConfig.instance.bypass? || Rails.env.test?
+        post "bypass-auth/teacher_school", to: "journeys/school_targeted_retention_incentive_payments/bypass_auth#callback"
+      end
+
+      get "auth/teacher_school/callback", to: "journeys/school_targeted_retention_incentive_payments/auth#callback"
+      get "auth/failure", to: "journeys/school_targeted_retention_incentive_payments/auth#failure"
+    end
+
     scope path: "/", constraints: {journey: Regexp.new(Journeys.all.map(&:routing_name).join("|"))} do
       get "landing-page", to: "static_pages#landing_page", as: :landing_page
     end

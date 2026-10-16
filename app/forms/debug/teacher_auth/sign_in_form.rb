@@ -1,5 +1,3 @@
-require "faker"
-
 module Debug
   module TeacherAuth
     class SignInForm < Form
