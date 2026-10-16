@@ -1,13 +1,15 @@
 module Journeys
   module EarlyYearsTeachersFinancialIncentivePayments
     class EmploymentCheck
-      PASSING_SCORE = 100
-      ADDRESS_SCORES = {
-        town: ["line4", 25],
-        address_line_3: ["line3", 10],
-        address_line_2: ["line2", 8],
-        address_line_1: ["line1", 5]
-      }.freeze
+      SIMILARITY_THRESHOLD = 2.0 / 3.0
+      IGNORED_WORDS = %w[
+        ltd
+        limited
+        private
+        nursery
+        day
+        preschool
+      ].join("|")
 
       def self.earliest_date_to_check
         1.month.ago.to_date
@@ -21,7 +23,7 @@ module Journeys
 
       def passed?
         employments.any? do |employment|
-          match_score(employment.fetch("employer")) >= PASSING_SCORE
+          setting_employer?(employment.fetch("employer"))
         end
       end
 
@@ -33,51 +35,93 @@ module Journeys
 
       attr_reader :setting, :hmrc_response_status, :hmrc_response_body
 
-      def match_score(employer)
-        score = name_score(employer.fetch("name"))
-        return 0 if score.zero?
+      def setting_employer?(employer)
+        address = employer.fetch("address", {})
+        postcode = address.fetch("postcode", nil)
+        employer_name = employer.fetch("name", nil)
 
-        address = employer["address"]
-        return score unless address.is_a?(Hash)
+        return false unless postcode.present?
+        return false unless employer_name.present?
 
-        postcode = clean_postcode(address["postcode"])
-        score += 50 if postcode.present? && postcode == clean_postcode(setting.postcode)
+        # If postcodes don't match we can't rely on name checking as they could
+        # be two separate nurseries with the same name
+        return false unless clean_postcode(postcode) == clean_postcode(setting.postcode)
 
-        ADDRESS_SCORES.each do |part, (line, points)|
-          score += points if partial_text_match?(address[line], setting.public_send(part))
-        end
-
-        score
+        similarity(
+          clean_company_name(employer_name).split,
+          clean_company_name(setting.name).split
+        ) >= SIMILARITY_THRESHOLD
       end
 
-      def name_score(employer_name)
-        setting_name = clean_company_name(setting.name)
-        employer_name = clean_company_name(employer_name)
+      def similarity(words_1, words_2)
+        return 0.0 if words_1.empty? || words_2.empty?
 
-        return 0 if setting_name.empty? || employer_name.empty?
-        return 100 if setting_name == employer_name
+        m = words_1.length
+        n = words_2.length
 
-        setting_first_word = setting_name.split(" ").first
-        employer_first_word = employer_name.split(" ").first
+        # Build a table where dp[i][j] represents the length of the
+        # longest common subsequence between:
+        #
+        #   - The first i words of words_1
+        #   - The first j words of words_2
+        #
+        # We need an extra row and column to represent empty sequences.
+        # These are initialised to zero, since an empty sequence cannot
+        # have any matching words.
+        dp = Array.new(m + 1) { Array.new(n + 1, 0) }
 
-        employer_name_match_setting = employer_name.include?(setting_first_word)
-        setting_name_match_employer = setting_name.include?(employer_first_word)
-
-        if employer_name_match_setting || setting_name_match_employer
-          50
-        else
-          0
+        # Compare every word in words_1 against every word in words_2.
+        #
+        # We start at 1 because row 0 and column 0 represent empty sequences.
+        (1..m).each do |i|
+          (1..n).each do |j|
+            dp[i][j] = if words_1[i - 1] == words_2[j - 1]
+              # The words match!
+              #
+              # Extend the longest common subsequence found before these
+              # two words by one.
+              #
+              # dp[i - 1][j - 1] is the result for both sequences
+              # excluding their current words.
+              dp[i - 1][j - 1] + 1
+            else
+              # The words don't match.
+              #
+              # Try skipping the current word from either sequence:
+              #
+              # dp[i - 1][j] - Skip the current word in words_1
+              # dp[i][j - 1] - Skip the current word in words_2
+              #
+              # Keep whichever gives us the longest subsequence.
+              [dp[i - 1][j], dp[i][j - 1]].max
+            end
+          end
         end
-      end
 
-      def partial_text_match?(first, second)
-        first = clean_text(first)
-        second = clean_text(second)
-        first.present? && second.present? && (first.include?(second) || second.include?(first))
+        # The bottom-right cell contains the length of the longest
+        # common subsequence across both complete arrays.
+        lcs_length = dp[m][n]
+
+        # Normalise the result to a similarity score between 0 and 1.
+        #
+        # Using the sum of both lengths ensures:
+        # - Identical arrays score 1.0
+        # - Arrays with no matching words score 0.0
+        # - Extra/missing words reduce the score proportionally
+        2.0 * lcs_length / (m + n)
       end
 
       def clean_text(value)
-        value.is_a?(String) ? value.downcase.strip.delete(",.-") : ""
+        value
+          .to_s
+          .downcase
+          .strip
+          .remove(",")
+          .remove(",")
+          .remove("-")
+          .remove("'")
+          .remove("’")
+          .squish
       end
 
       def clean_postcode(value)
@@ -85,13 +129,10 @@ module Journeys
       end
 
       def clean_company_name(name)
-        name
-          .to_s
-          .downcase
-          .remove("ltd.")
-          .remove("ltd")
-          .remove("limited")
-          .squish
+        clean_text(name)
+          .gsub(/\b(?:#{IGNORED_WORDS})\b\.?/o, "")
+          .gsub("@", "at")
+          .gsub("&", "and")
       end
 
       def employments

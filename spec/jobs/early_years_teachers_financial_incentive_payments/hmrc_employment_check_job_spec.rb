@@ -1281,7 +1281,10 @@ RSpec.describe(
         employments = [
           {
             employer: {
-              name: "Springfield nursery"
+              name: "Springfield nursery",
+              address: {
+                postcode: nursery.postcode
+              }
             }
           }
         ]
@@ -1381,7 +1384,10 @@ RSpec.describe(
             startDate: "2026-01-01",
             endDate: "2026-09-01",
             employer: {
-              name: "Springfield nursery"
+              name: "Springfield nursery",
+              address: {
+                postcode: nursery.postcode
+              }
             }
           }
         ]
