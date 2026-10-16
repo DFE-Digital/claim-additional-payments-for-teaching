@@ -230,6 +230,10 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
       expect(page).to have_content "Employment evidence uploaded by claimant"
       expect(page).to have_content "employment_proof.pdf"
 
+      expect(page).to have_content(
+        "Unable to match HMRC records due to a technical error"
+      )
+
       within ".hmcts-timeline" do
         expect(page).to have_content "HMRC API STATUS: Error"
         expect(page).to have_content "HMRC EMPLOYMENTS: []"
@@ -385,6 +389,10 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
       expect(page).not_to have_content "Employment verified by HMRC"
       expect(page).to have_content "Employment evidence uploaded by claimant"
       expect(page).to have_content "employment_proof.pdf"
+
+      expect(page).to have_content(
+        "The user selected a nursery that does not match HMRC records."
+      )
 
       within ".hmcts-timeline" do
         expect(page).to have_content "HMRC API STATUS: Success"
@@ -769,31 +777,8 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
           "Authorization" => "Bearer abc123"
         }
       ).to_return(
-        status: 200,
-        body: {
-          "_links" => {
-            "individual" => {
-              "href" => "individuals/matching/67890"
-            }
-          }
-        }.to_json
-      )
-
-      stub_request(
-        :get,
-        "https://test-api.service.hmrc.gov.uk/individuals/employments/paye?fromDate=2026-08-30&matchId=67890"
-      ).with(
-        headers: {
-          "Authorization" => "Bearer abc123"
-        }
-      ).to_return(
-        status: 200,
-        body: {
-          employments: []
-        }.to_json,
-        headers: {
-          "Content-Type" => "application/json"
-        }
+        status: 404,
+        body: ""
       )
 
       visit landing_page_path(
@@ -914,8 +899,10 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
       expect(page).to have_content "Employment evidence uploaded by claimant"
       expect(page).to have_content "employment_proof.pdf"
 
+      expect(page).to have_content "Claimant not found on HMRC."
+
       within ".hmcts-timeline" do
-        expect(page).to have_content "HMRC API STATUS: Success"
+        expect(page).to have_content "HMRC API STATUS: Claimant not found"
         expect(page).to have_content "HMRC EMPLOYMENTS: []"
       end
     end

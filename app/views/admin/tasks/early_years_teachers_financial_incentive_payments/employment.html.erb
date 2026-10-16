@@ -29,6 +29,16 @@
         <%= l(@claim.submitted_at.to_date, format: :day_month_year) %>
       </p>
     <% else %>
+      <p class="govuk-body">
+        <% if @claim.eligibility.hmrc_employment_check_errored? %>
+          Unable to match HMRC records due to a technical error.
+        <% elsif @claim.eligibility.hmrc_employment_check_not_found? %>
+          Claimant not found on HMRC.
+        <% else %>
+          The user selected a nursery that does not match HMRC records.
+        <% end %>
+      </p>
+
       <%= render(
         partial: "admin/tasks/early_years_teachers_financial_incentive_payments/employment_proof",
         locals: { claim: @claim }
