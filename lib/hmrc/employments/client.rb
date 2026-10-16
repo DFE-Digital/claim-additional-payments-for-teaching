@@ -112,6 +112,7 @@ module Hmrc
       def oauth_token_request_payload
         {
           grant_type: "client_credentials",
+          scope: "assigned",
           client_id: client_id,
           client_secret: oauth_client_secret
         }
