@@ -15,6 +15,14 @@ RSpec.describe Journeys::FurtherEducationPayments::FixedTermContractForm, type: 
     )
   end
 
+  before do
+    create(
+      :journey_configuration,
+      :further_education_payments,
+      current_academic_year: AcademicYear.new(2024)
+    )
+  end
+
   subject do
     described_class.new(
       journey_session:,
