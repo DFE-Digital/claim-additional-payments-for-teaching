@@ -49,7 +49,7 @@ RSpec.feature "EYTFI hmrc journeys", feature_flag: [:eytfi_journey] do
       :early_years_teachers_financial_incentive_payments
     )
 
-    create(:eligible_eytfi_provider, name: "Springfield nursery")
+    create(:eligible_eytfi_provider, name: "Springfield nursery", postcode: "DH4 4YY")
 
     create(:eligible_eytfi_provider, name: "Other nursery")
 
