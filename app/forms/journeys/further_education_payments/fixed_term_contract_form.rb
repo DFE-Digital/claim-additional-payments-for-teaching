@@ -36,7 +36,7 @@ module Journeys
       end
 
       def current_academic_year
-        @current_academic_year ||= AcademicYear.current.to_s(:long)
+        @current_academic_year ||= journey.configuration.current_academic_year.to_s(:long)
       end
     end
   end
