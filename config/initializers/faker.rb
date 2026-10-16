@@ -1,3 +1,3 @@
 require "faker"
 
-Faker::Config.locale = "en-GB"
+Faker::Config.default_locale = "en-GB"
