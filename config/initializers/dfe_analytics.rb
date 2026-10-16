@@ -2,7 +2,7 @@ DfE::Analytics.configure do |config|
   # Whether to log events instead of sending them to BigQuery.
   #
   # config.log_only = true
-  config.log_only = (%w[development test].include?(ENV["RAILS_ENV"]) || ENV["ENVIRONMENT_NAME"].start_with?("review") || ENV["ENVIRONMENT_NAME"] == "staging")
+  config.log_only = (%w[development test].include?(ENV["RAILS_ENV"]) || ENV["ENVIRONMENT_NAME"] == "staging")
 
   # Whether to use ActiveJob or dispatch events immediately.
   #
@@ -41,7 +41,7 @@ DfE::Analytics.configure do |config|
   # enable analytics. You might want to hook this up to a feature flag or
   # environment variable.
   #
-  config.enable_analytics = proc { Rails.env.production? }
+  config.enable_analytics = proc { Rails.env.production? || ENV["ENVIRONMENT_NAME"].start_with?("review") }
 
   # Enable entity table check job
   #
@@ -56,4 +56,7 @@ DfE::Analytics.configure do |config|
 
   # Allow sending soft deleted records - e.g. EligibleEyProvider
   config.ignore_default_scope = true
+
+  # Perform airbyte checks on startup and allow airbyte config generation
+  config.airbyte_enabled = Rails.env.in?(%w[review]) && ENV["BIGQUERY_AIRBYTE_DATASET"].present?
 end
