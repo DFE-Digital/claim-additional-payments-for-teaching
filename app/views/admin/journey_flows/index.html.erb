@@ -1,0 +1,19 @@
+<% content_for(:page_title) { page_title("Journey flows") } %>
+
+<p class="govuk-body">
+  <%= link_to "Back", root_path, class: "govuk-back-link" %>
+</p>
+
+<h1 class="govuk-heading-l">Journey flows</h1>
+
+<p class="govuk-body">
+  Select a customer journey below to view its flow.
+</p>
+
+<ul class="govuk-list govuk-list--bullet">
+  <% @journeys.each do |journey| %>
+    <li>
+      <%= link_to journey.full_name, admin_components_show_journey_flow_path(journey_key: journey.routing_name), class: "govuk-link govuk-link--no-visited-state" %>
+    </li>
+  <% end %>
+</ul>

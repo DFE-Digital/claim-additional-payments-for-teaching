@@ -1,0 +1,29 @@
+<% content_for(:page_title) { page_title(@journey_name) } %>
+
+<p class="govuk-body">
+  <%= link_to "Back", admin_components_journey_flows_path, class: "govuk-back-link" %>
+</p>
+
+<h1 class="govuk-heading-l">Journey flow</h1>
+
+<h2 class="govuk-heading-m"><%= @journey_name %></h2>
+
+<p class="govuk-body">
+  This page shows the route for the selected journey and highlights the main decision points and end states.
+  It includes the key branches people may take through the journey, including cases where they are not eligible or end early.
+  It is intended to help developers and testers understand how the customer journey is structured in practice.
+</p>
+
+<div class="govuk-body">
+  <div class="journey-flow-container" data-journey-flow-rendered="svg">
+    <div class="journey-flow-controls" aria-label="Journey flow controls">
+      <button type="button" class="journey-flow-zoom-in" aria-label="Zoom in">+</button>
+      <button type="button" class="journey-flow-zoom-out" aria-label="Zoom out">−</button>
+      <button type="button" class="journey-flow-reset" aria-label="Reset view">Reset</button>
+    </div>
+
+    <div id="journey-flow-diagram" aria-label="Journey flow diagram" class="journey-flow-canvas">
+      <%= @journey_diagram %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+id: early-years-payment-provider-alternative-idv
+name: Early years financial incentive payment service - Provider alternative ID verification
+nodes:
+  - id: start
+    label: Start
+    type: start
+  - id: email_verification
+    label: Email verification
+    type: page
+  - id: claimant_employed_by_nursery
+    label: Claimant employed by nursery
+    type: page
+  - id: claimant_personal_details
+    label: Claimant personal details
+    type: page
+  - id: claimant_not_employed_by_nursery
+    label: Claimant not employed by nursery
+    type: end
+  - id: check_answers
+    label: Check answers
+    type: page
+  - id: confirmation
+    label: Confirmation
+    type: end
+  - id: ineligible
+    label: Ineligible
+    type: end
+
+edges:
+  - from: start
+    to: email_verification
+    label: begin
+  - from: email_verification
+    to: claimant_employed_by_nursery
+    label: email verified
+  - from: email_verification
+    to: claimant_employed_by_nursery
+    label: continue
+  - from: claimant_employed_by_nursery
+    to: claimant_not_employed_by_nursery
+    label: claimant_employed_by_nursery == false
+  - from: claimant_employed_by_nursery
+    to: claimant_personal_details
+    label: continue
+  - from: claimant_personal_details
+    to: check_answers
+    label: continue
+  - from: check_answers
+    to: confirmation
+    label: submit
+  - from: check_answers
+    to: ineligible
+    label: ineligible

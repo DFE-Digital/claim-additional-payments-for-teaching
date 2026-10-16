@@ -1,0 +1,200 @@
+id: get-a-teacher-relocation-payment
+name: Get a teacher relocation payment
+nodes:
+  - id: start
+    label: Start
+    type: start
+  - id: previous_payment_received
+    label: Previous payment received
+    type: page
+  - id: application_route
+    label: Application route
+    type: page
+  - id: state_funded_secondary_school
+    label: State funded secondary school
+    type: page
+  - id: current_school
+    label: Current school
+    type: page
+  - id: select_current_school
+    label: Select current school
+    type: page
+  - id: headteacher_details
+    label: Headteacher details
+    type: page
+  - id: contract_details
+    label: Contract details
+    type: page
+  - id: start_date
+    label: Start date
+    type: page
+  - id: subject
+    label: Subject
+    type: page
+  - id: changed_workplace_or_new_contract
+    label: Changed workplace or new contract
+    type: page
+  - id: breaks_in_employment
+    label: Breaks in employment
+    type: page
+  - id: visa
+    label: Visa
+    type: page
+  - id: entry_date
+    label: Entry date
+    type: page
+  - id: check_your_answers_part_one
+    label: Check your answers part one
+    type: page
+  - id: information_provided
+    label: Information provided
+    type: page
+  - id: nationality
+    label: Nationality
+    type: page
+  - id: passport_number
+    label: Passport number
+    type: page
+  - id: personal_details
+    label: Personal details
+    type: page
+  - id: postcode_search
+    label: Postcode search
+    type: page
+  - id: select_home_address
+    label: Select home address
+    type: page
+  - id: address
+    label: Address
+    type: page
+  - id: email_address
+    label: Email address
+    type: page
+  - id: email_verification
+    label: Email verification
+    type: page
+  - id: provide_mobile_number
+    label: Provide mobile number
+    type: page
+  - id: mobile_number
+    label: Mobile number
+    type: page
+  - id: mobile_verification
+    label: Mobile verification
+    type: page
+  - id: personal_bank_account
+    label: Personal bank account
+    type: page
+  - id: gender
+    label: Gender
+    type: page
+  - id: check_your_answers
+    label: Check your answers
+    type: page
+  - id: confirmation
+    label: Confirmation
+    type: end
+  - id: ineligible
+    label: Ineligible
+    type: end
+
+edges:
+  - from: start
+    to: previous_payment_received
+    label: begin
+  - from: previous_payment_received
+    to: application_route
+    label: continue
+  - from: application_route
+    to: state_funded_secondary_school
+    label: continue
+  - from: state_funded_secondary_school
+    to: current_school
+    label: continue
+  - from: current_school
+    to: select_current_school
+    label: continue
+  - from: select_current_school
+    to: headteacher_details
+    label: continue
+  - from: headteacher_details
+    to: contract_details
+    label: continue
+  - from: contract_details
+    to: start_date
+    label: continue
+  - from: start_date
+    to: subject
+    label: continue
+  - from: subject
+    to: changed_workplace_or_new_contract
+    label: continue
+  - from: changed_workplace_or_new_contract
+    to: breaks_in_employment
+    label: continue
+  - from: breaks_in_employment
+    to: visa
+    label: continue
+  - from: visa
+    to: entry_date
+    label: continue
+  - from: entry_date
+    to: check_your_answers_part_one
+    label: continue
+  - from: check_your_answers_part_one
+    to: information_provided
+    label: continue
+  - from: information_provided
+    to: nationality
+    label: continue
+  - from: nationality
+    to: passport_number
+    label: continue
+  - from: passport_number
+    to: personal_details
+    label: continue
+  - from: personal_details
+    to: postcode_search
+    label: continue
+  - from: postcode_search
+    to: select_home_address
+    label: postcode_searched
+  - from: postcode_search
+    to: address
+    label: postcode_not_searched
+  - from: select_home_address
+    to: email_address
+    label: continue
+  - from: address
+    to: email_address
+    label: continue
+  - from: email_address
+    to: email_verification
+    label: continue
+  - from: email_verification
+    to: provide_mobile_number
+    label: continue
+  - from: provide_mobile_number
+    to: mobile_number
+    label: phone_needed
+  - from: provide_mobile_number
+    to: mobile_verification
+    label: no_phone
+  - from: mobile_number
+    to: mobile_verification
+    label: continue
+  - from: mobile_verification
+    to: personal_bank_account
+    label: continue
+  - from: personal_bank_account
+    to: gender
+    label: continue
+  - from: gender
+    to: check_your_answers
+    label: continue
+  - from: check_your_answers
+    to: confirmation
+    label: submit
+  - from: check_your_answers
+    to: ineligible
+    label: ineligible
