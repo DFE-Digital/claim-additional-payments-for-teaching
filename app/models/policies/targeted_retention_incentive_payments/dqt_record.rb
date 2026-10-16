@@ -6,6 +6,8 @@ module Policies
 
       ELIGIBLE_CODES = ELIGIBLE_JAC_CODES | ELIGIBLE_HECOS_CODES
 
+      attr_reader :record, :answers
+
       delegate(
         :qts_award_date,
         :itt_subjects,
@@ -67,8 +69,6 @@ module Policies
       end
 
       private
-
-      attr_reader :record, :answers
 
       def itt_subject_none_of_the_above?
         eligible_itt_subject&.to_sym == :none_of_the_above
