@@ -6,12 +6,25 @@ RSpec.describe AutoApproveClaimsJob do
   describe "#perform" do
     subject(:run_job) { auto_approve_claims_job.perform }
 
+    before do
+      create(
+        :journey_configuration,
+        :student_loans,
+        current_academic_year:
+      )
+
+      create(
+        :journey_configuration,
+        :targeted_retention_incentive_payments,
+        current_academic_year:
+      )
+    end
+
     let(:current_academic_year) { AcademicYear.current }
     let(:previous_academic_year) { current_academic_year - 1 }
 
     let(:claims_awaiting_decision_current_ay) do
       create_list(:claim, 2, :submitted, academic_year: current_academic_year, policy: Policies::StudentLoans) +
-        create_list(:claim, 2, :submitted, academic_year: current_academic_year, policy: Policies::EarlyCareerPayments) +
         create_list(:claim, 2, :submitted, academic_year: current_academic_year, policy: Policies::TargetedRetentionIncentivePayments)
     end
     let(:claims_awaiting_decision_previous_ay) { create_list(:claim, 2, :submitted, academic_year: previous_academic_year, policy: Policies::StudentLoans) }
