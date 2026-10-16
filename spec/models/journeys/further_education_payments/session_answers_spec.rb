@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.describe Journeys::FurtherEducationPayments::SessionAnswers do
+  before do
+    create(:journey_configuration, :further_education_payments)
+  end
+
   subject { described_class.new(answers.attributes) }
 
   let(:school) { create(:school, :further_education, :fe_eligible) }

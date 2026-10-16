@@ -113,11 +113,12 @@ module Journeys
       end
 
       def calculate_award_amount
+        provider = school.eligible_fe_provider(academic_year: Journeys::FurtherEducationPayments.configuration.current_academic_year)
         case teaching_hours_per_week
         when "more_than_12", "more_than_20"
-          school.eligible_fe_provider.max_award_amount
+          provider.max_award_amount
         when "between_2_5_and_12"
-          school.eligible_fe_provider.lower_award_amount
+          provider.lower_award_amount
         else
           0
         end
@@ -130,7 +131,7 @@ module Journeys
       def previous_claim
         @previous_claim ||= Claim
           .by_policy(Policies::FurtherEducationPayments)
-          .current_academic_year
+          .by_academic_year(Journeys::FurtherEducationPayments.configuration.current_academic_year)
           .where.not(onelogin_uid: nil)
           .where.not(id: submitted_claim_id)
           .find_by(onelogin_uid: onelogin_uid)
