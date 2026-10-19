@@ -20,7 +20,7 @@ RSpec.describe Journeys::FurtherEducationPayments::SessionAnswers do
       end
 
       it "returns max award amount" do
-        expect(subject.calculate_award_amount).to eql(school.eligible_fe_provider.max_award_amount)
+        expect(subject.calculate_award_amount).to eql(school.eligible_fe_provider(academic_year: Journeys::FurtherEducationPayments.configuration.current_academic_year).max_award_amount)
       end
     end
 
@@ -34,7 +34,7 @@ RSpec.describe Journeys::FurtherEducationPayments::SessionAnswers do
       end
 
       it "returns max award amount" do
-        expect(subject.calculate_award_amount).to eql(school.eligible_fe_provider.max_award_amount)
+        expect(subject.calculate_award_amount).to eql(school.eligible_fe_provider(academic_year: Journeys::FurtherEducationPayments.configuration.current_academic_year).max_award_amount)
       end
     end
 
@@ -48,7 +48,7 @@ RSpec.describe Journeys::FurtherEducationPayments::SessionAnswers do
       end
 
       it "returns lower award amount" do
-        expect(subject.calculate_award_amount).to eql(school.eligible_fe_provider.lower_award_amount)
+        expect(subject.calculate_award_amount).to eql(school.eligible_fe_provider(academic_year: Journeys::FurtherEducationPayments.configuration.current_academic_year).lower_award_amount)
       end
     end
 

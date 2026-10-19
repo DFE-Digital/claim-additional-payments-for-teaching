@@ -5,7 +5,7 @@ RSpec.feature "Further education payments" do
 
   let(:school) { create(:school, :fe_eligible) }
   let(:college) { school }
-  let(:expected_award_amount) { college.eligible_fe_provider.max_award_amount }
+  let(:expected_award_amount) { college.eligible_fe_provider(academic_year: Journeys::FurtherEducationPayments.configuration.current_academic_year).max_award_amount }
 
   scenario "visiting impermissible slug redirects back to last permissible slug" do
     when_further_education_payments_journey_configuration_exists

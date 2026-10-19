@@ -4,7 +4,7 @@ RSpec.feature "Further education change answers" do
   include ActionView::Helpers::NumberHelper
 
   let(:college) { create(:school, :further_education, :fe_eligible) }
-  let(:expected_award_amount) { college.eligible_fe_provider.max_award_amount }
+  let(:expected_award_amount) { college.eligible_fe_provider(academic_year: Journeys::FurtherEducationPayments.configuration.current_academic_year).max_award_amount }
 
   scenario "without side effects redirects back to check answers" do
     when_student_loan_data_exists

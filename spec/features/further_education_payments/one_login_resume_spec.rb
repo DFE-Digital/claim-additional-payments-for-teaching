@@ -4,7 +4,7 @@ RSpec.feature "Further education payments" do
   include ActionView::Helpers::NumberHelper
 
   let(:college) { create(:school, :further_education, :fe_eligible) }
-  let(:expected_award_amount) { college.eligible_fe_provider.max_award_amount }
+  let(:expected_award_amount) { college.eligible_fe_provider(academic_year: Journeys::FurtherEducationPayments.configuration.current_academic_year).max_award_amount }
   let(:one_login_uid) { SecureRandom.uuid }
 
   scenario "has OL account with existing partial eligibility and continues" do
