@@ -71,6 +71,22 @@ bin/rails hmrc:sandbox:create_employments NINO=AA123456A \
   START_DATE=2025-09-01
 ```
 
+To include an employer address:
+
+```sh
+bin/rails hmrc:sandbox:create_employments NINO=AA123456A \
+  EMPLOYER_NAME='Example Nursery' PAYE_REFERENCE=123/AB456 \
+  START_DATE=2025-09-01 \
+  EMPLOYER_ADDRESS_LINE_1='10 Example Road' \
+  EMPLOYER_ADDRESS_LINE_2='Leeds' EMPLOYER_POSTCODE='LS1 1AA'
+```
+
+`EMPLOYER_ADDRESS_LINE_1` through `EMPLOYER_ADDRESS_LINE_5` and
+`EMPLOYER_POSTCODE` are optional, including when seeding employment through
+`create_user`. They populate `employer.address.line1` through `line5` and
+`employer.address.postcode`. Blank fields are omitted; supplying only a postcode
+is supported. With no address fields, the address object is omitted.
+
 For multiple employments, pass `EMPLOYMENTS_FILE=/path/to/employments.json` to
 either `create_user` or `create_employments`. This replaces the single-employment
 parameters and sends the supplied IF payload. For example:
@@ -85,7 +101,10 @@ parameters and sends the supplied IF payload. For example:
     },
     {
       "employerRef": "123/NEW",
-      "employer": {"name": "Example Nursery", "districtNumber": "123", "schemeRef": "NEW"},
+      "employer": {
+        "name": "Example Nursery", "districtNumber": "123", "schemeRef": "NEW",
+        "address": {"line1": "10 Example Road", "line2": "Leeds", "postcode": "LS1 1AA"}
+      },
       "employment": {"startDate": "2025-09-01"}
     }
   ]
