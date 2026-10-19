@@ -2,7 +2,10 @@ class FurtherEducationPaymentsMailer < ApplicationMailer
   def provider_verification_overdue_chaser_email
     eligibility = params[:eligibility]
 
-    provider_email = eligibility.school.eligible_fe_provider.primary_key_contact_email_address
+    provider_email = eligibility
+      .school
+      .eligible_fe_provider(academic_year: eligibility.claim.academic_year)
+      .primary_key_contact_email_address
     provider_name = eligibility.school.name
     claimant_name = eligibility.claim.full_name
     claim_reference = eligibility.claim.reference
