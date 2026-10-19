@@ -11,7 +11,7 @@ module AutomatedChecks
         return if claim.tasks.exists?(name: TASK_NAME)
 
         flag = Policies::FurtherEducationPayments::ProviderFlag.for(
-          claim.eligibility.school.eligible_fe_provider
+          claim.eligibility.school.eligible_fe_provider(academic_year: claim.academic_year)
         )
 
         if flag

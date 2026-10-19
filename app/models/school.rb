@@ -168,7 +168,7 @@ class School < ApplicationRecord
     SCHOOL_TYPES.invert[code]
   end
 
-  def eligible_fe_provider(academic_year: AcademicYear.current)
+  def eligible_fe_provider(academic_year:)
     Policies::FurtherEducationPayments::EligibleFeProvider
       .by_academic_year(academic_year)
       .where(ukprn:)
