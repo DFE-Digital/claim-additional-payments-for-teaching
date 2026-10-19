@@ -38,7 +38,7 @@ RSpec.describe Hmrc::Sandbox::Client do
     output = StringIO.new
     client = described_class.new(base_url: described_class::BASE_URL, client_id: "id", client_secret: "secret", totp_secret: nil, output: output)
     stub_request(:post, "#{described_class::BASE_URL}/oauth/token")
-      .with(body: {grant_type: "client_credentials", scope: "assigned", client_id: "id", client_secret: "secret"})
+      .with(body: {grant_type: "client_credentials", client_id: "id", client_secret: "secret"})
       .to_return(body: {access_token: "token", expires_in: 3600}.to_json)
     services = [{"key" => "national-insurance", "name" => "National Insurance", "allowedUserTypes" => ["INDIVIDUAL"]}]
     request = stub_request(:get, "#{described_class::BASE_URL}/create-test-user/services")
@@ -77,13 +77,13 @@ RSpec.describe Hmrc::Sandbox::Client do
     expect(output.string).to include("GET #{described_class::BASE_URL}/individuals/employments/paye?matchId=match-123&fromDate=2025-01-01 -> HTTP 200")
   end
 
-  it "prefixes the secret with an eight-digit SHA512 OTP and requests assigned scope when seeding employments" do
+  it "prefixes the secret with an eight-digit SHA512 OTP when seeding employments" do
     travel_to Time.utc(2026, 9, 30, 12) do
       secret = "JBSWY3DPEHPK3PXP"
       otp = ROTP::TOTP.new(secret, digits: 8, digest: "sha512", interval: 30).now
       client = described_class.new(base_url: described_class::BASE_URL, client_id: "id", client_secret: "secret", totp_secret: secret)
       token_request = stub_request(:post, "#{described_class::BASE_URL}/oauth/token")
-        .with(body: {grant_type: "client_credentials", scope: "assigned", client_id: "id", client_secret: "#{otp}secret"})
+        .with(body: {grant_type: "client_credentials", client_id: "id", client_secret: "#{otp}secret"})
         .to_return(body: {access_token: "token", expires_in: 3600}.to_json)
       employment_request = stub_request(:post, "#{described_class::BASE_URL}/individuals/integration-framework-test-support/individuals/employment/nino/AA123456A")
         .with(query: {useCase: "DFE"}, headers: {"Authorization" => "Bearer token"})
@@ -98,7 +98,7 @@ RSpec.describe Hmrc::Sandbox::Client do
   it "creates an individual with only National Insurance enrolment using application authentication" do
     client = described_class.new(base_url: described_class::BASE_URL, client_id: "id", client_secret: "secret", totp_secret: nil)
     token = stub_request(:post, "#{described_class::BASE_URL}/oauth/token")
-      .with(body: {grant_type: "client_credentials", scope: "assigned", client_id: "id", client_secret: "secret"})
+      .with(body: {grant_type: "client_credentials", client_id: "id", client_secret: "secret"})
       .to_return(body: {access_token: "token", expires_in: 3600}.to_json)
     request = stub_request(:post, "#{described_class::BASE_URL}/create-test-user/individuals")
       .with(body: {serviceNames: ["national-insurance"], nino: "AA123456A"}.to_json,

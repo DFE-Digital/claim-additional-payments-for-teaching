@@ -3,6 +3,43 @@ require "tmpdir"
 require Rails.root.join("lib/hmrc/sandbox/tasks")
 
 RSpec.describe Hmrc::Sandbox::Tasks do
+  it "includes all supplied employer address fields when creating employment" do
+    Dir.mktmpdir do |directory|
+      client = instance_double(Hmrc::Sandbox::Client)
+      expect(client).to receive(:create_employments) do |**arguments|
+        expect(arguments.fetch(:payload).dig("employments", 0, "employer", "address")).to eq(
+          "line1" => "Unit 23", "line2" => "Example Park", "line3" => "Leeds",
+          "line4" => "West Yorkshire", "line5" => "UK", "postcode" => "LS1 1AA"
+        )
+        arguments.fetch(:payload)
+      end
+      tasks = described_class.new(directory: directory, client: client, output: StringIO.new,
+        env: {"NINO" => "AA123456A", "EMPLOYER_NAME" => "Example Nursery", "PAYE_REFERENCE" => "123/ABC",
+              "START_DATE" => "2025-09-01", "EMPLOYER_ADDRESS_LINE_1" => "Unit 23",
+              "EMPLOYER_ADDRESS_LINE_2" => "Example Park", "EMPLOYER_ADDRESS_LINE_3" => "Leeds",
+              "EMPLOYER_ADDRESS_LINE_4" => "West Yorkshire", "EMPLOYER_ADDRESS_LINE_5" => "UK", "EMPLOYER_POSTCODE" => "LS1 1AA"})
+
+      tasks.create_employments
+    end
+  end
+
+  it "supports a postcode-only employer address when creating a user with employment" do
+    Dir.mktmpdir do |directory|
+      client = instance_double(Hmrc::Sandbox::Client)
+      expect(client).to receive(:create_user).and_return({"userId" => "123", "nino" => "AA123456A"})
+      expect(client).to receive(:create_employments) do |**arguments|
+        expect(arguments.fetch(:payload).dig("employments", 0, "employer", "address"))
+          .to eq("postcode" => "LS1 1AA")
+        arguments.fetch(:payload)
+      end
+      tasks = described_class.new(directory: directory, client: client, output: StringIO.new,
+        env: {"EMPLOYER_NAME" => "Example Nursery", "PAYE_REFERENCE" => "123/ABC", "START_DATE" => "2025-09-01",
+              "EMPLOYER_ADDRESS_LINE_1" => "", "EMPLOYER_ADDRESS_LINE_2" => " ", "EMPLOYER_POSTCODE" => "LS1 1AA"})
+
+      tasks.create_user
+    end
+  end
+
   it "matches supplied identity details without a saved user and prints the result" do
     client = instance_double(Hmrc::Sandbox::Client)
     output = StringIO.new

@@ -116,9 +116,16 @@ module Hmrc
 
         {"employments" => [{
           "employerRef" => reference,
-          "employer" => {"name" => name, "districtNumber" => reference.split("/").first, "schemeRef" => reference.split("/").last},
+          "employer" => {"name" => name, "districtNumber" => reference.split("/").first, "schemeRef" => reference.split("/").last,
+                         "address" => employer_address.presence}.compact,
           "employment" => {"startDate" => start_date, "endDate" => end_date}.compact
         }]}
+      end
+
+      def employer_address
+        address = (1..5).to_h { |number| ["line#{number}", env["EMPLOYER_ADDRESS_LINE_#{number}"].presence] }
+        address["postcode"] = env["EMPLOYER_POSTCODE"].presence
+        address.compact
       end
 
       def seed_employments(user, payload, from_date, to_date)
