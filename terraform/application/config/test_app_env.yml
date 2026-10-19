@@ -20,6 +20,8 @@ TEACHER_AUTH_CLIENT_ID: teacher-auth-client-id
 TEACHER_AUTH_SECRET: teacher-auth-secret
 TEACHER_AUTH_REDIRECT_BASE_URL: https://test.claim-additional-teaching-payment.service.gov.uk
 
+TEACHER_AUTH_SCHOOL_CLIENT_ID: tri
+
 DQT_API_URL: https://preprod.teacher-qualifications-api.education.gov.uk/v3/
 DQT_BASE_URL: https://test-api-customerengagement.platform.education.gov.uk/dqt-crm/v1/
 
