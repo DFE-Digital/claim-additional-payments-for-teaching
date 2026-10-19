@@ -158,8 +158,4 @@ locals {
   azure_storage_account_name = module.storage_private.name
   azure_storage_access_key   = module.storage_private.primary_access_key
   azure_storage_container    = module.storage_private.primary_blob_endpoint
-
-  BIGQUERY_AIRBYTE_DATASET = var.airbyte_enabled ? local.gcp_dataset_name : null
-  AIRBYTE_SERVER_URL       = var.airbyte_enabled ? "https://airbyte-${var.namespace}.${module.cluster_data.ingress_domain}" : null
-  BIGQUERY_POLICY_TAGS     = var.airbyte_enabled ? "{\"hidden\":\"projects/claim-additional-payments/locations/europe-west2/taxonomies/6035056991658002237/policyTags/5001017932158544163\"}" : null
 }

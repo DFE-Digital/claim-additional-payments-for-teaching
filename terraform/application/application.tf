@@ -13,12 +13,15 @@ module "application_configuration" {
   config_variables = merge(
     local.app_env_values,
     {
-      ENVIRONMENT_NAME    = var.environment
-      PGSSLMODE           = local.postgres_ssl_mode
-      CANONICAL_HOSTNAME  = local.canonical_hostname
-      BIGQUERY_DATASET    = var.dataset_name
-      BIGQUERY_PROJECT_ID = "claim-additional-payments"
-      BIGQUERY_TABLE_NAME = "events"
+      ENVIRONMENT_NAME         = var.environment
+      PGSSLMODE                = local.postgres_ssl_mode
+      CANONICAL_HOSTNAME       = local.canonical_hostname
+      BIGQUERY_DATASET         = var.dataset_name
+      BIGQUERY_PROJECT_ID      = "claim-additional-payments"
+      BIGQUERY_TABLE_NAME      = "events"
+      BIGQUERY_AIRBYTE_DATASET = var.airbyte_enabled ? local.gcp_dataset_name : null
+      AIRBYTE_SERVER_URL       = var.airbyte_enabled ? "https://airbyte-${var.namespace}.${module.cluster_data.ingress_domain}" : null
+      BIGQUERY_POLICY_TAGS     = var.airbyte_enabled ? "{\"hidden\":\"projects/claim-additional-payments/locations/europe-west2/taxonomies/6035056991658002237/policyTags/5001017932158544163\"}" : null
   })
   secret_variables = merge({
     DATABASE_URL               = module.postgres.url
