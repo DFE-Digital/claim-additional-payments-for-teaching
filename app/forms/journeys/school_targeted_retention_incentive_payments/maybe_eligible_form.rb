@@ -31,6 +31,11 @@ module Journeys
 
         true
       end
+
+      def award_amount
+        Policies::TargetedRetentionIncentivePayments
+          .award_amount(journey_session.answers.current_school)
+      end
     end
   end
 end

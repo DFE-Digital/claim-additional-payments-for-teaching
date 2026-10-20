@@ -8,7 +8,7 @@
       <%= f.govuk_error_summary %>
 
       <h1 class="govuk-heading-l">
-        You may be eligible for a recognition payment of up to £4,500
+        You may be eligible for a recognition payment of up to <%= number_to_currency(@form.award_amount, precision: 0) %>
       </h1>
 
       <p class="govuk-body">
@@ -20,7 +20,7 @@
       </h2>
 
       <p class="govuk-body">
-        The payment may affect your finances. You should check how it could impact you before you decide whether to accept it. While the payment is £4,500, the amount paid into your account may be lower if you need to pay tax or repay your student loan.
+        The payment may affect your finances. You should check how it could impact you before you decide whether to accept it. While the payment is <%= number_to_currency(@form.award_amount, precision: 0) %>, the amount paid into your account may be lower if you need to pay tax or repay your student loan.
       </p>
 
       <h3 class="govuk-heading-s">
