@@ -13,6 +13,7 @@ module Journeys
       HalfContractedHoursForm,
       SignInForm,
       QueryTeacherDetailsForm,
+      MaybeEligibleForm,
       HelloForm,
       CheckYourAnswersForm,
       ConfirmationForm
@@ -37,6 +38,7 @@ module Journeys
         VerifyNationalInsuranceNumberForm,
         NationalInsuranceNumberForm,
         TeacherDetailsForm,
+        MaybeEligibleForm,
         HelloForm,
         CheckYourAnswersForm,
         ConfirmationForm
