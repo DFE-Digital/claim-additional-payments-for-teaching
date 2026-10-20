@@ -169,7 +169,7 @@ module Journeys
       mapping = {}
 
       forms.map do |form|
-        key = form.name.demodulize.underscore.downcase.dasherize.gsub(/-form$/, "")
+        key = form.try(:form_key) || form.name.demodulize.underscore.downcase.dasherize.gsub(/-form$/, "")
         mapping[key] = form
       end
 

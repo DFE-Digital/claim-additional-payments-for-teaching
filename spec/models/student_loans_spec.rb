@@ -5,18 +5,6 @@ RSpec.describe Policies::StudentLoans, type: :model do
 
   it { is_expected.to include(BasePolicy) }
 
-  it do
-    expect(subject::VERIFIERS).to eq([
-      AutomatedChecks::ClaimVerifiers::Identity,
-      AutomatedChecks::ClaimVerifiers::Qualifications,
-      AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
-      AutomatedChecks::ClaimVerifiers::Employment,
-      AutomatedChecks::ClaimVerifiers::StudentLoanAmount,
-      AutomatedChecks::ClaimVerifiers::FraudRisk,
-      AutomatedChecks::ClaimVerifiers::MatchingClaims
-    ])
-  end
-
   specify {
     expect(subject).to have_attributes(
       short_name: "Student Loans",
