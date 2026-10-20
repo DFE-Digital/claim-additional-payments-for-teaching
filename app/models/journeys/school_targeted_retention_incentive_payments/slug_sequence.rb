@@ -11,6 +11,7 @@ module Journeys
         "national-insurance-number",
         "teacher-details",
         "maybe-eligible",
+        "information-provided",
         "hello",
         "check-your-answers",
         "confirmation"
@@ -52,6 +53,7 @@ module Journeys
         array << "national-insurance-number" if show_national_insurance_number?
         array << "teacher-details"
         array << "maybe-eligible"
+        array << "information-provided"
         array << "hello"
         array << "check-your-answers"
         array << "confirmation"
