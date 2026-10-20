@@ -137,5 +137,15 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
     click_button "Continue"
 
     expect(page).to have_text "How we’ll use your information"
+    click_button "Continue"
+
+    expect(page).to have_text "What is your home address"
+    click_button "Enter your address manually"
+
+    fill_in "House number or name", with: "1"
+    fill_in "Building and street", with: "Grey Street"
+    fill_in "Town or city", with: "Newcastle upon Tyne"
+    fill_in "Postcode", with: "NE1 6EE"
+    click_button "Continue"
   end
 end

@@ -12,6 +12,9 @@ module Journeys
         "teacher-details",
         "maybe-eligible",
         "information-provided",
+        "postcode-search",
+        "select-home-address",
+        "address",
         "hello",
         "check-your-answers",
         "confirmation"
@@ -54,6 +57,14 @@ module Journeys
         array << "teacher-details"
         array << "maybe-eligible"
         array << "information-provided"
+        array << "postcode-search"
+
+        array << if answers.postcode_searched?
+          "select-home-address"
+        else
+          "address"
+        end
+
         array << "hello"
         array << "check-your-answers"
         array << "confirmation"
