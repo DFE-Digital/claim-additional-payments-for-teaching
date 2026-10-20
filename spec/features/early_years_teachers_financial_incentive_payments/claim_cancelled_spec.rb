@@ -82,6 +82,12 @@ RSpec.describe "EYTFI - Claim cancelled", feature_flag: [:eytfi_journey] do
       click_button "Continue"
     end
 
+    expect(page).to have_text "Enter your National Insurance number"
+    fill_in "Enter your National Insurance number", with: "AB123456C"
+    click_button "Continue"
+
+    upload_employment_proof
+
     expect(page).to have_text "You may be eligible for a recognition payment"
     choose "No"
     click_button "Continue"

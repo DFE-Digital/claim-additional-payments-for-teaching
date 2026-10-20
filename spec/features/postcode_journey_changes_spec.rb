@@ -326,13 +326,14 @@ RSpec.feature "Postcode journey desired behavior", feature_flag: [:eytfi_journey
       click_button "Continue"
     end
 
-    expect(page).to have_text("You may be eligible for a recognition payment")
-    choose "Yes"
+    expect(page).to have_text("Enter your National Insurance number")
+    fill_in "Enter your National Insurance number", with: "AB123456C"
     click_button "Continue"
 
     upload_employment_proof
 
-    expect(page).to have_text("How we’ll use your information")
+    expect(page).to have_text("You may be eligible for a recognition payment")
+    choose "Yes"
     click_button "Continue"
 
     expect(page).to have_text("What is your home address?")

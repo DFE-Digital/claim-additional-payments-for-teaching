@@ -59,11 +59,14 @@ RSpec.feature "EYTFI address", feature_flag: [:eytfi_journey], slow: true do
       click_button "Continue"
     end
 
-    choose "Yes"
+    expect(page).to have_text "Enter your National Insurance number"
+    fill_in "Enter your National Insurance number", with: "AB123456C"
     click_button "Continue"
 
     upload_employment_proof
 
+    expect(page).to have_text "You may be eligible for a recognition payment"
+    choose "Yes"
     click_button "Continue"
 
     expect(page).to have_text "What is your home address?"
@@ -71,9 +74,6 @@ RSpec.feature "EYTFI address", feature_flag: [:eytfi_journey], slow: true do
 
   def complete_journey_from_address_to_check_answers
     choose "I don’t know"
-    click_button "Continue"
-
-    fill_in "Enter your National Insurance number", with: "AB123456C"
     click_button "Continue"
 
     fill_in "Name on the account", with: "John Doe"
