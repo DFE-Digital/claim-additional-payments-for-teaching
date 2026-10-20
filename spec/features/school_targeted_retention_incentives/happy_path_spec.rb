@@ -133,5 +133,9 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
     click_button "Continue"
 
     expect(page).to have_text "You may be eligible"
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_text "How we’ll use your information"
   end
 end

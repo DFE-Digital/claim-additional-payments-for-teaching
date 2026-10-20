@@ -14,6 +14,7 @@ module Journeys
       SignInForm,
       QueryTeacherDetailsForm,
       MaybeEligibleForm,
+      InformationProvidedForm,
       HelloForm,
       CheckYourAnswersForm,
       ConfirmationForm
@@ -39,6 +40,8 @@ module Journeys
         NationalInsuranceNumberForm,
         TeacherDetailsForm,
         MaybeEligibleForm,
+        MaybeEligibleForm,
+        InformationProvidedForm,
         HelloForm,
         CheckYourAnswersForm,
         ConfirmationForm
