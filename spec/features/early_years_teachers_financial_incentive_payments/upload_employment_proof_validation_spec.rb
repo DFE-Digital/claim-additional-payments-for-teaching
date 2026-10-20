@@ -90,7 +90,10 @@ RSpec.feature "EYTFI employment proof upload validation", feature_flag: [:eytfi_
 
     perform_enqueued_jobs { click_button "Continue" }
 
-    choose "Yes"
+    expect(page).to have_text "Enter your National Insurance number"
+    fill_in "Enter your National Insurance number", with: "AB123456C"
     click_button "Continue"
+
+    expect(page).to have_text "Upload your payslip"
   end
 end
