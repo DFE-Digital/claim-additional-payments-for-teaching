@@ -29,14 +29,23 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
         "dateOfBirth" => "1970-12-13",
         "nationalInsuranceNumber" => "AB123456C",
         "emailAddress" => "john.doe@example.com",
-        "qts" => nil,
+        "qts" => {
+          routes: [{
+            routeToProfessionalStatusType: {
+              name: "Assessment Only",
+              professionalStatusType: "QualifiedTeacherStatus",
+              routeToProfessionalStatusTypeId: "57b86cef-98e2-4962-a74a-d47c7a34b838"
+            }
+          }],
+          holdsFrom: "2024-10-22"
+        },
         "eyts" => {
-          "holdsFrom" => "2015-10-22",
+          "holdsFrom" => "2024-10-22",
           "routes" => [
             {
               "routeToProfessionalStatusType" => {
                 "routeToProfessionalStatusTypeId" => "11111",
-                "name" => "EYTS ITT Migrated",
+                "name" => "Assessment Only",
                 "professionalStatusType" => "EarlyYearsTeacherStatus"
               }
             }
@@ -47,14 +56,17 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
             "routeToProfessionalStatusId" => "222222",
             "routeToProfessionalStatusType" => {
               "routeToProfessionalStatusTypeId" => "33333",
-              "name" => "EYTS ITT Migrated",
+              "name" => "Assessment Only",
               "professionalStatusType" => "EarlyYearsTeacherStatus"
             },
             "status" => "Holds",
-            "holdsFrom" => "2015-10-22",
+            "holdsFrom" => "2024-10-22",
             "trainingStartDate" => "2014-09-30",
             "trainingEndDate" => nil,
-            "trainingSubjects" => [],
+            "trainingSubjects" => [{
+              name: "applied computing",
+              reference: "100358"
+            }],
             "trainingAgeSpecialism" => {
               "type" => "Range"
             },
@@ -117,5 +129,9 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
     click_button "Continue"
 
     expect(page).to have_text "Teacher details"
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_text "You may be eligible"
   end
 end
