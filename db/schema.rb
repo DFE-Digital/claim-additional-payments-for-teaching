@@ -148,6 +148,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_12_141454) do
     t.datetime "qa_completed_at"
     t.boolean "qa_required", default: false
     t.boolean "qualifications_details_check"
+    t.jsonb "redacted_attributes", default: {}
     t.string "reference", limit: 8, null: false
     t.datetime "retained_personal_data_removed_at"
     t.datetime "sent_one_time_password_at"
@@ -242,6 +243,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_12_141454) do
     t.string "itt_academic_year", limit: 9
     t.boolean "nqt_in_academic_year_after_itt"
     t.string "qualification"
+    t.jsonb "redacted_attributes", default: {}
     t.boolean "school_somewhere_else"
     t.boolean "subject_to_disciplinary_action"
     t.boolean "subject_to_formal_performance_action"
@@ -275,6 +277,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_12_141454) do
     t.string "provider_email_address"
     t.string "provider_entered_contract_type"
     t.datetime "provider_six_month_employment_reminder_sent_at"
+    t.jsonb "redacted_attributes", default: {}
     t.string "returner_contract_type"
     t.boolean "returner_worked_with_children"
     t.boolean "returning_within_6_months"
@@ -296,6 +299,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_12_141454) do
     t.jsonb "hmrc_response_body"
     t.integer "hmrc_response_status"
     t.text "nursery_id"
+    t.jsonb "redacted_attributes", default: {}
     t.datetime "teacher_auth_completed_at"
     t.citext "teacher_auth_email"
     t.text "teacher_auth_one_login_uid"
@@ -475,6 +479,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_12_141454) do
     t.string "provider_verification_teaching_start_year"
     t.uuid "provider_verification_verified_by_id"
     t.text "provision_search"
+    t.jsonb "redacted_attributes", default: {}
     t.uuid "school_id"
     t.boolean "subject_to_disciplinary_action"
     t.boolean "subject_to_formal_performance_action"
@@ -515,6 +520,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_12_141454) do
     t.boolean "one_year"
     t.string "passport_number"
     t.text "previous_year_claim_ids", default: [], array: true
+    t.jsonb "redacted_attributes", default: {}
     t.string "school_headteacher_name"
     t.date "start_date"
     t.boolean "state_funded_secondary_school"
@@ -872,6 +878,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_12_141454) do
     t.boolean "mostly_performed_leadership_duties"
     t.boolean "physics_taught"
     t.string "qts_award_year"
+    t.jsonb "redacted_attributes", default: {}
     t.decimal "student_loan_repayment_amount", precision: 7, scale: 2
     t.boolean "taught_eligible_subjects"
     t.string "teacher_reference_number", limit: 11
@@ -908,6 +915,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_12_141454) do
     t.string "itt_academic_year", limit: 9
     t.boolean "nqt_in_academic_year_after_itt"
     t.string "qualification"
+    t.jsonb "redacted_attributes", default: {}
     t.boolean "school_somewhere_else"
     t.boolean "subject_to_disciplinary_action"
     t.boolean "subject_to_formal_performance_action"

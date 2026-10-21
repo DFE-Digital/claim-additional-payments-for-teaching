@@ -1,4 +1,7 @@
 production: &production
+  apply_data_retention_policy:
+    class: Policies::DataRetention::PoliciesJob
+    schedule: "30 5 * * 7" # At 05:30 AM, Sundays
   auto_approve_claims:
     class: AutoApproveClaimsJob
     schedule: "0 8 * * 1-5" # At 08:00 AM, Monday through Friday
