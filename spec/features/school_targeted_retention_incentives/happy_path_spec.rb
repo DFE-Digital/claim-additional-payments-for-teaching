@@ -154,6 +154,10 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
     fill_in "Account number", with: "12345678"
     click_button "Continue"
 
+    expect(page).to have_text "Are you recorded as male or female"
+    choose "I don’t know"
+    click_button "Continue"
+
     expect(page).to have_text "hello"
   end
 end
