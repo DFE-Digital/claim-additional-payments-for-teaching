@@ -23,7 +23,7 @@ module Policies
       # policy with redactions performed, and meta data updated, suitable for
       # passing to Claim#update!
       def new_claim_attributes
-        @new_claim_attributes || claim.attributes.to_h do |name, value|
+        @new_claim_attributes ||= claim.attributes.to_h do |name, value|
           if claim_attribute_changed?(name)
             [name, nil]
           else
@@ -39,7 +39,7 @@ module Policies
       # policy with redactions performed, and meta data updated, suitable for
       # passing to Elgibility#update!
       def new_eligibility_attributes
-        @new_eligibility_attributes || claim.eligibility.attributes.to_h do |name, value|
+        @new_eligibility_attributes ||= claim.eligibility.attributes.to_h do |name, value|
           if eligibility_attribute_changed?(name)
             [name, nil]
           else

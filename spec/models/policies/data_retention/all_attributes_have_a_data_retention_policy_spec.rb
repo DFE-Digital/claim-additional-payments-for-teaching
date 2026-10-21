@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "All policies have a data retention policy for all attributes" do
-  let(:depricated_attributes) do
+  let(:deprecated_attributes) do
     {
       Policies::StudentLoans => ["student_loan_repayment_amount"]
     }
@@ -21,7 +21,7 @@ RSpec.describe "All policies have a data retention policy for all attributes" do
         data_retention_policy = policy::DataRetention::Policy
 
         Claim.column_names.each do |name|
-          next if depricated_attributes[policy]&.include?(name)
+          next if deprecated_attributes[policy]&.include?(name)
 
           expect(
             data_retention_policy.claim_attributes.keys
@@ -34,7 +34,7 @@ RSpec.describe "All policies have a data retention policy for all attributes" do
         end
 
         policy::Eligibility.column_names.each do |name|
-          next if depricated_attributes[policy]&.include?(name)
+          next if deprecated_attributes[policy]&.include?(name)
 
           expect(
             data_retention_policy.eligibility_attributes.keys
