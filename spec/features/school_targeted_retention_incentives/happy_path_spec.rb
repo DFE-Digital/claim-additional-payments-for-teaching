@@ -147,5 +147,13 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
     fill_in "Town or city", with: "Newcastle upon Tyne"
     fill_in "Postcode", with: "NE1 6EE"
     click_button "Continue"
+
+    expect(page).to have_text "Enter the bank account"
+    fill_in "Name on the account", with: "John Doe"
+    fill_in "Sort code", with: "123456"
+    fill_in "Account number", with: "12345678"
+    click_button "Continue"
+
+    expect(page).to have_text "hello"
   end
 end

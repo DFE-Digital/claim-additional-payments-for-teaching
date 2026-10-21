@@ -1,0 +1,57 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_fieldset legend: {
+        text: @form.t("legend", default: t("questions.account_details")),
+        tag: "h1",
+        size: "l"
+      } do %>
+        <%= f.govuk_text_field(
+          :banking_name,
+          spellcheck: "false",
+          autocomplete: "name",
+          label: {
+            text: @form.t("banking_name.label", default: "Name on the account")
+          },
+          hint: {
+            text: @form.t(
+              "banking_name.hint"
+            )
+          }
+        ) %>
+
+        <%= f.govuk_text_field :bank_sort_code,
+          width: "one-quarter",
+          autocomplete: "off",
+          inputmode: "numeric",
+          label: { text: "Sort code" },
+          hint: {
+            text: @form.t(
+              "bank_sort_code.hint",
+              default: "Must be 6 digits long"
+            )
+          } %>
+
+        <%= f.govuk_text_field :bank_account_number,
+          width: 20,
+          autocomplete: "off",
+          inputmode: "numeric",
+          label: { text: "Account number" },
+          hint: {
+            text: @form.t(
+              "bank_account_number.hint",
+              default: "Must be 8 digits long"
+            )
+          } %>
+      <% end %>
+
+      <% if f.object.show_warning? %>
+        <%= govuk_warning_text(text: t("questions.check_your_account_details")) %>
+      <% end %>
+
+      <%= f.govuk_submit "Continue" %>
+    <% end %>
+  </div>
+</div>
