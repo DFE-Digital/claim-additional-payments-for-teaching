@@ -15,6 +15,7 @@ module Journeys
       QueryTeacherDetailsForm,
       MaybeEligibleForm,
       InformationProvidedForm,
+      PersonalBankAccountForm,
       HelloForm,
       CheckYourAnswersForm,
       ConfirmationForm
@@ -42,6 +43,7 @@ module Journeys
         MaybeEligibleForm,
         MaybeEligibleForm,
         InformationProvidedForm,
+        PersonalBankAccountForm,
         HelloForm,
         CheckYourAnswersForm,
         ConfirmationForm

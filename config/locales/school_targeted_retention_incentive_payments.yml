@@ -64,3 +64,5 @@ en:
         title: Querying teacher details
       verify_national_insurance_number:
         title: Is this your National Insurance number?
+      personal_bank_account:
+          legend: Enter the bank account details you want the payment to be paid into

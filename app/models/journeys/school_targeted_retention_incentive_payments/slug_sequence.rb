@@ -15,6 +15,7 @@ module Journeys
         "postcode-search",
         "select-home-address",
         "address",
+        "personal-bank-account",
         "hello",
         "check-your-answers",
         "confirmation"
@@ -64,6 +65,8 @@ module Journeys
         else
           "address"
         end
+
+        array << "personal-bank-account"
 
         array << "hello"
         array << "check-your-answers"
