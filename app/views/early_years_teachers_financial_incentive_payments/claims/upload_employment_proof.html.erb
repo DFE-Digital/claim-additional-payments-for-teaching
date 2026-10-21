@@ -51,7 +51,7 @@
 
       <p class="govuk-body">You can upload a clear photo or a scanned copy of the document.</p>
 
-      <%= f.govuk_file_field :file, label: { text: "Upload document", class: "govuk-label--m" },
+      <%= f.govuk_file_field :file, label: { text: "Upload document", class: "govuk-label--m", tabindex: 0 },
             accept: f.object.class::ALLOWED_CONTENT_TYPES.join(",") %>
 
       <%= f.govuk_submit "Upload" %>
