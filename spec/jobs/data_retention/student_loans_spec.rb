@@ -1,11 +1,11 @@
 require "rails_helper"
 
-RSpec.describe Policies::DataRetention::PoliciesJob do
+RSpec.describe DataRetention::PoliciesJob do
   before do
     FeatureFlag.enable!(:apply_data_retention_policy)
   end
 
-  context "when the policy is early years" do
+  context "when the policy is student loans" do
     let(:claim_attributes) do
       {
         first_name: "Edna",
@@ -46,31 +46,21 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
 
     let(:eligibility_attributes) do
       {
-        alternative_idv_claimant_bank_details_match: true,
-        alternative_idv_claimant_date_of_birth: Date.new(1949, 1, 21),
-        alternative_idv_claimant_email: "e.krabappel@springfield-elementary.edu",
-        alternative_idv_claimant_employed_by_nursery: true,
-        alternative_idv_claimant_employment_check_declaration: true,
-        alternative_idv_claimant_national_insurance_number: "QQ123456",
-        alternative_idv_claimant_postcode: "SP1 2NG",
-        alternative_idv_completed_at: DateTime.new(2025, 1, 15),
-        alternative_idv_reference: Reference.to_s,
         award_amount: 2000.0,
-        child_facing_confirmation_given: true,
-        nursery_urn: "123456",
-        practitioner_claim_started_at: DateTime.new(2025, 1, 10),
-        practitioner_first_name: "Edna",
-        practitioner_reminder_email_last_sent_at: DateTime.new(2025, 1, 20),
-        practitioner_reminder_email_sent_count: 1,
-        practitioner_surname: "Krabappel",
-        provider_claim_submitted_at: DateTime.new(2025, 1, 5),
-        provider_email_address: "seymour.skinner@springfield-elementary.edu",
-        provider_entered_contract_type: "permanent",
-        provider_six_month_employment_reminder_sent_at: DateTime.new(2025, 1, 25),
-        returner_contract_type: "permanent",
-        returner_worked_with_children: true,
-        returning_within_6_months: true,
-        start_date: Date.new(2025, 2, 1)
+        claim_school_id: create(:school).id,
+        current_school_id: create(:school).id,
+        biology_taught: true,
+        chemistry_taught: true,
+        computing_taught: false,
+        languages_taught: false,
+        physics_taught: true,
+        taught_eligible_subjects: true,
+        had_leadership_position: false,
+        mostly_performed_leadership_duties: false,
+        claim_school_somewhere_else: true,
+        teacher_reference_number: "1234567",
+        qts_award_year: "on_or_after_cut_off_date",
+        employment_status: "different_school"
       }
     end
 
@@ -78,7 +68,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
       create(
         :claim,
         **claim_attributes,
-        policy: Policies::EarlyYearsPayments,
+        policy: Policies::StudentLoans,
         academic_year: AcademicYear.new(2025),
         eligibility_attributes: eligibility_attributes,
         submitted_at: DateTime.new(2025, 9, 1, 0, 0, 0)
@@ -88,22 +78,14 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
     context "when the claim is for the current academic year" do
       context "when the claim is inactive" do
         before do |example|
-          create(:task, name: "employment", passed: true, claim: claim)
-
-          create(
-            :decision,
-            :approved,
-            claim: claim,
-            created_at: DateTime.new(2025, 9, 1, 0, 0, 0)
-          )
-
-          create(
-            :payment,
-            claims: [claim],
-            scheduled_payment_date: DateTime.new(2025, 9, 15, 0, 0, 0)
-          )
-
           travel_to(AcademicYear.new(2025).start_of_autumn_term + 20.weeks) do
+            create(
+              :decision,
+              :rejected,
+              claim: claim,
+              created_at: DateTime.new(2025, 9, 1, 0, 0, 0)
+            )
+
             perform_enqueued_jobs do
               described_class.perform_now
             end
@@ -125,9 +107,9 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
 
       context "when the claim is active" do
         before do |example|
-          claim
-
           travel_to(AcademicYear.new(2025).start_of_autumn_term + 20.weeks) do
+            claim
+
             perform_enqueued_jobs do
               described_class.perform_now
             end
@@ -149,49 +131,16 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
     end
 
     context "when the claim is from a prior academic year" do
-      context "when the claim is active" do
-        before do |example|
-          claim
-
-          travel_to(Time.utc(2026, 9, 1, 12, 0, 0)) do
-            perform_enqueued_jobs do
-              described_class.perform_now
-            end
-
-            claim.reload
-          end
-        end
-
-        it "doesn't scrub any attributes" do
-          claim_attributes.each_key do |attribute|
-            expect(claim.send(attribute)).to eq claim_attributes.fetch(attribute)
-          end
-
-          eligibility_attributes.each_key do |attribute|
-            expect(claim.eligibility.send(attribute)).to eq eligibility_attributes.fetch(attribute)
-          end
-        end
-      end
-
       context "when the claim is inactive" do
         before do |example|
-          create(:task, name: "employment", passed: true, claim: claim)
-
-          create(
-            :decision,
-            :approved,
-            claim: claim,
-            created_at: DateTime.new(2025, 9, 1, 0, 0, 0)
-          )
-
-          create(
-            :payment,
-            :confirmed,
-            claims: [claim],
-            scheduled_payment_date: DateTime.new(2025, 9, 15, 0, 0, 0)
-          )
-
           travel_to(Time.utc(2031, 9, 1, 12, 0, 0)) do
+            create(
+              :decision,
+              :rejected,
+              claim: claim,
+              created_at: DateTime.new(2025, 9, 1, 0, 0, 0)
+            )
+
             perform_enqueued_jobs do
               described_class.perform_now
             end
@@ -237,32 +186,48 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
           expect(claim.decision_deadline).to eq claim_attributes.fetch(:decision_deadline)
 
           eligibility = claim.eligibility
-          expect(eligibility.alternative_idv_claimant_date_of_birth).to eq(nil)
-          expect(eligibility.alternative_idv_claimant_email).to eq(nil)
-          expect(eligibility.alternative_idv_claimant_national_insurance_number).to eq(nil)
-          expect(eligibility.alternative_idv_claimant_postcode).to eq(nil)
-          expect(eligibility.practitioner_first_name).to eq(nil)
-          expect(eligibility.practitioner_surname).to eq(nil)
-          expect(eligibility.provider_email_address).to eq(nil)
 
-          expect(eligibility.alternative_idv_claimant_bank_details_match).to eq eligibility_attributes.fetch(:alternative_idv_claimant_bank_details_match)
-          expect(eligibility.alternative_idv_claimant_employed_by_nursery).to eq eligibility_attributes.fetch(:alternative_idv_claimant_employed_by_nursery)
-          expect(eligibility.alternative_idv_claimant_employment_check_declaration).to eq eligibility_attributes.fetch(:alternative_idv_claimant_employment_check_declaration)
-          expect(eligibility.alternative_idv_completed_at).to eq eligibility_attributes.fetch(:alternative_idv_completed_at)
-          expect(eligibility.alternative_idv_reference).to eq eligibility_attributes.fetch(:alternative_idv_reference)
+          # There's a callback that normalises trn casting it to a string,
+          expect(eligibility.teacher_reference_number).to eq ""
+
           expect(eligibility.award_amount).to eq eligibility_attributes.fetch(:award_amount)
-          expect(eligibility.child_facing_confirmation_given).to eq eligibility_attributes.fetch(:child_facing_confirmation_given)
-          expect(eligibility.nursery_urn).to eq eligibility_attributes.fetch(:nursery_urn)
-          expect(eligibility.practitioner_reminder_email_last_sent_at).to eq eligibility_attributes.fetch(:practitioner_reminder_email_last_sent_at)
-          expect(eligibility.practitioner_reminder_email_sent_count).to eq eligibility_attributes.fetch(:practitioner_reminder_email_sent_count)
-          expect(eligibility.practitioner_claim_started_at).to eq eligibility_attributes.fetch(:practitioner_claim_started_at)
-          expect(eligibility.provider_claim_submitted_at).to eq eligibility_attributes.fetch(:provider_claim_submitted_at)
-          expect(eligibility.provider_entered_contract_type).to eq eligibility_attributes.fetch(:provider_entered_contract_type)
-          expect(eligibility.provider_six_month_employment_reminder_sent_at).to eq eligibility_attributes.fetch(:provider_six_month_employment_reminder_sent_at)
-          expect(eligibility.returner_contract_type).to eq eligibility_attributes.fetch(:returner_contract_type)
-          expect(eligibility.returner_worked_with_children).to eq eligibility_attributes.fetch(:returner_worked_with_children)
-          expect(eligibility.returning_within_6_months).to eq eligibility_attributes.fetch(:returning_within_6_months)
-          expect(eligibility.start_date).to eq eligibility_attributes.fetch(:start_date)
+          expect(eligibility.claim_school_id).to eq eligibility_attributes.fetch(:claim_school_id)
+          expect(eligibility.current_school_id).to eq eligibility_attributes.fetch(:current_school_id)
+          expect(eligibility.biology_taught).to eq eligibility_attributes.fetch(:biology_taught)
+          expect(eligibility.chemistry_taught).to eq eligibility_attributes.fetch(:chemistry_taught)
+          expect(eligibility.computing_taught).to eq eligibility_attributes.fetch(:computing_taught)
+          expect(eligibility.languages_taught).to eq eligibility_attributes.fetch(:languages_taught)
+          expect(eligibility.physics_taught).to eq eligibility_attributes.fetch(:physics_taught)
+          expect(eligibility.taught_eligible_subjects).to eq eligibility_attributes.fetch(:taught_eligible_subjects)
+          expect(eligibility.had_leadership_position).to eq eligibility_attributes.fetch(:had_leadership_position)
+          expect(eligibility.mostly_performed_leadership_duties).to eq eligibility_attributes.fetch(:mostly_performed_leadership_duties)
+          expect(eligibility.claim_school_somewhere_else).to eq eligibility_attributes.fetch(:claim_school_somewhere_else)
+          expect(eligibility.qts_award_year).to eq eligibility_attributes.fetch(:qts_award_year)
+          expect(eligibility.employment_status).to eq eligibility_attributes.fetch(:employment_status)
+        end
+      end
+
+      context "when the claim is active" do
+        before do |example|
+          travel_to(Time.utc(2026, 9, 1, 12, 0, 0)) do
+            claim
+
+            perform_enqueued_jobs do
+              described_class.perform_now
+            end
+
+            claim.reload
+          end
+        end
+
+        it "doesn't scrub any attributes" do
+          claim_attributes.each_key do |attribute|
+            expect(claim.send(attribute)).to eq claim_attributes.fetch(attribute)
+          end
+
+          eligibility_attributes.each_key do |attribute|
+            expect(claim.eligibility.send(attribute)).to eq eligibility_attributes.fetch(attribute)
+          end
         end
       end
     end

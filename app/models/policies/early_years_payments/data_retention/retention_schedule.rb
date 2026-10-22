@@ -1,7 +1,7 @@
 module Policies
-  module EarlyYearsTeachersFinancialIncentivePayments
+  module EarlyYearsPayments
     module DataRetention
-      class Policy < Policies::DataRetention::BasePolicy
+      class RetentionSchedule < ::DataRetention::BaseSchedule
         self.claim_attributes = {
           id: :retained,
           academic_year: :retained,
@@ -14,7 +14,7 @@ module Policies
           bank_or_building_society: :retained,
           bank_sort_code: :inactive_claim_over_six_years_old?,
           banking_name: :inactive_claim_over_six_years_old?,
-          building_society_roll_number: :inactive_claim_over_six_years_old?,
+          building_society_roll_number: :inactive_claim_submitted_in_prior_academic_term?,
           claimant_declaration: :retained,
           column_to_remove_teacher_reference_number: :retained,
           created_at: :retained,
@@ -51,7 +51,7 @@ module Policies
           onelogin_idv_full_name: :inactive_claim_submitted_in_prior_academic_term?,
           onelogin_idv_last_name: :inactive_claim_submitted_in_prior_academic_term?,
           onelogin_idv_return_codes: :inactive_claim_submitted_in_prior_academic_term?,
-          onelogin_uid: :inactive_claim_over_six_years_old?,
+          onelogin_uid: :inactive_claim_submitted_in_prior_academic_term?,
           onelogin_user_info: :inactive_claim_submitted_in_prior_academic_term?,
           paye_reference: :inactive_claim_submitted_in_prior_academic_term?,
           payroll_gender: :retained,
@@ -87,33 +87,34 @@ module Policies
 
         self.eligibility_attributes = {
           id: :retained,
-          award_amount: :retained,
-          confirmed_employment_proof_blob_ids: :inactive_claim_submitted_in_prior_academic_term?,
-          continue_claim: :retained,
           created_at: :retained,
-          eligible_eytfi_provider_urn: :retained,
-          has_eligible_qualification: :retained,
-          hmrc_employment_check_passed: :retained,
-          hmrc_response_body: :inactive_claim_over_six_years_old?,
-          hmrc_response_status: :inactive_claim_over_six_years_old?,
-          nursery_id: :inactive_claim_over_six_years_old?,
+          updated_at: :retained,
+          alternative_idv_claimant_bank_details_match: :retained,
+          alternative_idv_claimant_date_of_birth: :inactive_claim_submitted_in_prior_academic_term?,
+          alternative_idv_claimant_email: :inactive_claim_submitted_in_prior_academic_term?,
+          alternative_idv_claimant_employed_by_nursery: :retained,
+          alternative_idv_claimant_employment_check_declaration: :retained,
+          alternative_idv_claimant_national_insurance_number: :inactive_claim_submitted_in_prior_academic_term?,
+          alternative_idv_claimant_postcode: :inactive_claim_submitted_in_prior_academic_term?,
+          alternative_idv_completed_at: :retained,
+          alternative_idv_reference: :retained,
+          award_amount: :retained,
+          child_facing_confirmation_given: :retained,
+          nursery_urn: :retained,
+          practitioner_claim_started_at: :retained,
+          practitioner_first_name: :inactive_claim_submitted_in_prior_academic_term?,
+          practitioner_reminder_email_last_sent_at: :retained,
+          practitioner_reminder_email_sent_count: :retained,
+          practitioner_surname: :inactive_claim_submitted_in_prior_academic_term?,
+          provider_claim_submitted_at: :retained,
+          provider_email_address: :inactive_claim_submitted_in_prior_academic_term?,
+          provider_entered_contract_type: :retained,
+          provider_six_month_employment_reminder_sent_at: :retained,
           redacted_attributes: :retained,
-          teacher_auth_completed_at: :retained,
-          teacher_auth_email: :inactive_claim_over_six_years_old?,
-          teacher_auth_one_login_uid: :inactive_claim_over_six_years_old?,
-          teacher_auth_teacher_reference_number: :inactive_claim_over_six_years_old?,
-          teacher_auth_verified_date_of_birth: :inactive_claim_over_six_years_old?,
-          teacher_auth_verified_name: :inactive_claim_over_six_years_old?,
-          teacher_reference_number: :inactive_claim_over_six_years_old?,
-          teaching_qualification_confirmation: :retained,
-          trs_data: :inactive_claim_over_six_years_old?,
-          trs_data_fetched_at: :retained,
-          trs_national_insurance_number: :inactive_claim_over_six_years_old?,
-          updated_at: :retained
-        }
-
-        self.eligibility_attachments_to_destroy = {
-          employment_proofs: :confirmed_employment_proof_blob_ids
+          returner_contract_type: :retained,
+          returner_worked_with_children: :retained,
+          returning_within_6_months: :retained,
+          start_date: :retained
         }
       end
     end

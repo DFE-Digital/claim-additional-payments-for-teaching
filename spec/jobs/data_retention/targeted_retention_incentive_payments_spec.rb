@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Policies::DataRetention::PoliciesJob do
+RSpec.describe DataRetention::PoliciesJob do
   before do
     FeatureFlag.enable!(:apply_data_retention_policy)
   end
@@ -197,7 +197,7 @@ RSpec.describe Policies::DataRetention::PoliciesJob do
         end
 
         it "creates a recovery record" do
-          recovery = Policies::DataRetention::Recovery.find_by!(claim: claim)
+          recovery = DataRetention::Recovery.find_by!(claim: claim)
 
           expect(recovery.payload).to include(
             "claim_attributes" => include(
