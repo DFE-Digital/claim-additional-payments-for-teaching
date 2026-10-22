@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_12_141454) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_22_140935) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -184,6 +184,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_12_141454) do
     t.index ["left_claim_id", "right_claim_id"], name: "index_claims_matches_on_left_and_right_claim_id", unique: true
     t.index ["left_claim_id"], name: "index_claims_matches_on_left_claim_id"
     t.index ["right_claim_id"], name: "index_claims_matches_on_right_claim_id"
+  end
+
+  create_table "data_retention_recoveries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "claim_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "destroy_at", null: false
+    t.jsonb "payload"
+    t.datetime "updated_at", null: false
+    t.index ["claim_id"], name: "index_data_retention_recoveries_on_claim_id"
   end
 
   create_table "decisions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -643,15 +652,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_12_141454) do
     t.index ["updated_at"], name: "index_payroll_runs_on_updated_at"
   end
 
-  create_table "policies_data_retention_recoveries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "claim_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "destroy_at", null: false
-    t.jsonb "payload"
-    t.datetime "updated_at", null: false
-    t.index ["claim_id"], name: "index_policies_data_retention_recoveries_on_claim_id"
-  end
-
   create_table "reminders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "deleted_at"
@@ -992,6 +992,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_12_141454) do
   add_foreign_key "claims", "journeys_sessions"
   add_foreign_key "claims_matches", "claims", column: "left_claim_id"
   add_foreign_key "claims_matches", "claims", column: "right_claim_id"
+  add_foreign_key "data_retention_recoveries", "claims"
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "early_career_payments_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "eligible_ey_providers", "file_uploads"
@@ -1014,7 +1015,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_12_141454) do
   add_foreign_key "payroll_runs", "dfe_sign_in_users", column: "confirmation_report_uploaded_by_id"
   add_foreign_key "payroll_runs", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "payroll_runs", "dfe_sign_in_users", column: "downloaded_by_id"
-  add_foreign_key "policies_data_retention_recoveries", "claims"
   add_foreign_key "schools", "local_authority_districts"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
