@@ -17,7 +17,10 @@ module Debug
       attribute :trs_national_insurance_number, :string
 
       def default_email
-        "#{@default_verified_name.downcase.tr(" ", ".")}@example.com"
+        [
+          @default_verified_name.downcase.tr(" ", ".").gsub(/\.{2,}/, "."),
+          "@example.com"
+        ].join
       end
 
       def default_verified_name
