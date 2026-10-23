@@ -23,12 +23,21 @@ module Journeys
       def save
         return false if invalid?
 
-        journey_session
-          .answers
-          .update!(
-            national_insurance_number_correct:,
-            national_insurance_number:
-          )
+        if national_insurance_number_correct
+          journey_session
+            .answers
+            .update!(
+              national_insurance_number_correct:,
+              national_insurance_number: journey_session.answers.trs_data["nationalInsuranceNumber"]
+            )
+        else
+          journey_session
+            .answers
+            .update!(
+              national_insurance_number_correct:,
+              national_insurance_number:
+            )
+        end
 
         true
       end

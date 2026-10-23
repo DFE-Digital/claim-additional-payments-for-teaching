@@ -13,6 +13,7 @@ en:
     support_email_address: "schools-targeted.retention-incentive@education.gov.uk"
     information_provided_further_details: "For more details, you can read about payments and deductions for the %{link}"
     information_provided_further_details_link_text: "school targeted retention incentive (opens in new tab)"
+    guidance_url: "https://www.gov.uk/guidance/targeted-retention-incentive-payments-for-school-teachers"
     accessibility_statement:
       test_date: "28 July 2022"
       prepared_date: "31 July 2019"

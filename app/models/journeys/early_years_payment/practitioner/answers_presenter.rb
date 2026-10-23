@@ -2,8 +2,6 @@ module Journeys
   module EarlyYearsPayment
     module Practitioner
       class AnswersPresenter < BaseAnswersPresenter
-        include ActionView::Helpers::TranslationHelper
-
         def identity_answers
           [].tap do |a|
             a << ["Full name", answers.full_name, "full-name"] if show_full_name?
