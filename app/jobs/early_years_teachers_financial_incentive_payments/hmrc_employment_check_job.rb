@@ -1,26 +1,18 @@
 module EarlyYearsTeachersFinancialIncentivePayments
   class HmrcEmploymentCheckJob < ApplicationJob
-    # Hmrc api call is off by default in review environments, turn it on in
-    # these environments by enabling
-    # `eytrp_perform_hmrc_api_call_in_review_environments`
     def self.enabled?
-      return false unless FeatureFlag.enabled?(:eytrp_hmrc_integration)
-
-      if Rails.env.development? || Rails.env.review_app_like?
-        FeatureFlag.enabled?(:eytrp_perform_hmrc_api_call_in_review_environments)
-      else
-        true
-      end
+      FeatureFlag.enabled?(:eytrp_hmrc_integration)
     end
 
-    def perform(journey_session)
+    def perform(claim)
       return unless self.class.enabled?
 
-      return if journey_session.answers.hmrc_response_received?
+      eligibility = claim.eligibility
+      return if eligibility.hmrc_response_status.present?
 
-      response = fetch_employment_history(journey_session.answers)
+      response = fetch_employment_history(claim)
 
-      journey_session.answers.update!(
+      eligibility.update!(
         hmrc_response_status: response.status,
         hmrc_response_body: response.body
       )
@@ -28,12 +20,15 @@ module EarlyYearsTeachersFinancialIncentivePayments
 
     private
 
-    def fetch_employment_history(answers)
+    def fetch_employment_history(claim)
+      # HMRC identity matching must use Teacher Auth verified details
+      verified_name_parts = claim.eligibility.teacher_auth_verified_name.split
+
       Hmrc::Employments.client.employment_history_for_individual(
-        first_name: answers.teacher_auth_verified_first_name,
-        last_name: answers.teacher_auth_verified_last_name,
-        date_of_birth: answers.teacher_auth_verified_date_of_birth,
-        nino: answers.national_insurance_number,
+        first_name: verified_name_parts.first,
+        last_name: verified_name_parts.last,
+        date_of_birth: claim.eligibility.teacher_auth_verified_date_of_birth,
+        nino: claim.national_insurance_number,
         from_date: Journeys::EarlyYearsTeachersFinancialIncentivePayments::EmploymentCheck.earliest_date_to_check
       )
     rescue Hmrc::ResponseError => e
