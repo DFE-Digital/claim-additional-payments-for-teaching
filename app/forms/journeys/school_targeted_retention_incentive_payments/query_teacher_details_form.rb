@@ -9,6 +9,10 @@ module Journeys
         true
       end
 
+      def completed?
+        journey_session.answers.trs_data_fetched_at.present?
+      end
+
       def redirect_to_next_slug?
         journey_session.answers.trs_data_fetched_at.present?
       end
