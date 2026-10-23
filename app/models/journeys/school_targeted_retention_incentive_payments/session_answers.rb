@@ -19,6 +19,7 @@ module Journeys
 
       attribute :correct_details, :boolean, pii: false
       attribute :continue_claim, :boolean, pii: false
+      attribute :claimant_declaration, :boolean, pii: false
 
       def policy
         Policies::TargetedRetentionIncentivePayments
