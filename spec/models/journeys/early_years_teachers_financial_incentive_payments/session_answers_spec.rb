@@ -14,7 +14,16 @@ RSpec.describe(
       nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
       other_nursery = create(:eligible_eytfi_provider, name: "Other nursery")
       response_body = {
-        employments: [{employer: {name: "Springfield nursery"}}]
+        employments: [
+          {
+            employer: {
+              name: "Springfield nursery",
+              address: {
+                postcode: nursery.postcode
+              }
+            }
+          }
+        ]
       }.to_json
       journey_session = create(
         :eytfi_session,
