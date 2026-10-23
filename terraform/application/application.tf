@@ -13,21 +13,31 @@ module "application_configuration" {
   config_variables = merge(
     local.app_env_values,
     {
-      ENVIRONMENT_NAME    = var.environment
-      PGSSLMODE           = local.postgres_ssl_mode
-      CANONICAL_HOSTNAME  = local.canonical_hostname
-      BIGQUERY_DATASET    = var.dataset_name
-      BIGQUERY_PROJECT_ID = "claim-additional-payments"
-      BIGQUERY_TABLE_NAME = "events"
+      ENVIRONMENT_NAME         = var.environment
+      PGSSLMODE                = local.postgres_ssl_mode
+      CANONICAL_HOSTNAME       = local.canonical_hostname
+      BIGQUERY_DATASET         = var.dataset_name
+      BIGQUERY_PROJECT_ID      = "claim-additional-payments"
+      BIGQUERY_TABLE_NAME      = "events"
+      BIGQUERY_AIRBYTE_DATASET = var.airbyte_enabled ? local.gcp_dataset_name : null
+      AIRBYTE_SERVER_URL       = var.airbyte_enabled ? "https://airbyte-${var.namespace}.${module.cluster_data.ingress_domain}" : null
+      BIGQUERY_POLICY_TAGS     = var.airbyte_enabled ? "{\"hidden\":\"projects/claim-additional-payments/locations/europe-west2/taxonomies/6035056991658002237/policyTags/5001017932158544163\"}" : null
   })
-  secret_variables = {
+  secret_variables = merge({
     DATABASE_URL               = module.postgres.url
     AZURE_STORAGE_ACCOUNT_NAME = local.azure_storage_account_name
     AZURE_STORAGE_ACCESS_KEY   = local.azure_storage_access_key
     AZURE_STORAGE_CONTAINER    = local.azure_storage_container
     HEARTBEAT_CHECK_URL        = var.enable_monitoring ? module.statuscake[0].heartbeat_check_urls[local.heartbeat_check_name] : null
     GOOGLE_CLOUD_CREDENTIALS   = var.enable_dfe_analytics_federated_auth ? module.dfe_analytics[0].google_cloud_credentials : null
-  }
+    },
+    {
+      AIRBYTE_CONFIGURATION = var.airbyte_enabled ? jsonencode({
+        SOURCE_ID      = module.airbyte[0].airbyte_source_id
+        DESTINATION_ID = module.airbyte[0].airbyte_destination_id
+        CONNECTION_ID  = module.airbyte[0].airbyte_connection_id
+      }) : null
+  })
 }
 
 module "web_application" {
