@@ -8,6 +8,7 @@ headers = [
   "claim_reference",
   "amendment_created_at",
   "amendment_notes",
+  "amendment_fields",
   "amendment_changes",
 ]
 
@@ -31,6 +32,7 @@ CSV.open(output_path, "w", headers:, write_headers: true) do |csv|
       amendment.claim.reference,
       amendment.created_at,
       amendment.notes,
+      amendment.claim_changes.keys.map(&:to_s).join(","),
       amendment.claim_changes,
     ]
   end
@@ -78,4 +80,3 @@ CSV.open(output_path, "w", headers:, write_headers: true) do |csv|
     ]
   end
 end
-
