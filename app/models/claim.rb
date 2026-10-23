@@ -403,14 +403,6 @@ class Claim < ApplicationRecord
     end
   end
 
-  def one_login_idv_match?
-    one_login_idv_name_match? && one_login_idv_dob_match?
-  end
-
-  def one_login_idv_mismatch?
-    !one_login_idv_match?
-  end
-
   def one_login_idv_failed?
     identity_confirmed_with_onelogin == false
   end
@@ -486,15 +478,6 @@ class Claim < ApplicationRecord
       ref = Reference.new.to_s
       break ref unless Claim.exists?(reference: ref)
     }
-  end
-
-  def one_login_idv_name_match?
-    /\A#{first_name.strip.downcase} /.match?(onelogin_idv_full_name.strip.downcase) &&
-      / #{surname.strip.downcase}\z/.match?(onelogin_idv_full_name.strip.downcase)
-  end
-
-  def one_login_idv_dob_match?
-    onelogin_idv_date_of_birth == date_of_birth
   end
 
   def has_further_education_policy?
