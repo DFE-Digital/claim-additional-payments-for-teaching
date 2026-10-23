@@ -1,6 +1,6 @@
 <table id="claims-with-matches" class="govuk-table govuk-!-margin-bottom-9">
   <% if show_caption %>
-    <caption class="govuk-table__caption govuk-heading-l">
+    <caption class="govuk-table__caption govuk-table__caption--l">
       <%= @claim.policy.short_name %> <%= "claim".pluralize(matching_claims.count) %> with matching details
     </caption>
   <% end %>
