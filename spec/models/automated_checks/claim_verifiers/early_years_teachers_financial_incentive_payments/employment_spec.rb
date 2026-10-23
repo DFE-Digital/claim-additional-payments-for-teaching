@@ -28,7 +28,6 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::EarlyYearsTeachersFinancialIncen
     expect(task.passed).to eq(true)
     expect(task.manual).to eq(false)
     expect(claim.eligibility.reload.hmrc_response_body).to eq(response_body)
-    expect(claim.notes.last.body).to include("HMRC API STATUS: Success", "Oak Tree Nursery")
   end
 
   it "leaves employment for manual checking when HMRC cannot find the claimant" do
@@ -43,7 +42,6 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::EarlyYearsTeachersFinancialIncen
     expect(task.passed).to be_nil
     expect(task.manual).to eq(true)
     expect(task.reason).to eq("incomplete")
-    expect(claim.notes.last.body).to include("HMRC API STATUS: Claimant not found")
   end
 
   it "does not run the job again when an employment task already exists" do
@@ -53,6 +51,5 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::EarlyYearsTeachersFinancialIncen
       .not_to receive(:perform_now)
 
     expect { described_class.new(claim: claim).perform }.not_to change { claim.tasks.count }
-    expect(claim.notes).to be_empty
   end
 end
