@@ -43,11 +43,13 @@ module Journeys
     # returns the next slug in the sequence
     # used when a user hits continue on a form
     def next_slug
-      return "ineligible" if eligibility_checker.ineligible?
-
       if current_slug.nil?
         journey.slug_for_form(form: forms.first)
       else
+        if !form_class_for_current_slug.skip_eligibility_check? && eligibility_checker.ineligible?
+          return "ineligible" if eligibility_checker.ineligible?
+        end
+
         forms.each_with_index do |form, index|
           slug = journey.slug_for_form(form:)
 
@@ -206,6 +208,10 @@ module Journeys
     end
 
     private
+
+    def form_class_for_current_slug
+      journey.form_class_for_slug(slug: current_slug)
+    end
 
     def impermissible_forms
       all_forms.reject do |form|

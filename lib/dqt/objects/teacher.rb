@@ -4,6 +4,10 @@ module Dqt
       to_h.empty?
     end
 
+    def found?
+      !not_found?
+    end
+
     def email_address
       string_reader(emailAddress)
     end
@@ -48,6 +52,11 @@ module Dqt
       return [] if routesToProfessionalStatuses.blank?
 
       routesToProfessionalStatuses
+    end
+
+    def held_routes_to_professional_statuses
+      routes = routesToProfessionalStatuses.map { |r| Route.new(r) }
+      routes.select { |r| r.holds? }
     end
 
     def itt_subject_codes
