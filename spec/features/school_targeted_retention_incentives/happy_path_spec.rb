@@ -158,6 +158,14 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
     choose "I don’t know"
     click_button "Continue"
 
-    expect(page).to have_text "hello"
+    expect(page).to have_text "Confirm your details"
+    check "I confirm that I understand and accept these conditions."
+    expect {
+      click_button "Confirm and claim"
+    }.to change(Claim, :count).by(1)
+
+    claim = Claim.last
+    expect(page).to have_text "Claim complete"
+    expect(page).to have_text claim.reference
   end
 end

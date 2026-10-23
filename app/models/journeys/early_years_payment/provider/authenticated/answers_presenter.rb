@@ -3,8 +3,6 @@ module Journeys
     module Provider
       module Authenticated
         class AnswersPresenter < BaseAnswersPresenter
-          include ActionView::Helpers::TranslationHelper
-
           def claim_answers
             [].tap do |a|
               a << nursery

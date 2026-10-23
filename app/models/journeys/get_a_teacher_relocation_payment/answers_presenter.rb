@@ -1,8 +1,6 @@
 module Journeys
   module GetATeacherRelocationPayment
     class AnswersPresenter < BaseAnswersPresenter
-      include ActionView::Helpers::TranslationHelper
-
       def eligibility_answers
         [].tap do |a|
           a << previous_payment_received

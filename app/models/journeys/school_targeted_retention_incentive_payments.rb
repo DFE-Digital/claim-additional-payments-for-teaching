@@ -16,7 +16,6 @@ module Journeys
       MaybeEligibleForm,
       InformationProvidedForm,
       PersonalBankAccountForm,
-      HelloForm,
       CheckYourAnswersForm,
       ConfirmationForm
     ].freeze
@@ -44,7 +43,6 @@ module Journeys
         MaybeEligibleForm,
         InformationProvidedForm,
         PersonalBankAccountForm,
-        HelloForm,
         CheckYourAnswersForm,
         ConfirmationForm
       ]
@@ -58,6 +56,10 @@ module Journeys
 
     def set_a_reminder?(itt_year)
       false
+    end
+
+    def requires_student_loan_details?
+      true
     end
   end
 end

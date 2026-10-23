@@ -17,7 +17,6 @@ module Journeys
         "address",
         "personal-bank-account",
         "gender",
-        "hello",
         "check-your-answers",
         "confirmation"
       ]
@@ -69,8 +68,6 @@ module Journeys
 
         array << "personal-bank-account"
         array << "gender"
-
-        array << "hello"
         array << "check-your-answers"
         array << "confirmation"
       end

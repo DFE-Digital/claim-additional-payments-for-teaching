@@ -1,5 +1,7 @@
 module Journeys
   class BaseAnswersPresenter
+    include ActionView::Helpers::TranslationHelper
+
     attr_reader :journey_session
 
     delegate :answers, to: :journey_session

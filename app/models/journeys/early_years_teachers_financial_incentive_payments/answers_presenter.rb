@@ -1,7 +1,6 @@
 module Journeys
   module EarlyYearsTeachersFinancialIncentivePayments
     class AnswersPresenter < BaseAnswersPresenter
-      include ActionView::Helpers::TranslationHelper
       include Rails.application.routes.url_helpers
       include ActionView::Helpers::UrlHelper
       include ActionView::Helpers::NumberHelper
