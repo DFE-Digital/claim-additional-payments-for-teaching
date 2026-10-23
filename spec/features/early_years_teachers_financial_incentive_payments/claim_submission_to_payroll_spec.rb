@@ -99,13 +99,14 @@ RSpec.describe "Full end to end EYTRP", feature_flag: [:eytfi_journey] do
     expect(page).to have_text "Sign in with GOV.UK One Login"
     perform_enqueued_jobs { click_button "Continue" }
 
-    expect(page).to have_text "You may be eligible for a recognition payment"
-    choose "Yes"
+    expect(page).to have_text "Enter your National Insurance number"
+    fill_in "Enter your National Insurance number", with: claimant_nino
     click_button "Continue"
 
     upload_employment_proof
 
-    expect(page).to have_text "How we’ll use your information"
+    expect(page).to have_text "You may be eligible for a recognition payment"
+    choose "Yes"
     click_button "Continue"
 
     expect(page).to have_text "What is your home address?"
@@ -120,10 +121,6 @@ RSpec.describe "Full end to end EYTRP", feature_flag: [:eytfi_journey] do
 
     expect(page).to have_text "Are you recorded as male or female on your employer’s payroll system?"
     choose "I don’t know"
-    click_button "Continue"
-
-    expect(page).to have_text "Enter your National Insurance number"
-    fill_in "Enter your National Insurance number", with: claimant_nino
     click_button "Continue"
 
     expect(page).to have_text(I18n.t("questions.account_details"))

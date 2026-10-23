@@ -95,7 +95,7 @@ RSpec.describe(
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-08-30",
+            fromDate: "2026-07-30",
             matchId: "12345"
           },
           headers: {
@@ -392,7 +392,7 @@ RSpec.describe(
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-08-30",
+            fromDate: "2026-07-30",
             matchId: "12345"
           },
           headers: {
@@ -480,7 +480,7 @@ RSpec.describe(
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-08-30",
+            fromDate: "2026-07-30",
             matchId: "12345"
           },
           headers: {
@@ -568,7 +568,7 @@ RSpec.describe(
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-08-30",
+            fromDate: "2026-07-30",
             matchId: "12345"
           },
           headers: {
@@ -658,7 +658,7 @@ RSpec.describe(
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-08-30",
+            fromDate: "2026-07-30",
             matchId: "12345"
           },
           headers: {
@@ -748,7 +748,7 @@ RSpec.describe(
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-08-30",
+            fromDate: "2026-07-30",
             matchId: "12345"
           },
           headers: {
@@ -840,7 +840,7 @@ RSpec.describe(
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-08-30",
+            fromDate: "2026-07-30",
             matchId: "12345"
           },
           headers: {
@@ -934,7 +934,7 @@ RSpec.describe(
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-08-30",
+            fromDate: "2026-07-30",
             matchId: "12345"
           },
           headers: {
@@ -1030,7 +1030,7 @@ RSpec.describe(
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-08-30",
+            fromDate: "2026-07-30",
             matchId: "12345"
           },
           headers: {
@@ -1124,7 +1124,7 @@ RSpec.describe(
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-08-30",
+            fromDate: "2026-07-30",
             matchId: "12345"
           },
           headers: {
@@ -1218,7 +1218,7 @@ RSpec.describe(
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-08-30",
+            fromDate: "2026-07-30",
             matchId: "12345"
           },
           headers: {
@@ -1281,7 +1281,10 @@ RSpec.describe(
         employments = [
           {
             employer: {
-              name: "Springfield nursery"
+              name: "Springfield nursery",
+              address: {
+                postcode: nursery.postcode
+              }
             }
           }
         ]
@@ -1320,7 +1323,7 @@ RSpec.describe(
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-08-30",
+            fromDate: "2026-07-30",
             matchId: "12345"
           },
           headers: {
@@ -1381,7 +1384,10 @@ RSpec.describe(
             startDate: "2026-01-01",
             endDate: "2026-09-01",
             employer: {
-              name: "Springfield nursery"
+              name: "Springfield nursery",
+              address: {
+                postcode: nursery.postcode
+              }
             }
           }
         ]
@@ -1420,7 +1426,7 @@ RSpec.describe(
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-08-30",
+            fromDate: "2026-07-30",
             matchId: "12345"
           },
           headers: {
@@ -1520,7 +1526,7 @@ RSpec.describe(
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-08-30",
+            fromDate: "2026-07-30",
             matchId: "12345"
           },
           headers: {
@@ -1612,7 +1618,7 @@ RSpec.describe(
           "https://test-api.service.hmrc.gov.uk/individuals/employments/paye"
         ).with(
           query: {
-            fromDate: "2026-08-30",
+            fromDate: "2026-07-30",
             matchId: "12345"
           },
           headers: {

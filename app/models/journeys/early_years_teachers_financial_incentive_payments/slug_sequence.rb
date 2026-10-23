@@ -55,33 +55,6 @@ module Journeys
       end
 
       def slugs
-        if FeatureFlag.enabled?(:eytrp_hmrc_integration)
-          hmrc_employment_journey_slugs
-        else
-          original_journey_slugs
-        end
-      end
-
-      def journey
-        Journeys::EarlyYearsTeachersFinancialIncentivePayments
-      end
-
-      private
-
-      def form_for_slug(slug)
-        form_class = journey.form_class_for_slug(slug:)
-
-        raise "Form not found for journey: #{journey} slug: #{slug}" if form_class.nil?
-
-        form_class.new(
-          journey:,
-          journey_session:,
-          params: ActionController::Parameters.new,
-          session: {}
-        )
-      end
-
-      def hmrc_employment_journey_slugs
         array = []
 
         array << SLUGS_HASH["nursery-search"]
@@ -102,11 +75,13 @@ module Journeys
           SLUGS_HASH["national-insurance-number"]
         end
 
-        unless ::EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob.enabled?
-          array << SLUGS_HASH["hmrc-bypass"]
-        end
+        if FeatureFlag.enabled?(:eytrp_hmrc_integration)
+          unless ::EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob.enabled?
+            array << SLUGS_HASH["hmrc-bypass"]
+          end
 
-        array << SLUGS_HASH["hmrc-loading-screen"]
+          array << SLUGS_HASH["hmrc-loading-screen"]
+        end
 
         unless answers.hmrc_employment_check_passed?
           array << SLUGS_HASH["upload-employment-proof"]
@@ -136,44 +111,23 @@ module Journeys
         array
       end
 
-      def original_journey_slugs
-        array = []
+      def journey
+        Journeys::EarlyYearsTeachersFinancialIncentivePayments
+      end
 
-        array << SLUGS_HASH["nursery-search"]
+      private
 
-        if answers.nursery_id.blank?
-          array << SLUGS_HASH["nursery-select"]
-        end
+      def form_for_slug(slug)
+        form_class = journey.form_class_for_slug(slug:)
 
-        array << SLUGS_HASH["teaching-qualification-confirmation"]
-        array << SLUGS_HASH["check-eligibility"]
-        array << SLUGS_HASH["eligible-teaching-qualification-held"]
-        array << SLUGS_HASH["sign-in"]
-        array << SLUGS_HASH["qualifications-check"]
-        array << SLUGS_HASH["continue-claim"]
+        raise "Form not found for journey: #{journey} slug: #{slug}" if form_class.nil?
 
-        if answers.continue_claim == false
-          array << SLUGS_HASH["claim-cancelled"]
-        end
-
-        array << SLUGS_HASH["upload-employment-proof"]
-        array << SLUGS_HASH["review-employment-proof"]
-        array << SLUGS_HASH["information-provided"]
-        array << SLUGS_HASH["postcode-search"]
-
-        array << if answers.postcode_searched?
-          SLUGS_HASH["select-home-address"]
-        else
-          SLUGS_HASH["address"]
-        end
-
-        array << SLUGS_HASH["gender"]
-        array << SLUGS_HASH["national-insurance-number"]
-        array << SLUGS_HASH["personal-bank-account"]
-        array << SLUGS_HASH["check-your-answers"]
-        array << SLUGS_HASH["confirmation"]
-
-        array
+        form_class.new(
+          journey:,
+          journey_session:,
+          params: ActionController::Parameters.new,
+          session: {}
+        )
       end
     end
   end

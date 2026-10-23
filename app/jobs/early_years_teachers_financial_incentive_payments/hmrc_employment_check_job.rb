@@ -1,6 +1,5 @@
 module EarlyYearsTeachersFinancialIncentivePayments
   class HmrcEmploymentCheckJob < ApplicationJob
-    # Enable `eytrp_hmrc_integration` to turn on the new HMRC journey.
     # Hmrc api call is off by default in review environments, turn it on in
     # these environments by enabling
     # `eytrp_perform_hmrc_api_call_in_review_environments`

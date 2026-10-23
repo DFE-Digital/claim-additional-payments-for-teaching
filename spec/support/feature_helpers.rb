@@ -28,7 +28,7 @@ module FeatureHelpers
     choose "Yes, add this file"
     click_on "Continue"
 
-    expect(page).to have_text("Document uploaded successfully")
+    expect(page).to have_text("You may be eligible for a recognition payment")
   end
 
   def choose_qts_year(option = :on_or_after_cut_off_date)
