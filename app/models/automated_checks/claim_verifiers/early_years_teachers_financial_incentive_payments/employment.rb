@@ -10,6 +10,8 @@ module AutomatedChecks
         def perform
           return if claim.tasks.employment.exists?
 
+          ::EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob.perform_now(claim)
+
           task = claim.tasks.employment.new
 
           if employment_check.passed?
