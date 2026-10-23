@@ -5,7 +5,18 @@ module Journeys
         "current-school",
         "select-current-school",
         "half-contracted-hours",
-        "hello",
+        "sign-in",
+        "query-teacher-details",
+        "verify-national-insurance-number",
+        "national-insurance-number",
+        "teacher-details",
+        "maybe-eligible",
+        "information-provided",
+        "postcode-search",
+        "select-home-address",
+        "address",
+        "personal-bank-account",
+        "gender",
         "check-your-answers",
         "confirmation"
       ]
@@ -34,9 +45,31 @@ module Journeys
       end
 
       def slugs
-        [].tap do |sequence|
-          sequence.push(*SLUGS)
+        array = []
+
+        array << "current-school"
+        array << "select-current-school"
+        array << "half-contracted-hours"
+        array << "sign-in"
+        array << "query-teacher-details"
+
+        array << "verify-national-insurance-number" if show_verify_national_insurance_number?
+        array << "national-insurance-number" if show_national_insurance_number?
+        array << "teacher-details"
+        array << "maybe-eligible"
+        array << "information-provided"
+        array << "postcode-search"
+
+        array << if answers.postcode_searched?
+          "select-home-address"
+        else
+          "address"
         end
+
+        array << "personal-bank-account"
+        array << "gender"
+        array << "check-your-answers"
+        array << "confirmation"
       end
 
       def journey
@@ -44,6 +77,16 @@ module Journeys
       end
 
       private
+
+      def show_verify_national_insurance_number?
+        journey_session.answers.trs_data_fetched_at.present?
+          && journey_session.answers.trs_data["nationalInsuranceNumber"].present?
+      end
+
+      def show_national_insurance_number?
+        journey_session.answers.trs_data_fetched_at.present?
+          && journey_session.answers.trs_data["nationalInsuranceNumber"].blank?
+      end
     end
   end
 end

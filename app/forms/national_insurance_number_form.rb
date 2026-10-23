@@ -18,6 +18,10 @@ class NationalInsuranceNumberForm < Form
     if: -> { national_insurance_number.present? }
   )
 
+  def self.skip_eligibility_check?
+    true
+  end
+
   def save
     return false if invalid?
 

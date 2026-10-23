@@ -1,7 +1,6 @@
 module Journeys
   module FurtherEducationPayments
     class AnswersPresenter < BaseAnswersPresenter
-      include ActionView::Helpers::TranslationHelper
       include CoursesHelper
 
       def identity_answers

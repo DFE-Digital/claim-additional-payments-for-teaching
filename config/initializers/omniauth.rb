@@ -145,4 +145,33 @@ Rails.application.config.middleware.use OmniAuth::Builder do
       }
     }
   end
+
+  if TeacherAuth::SchoolConfig.instance.bypass?
+    provider :developer
+  else
+    provider :openid_connect, {
+      name: :teacher_school,
+      discovery: true,
+      response_type: :code,
+      scope: %i[openid email profile offline_access teaching_record],
+      send_scope_to_token_endpoint: false,
+      callback_path: TeacherAuth::SchoolConfig.instance.callback_path,
+      path_prefix: TeacherAuth::SchoolConfig.instance.path_prefix,
+      issuer: TeacherAuth::SchoolConfig.instance.issuer,
+      pkce: true,
+      client_options: {
+        port: 443,
+        scheme: "https",
+        host: TeacherAuth::SchoolConfig.instance.host,
+        identifier: TeacherAuth::SchoolConfig.instance.identifier,
+        secret: TeacherAuth::SchoolConfig.instance.secret,
+        redirect_uri: TeacherAuth::SchoolConfig.instance.redirect_uri,
+        authorization_endpoint: "/oauth2/authorize",
+        end_session_endpoint: "/oauth2/logout",
+        token_endpoint: "/oauth2/token",
+        userinfo_endpoint: "/oauth2/userinfo",
+        jwks_uri: TeacherAuth::SchoolConfig.instance.jwks_uri
+      }
+    }
+  end
 end

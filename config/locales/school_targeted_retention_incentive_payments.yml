@@ -13,6 +13,7 @@ en:
     support_email_address: "schools-targeted.retention-incentive@education.gov.uk"
     information_provided_further_details: "For more details, you can read about payments and deductions for the %{link}"
     information_provided_further_details_link_text: "school targeted retention incentive (opens in new tab)"
+    guidance_url: "https://www.gov.uk/guidance/targeted-retention-incentive-payments-for-school-teachers"
     accessibility_statement:
       test_date: "28 July 2022"
       prepared_date: "31 July 2019"
@@ -47,6 +48,10 @@ en:
           generic: You are not eligible
           school_ineligible: The school you have selected is not eligible
           at_least_half_contracted_hours: You are not eligible for this payment
+          ineligible_subject: You are not eligible due to subject
+          ineligible_qualification: You are not eligible due to qualification
+          teaching_years_exceeded: You are not eligible as teaching years exceeded
+          incorrect_details: You need to update your details before you submit a claim
       current_school:
         question: What school do you teach at?
         errors:
@@ -56,3 +61,12 @@ en:
         heading: Which school do you teach at?
         errors:
           blank: Select the school you teach at
+      query_teacher_details:
+        title: Querying teacher details
+      verify_national_insurance_number:
+        title: Is this your National Insurance number?
+      personal_bank_account:
+          legend: Enter the bank account details you want the payment to be paid into
+      gender:
+        questions:
+          payroll_gender: Are you recorded as male or female on your employer’s payroll system?

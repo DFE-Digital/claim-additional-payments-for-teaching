@@ -11,10 +11,44 @@ module Journeys
       SelectCurrentSchoolForm,
       IneligibleForm,
       HalfContractedHoursForm,
-      HelloForm,
+      SignInForm,
+      QueryTeacherDetailsForm,
+      MaybeEligibleForm,
+      InformationProvidedForm,
+      PersonalBankAccountForm,
       CheckYourAnswersForm,
       ConfirmationForm
     ].freeze
+
+    def forms
+      array = [
+        CurrentSchoolForm,
+        SelectCurrentSchoolForm,
+        IneligibleForm,
+        HalfContractedHoursForm
+      ]
+
+      array << if TeacherAuth::SchoolConfig.instance.bypass?
+        Debug::TeacherAuth::School::SignInForm
+      else
+        SignInForm
+      end
+
+      array += [
+        QueryTeacherDetailsForm,
+        VerifyNationalInsuranceNumberForm,
+        NationalInsuranceNumberForm,
+        TeacherDetailsForm,
+        MaybeEligibleForm,
+        MaybeEligibleForm,
+        InformationProvidedForm,
+        PersonalBankAccountForm,
+        CheckYourAnswersForm,
+        ConfirmationForm
+      ]
+
+      array
+    end
 
     def available?
       FeatureFlag.enabled?(:new_stri)
@@ -22,6 +56,10 @@ module Journeys
 
     def set_a_reminder?(itt_year)
       false
+    end
+
+    def requires_student_loan_details?
+      true
     end
   end
 end
