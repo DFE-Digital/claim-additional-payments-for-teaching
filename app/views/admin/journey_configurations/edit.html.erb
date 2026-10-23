@@ -104,6 +104,20 @@
         :name,
         legend: { text: "Automatic approvals for submitted claims" } %>
 
+      <%= f.govuk_text_field :approved_min_qa_threshold,
+        inputmode: "numeric",
+        suffix_text: "%",
+        width: 3,
+        label: { text: "Approved claims minimum QA threshold" },
+        hint: { text: "Percentage of approved claims to QA" } %>
+
+      <%= f.govuk_text_field :rejected_min_qa_threshold,
+        inputmode: "numeric",
+        suffix_text: "%",
+        width: 3,
+        label: { text: "Rejected claims minimum QA threshold" },
+        hint: { text: "Percentage of rejected claims to QA" } %>
+
       <% if journey_configuration.teacher_id_configurable? %>
         <%= f.govuk_collection_radio_buttons :teacher_id_enabled,
           @form.teacher_id_radio_options,
