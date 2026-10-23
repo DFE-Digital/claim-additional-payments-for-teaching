@@ -157,7 +157,7 @@ jobs:
             --runtime-log "$previous_runtime_log"
       - name: Upload node runtime log
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: runtime-log-${{ matrix.ci_node_index }}
           path: tmp/parallel_runtime_rspec.log
