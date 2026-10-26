@@ -6,14 +6,10 @@ RSpec.describe "Full end to end EYTRP", feature_flag: [:eytfi_journey] do
   let(:claimant_date_of_birth) { Date.new(1970, 12, 13) }
 
   before do
-    stub_const(
-      "Policies::EarlyYearsTeachersFinancialIncentivePayments::APPROVED_MIN_QA_THRESHOLD",
-      0
-    )
-
     create(
       :journey_configuration,
-      :early_years_teachers_financial_incentive_payments
+      :early_years_teachers_financial_incentive_payments,
+      approved_min_qa_threshold: 0
     )
 
     create(:eligible_eytfi_provider, name: "Springfield nursery")

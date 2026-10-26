@@ -4,6 +4,9 @@ module Policies
   module TestPolicyA
     include BasePolicy
 
+    APPROVED_MIN_QA_THRESHOLD = 7
+    REJECTED_MIN_QA_THRESHOLD = 13
+
     extend self
 
     class Eligibility
@@ -84,11 +87,143 @@ RSpec.describe BasePolicy, type: :model do
     end
   end
 
-  describe "#decision_deadline_date" do
+  describe "::decision_deadline_date" do
     let(:claim) { build(:claim, :submitted) }
 
     it "is 19 weeks after submitted date" do
       expect(Policies::TestPolicy.decision_deadline_date(claim)).to eql((claim.submitted_at + 19.weeks).to_date)
+    end
+  end
+
+  describe "::approved_min_qa_threshold" do
+    context "when journey not present" do
+      it "returns constant" do
+        expect(Policies::TestPolicyA.approved_min_qa_threshold).to eql(7)
+      end
+    end
+
+    context "when journey present but no journey configuration" do
+      let(:mock_journey) do
+        Journeys::FurtherEducationPayments
+      end
+
+      before do
+        allow(Journeys).to receive(:for_policy).and_return(mock_journey)
+      end
+
+      it "returns constant" do
+        expect(Policies::TestPolicyA.approved_min_qa_threshold).to eql(7)
+      end
+    end
+
+    context "when journey present with journey configuration with nil value" do
+      let(:mock_journey) do
+        Journeys::FurtherEducationPayments
+      end
+
+      let(:mock_journey_configuration) do
+        build(
+          :journey_configuration,
+          approved_min_qa_threshold: nil
+        )
+      end
+
+      before do
+        allow(Journeys).to receive(:for_policy).and_return(mock_journey)
+        allow(Journeys::Configuration).to receive(:find_by).and_return(mock_journey_configuration)
+      end
+
+      it "returns constant" do
+        expect(Policies::TestPolicyA.approved_min_qa_threshold).to eql(7)
+      end
+    end
+
+    context "when journey present and configured" do
+      let(:mock_journey) do
+        Journeys::FurtherEducationPayments
+      end
+
+      let(:mock_journey_configuration) do
+        build(
+          :journey_configuration,
+          approved_min_qa_threshold: 14
+        )
+      end
+
+      before do
+        allow(Journeys).to receive(:for_policy).and_return(mock_journey)
+        allow(Journeys::Configuration).to receive(:find_by).and_return(mock_journey_configuration)
+      end
+
+      it "returns configured value" do
+        expect(Policies::TestPolicyA.approved_min_qa_threshold).to eql(14)
+      end
+    end
+  end
+
+  describe "::rejected_min_qa_threshold" do
+    context "when journey not present" do
+      it "returns constant" do
+        expect(Policies::TestPolicyA.rejected_min_qa_threshold).to eql(13)
+      end
+    end
+
+    context "when journey present but no journey configuration" do
+      let(:mock_journey) do
+        Journeys::FurtherEducationPayments
+      end
+
+      before do
+        allow(Journeys).to receive(:for_policy).and_return(mock_journey)
+      end
+
+      it "returns constant" do
+        expect(Policies::TestPolicyA.rejected_min_qa_threshold).to eql(13)
+      end
+    end
+
+    context "when journey present with journey configuration with nil value" do
+      let(:mock_journey) do
+        Journeys::FurtherEducationPayments
+      end
+
+      let(:mock_journey_configuration) do
+        build(
+          :journey_configuration,
+          rejected_min_qa_threshold: nil
+        )
+      end
+
+      before do
+        allow(Journeys).to receive(:for_policy).and_return(mock_journey)
+        allow(Journeys::Configuration).to receive(:find_by).and_return(mock_journey_configuration)
+      end
+
+      it "returns constant" do
+        expect(Policies::TestPolicyA.rejected_min_qa_threshold).to eql(13)
+      end
+    end
+
+    context "when journey present and configured" do
+      let(:mock_journey) do
+        Journeys::FurtherEducationPayments
+      end
+
+      let(:mock_journey_configuration) do
+        build(
+          :journey_configuration,
+          rejected_min_qa_threshold: 26
+        )
+      end
+
+      before do
+        allow(Journeys).to receive(:for_policy).and_return(mock_journey)
+        allow(Journeys::Configuration).to receive(:find_by).and_return(mock_journey_configuration)
+      end
+
+      it "returns configured value" do
+        expect(Policies::TestPolicyA.rejected_min_qa_threshold).to eql(26)
+      end
     end
   end
 end

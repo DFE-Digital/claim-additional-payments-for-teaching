@@ -56,5 +56,10 @@ FactoryBot.define do
       open_for_submissions { false }
       close_at { 2.days.from_now }
     end
+
+    trait :disable_qa do
+      approved_min_qa_threshold { 0 }
+      rejected_min_qa_threshold { 0 }
+    end
   end
 end

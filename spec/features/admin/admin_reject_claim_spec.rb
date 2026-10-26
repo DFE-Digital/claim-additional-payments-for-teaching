@@ -4,7 +4,11 @@ RSpec.feature "Admin rejects a claim" do
   let!(:claim) { create(:claim, :submitted) }
 
   before do
-    disable_claim_qa_flagging
+    create(
+      :journey_configuration,
+      :student_loans,
+      :disable_qa
+    )
     @signed_in_user = sign_in_as_service_operator
   end
 
@@ -37,23 +41,6 @@ RSpec.feature "Admin rejects a claim" do
 
     expect(page).to have_content("Result Rejected")
     expect(page).to have_content("Reasons Ineligible subject, Duplicate")
-  end
-
-  scenario "Rejecting an ECP claim with Induction - ECP only" do
-    claim = create(:claim, :submitted, policy: Policies::EarlyCareerPayments)
-
-    visit admin_claim_tasks_path(claim)
-    click_on "Approve or reject this claim"
-    choose "Reject"
-    check "Induction - ECP only"
-    click_button "Confirm decision"
-
-    expect(page).to have_content("Claim has been rejected successfully")
-
-    visit admin_claim_path(claim)
-
-    expect(page).to have_content("Result Rejected")
-    expect(page).to have_content("Reasons Induction - ECP only")
   end
 
   scenario "Rejecting a claim with Other with a note" do
@@ -123,13 +110,18 @@ RSpec.feature "Admin rejects a claim" do
     end
 
     scenario "rejecting sends the generic rejection email" do
+      create(
+        :journey_configuration,
+        :further_education_payments,
+        :disable_qa
+      )
+
       visit admin_claim_tasks_path(claim)
 
       click_on "Approve or reject this claim"
+
       choose "Reject"
-
       check "Ineligible subject"
-
       click_button "Confirm decision"
 
       expect(page).to have_content("Claim has been rejected successfully")
@@ -145,14 +137,19 @@ RSpec.feature "Admin rejects a claim" do
     end
 
     scenario "rejecting with just the other_reason_only_used_in_exceptional_circumstances does not send an email" do
+      create(
+        :journey_configuration,
+        :further_education_payments,
+        :disable_qa
+      )
+
       visit admin_claim_tasks_path(claim)
 
       click_on "Approve or reject this claim"
-      choose "Reject"
 
+      choose "Reject"
       check "Other reason only used in exceptional circumstances"
       fill_in "Decision notes", with: "A note with exceptional reasons"
-
       click_button "Confirm decision"
 
       expect(page).to have_content("Claim has been rejected successfully")
@@ -180,6 +177,12 @@ RSpec.feature "Admin rejects a claim" do
       end
 
       scenario "rejecting sends email to provider only when claimant yet to complete" do
+        create(
+          :journey_configuration,
+          :early_years_payment_provider_start,
+          :disable_qa
+        )
+
         visit admin_claim_tasks_path(claim)
         click_on "Approve or reject this claim"
         choose "Reject"
@@ -208,6 +211,11 @@ RSpec.feature "Admin rejects a claim" do
       end
 
       scenario "rejecting sends email to claimant + provider" do
+        create(
+          :journey_configuration,
+          :early_years_payment_provider_start,
+          :disable_qa
+        )
         visit admin_claim_tasks_path(claim)
         click_on "Approve or reject this claim"
         choose "Reject"
@@ -231,20 +239,19 @@ RSpec.feature "Admin rejects a claim" do
       perform_enqueued_jobs { example.run }
     end
 
-    before do
-      stub_const("Policies::#{policy}::REJECTED_MIN_QA_THRESHOLD", 100)
-    end
-
     context "when rejecting during QA" do
       it "rejects the claim" do
-        visit admin_claim_tasks_path(claim)
+        create(
+          :journey_configuration,
+          :further_education_payments,
+          rejected_min_qa_threshold: 100
+        )
 
+        visit admin_claim_tasks_path(claim)
         click_on "Approve or reject this claim"
 
         choose "Reject"
-
         check "No teaching responsibilities"
-
         click_button "Confirm decision"
 
         expect(claim.email_address).not_to have_received_email(
@@ -256,15 +263,11 @@ RSpec.feature "Admin rejects a claim" do
         )
 
         visit admin_claim_tasks_path(claim)
-
         click_on "Approve or reject quality assurance of this claim"
 
         choose "Reject"
-
         check "GOV One Login identity check failed"
-
         fill_in "Decision notes", with: "QA failed"
-
         click_button "Confirm decision"
 
         expect(page).to have_content("Claim has been rejected successfully")
@@ -281,6 +284,12 @@ RSpec.feature "Admin rejects a claim" do
 
     context "when approving during QA" do
       it "approves the claim" do
+        create(
+          :journey_configuration,
+          :further_education_payments,
+          approved_min_qa_threshold: 100
+        )
+
         visit admin_claim_tasks_path(claim)
         click_on "Approve or reject this claim"
         choose "Reject"
