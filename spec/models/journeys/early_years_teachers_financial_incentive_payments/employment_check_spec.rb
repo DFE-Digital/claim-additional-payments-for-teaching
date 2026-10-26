@@ -43,12 +43,12 @@ RSpec.describe(
       travel_to Time.zone.local(2026, 1, 15, 12) do
         expect(
           described_class.earliest_date_to_check
-        ).to eq(Date.new(2025, 12, 15))
+        ).to eq(Date.new(2025, 11, 15))
       end
     end
 
     it "uses the last available day when the previous month is shorter" do
-      travel_to Time.zone.local(2026, 3, 31, 12) do
+      travel_to Time.zone.local(2026, 4, 30, 12) do
         expect(
           described_class.earliest_date_to_check
         ).to eq(Date.new(2026, 2, 28))

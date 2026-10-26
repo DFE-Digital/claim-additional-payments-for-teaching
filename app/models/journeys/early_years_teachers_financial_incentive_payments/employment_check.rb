@@ -12,7 +12,7 @@ module Journeys
       ].join("|")
 
       def self.earliest_date_to_check
-        1.month.ago.to_date
+        2.months.ago.to_date
       end
 
       def initialize(setting:, hmrc_response_status:, hmrc_response_body:)
