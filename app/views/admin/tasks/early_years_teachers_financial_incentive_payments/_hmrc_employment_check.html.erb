@@ -1,0 +1,21 @@
+<section id="hmrc-employment-check">
+  <h2 class="govuk-heading-l" id="hmrc-employment-check-heading">HMRC employment check</h2>
+
+  <% if presenter.message.present? %>
+    <p class="govuk-body"><%= presenter.message %></p>
+  <% else %>
+    <% presenter.employment_summaries.each_with_index do |rows, index| %>
+      <h3 class="govuk-heading-m">Employment <%= index + 1 %></h3>
+
+      <%= govuk_summary_list do |summary_list| %>
+        <% rows.each do |label, value| %>
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { label } %>
+
+            <% row.with_value { value } %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+</section>
