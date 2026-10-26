@@ -5,7 +5,10 @@ RSpec.feature "Admin decisions" do
     let(:claim) { create(:claim, :submitted, policy: Policies::TargetedRetentionIncentivePayments) }
 
     before do
-      create(:journey_configuration, :targeted_retention_incentive_payments)
+      create(
+        :journey_configuration,
+        :targeted_retention_incentive_payments
+      )
       @signed_in_user = sign_in_as_service_operator
     end
 

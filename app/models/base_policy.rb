@@ -121,15 +121,15 @@ module BasePolicy
   end
 
   def approved_min_qa_threshold
-    return self::APPROVED_MIN_QA_THRESHOLD if journey.nil?
+    return self::APPROVED_MIN_QA_THRESHOLD if journey.nil? || Journeys::Configuration.find_by(routing_name: journey.routing_name).nil?
 
-    journey.configuration.approved_min_qa_threshold
+    journey.configuration.approved_min_qa_threshold || self::APPROVED_MIN_QA_THRESHOLD
   end
 
   def rejected_min_qa_threshold
-    return self::REJECTED_MIN_QA_THRESHOLD if journey.nil?
+    return self::REJECTED_MIN_QA_THRESHOLD if journey.nil? || Journeys::Configuration.find_by(routing_name: journey.routing_name).nil?
 
-    journey.configuration.rejected_min_qa_threshold
+    journey.configuration.rejected_min_qa_threshold || self::REJECTED_MIN_QA_THRESHOLD
   end
 
   def journey
