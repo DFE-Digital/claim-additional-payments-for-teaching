@@ -169,6 +169,12 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
       expect(journey_session.answers.trs_data_fetched_at).to be_within(1.minute).of(Time.zone.now)
       expect(journey_session.answers.has_eligible_qualification).to be_truthy
 
+      expect(page).to have_text "Enter your National Insurance number"
+      fill_in "Enter your National Insurance number", with: "AB123456C"
+      click_button "Continue"
+
+      upload_employment_proof
+
       expect(page).to have_text "You may be eligible for a recognition payment"
       choose "No"
       click_button "Continue"
@@ -219,13 +225,14 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
         click_button "Continue"
       end
 
-      expect(page).to have_text "You may be eligible for a recognition payment"
-      choose "Yes"
+      expect(page).to have_text "Enter your National Insurance number"
+      fill_in "Enter your National Insurance number", with: "AB123456C"
       click_button "Continue"
 
       upload_employment_proof
 
-      expect(page).to have_text "How we’ll use your information"
+      expect(page).to have_text "You may be eligible for a recognition payment"
+      choose "Yes"
       click_button "Continue"
 
       expect(page).to have_text "What is your home address?"
@@ -240,10 +247,6 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
 
       expect(page).to have_text "Are you recorded as male or female on your employer’s payroll system?"
       choose "I don’t know"
-      click_button "Continue"
-
-      expect(page).to have_text "Enter your National Insurance number"
-      fill_in "Enter your National Insurance number", with: "AB123456C"
       click_button "Continue"
 
       expect(page).to have_text(I18n.t("questions.account_details"))
