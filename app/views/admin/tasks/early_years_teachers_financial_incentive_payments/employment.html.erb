@@ -26,6 +26,10 @@
       locals: { claim: @claim }
     ) %>
 
+    <%= render(
+      partial: "admin/tasks/early_years_teachers_financial_incentive_payments/hmrc_employment_check",
+      locals: { presenter: Policies::EarlyYearsTeachersFinancialIncentivePayments::AdminEmploymentPresenter.new(@claim.eligibility) }
+    ) %>
   </div>
 
   <div class="govuk-grid-column-two-thirds">
