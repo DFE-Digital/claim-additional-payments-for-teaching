@@ -96,9 +96,16 @@ RSpec.describe "EYTFI admin HMRC employment check" do
           value: "Sunny Days Nursery"
         )
 
-        expect(page).to have_summary_item(
-          key: "Employment start date",
-          value: "Not returned"
+        expect(page).not_to have_selector(
+          "dt",
+          text: "Employment start date",
+          exact_text: true
+        )
+
+        expect(page).not_to have_selector(
+          "dt",
+          text: "Employment end date",
+          exact_text: true
         )
       end
     end
