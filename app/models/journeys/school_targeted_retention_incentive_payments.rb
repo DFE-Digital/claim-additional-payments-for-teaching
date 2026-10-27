@@ -12,6 +12,8 @@ module Journeys
       IneligibleForm,
       HalfContractedHoursForm,
       SignInForm,
+      ExistingClaimForm,
+      ExistingClaimsForm,
       QueryTeacherDetailsForm,
       MaybeEligibleForm,
       InformationProvidedForm,
@@ -35,6 +37,8 @@ module Journeys
       end
 
       array += [
+        ExistingClaimForm,
+        ExistingClaimsForm,
         QueryTeacherDetailsForm,
         VerifyNationalInsuranceNumberForm,
         NationalInsuranceNumberForm,

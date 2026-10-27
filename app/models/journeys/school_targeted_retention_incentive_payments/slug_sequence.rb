@@ -6,6 +6,8 @@ module Journeys
         "select-current-school",
         "half-contracted-hours",
         "sign-in",
+        "existing-claim",
+        "existing-claims",
         "query-teacher-details",
         "verify-national-insurance-number",
         "national-insurance-number",
@@ -51,25 +53,31 @@ module Journeys
         array << "select-current-school"
         array << "half-contracted-hours"
         array << "sign-in"
-        array << "query-teacher-details"
 
-        array << "verify-national-insurance-number" if show_verify_national_insurance_number?
-        array << "national-insurance-number" if show_national_insurance_number?
-        array << "teacher-details"
-        array << "maybe-eligible"
-        array << "information-provided"
-        array << "postcode-search"
-
-        array << if answers.postcode_searched?
-          "select-home-address"
+        if show_existing_claim?
+          array << "existing-claim"
+          array << "existing-claims"
         else
-          "address"
-        end
+          array << "query-teacher-details"
 
-        array << "personal-bank-account"
-        array << "gender"
-        array << "check-your-answers"
-        array << "confirmation"
+          array << "verify-national-insurance-number" if show_verify_national_insurance_number?
+          array << "national-insurance-number" if show_national_insurance_number?
+          array << "teacher-details"
+          array << "maybe-eligible"
+          array << "information-provided"
+          array << "postcode-search"
+
+          array << if answers.postcode_searched?
+            "select-home-address"
+          else
+            "address"
+          end
+
+          array << "personal-bank-account"
+          array << "gender"
+          array << "check-your-answers"
+          array << "confirmation"
+        end
       end
 
       def journey
@@ -77,6 +85,17 @@ module Journeys
       end
 
       private
+
+      def show_existing_claim?
+        return false if answers.payroll_gender.present?
+
+        OneLoginAccount
+          .new(uid: answers.teacher_auth_one_login_uid)
+          .claims
+          .where(policy: Policies::TargetedRetentionIncentivePayments)
+          .where(academic_year: journey.configuration.current_academic_year)
+          .exists?
+      end
 
       def show_verify_national_insurance_number?
         journey_session.answers.trs_data_fetched_at.present?

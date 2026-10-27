@@ -1,0 +1,19 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Your One Login account already has a claim for this payment linked to it
+    </h1>
+
+    <p class="govuk-body">
+      There’s already a targeted retention incentive payment claim for this school this year linked to your One Login account.
+    </p>
+
+    <p class="govuk-body">
+      You can view the claim submissions linked to your account to check the details.
+    </p>
+
+    <%= form_with model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_submit "View claim submissions" %>
+    <% end %>
+  </div>
+</div>
