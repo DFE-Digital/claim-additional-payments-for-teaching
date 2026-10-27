@@ -73,8 +73,8 @@ module Policies
             rows << [label, value]
           end
 
-          rows << ["Employment start date", start_date]
-          rows << ["Employment end date", end_date]
+          rows << ["Employment start date", start_date] if start_date.present?
+          rows << ["Employment end date", end_date] if end_date.present?
           rows
         end
 
@@ -91,11 +91,11 @@ module Policies
         end
 
         def start_date
-          @data.fetch("startDate", "Not returned")
+          @data["startDate"]
         end
 
         def end_date
-          @data.fetch("endDate", "Not returned")
+          @data["endDate"]
         end
       end
     end
