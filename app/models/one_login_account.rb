@@ -29,6 +29,7 @@ class OneLoginAccount
   end
 
   def claims
-    raise NotImplementedError
+    Claim
+      .where(onelogin_uid: uid)
   end
 end

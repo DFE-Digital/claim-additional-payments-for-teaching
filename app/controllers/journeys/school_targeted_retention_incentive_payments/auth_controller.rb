@@ -4,9 +4,13 @@ module Journeys
       def callback
         persist_callback_to_session
 
-        ::SchoolTargetedRetentionIncentivePayments::FetchTrsDataJob.perform_later(journey_session:)
+        if existing_claim_in_window?
+          redirect_to claim_path(current_journey_routing_name, "existing-claim")
+        else
+          ::SchoolTargetedRetentionIncentivePayments::FetchTrsDataJob.perform_later(journey_session:)
 
-        redirect_to claim_path(current_journey_routing_name, "query-teacher-details")
+          redirect_to claim_path(current_journey_routing_name, "query-teacher-details")
+        end
       end
 
       def failure
@@ -34,6 +38,15 @@ module Journeys
           identity_confirmed_with_onelogin: true,
           onelogin_idv_at: Time.zone.now
         )
+      end
+
+      def existing_claim_in_window?
+        OneLoginAccount
+          .new(uid: omniauth_hash.extra.raw_info.sub)
+          .claims
+          .where(policy: Policies::TargetedRetentionIncentivePayments)
+          .where(academic_year: journey.configuration.current_academic_year)
+          .exists?
       end
     end
   end
