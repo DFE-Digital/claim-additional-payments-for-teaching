@@ -1,3 +1,3 @@
-Provider URN,Provider name,Provider address line 1,Provider address line 2,Provider address line 3,Provider town,Postcode,Eligible,Max claims,COPD
-123456,Nursery 123456,1 Some Road,,,London,EC1N 2TD,TRUE,5,FALSE
-EY234567,Nursery EY234567,2 Some Street,,,London,EC1N 2TD,FALSE,10,TRUE
+Provider URN,Provider name,Provider address line 1,Provider address line 2,Provider address line 3,Provider town,Postcode,Eligible,Max claims,COPD,Registered person name,Telephone number,PAYE reference,Multiple nurseries?
+123456,Nursery 123456,1 Some Road,,,London,EC1N 2TD,TRUE,5,FALSE,Example Ltd,01234567890,123/AB456,TRUE
+EY234567,Nursery EY234567,2 Some Street,,,London,EC1N 2TD,FALSE,10,TRUE,,,,
