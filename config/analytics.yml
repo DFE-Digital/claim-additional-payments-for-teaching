@@ -206,7 +206,7 @@ shared:
     - teacher_reference_number # string, TRN external identifier
     - redacted_attributes # jsonb, hash of attributes we've scrubbed along with the data removed
   :early_career_payments_eligibilities:
-    - id # uuid, that identifies the eligiblity
+    - id # uuid, that identifies the eligibility
     - nqt_in_academic_year_after_itt # boolean, is claimant teaching as newly qualified teacher
     - created_at # datetime, timestamp when eligibility was created
     - updated_at # datetime, timestamp when eligibility was last updated
@@ -226,7 +226,7 @@ shared:
     - teacher_reference_number # string, external identifier
     - redacted_attributes # jsonb, hash of attributes we've scrubbed along with the data removed
   :targeted_retention_incentive_payments_eligibilities:
-    - id # uuid, that identifies the eligiblity
+    - id # uuid, that identifies the eligibility
     - created_at # datetime, timestamp when eligibility was created
     - updated_at # datetime, timestamp when eligibility was last updated
     - nqt_in_academic_year_after_itt # boolean, is claimant teaching as newly qualified teacher
@@ -246,8 +246,9 @@ shared:
     - school_somewhere_else # boolean, is claimant teaching at a different school
     - teacher_reference_number # string, external identifier
     - redacted_attributes # jsonb, hash of attributes we've scrubbed along with the data removed
+    - confirmed_employment_proof_blob_ids # string, array of references of their file uploads
   :international_relocation_payments_eligibilities:
-    - id # uuid, that identifies the eligiblity
+    - id # uuid, that identifies the eligibility
     - created_at # datetime, timestamp when eligibility was created
     - updated_at # datetime, timestamp when eligibility was last updated
     - application_route # string, claiming as teacher or salaried trainee or other

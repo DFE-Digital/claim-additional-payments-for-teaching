@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_22_140935) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_02_162924) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -913,6 +913,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_22_140935) do
 
   create_table "targeted_retention_incentive_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.decimal "award_amount", precision: 7, scale: 2
+    t.text "confirmed_employment_proof_blob_ids", default: [], array: true
     t.datetime "created_at", null: false
     t.uuid "current_school_id"
     t.boolean "eligible_degree_subject"
