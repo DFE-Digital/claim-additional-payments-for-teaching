@@ -70,9 +70,15 @@ module Journeys
       end
 
       def previous_claim
+        academic_years = if Journeys::EarlyYearsTeachersFinancialIncentivePayments.configuration.current_academic_year == AcademicYear.new(2026)
+          [AcademicYear.new(2025), AcademicYear.new(2026)]
+        else
+          [Journeys::EarlyYearsTeachersFinancialIncentivePayments.configuration.current_academic_year]
+        end
+
         @previous_claim ||= Claim
           .by_policy(Policies::EarlyYearsTeachersFinancialIncentivePayments)
-          .where(academic_year: Journeys::EarlyYearsTeachersFinancialIncentivePayments.configuration.current_academic_year)
+          .where(academic_year: academic_years)
           .where.not(id: submitted_claim_id)
           .where.not(onelogin_uid: nil)
           .find_by(onelogin_uid: teacher_auth_one_login_uid)
