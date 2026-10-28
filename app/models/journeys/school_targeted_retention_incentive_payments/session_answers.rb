@@ -21,6 +21,8 @@ module Journeys
       attribute :continue_claim, :boolean, pii: false
       attribute :claimant_declaration, :boolean, pii: false
 
+      attribute :confirmed_employment_proof_blob_ids, default: [], pii: true
+
       def policy
         Policies::TargetedRetentionIncentivePayments
       end

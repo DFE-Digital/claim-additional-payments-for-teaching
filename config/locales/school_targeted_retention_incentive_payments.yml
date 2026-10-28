@@ -70,3 +70,5 @@ en:
       gender:
         questions:
           payroll_gender: Are you recorded as male or female on your employer’s payroll system?
+      review_employment_proof:
+        title: Check your document
