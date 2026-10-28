@@ -534,6 +534,9 @@ shared:
     - sanitised_name # string, name of provider normalised for searching
     - max_claims # integer, max number of claims permitted for this nursery
     - copd # boolean, is this provider childcare on domestic premises
+    - registered_person_name # string, Name of the org the nursery belongs to
+    - telephone_number # string, nursery contact number
+    - multiple_nurseries # boolean, does registered person operate multiple nurseries
   :active_storage_variant_records:
     - id # uuid, uniquely identifies this variant record
     - blob_id # uuid, the blob this variant was derived from

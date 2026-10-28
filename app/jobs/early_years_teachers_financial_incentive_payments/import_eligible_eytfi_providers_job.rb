@@ -13,7 +13,11 @@ module EarlyYearsTeachersFinancialIncentivePayments
         "Postcode",
         "Eligible",
         "Max claims",
-        "COPD"
+        "COPD",
+        "Registered person name",
+        "Telephone number",
+        "PAYE reference",
+        "Multiple nurseries?"
       ]
 
       include ActiveModel::Validations
@@ -47,6 +51,21 @@ module EarlyYearsTeachersFinancialIncentivePayments
         numericality: {only_integer: true, greater_than_or_equal_to: 0},
         if: -> { row["Max claims"].present? }
 
+      validates(
+        "Multiple nurseries?",
+        inclusion: {
+          in: %w[TRUE FALSE],
+          message: "must be TRUE or FALSE"
+        },
+        if: -> { row["Registered person name"].present? }
+      )
+
+      validates(
+        "Multiple nurseries?",
+        absence: true,
+        unless: -> { row["Registered person name"].present? }
+      )
+
       def initialize(row:)
         @row = row
       end
@@ -65,6 +84,10 @@ module EarlyYearsTeachersFinancialIncentivePayments
             eligible: cast_bool(row["Eligible"]),
             copd: cast_bool(row["COPD"]),
             max_claims: row["Max claims"].presence || 5,
+            registered_person_name: row["Registered person name"].presence,
+            telephone_number: row["Telephone number"].presence,
+            paye_reference: row["PAYE reference"].presence,
+            multiple_nurseries: row["Registered person name"].present? ? cast_bool(row["Multiple nurseries?"]) : nil,
             file_upload:
           )
       end
