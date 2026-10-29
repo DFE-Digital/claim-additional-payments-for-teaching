@@ -3,7 +3,13 @@ require "rails_helper"
 RSpec.describe AutomatedChecks::ClaimVerifiers::EarlyYearsTeachersFinancialIncentivePayments::Employment do
   it "fetches HMRC employment inline before evaluating the claim" do
     FeatureFlag.enable!(:eytrp_hmrc_integration)
-    nursery = create(:eligible_eytfi_provider, name: "Oak Tree Nursery", postcode: "SW1A 1AA")
+
+    nursery = create(
+      :eligible_eytfi_provider,
+      name: "Oak Tree Nursery",
+      postcode: "SW1A 1AA"
+    )
+
     claim = create(
       :claim,
       policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
@@ -13,11 +19,24 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::EarlyYearsTeachersFinancialIncen
         teacher_auth_verified_date_of_birth: "1970-12-13"
       }
     )
+
     response_body = {
-      employments: [{employer: {name: nursery.name, address: {postcode: nursery.postcode}}}]
+      employments: [
+        {
+          employer: {
+            name: nursery.name,
+            address: {
+              postcode: nursery.postcode
+            }
+          }
+        }
+      ]
     }.to_json
+
     client = instance_double(Hmrc::Employments::Client)
+
     allow(Hmrc::Employments).to receive(:client).and_return(client)
+
     expect(client).to receive(:employment_history_for_individual).and_return(
       double(status: 200, body: response_body)
     )
@@ -31,21 +50,27 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::EarlyYearsTeachersFinancialIncen
   end
 
   it "passes automatically when the employer PAYE reference matches without name or address details" do
-    nursery = create(:eligible_eytfi_provider, paye_reference: "123/AB456")
+    nursery = create(
+      :eligible_eytfi_provider,
+      paye_reference: "123/AB456"
+    )
+
     claim = create(
       :claim,
       policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
       eligibility_attributes: {eligible_eytfi_provider_urn: nursery.urn}
     )
-    expect(::EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob)
-      .to receive(:perform_now).with(claim) do
-        claim.eligibility.update!(
-          hmrc_response_status: 200,
-          hmrc_response_body: {
-            employments: [{employer: {payeReference: "123/AB456"}}]
-          }.to_json
-        )
-      end
+
+    expect(
+      ::EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob
+    ).to receive(:perform_now).with(claim) do
+      claim.eligibility.update!(
+        hmrc_response_status: 200,
+        hmrc_response_body: {
+          employments: [{employer: {payeReference: "123/AB456"}}]
+        }.to_json
+      )
+    end
 
     task = described_class.new(claim: claim).perform
 
@@ -54,12 +79,61 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::EarlyYearsTeachersFinancialIncen
     expect(task.manual).to be(false)
   end
 
+  it "leaves employment for manual checking when a PAYE match covers an ineligible nursery" do
+    nursery = create(
+      :eligible_eytfi_provider, paye_reference: "123/AB456",
+      registered_person_name: "Oak Group", multiple_nurseries: true
+    )
+
+    create(
+      :eligible_eytfi_provider, file_upload: nursery.file_upload,
+      registered_person_name: "Oak Group", eligible: false
+    )
+
+    claim = create(
+      :claim,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+      eligibility_attributes: {eligible_eytfi_provider_urn: nursery.urn}
+    )
+
+    expect(
+      ::EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob
+    ).to receive(:perform_now).with(claim) do
+      claim.eligibility.update!(
+        hmrc_response_status: 200,
+        hmrc_response_body: {
+          employments: [{
+            employer: {
+              payeReference: "123/AB456",
+              name: nursery.name,
+              address: {postcode: nursery.postcode}
+            }
+          }]
+        }.to_json
+      )
+    end
+
+    task = described_class.new(claim: claim).perform
+
+    expect(task.passed).to be_nil
+    expect(task.manual).to be(true)
+    expect(task.reason).to eq("incomplete")
+  end
+
   it "leaves employment for manual checking when HMRC cannot find the claimant" do
-    claim = create(:claim, policy: Policies::EarlyYearsTeachersFinancialIncentivePayments)
-    expect(::EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob)
-      .to receive(:perform_now).with(claim) do
-        claim.eligibility.update!(hmrc_response_status: 404, hmrc_response_body: "not found")
-      end
+    claim = create(
+      :claim,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments
+    )
+
+    expect(
+      ::EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob
+    ).to receive(:perform_now).with(claim) do
+      claim.eligibility.update!(
+        hmrc_response_status: 404,
+        hmrc_response_body: "not found"
+      )
+    end
 
     task = described_class.new(claim: claim).perform
 
@@ -69,11 +143,19 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::EarlyYearsTeachersFinancialIncen
   end
 
   it "does not run the job again when an employment task already exists" do
-    claim = create(:claim, policy: Policies::EarlyYearsTeachersFinancialIncentivePayments)
-    create(:task, claim: claim, name: "employment")
-    expect(::EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob)
-      .not_to receive(:perform_now)
+    claim = create(
+      :claim,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments
+    )
 
-    expect { described_class.new(claim: claim).perform }.not_to change { claim.tasks.count }
+    create(:task, claim: claim, name: "employment")
+
+    expect(
+      ::EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob
+    ).not_to receive(:perform_now)
+
+    expect { described_class.new(claim: claim).perform }.not_to(
+      change { claim.tasks.count }
+    )
   end
 end
