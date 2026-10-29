@@ -19,7 +19,6 @@ shared:
     - email_sent_at # datetime, when was reminder sent
     - itt_academic_year # string, year completed ITT if relevant for reminder
     - itt_subject # string, ITT subject if relevant for reminder
-    - sent_one_time_password_at # datetime, when OTP was sent
     - journey_class # string, what journey does this reminde relate to
     - deleted_at # datetime, when was this reminder soft deleted via unsubscription
     - full_name # string, full name for reminder
