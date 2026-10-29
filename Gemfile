@@ -125,6 +125,6 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: [:windows, :jruby]
 
-gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.15.17"
+gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.16.1"
 
 gem "reactionview", "~> 0.3.0"
