@@ -30,6 +30,30 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::EarlyYearsTeachersFinancialIncen
     expect(claim.eligibility.reload.hmrc_response_body).to eq(response_body)
   end
 
+  it "passes automatically when the employer PAYE reference matches without name or address details" do
+    nursery = create(:eligible_eytfi_provider, paye_reference: "123/AB456")
+    claim = create(
+      :claim,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+      eligibility_attributes: {eligible_eytfi_provider_urn: nursery.urn}
+    )
+    expect(::EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob)
+      .to receive(:perform_now).with(claim) do
+        claim.eligibility.update!(
+          hmrc_response_status: 200,
+          hmrc_response_body: {
+            employments: [{employer: {payeReference: "123/AB456"}}]
+          }.to_json
+        )
+      end
+
+    task = described_class.new(claim: claim).perform
+
+    expect(task).to be_persisted
+    expect(task.passed).to be(true)
+    expect(task.manual).to be(false)
+  end
+
   it "leaves employment for manual checking when HMRC cannot find the claimant" do
     claim = create(:claim, policy: Policies::EarlyYearsTeachersFinancialIncentivePayments)
     expect(::EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob)

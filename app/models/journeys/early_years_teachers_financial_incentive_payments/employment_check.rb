@@ -22,9 +22,19 @@ module Journeys
       end
 
       def passed?
-        employments.any? do |employment|
+        matching_check.present?
+      end
+
+      def matching_check
+        return :employer_paye_reference if employments.any? do |employment|
+          employer_paye_reference_matches?(employment.fetch("employer"))
+        end
+
+        return :name_postcode if employments.any? do |employment|
           setting_employer?(employment.fetch("employer"))
         end
+
+        nil
       end
 
       def employer_names
@@ -34,6 +44,11 @@ module Journeys
       private
 
       attr_reader :setting, :hmrc_response_status, :hmrc_response_body
+
+      def employer_paye_reference_matches?(employer)
+        setting.paye_reference.present? &&
+          setting.paye_reference == employer["payeReference"]
+      end
 
       def setting_employer?(employer)
         address = employer.fetch("address", {})
@@ -148,9 +163,7 @@ module Journeys
         employments = body.fetch("employments")
         return [] unless employments.all? do |employment|
           employment.is_a?(Hash) &&
-            employment["employer"].is_a?(Hash) &&
-            employment["employer"]["name"].is_a?(String) &&
-            employment["employer"]["name"].present?
+            employment["employer"].is_a?(Hash)
         end
 
         employments

@@ -5,10 +5,12 @@ RSpec.describe(
 ) do
   def employment(
     name: "Oak Tree Nursery",
-    postcode: "SW1A 1AA"
+    postcode: "SW1A 1AA",
+    paye_reference: nil
   )
     {
       "employer" => {
+        "payeReference" => paye_reference,
         "name" => name,
         "address" => {
           "postcode" => postcode
@@ -21,13 +23,15 @@ RSpec.describe(
     employments: [employment],
     setting_name: "Oak Tree Nursery",
     setting_postcode: "SW1A 1AA",
+    setting_paye_reference: nil,
     status: 200,
     body: nil
   )
     setting = build(
       :eligible_eytfi_provider,
       name: setting_name,
-      postcode: setting_postcode
+      postcode: setting_postcode,
+      paye_reference: setting_paye_reference
     )
     described_class.new(
       setting: setting,
@@ -53,6 +57,98 @@ RSpec.describe(
           described_class.earliest_date_to_check
         ).to eq(Date.new(2026, 2, 28))
       end
+    end
+  end
+
+  describe "#matching_check" do
+    it "passes on a PAYE reference without a name or address" do
+      check = check_for(
+        setting_paye_reference: "123/AB456",
+        employments: [{"employer" => {"payeReference" => "123/AB456"}}]
+      )
+
+      expect(check.passed?).to be(true)
+      expect(check.matching_check).to eq(:employer_paye_reference)
+    end
+
+    it "prioritises a later PAYE match over an earlier name and postcode match" do
+      check = check_for(
+        setting_paye_reference: "123/AB456",
+        employments: [
+          employment,
+          employment(name: "Unrelated employer", postcode: "XX1 1XX", paye_reference: "123/AB456")
+        ]
+      )
+      expect(check).not_to receive(:setting_employer?)
+
+      expect(check.passed?).to be(true)
+      expect(check.matching_check).to eq(:employer_paye_reference)
+    end
+
+    it "falls back to name and postcode when PAYE references differ" do
+      check = check_for(
+        setting_paye_reference: "123/AB456",
+        employments: [employment(paye_reference: "999/ZZ999")]
+      )
+
+      expect(check.passed?).to be(true)
+      expect(check.matching_check).to eq(:name_postcode)
+    end
+
+    it "fails when neither the PAYE reference nor name and postcode match" do
+      check = check_for(
+        setting_paye_reference: "123/AB456",
+        employments: [employment(name: "Willow Grove", paye_reference: "999/ZZ999")]
+      )
+
+      expect(check.passed?).to be(false)
+      expect(check.matching_check).to be_nil
+    end
+
+    it "does not match nil PAYE references" do
+      check = check_for(employments: [employment(name: "Willow Grove")])
+
+      expect(check.passed?).to be(false)
+      expect(check.matching_check).to be_nil
+    end
+
+    it "does not match empty PAYE references" do
+      check = check_for(
+        setting_paye_reference: "",
+        employments: [employment(name: "Willow Grove", paye_reference: "")]
+      )
+
+      expect(check.passed?).to be(false)
+      expect(check.matching_check).to be_nil
+    end
+
+    it "does not match whitespace only PAYE references" do
+      check = check_for(
+        setting_paye_reference: " ",
+        employments: [employment(name: "Willow Grove", paye_reference: " ")]
+      )
+
+      expect(check.passed?).to be(false)
+    end
+
+    it "does not match when HMRC omits the PAYE reference" do
+      check = check_for(
+        setting_paye_reference: "123/AB456",
+        employments: [employment(name: "Willow Grove")]
+      )
+
+      expect(check.passed?).to be(false)
+    end
+
+    it "does not use a PAYE match from an unsuccessful response" do
+      check = check_for(
+        setting_paye_reference: "123/AB456",
+        employments: [employment(paye_reference: "123/AB456")],
+        status: 500
+      )
+
+      expect(check.passed?).to be(false)
+      expect(check.matching_check).to be_nil
     end
   end
 
@@ -409,18 +505,6 @@ RSpec.describe(
       expect(check.passed?).to be(false)
     end
 
-    it "rejects a nonstring employer name" do
-      check = check_for(
-        employments: [
-          employment(
-            name: 123
-          )
-        ]
-      )
-
-      expect(check.passed?).to be(false)
-    end
-
     it "rejects a blank employer name" do
       check = check_for(
         employments: [
@@ -535,19 +619,16 @@ RSpec.describe(
       expect(check.passed?).to be(false)
     end
 
-    it "rejects a valid matching employment when another entry is malformed" do
+    it "passes a matching employment when another employer name is missing" do
       check = check_for(
         employments: [
-          employment,
-          {
-            "employer" => {
-              "name" => nil
-            }
-          }
+          employment(name: nil),
+          employment
         ]
       )
 
-      expect(check.passed?).to be(false)
+      expect(check.passed?).to be(true)
+      expect(check.matching_check).to eq(:name_postcode)
     end
   end
 end
