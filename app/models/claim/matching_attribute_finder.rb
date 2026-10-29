@@ -8,6 +8,8 @@ class Claim
       ["first_name", "surname", "date_of_birth"]
     ].freeze
 
+    attr_reader :source_claim
+
     def initialize(source_claim)
       @source_claim = source_claim
     end
@@ -27,7 +29,7 @@ class Claim
 
       # Claim attributes
       CLAIM_ATTRIBUTE_GROUPS_TO_MATCH.each do |attributes|
-        vals = values_for_attributes(@source_claim, attributes)
+        vals = values_for_attributes(source_claim, attributes)
         next if vals.blank?
 
         concatenated_columns = "CONCAT(#{attributes.join(",")})"
@@ -38,7 +40,7 @@ class Claim
 
       # Eligibility attributes
       eligibility_ids = eligibility_attributes_groups_to_match.flat_map do |attributes|
-        vals = values_for_attributes(@source_claim.eligibility, attributes)
+        vals = values_for_attributes(source_claim.eligibility, attributes)
         next if vals.blank?
 
         Policies::POLICIES.map do |policy|
@@ -64,11 +66,11 @@ class Claim
 
     def matching_attributes(other_claim)
       matching_claim_attributes = CLAIM_ATTRIBUTE_GROUPS_TO_MATCH.select do |attributes|
-        values_for_attributes(@source_claim, attributes) == values_for_attributes(other_claim, attributes)
+        values_for_attributes(source_claim, attributes) == values_for_attributes(other_claim, attributes)
       end
 
       matching_eligibility_attributes = eligibility_attributes_groups_to_match.select do |attributes|
-        values_for_attributes(@source_claim.eligibility, attributes) == values_for_attributes(other_claim.eligibility, attributes)
+        values_for_attributes(source_claim.eligibility, attributes) == values_for_attributes(other_claim.eligibility, attributes)
       end
 
       (matching_claim_attributes + matching_eligibility_attributes).flatten
@@ -77,14 +79,14 @@ class Claim
     private
 
     def eligibility_attributes_groups_to_match
-      @source_claim.policy.eligibility_matching_attributes
+      source_claim.policy.eligibility_matching_attributes
     end
 
     def claims_to_compare
       Claim
         .includes(:eligibility)
-        .by_academic_year(@source_claim.academic_year)
-        .where.not(id: @source_claim.id)
+        .by_academic_year(Cohort.new(claim: source_claim).academic_years)
+        .where.not(id: source_claim.id)
     end
 
     def values_for_attributes(object, attributes)
