@@ -308,20 +308,6 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
   end
 
   context "NINO journeys" do
-    before do
-      FeatureFlag.enable!(:eytrp_hmrc_integration)
-
-      # Set the hmrc client to return errors so we don't need to stub things in
-      # the spec
-      error_client = double("Hmrc::Employments::Client")
-
-      allow(error_client).to receive(:employment_history_for_individual) do
-        double(status: 500, body: "Oh no!")
-      end
-
-      allow(Hmrc::Employments).to receive(:client) { error_client }
-    end
-
     context "NINO returned from TRS and confirmed" do
       let(:mock_teacher) do
         instance_double(
@@ -373,10 +359,6 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         expect(page).to have_content "AB123456C"
         choose "Yes"
         click_button "Continue"
-
-        expect(page).to have_content "Loading"
-        perform_enqueued_jobs
-        visit current_path # save waiting for the page to reload
 
         expect(page).to have_content "Upload document"
         attach_file(
@@ -476,10 +458,6 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         fill_in "What is your National Insurance number?", with: "BB123456C"
         click_button "Continue"
 
-        expect(page).to have_content "Loading"
-        perform_enqueued_jobs
-        visit current_path # save waiting for the page to reload
-
         expect(page).to have_content "Upload document"
         attach_file(
           "Upload document",
@@ -576,10 +554,6 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         fill_in "Enter your National Insurance number", with: "AB123123C"
         click_button "Continue"
 
-        expect(page).to have_content "Loading"
-        perform_enqueued_jobs
-        visit current_path # save waiting for the page to reload
-
         expect(page).to have_content "Upload document"
         attach_file(
           "Upload document",
@@ -628,18 +602,6 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         expect(page).to have_content "Enter your National Insurance number"
         fill_in "Enter your National Insurance number", with: "BB123123C"
         click_button "Continue"
-
-        # Expect to be back on the hmrc screen
-        expect(page).to have_content "Loading"
-        perform_enqueued_jobs
-        visit current_path # save waiting for the page to reload
-
-        # FIXME - currently we're dropping the fact that we're changing answer
-        # so have to go through the rest of the journey
-        visit claim_path(
-          Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name,
-          "check-your-answers"
-        )
 
         expect(page).to have_text "Confirm your details and complete your claim"
         expect(page).to have_content("BB123123C")
