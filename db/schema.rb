@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_22_140935) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_23_134647) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -540,12 +540,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_22_140935) do
   end
 
   create_table "journey_configurations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "approved_min_qa_threshold", default: 100
     t.boolean "automatic_approvals", default: true, null: false
     t.string "availability_message"
     t.datetime "close_at"
     t.datetime "created_at", precision: nil, null: false
     t.string "current_academic_year", limit: 9
     t.boolean "open_for_submissions", default: true, null: false
+    t.integer "rejected_min_qa_threshold", default: 100
     t.string "routing_name", null: false
     t.boolean "teacher_id_enabled", default: true
     t.datetime "updated_at", precision: nil, null: false

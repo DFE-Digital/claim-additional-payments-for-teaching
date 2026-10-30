@@ -81,7 +81,9 @@ module Admin
           :open_for_submissions,
           :current_academic_year,
           :teacher_id_enabled,
-          :automatic_approvals
+          :automatic_approvals,
+          :approved_min_qa_threshold,
+          :rejected_min_qa_threshold
         )
 
       permitted[:close_at] = Time.zone.parse(permitted[:close_at]).in_time_zone("London") if permitted[:close_at].present?

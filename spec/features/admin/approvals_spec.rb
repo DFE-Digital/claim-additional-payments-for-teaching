@@ -2,8 +2,11 @@ require "rails_helper"
 
 RSpec.describe "Approvals" do
   before do
-    create(:journey_configuration, :early_years_payment_provider_start)
-    stub_const("Policies::EarlyYearsPayments::APPROVED_MIN_QA_THRESHOLD", 0)
+    create(
+      :journey_configuration,
+      :early_years_payment_provider_start,
+      approved_min_qa_threshold: 0
+    )
   end
 
   context "when the claim is auto-approved" do
