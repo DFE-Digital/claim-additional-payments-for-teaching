@@ -5,10 +5,12 @@ RSpec.describe(
 ) do
   def employment(
     name: "Oak Tree Nursery",
-    postcode: "SW1A 1AA"
+    postcode: "SW1A 1AA",
+    paye_reference: nil
   )
     {
       "employer" => {
+        "payeReference" => paye_reference,
         "name" => name,
         "address" => {
           "postcode" => postcode
@@ -21,13 +23,15 @@ RSpec.describe(
     employments: [employment],
     setting_name: "Oak Tree Nursery",
     setting_postcode: "SW1A 1AA",
+    setting_paye_reference: nil,
     status: 200,
     body: nil
   )
     setting = build(
       :eligible_eytfi_provider,
       name: setting_name,
-      postcode: setting_postcode
+      postcode: setting_postcode,
+      paye_reference: setting_paye_reference
     )
     described_class.new(
       setting: setting,
@@ -38,7 +42,139 @@ RSpec.describe(
     )
   end
 
-  describe ".earliest_date_to_check" do
+  describe "registered person dispatch" do
+    it "stops when the registered person differs from the chosen setting" do
+      setting = create(
+        :eligible_eytfi_provider, name: "Willow Group", postcode: "SW1A 1AA",
+        registered_person_name: "Oak Group"
+      )
+      create(
+        :eligible_eytfi_provider, file_upload: setting.file_upload,
+        registered_person_name: "Willow Group", eligible: false
+      )
+      check = described_class.new(
+        setting: setting, hmrc_response_status: 200,
+        hmrc_response_body: {
+          employments: [{
+            employer: {
+              name: "Willow Group",
+              address: {postcode: "SW1A 1AA"}
+            }
+          }]
+        }.to_json
+      )
+      next_check = Journeys::EarlyYearsTeachersFinancialIncentivePayments::
+        EmploymentChecks::NamePostcode
+      expect(next_check).not_to receive(:new)
+
+      expect(check.passed?).to be(false)
+      expect(check.result.check).to eq(:registered_person)
+      expect(check.result.failure_reason).to eq(
+        :registered_person_does_not_match_setting
+      )
+    end
+
+    it "uses PAYE before registered person" do
+      setting = create(
+        :eligible_eytfi_provider,
+        name: "Oak Tree Nursery", postcode: "SW1A 1AA",
+        registered_person_name: "Oak Tree Nursery", paye_reference: "123/AB456"
+      )
+
+      check = described_class.new(
+        setting: setting, hmrc_response_status: 200,
+        hmrc_response_body: {
+          employments: [{
+            employer: {name: "Oak Tree Nursery", payeReference: "123/AB456"}
+          }]
+        }.to_json
+      )
+
+      next_check = Journeys::EarlyYearsTeachersFinancialIncentivePayments::
+        EmploymentChecks::RegisteredPerson
+      expect(next_check).not_to receive(:new)
+      expect(check.passed?).to be(true)
+      expect(check.result.check).to eq(:employer_paye_reference)
+    end
+
+    it "uses registered person before name and postcode" do
+      setting = create(
+        :eligible_eytfi_provider,
+        name: "Oak Tree Nursery", postcode: "SW1A 1AA",
+        registered_person_name: "Oak Tree Nursery", paye_reference: "123/AB456"
+      )
+
+      check = described_class.new(
+        setting: setting, hmrc_response_status: 200,
+        hmrc_response_body: {
+          employments: [{
+            employer: {name: " oak tree nursery "}
+          }]
+        }.to_json
+      )
+
+      expect(check.passed?).to be(true)
+      expect(check.result.check).to eq(:registered_person)
+    end
+
+    it "does not fall back after a failed registered person match" do
+      setting = create(
+        :eligible_eytfi_provider,
+        name: "Oak Tree Nursery", postcode: "SW1A 1AA",
+        registered_person_name: "Oak Tree Nursery", paye_reference: "123/AB456"
+      )
+      create(
+        :eligible_eytfi_provider, file_upload: setting.file_upload,
+        registered_person_name: "Oak Tree Nursery", eligible: false
+      )
+
+      check = described_class.new(
+        setting: setting, hmrc_response_status: 200,
+        hmrc_response_body: {
+          employments: [{
+            employer: {
+              name: "Oak Tree Nursery",
+              address: {postcode: "SW1A 1AA"}
+            }
+          }]
+        }.to_json
+      )
+
+      next_check = Journeys::EarlyYearsTeachersFinancialIncentivePayments::
+        EmploymentChecks::NamePostcode
+      expect(next_check).not_to receive(:new)
+      expect(check.passed?).to be(false)
+      expect(check.result.check).to eq(:registered_person)
+      expect(check.result.failure_reason).to eq(
+        :registered_person_has_ineligible_nurseries
+      )
+    end
+
+    it "falls back when the registered person is unknown" do
+      setting = create(
+        :eligible_eytfi_provider,
+        name: "Oak Tree Nursery", postcode: "SW1A 1AA",
+        registered_person_name: "Oak Group", paye_reference: "123/AB456"
+      )
+
+      check = described_class.new(
+        setting: setting, hmrc_response_status: 200,
+        hmrc_response_body: {
+          employments: [{
+            employer: {
+              name: "Oak Tree Nursery",
+              address: {postcode: "SW1A 1AA"}
+            }
+          }]
+        }.to_json
+      )
+
+      expect(check.passed?).to be(true)
+      expect(check.result.check).to eq(:name_postcode)
+    end
+  end
+
+  describe "response handling and dispatch" do
     it "looks back one calendar month, including across a year boundary" do
       travel_to Time.zone.local(2026, 1, 15, 12) do
         expect(
@@ -54,245 +190,131 @@ RSpec.describe(
         ).to eq(Date.new(2026, 2, 28))
       end
     end
-  end
 
-  describe "#passed?" do
-    it "passes for identical names and postcodes" do
-      check = check_for
-
-      expect(check.passed?).to be(true)
-    end
-
-    it "normalizes case, whitespace, commas, hyphens and straight and curly apostrophes" do
+    it "passes on a PAYE reference without a name or address" do
       check = check_for(
-        employments: [
-          employment(
-            name: "  OAK’S-TREE, Nursery  ",
-            postcode: " sw1a1aa "
-          )
-        ],
-        setting_name: "Oak'sTree Nursery"
+        setting_paye_reference: "123/AB456",
+        employments: [{"employer" => {"payeReference" => "123/AB456"}}]
       )
 
       expect(check.passed?).to be(true)
+      expect(check.result.check).to eq(:employer_paye_reference)
     end
 
-    it "removes all ignored words and the optional full stop" do
+    it "prioritises PAYE over an earlier name and postcode match" do
       check = check_for(
+        setting_paye_reference: "123/AB456",
         employments: [
+          employment,
           employment(
-            name: "Private Oak Day Tree Preschool Nursery Limited Ltd."
+            name: "Unrelated employer",
+            postcode: "XX1 1XX",
+            paye_reference: "123/AB456"
           )
         ]
+      )
+      next_check = Journeys::EarlyYearsTeachersFinancialIncentivePayments::
+        EmploymentChecks::NamePostcode
+      expect(next_check).not_to receive(:new)
+
+      expect(check.passed?).to be(true)
+      expect(check.result.check).to eq(:employer_paye_reference)
+    end
+
+    it "falls back to name and postcode when PAYE references differ" do
+      check = check_for(
+        setting_paye_reference: "123/AB456",
+        employments: [employment(paye_reference: "999/ZZ999")]
       )
 
       expect(check.passed?).to be(true)
+      expect(check.result.check).to eq(:name_postcode)
     end
 
-    it "expands ampersands to and" do
+    it "fails when neither the PAYE reference nor name and postcode match" do
       check = check_for(
+        setting_paye_reference: "123/AB456",
         employments: [
-          employment(
-            name: "Oak & Tree Nursery"
-          )
-        ],
-        setting_name: "Oak and Tree Nursery"
+          employment(name: "Willow Grove", paye_reference: "999/ZZ999")
+        ]
+      )
+
+      expect(check.passed?).to be(false)
+      expect(check.result.check).to be_nil
+      expect(check.result.failure_reason).to eq(
+        :no_matching_employment
+      )
+    end
+
+    it "does not use a PAYE match from an unsuccessful response" do
+      check = check_for(
+        setting_paye_reference: "123/AB456",
+        employments: [employment(paye_reference: "123/AB456")],
+        status: 500
+      )
+
+      expect(check.passed?).to be(false)
+      expect(check.result.check).to be_nil
+    end
+
+    it "does not fall back after a failed PAYE match" do
+      setting = create(
+        :eligible_eytfi_provider,
+        name: "Oak Tree Nursery", postcode: "SW1A 1AA",
+        paye_reference: "123/AB456", registered_person_name: "Oak Group",
+        multiple_nurseries: true, eligible: true
+      )
+      create(
+        :eligible_eytfi_provider, file_upload: setting.file_upload,
+        registered_person_name: "Oak Group", eligible: false,
+        paye_reference: "999/ZZ999"
+      )
+      check = described_class.new(
+        setting: setting, hmrc_response_status: 200,
+        hmrc_response_body: {
+          employments: [
+            employment,
+            employment(
+              name: "Other Employer",
+              postcode: "XX1 1XX",
+              paye_reference: "123/AB456"
+            )
+          ]
+        }.to_json
+      )
+      next_check = Journeys::EarlyYearsTeachersFinancialIncentivePayments::
+        EmploymentChecks::NamePostcode
+      expect(next_check).not_to receive(:new)
+
+      expect(check.passed?).to be(false)
+      expect(check.result.passed?).to be(false)
+      expect(check.result.check).to eq(:employer_paye_reference)
+      expect(check.result.failure_reason).to eq(
+        :registered_person_has_ineligible_nurseries
+      )
+    end
+
+    it "still uses name and postcode when the PAYE reference does not match" do
+      setting = create(
+        :eligible_eytfi_provider,
+        name: "Oak Tree Nursery", postcode: "SW1A 1AA",
+        paye_reference: "123/AB456", registered_person_name: "Oak Group",
+        multiple_nurseries: true
+      )
+      create(
+        :eligible_eytfi_provider, file_upload: setting.file_upload,
+        registered_person_name: "Oak Group", eligible: false
+      )
+      check = described_class.new(
+        setting: setting, hmrc_response_status: 200,
+        hmrc_response_body: {
+          employments: [employment(paye_reference: "999/ZZ999")]
+        }.to_json
       )
 
       expect(check.passed?).to be(true)
-    end
-
-    it "expands at signs to at" do
-      check = check_for(
-        employments: [
-          employment(
-            name: "Oak @ Tree Nursery"
-          )
-        ],
-        setting_name: "Oak at Tree Nursery"
-      )
-
-      expect(check.passed?).to be(true)
-    end
-
-    it "does not remove ignored words embedded in other words" do
-      check = check_for(
-        employments: [
-          employment(
-            name: "Daylight Nursery"
-          )
-        ],
-        setting_name: "Light Nursery"
-      )
-
-      expect(check.passed?).to be(false)
-    end
-
-    it "passes at exactly the two thirds similarity threshold" do
-      check = check_for(
-        employments: [
-          employment(
-            name: "Oak"
-          )
-        ]
-      )
-
-      expect(check.passed?).to be(true)
-    end
-
-    it "rejects a name below the similarity threshold" do
-      check = check_for(
-        employments: [
-          employment(
-            name: "Oak Red Blue"
-          )
-        ]
-      )
-
-      expect(check.passed?).to be(false)
-    end
-
-    it "finds a shared subsequence across intervening words" do
-      check = check_for(
-        employments: [
-          employment(
-            name: "Red Oak Blue Tree"
-          )
-        ]
-      )
-
-      expect(check.passed?).to be(true)
-    end
-
-    it "rejects names with no shared words" do
-      check = check_for(
-        employments: [
-          employment(
-            name: "Willow Grove Nursery"
-          )
-        ]
-      )
-
-      expect(check.passed?).to be(false)
-    end
-
-    it "rejects a missing postcode" do
-      check = check_for(
-        employments: [
-          {
-            "employer" => {
-              "name" => "Oak Tree Nursery",
-              "address" => {}
-            }
-          }
-        ]
-      )
-
-      expect(check.passed?).to be(false)
-    end
-
-    it "rejects a missing address" do
-      check = check_for(
-        employments: [
-          {
-            "employer" => {
-              "name" => "Oak Tree Nursery"
-            }
-          }
-        ]
-      )
-
-      expect(check.passed?).to be(false)
-    end
-
-    it "rejects a null postcode" do
-      check = check_for(
-        employments: [
-          employment(
-            postcode: nil
-          )
-        ]
-      )
-
-      expect(check.passed?).to be(false)
-    end
-
-    it "rejects a whitespace only postcode" do
-      check = check_for(
-        employments: [
-          employment(
-            postcode: "  "
-          )
-        ]
-      )
-
-      expect(check.passed?).to be(false)
-    end
-
-    it "passes when a later employment matches" do
-      check = check_for(
-        employments: [
-          employment(
-            name: "Willow Grove"
-          ),
-          employment
-        ]
-      )
-
-      expect(check.passed?).to be(true)
-    end
-
-    it "rejects when no employment matches" do
-      check = check_for(
-        employments: [
-          employment(
-            name: "Willow Grove"
-          ),
-          employment(
-            name: "Elm House"
-          )
-        ]
-      )
-
-      expect(check.passed?).to be(false)
-    end
-
-    it "does not combine name words across employments" do
-      check = check_for(
-        employments: [
-          employment(
-            name: "Oak Red Blue"
-          ),
-          employment(
-            name: "Tree Green Yellow"
-          )
-        ]
-      )
-
-      expect(check.passed?).to be(false)
-    end
-
-    it "does not inspect employment dates in the returned history" do
-      check = check_for(
-        employments: [
-          employment.merge(
-            "employment" => {
-              "startDate" => "2000-01-01",
-              "endDate" => "2000-02-01"
-            }
-          )
-        ]
-      )
-
-      expect(check.passed?).to be(true)
-    end
-
-    it "rejects an empty employment history" do
-      check = check_for(
-        employments: []
-      )
-
-      expect(check.passed?).to be(false)
+      expect(check.result.check).to eq(:name_postcode)
+      expect(check.result.failure_reason).to be_nil
     end
 
     it "rejects an unsuccessful response even when its body matches" do
@@ -393,48 +415,6 @@ RSpec.describe(
       expect(check.passed?).to be(false)
     end
 
-    it "rejects a missing employer name" do
-      check = check_for(
-        employments: [
-          {
-            "employer" => {
-              "address" => {
-                "postcode" => "SW1A 1AA"
-              }
-            }
-          }
-        ]
-      )
-
-      expect(check.passed?).to be(false)
-    end
-
-    it "rejects a nonstring employer name" do
-      check = check_for(
-        employments: [
-          employment(
-            name: 123
-          )
-        ]
-      )
-
-      expect(check.passed?).to be(false)
-    end
-
-    it "rejects a blank employer name" do
-      check = check_for(
-        employments: [
-          employment(
-            name: "  "
-          )
-        ]
-      )
-
-      expect(check.passed?).to be(false)
-    end
-  end
-
-  describe "#employer_names" do
     it "returns names in the order supplied by HMRC" do
       check = check_for(
         employments: [
@@ -456,98 +436,6 @@ RSpec.describe(
       )
 
       expect(check.employer_names).to eq([])
-    end
-  end
-
-  describe "adversarial examples documenting current behavior" do
-    it "rejects identical names made entirely of ignored words" do
-      check = check_for(
-        setting_name: "Private Day Nursery Ltd",
-        employments: [
-          employment(
-            name: "Private Day Nursery Ltd"
-          )
-        ]
-      )
-
-      expect(check.passed?).to be(false)
-    end
-
-    it "rejects the same two meaningful words in reversed order" do
-      check = check_for(
-        employments: [
-          employment(
-            name: "Tree Oak Nursery"
-          )
-        ]
-      )
-
-      expect(check.passed?).to be(false)
-    end
-
-    it "passes a different branch name when two of three meaningful words agree" do
-      check = check_for(
-        setting_name: "Oak Tree North Nursery",
-        employments: [
-          employment(
-            name: "Oak Tree South Nursery"
-          )
-        ]
-      )
-
-      expect(check.passed?).to be(true)
-    end
-
-    it "rejects repeated words that dilute an otherwise identical name" do
-      check = check_for(
-        employments: [
-          employment(
-            name: "Oak Oak Oak Oak Tree Nursery"
-          )
-        ]
-      )
-
-      expect(check.passed?).to be(false)
-    end
-
-    it "rejects a full stop on a meaningful word" do
-      check = check_for(
-        setting_name: "Oak Nursery",
-        employments: [
-          employment(
-            name: "Oak. Nursery"
-          )
-        ]
-      )
-
-      expect(check.passed?).to be(false)
-    end
-
-    it "rejects a hyphen used as a word separator because it joins the words" do
-      check = check_for(
-        employments: [
-          employment(
-            name: "Oak-Tree Nursery"
-          )
-        ]
-      )
-
-      expect(check.passed?).to be(false)
-    end
-
-    it "rejects a valid matching employment when another entry is malformed" do
-      check = check_for(
-        employments: [
-          employment,
-          {
-            "employer" => {
-              "name" => nil
-            }
-          }
-        ]
-      )
-
-      expect(check.passed?).to be(false)
     end
   end
 end

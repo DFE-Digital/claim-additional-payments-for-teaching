@@ -31,16 +31,21 @@ RSpec.describe(
 
   context "when the HMRC API call fails" do
     context "when an error is returned from the HMRC API" do
-      it "stores the error response from employment history" do
+      it "fetches and stores a response when a body exists without a status" do
         nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
 
-        journey_session = create(
-          :eytfi_session,
-          answers: {
-            nursery_id: nursery.id,
-            teacher_auth_verified_name: "John Doe",
+        claim = create(
+          :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          first_name: "Claimant",
+          surname: "Entered",
+          date_of_birth: "1980-01-01",
+          national_insurance_number: "AB123456C",
+          eligibility_attributes: {
+            eligible_eytfi_provider_urn: nursery.urn,
+            teacher_auth_verified_name: "John Middle Doe",
             teacher_auth_verified_date_of_birth: "1970-12-13",
-            national_insurance_number: "AB123456C"
+            hmrc_response_body: "previous incomplete response"
           }
         )
 
@@ -110,13 +115,11 @@ RSpec.describe(
           }
         )
 
-        described_class.perform_now(journey_session)
+        described_class.perform_now(claim)
 
-        answers = journey_session.reload.answers
-        expect(answers.hmrc_response_received?).to eq(true)
-        expect(answers.hmrc_response_status).to eq(500)
-        expect(answers.hmrc_employment_check_passed?).to eq(false)
-        expect(answers.hmrc_response_body).to eq(response_body)
+        eligibility = claim.eligibility.reload
+        expect(eligibility.hmrc_response_status).to eq(500)
+        expect(eligibility.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -124,13 +127,17 @@ RSpec.describe(
       it "stores the error response from matching" do
         nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
 
-        journey_session = create(
-          :eytfi_session,
-          answers: {
-            nursery_id: nursery.id,
-            teacher_auth_verified_name: "John Doe",
-            teacher_auth_verified_date_of_birth: "1970-12-13",
-            national_insurance_number: "AB123456C"
+        claim = create(
+          :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          first_name: "Claimant",
+          surname: "Entered",
+          date_of_birth: "1980-01-01",
+          national_insurance_number: "AB123456C",
+          eligibility_attributes: {
+            eligible_eytfi_provider_urn: nursery.urn,
+            teacher_auth_verified_name: "John Middle Doe",
+            teacher_auth_verified_date_of_birth: "1970-12-13"
           }
         )
 
@@ -174,13 +181,11 @@ RSpec.describe(
           body: response_body
         )
 
-        described_class.perform_now(journey_session)
+        described_class.perform_now(claim)
 
-        answers = journey_session.reload.answers
-        expect(answers.hmrc_response_received?).to eq(true)
-        expect(answers.hmrc_response_status).to eq(500)
-        expect(answers.hmrc_employment_check_passed?).to eq(false)
-        expect(answers.hmrc_response_body).to eq(response_body)
+        eligibility = claim.eligibility.reload
+        expect(eligibility.hmrc_response_status).to eq(500)
+        expect(eligibility.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(
           a_request(
@@ -195,13 +200,17 @@ RSpec.describe(
       it "completes the check without requesting employment history" do
         nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
 
-        journey_session = create(
-          :eytfi_session,
-          answers: {
-            nursery_id: nursery.id,
-            teacher_auth_verified_name: "John Doe",
-            teacher_auth_verified_date_of_birth: "1970-12-13",
-            national_insurance_number: "AB123456C"
+        claim = create(
+          :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          first_name: "Claimant",
+          surname: "Entered",
+          date_of_birth: "1980-01-01",
+          national_insurance_number: "AB123456C",
+          eligibility_attributes: {
+            eligible_eytfi_provider_urn: nursery.urn,
+            teacher_auth_verified_name: "John Middle Doe",
+            teacher_auth_verified_date_of_birth: "1970-12-13"
           }
         )
 
@@ -245,13 +254,11 @@ RSpec.describe(
           body: response_body
         )
 
-        described_class.perform_now(journey_session)
+        described_class.perform_now(claim)
 
-        answers = journey_session.reload.answers
-        expect(answers.hmrc_response_received?).to eq(true)
-        expect(answers.hmrc_response_status).to eq(404)
-        expect(answers.hmrc_employment_check_passed?).to eq(false)
-        expect(answers.hmrc_response_body).to eq(response_body)
+        eligibility = claim.eligibility.reload
+        expect(eligibility.hmrc_response_status).to eq(404)
+        expect(eligibility.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(
           a_request(
@@ -264,13 +271,17 @@ RSpec.describe(
       it "handles a matching response without an individual link" do
         nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
 
-        journey_session = create(
-          :eytfi_session,
-          answers: {
-            nursery_id: nursery.id,
-            teacher_auth_verified_name: "John Doe",
-            teacher_auth_verified_date_of_birth: "1970-12-13",
-            national_insurance_number: "AB123456C"
+        claim = create(
+          :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          first_name: "Claimant",
+          surname: "Entered",
+          date_of_birth: "1980-01-01",
+          national_insurance_number: "AB123456C",
+          eligibility_attributes: {
+            eligible_eytfi_provider_urn: nursery.urn,
+            teacher_auth_verified_name: "John Middle Doe",
+            teacher_auth_verified_date_of_birth: "1970-12-13"
           }
         )
 
@@ -312,13 +323,11 @@ RSpec.describe(
           body: response_body
         )
 
-        described_class.perform_now(journey_session)
+        described_class.perform_now(claim)
 
-        answers = journey_session.reload.answers
-        expect(answers.hmrc_response_received?).to eq(true)
-        expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed?).to eq(false)
-        expect(answers.hmrc_response_body).to eq(response_body)
+        eligibility = claim.eligibility.reload
+        expect(eligibility.hmrc_response_status).to eq(200)
+        expect(eligibility.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(
           a_request(
@@ -333,13 +342,17 @@ RSpec.describe(
       it "handles invalid JSON" do
         nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
 
-        journey_session = create(
-          :eytfi_session,
-          answers: {
-            nursery_id: nursery.id,
-            teacher_auth_verified_name: "John Doe",
-            teacher_auth_verified_date_of_birth: "1970-12-13",
-            national_insurance_number: "AB123456C"
+        claim = create(
+          :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          first_name: "Claimant",
+          surname: "Entered",
+          date_of_birth: "1980-01-01",
+          national_insurance_number: "AB123456C",
+          eligibility_attributes: {
+            eligible_eytfi_provider_urn: nursery.urn,
+            teacher_auth_verified_name: "John Middle Doe",
+            teacher_auth_verified_date_of_birth: "1970-12-13"
           }
         )
 
@@ -407,13 +420,11 @@ RSpec.describe(
           }
         )
 
-        described_class.perform_now(journey_session)
+        described_class.perform_now(claim)
 
-        answers = journey_session.reload.answers
-        expect(answers.hmrc_response_received?).to eq(true)
-        expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed?).to eq(false)
-        expect(answers.hmrc_response_body).to eq(response_body)
+        eligibility = claim.eligibility.reload
+        expect(eligibility.hmrc_response_status).to eq(200)
+        expect(eligibility.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -421,13 +432,17 @@ RSpec.describe(
       it "handles a missing employments key" do
         nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
 
-        journey_session = create(
-          :eytfi_session,
-          answers: {
-            nursery_id: nursery.id,
-            teacher_auth_verified_name: "John Doe",
-            teacher_auth_verified_date_of_birth: "1970-12-13",
-            national_insurance_number: "AB123456C"
+        claim = create(
+          :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          first_name: "Claimant",
+          surname: "Entered",
+          date_of_birth: "1980-01-01",
+          national_insurance_number: "AB123456C",
+          eligibility_attributes: {
+            eligible_eytfi_provider_urn: nursery.urn,
+            teacher_auth_verified_name: "John Middle Doe",
+            teacher_auth_verified_date_of_birth: "1970-12-13"
           }
         )
 
@@ -495,13 +510,11 @@ RSpec.describe(
           }
         )
 
-        described_class.perform_now(journey_session)
+        described_class.perform_now(claim)
 
-        answers = journey_session.reload.answers
-        expect(answers.hmrc_response_received?).to eq(true)
-        expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed?).to eq(false)
-        expect(answers.hmrc_response_body).to eq(response_body)
+        eligibility = claim.eligibility.reload
+        expect(eligibility.hmrc_response_status).to eq(200)
+        expect(eligibility.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -509,13 +522,17 @@ RSpec.describe(
       it "handles a non-object response" do
         nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
 
-        journey_session = create(
-          :eytfi_session,
-          answers: {
-            nursery_id: nursery.id,
-            teacher_auth_verified_name: "John Doe",
-            teacher_auth_verified_date_of_birth: "1970-12-13",
-            national_insurance_number: "AB123456C"
+        claim = create(
+          :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          first_name: "Claimant",
+          surname: "Entered",
+          date_of_birth: "1980-01-01",
+          national_insurance_number: "AB123456C",
+          eligibility_attributes: {
+            eligible_eytfi_provider_urn: nursery.urn,
+            teacher_auth_verified_name: "John Middle Doe",
+            teacher_auth_verified_date_of_birth: "1970-12-13"
           }
         )
 
@@ -583,13 +600,11 @@ RSpec.describe(
           }
         )
 
-        described_class.perform_now(journey_session)
+        described_class.perform_now(claim)
 
-        answers = journey_session.reload.answers
-        expect(answers.hmrc_response_received?).to eq(true)
-        expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed?).to eq(false)
-        expect(answers.hmrc_response_body).to eq(response_body)
+        eligibility = claim.eligibility.reload
+        expect(eligibility.hmrc_response_status).to eq(200)
+        expect(eligibility.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -597,13 +612,17 @@ RSpec.describe(
       it "handles a null employment list" do
         nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
 
-        journey_session = create(
-          :eytfi_session,
-          answers: {
-            nursery_id: nursery.id,
-            teacher_auth_verified_name: "John Doe",
-            teacher_auth_verified_date_of_birth: "1970-12-13",
-            national_insurance_number: "AB123456C"
+        claim = create(
+          :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          first_name: "Claimant",
+          surname: "Entered",
+          date_of_birth: "1980-01-01",
+          national_insurance_number: "AB123456C",
+          eligibility_attributes: {
+            eligible_eytfi_provider_urn: nursery.urn,
+            teacher_auth_verified_name: "John Middle Doe",
+            teacher_auth_verified_date_of_birth: "1970-12-13"
           }
         )
 
@@ -673,13 +692,11 @@ RSpec.describe(
           }
         )
 
-        described_class.perform_now(journey_session)
+        described_class.perform_now(claim)
 
-        answers = journey_session.reload.answers
-        expect(answers.hmrc_response_received?).to eq(true)
-        expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed?).to eq(false)
-        expect(answers.hmrc_response_body).to eq(response_body)
+        eligibility = claim.eligibility.reload
+        expect(eligibility.hmrc_response_status).to eq(200)
+        expect(eligibility.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -687,13 +704,17 @@ RSpec.describe(
       it "handles an object instead of an employment list" do
         nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
 
-        journey_session = create(
-          :eytfi_session,
-          answers: {
-            nursery_id: nursery.id,
-            teacher_auth_verified_name: "John Doe",
-            teacher_auth_verified_date_of_birth: "1970-12-13",
-            national_insurance_number: "AB123456C"
+        claim = create(
+          :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          first_name: "Claimant",
+          surname: "Entered",
+          date_of_birth: "1980-01-01",
+          national_insurance_number: "AB123456C",
+          eligibility_attributes: {
+            eligible_eytfi_provider_urn: nursery.urn,
+            teacher_auth_verified_name: "John Middle Doe",
+            teacher_auth_verified_date_of_birth: "1970-12-13"
           }
         )
 
@@ -763,13 +784,11 @@ RSpec.describe(
           }
         )
 
-        described_class.perform_now(journey_session)
+        described_class.perform_now(claim)
 
-        answers = journey_session.reload.answers
-        expect(answers.hmrc_response_received?).to eq(true)
-        expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed?).to eq(false)
-        expect(answers.hmrc_response_body).to eq(response_body)
+        eligibility = claim.eligibility.reload
+        expect(eligibility.hmrc_response_status).to eq(200)
+        expect(eligibility.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -777,13 +796,17 @@ RSpec.describe(
       it "handles a non-object employment" do
         nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
 
-        journey_session = create(
-          :eytfi_session,
-          answers: {
-            nursery_id: nursery.id,
-            teacher_auth_verified_name: "John Doe",
-            teacher_auth_verified_date_of_birth: "1970-12-13",
-            national_insurance_number: "AB123456C"
+        claim = create(
+          :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          first_name: "Claimant",
+          surname: "Entered",
+          date_of_birth: "1980-01-01",
+          national_insurance_number: "AB123456C",
+          eligibility_attributes: {
+            eligible_eytfi_provider_urn: nursery.urn,
+            teacher_auth_verified_name: "John Middle Doe",
+            teacher_auth_verified_date_of_birth: "1970-12-13"
           }
         )
 
@@ -855,13 +878,11 @@ RSpec.describe(
           }
         )
 
-        described_class.perform_now(journey_session)
+        described_class.perform_now(claim)
 
-        answers = journey_session.reload.answers
-        expect(answers.hmrc_response_received?).to eq(true)
-        expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed?).to eq(false)
-        expect(answers.hmrc_response_body).to eq(response_body)
+        eligibility = claim.eligibility.reload
+        expect(eligibility.hmrc_response_status).to eq(200)
+        expect(eligibility.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -869,13 +890,17 @@ RSpec.describe(
       it "handles a non-object employer" do
         nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
 
-        journey_session = create(
-          :eytfi_session,
-          answers: {
-            nursery_id: nursery.id,
-            teacher_auth_verified_name: "John Doe",
-            teacher_auth_verified_date_of_birth: "1970-12-13",
-            national_insurance_number: "AB123456C"
+        claim = create(
+          :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          first_name: "Claimant",
+          surname: "Entered",
+          date_of_birth: "1980-01-01",
+          national_insurance_number: "AB123456C",
+          eligibility_attributes: {
+            eligible_eytfi_provider_urn: nursery.urn,
+            teacher_auth_verified_name: "John Middle Doe",
+            teacher_auth_verified_date_of_birth: "1970-12-13"
           }
         )
 
@@ -949,13 +974,11 @@ RSpec.describe(
           }
         )
 
-        described_class.perform_now(journey_session)
+        described_class.perform_now(claim)
 
-        answers = journey_session.reload.answers
-        expect(answers.hmrc_response_received?).to eq(true)
-        expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed?).to eq(false)
-        expect(answers.hmrc_response_body).to eq(response_body)
+        eligibility = claim.eligibility.reload
+        expect(eligibility.hmrc_response_status).to eq(200)
+        expect(eligibility.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -963,13 +986,17 @@ RSpec.describe(
       it "handles a non-string employer name" do
         nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
 
-        journey_session = create(
-          :eytfi_session,
-          answers: {
-            nursery_id: nursery.id,
-            teacher_auth_verified_name: "John Doe",
-            teacher_auth_verified_date_of_birth: "1970-12-13",
-            national_insurance_number: "AB123456C"
+        claim = create(
+          :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          first_name: "Claimant",
+          surname: "Entered",
+          date_of_birth: "1980-01-01",
+          national_insurance_number: "AB123456C",
+          eligibility_attributes: {
+            eligible_eytfi_provider_urn: nursery.urn,
+            teacher_auth_verified_name: "John Middle Doe",
+            teacher_auth_verified_date_of_birth: "1970-12-13"
           }
         )
 
@@ -1045,13 +1072,11 @@ RSpec.describe(
           }
         )
 
-        described_class.perform_now(journey_session)
+        described_class.perform_now(claim)
 
-        answers = journey_session.reload.answers
-        expect(answers.hmrc_response_received?).to eq(true)
-        expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed?).to eq(false)
-        expect(answers.hmrc_response_body).to eq(response_body)
+        eligibility = claim.eligibility.reload
+        expect(eligibility.hmrc_response_status).to eq(200)
+        expect(eligibility.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -1059,13 +1084,17 @@ RSpec.describe(
       it "handles missing employer information" do
         nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
 
-        journey_session = create(
-          :eytfi_session,
-          answers: {
-            nursery_id: nursery.id,
-            teacher_auth_verified_name: "John Doe",
-            teacher_auth_verified_date_of_birth: "1970-12-13",
-            national_insurance_number: "AB123456C"
+        claim = create(
+          :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          first_name: "Claimant",
+          surname: "Entered",
+          date_of_birth: "1980-01-01",
+          national_insurance_number: "AB123456C",
+          eligibility_attributes: {
+            eligible_eytfi_provider_urn: nursery.urn,
+            teacher_auth_verified_name: "John Middle Doe",
+            teacher_auth_verified_date_of_birth: "1970-12-13"
           }
         )
 
@@ -1139,13 +1168,11 @@ RSpec.describe(
           }
         )
 
-        described_class.perform_now(journey_session)
+        described_class.perform_now(claim)
 
-        answers = journey_session.reload.answers
-        expect(answers.hmrc_response_received?).to eq(true)
-        expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed?).to eq(false)
-        expect(answers.hmrc_response_body).to eq(response_body)
+        eligibility = claim.eligibility.reload
+        expect(eligibility.hmrc_response_status).to eq(200)
+        expect(eligibility.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -1153,13 +1180,17 @@ RSpec.describe(
       it "handles a missing employer name" do
         nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
 
-        journey_session = create(
-          :eytfi_session,
-          answers: {
-            nursery_id: nursery.id,
-            teacher_auth_verified_name: "John Doe",
-            teacher_auth_verified_date_of_birth: "1970-12-13",
-            national_insurance_number: "AB123456C"
+        claim = create(
+          :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          first_name: "Claimant",
+          surname: "Entered",
+          date_of_birth: "1980-01-01",
+          national_insurance_number: "AB123456C",
+          eligibility_attributes: {
+            eligible_eytfi_provider_urn: nursery.urn,
+            teacher_auth_verified_name: "John Middle Doe",
+            teacher_auth_verified_date_of_birth: "1970-12-13"
           }
         )
 
@@ -1233,13 +1264,11 @@ RSpec.describe(
           }
         )
 
-        described_class.perform_now(journey_session)
+        described_class.perform_now(claim)
 
-        answers = journey_session.reload.answers
-        expect(answers.hmrc_response_received?).to eq(true)
-        expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed?).to eq(false)
-        expect(answers.hmrc_response_body).to eq(response_body)
+        eligibility = claim.eligibility.reload
+        expect(eligibility.hmrc_response_status).to eq(200)
+        expect(eligibility.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -1248,16 +1277,20 @@ RSpec.describe(
 
   context "when the HMRC API call succeeds" do
     context "when the claimant is employed at the setting" do
-      it "passes the check when employment dates are absent" do
+      it "stores employment history when employment dates are absent" do
         nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
 
-        journey_session = create(
-          :eytfi_session,
-          answers: {
-            nursery_id: nursery.id,
-            teacher_auth_verified_name: "John Doe",
-            teacher_auth_verified_date_of_birth: "1970-12-13",
-            national_insurance_number: "AB123456C"
+        claim = create(
+          :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          first_name: "Claimant",
+          surname: "Entered",
+          date_of_birth: "1980-01-01",
+          national_insurance_number: "AB123456C",
+          eligibility_attributes: {
+            eligible_eytfi_provider_urn: nursery.urn,
+            teacher_auth_verified_name: "John Middle Doe",
+            teacher_auth_verified_date_of_birth: "1970-12-13"
           }
         )
 
@@ -1338,27 +1371,29 @@ RSpec.describe(
           }
         )
 
-        described_class.perform_now(journey_session)
+        described_class.perform_now(claim)
 
-        answers = journey_session.reload.answers
-        expect(answers.hmrc_response_received?).to eq(true)
-        expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed?).to eq(true)
-        expect(answers.hmrc_response_body).to eq(response_body)
+        eligibility = claim.eligibility.reload
+        expect(eligibility.hmrc_response_status).to eq(200)
+        expect(eligibility.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
 
-      it "passes the check regardless of employment dates" do
+      it "stores employment history regardless of employment dates" do
         nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
 
-        journey_session = create(
-          :eytfi_session,
-          answers: {
-            nursery_id: nursery.id,
-            teacher_auth_verified_name: "John Doe",
-            teacher_auth_verified_date_of_birth: "1970-12-13",
-            national_insurance_number: "AB123456C"
+        claim = create(
+          :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          first_name: "Claimant",
+          surname: "Entered",
+          date_of_birth: "1980-01-01",
+          national_insurance_number: "AB123456C",
+          eligibility_attributes: {
+            eligible_eytfi_provider_urn: nursery.urn,
+            teacher_auth_verified_name: "John Middle Doe",
+            teacher_auth_verified_date_of_birth: "1970-12-13"
           }
         )
 
@@ -1441,29 +1476,31 @@ RSpec.describe(
           }
         )
 
-        described_class.perform_now(journey_session)
+        described_class.perform_now(claim)
 
-        answers = journey_session.reload.answers
-        expect(answers.hmrc_response_received?).to eq(true)
-        expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed?).to eq(true)
-        expect(answers.hmrc_response_body).to eq(response_body)
+        eligibility = claim.eligibility.reload
+        expect(eligibility.hmrc_response_status).to eq(200)
+        expect(eligibility.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
     end
 
     context "when the claimant is not employed at the setting" do
-      it "persists employment at another setting without passing the check" do
+      it "stores employment at another setting" do
         nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
 
-        journey_session = create(
-          :eytfi_session,
-          answers: {
-            nursery_id: nursery.id,
-            teacher_auth_verified_name: "John Doe",
-            teacher_auth_verified_date_of_birth: "1970-12-13",
-            national_insurance_number: "AB123456C"
+        claim = create(
+          :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          first_name: "Claimant",
+          surname: "Entered",
+          date_of_birth: "1980-01-01",
+          national_insurance_number: "AB123456C",
+          eligibility_attributes: {
+            eligible_eytfi_provider_urn: nursery.urn,
+            teacher_auth_verified_name: "John Middle Doe",
+            teacher_auth_verified_date_of_birth: "1970-12-13"
           }
         )
 
@@ -1541,27 +1578,29 @@ RSpec.describe(
           }
         )
 
-        described_class.perform_now(journey_session)
+        described_class.perform_now(claim)
 
-        answers = journey_session.reload.answers
-        expect(answers.hmrc_response_received?).to eq(true)
-        expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed?).to eq(false)
-        expect(answers.hmrc_response_body).to eq(response_body)
+        eligibility = claim.eligibility.reload
+        expect(eligibility.hmrc_response_status).to eq(200)
+        expect(eligibility.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
 
-      it "persists an empty history without passing the check" do
+      it "stores an empty employment history" do
         nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
 
-        journey_session = create(
-          :eytfi_session,
-          answers: {
-            nursery_id: nursery.id,
-            teacher_auth_verified_name: "John Doe",
-            teacher_auth_verified_date_of_birth: "1970-12-13",
-            national_insurance_number: "AB123456C"
+        claim = create(
+          :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          first_name: "Claimant",
+          surname: "Entered",
+          date_of_birth: "1980-01-01",
+          national_insurance_number: "AB123456C",
+          eligibility_attributes: {
+            eligible_eytfi_provider_urn: nursery.urn,
+            teacher_auth_verified_name: "John Middle Doe",
+            teacher_auth_verified_date_of_birth: "1970-12-13"
           }
         )
 
@@ -1633,13 +1672,11 @@ RSpec.describe(
           }
         )
 
-        described_class.perform_now(journey_session)
+        described_class.perform_now(claim)
 
-        answers = journey_session.reload.answers
-        expect(answers.hmrc_response_received?).to eq(true)
-        expect(answers.hmrc_response_status).to eq(200)
-        expect(answers.hmrc_employment_check_passed?).to eq(false)
-        expect(answers.hmrc_response_body).to eq(response_body)
+        eligibility = claim.eligibility.reload
+        expect(eligibility.hmrc_response_status).to eq(200)
+        expect(eligibility.hmrc_response_body).to eq(response_body)
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -1648,48 +1685,35 @@ RSpec.describe(
 
   context "when the job has already completed" do
     it "preserves the stored result without making HTTP requests" do
-      journey_session = create(
-        :eytfi_session,
-        answers: {
+      claim = create(
+        :claim,
+        policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+        eligibility_attributes: {
           hmrc_response_status: 200,
           hmrc_response_body: {employments: []}.to_json
         }
       )
-      original_answers = journey_session.answers.attributes
+      original_attributes = claim.eligibility.attributes
 
-      described_class.perform_now(journey_session)
+      described_class.perform_now(claim)
 
-      expect(journey_session.reload.answers.attributes).to eq(original_answers)
+      expect(claim.eligibility.reload.attributes).to eq(original_attributes)
       expect(a_request(:any, /service\.hmrc\.gov\.uk/)).not_to have_been_made
     end
 
     it "skips HTTP requests when only a status is stored" do
-      journey_session = create(
-        :eytfi_session,
-        answers: {
+      claim = create(
+        :claim,
+        policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+        eligibility_attributes: {
           hmrc_response_status: 404
         }
       )
-      original_answers = journey_session.answers.attributes
+      original_attributes = claim.eligibility.attributes
 
-      described_class.perform_now(journey_session)
+      described_class.perform_now(claim)
 
-      expect(journey_session.reload.answers.attributes).to eq(original_answers)
-      expect(a_request(:any, /service\.hmrc\.gov\.uk/)).not_to have_been_made
-    end
-
-    it "skips HTTP requests when only a body is stored" do
-      journey_session = create(
-        :eytfi_session,
-        answers: {
-          hmrc_response_body: {employments: []}.to_json
-        }
-      )
-      original_answers = journey_session.answers.attributes
-
-      described_class.perform_now(journey_session)
-
-      expect(journey_session.reload.answers.attributes).to eq(original_answers)
+      expect(claim.eligibility.reload.attributes).to eq(original_attributes)
       expect(a_request(:any, /service\.hmrc\.gov\.uk/)).not_to have_been_made
     end
   end

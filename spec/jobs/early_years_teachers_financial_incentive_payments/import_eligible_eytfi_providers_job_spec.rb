@@ -11,6 +11,34 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
     )
   end
 
+  it "persists registered person details and leaves optional fields nil" do
+    upload = create(
+      :file_upload,
+      :with_current_academic_year,
+      :not_completed_processing,
+      target_data_model: Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider,
+      body: file_fixture("eligible_eytfi_providers.csv").read
+    )
+
+    described_class.new.perform(upload)
+
+    providers = Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider
+
+    expect(providers.find_by!(urn: "123456")).to have_attributes(
+      registered_person_name: "example ltd",
+      telephone_number: "01234567890",
+      paye_reference: "123/AB456",
+      multiple_nurseries: true
+    )
+
+    expect(providers.find_by!(urn: "EY234567")).to have_attributes(
+      registered_person_name: nil,
+      telephone_number: nil,
+      paye_reference: nil,
+      multiple_nurseries: nil
+    )
+  end
+
   describe "#perform" do
     it "creates eytfi provider" do
       expect {
@@ -102,7 +130,7 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
       it "saves errors on file upload" do
         subject.perform(file_upload)
 
-        expect(file_upload.reload.upload_errors).to eql(["Headers must be Provider URN, Provider name, Provider address line 1, Provider address line 2, Provider address line 3, Provider town, Postcode, Eligible, Max claims, COPD"])
+        expect(file_upload.reload.upload_errors).to eql(["Headers must be Provider URN, Provider name, Provider address line 1, Provider address line 2, Provider address line 3, Provider town, Postcode, Eligible, Max claims, COPD, Registered person name, Telephone number, PAYE reference, Multiple nurseries?"])
       end
     end
   end
@@ -114,6 +142,73 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
   end
 
   subject { described_class.new(row:) }
+
+  describe "registered person details" do
+    it "accepts false when a registered person is present" do
+      row = CSV.parse(
+        file_fixture("eligible_eytfi_providers.csv").read,
+        headers: true
+      ).first
+
+      row["Multiple nurseries?"] = "FALSE"
+
+      parser = described_class.new(row: row)
+
+      expect(parser).to be_valid
+      expect(
+        parser.to_provider(file_upload: build(:file_upload)).multiple_nurseries
+      ).to be false
+    end
+
+    it "requires a boolean when a registered person is present" do
+      row = CSV.parse(
+        file_fixture("eligible_eytfi_providers.csv").read,
+        headers: true
+      ).first
+
+      row["Multiple nurseries?"] = nil
+
+      parser = described_class.new(row: row)
+
+      expect(parser).not_to be_valid
+
+      expect(parser.errors["Multiple nurseries?"]).to include(
+        "must be TRUE or FALSE"
+      )
+    end
+
+    it "rejects invalid booleans when a registered person is present" do
+      row = CSV.parse(
+        file_fixture("eligible_eytfi_providers.csv").read,
+        headers: true
+      ).first
+
+      row["Multiple nurseries?"] = "yes"
+
+      parser = described_class.new(row: row)
+
+      expect(parser).not_to be_valid
+
+      expect(parser.errors["Multiple nurseries?"]).to include(
+        "must be TRUE or FALSE"
+      )
+    end
+
+    it "requires the flag to be absent when no registered person is present" do
+      row = CSV.parse(
+        file_fixture("eligible_eytfi_providers.csv").read,
+        headers: true
+      ).first
+
+      row["Registered person name"] = nil
+
+      parser = described_class.new(row: row)
+
+      expect(parser).not_to be_valid
+
+      expect(parser.errors["Multiple nurseries?"]).to include("must be blank")
+    end
+  end
 
   describe "#validations" do
     context "urn" do
