@@ -45,6 +45,7 @@
   - upload_errors
   :reminders:
   - one_time_password
+  - sent_one_time_password_at
   :student_loans_data:
   - id
   - claim_reference
