@@ -42,6 +42,138 @@ RSpec.describe(
     )
   end
 
+  describe "registered person dispatch" do
+    it "stops when the registered person differs from the chosen setting" do
+      setting = create(
+        :eligible_eytfi_provider, name: "Willow Group", postcode: "SW1A 1AA",
+        registered_person_name: "Oak Group"
+      )
+      create(
+        :eligible_eytfi_provider, file_upload: setting.file_upload,
+        registered_person_name: "Willow Group", eligible: false
+      )
+      check = described_class.new(
+        setting: setting, hmrc_response_status: 200,
+        hmrc_response_body: {
+          employments: [{
+            employer: {
+              name: "Willow Group",
+              address: {postcode: "SW1A 1AA"}
+            }
+          }]
+        }.to_json
+      )
+      next_check = Journeys::EarlyYearsTeachersFinancialIncentivePayments::
+        EmploymentChecks::NamePostcode
+      expect(next_check).not_to receive(:new)
+
+      expect(check.passed?).to be(false)
+      expect(check.result.check).to eq(:registered_person)
+      expect(check.result.failure_reason).to eq(
+        :registered_person_does_not_match_setting
+      )
+    end
+
+    it "uses PAYE before registered person" do
+      setting = create(
+        :eligible_eytfi_provider,
+        name: "Oak Tree Nursery", postcode: "SW1A 1AA",
+        registered_person_name: "Oak Tree Nursery", paye_reference: "123/AB456"
+      )
+
+      check = described_class.new(
+        setting: setting, hmrc_response_status: 200,
+        hmrc_response_body: {
+          employments: [{
+            employer: {name: "Oak Tree Nursery", payeReference: "123/AB456"}
+          }]
+        }.to_json
+      )
+
+      next_check = Journeys::EarlyYearsTeachersFinancialIncentivePayments::
+        EmploymentChecks::RegisteredPerson
+      expect(next_check).not_to receive(:new)
+      expect(check.passed?).to be(true)
+      expect(check.result.check).to eq(:employer_paye_reference)
+    end
+
+    it "uses registered person before name and postcode" do
+      setting = create(
+        :eligible_eytfi_provider,
+        name: "Oak Tree Nursery", postcode: "SW1A 1AA",
+        registered_person_name: "Oak Tree Nursery", paye_reference: "123/AB456"
+      )
+
+      check = described_class.new(
+        setting: setting, hmrc_response_status: 200,
+        hmrc_response_body: {
+          employments: [{
+            employer: {name: " oak tree nursery "}
+          }]
+        }.to_json
+      )
+
+      expect(check.passed?).to be(true)
+      expect(check.result.check).to eq(:registered_person)
+    end
+
+    it "does not fall back after a failed registered person match" do
+      setting = create(
+        :eligible_eytfi_provider,
+        name: "Oak Tree Nursery", postcode: "SW1A 1AA",
+        registered_person_name: "Oak Tree Nursery", paye_reference: "123/AB456"
+      )
+      create(
+        :eligible_eytfi_provider, file_upload: setting.file_upload,
+        registered_person_name: "Oak Tree Nursery", eligible: false
+      )
+
+      check = described_class.new(
+        setting: setting, hmrc_response_status: 200,
+        hmrc_response_body: {
+          employments: [{
+            employer: {
+              name: "Oak Tree Nursery",
+              address: {postcode: "SW1A 1AA"}
+            }
+          }]
+        }.to_json
+      )
+
+      next_check = Journeys::EarlyYearsTeachersFinancialIncentivePayments::
+        EmploymentChecks::NamePostcode
+      expect(next_check).not_to receive(:new)
+      expect(check.passed?).to be(false)
+      expect(check.result.check).to eq(:registered_person)
+      expect(check.result.failure_reason).to eq(
+        :registered_person_has_ineligible_nurseries
+      )
+    end
+
+    it "falls back when the registered person is unknown" do
+      setting = create(
+        :eligible_eytfi_provider,
+        name: "Oak Tree Nursery", postcode: "SW1A 1AA",
+        registered_person_name: "Oak Group", paye_reference: "123/AB456"
+      )
+
+      check = described_class.new(
+        setting: setting, hmrc_response_status: 200,
+        hmrc_response_body: {
+          employments: [{
+            employer: {
+              name: "Oak Tree Nursery",
+              address: {postcode: "SW1A 1AA"}
+            }
+          }]
+        }.to_json
+      )
+
+      expect(check.passed?).to be(true)
+      expect(check.result.check).to eq(:name_postcode)
+    end
+  end
+
   describe "response handling and dispatch" do
     it "looks back one calendar month, including across a year boundary" do
       travel_to Time.zone.local(2026, 1, 15, 12) do
@@ -69,15 +201,21 @@ RSpec.describe(
       expect(check.result.check).to eq(:employer_paye_reference)
     end
 
-    it "prioritises a later PAYE match over an earlier name and postcode match" do
+    it "prioritises PAYE over an earlier name and postcode match" do
       check = check_for(
         setting_paye_reference: "123/AB456",
         employments: [
           employment,
-          employment(name: "Unrelated employer", postcode: "XX1 1XX", paye_reference: "123/AB456")
+          employment(
+            name: "Unrelated employer",
+            postcode: "XX1 1XX",
+            paye_reference: "123/AB456"
+          )
         ]
       )
-      expect(Journeys::EarlyYearsTeachersFinancialIncentivePayments::EmploymentChecks::NamePostcode).not_to receive(:new)
+      next_check = Journeys::EarlyYearsTeachersFinancialIncentivePayments::
+        EmploymentChecks::NamePostcode
+      expect(next_check).not_to receive(:new)
 
       expect(check.passed?).to be(true)
       expect(check.result.check).to eq(:employer_paye_reference)
@@ -96,12 +234,16 @@ RSpec.describe(
     it "fails when neither the PAYE reference nor name and postcode match" do
       check = check_for(
         setting_paye_reference: "123/AB456",
-        employments: [employment(name: "Willow Grove", paye_reference: "999/ZZ999")]
+        employments: [
+          employment(name: "Willow Grove", paye_reference: "999/ZZ999")
+        ]
       )
 
       expect(check.passed?).to be(false)
       expect(check.result.check).to be_nil
-      expect(check.result.failure_reason).to eq(:no_matching_employment)
+      expect(check.result.failure_reason).to eq(
+        :no_matching_employment
+      )
     end
 
     it "does not use a PAYE match from an unsuccessful response" do
@@ -115,9 +257,10 @@ RSpec.describe(
       expect(check.result.check).to be_nil
     end
 
-    it "fails without falling back even when another employment matches name and postcode" do
+    it "does not fall back after a failed PAYE match" do
       setting = create(
-        :eligible_eytfi_provider, name: "Oak Tree Nursery", postcode: "SW1A 1AA",
+        :eligible_eytfi_provider,
+        name: "Oak Tree Nursery", postcode: "SW1A 1AA",
         paye_reference: "123/AB456", registered_person_name: "Oak Group",
         multiple_nurseries: true, eligible: true
       )
@@ -131,21 +274,30 @@ RSpec.describe(
         hmrc_response_body: {
           employments: [
             employment,
-            employment(name: "Other Employer", postcode: "XX1 1XX", paye_reference: "123/AB456")
+            employment(
+              name: "Other Employer",
+              postcode: "XX1 1XX",
+              paye_reference: "123/AB456"
+            )
           ]
         }.to_json
       )
-      expect(Journeys::EarlyYearsTeachersFinancialIncentivePayments::EmploymentChecks::NamePostcode).not_to receive(:new)
+      next_check = Journeys::EarlyYearsTeachersFinancialIncentivePayments::
+        EmploymentChecks::NamePostcode
+      expect(next_check).not_to receive(:new)
 
       expect(check.passed?).to be(false)
       expect(check.result.passed?).to be(false)
       expect(check.result.check).to eq(:employer_paye_reference)
-      expect(check.result.failure_reason).to eq(:registered_person_has_ineligible_nurseries)
+      expect(check.result.failure_reason).to eq(
+        :registered_person_has_ineligible_nurseries
+      )
     end
 
     it "still uses name and postcode when the PAYE reference does not match" do
       setting = create(
-        :eligible_eytfi_provider, name: "Oak Tree Nursery", postcode: "SW1A 1AA",
+        :eligible_eytfi_provider,
+        name: "Oak Tree Nursery", postcode: "SW1A 1AA",
         paye_reference: "123/AB456", registered_person_name: "Oak Group",
         multiple_nurseries: true
       )
@@ -155,7 +307,9 @@ RSpec.describe(
       )
       check = described_class.new(
         setting: setting, hmrc_response_status: 200,
-        hmrc_response_body: {employments: [employment(paye_reference: "999/ZZ999")]}.to_json
+        hmrc_response_body: {
+          employments: [employment(paye_reference: "999/ZZ999")]
+        }.to_json
       )
 
       expect(check.passed?).to be(true)
