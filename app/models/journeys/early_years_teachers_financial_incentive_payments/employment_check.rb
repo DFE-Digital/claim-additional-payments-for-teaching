@@ -25,6 +25,13 @@ module Journeys
 
         return paye_check.result if paye_check.usable?
 
+        registered_person_check = EmploymentChecks::RegisteredPerson.new(
+          setting: setting,
+          employments: employments
+        )
+
+        return registered_person_check.result if registered_person_check.usable?
+
         EmploymentChecks::NamePostcode.new(
           setting: setting,
           employments: employments

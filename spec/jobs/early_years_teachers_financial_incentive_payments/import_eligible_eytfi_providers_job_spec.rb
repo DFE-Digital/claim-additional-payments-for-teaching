@@ -25,7 +25,7 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
     providers = Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider
 
     expect(providers.find_by!(urn: "123456")).to have_attributes(
-      registered_person_name: "Example Ltd",
+      registered_person_name: "example ltd",
       telephone_number: "01234567890",
       paye_reference: "123/AB456",
       multiple_nurseries: true
