@@ -14,7 +14,15 @@ module AutomatedChecks
 
           task = claim.tasks.employment.new
 
-          if employment_check.passed?
+          result = employment_check.result
+
+          task.data = {
+            check: result.check,
+            passed: result.passed?,
+            failure_reason: result.failure_reason
+          }
+
+          if result.passed?
             task.passed = true
             task.manual = false
           else
