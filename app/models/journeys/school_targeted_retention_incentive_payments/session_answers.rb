@@ -17,6 +17,8 @@ module Journeys
       attribute :national_insurance_number_correct, :boolean, pii: false
       attribute :national_insurance_number, :string, pii: true
 
+      attribute :correct_details, :boolean, pii: false
+
       def policy
         Policies::TargetedRetentionIncentivePayments
       end
@@ -29,17 +31,11 @@ module Journeys
         end
       end
 
-      def qualifications_from_trs_data
-        trs_data["routesToProfessionalStatuses"].select do |route|
-          route["status"] == "Holds"
-        end.map do |route|
-          OpenStruct.new(
-            name: route["routeToProfessionalStatusType"]["name"],
-            professional_status: route["routeToProfessionalStatusType"]["professionalStatusType"].underscore.humanize.titleize,
-            valid_from: Date.parse(route["holdsFrom"]),
-            subjects: route["trainingSubjects"].map { |subject| "#{subject["name"]} (#{subject["reference"]})" }
-          )
-        end
+      def dqt_record
+        @dqt_record ||= Policies::TargetedRetentionIncentivePayments::StriDqtRecord.new(
+          Dqt::Teacher.new(trs_data),
+          self
+        )
       end
     end
   end

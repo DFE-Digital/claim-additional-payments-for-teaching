@@ -13,7 +13,8 @@ RSpec.describe Debug::StriBypassJob do
         subject.perform(
           journey_session:,
           has_national_insurance_number: true,
-          national_insurance_number: "AB123456C"
+          national_insurance_number: "AB123456C",
+          ineligible_options: [""]
         )
 
         expect(journey_session.reload.answers.trs_data["nationalInsuranceNumber"]).to eql("AB123456C")
@@ -27,7 +28,8 @@ RSpec.describe Debug::StriBypassJob do
         subject.perform(
           journey_session:,
           has_national_insurance_number: false,
-          national_insurance_number: "AB123456C"
+          national_insurance_number: "AB123456C",
+          ineligible_options: [""]
         )
 
         expect(journey_session.reload.answers.trs_data["nationalInsuranceNumber"]).to be_blank
