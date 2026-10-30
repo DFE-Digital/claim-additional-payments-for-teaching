@@ -70,9 +70,14 @@ module Journeys
       end
 
       def previous_claim
+        temp_claim = Claim.new(
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          academic_year: Journeys::EarlyYearsTeachersFinancialIncentivePayments.configuration.current_academic_year
+        )
+
         @previous_claim ||= Claim
           .by_policy(Policies::EarlyYearsTeachersFinancialIncentivePayments)
-          .current_academic_year
+          .where(academic_year: Cohort.new(claim: temp_claim).academic_years)
           .where.not(id: submitted_claim_id)
           .where.not(onelogin_uid: nil)
           .find_by(onelogin_uid: teacher_auth_one_login_uid)
