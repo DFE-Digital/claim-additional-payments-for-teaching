@@ -10,7 +10,13 @@ module Journeys
         "verify-national-insurance-number",
         "national-insurance-number",
         "teacher-details",
-        "hello",
+        "maybe-eligible",
+        "information-provided",
+        "postcode-search",
+        "select-home-address",
+        "address",
+        "personal-bank-account",
+        "gender",
         "check-your-answers",
         "confirmation"
       ]
@@ -50,7 +56,18 @@ module Journeys
         array << "verify-national-insurance-number" if show_verify_national_insurance_number?
         array << "national-insurance-number" if show_national_insurance_number?
         array << "teacher-details"
-        array << "hello"
+        array << "maybe-eligible"
+        array << "information-provided"
+        array << "postcode-search"
+
+        array << if answers.postcode_searched?
+          "select-home-address"
+        else
+          "address"
+        end
+
+        array << "personal-bank-account"
+        array << "gender"
         array << "check-your-answers"
         array << "confirmation"
       end

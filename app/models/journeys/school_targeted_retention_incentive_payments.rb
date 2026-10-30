@@ -13,7 +13,9 @@ module Journeys
       HalfContractedHoursForm,
       SignInForm,
       QueryTeacherDetailsForm,
-      HelloForm,
+      MaybeEligibleForm,
+      InformationProvidedForm,
+      PersonalBankAccountForm,
       CheckYourAnswersForm,
       ConfirmationForm
     ].freeze
@@ -37,7 +39,10 @@ module Journeys
         VerifyNationalInsuranceNumberForm,
         NationalInsuranceNumberForm,
         TeacherDetailsForm,
-        HelloForm,
+        MaybeEligibleForm,
+        MaybeEligibleForm,
+        InformationProvidedForm,
+        PersonalBankAccountForm,
         CheckYourAnswersForm,
         ConfirmationForm
       ]
@@ -51,6 +56,10 @@ module Journeys
 
     def set_a_reminder?(itt_year)
       false
+    end
+
+    def requires_student_loan_details?
+      true
     end
   end
 end

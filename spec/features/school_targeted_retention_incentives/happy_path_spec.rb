@@ -29,14 +29,23 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
         "dateOfBirth" => "1970-12-13",
         "nationalInsuranceNumber" => "AB123456C",
         "emailAddress" => "john.doe@example.com",
-        "qts" => nil,
+        "qts" => {
+          routes: [{
+            routeToProfessionalStatusType: {
+              name: "Assessment Only",
+              professionalStatusType: "QualifiedTeacherStatus",
+              routeToProfessionalStatusTypeId: "57b86cef-98e2-4962-a74a-d47c7a34b838"
+            }
+          }],
+          holdsFrom: "2024-10-22"
+        },
         "eyts" => {
-          "holdsFrom" => "2015-10-22",
+          "holdsFrom" => "2024-10-22",
           "routes" => [
             {
               "routeToProfessionalStatusType" => {
                 "routeToProfessionalStatusTypeId" => "11111",
-                "name" => "EYTS ITT Migrated",
+                "name" => "Assessment Only",
                 "professionalStatusType" => "EarlyYearsTeacherStatus"
               }
             }
@@ -47,14 +56,17 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
             "routeToProfessionalStatusId" => "222222",
             "routeToProfessionalStatusType" => {
               "routeToProfessionalStatusTypeId" => "33333",
-              "name" => "EYTS ITT Migrated",
+              "name" => "Assessment Only",
               "professionalStatusType" => "EarlyYearsTeacherStatus"
             },
             "status" => "Holds",
-            "holdsFrom" => "2015-10-22",
+            "holdsFrom" => "2024-10-22",
             "trainingStartDate" => "2014-09-30",
             "trainingEndDate" => nil,
-            "trainingSubjects" => [],
+            "trainingSubjects" => [{
+              name: "applied computing",
+              reference: "100358"
+            }],
             "trainingAgeSpecialism" => {
               "type" => "Range"
             },
@@ -117,5 +129,43 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
     click_button "Continue"
 
     expect(page).to have_text "Teacher details"
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_text "You may be eligible"
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_text "How we’ll use your information"
+    click_button "Continue"
+
+    expect(page).to have_text "What is your home address"
+    click_button "Enter your address manually"
+
+    fill_in "House number or name", with: "1"
+    fill_in "Building and street", with: "Grey Street"
+    fill_in "Town or city", with: "Newcastle upon Tyne"
+    fill_in "Postcode", with: "NE1 6EE"
+    click_button "Continue"
+
+    expect(page).to have_text "Enter the bank account"
+    fill_in "Name on the account", with: "John Doe"
+    fill_in "Sort code", with: "123456"
+    fill_in "Account number", with: "12345678"
+    click_button "Continue"
+
+    expect(page).to have_text "Are you recorded as male or female"
+    choose "I don’t know"
+    click_button "Continue"
+
+    expect(page).to have_text "Confirm your details"
+    check "I confirm that I understand and accept these conditions."
+    expect {
+      click_button "Confirm and claim"
+    }.to change(Claim, :count).by(1)
+
+    claim = Claim.last
+    expect(page).to have_text "Claim complete"
+    expect(page).to have_text claim.reference
   end
 end

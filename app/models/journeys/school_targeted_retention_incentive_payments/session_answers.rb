@@ -18,6 +18,8 @@ module Journeys
       attribute :national_insurance_number, :string, pii: true
 
       attribute :correct_details, :boolean, pii: false
+      attribute :continue_claim, :boolean, pii: false
+      attribute :claimant_declaration, :boolean, pii: false
 
       def policy
         Policies::TargetedRetentionIncentivePayments
