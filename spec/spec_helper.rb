@@ -1,7 +1,4 @@
 require "simplecov" if ENV["COVERAGE"] == "true"
-require "faker"
-
-Faker::Config.locale = "en-GB"
 
 if ENV["COVERAGE"] == "true"
   SimpleCov.start do
