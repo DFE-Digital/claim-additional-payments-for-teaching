@@ -35,6 +35,18 @@ RSpec.describe "EYTFI admin HMRC employment check" do
       }
     )
 
+    create(
+      :task,
+      claim: claim,
+      name: "employment",
+      passed: true,
+      manual: false,
+      data: {
+        check: "paye_reference",
+        passed: true
+      }
+    )
+
     claim.eligibility.employment_proofs.attach(
       io: File.open(
         Rails.root.join("spec/fixtures/files/employment_proof.pdf")
@@ -58,6 +70,7 @@ RSpec.describe "EYTFI admin HMRC employment check" do
 
     within("#hmrc-employment-check") do
       expect(page).to have_text("HMRC employment check")
+      expect(page).to have_text("Passed check: Paye reference")
 
       expect(page).to have_selector("h3", text: "Employment 1")
 
@@ -127,6 +140,7 @@ RSpec.describe "EYTFI admin HMRC employment check" do
     visit admin_claim_task_path(claim, "employment")
 
     expect(page).to have_text("Claimant not found on HMRC.")
+    expect(page).not_to have_text("Passed check:")
     expect(page).to have_text("Uploaded evidence")
   end
 
