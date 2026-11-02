@@ -3,12 +3,17 @@ require "rails_helper"
 RSpec.feature "Admin checks a claim" do
   context "User is logged in as a service operator" do
     before do
-      disable_claim_qa_flagging
       @signed_in_user = sign_in_as_service_operator
     end
 
     scenario "User can approve a claim" do
       freeze_time do
+        create(
+          :journey_configuration,
+          :student_loans,
+          :disable_qa
+        )
+
         submitted_claims = 2.times.map do |i|
           create(:claim, :submitted, created_at: i.days.ago)
         end
@@ -42,7 +47,11 @@ RSpec.feature "Admin checks a claim" do
     end
 
     scenario "they can reject a claim" do
-      create(:journey_configuration, :student_loans)
+      create(
+        :journey_configuration,
+        :student_loans,
+        :disable_qa
+      )
       submitted_claims = create_list(:claim, 2, :submitted)
       claim_to_reject = submitted_claims.first
 

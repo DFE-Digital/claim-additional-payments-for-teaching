@@ -9,9 +9,23 @@ class Admin::JourneyConfigurationForm
   attribute :teacher_id_enabled, :boolean
   attribute :close_at, :datetime
   attribute :automatic_approvals, :boolean
+  attribute :approved_min_qa_threshold, :integer
+  attribute :rejected_min_qa_threshold, :integer
 
   validates :close_at, presence: true, if: :open_for_submissions
   validate :close_at_in_future, if: :open_for_submissions
+
+  validates :approved_min_qa_threshold,
+    numericality: {
+      greater_than_or_equal_to: 0,
+      less_than_or_equal_to: 100
+    }
+
+  validates :rejected_min_qa_threshold,
+    numericality: {
+      greater_than_or_equal_to: 0,
+      less_than_or_equal_to: 100
+    }
 
   def self.for_journey_configuration(journey_configuration)
     new(
@@ -21,7 +35,9 @@ class Admin::JourneyConfigurationForm
       availability_message: journey_configuration.availability_message,
       teacher_id_enabled: journey_configuration.teacher_id_enabled,
       close_at: journey_configuration.close_at,
-      automatic_approvals: journey_configuration.automatic_approvals
+      automatic_approvals: journey_configuration.automatic_approvals,
+      approved_min_qa_threshold: journey_configuration.approved_min_qa_threshold,
+      rejected_min_qa_threshold: journey_configuration.rejected_min_qa_threshold
     )
   end
 
@@ -69,7 +85,9 @@ class Admin::JourneyConfigurationForm
       availability_message:,
       teacher_id_enabled:,
       close_at:,
-      automatic_approvals:
+      automatic_approvals:,
+      approved_min_qa_threshold:,
+      rejected_min_qa_threshold:
     )
   end
 
