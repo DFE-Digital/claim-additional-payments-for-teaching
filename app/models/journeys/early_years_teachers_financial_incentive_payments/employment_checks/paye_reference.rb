@@ -10,7 +10,7 @@ module Journeys
         def result
           return nil unless usable?
 
-          if setting.multiple_nurseries? && registered_person_has_ineligible_nurseries?
+          if registered_person_has_ineligible_nurseries?
             Result.new(
               check: :employer_paye_reference,
               passed?: false,
@@ -36,6 +36,8 @@ module Journeys
         attr_reader :setting, :employments
 
         def registered_person_has_ineligible_nurseries?
+          return false if setting.registered_person_name.blank?
+
           Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider
             .where(
               file_upload_id: setting.file_upload_id,

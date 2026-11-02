@@ -125,7 +125,7 @@ RSpec.describe(
       expect(check.result).to be_nil
     end
 
-    it "passes when the setting does not control multiple nurseries" do
+    it "fails for an ineligible companion when the multiple flag is false" do
       setting = create(
         :eligible_eytfi_provider, paye_reference: "123/AB456",
         registered_person_name: "Oak Group", multiple_nurseries: false
@@ -139,8 +139,52 @@ RSpec.describe(
       )
 
       expect(check.usable?).to be(true)
-      expect(check.result.passed?).to be(true)
+      expect(check.result.passed?).to be(false)
       expect(check.result.check).to eq(:employer_paye_reference)
+      expect(check.result.failure_reason).to eq(
+        :registered_person_has_ineligible_nurseries
+      )
+    end
+
+    it "fails for an ineligible companion when the multiple flag is unset" do
+      setting = create(
+        :eligible_eytfi_provider, paye_reference: "123/AB456",
+        registered_person_name: "Oak Group", multiple_nurseries: nil
+      )
+      create(
+        :eligible_eytfi_provider, file_upload: setting.file_upload,
+        registered_person_name: "Oak Group", eligible: false
+      )
+      check = described_class.new(
+        setting: setting, employments: [employment(paye_reference: "123/AB456")]
+      )
+
+      expect(check.usable?).to be(true)
+      expect(check.result.passed?).to be(false)
+      expect(check.result.check).to eq(:employer_paye_reference)
+      expect(check.result.failure_reason).to eq(
+        :registered_person_has_ineligible_nurseries
+      )
+    end
+
+    it "does not group nurseries with missing registered person names" do
+      setting = create(
+        :eligible_eytfi_provider,
+        paye_reference: "123/AB456",
+        registered_person_name: nil
+      )
+      create(
+        :eligible_eytfi_provider,
+        file_upload: setting.file_upload,
+        registered_person_name: nil,
+        eligible: false
+      )
+      check = described_class.new(
+        setting: setting,
+        employments: [employment(paye_reference: "123/AB456")]
+      )
+
+      expect(check.result.passed?).to be(true)
       expect(check.result.failure_reason).to be_nil
     end
 
@@ -167,7 +211,7 @@ RSpec.describe(
       expect(check.result.failure_reason).to be_nil
     end
 
-    it "passes with multiple nurseries flagged when only one setting is recorded pending product review" do
+    it "passes when the registered person has only one eligible nursery" do
       setting = create(
         :eligible_eytfi_provider, paye_reference: "123/AB456", eligible: true,
         registered_person_name: "Oak Group", multiple_nurseries: true
