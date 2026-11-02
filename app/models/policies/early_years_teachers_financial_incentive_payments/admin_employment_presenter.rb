@@ -65,7 +65,10 @@ module Policies
         end
 
         def summary_rows
-          rows = [["Employer name", name]]
+          rows = [
+            ["Employer name", name],
+            ["Employer PAYE reference", paye_reference]
+          ]
 
           address.each do |line, value|
             line = line.underscore.gsub(/(\D)(\d)/, '\1 \2').humanize.downcase
@@ -82,6 +85,10 @@ module Policies
 
         def name
           @employer.fetch("name", "Not returned")
+        end
+
+        def paye_reference
+          @employer["payeReference"].presence || "Not returned"
         end
 
         def address

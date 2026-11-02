@@ -14,6 +14,7 @@ RSpec.describe "EYTFI admin HMRC employment check" do
             {
               employer: {
                 name: "Oak Tree Nursery",
+                payeReference: "123/AB456",
                 address: {
                   line1: "1 High Street",
                   postcode: "SW1A 1AA"
@@ -83,6 +84,11 @@ RSpec.describe "EYTFI admin HMRC employment check" do
         )
 
         expect(page).to have_summary_item(
+          key: "Employer PAYE reference",
+          value: "123/AB456"
+        )
+
+        expect(page).to have_summary_item(
           key: "Address line 1",
           value: "1 High Street"
         )
@@ -107,6 +113,11 @@ RSpec.describe "EYTFI admin HMRC employment check" do
         expect(page).to have_summary_item(
           key: "Employer name",
           value: "Sunny Days Nursery"
+        )
+
+        expect(page).to have_summary_item(
+          key: "Employer PAYE reference",
+          value: "Not returned"
         )
 
         expect(page).not_to have_selector(
