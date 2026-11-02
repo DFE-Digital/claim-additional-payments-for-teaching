@@ -229,6 +229,8 @@ RSpec.describe "Task index page for EYTFI claims" do
       :eligible_eytfi_provider,
       urn: "EY123456",
       name: "Sunny Days Nursery",
+      registered_person_name: "Sunny Days Group",
+      paye_reference: "123/AB456",
       address_line_1: "1 Nursery Lane",
       address_line_2: "Childcare Park",
       address_line_3: "Sunny Side",
@@ -272,6 +274,15 @@ RSpec.describe "Task index page for EYTFI claims" do
     click_on "Check employment information"
 
     expect(page).to have_text("Employment evidence uploaded by claimant on 1/5/2026")
+
+    expect(page).to have_summary_item(
+      key: "Registered person name",
+      value: "sunny days group"
+    )
+    expect(page).to have_summary_item(
+      key: "Employer PAYE reference",
+      value: "123/AB456"
+    )
 
     expect(page).to have_text("Selected nursery")
     expect(page).to have_text("EY123456")
