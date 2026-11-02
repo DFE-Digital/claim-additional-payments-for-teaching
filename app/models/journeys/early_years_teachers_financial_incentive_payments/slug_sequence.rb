@@ -12,8 +12,6 @@ module Journeys
         continue-claim
         claim-cancelled
         confirm-national-insurance-number
-        hmrc-loading-screen
-        hmrc-bypass
         upload-employment-proof
         review-employment-proof
         information-provided
@@ -75,18 +73,8 @@ module Journeys
           SLUGS_HASH["national-insurance-number"]
         end
 
-        if FeatureFlag.enabled?(:eytrp_hmrc_integration)
-          unless ::EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob.enabled?
-            array << SLUGS_HASH["hmrc-bypass"]
-          end
-
-          array << SLUGS_HASH["hmrc-loading-screen"]
-        end
-
-        unless answers.hmrc_employment_check_passed?
-          array << SLUGS_HASH["upload-employment-proof"]
-          array << SLUGS_HASH["review-employment-proof"]
-        end
+        array << SLUGS_HASH["upload-employment-proof"]
+        array << SLUGS_HASH["review-employment-proof"]
 
         array << SLUGS_HASH["continue-claim"]
 
