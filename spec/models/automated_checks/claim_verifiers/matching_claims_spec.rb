@@ -422,6 +422,37 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::MatchingClaims do
       expect(removed_match.tasks.matching_details).to be_empty
       expect_incomplete_matching_details_task(new_match, source_claim)
     end
+
+    context do
+      let(:claim) do
+        create(
+          :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          academic_year: AcademicYear.new(2026),
+          national_insurance_number: "AB123456C"
+        )
+      end
+
+      let!(:closed_beta_claim) do
+        create(
+          :claim,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          academic_year: AcademicYear.new(2025),
+          national_insurance_number: "AB123456C"
+        )
+      end
+
+      subject do
+        described_class.new(claim: claim)
+      end
+
+      it "find claims in the same cohort" do
+        expect { subject.perform }.to change(Task, :count).by(2)
+
+        expect(claim.tasks.first.data["matching_claims"]).to eql([closed_beta_claim.reference])
+        expect(closed_beta_claim.tasks.first.data["matching_claims"]).to eql([claim.reference])
+      end
+    end
   end
 
   def create_claim(email_address:, created_at: Time.current, national_insurance_number: nil)

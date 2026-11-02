@@ -12,7 +12,7 @@ module Policies
 
       Claim
         .by_policy(claim.policy)
-        .by_academic_year(claim.academic_year)
+        .by_academic_year(Cohort.new(claim:).academic_years)
         .approved
         .where(id: all_matching_claims_subquery)
     end

@@ -6,11 +6,11 @@ module Seeders
     def call
       load_factory_bot_definitions
 
-      puts "Seeding journey configs..."
-      create_journey_configurations
-
       puts "Seeding feature flags..."
       toggle_feature_flags
+
+      puts "Seeding journey configs..."
+      create_journey_configurations
 
       puts "Seeding payroll runs..."
       seed_payroll_runs

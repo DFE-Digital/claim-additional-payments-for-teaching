@@ -136,5 +136,34 @@ RSpec.describe Policies::DuplicateFinder do
         end
       end
     end
+
+    context "when claim handling a cohort spanning multiple years" do
+      let(:policy) { Policies::EarlyYearsTeachersFinancialIncentivePayments }
+
+      let(:submitted_claim) do
+        create(
+          :claim,
+          :submitted,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          academic_year: AcademicYear.new(2026),
+          national_insurance_number: "AB123456C"
+        )
+      end
+
+      let!(:closed_beta_claim) do
+        create(
+          :claim,
+          :submitted,
+          :approved,
+          policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+          academic_year: AcademicYear.new(2025),
+          national_insurance_number: "AB123456C"
+        )
+      end
+
+      it "includes other claims in cohort" do
+        expect(subject).to include(closed_beta_claim)
+      end
+    end
   end
 end
