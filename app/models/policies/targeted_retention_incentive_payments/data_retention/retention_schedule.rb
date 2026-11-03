@@ -105,7 +105,8 @@ module Policies
           employed_directly: :retained,
           has_entire_term_contract: :retained,
           induction_completed: :retained,
-          school_somewhere_else: :retained
+          school_somewhere_else: :retained,
+          confirmed_employment_proof_blob_ids: :retained
         }
       end
     end
