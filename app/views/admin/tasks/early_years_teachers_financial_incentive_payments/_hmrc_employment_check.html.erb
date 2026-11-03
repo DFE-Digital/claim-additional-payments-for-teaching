@@ -1,5 +1,14 @@
 <section id="hmrc-employment-check">
-  <h2 class="govuk-heading-l" id="hmrc-employment-check-heading">HMRC employment check</h2>
+  <h2 class="govuk-heading-l" id="hmrc-employment-check-heading">
+    HMRC employment check
+  </h2>
+
+  <% data = task.data.presence || {} %>
+
+  <% if data["passed"] %>
+    <%= govuk_inset_text(text: "Passed check: #{data["check"].to_s.humanize}") %>
+  <% end %>
+
 
   <% if presenter.message.present? %>
     <p class="govuk-body"><%= presenter.message %></p>

@@ -14,6 +14,7 @@ RSpec.describe "EYTFI admin HMRC employment check" do
             {
               employer: {
                 name: "Oak Tree Nursery",
+                payeReference: "123/AB456",
                 address: {
                   line1: "1 High Street",
                   postcode: "SW1A 1AA"
@@ -32,6 +33,18 @@ RSpec.describe "EYTFI admin HMRC employment check" do
             }
           ]
         }.to_json
+      }
+    )
+
+    create(
+      :task,
+      claim: claim,
+      name: "employment",
+      passed: true,
+      manual: false,
+      data: {
+        check: "paye_reference",
+        passed: true
       }
     )
 
@@ -58,6 +71,7 @@ RSpec.describe "EYTFI admin HMRC employment check" do
 
     within("#hmrc-employment-check") do
       expect(page).to have_text("HMRC employment check")
+      expect(page).to have_text("Passed check: Paye reference")
 
       expect(page).to have_selector("h3", text: "Employment 1")
 
@@ -67,6 +81,11 @@ RSpec.describe "EYTFI admin HMRC employment check" do
         expect(page).to have_summary_item(
           key: "Employer name",
           value: "Oak Tree Nursery"
+        )
+
+        expect(page).to have_summary_item(
+          key: "Employer PAYE reference",
+          value: "123/AB456"
         )
 
         expect(page).to have_summary_item(
@@ -94,6 +113,11 @@ RSpec.describe "EYTFI admin HMRC employment check" do
         expect(page).to have_summary_item(
           key: "Employer name",
           value: "Sunny Days Nursery"
+        )
+
+        expect(page).to have_summary_item(
+          key: "Employer PAYE reference",
+          value: "Not returned"
         )
 
         expect(page).not_to have_selector(
@@ -127,6 +151,7 @@ RSpec.describe "EYTFI admin HMRC employment check" do
     visit admin_claim_task_path(claim, "employment")
 
     expect(page).to have_text("Claimant not found on HMRC.")
+    expect(page).not_to have_text("Passed check:")
     expect(page).to have_text("Uploaded evidence")
   end
 

@@ -1,6 +1,19 @@
 require "rails_helper"
 
 RSpec.describe Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider do
+  it "normalizes registered person names on assignment and lookup" do
+    provider = create(:eligible_eytfi_provider, registered_person_name: "  Oak Group  ")
+
+    expect(provider.reload.registered_person_name).to eq("oak group")
+    expect(described_class.where(registered_person_name: [" OAK GROUP "])).to include(provider)
+  end
+
+  it "allows a missing registered person name" do
+    provider = build(:eligible_eytfi_provider, registered_person_name: nil)
+
+    expect(provider.registered_person_name).to be_nil
+  end
+
   describe "::search" do
     context "when name contains apostrophe and search term does not" do
       before do
