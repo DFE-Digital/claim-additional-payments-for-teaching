@@ -126,7 +126,7 @@ module Journeys
 
       def trigger_malware_scan_jobs
         answers.confirmed_employment_proof_blob_ids.each do |blob_id|
-          ::EarlyYearsTeachersFinancialIncentivePayments::FetchEmploymentProofMalwareScanResultJob.perform_later(blob_id)
+          BlobMalwareScanResultJob.perform_later(blob_id)
         end
       end
 
