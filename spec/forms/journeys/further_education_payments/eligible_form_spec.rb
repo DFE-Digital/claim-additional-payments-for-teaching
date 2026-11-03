@@ -25,7 +25,7 @@ RSpec.describe Journeys::FurtherEducationPayments::EligibleForm, type: :model do
   end
 
   describe "#save" do
-    let!(:eligible_fe_provider) { create(:eligible_fe_provider, ukprn: school.ukprn, max_award_amount: 4_000.0) }
+    let!(:eligible_fe_provider) { create(:eligible_fe_provider, ukprn: school.ukprn, middle_award_amount: 4_000.0) }
 
     it "updates award_amount" do
       expect { subject.save }.to(

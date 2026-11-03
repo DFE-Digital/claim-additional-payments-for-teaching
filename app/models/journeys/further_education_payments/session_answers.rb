@@ -115,8 +115,10 @@ module Journeys
       def calculate_award_amount
         provider = school.eligible_fe_provider(academic_year: Journeys::FurtherEducationPayments.configuration.current_academic_year)
         case teaching_hours_per_week
-        when "more_than_12", "more_than_20"
+        when "more_than_20"
           provider.max_award_amount
+        when "more_than_12"
+          provider.middle_award_amount
         when "between_2_5_and_12"
           provider.lower_award_amount
         else
