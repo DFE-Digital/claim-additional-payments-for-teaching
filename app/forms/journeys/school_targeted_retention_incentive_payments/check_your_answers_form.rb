@@ -58,6 +58,7 @@ module Journeys
           claim.save!
           Event.create(claim:, name: "claim_submitted")
           mark_service_access_code_as_used!
+          trigger_malware_scan_jobs
         end
 
         session[:submitted_claim_id] = claim.id
@@ -116,6 +117,14 @@ module Journeys
       def award_amount
         Policies::TargetedRetentionIncentivePayments
           .award_amount(journey_session.answers.current_school)
+      end
+
+      private
+
+      def trigger_malware_scan_jobs
+        answers.confirmed_employment_proof_blob_ids.each do |blob_id|
+          BlobMalwareScanResultJob.perform_later(blob_id)
+        end
       end
     end
   end
