@@ -422,6 +422,7 @@ shared:
     - ukprn # integer, external identifier for school
     - academic_year # string, which academic year the eligibility record is for
     - max_award_amount # decimal, max amount that can be awarded to claimant
+    - middle_award_amount # decimal, middle amount that can be awarded to claimant
     - lower_award_amount # decimal, lower amound that can be awarded to claimant
     - created_at # datetime, timestamp when record was created
     - updated_at # datetime, timestamp when record was last updated
