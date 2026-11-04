@@ -1,0 +1,57 @@
+<% content_for(:page_title, page_title("Upload proof of employment", journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false, multipart: true } do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        We could not confirm that you work at the school you selected
+      </h1>
+
+      <%= govuk_warning_text(
+        text: "You selected #{@form.school_name} as your workplace, but we could not confirm this using HMRC records."
+      ) %>
+
+      <p class="govuk-body">
+        If you work at <%= @form.school_name %>, you can upload a payslip
+        to confirm this.
+      </p>
+
+      <p class="govuk-body">
+        If you selected the wrong school, go back and
+        <%= govuk_link_to(
+          "choose a different school",
+          claim_path(
+            current_journey_routing_name,
+            "current-school",
+            change: "upload-employment-proof"
+          )
+        ) %>
+      </p>
+
+      <p class="govuk-body">The document must:</p>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <li>show your full name</li>
+        <li>show the name of your workplace</li>
+        <li>be dated within the last 2 months</li>
+      </ul>
+
+      <p class="govuk-body">You can upload a clear photo or a scanned copy of the document.</p>
+
+      <%= f.govuk_file_field :file, label: { text: "Upload payslip", class: "govuk-label--m" },
+            accept: f.object.class::ALLOWED_CONTENT_TYPES.join(",") %>
+
+      <%= f.govuk_submit "Upload" %>
+
+      <p class="govuk-body">
+        Uploaded files are processed securely and retained only for as long as necessary to review your claim,
+        after which they are securely deleted. For more information, see
+        <%= govuk_link_to "DFE personal information charter",
+          "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter",
+          new_tab: true %>
+      </p>
+    <% end %>
+  </div>
+</div>

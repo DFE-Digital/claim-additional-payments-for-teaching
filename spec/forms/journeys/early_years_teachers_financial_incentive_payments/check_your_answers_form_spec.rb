@@ -73,7 +73,7 @@ RSpec.describe Journeys::EarlyYearsTeachersFinancialIncentivePayments::CheckYour
     it "enqueues a malware scan job for each confirmed blob" do
       expect {
         form.save
-      }.to have_enqueued_job(EarlyYearsTeachersFinancialIncentivePayments::FetchEmploymentProofMalwareScanResultJob)
+      }.to have_enqueued_job(BlobMalwareScanResultJob)
         .with(journey_session.answers.confirmed_employment_proof_blob_ids.first)
     end
   end

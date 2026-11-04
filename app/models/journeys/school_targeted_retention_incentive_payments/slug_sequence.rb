@@ -12,6 +12,8 @@ module Journeys
         "verify-national-insurance-number",
         "national-insurance-number",
         "teacher-details",
+        "upload-employment-proof",
+        "review-employment-proof",
         "maybe-eligible",
         "information-provided",
         "postcode-search",
@@ -63,6 +65,8 @@ module Journeys
           array << "verify-national-insurance-number" if show_verify_national_insurance_number?
           array << "national-insurance-number" if show_national_insurance_number?
           array << "teacher-details"
+          array << "upload-employment-proof"
+          array << "review-employment-proof"
           array << "maybe-eligible"
           array << "information-provided"
           array << "postcode-search"

@@ -132,6 +132,14 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
     choose "Yes"
     click_button "Continue"
 
+    expect(page).to have_text "We could not confirm that you work at"
+    attach_file "Upload payslip", Rails.root.join("spec/fixtures/files/employment_proof.pdf")
+    click_on "Upload"
+
+    expect(page).to have_text "Check your document"
+    choose "Yes, add this file"
+    click_button "Continue"
+
     expect(page).to have_text "You may be eligible"
     choose "Yes"
     click_button "Continue"
@@ -165,6 +173,11 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
     }.to change(Claim, :count).by(1)
 
     claim = Claim.last
+    eligibility = claim.eligibility
+
+    expect(eligibility.employment_proofs).to be_attached
+    expect(eligibility.confirmed_employment_proof_blob_ids).to be_present
+
     expect(page).to have_text "Claim complete"
     expect(page).to have_text claim.reference
   end
