@@ -175,6 +175,7 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
     claim = Claim.last
     eligibility = claim.eligibility
 
+    expect(eligibility.employment_proofs).to be_attached
     expect(eligibility.confirmed_employment_proof_blob_ids).to be_present
 
     expect(page).to have_text "Claim complete"

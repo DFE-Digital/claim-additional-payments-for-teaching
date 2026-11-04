@@ -86,10 +86,13 @@ module Journeys
             if eligibility.respond_to?(:"#{name}=")
               eligibility.public_send(:"#{name}=", value)
             end
-
-            eligibility.teacher_reference_number = answers.teacher_auth_teacher_reference_number
-            eligibility.award_amount = award_amount
           end
+
+          eligibility.teacher_reference_number = answers.teacher_auth_teacher_reference_number
+          eligibility.award_amount = award_amount
+
+          confirmed_blobs = ActiveStorage::Blob.where(id: answers.confirmed_employment_proof_blob_ids)
+          confirmed_blobs.each { |blob| eligibility.employment_proofs.attach(blob) }
         end
       end
 

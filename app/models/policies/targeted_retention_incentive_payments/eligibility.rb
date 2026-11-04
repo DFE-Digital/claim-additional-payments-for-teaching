@@ -1,17 +1,17 @@
 module Policies
   module TargetedRetentionIncentivePayments
     class Eligibility < ApplicationRecord
+      self.table_name = "targeted_retention_incentive_payments_eligibilities"
+
       include TeacherReferenceNumberValidation
-
-      def policy
-        Policies::TargetedRetentionIncentivePayments
-      end
-
       include ActiveSupport::NumberHelper
 
-      self.table_name = "targeted_retention_incentive_payments_eligibilities"
       has_one :claim, as: :eligibility, inverse_of: :eligibility
       belongs_to :current_school, optional: true, class_name: "School"
+
+      # dependent: :purge_later by default
+      # — blobs are deleted from Azure asynchronously when the session is destroyed
+      has_many_attached :employment_proofs
 
       before_validation :normalise_teacher_reference_number, if: :teacher_reference_number_changed?
 
@@ -59,6 +59,10 @@ module Policies
         none_of_the_above
         computing
       ].index_with(&:itself), prefix: :itt_subject
+
+      def policy
+        Policies::TargetedRetentionIncentivePayments
+      end
 
       private
 
