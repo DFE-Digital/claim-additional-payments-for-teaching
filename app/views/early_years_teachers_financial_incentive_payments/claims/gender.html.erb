@@ -24,11 +24,10 @@
         <%= f.govuk_radio_button :payroll_gender, :dont_know, label: { text: "I don’t know" } %>
       <% end %>
 
-      <%= govuk_details(summary_text: "Why do we ask this?") do %>
-        <p class="govuk-body">
-          Payroll records your gender as male or female, and we need this information to make your payment.
-        </p>
-      <% end %>
+      <p class="govuk-body">
+        Payroll records your gender as male or female, and we need this
+        information to make your payment.
+      </p>
 
       <%= f.govuk_submit "Continue" %>
     <% end %>
