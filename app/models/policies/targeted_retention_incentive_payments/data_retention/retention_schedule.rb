@@ -106,7 +106,11 @@ module Policies
           has_entire_term_contract: :retained,
           induction_completed: :retained,
           school_somewhere_else: :retained,
-          confirmed_employment_proof_blob_ids: :retained
+          confirmed_employment_proof_blob_ids: :inactive_claim_submitted_in_prior_academic_term?
+        }
+
+        self.eligibility_attachments_to_destroy = {
+          employment_proofs: :confirmed_employment_proof_blob_ids
         }
       end
     end
