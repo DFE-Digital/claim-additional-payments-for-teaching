@@ -134,14 +134,14 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     fill_in "Postcode", with: "NE1 6EE"
     click_button "Continue"
 
-    expect(page).to have_text "Are you recorded as male or female on your employer’s payroll system?"
-    choose "I don’t know"
-    click_button "Continue"
-
     expect(page).to have_text(I18n.t("questions.account_details"))
     fill_in "Name on the account", with: "John Doe"
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "12345678"
+    click_button "Continue"
+
+    expect(page).to have_text "Are you recorded as male or female on your employer’s payroll system?"
+    choose "I don’t know"
     click_button "Continue"
 
     expect(page).to have_text "Confirm your details and complete your claim"
@@ -385,16 +385,16 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         fill_in "Postcode", with: "NE1 6EE"
         click_button "Continue"
 
-        expect(page).to have_text(
-          "Are you recorded as male or female on your employer’s payroll system?"
-        )
-        choose "I don’t know"
-        click_button "Continue"
-
         expect(page).to have_text(I18n.t("questions.account_details"))
         fill_in "Name on the account", with: "John Doe"
         fill_in "Sort code", with: "123456"
         fill_in "Account number", with: "12345678"
+        click_button "Continue"
+
+        expect(page).to have_text(
+          "Are you recorded as male or female on your employer’s payroll system?"
+        )
+        choose "I don’t know"
         click_button "Continue"
 
         expect(page).to have_text "Confirm your details and complete your claim"
@@ -483,16 +483,16 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         fill_in "Postcode", with: "NE1 6EE"
         click_button "Continue"
 
-        expect(page).to have_text(
-          "Are you recorded as male or female on your employer’s payroll system?"
-        )
-        choose "I don’t know"
-        click_button "Continue"
-
         expect(page).to have_text(I18n.t("questions.account_details"))
         fill_in "Name on the account", with: "John Doe"
         fill_in "Sort code", with: "123456"
         fill_in "Account number", with: "12345678"
+        click_button "Continue"
+
+        expect(page).to have_text(
+          "Are you recorded as male or female on your employer’s payroll system?"
+        )
+        choose "I don’t know"
         click_button "Continue"
 
         expect(page).to have_text "Confirm your details and complete your claim"
@@ -579,16 +579,16 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         fill_in "Postcode", with: "NE1 6EE"
         click_button "Continue"
 
-        expect(page).to have_text(
-          "Are you recorded as male or female on your employer’s payroll system?"
-        )
-        choose "I don’t know"
-        click_button "Continue"
-
         expect(page).to have_text(I18n.t("questions.account_details"))
         fill_in "Name on the account", with: "John Doe"
         fill_in "Sort code", with: "123456"
         fill_in "Account number", with: "12345678"
+        click_button "Continue"
+
+        expect(page).to have_text(
+          "Are you recorded as male or female on your employer’s payroll system?"
+        )
+        choose "I don’t know"
         click_button "Continue"
 
         expect(page).to have_text "Confirm your details and complete your claim"

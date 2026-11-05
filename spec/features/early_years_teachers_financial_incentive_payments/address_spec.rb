@@ -73,12 +73,12 @@ RSpec.feature "EYTFI address", feature_flag: [:eytfi_journey], slow: true do
   end
 
   def complete_journey_from_address_to_check_answers
-    choose "I don’t know"
-    click_button "Continue"
-
     fill_in "Name on the account", with: "John Doe"
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "12345678"
+    click_button "Continue"
+
+    choose "I don’t know"
     click_button "Continue"
 
     expect(page).to have_text "Confirm your details and complete your claim"
