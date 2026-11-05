@@ -79,7 +79,7 @@ module Journeys
 
       def gender
         [
-          "Gender",
+          "Gender as it appears on payroll",
           t("answers.payroll_gender.#{answers.payroll_gender}"),
           "gender"
         ]

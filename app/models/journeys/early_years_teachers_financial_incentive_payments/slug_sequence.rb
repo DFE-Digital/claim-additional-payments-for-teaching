@@ -82,6 +82,8 @@ module Journeys
           array << SLUGS_HASH["claim-cancelled"]
         end
 
+        array << SLUGS_HASH["information-provided"]
+
         array << SLUGS_HASH["postcode-search"]
 
         array << if answers.postcode_searched?
@@ -90,9 +92,8 @@ module Journeys
           SLUGS_HASH["address"]
         end
 
-        array << SLUGS_HASH["gender"]
-
         array << SLUGS_HASH["personal-bank-account"]
+        array << SLUGS_HASH["gender"]
         array << SLUGS_HASH["check-your-answers"]
         array << SLUGS_HASH["confirmation"]
 

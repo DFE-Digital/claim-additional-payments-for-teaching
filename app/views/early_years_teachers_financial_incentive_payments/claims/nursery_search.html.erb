@@ -15,14 +15,6 @@
 
       <h1 class="govuk-heading-l"><%= @form.t(:title) %></h1>
 
-      <p class="govuk-body">
-        If you work in more than one setting, choose the one you spend most of your time in.
-      </p>
-
-      <p class="govuk-body">
-        If you teach at a <%= govuk_link_to "provider of childcare on domestic premises (CoDP)", t("early_years_teachers_financial_incentive_payments.codp_url") %> and you cannot find it in the search, email <%= govuk_mail_to t("early_years_teachers_financial_incentive_payments.support_email_address") %>.
-      </p>
-
       <%= f.govuk_school_search(
         :nursery_search_query,
         search_path: journeys_early_years_teachers_financial_incentive_payments_nursery_searches_path,
@@ -38,6 +30,38 @@
       ) %>
 
       <%= f.govuk_submit %>
+    <% end %>
+
+    <%= govuk_details(summary_text: "Help selecting a nursery") do %>
+      <h2 class="govuk-heading-s">Help selecting a nursery</h2>
+
+      <p class="govuk-body">
+        If you work in more than one setting, choose the one you spend most of
+        your time in.
+      </p>
+
+      <p class="govuk-body">
+        If you teach at a <%= govuk_link_to(
+          "provider of childcare on domestic premises (CoDP)",
+          t("early_years_teachers_financial_incentive_payments.codp_url")
+        ) %> and you cannot find it in the search, email <%= govuk_mail_to(
+          t("early_years_teachers_financial_incentive_payments.support_email_address")
+        ) %>.
+      </p>
+
+      <h2 class="govuk-heading-s">Information about nursery eligibility</h2>
+
+      <p class="govuk-body">
+        You can read the <%= govuk_link_to(
+          "guidance",
+          t("early_years_teachers_financial_incentive_payments.guidance_url")
+        ) %> to check nursery eligibility criteria.
+      </p>
+
+      <p class="govuk-body">
+        You can read the <%= govuk_link_to("methodology", "#FIXME-625") %>
+        to find out how local authorities were selected.
+      </p>
     <% end %>
   </div>
 </div>

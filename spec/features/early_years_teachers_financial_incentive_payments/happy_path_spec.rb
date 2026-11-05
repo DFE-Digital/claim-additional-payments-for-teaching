@@ -124,6 +124,29 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     choose "Yes"
     click_button "Continue"
 
+    expect(page).to have_title "How we’ll use your information"
+    expect(page).to have_text "How we’ll use your information"
+    expect(page).to have_text "Student loan deductions"
+    expect(page).to have_text "Income Tax"
+    expect(page).to have_text "To pay you"
+    expect(page).to have_text "home address"
+    expect(page).to have_text "gender as it appears in payroll"
+    expect(page).to have_text "bank account details"
+    expect(page).not_to have_css ".govuk-notification-banner"
+
+    click_link "Back"
+    expect(page).to have_text "You may be eligible for a recognition payment"
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_text "How we’ll use your information"
+    click_button "Continue"
+
+    expect(page).to have_text "What is your home address?"
+    click_link "Back"
+    expect(page).to have_text "How we’ll use your information"
+    click_button "Continue"
+
     expect(page).to have_text "What is your home address?"
     click_button "Enter your address manually"
 
@@ -134,14 +157,14 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     fill_in "Postcode", with: "NE1 6EE"
     click_button "Continue"
 
-    expect(page).to have_text "Are you recorded as male or female on your employer’s payroll system?"
-    choose "I don’t know"
-    click_button "Continue"
-
     expect(page).to have_text(I18n.t("questions.account_details"))
     fill_in "Name on the account", with: "John Doe"
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "12345678"
+    click_button "Continue"
+
+    expect(page).to have_text "Are you recorded as male or female on your employer’s payroll system?"
+    choose "I don’t know"
     click_button "Continue"
 
     expect(page).to have_text "Confirm your details and complete your claim"
@@ -375,6 +398,10 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         choose "Yes"
         click_button "Continue"
 
+        expect(page).to have_title "How we’ll use your information"
+        expect(page).to have_text "How we’ll use your information"
+        click_button "Continue"
+
         expect(page).to have_text "What is your home address?"
         click_button "Enter your address manually"
 
@@ -385,16 +412,16 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         fill_in "Postcode", with: "NE1 6EE"
         click_button "Continue"
 
-        expect(page).to have_text(
-          "Are you recorded as male or female on your employer’s payroll system?"
-        )
-        choose "I don’t know"
-        click_button "Continue"
-
         expect(page).to have_text(I18n.t("questions.account_details"))
         fill_in "Name on the account", with: "John Doe"
         fill_in "Sort code", with: "123456"
         fill_in "Account number", with: "12345678"
+        click_button "Continue"
+
+        expect(page).to have_text(
+          "Are you recorded as male or female on your employer’s payroll system?"
+        )
+        choose "I don’t know"
         click_button "Continue"
 
         expect(page).to have_text "Confirm your details and complete your claim"
@@ -473,6 +500,10 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         choose "Yes"
         click_button "Continue"
 
+        expect(page).to have_title "How we’ll use your information"
+        expect(page).to have_text "How we’ll use your information"
+        click_button "Continue"
+
         expect(page).to have_text "What is your home address?"
         click_button "Enter your address manually"
 
@@ -483,16 +514,16 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         fill_in "Postcode", with: "NE1 6EE"
         click_button "Continue"
 
-        expect(page).to have_text(
-          "Are you recorded as male or female on your employer’s payroll system?"
-        )
-        choose "I don’t know"
-        click_button "Continue"
-
         expect(page).to have_text(I18n.t("questions.account_details"))
         fill_in "Name on the account", with: "John Doe"
         fill_in "Sort code", with: "123456"
         fill_in "Account number", with: "12345678"
+        click_button "Continue"
+
+        expect(page).to have_text(
+          "Are you recorded as male or female on your employer’s payroll system?"
+        )
+        choose "I don’t know"
         click_button "Continue"
 
         expect(page).to have_text "Confirm your details and complete your claim"
@@ -569,6 +600,10 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         choose "Yes"
         click_button "Continue"
 
+        expect(page).to have_title "How we’ll use your information"
+        expect(page).to have_text "How we’ll use your information"
+        click_button "Continue"
+
         expect(page).to have_text "What is your home address?"
         click_button "Enter your address manually"
 
@@ -579,16 +614,16 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         fill_in "Postcode", with: "NE1 6EE"
         click_button "Continue"
 
-        expect(page).to have_text(
-          "Are you recorded as male or female on your employer’s payroll system?"
-        )
-        choose "I don’t know"
-        click_button "Continue"
-
         expect(page).to have_text(I18n.t("questions.account_details"))
         fill_in "Name on the account", with: "John Doe"
         fill_in "Sort code", with: "123456"
         fill_in "Account number", with: "12345678"
+        click_button "Continue"
+
+        expect(page).to have_text(
+          "Are you recorded as male or female on your employer’s payroll system?"
+        )
+        choose "I don’t know"
         click_button "Continue"
 
         expect(page).to have_text "Confirm your details and complete your claim"

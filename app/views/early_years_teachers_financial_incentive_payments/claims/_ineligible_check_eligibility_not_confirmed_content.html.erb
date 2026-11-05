@@ -5,7 +5,13 @@
     </h1>
 
     <p class="govuk-body">
-      To be eligible for the early years teacher recognition payment you must be a qualified early years teacher in an eligible setting. You also need to meet the <%= govuk_link_to "eligibility criteria and expectations outlined in the guidance", eytfi_guidance_path(anchor: "eligibility") %>.
+      To be eligible for the early years teacher recognition payment you must be a
+      qualified early years teacher in an eligible setting. You also need to meet the
+      <%= govuk_link_to(
+        "eligibility criteria and expectations outlined in the guidance",
+        t("early_years_teachers_financial_incentive_payments.guidance_url")
+      )
+      %>.
     </p>
 
     <p class="govuk-body">
