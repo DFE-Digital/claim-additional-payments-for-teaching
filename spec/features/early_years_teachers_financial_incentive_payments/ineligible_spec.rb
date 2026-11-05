@@ -235,6 +235,10 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
       choose "Yes"
       click_button "Continue"
 
+      expect(page).to have_title "How we’ll use your information"
+      expect(page).to have_text "How we’ll use your information"
+      click_button "Continue"
+
       expect(page).to have_text "What is your home address?"
       click_button "Enter your address manually"
 

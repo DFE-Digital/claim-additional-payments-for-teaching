@@ -69,6 +69,10 @@ RSpec.feature "EYTFI address", feature_flag: [:eytfi_journey], slow: true do
     choose "Yes"
     click_button "Continue"
 
+    expect(page).to have_title "How we’ll use your information"
+    expect(page).to have_text "How we’ll use your information"
+    click_button "Continue"
+
     expect(page).to have_text "What is your home address?"
   end
 

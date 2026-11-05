@@ -82,6 +82,8 @@ module Journeys
           array << SLUGS_HASH["claim-cancelled"]
         end
 
+        array << SLUGS_HASH["information-provided"]
+
         array << SLUGS_HASH["postcode-search"]
 
         array << if answers.postcode_searched?
