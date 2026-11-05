@@ -1,14 +1,14 @@
 require "rails_helper"
 
-RSpec.feature "Further education payments" do
+RSpec.feature "Further education payments", :testing_persona do
   include ActionView::Helpers::NumberHelper
 
   let(:college) { create(:school, :further_education, :fe_eligible) }
   let(:expected_award_amount) { college.eligible_fe_provider(academic_year: Journeys::FurtherEducationPayments.configuration.current_academic_year).max_award_amount }
 
   scenario "happy path claim without OL at start" do
-    when_student_loan_data_exists
-    when_further_education_payments_journey_configuration_exists
+    create(:student_loans_data, nino: "PX321499A", date_of_birth: Date.new(1988, 2, 28), policy_name: Policies::FurtherEducationPayments)
+    create(:journey_configuration, :further_education_payments)
     and_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
@@ -214,8 +214,8 @@ RSpec.feature "Further education payments" do
 
   context "When the claimant has claimed previously" do
     it "asks them to sign in with One Login" do
-      when_student_loan_data_exists
-      when_further_education_payments_journey_configuration_exists
+      create(:student_loans_data, nino: "PX321499A", date_of_birth: Date.new(1988, 2, 28), policy_name: Policies::FurtherEducationPayments)
+      create(:journey_configuration, :further_education_payments)
       and_college_exists
 
       visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)

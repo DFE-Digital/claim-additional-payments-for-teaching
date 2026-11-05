@@ -1,0 +1,37 @@
+<% content_for(:page_title) { page_title("Testing personas: #{@journey.full_name}") } %>
+<% content_for(:back_link) { govuk_back_link(href: admin_components_testing_personas_path) } %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">Testing personas</span>
+    <h1 class="govuk-heading-l"><%= @journey.full_name %></h1>
+
+    <% if @personas.empty? %>
+      <p class="govuk-body">No scenarios have been catalogued for this journey yet.</p>
+    <% end %>
+
+    <% @personas.each do |persona| %>
+      <h2 class="govuk-heading-m">
+        <%= persona[:title] %>
+        <%= govuk_tag(text: persona[:outcome] == "success" ? "Successful claim" : "Ineligible", colour: persona[:outcome] == "success" ? "green" : "red") %>
+      </h2>
+
+      <p class="govuk-body"><%= persona[:description] %></p>
+
+      <%= govuk_summary_list(borders: false) do |summary_list| %>
+        <%= summary_list.with_row do |row| %>
+          <%= row.with_key(text: "Acceptance criteria") %>
+          <%= row.with_value(text: persona[:acceptance_criteria]) %>
+        <% end %>
+        <%= summary_list.with_row do |row| %>
+          <%= row.with_key(text: "RSpec test") %>
+          <%= row.with_value do %>
+            <code><%= persona[:spec] %></code><br />
+            <span class="govuk-body-s">"<%= persona[:scenario] %>"</span>
+          <% end %>
+        <% end %>
+      <% end %>
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+    <% end %>
+  </div>
+</div>

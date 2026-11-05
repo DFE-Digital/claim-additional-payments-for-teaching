@@ -16,7 +16,7 @@
         <li>
           <%= govuk_link_to journey.full_name, journey.start_page_url %>
           <span class="govuk-body-s govuk-!-margin-left-2">
-            (<%= govuk_link_to "Go to start of journey", admin_components_open_component_path(journey: journey.routing_name, slug: journey.slug_sequence::SLUGS.first) %>)
+            (<%= govuk_link_to "Go to start of journey", admin_components_journey_preview_path(journey: journey.routing_name, slug: journey.slug_sequence::SLUGS.first) %>)
           </span>
         </li>
       <% end %>
