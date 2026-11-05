@@ -1,10 +1,10 @@
 require "rails_helper"
 
-RSpec.feature "Further education payments", js: true, flaky: true do
+RSpec.feature "Further education payments", :testing_persona, js: true, flaky: true do
   let(:college) { create(:school, :further_education, :fe_eligible) }
 
   scenario "happy js path" do
-    when_further_education_payments_journey_configuration_exists
+    create(:journey_configuration, :further_education_payments)
     and_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)

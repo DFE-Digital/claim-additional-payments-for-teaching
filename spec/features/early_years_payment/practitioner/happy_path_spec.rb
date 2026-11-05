@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Early years payment practitioner" do
+RSpec.feature "Early years payment practitioner", :testing_persona do
   let(:email_address) { "johndoe@example.com" }
   let(:journey_session) { Journeys::EarlyYearsPayment::Provider::Authenticated::Session.last }
   let(:mail) { ActionMailer::Base.deliveries.last }
@@ -9,13 +9,49 @@ RSpec.feature "Early years payment practitioner" do
   let(:claim) { Claim.last }
 
   scenario "Happy path" do
-    when_student_loan_data_exists
-    when_early_years_payment_provider_authenticated_journey_submitted
+    create(:student_loans_data, nino: "PX321499A", date_of_birth: Date.new(1988, 2, 28), policy_name: Policies::FurtherEducationPayments)
+    create(:journey_configuration, :early_years_payment_provider_authenticated)
+    create(:journey_configuration, :early_years_payment_provider_start)
+    create(
+      :eligible_ey_provider,
+      primary_key_contact_email_address: "johndoe@example.com",
+      secondary_contact_email_address: "janedoe@example.com"
+    )
 
-    # ensure provider journey does not leak into practitioner journey
+    visit landing_page_path(Journeys::EarlyYearsPayment::Provider::Start.routing_name)
+    click_link "Start now"
+    fill_in "Enter your email address", with: "johndoe@example.com"
+    click_on "Submit"
+
+    visit ActionMailer::Base.deliveries.last.personalisation[:magic_link]
+    check "I confirm that I’ve obtained consent from my employee and have provided them with the relevant privacy notice."
+    click_button "Continue"
+    choose nursery.nursery_name
+    click_button "Continue"
+    fill_in "claim-paye-reference-field", with: "123/123456SE90"
+    click_button "Continue"
+    fill_in "First name", with: "Bobby"
+    fill_in "Last name", with: "Bobberson"
+    click_button "Continue"
+    date = Date.yesterday
+    fill_in("Day", with: date.day)
+    fill_in("Month", with: date.month)
+    fill_in("Year", with: date.year)
+    click_button "Continue"
+    choose "Permanent"
+    click_button "Continue"
+    choose "Yes"
+    click_button "Continue"
+    choose "No"
+    click_button "Continue"
+    fill_in "claim-practitioner-email-address-field", with: "practitioner@example.com"
+    click_button "Continue"
+    fill_in "claim-provider-contact-name-field", with: "John Doe"
+    click_button "Accept and send"
+
     page.reset!
 
-    when_early_years_payment_practitioner_journey_configuration_exists
+    create(:journey_configuration, :early_years_payment_practitioner)
 
     visit "/early-years-payment-practitioner/landing-page"
     expect(page).to have_text "Complete a claim for an early years"
@@ -70,9 +106,47 @@ RSpec.feature "Early years payment practitioner" do
   end
 
   scenario "Happy path - with postcode lookup" do
-    when_student_loan_data_exists
-    when_early_years_payment_provider_authenticated_journey_submitted
-    when_early_years_payment_practitioner_journey_configuration_exists
+    create(:student_loans_data, nino: "PX321499A", date_of_birth: Date.new(1988, 2, 28), policy_name: Policies::FurtherEducationPayments)
+    create(:journey_configuration, :early_years_payment_provider_authenticated)
+    create(:journey_configuration, :early_years_payment_provider_start)
+    create(
+      :eligible_ey_provider,
+      primary_key_contact_email_address: "johndoe@example.com",
+      secondary_contact_email_address: "janedoe@example.com"
+    )
+
+    visit landing_page_path(Journeys::EarlyYearsPayment::Provider::Start.routing_name)
+    click_link "Start now"
+    fill_in "Enter your email address", with: "johndoe@example.com"
+    click_on "Submit"
+
+    visit ActionMailer::Base.deliveries.last.personalisation[:magic_link]
+    check "I confirm that I’ve obtained consent from my employee and have provided them with the relevant privacy notice."
+    click_button "Continue"
+    choose nursery.nursery_name
+    click_button "Continue"
+    fill_in "claim-paye-reference-field", with: "123/123456SE90"
+    click_button "Continue"
+    fill_in "First name", with: "Bobby"
+    fill_in "Last name", with: "Bobberson"
+    click_button "Continue"
+    date = Date.yesterday
+    fill_in("Day", with: date.day)
+    fill_in("Month", with: date.month)
+    fill_in("Year", with: date.year)
+    click_button "Continue"
+    choose "Permanent"
+    click_button "Continue"
+    choose "Yes"
+    click_button "Continue"
+    choose "No"
+    click_button "Continue"
+    fill_in "claim-practitioner-email-address-field", with: "practitioner@example.com"
+    click_button "Continue"
+    fill_in "claim-provider-contact-name-field", with: "John Doe"
+    click_button "Accept and send"
+
+    create(:journey_configuration, :early_years_payment_practitioner)
 
     visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=practitioner@example.com"
     expect(page).to have_content "Enter your claim reference"
@@ -122,9 +196,47 @@ RSpec.feature "Early years payment practitioner" do
   end
 
   scenario "Happy path - with alt idv failure" do
-    when_student_loan_data_exists
-    when_early_years_payment_provider_authenticated_journey_submitted
-    when_early_years_payment_practitioner_journey_configuration_exists
+    create(:student_loans_data, nino: "PX321499A", date_of_birth: Date.new(1988, 2, 28), policy_name: Policies::FurtherEducationPayments)
+    create(:journey_configuration, :early_years_payment_provider_authenticated)
+    create(:journey_configuration, :early_years_payment_provider_start)
+    create(
+      :eligible_ey_provider,
+      primary_key_contact_email_address: "johndoe@example.com",
+      secondary_contact_email_address: "janedoe@example.com"
+    )
+
+    visit landing_page_path(Journeys::EarlyYearsPayment::Provider::Start.routing_name)
+    click_link "Start now"
+    fill_in "Enter your email address", with: "johndoe@example.com"
+    click_on "Submit"
+
+    visit ActionMailer::Base.deliveries.last.personalisation[:magic_link]
+    check "I confirm that I’ve obtained consent from my employee and have provided them with the relevant privacy notice."
+    click_button "Continue"
+    choose nursery.nursery_name
+    click_button "Continue"
+    fill_in "claim-paye-reference-field", with: "123/123456SE90"
+    click_button "Continue"
+    fill_in "First name", with: "Bobby"
+    fill_in "Last name", with: "Bobberson"
+    click_button "Continue"
+    date = Date.yesterday
+    fill_in("Day", with: date.day)
+    fill_in("Month", with: date.month)
+    fill_in("Year", with: date.year)
+    click_button "Continue"
+    choose "Permanent"
+    click_button "Continue"
+    choose "Yes"
+    click_button "Continue"
+    choose "No"
+    click_button "Continue"
+    fill_in "claim-practitioner-email-address-field", with: "practitioner@example.com"
+    click_button "Continue"
+    fill_in "claim-provider-contact-name-field", with: "John Doe"
+    click_button "Accept and send"
+
+    create(:journey_configuration, :early_years_payment_practitioner)
 
     visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=practitioner@example.com"
     expect(page).to have_content "Enter your claim reference"
@@ -184,7 +296,7 @@ RSpec.feature "Early years payment practitioner" do
 
     expect(page.title).to have_text("What is your personal email address?")
     expect(page).to have_content("What is your personal email address?")
-    fill_in "claim-email-address-field", with: "johndoe@example.com"
+    fill_in "What is your personal email address?", with: "johndoe@example.com"
     click_on "Continue"
 
     expect(page).to have_content("Enter the 6-digit passcode")
@@ -227,7 +339,7 @@ RSpec.feature "Early years payment practitioner" do
   def rest_of_the_journey
     expect(page.title).to have_text("What is your personal email address?")
     expect(page).to have_content("What is your personal email address?")
-    fill_in "claim-email-address-field", with: "johndoe@example.com"
+    fill_in "What is your personal email address?", with: "johndoe@example.com"
     click_on "Continue"
 
     expect(page).to have_content("Enter the 6-digit passcode")

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "targeted_retention_incentive payments claims" do
+RSpec.feature "targeted_retention_incentive payments claims", :testing_persona do
   let(:claim) { Claim.by_policy(Policies::TargetedRetentionIncentivePayments).order(:created_at).last }
   let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments, current_academic_year: AcademicYear.new(2022)) }
   let(:school) { create(:school, :targeted_retention_incentive_payments_eligible) }

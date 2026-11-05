@@ -1,13 +1,13 @@
 require "rails_helper"
 
 RSpec.describe "Admin page", type: :request do
-  describe "GET /admin/components/journey-components" do
+  describe "GET /admin/components" do
     let(:journey) { Journeys.all.first }
     let(:slug) { journey.slug_sequence::SLUGS.first }
     let!(:sign_in) { sign_in_as_service_operator }
 
     it "renders the components page", :aggregate_failures do
-      get admin_components_journey_components_path
+      get admin_components_path
 
       expect(response).to be_successful
       expect(response.body).to include("Journey Components")
@@ -26,7 +26,7 @@ RSpec.describe "Admin page", type: :request do
       get root_path
 
       expect(response).to be_successful
-      expect(response.body).to include(admin_components_journey_components_path)
+      expect(response.body).to include(admin_components_path)
       expect(response.body).to include(admin_components_landing_page_journeys_path)
       expect(response.body).to include("href=\"/admin\"")
     end
@@ -49,13 +49,24 @@ RSpec.describe "Admin page", type: :request do
     end
   end
 
+  describe "GET /admin/components/testing-personas" do
+    let!(:sign_in) { sign_in_as_service_operator }
+
+    it "only displays one row per journey name" do
+      get admin_components_testing_personas_path
+
+      expect(response).to be_successful
+      expect(response.body.scan("Claim a targeted retention incentive payment for school teachers").count).to eq(1)
+    end
+  end
+
   describe "GET /admin/components/journey-components/open" do
     let(:journey) { Journeys.all.first }
     let(:slug) { journey.slug_sequence::SLUGS.first }
 
     context "when unauthenticated" do
       it "redirects to the sign in page" do
-        get admin_components_open_component_path(journey: journey.routing_name, slug: slug)
+        get admin_components_journey_preview_path(journey: journey.routing_name, slug: slug)
 
         expect(response).to redirect_to(admin_sign_in_path)
       end
@@ -65,13 +76,13 @@ RSpec.describe "Admin page", type: :request do
       let!(:sign_in) { sign_in_as_service_operator }
 
       it "redirects to the selected journey slug" do
-        get admin_components_open_component_path(journey: journey.routing_name, slug: slug)
+        get admin_components_journey_preview_path(journey: journey.routing_name, slug: slug)
 
         expect(response).to redirect_to(claim_path(journey.routing_name, slug, skip_landing_page: true))
       end
 
       it "renders the practitioner ineligible page" do
-        get admin_components_open_component_path(journey: Journeys::EarlyYearsPayment::Practitioner.routing_name, slug: "ineligible")
+        get admin_components_journey_preview_path(journey: Journeys::EarlyYearsPayment::Practitioner.routing_name, slug: "ineligible")
         follow_redirect!
 
         expect(response).to be_successful
@@ -79,7 +90,7 @@ RSpec.describe "Admin page", type: :request do
       end
 
       it "renders a generic ineligible preview without raising an error" do
-        get admin_components_open_component_path(journey: Journeys::TeacherStudentLoanReimbursement.routing_name, slug: "ineligible")
+        get admin_components_journey_preview_path(journey: Journeys::TeacherStudentLoanReimbursement.routing_name, slug: "ineligible")
         follow_redirect!
 
         expect(response).to be_successful
@@ -95,7 +106,7 @@ RSpec.describe "Admin page", type: :request do
           slug = route[:slug]
           expected_path = claim_path(journey_name, slug, skip_landing_page: true)
 
-          get admin_components_open_component_path(journey: journey_name, slug: slug)
+          get admin_components_journey_preview_path(journey: journey_name, slug: slug)
 
           unless response.redirect? && response.location&.end_with?(expected_path)
             failures << "#{journey_name}/#{slug} did not redirect to #{expected_path} (got #{response.status}: #{response.location})"
@@ -115,7 +126,7 @@ RSpec.describe "Admin page", type: :request do
           journey_name = route[:journey]
 
           begin
-            get admin_components_open_component_path(journey: journey_name, slug: "ineligible")
+            get admin_components_journey_preview_path(journey: journey_name, slug: "ineligible")
             follow_redirect!
 
             if response.status >= 500

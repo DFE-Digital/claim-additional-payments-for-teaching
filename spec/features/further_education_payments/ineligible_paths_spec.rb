@@ -1,13 +1,13 @@
 require "rails_helper"
 
-RSpec.feature "Further education payments ineligible paths" do
+RSpec.feature "Further education payments ineligible paths", :testing_persona do
   let(:ineligible_college) { create(:school, :further_education) }
   let(:eligible_college) { create(:school, :further_education, :fe_eligible) }
   let(:closed_eligible_college) { create(:school, :further_education, :fe_eligible, :closed) }
   let(:current_academic_year) { AcademicYear.current }
 
   scenario "when no teaching responsibilities" do
-    when_further_education_payments_journey_configuration_exists
+    create(:journey_configuration, :further_education_payments)
 
     visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
     expect(page).to have_link("Start now")
@@ -33,7 +33,7 @@ RSpec.feature "Further education payments ineligible paths" do
   end
 
   scenario "when ineligible FE provider is selected" do
-    when_further_education_payments_journey_configuration_exists
+    create(:journey_configuration, :further_education_payments)
     and_ineligible_college_exists
     and_eligible_college_exists
 
@@ -79,7 +79,7 @@ RSpec.feature "Further education payments ineligible paths" do
   end
 
   scenario "when ineligible FE provider is selected with js", js: true, flaky: true do
-    when_further_education_payments_journey_configuration_exists
+    create(:journey_configuration, :further_education_payments)
     and_ineligible_college_exists
     and_eligible_college_exists
 
@@ -133,7 +133,7 @@ RSpec.feature "Further education payments ineligible paths" do
   end
 
   scenario "when closed FE provider selected" do
-    when_further_education_payments_journey_configuration_exists
+    create(:journey_configuration, :further_education_payments)
     and_closed_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
@@ -178,7 +178,7 @@ RSpec.feature "Further education payments ineligible paths" do
   end
 
   scenario "when fixed term contract and has not taught one term" do
-    when_further_education_payments_journey_configuration_exists
+    create(:journey_configuration, :further_education_payments)
     and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
@@ -234,7 +234,7 @@ RSpec.feature "Further education payments ineligible paths" do
   end
 
   scenario "when fixed term contract and has not teaching 2.5 hours" do
-    when_further_education_payments_journey_configuration_exists
+    create(:journey_configuration, :further_education_payments)
     and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
@@ -292,7 +292,7 @@ RSpec.feature "Further education payments ineligible paths" do
   end
 
   scenario "when contract_type is Employed by another organisation" do
-    when_further_education_payments_journey_configuration_exists
+    create(:journey_configuration, :further_education_payments)
     and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
@@ -341,7 +341,7 @@ RSpec.feature "Further education payments ineligible paths" do
   end
 
   scenario "when lacking subjects" do
-    when_further_education_payments_journey_configuration_exists
+    create(:journey_configuration, :further_education_payments)
     and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
@@ -400,7 +400,7 @@ RSpec.feature "Further education payments ineligible paths" do
   end
 
   scenario "when variable contract and just one academic term taught" do
-    when_further_education_payments_journey_configuration_exists
+    create(:journey_configuration, :further_education_payments)
     and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
@@ -450,7 +450,7 @@ RSpec.feature "Further education payments ineligible paths" do
   end
 
   scenario "when teaches non eligible course in applicable subject area" do
-    when_further_education_payments_journey_configuration_exists
+    create(:journey_configuration, :further_education_payments)
     and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
@@ -513,7 +513,7 @@ RSpec.feature "Further education payments ineligible paths" do
   end
 
   scenario "when teacher spends less than half hours teaching eligible courses" do
-    when_further_education_payments_journey_configuration_exists
+    create(:journey_configuration, :further_education_payments)
     and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
@@ -580,7 +580,7 @@ RSpec.feature "Further education payments ineligible paths" do
   end
 
   scenario "when not a recent FE teacher" do
-    when_further_education_payments_journey_configuration_exists
+    create(:journey_configuration, :further_education_payments)
     and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
@@ -619,7 +619,7 @@ RSpec.feature "Further education payments ineligible paths" do
   end
 
   scenario "when teacher is subject to performance measures" do
-    when_further_education_payments_journey_configuration_exists
+    create(:journey_configuration, :further_education_payments)
     and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
@@ -696,7 +696,7 @@ RSpec.feature "Further education payments ineligible paths" do
   end
 
   scenario "when teacher is subject to disciplinary action" do
-    when_further_education_payments_journey_configuration_exists
+    create(:journey_configuration, :further_education_payments)
     and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
@@ -773,7 +773,7 @@ RSpec.feature "Further education payments ineligible paths" do
   end
 
   scenario "when lacks teaching qualification and no enrol plan" do
-    when_further_education_payments_journey_configuration_exists
+    create(:journey_configuration, :further_education_payments)
     and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
@@ -815,7 +815,7 @@ RSpec.feature "Further education payments ineligible paths" do
   end
 
   scenario "when permanent contract and not enough hours" do
-    when_further_education_payments_journey_configuration_exists
+    create(:journey_configuration, :further_education_payments)
     and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
@@ -865,7 +865,7 @@ RSpec.feature "Further education payments ineligible paths" do
   end
 
   scenario "when fixed-term contract and not enough hours" do
-    when_further_education_payments_journey_configuration_exists
+    create(:journey_configuration, :further_education_payments)
     and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
@@ -920,7 +920,7 @@ RSpec.feature "Further education payments ineligible paths" do
   end
 
   scenario "when variable contract and not enough hours" do
-    when_further_education_payments_journey_configuration_exists
+    create(:journey_configuration, :further_education_payments)
     and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
@@ -975,7 +975,7 @@ RSpec.feature "Further education payments ineligible paths" do
   end
 
   scenario "when less that 50% teaching hours to FE" do
-    when_further_education_payments_journey_configuration_exists
+    create(:journey_configuration, :further_education_payments)
     and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)

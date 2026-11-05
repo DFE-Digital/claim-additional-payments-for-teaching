@@ -55,6 +55,16 @@ module Policies
         ].compact_blank.join(", ")
       end
 
+      def selection_address
+        return address unless copd?
+
+        [
+          name,
+          town.presence,
+          postcode.to_s.split.first
+        ].compact_blank.join(", ")
+      end
+
       def closed?
         false
       end

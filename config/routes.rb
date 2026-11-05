@@ -262,11 +262,12 @@ Rails.application.routes.draw do
       end
     end
 
-    scope "/components", as: :components do
-      get "/", to: "components#index", as: :index
-      get "journey-components", to: "components#journey_components", as: :journey_components
-      get "landing-page-journeys", to: "components#landing_page_journeys", as: :landing_page_journeys
-      get "journey-components/open", to: "components#open", as: :open_component
+    resources :components, only: :index
+
+    namespace :components do
+      resources :landing_page_journeys, path: "landing-page-journeys", only: :index
+      resources :testing_personas, path: "testing-personas", only: %i[index show], param: :journey
+      resource :journey_preview, path: "open", only: :show
     end
   end
 

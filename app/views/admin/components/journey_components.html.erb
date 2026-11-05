@@ -23,7 +23,7 @@
                 <% values.each do |slug| %>
                   <% target_path = claim_path(journey[:journey_routing_name], slug) %>
                   <li>
-                    <%= link_to target_path, admin_components_open_component_path(journey: journey[:journey_routing_name], slug: slug) %>
+                    <%= link_to target_path, admin_components_journey_preview_path(journey: journey[:journey_routing_name], slug: slug) %>
                   </li>
                 <% end %>
               </ul>
@@ -48,7 +48,7 @@
             <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-2">
               <% entry[:journeys].each do |journey| %>
                 <li>
-                  <%= link_to claim_path(journey[:journey_routing_name], entry[:component]), admin_components_open_component_path(journey: journey[:journey_routing_name], slug: entry[:component]) %>
+                  <%= link_to claim_path(journey[:journey_routing_name], entry[:component]), admin_components_journey_preview_path(journey: journey[:journey_routing_name], slug: entry[:component]) %>
                 </li>
               <% end %>
             </ul>
