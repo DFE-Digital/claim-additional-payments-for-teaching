@@ -1,0 +1,449 @@
+---
+- title: Early years payment practitioner
+  outcome: success
+  criteria: A practitioner can claim for a valid eligible claim and complete the journey
+    successfully.
+  description: A practitioner can find their claim reference, prove their identity
+    and complete the claim flow.
+  journey: Journeys::EarlyYearsPayment::Practitioner
+  spec: spec/features/early_years_payment/practitioner/happy_path_spec.rb
+  scenario: happy path
+- title: Early years payment provider authenticated claimant
+  outcome: success
+  criteria: A provider can complete the authenticated claim journey and submit a valid
+    early years payment claim.
+  description: A provider starts from the magic link, completes the claim, and submits
+    a successful claim.
+  journey: Journeys::EarlyYearsPayment::Provider::Authenticated
+  spec: spec/features/early_years_payment/provider/authenticated/happy_path_spec.rb
+  scenario: happy path
+- title: Early years payment provider contract type ineligible claimant
+  outcome: ineligible
+  criteria: A provider sees the ineligible page when the employee’s contract type
+    does not qualify for the payment.
+  description: A provider submits a claim for an employee on a casual or temporary
+    contract, which is not eligible.
+  journey: Journeys::EarlyYearsPayment::Provider::Authenticated
+  spec: spec/features/early_years_payment/provider/authenticated/ineligible_contract_type_spec.rb
+  scenario: ineligible path
+- title: Early years payment provider max claims exceeded
+  outcome: ineligible
+  criteria: A provider is blocked when the nursery has used all eligible expressions
+    of interest for the year.
+  description: A provider tries to submit a claim after the nursery has reached the
+    maximum permitted number of claims.
+  journey: Journeys::EarlyYearsPayment::Provider::Authenticated
+  spec: spec/features/early_years_payment/provider/authenticated/ineligible_max_claims_exceeded_spec.rb
+  scenario: ineligible path
+- title: Early years payment provider nursery ineligible claimant
+  outcome: ineligible
+  criteria: A provider is taken to the ineligible page when they select a nursery
+    that is not eligible.
+  description: A provider selects an ineligible nursery and cannot continue with the
+    claim.
+  journey: Journeys::EarlyYearsPayment::Provider::Authenticated
+  spec: spec/features/early_years_payment/provider/authenticated/ineligible_nursery_spec.rb
+  scenario: ineligible path
+- title: Early years payment provider returner ineligible claimant
+  outcome: ineligible
+  criteria: A provider sees the ineligible page when an eligible returner has a permanent
+    contract and was already working with children in a way that makes the claim ineligible.
+  description: A returner with a permanent child-facing role is assessed as not eligible
+    for the provider flow.
+  journey: Journeys::EarlyYearsPayment::Provider::Authenticated
+  spec: spec/features/early_years_payment/provider/authenticated/ineligible_returner_spec.rb
+  scenario: ineligible path
+- title: Early years payment provider start date ineligible claimant
+  outcome: ineligible
+  criteria: A provider is taken to the ineligible page when the employee’s start date
+    does not satisfy the payment rules.
+  description: A provider enters an ineligible employee start date and the claim is
+    blocked.
+  journey: Journeys::EarlyYearsPayment::Provider::Authenticated
+  spec: spec/features/early_years_payment/provider/authenticated/ineligible_start_date_spec.rb
+  scenario: ineligible path
+- title: Early years payment provider non child-facing ineligible claimant
+  outcome: ineligible
+  criteria: A provider is taken to the ineligible page when the employee spends most
+    of their time not working directly with children.
+  description: A provider completes the claim flow for an employee who does not work
+    directly with children, so the claim is rejected.
+  journey: Journeys::EarlyYearsPayment::Provider::Authenticated
+  spec: spec/features/early_years_payment/provider/authenticated/not_child_facing_spec.rb
+  scenario: ineligible path
+- title: Provider start journey
+  outcome: success
+  criteria: A provider can start the claim process, enter their email address and
+    receive a magic link to continue.
+  description: A provider starts a claim on behalf of their employee and completes
+    the provider email entry flow.
+  journey: Journeys::EarlyYearsPayment::Provider::Start
+  spec: spec/features/early_years_payment/provider/start/happy_path_spec.rb
+  scenario: happy path
+- title: Early years payment provider ineligible email claimant
+  outcome: ineligible
+  criteria: A provider is shown the ineligible access page when their email address
+    is not allowed to create a claim.
+  description: A provider enters an email address that is not on the allowed whitelist
+    for the start journey.
+  journey: Journeys::EarlyYearsPayment::Provider::Start
+  spec: spec/features/early_years_payment/provider/start/ineligible_email_spec.rb
+  scenario: ineligible path
+- title: User is ineligible (criteria confirmation
+  outcome: ineligible
+  criteria: The user selects no and reaches the 'You’re not eligible for this payment'
+    page.
+  description: Sally works at Kiddikins Nursery, Sure Start North, Hartlepool Main
+    Centre, Hindpool Close, Hartlepool, TS24 0TB, has EYTS and spends 70% of her time
+    with children, but is subject to recent performance and disciplinary action. She
+    does not realise that she is ineligible because of a recent performance measure
+    having been put in place. She attempts to make a claim.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/check_eligibility_spec.rb
+  scenario: ineligible path
+- title: Cancels their claim
+  outcome: ineligible
+  criteria: The claim is cancelled.
+  description: A teacher who starts a claim and then chooses to cancel it.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/claim_cancelled_spec.rb
+  scenario: ineligible path
+- title: User submits claim at a COPD nursery
+  outcome: success
+  criteria: A teacher working at a nursery flagged as COPD can complete the full claim
+    and the claim is successfully created.
+  description: Priya works at Cedar House Nursery, Cambridge, CB4 1QH, has EYTS and
+    spends 80% of her time with children. Her nursery is flagged as COPD but remains
+    eligible for the payment.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/happy_path_spec.rb
+  scenario: happy path
+- title: User submits claim
+  outcome: success
+  criteria: All pages display correctly and a successful claim can be made.
+  description: Joe Smith uses a laptop or PC, works at St John's Preschool, St John's
+    Church Hall, Birdsfoot Lane, Luton, LU3 2DN, has EYPS and spends 70% of his time
+    with children. He is not subject to any performance or disciplinary action.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/happy_path_spec.rb
+  scenario: happy path
+- title: EYTRP claimant who applied in private beta 25/26 is blocked from applying
+    in public beta 26/27
+  outcome: ineligible
+  criteria: The claimant is blocked from submitting a new EYTRP claim in the 26/27
+    public beta after already applying in the private beta 25/26 window.
+  description: A teacher who already submitted an EYTRP claim in private beta 25/26
+    tries to apply again for the public beta 26/27 claim window.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/happy_path_spec.rb
+  scenario: ineligible path
+- title: Nursery not in the autocomplete list
+  outcome: ineligible
+  criteria: The claimant is shown a message that no nurseries were found.
+  description: A teacher whose nursery cannot be found when searching.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/happy_path_spec.rb
+  scenario: ineligible path
+- title: National Insurance number returned and confirmed
+  outcome: success
+  criteria: The claimant completes the journey without re-entering their number.
+  description: A teacher whose National Insurance number is returned from TRS and
+    who confirms it.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/happy_path_spec.rb
+  scenario: happy path
+- title: Ineligible nursery
+  outcome: ineligible
+  criteria: The claimant sees the ineligible page.
+  description: A teacher who chooses a nursery that is not eligible.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/ineligible_spec.rb
+  scenario: ineligible path
+- title: User is ineligible (nursery
+  outcome: ineligible
+  criteria: Little Teapots Pre School is shown as an ineligible nursery and the \"The
+    nursery you selected may not be eligible\" message is displayed.
+  description: Anna works at Little Teapots Pre School, Bury St Edmunds, IP29 4UL,
+    has EYTS, spends 70% of her time with children and is not sure whether her nursery
+    is eligible so gives the claim a go.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/ineligible_spec.rb
+  scenario: ineligible path
+- title: Anna checks whether the nursery is eligible
+  outcome: ineligible
+  criteria: Little Teapots Pre School should display as an ineligible nursery and
+    the \"The nursery you selected may not be eligible\" should display.
+  description: Anna works at Little Teapots Pre School, Bury St Edmunds, IP29 4UL
+    has EYTS, spends 70% of her time with children, and is not subject to any performance
+    or disciplinary action. She is not sure whether her nursery is eligible or not
+    so 'gives the claim a go.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/ineligible_spec.rb
+  scenario: ineligible path
+- title: User is eligible but cannot verify their ID via One Login
+  outcome: ineligible
+  criteria: The user does not reach the \"Is this your National Insurance number\"
+    page because the One Login identity check fails.
+  description: Ellie works at Sunflower Nurseries, Rochdale, OL11 2HD, has EYTS, spends
+    90% of her time with children, and is not subject to any performance or disciplinary
+    action. She has not created a One Login account before and consequently exits
+    the service without being able to complete the claim.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/ineligible_spec.rb
+  scenario: ineligible path
+- title: User is ineligible (qualification
+  outcome: ineligible
+  criteria: The user does not hold EYTS, EYPS or QTS and the \"You’re not eligible
+    for this payment\" page is displayed.
+  description: Anna works at Dimples Stainton, Day Nursery, The Annexe, Sporting Lodge,
+    Low Lane, Middlesbrough, TS17 9LW, does not have EYTS, EYPS or QTS, spends 70%
+    of her time with children, and is not subject to any performance or disciplinary
+    action. She is working towards a Level 6 qualification but has not yet attained
+    it. She is not sure if she can claim whilst training for an EYTS and attempts
+    to make a claim.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/ineligible_spec.rb
+  scenario: ineligible path
+- title: Failed One Login ID verification
+  outcome: ineligible
+  criteria: The user does not return from the One Login journey and the \"Is this
+    your national insurance number\" page cannot be reached.
+  description: Jane works at Wonderland Children's Day Nursery, has EYTS and spends
+    80% of her time with children, and is not subject to any performance or disciplinary
+    action. Jane has a One Login account but has trouble navigating the service. She
+    exits the One Login service and is unable to complete an EYTRP claim.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/ineligible_spec.rb
+  scenario: ineligible path
+- title: Cannot be matched with their TRN number
+  outcome: ineligible
+  criteria: The \"Find your teaching record\" page is displayed, and then the \"Is
+    this your national insurance number?\" page is reached.
+  description: Mike works at Lostock Playschool, Bolton, BL6 4EL, has EYTS and spends
+    80% of his time with children, and is not subject to any performance or disciplinary
+    action. He cannot find his teacher reference number and is prompted to enter his
+    national insurance number.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/ineligible_spec.rb
+  scenario: ineligible path
+- title: User is ineligible (qualification
+  outcome: ineligible
+  criteria: The user is told they are not eligible based on their qualification and
+    the \"Is this your national insurance number\" page cannot be reached.
+  description: Travis works at Green Garden Community Nursery, Greets Green Resource
+    Centre, Harwood Street, West Bromwich, B70 9JF, has EYPS, spends 80% of his time
+    with children, and is not subject to any performance or disciplinary action. He
+    is recently qualified and his Teacher Reference Number has not yet updated causing
+    an ineligible qualification match.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/ineligible_spec.rb
+  scenario: ineligible path
+- title: User's national insurance does not match
+  outcome: success
+  criteria: The claimant selects no on the National Insurance match page, enters AB123456C,
+    and then reaches the "You may be eligible" page after uploading proof.
+  description: Glen works at Brighter Bunnies Pre School, Bolton, BL5 2BG, has EYTS,
+    spends 70% of his time with children, and is not subject to any performance or
+    disciplinary action. He notices his National Insurance number is incorrect and
+    changes it when prompted.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/ineligible_spec.rb
+  scenario: happy path
+- title: Nursery name matches but wrong location
+  outcome: success
+  criteria: The claimant corrects the National Insurance mismatch, uploads a recent
+    payslip, confirms the file, and lands on the recognition-payment page.
+  description: Susan works at Sunny Days Nursery in London, spends 80% of her time
+    with children, holds QTS, and is not subject to any performance or disciplinary
+    action. There is an error with her qualification details and she is prompted to
+    upload a recent payslip.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/ineligible_spec.rb
+  scenario: happy path
+- title: User accidentally decides not to continue with claim
+  outcome: ineligible
+  criteria: The claimant selects no when asked if they want to continue with the claim
+    and is taken to the \"Claim cancelled\" page.
+  description: Barney works at Elm Lane Day Nursery, Dagenham, RM10 9UR, has EYTS
+    and spends 70% of his time with children, and is not subject to any performance
+    or disciplinary action. Barney quickly skim reads the \"You may be eligible to
+    claim\" page and accidentally clicks no when answering \"Do you want to continue
+    with your claim?\"
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/ineligible_spec.rb
+  scenario: ineligible path
+- title: Location matches HMRC (nursery name similar
+  outcome: success
+  criteria: The claimant continues through the upload review step, chooses the matching
+    address option, and reaches the next claim question without error.
+  description: Sara works at Sunny Days Nursery in Weaverham, spends 80% of her time
+    with children, holds EYTS, and is not subject to any performance or disciplinary
+    action. Her nursery is similar to the HMRC record and she is asked to confirm
+    the address that matches the claim details before continuing.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/ineligible_spec.rb
+  scenario: happy path
+- title: User does not understand how we will use their information
+  outcome: ineligible
+  criteria: The claimant uploads a payslip, confirms the file, and continues on to
+    the next claim step without the claim being submitted.
+  description: Andy works at Anston Stones Early Years, Sheffield, S25 2QZ, has EYTS,
+    spends 70% of his time with children, and is not subject to any performance or
+    disciplinary action. He is completing the claim quickly and assumes the upload
+    step is the final confirmation. He moves on to the next form stage without realising
+    the claim is not yet complete.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/ineligible_spec.rb
+  scenario: ineligible path
+- title: User could not find their address
+  outcome: ineligible
+  criteria: The postcode search does not return an address; the claimant selects Enter
+    your address manually and completes the address fields.
+  description: Mia works at The Avenue Day Nursery, Middlesbrough, TS5 6PA, has EYTS,
+    spends 70% of her time with children, and is not subject to any performance or
+    disciplinary action. When entering her postcode, her home address does not appear.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/ineligible_spec.rb
+  scenario: ineligible path
+- title: User could not enter in their bank details
+  outcome: ineligible
+  criteria: The claimant enters 7 digits for the account number, is shown the 8-digit
+    validation message, then enters a valid 8-digit account number and the HMRC bank
+    validation rejects it with the account mismatch message.
+  description: Michael works at Barking Riverside Nursery School, Renwick Road, Barking,
+    IG11 0FU, has EYTS, spends 80% of his time with children, and is not subject to
+    any performance or disciplinary action. Michael uses his card to type in his bank
+    details and misses a digit on his account number.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/ineligible_spec.rb
+  scenario: ineligible path
+- title: User does not select their gender
+  outcome: ineligible
+  criteria: The claimant reaches the employer payroll question and does not make a
+    selection, so they remain on the employer payroll page.
+  description: Maureen works at Willow Green Day Nursery, Heanor Avenue, Denton, M34
+    7WU, has QTS, spends 80% of her time with children, and is not subject to any
+    performance or disciplinary action. She is confused as to why she is being asked
+    to select her gender and has not noticed the \"Why do we ask this?\" drop down.
+    She does not select a gender and exits the page.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/ineligible_spec.rb
+  scenario: ineligible path
+- title: No relevant qualification
+  outcome: ineligible
+  criteria: The claimant sees the ineligible page.
+  description: A teacher who states they do not hold a relevant qualification.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/ineligible_spec.rb
+  scenario: ineligible path
+- title: Rejects the payment
+  outcome: ineligible
+  criteria: No claim is submitted.
+  description: A teacher who declines the payment when offered.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/ineligible_spec.rb
+  scenario: ineligible path
+- title: User missed the confirmation check box
+  outcome: ineligible
+  criteria: The claimant reaches the confirmation step, does not tick the declaration,
+    and sees the acceptance validation message.
+  description: Tom works at Early Steps Dudley, Bank Road, Gornal Wood, Dudley, DY3
+    2NT, has EYTS, spends 80% of his time with children, and is not subject to any
+    performance or disciplinary action. Tom rushes through the claim journey within
+    his lunch hour. In doing so, he fails to tick the \"I confirm that I understand
+    and accept these conditions\" before submitting.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/ineligible_spec.rb
+  scenario: ineligible path
+- title: User does not receive a confirmation email
+  outcome: ineligible
+  criteria: A confirmation email is sent to the email address associated with the
+    user’s One Login account.
+  description: Diana works at West Melton Early Years, Rotherham, S63 6NF, has EYTS,
+    spends 80% of her time with children, holds EYPS and is not subject to any performance
+    or disciplinary action. She changes her email address shortly before applying
+    for a claim and therefore does not receive a confirmation email.
+  journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments
+  spec: spec/features/early_years_teachers_financial_incentive_payments/ineligible_spec.rb
+  scenario: ineligible path
+- title: Further education JS claimant
+  outcome: success
+  criteria: A further education claimant can complete the JS-enabled eligibility and
+    claim flow successfully.
+  description: A claimant completes the FE journey using the JS-assisted provider
+    selection path and submits a valid claim.
+  journey: Journeys::FurtherEducationPayments
+  spec: spec/features/further_education_payments/happy_js_path_spec.rb
+  scenario: happy path
+- title: Further education teacher claimant
+  outcome: success
+  criteria: A further education teacher can complete the eligibility check, sign in
+    and submit a successful claim.
+  description: A teacher completes the FE claim journey with an eligible provider
+    and valid teaching details.
+  journey: Journeys::FurtherEducationPayments
+  spec: spec/features/further_education_payments/happy_path_spec.rb
+  scenario: happy path
+- title: Further education ineligible claimant
+  outcome: ineligible
+  criteria: A claimant without eligible teaching responsibilities or with an ineligible
+    FE provider is shown the ineligible page.
+  description: A claimant reaches an ineligible FE route because they do not meet
+    teaching responsibilities or choose an ineligible provider.
+  journey: Journeys::FurtherEducationPayments
+  spec: spec/features/further_education_payments/ineligible_paths_spec.rb
+  scenario: ineligible path
+- title: Get a teacher relocation payment ineligible claimant
+  outcome: ineligible
+  criteria: A claimant is shown the ineligible page if they have had a previous payment,
+    choose an ineligible route, school, contract, subject or visa.
+  description: A teacher reaches the GTRP ineligible page when one of the route checks
+    fails.
+  journey: Journeys::GetATeacherRelocationPayment
+  spec: spec/features/get_a_teacher_relocation_payment/ineligible_route_completing_the_form_spec.rb
+  scenario: ineligible path
+- title: Get a teacher relocation payment claimant
+  outcome: success
+  criteria: A teacher can complete the relocation payment form, submit their details
+    and finish the application successfully.
+  description: A teacher relocating to England completes the GTRP journey for a successful
+    application.
+  journey: Journeys::GetATeacherRelocationPayment
+  spec: spec/features/get_a_teacher_relocation_payment/teacher_route_completing_the_form_spec.rb
+  scenario: happy path
+- title: Teacher student loan repayments ineligible claimant
+  outcome: ineligible
+  criteria: A teacher is shown the ineligible page when their claim school, current
+    school, subject, or repayment details mean they do not qualify.
+  description: A teacher reaches an ineligible student loan repayment route because
+    their circumstances fail the eligibility checks.
+  journey: Journeys::TeacherStudentLoanReimbursement
+  spec: spec/features/ineligible_student_loans_claims_spec.rb
+  scenario: ineligible path
+- title: Teacher student loan reimbursement claimant
+  outcome: success
+  criteria: A teacher can complete the student loan repayment claim and submit valid
+    personal details and employment information.
+  description: A teacher claims back student loan repayments using a valid teaching
+    role and eligible details.
+  journey: Journeys::TeacherStudentLoanReimbursement
+  spec: spec/features/student_loans_claim_spec.rb
+  scenario: happy path
+- title: Targeted retention incentive claimant
+  outcome: success
+  criteria: A teacher can complete the eligibility check and submit a successful targeted
+    retention incentive claim.
+  description: A teacher completes the targeted retention incentive journey and submits
+    a valid claim.
+  journey: Journeys::TargetedRetentionIncentivePayments
+  spec: spec/features/targeted_retention_incentive_payments_spec.rb
+  scenario: happy path
+- title: Targeted retention incentive ineligible claimant
+  outcome: ineligible
+  criteria: A teacher is shown the ineligible page when they fail the subject, degree,
+    or eligibility checks.
+  description: A teacher reaches an ineligible targeted retention incentive route
+    because they do not meet the eligibility criteria.
+  journey: Journeys::TargetedRetentionIncentivePayments
+  spec: spec/features/targeted_retention_incentive_payments_spec.rb
+  scenario: ineligible path
