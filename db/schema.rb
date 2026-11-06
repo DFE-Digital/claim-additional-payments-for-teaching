@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_02_162924) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_03_143924) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -370,6 +370,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_02_162924) do
     t.uuid "file_upload_id"
     t.decimal "lower_award_amount", precision: 7, scale: 2
     t.decimal "max_award_amount", precision: 7, scale: 2
+    t.decimal "middle_award_amount", precision: 7, scale: 2
     t.string "primary_key_contact_email_address"
     t.integer "ukprn", null: false
     t.datetime "updated_at", null: false

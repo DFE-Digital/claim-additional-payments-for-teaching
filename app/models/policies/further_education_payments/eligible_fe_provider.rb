@@ -62,7 +62,7 @@ module Policies
         length: {maximum: Rails.application.config.email_max_length}
 
       def self.csv_for_academic_year(academic_year)
-        attribute_names = [:ukprn, :max_award_amount, :lower_award_amount, :primary_key_contact_email_address]
+        attribute_names = [:ukprn, :max_award_amount, :middle_award_amount, :lower_award_amount, :primary_key_contact_email_address]
 
         CSV.generate(headers: true) do |csv|
           csv << attribute_names

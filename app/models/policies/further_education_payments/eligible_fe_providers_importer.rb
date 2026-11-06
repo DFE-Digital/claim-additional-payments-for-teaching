@@ -8,6 +8,7 @@ module Policies
         mandatory_headers: %w[
           ukprn
           max_award_amount
+          middle_award_amount
           lower_award_amount
           primary_key_contact_email_address
         ]
@@ -37,6 +38,7 @@ module Policies
         {
           ukprn: row.fetch("ukprn"),
           max_award_amount: row.fetch("max_award_amount").gsub(/£|,|�/, ""),
+          middle_award_amount: row.fetch("middle_award_amount").gsub(/£|,|�/, ""),
           lower_award_amount: row.fetch("lower_award_amount").gsub(/£|,|�/, ""),
           primary_key_contact_email_address: row.fetch("primary_key_contact_email_address"),
           academic_year:,

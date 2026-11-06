@@ -12,6 +12,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibleFeProvidersImporter d
     [
       hash[:ukprn],
       hash[:max_award_amount],
+      hash[:middle_award_amount],
       hash[:lower_award_amount]
     ].join(",") + "\n"
   end
@@ -27,7 +28,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibleFeProvidersImporter d
         subject.run(file_upload.id)
 
         expect(subject.errors).to be_present
-        expect(subject.errors).to include("The selected file is missing some expected columns: ukprn, max_award_amount, lower_award_amount, primary_key_contact_email_address")
+        expect(subject.errors).to include("The selected file is missing some expected columns: ukprn, max_award_amount, middle_award_amount, lower_award_amount, primary_key_contact_email_address")
       end
     end
 
@@ -125,7 +126,12 @@ RSpec.describe Policies::FurtherEducationPayments::EligibleFeProvidersImporter d
         file.write correct_headers
 
         3.times do
-          file.write to_row(attributes_for(:eligible_fe_provider).merge(max_award_amount: '"£6,000"', lower_award_amount: '"£3,000"'))
+          file.write to_row(attributes_for(:eligible_fe_provider)
+            .merge(
+              max_award_amount: '"£6,000"',
+              middle_award_amount: '"£4,500"',
+              lower_award_amount: '"£3,000"'
+            ))
         end
 
         file.close
@@ -134,6 +140,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibleFeProvidersImporter d
       it "ignores superfluous characters and imports new records" do
         expect { subject.run(file_upload.id) }.to change { Policies::FurtherEducationPayments::EligibleFeProvider.count }.by(3)
         expect(Policies::FurtherEducationPayments::EligibleFeProvider.pluck(:max_award_amount).uniq).to eql([6_000])
+        expect(Policies::FurtherEducationPayments::EligibleFeProvider.pluck(:middle_award_amount).uniq).to eql([4_500])
         expect(Policies::FurtherEducationPayments::EligibleFeProvider.pluck(:lower_award_amount).uniq).to eql([3_000])
       end
 

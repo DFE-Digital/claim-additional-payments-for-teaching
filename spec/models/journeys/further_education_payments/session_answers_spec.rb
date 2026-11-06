@@ -33,8 +33,8 @@ RSpec.describe Journeys::FurtherEducationPayments::SessionAnswers do
         )
       end
 
-      it "returns max award amount" do
-        expect(subject.calculate_award_amount).to eql(school.eligible_fe_provider(academic_year: Journeys::FurtherEducationPayments.configuration.current_academic_year).max_award_amount)
+      it "returns middle award amount" do
+        expect(subject.calculate_award_amount).to eql(school.eligible_fe_provider(academic_year: Journeys::FurtherEducationPayments.configuration.current_academic_year).middle_award_amount)
       end
     end
 
