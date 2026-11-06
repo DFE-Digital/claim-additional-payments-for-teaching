@@ -167,20 +167,6 @@ module Policies
       end
 
       def timetabled_teaching_hours
-        # The max we want to show admins is "12 or more hours"
-        provider_teaching_hours_per_week =
-          case eligibility.provider_verification_teaching_hours_per_week
-          when "more_than_20" then "more_than_12"
-          else eligibility.provider_verification_teaching_hours_per_week
-          end
-
-        # The max we want to show admins is "12 or more hours"
-        claimant_teaching_hours_per_week =
-          case eligibility.teaching_hours_per_week
-          when "more_than_20" then "more_than_12"
-          else eligibility.teaching_hours_per_week
-          end
-
         locale_scope = %w[
           further_education_payments
           admin
@@ -191,8 +177,8 @@ module Policies
 
         [
           "Timetabled teaching hours",
-          I18n.t(claimant_teaching_hours_per_week, scope: locale_scope),
-          I18n.t(provider_teaching_hours_per_week, scope: locale_scope)
+          I18n.t(eligibility.teaching_hours_per_week, scope: locale_scope),
+          I18n.t(eligibility.provider_verification_teaching_hours_per_week, scope: locale_scope)
         ]
       end
 

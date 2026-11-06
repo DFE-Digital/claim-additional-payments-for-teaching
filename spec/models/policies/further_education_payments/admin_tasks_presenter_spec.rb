@@ -111,8 +111,8 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
 
         expect(rows).to include([
           "Timetabled teaching hours",
-          "12 or more hours per week",
-          "12 or more hours per week"
+          "12 or more hours per week, but fewer than 20",
+          "20 hours or more per week"
         ])
 
         expect(rows).to include(["Age range taught", "Yes", "Yes"])
@@ -183,7 +183,7 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
             }
           end
 
-          it { is_expected.to eq("12 or more hours per week") }
+          it { is_expected.to eq("20 hours or more per week") }
         end
 
         context "when provider answers 'more_than_12" do
@@ -193,7 +193,7 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
             }
           end
 
-          it { is_expected.to eq("12 or more hours per week") }
+          it { is_expected.to eq("12 or more hours per week, but fewer than 20") }
         end
 
         context "when provider answers 'between_2_5_and_12'" do
