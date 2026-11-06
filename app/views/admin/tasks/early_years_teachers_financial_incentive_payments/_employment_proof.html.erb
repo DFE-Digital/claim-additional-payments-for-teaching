@@ -21,18 +21,14 @@
       <% row.with_value { provider.name } %>
     <% end %>
 
-    <% if provider.registered_person_name.present? %>
-      <% summary_list.with_row do |row| %>
-        <% row.with_key { "Registered person name" } %>
-        <% row.with_value { provider.registered_person_name } %>
-      <% end %>
+    <% summary_list.with_row do |row| %>
+      <% row.with_key { "Registered person name" } %>
+      <% row.with_value { provider.registered_person_name } %>
     <% end %>
 
-    <% if provider.paye_reference.present? %>
-      <% summary_list.with_row do |row| %>
-        <% row.with_key { "Employer PAYE reference" } %>
-        <% row.with_value { provider.paye_reference } %>
-      <% end %>
+    <% summary_list.with_row do |row| %>
+      <% row.with_key { "Employer PAYE reference" } %>
+      <% row.with_value { provider.paye_reference } %>
     <% end %>
 
     <% summary_list.with_row do |row| %>
