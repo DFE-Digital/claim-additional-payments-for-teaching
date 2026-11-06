@@ -18,18 +18,8 @@ module Policies
       def academic_date
         record.held_routes_to_professional_statuses.map do |route|
           case route.qualification
-          when :undergraduate_itt, :assessment_only, :overseas_recognition
+          when :undergraduate_itt, :assessment_only, :overseas_recognition, :postgraduate_itt
             return qts_award_date
-          when :postgraduate_itt
-            # For Postgraduate programs, the ITT start date is sometimes recorded a few days before the beginning of the
-            # new academic year, which makes it fall, mistakenly, within the *previous* academic year. Based on the
-            # situation, this can also cause the qualifications and induction checks to pass or fail automatically when
-            # they shouldn't. One way around it is to assume that the new academic year can start up to 2 weeks earlier.
-            if start_date&.between?(Date.new(route.start_date.year, 8, 18), Date.new(route.start_date.year, 8, 31))
-              Date.new(route.start_date.year, 9, 1)
-            else
-              route.start_date
-            end
           end
         end.compact.max
       end
@@ -38,13 +28,11 @@ module Policies
       # based on academic_date determine the relevant AcademicYear
       # for eligibility purposes
       def academic_year_started_teaching
-        AcademicYear.for(academic_date)
-      end
+        date = record.held_routes_to_professional_statuses.select do |route|
+          route.eligible_stri_qualification?
+        end.map(&:holds_from).compact.max
 
-      def stri_eligible?
-        qualification_eligible?
-          && starting_teaching_year_eligible?
-          && subject_eligible?
+        AcademicYear.for(date)
       end
 
       def starting_teaching_year_eligible?
@@ -65,6 +53,15 @@ module Policies
         record.held_routes_to_professional_statuses.any? do |route|
           route.eligible_stri_subject?
         end
+      end
+
+      def degree_code_eligible?
+        degree_codes = DqtHigherEducationQualification.where(
+          teacher_reference_number: record.teacher_reference_number,
+          date_of_birth: record.date_of_birth
+        ).pluck(:subject_code)
+
+        (DqtRecord::ELIGIBLE_CODES & degree_codes).any?
       end
     end
   end
