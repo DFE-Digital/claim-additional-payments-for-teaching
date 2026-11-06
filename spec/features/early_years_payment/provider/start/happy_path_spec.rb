@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Early years payment provider" do
+RSpec.feature "Early years payment provider", :testing_persona do
   let(:mail) { ActionMailer::Base.deliveries.last }
   let(:magic_link) { mail.personalisation[:magic_link] }
 
@@ -9,8 +9,12 @@ RSpec.feature "Early years payment provider" do
   end
 
   scenario "start - enter email, get magic link" do
-    when_early_years_payment_provider_start_journey_configuration_exists
-    when_eligible_ey_provider_exists
+    create(:journey_configuration, :early_years_payment_provider_start)
+    create(
+      :eligible_ey_provider,
+      primary_key_contact_email_address: "johndoe@example.com",
+      secondary_contact_email_address: "janedoe@example.com"
+    )
 
     visit landing_page_path(Journeys::EarlyYearsPayment::Provider::Start.routing_name)
     expect(page).to have_text("Claim an early years financial incentive payment on behalf of your employee")
@@ -31,8 +35,12 @@ RSpec.feature "Early years payment provider" do
   end
 
   scenario "enter another email address" do
-    when_early_years_payment_provider_start_journey_configuration_exists
-    when_eligible_ey_provider_exists
+    create(:journey_configuration, :early_years_payment_provider_start)
+    create(
+      :eligible_ey_provider,
+      primary_key_contact_email_address: "johndoe@example.com",
+      secondary_contact_email_address: "janedoe@example.com"
+    )
 
     visit landing_page_path(Journeys::EarlyYearsPayment::Provider::Start.routing_name)
     click_link "Start now"
@@ -50,8 +58,12 @@ RSpec.feature "Early years payment provider" do
   end
 
   scenario "send another link" do
-    when_early_years_payment_provider_start_journey_configuration_exists
-    when_eligible_ey_provider_exists
+    create(:journey_configuration, :early_years_payment_provider_start)
+    create(
+      :eligible_ey_provider,
+      primary_key_contact_email_address: "johndoe@example.com",
+      secondary_contact_email_address: "janedoe@example.com"
+    )
 
     visit landing_page_path(Journeys::EarlyYearsPayment::Provider::Start.routing_name)
     click_link "Start now"

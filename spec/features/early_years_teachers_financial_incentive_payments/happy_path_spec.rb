@@ -1,6 +1,7 @@
 require "rails_helper"
 
-RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
+# @journey EarlyYearsTeachersFinancialIncentivePayments
+RSpec.feature "EYTFI journey", :testing_persona, feature_flag: [:eytfi_journey] do
   let(:mock_teacher) do
     instance_double(
       "Dqt::Teacher",
@@ -65,6 +66,109 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     expect(page).to have_text "Claim an early years teacher recognition payment"
   end
 
+  scenario "happy path with COPD nursery" do
+    create(
+      :eligible_eytfi_provider,
+      name: "Cedar House Nursery",
+      town: "Cambridge",
+      postcode: "CB4 1QH",
+      copd: true
+    )
+
+    visit landing_page_path(
+      Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
+    )
+    click_link "Start now"
+
+    expect(page).to have_text "Which nursery do you teach in?"
+    find_field("claim[nursery_search_query]").set("Cedar House Nursery")
+    click_button "Continue"
+
+    expect(page).to have_text "Which nursery do you teach in?"
+    expect(page).to have_text "Cedar House Nursery"
+    expect(page).to have_text "Cambridge"
+    expect(page).to have_text "CB4"
+    expect(page).not_to have_text "CB4 1QH"
+
+    choose "Cedar House Nursery"
+    click_button "Continue"
+
+    expect(page).to have_text "Do you hold one of these teaching qualifications?"
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_text "Check if you’re eligible"
+    choose "Yes"
+    click_button "Confirm and continue"
+
+    expect(page).to have_text "You’re eligible to apply"
+    click_button "Continue"
+
+    expect(page).to have_text "Sign in with GOV.UK One Login"
+    perform_enqueued_jobs do
+      click_button "Continue"
+    end
+
+    expect(page).to have_text "Enter your National Insurance number"
+    fill_in "Enter your National Insurance number", with: "AB123456C"
+    click_button "Continue"
+
+    expect(page).to have_text "Upload your payslip"
+    attach_file(
+      "Upload document",
+      Rails.root.join("spec/fixtures/files/employment_proof.pdf")
+    )
+    click_button "Upload"
+
+    expect(page).to have_text "Check your document"
+    choose "Yes, add this file"
+    click_button "Continue"
+
+    expect(page).to have_text "You may be eligible for a recognition payment"
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_title "How we’ll use your information"
+    expect(page).to have_text "How we’ll use your information"
+    click_button "Continue"
+
+    expect(page).to have_text "What is your home address?"
+    click_button "Enter your address manually"
+
+    fill_in "House number or name", with: "1"
+    fill_in "Building and street", with: "Grey Street"
+    fill_in "Town or city", with: "Newcastle upon Tyne"
+    fill_in "County", with: "Tyne and Wear"
+    fill_in "Postcode", with: "NE1 6EE"
+    click_button "Continue"
+
+    expect(page).to have_text(I18n.t("questions.account_details"))
+    fill_in "Name on the account", with: "John Doe"
+    fill_in "Sort code", with: "123456"
+    fill_in "Account number", with: "12345678"
+    click_button "Continue"
+
+    expect(page).to have_text "Are you recorded as male or female on your employer’s payroll system?"
+    choose "I don’t know"
+    click_button "Continue"
+
+    expect(page).to have_text "Confirm your details and complete your claim"
+    check "I confirm that I understand and accept these conditions."
+
+    perform_enqueued_jobs do
+      expect {
+        click_button "Confirm and claim"
+      }.to change { Claim.count }.by(1)
+    end
+
+    claim = Claim.last
+    provider = claim.eligibility.eligible_eytfi_provider
+
+    expect(claim.eligibility).to be_present
+    expect(provider.copd).to be true
+    expect(provider.eligible).to be true
+  end
+
   scenario "happy path" do
     create(
       :eligible_eytfi_provider,
@@ -74,7 +178,6 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     visit landing_page_path(
       Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
     )
-
     click_link "Start now"
 
     expect(page).to have_text "Which nursery do you teach in?"
@@ -100,7 +203,6 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     perform_enqueued_jobs do
       click_button "Continue"
     end
-
     journey_session = Journeys::EarlyYearsTeachersFinancialIncentivePayments::Session.last
 
     expect(journey_session.answers.teacher_auth_teacher_reference_number).to eql("1234567")
@@ -118,7 +220,16 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     fill_in "Enter your National Insurance number", with: "AB123456C"
     click_button "Continue"
 
-    upload_employment_proof
+    expect(page).to have_text "Upload your payslip"
+    attach_file(
+      "Upload document",
+      Rails.root.join("spec/fixtures/files/employment_proof.pdf")
+    )
+    click_button "Upload"
+
+    expect(page).to have_text "Check your document"
+    choose "Yes, add this file"
+    click_button "Continue"
 
     expect(page).to have_text "You may be eligible for a recognition payment"
     choose "Yes"
@@ -150,6 +261,7 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     expect(page).to have_text "What is your home address?"
     click_button "Enter your address manually"
 
+    expect(page).to have_text "What is your address?"
     fill_in "House number or name", with: "1"
     fill_in "Building and street", with: "Grey Street"
     fill_in "Town or city", with: "Newcastle upon Tyne"
@@ -255,6 +367,51 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     expect(feedback.claim_id).to eql(claim.id)
   end
 
+  scenario "A EYTRP claimant who applied for a claim in private beta 25/26 should not be able to apply for 26/27 public beta" do
+    create(
+      :eligible_eytfi_provider,
+      name: "Springfield nursery"
+    )
+
+    create(
+      :claim,
+      :submitted,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+      onelogin_uid: OmniAuth.config.mock_auth[:teacher].extra.raw_info.sub,
+      academic_year: AcademicYear.current
+    )
+
+    visit landing_page_path(
+      Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
+    )
+    click_link "Start now"
+
+    expect(page).to have_text "Which nursery do you teach in?"
+    find_field("claim[nursery_search_query]").set("Springfield nursery")
+    click_button "Continue"
+
+    expect(page).to have_text "Which nursery do you teach in?"
+    choose "Springfield nursery"
+    click_button "Continue"
+
+    expect(page).to have_text "Do you hold one of these teaching qualifications?"
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_text "Check if you’re eligible"
+    choose "Yes"
+    click_button "Confirm and continue"
+
+    expect(page).to have_text "You’re eligible to apply"
+    click_button "Continue"
+
+    expect(page).to have_text "Sign in with GOV.UK One Login"
+    perform_enqueued_jobs do
+      click_button "Continue"
+    end
+    expect(page).to have_text "You’ve already submitted a claim in this claim window"
+  end
+
   scenario "using nursery auto complete - js", js: true do
     create(
       :eligible_eytfi_provider,
@@ -264,11 +421,9 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     visit landing_page_path(
       Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
     )
-
     click_link "Start now"
 
     expect(page).to have_text "Which nursery do you teach in?"
-
     find_field("claim[nursery_search_query]").send_keys("Spr")
     find("li", text: "Springfield nursery").click
 
@@ -286,11 +441,9 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     visit landing_page_path(
       Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
     )
-
     click_link "Start now"
 
     expect(page).to have_text "Which nursery do you teach in?"
-
     find_field("claim[nursery_search_query]").send_keys("Spr")
     find("h1").click # click somewhere else to disimiss the autocomplete dropdown
     click_button "Continue"
@@ -311,7 +464,6 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
     visit landing_page_path(
       Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
     )
-
     click_link "Start now"
 
     expect(page).to have_text "Which nursery do you teach in?"
@@ -331,6 +483,22 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
   end
 
   context "NINO journeys" do
+    before do
+      FeatureFlag.enable!(:eytrp_hmrc_integration)
+
+      error_client = double("Hmrc::Employments::Client")
+      allow(error_client).to receive(:employment_history_for_individual) do
+        double(status: 500, body: "Oh no!")
+      end
+
+      allow(Hmrc::Employments).to receive(:client) { error_client }
+
+      create(
+        :eligible_eytfi_provider,
+        name: "Springfield nursery"
+      )
+    end
+
     context "NINO returned from TRS and confirmed" do
       let(:mock_teacher) do
         instance_double(
@@ -341,15 +509,9 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
       end
 
       scenario "The user completes the journey" do
-        create(
-          :eligible_eytfi_provider,
-          name: "Springfield nursery"
-        )
-
         visit landing_page_path(
-          journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
+          Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
         )
-
         click_link "Start now"
 
         expect(page).to have_text "Which nursery do you teach in?"
@@ -360,9 +522,7 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         choose "Springfield nursery"
         click_button "Continue"
 
-        expect(page).to have_text(
-          "Do you hold one of these teaching qualifications?"
-        )
+        expect(page).to have_text "Do you hold one of these teaching qualifications?"
         choose "Yes"
         click_button "Continue"
 
@@ -382,6 +542,13 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         expect(page).to have_content "AB123456C"
         choose "Yes"
         click_button "Continue"
+
+        if page.has_content?("Loading")
+          perform_enqueued_jobs
+          visit current_path
+        else
+          expect(page).to have_content "Upload your payslip"
+        end
 
         expect(page).to have_content "Upload document"
         attach_file(
@@ -442,15 +609,9 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
       end
 
       scenario "The user completes the journey" do
-        create(
-          :eligible_eytfi_provider,
-          name: "Springfield nursery"
-        )
-
         visit landing_page_path(
-          journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
+          Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
         )
-
         click_link "Start now"
 
         expect(page).to have_text "Which nursery do you teach in?"
@@ -461,9 +622,7 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         choose "Springfield nursery"
         click_button "Continue"
 
-        expect(page).to have_text(
-          "Do you hold one of these teaching qualifications?"
-        )
+        expect(page).to have_text "Do you hold one of these teaching qualifications?"
         choose "Yes"
         click_button "Continue"
 
@@ -484,6 +643,13 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         choose "No"
         fill_in "What is your National Insurance number?", with: "BB123456C"
         click_button "Continue"
+
+        if page.has_content?("Loading")
+          perform_enqueued_jobs
+          visit current_path
+        else
+          expect(page).to have_content "Upload your payslip"
+        end
 
         expect(page).to have_content "Upload document"
         attach_file(
@@ -544,15 +710,9 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
       end
 
       scenario "The user completes the journey" do
-        create(
-          :eligible_eytfi_provider,
-          name: "Springfield nursery"
-        )
-
         visit landing_page_path(
-          journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
+          Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
         )
-
         click_link "Start now"
 
         expect(page).to have_text "Which nursery do you teach in?"
@@ -563,9 +723,7 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         choose "Springfield nursery"
         click_button "Continue"
 
-        expect(page).to have_text(
-          "Do you hold one of these teaching qualifications?"
-        )
+        expect(page).to have_text "Do you hold one of these teaching qualifications?"
         choose "Yes"
         click_button "Continue"
 
@@ -584,6 +742,13 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
         expect(page).to have_content "Enter your National Insurance number"
         fill_in "Enter your National Insurance number", with: "AB123123C"
         click_button "Continue"
+
+        if page.has_content?("Loading")
+          perform_enqueued_jobs
+          visit current_path
+        else
+          expect(page).to have_content "Upload your payslip"
+        end
 
         expect(page).to have_content "Upload document"
         attach_file(

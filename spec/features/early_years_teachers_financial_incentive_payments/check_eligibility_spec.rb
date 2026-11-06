@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "EYTFI check eligibility page", feature_flag: [:eytfi_journey] do
+RSpec.feature "EYTFI check eligibility page", :testing_persona, feature_flag: [:eytfi_journey] do
   before do
     create(:journey_configuration, :early_years_teachers_financial_incentive_payments)
     create(:eligible_eytfi_provider, name: "Springfield nursery")
@@ -28,6 +28,13 @@ RSpec.feature "EYTFI check eligibility page", feature_flag: [:eytfi_journey] do
   end
 
   scenario "no redirects to ineligible" do
+    choose "No"
+    click_button "Confirm and continue"
+
+    expect(page).to have_text "You’re not eligible for this payment"
+  end
+
+  scenario "Sally is ineligible because of a recent performance measure" do
     choose "No"
     click_button "Confirm and continue"
 

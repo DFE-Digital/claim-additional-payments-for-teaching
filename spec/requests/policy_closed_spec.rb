@@ -19,7 +19,7 @@ RSpec.describe "Maintenance Mode", type: :request do
     it "blocks admin component previews in production" do
       sign_in_as_service_operator
 
-      get admin_components_open_component_path(
+      get admin_components_journey_preview_path(
         journey: Journeys::TeacherStudentLoanReimbursement.routing_name,
         slug: Journeys::TeacherStudentLoanReimbursement.slug_sequence::SLUGS.first
       )

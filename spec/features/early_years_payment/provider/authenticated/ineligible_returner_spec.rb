@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Early years payment provider ineligible returner" do
+RSpec.feature "Early years payment provider ineligible returner", :testing_persona do
   let(:email_address) { "johndoe@example.com" }
   let(:journey_session) { Journeys::EarlyYearsPayment::Provider::Authenticated::Session.last }
   let(:mail) { ActionMailer::Base.deliveries.last }
@@ -8,8 +8,13 @@ RSpec.feature "Early years payment provider ineligible returner" do
   let!(:nursery) { create(:eligible_ey_provider, primary_key_contact_email_address: email_address) }
 
   scenario "returner worked with children in a permanent position" do
-    when_early_years_payment_provider_authenticated_journey_configuration_exists
-    when_early_years_payment_provider_start_journey_completed
+    create(:journey_configuration, :early_years_payment_provider_authenticated)
+    create(:journey_configuration, :early_years_payment_provider_start)
+
+    visit landing_page_path(Journeys::EarlyYearsPayment::Provider::Start.routing_name)
+    click_link "Start now"
+    fill_in "Enter your email address", with: "johndoe@example.com"
+    click_on "Submit"
 
     visit magic_link
     check "I confirm that I’ve obtained consent from my employee and have provided them with the relevant privacy notice."
