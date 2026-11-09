@@ -19,6 +19,15 @@ module Policies
         end
       end
 
+      def employment_check_date_range
+        start_date = eligibility.employment_check_date_range_start
+        end_date = eligibility.employment_check_date_range_end
+        return unless start_date.present? && end_date.present?
+
+        "Employment checked from #{start_date.strftime("%-d %B %Y")} " \
+          "to #{end_date.strftime("%-d %B %Y")}."
+      end
+
       def employment_summaries
         return [] if message.present?
 

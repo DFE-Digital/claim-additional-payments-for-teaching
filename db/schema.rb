@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_03_143924) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_09_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -303,6 +303,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_03_143924) do
     t.boolean "continue_claim"
     t.datetime "created_at", null: false
     t.string "eligible_eytfi_provider_urn"
+    t.date "employment_check_date_range_end"
+    t.date "employment_check_date_range_start"
     t.boolean "has_eligible_qualification"
     t.boolean "hmrc_employment_check_passed"
     t.jsonb "hmrc_response_body"

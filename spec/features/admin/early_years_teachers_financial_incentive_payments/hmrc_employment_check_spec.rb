@@ -1,12 +1,31 @@
 require "rails_helper"
 
 RSpec.describe "EYTFI admin HMRC employment check" do
+  it "omits the checked range for historical claims without dates" do
+    claim = create(
+      :claim,
+      :submitted,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+      eligibility_attributes: {hmrc_response_status: 404}
+    )
+
+    sign_in_as_service_admin
+    visit admin_claim_task_path(claim, "employment")
+
+    within("#hmrc-employment-check") do
+      expect(page).to have_text("Claimant not found on HMRC.")
+      expect(page).not_to have_text("Employment checked from")
+    end
+  end
+
   it "shows each HMRC employment alongside uploaded evidence" do
     claim = create(
       :claim,
       :submitted,
       policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
       eligibility_attributes: {
+        employment_check_date_range_start: Date.new(2026, 7, 30),
+        employment_check_date_range_end: Date.new(2026, 9, 30),
         hmrc_employment_check_passed: true,
         hmrc_response_status: 200,
         hmrc_response_body: {
@@ -72,6 +91,10 @@ RSpec.describe "EYTFI admin HMRC employment check" do
     within("#hmrc-employment-check") do
       expect(page).to have_text("HMRC employment check")
       expect(page).to have_text("Passed check: Paye reference")
+      expect(page).to have_selector(
+        "p",
+        text: "Employment checked from 30 July 2026 to 30 September 2026."
+      )
 
       expect(page).to have_selector("h3", text: "Employment 1")
 
