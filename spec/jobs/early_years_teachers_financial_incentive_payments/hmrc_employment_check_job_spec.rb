@@ -120,6 +120,10 @@ RSpec.describe(
         eligibility = claim.eligibility.reload
         expect(eligibility.hmrc_response_status).to eq(500)
         expect(eligibility.hmrc_response_body).to eq(response_body)
+        expect(eligibility.employment_check_date_range_start)
+          .to eq(Date.new(2026, 7, 30))
+        expect(eligibility.employment_check_date_range_end)
+          .to eq(Date.new(2026, 9, 30))
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -186,6 +190,10 @@ RSpec.describe(
         eligibility = claim.eligibility.reload
         expect(eligibility.hmrc_response_status).to eq(500)
         expect(eligibility.hmrc_response_body).to eq(response_body)
+        expect(eligibility.employment_check_date_range_start)
+          .to eq(Date.new(2026, 7, 30))
+        expect(eligibility.employment_check_date_range_end)
+          .to eq(Date.new(2026, 9, 30))
         expect(matching_request).to have_been_requested.once
         expect(
           a_request(
@@ -259,6 +267,10 @@ RSpec.describe(
         eligibility = claim.eligibility.reload
         expect(eligibility.hmrc_response_status).to eq(404)
         expect(eligibility.hmrc_response_body).to eq(response_body)
+        expect(eligibility.employment_check_date_range_start)
+          .to eq(Date.new(2026, 7, 30))
+        expect(eligibility.employment_check_date_range_end)
+          .to eq(Date.new(2026, 9, 30))
         expect(matching_request).to have_been_requested.once
         expect(
           a_request(
@@ -328,6 +340,10 @@ RSpec.describe(
         eligibility = claim.eligibility.reload
         expect(eligibility.hmrc_response_status).to eq(200)
         expect(eligibility.hmrc_response_body).to eq(response_body)
+        expect(eligibility.employment_check_date_range_start)
+          .to eq(Date.new(2026, 7, 30))
+        expect(eligibility.employment_check_date_range_end)
+          .to eq(Date.new(2026, 9, 30))
         expect(matching_request).to have_been_requested.once
         expect(
           a_request(
@@ -425,6 +441,10 @@ RSpec.describe(
         eligibility = claim.eligibility.reload
         expect(eligibility.hmrc_response_status).to eq(200)
         expect(eligibility.hmrc_response_body).to eq(response_body)
+        expect(eligibility.employment_check_date_range_start)
+          .to eq(Date.new(2026, 7, 30))
+        expect(eligibility.employment_check_date_range_end)
+          .to eq(Date.new(2026, 9, 30))
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -515,6 +535,10 @@ RSpec.describe(
         eligibility = claim.eligibility.reload
         expect(eligibility.hmrc_response_status).to eq(200)
         expect(eligibility.hmrc_response_body).to eq(response_body)
+        expect(eligibility.employment_check_date_range_start)
+          .to eq(Date.new(2026, 7, 30))
+        expect(eligibility.employment_check_date_range_end)
+          .to eq(Date.new(2026, 9, 30))
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -605,6 +629,10 @@ RSpec.describe(
         eligibility = claim.eligibility.reload
         expect(eligibility.hmrc_response_status).to eq(200)
         expect(eligibility.hmrc_response_body).to eq(response_body)
+        expect(eligibility.employment_check_date_range_start)
+          .to eq(Date.new(2026, 7, 30))
+        expect(eligibility.employment_check_date_range_end)
+          .to eq(Date.new(2026, 9, 30))
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -697,6 +725,10 @@ RSpec.describe(
         eligibility = claim.eligibility.reload
         expect(eligibility.hmrc_response_status).to eq(200)
         expect(eligibility.hmrc_response_body).to eq(response_body)
+        expect(eligibility.employment_check_date_range_start)
+          .to eq(Date.new(2026, 7, 30))
+        expect(eligibility.employment_check_date_range_end)
+          .to eq(Date.new(2026, 9, 30))
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -789,6 +821,10 @@ RSpec.describe(
         eligibility = claim.eligibility.reload
         expect(eligibility.hmrc_response_status).to eq(200)
         expect(eligibility.hmrc_response_body).to eq(response_body)
+        expect(eligibility.employment_check_date_range_start)
+          .to eq(Date.new(2026, 7, 30))
+        expect(eligibility.employment_check_date_range_end)
+          .to eq(Date.new(2026, 9, 30))
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -883,6 +919,10 @@ RSpec.describe(
         eligibility = claim.eligibility.reload
         expect(eligibility.hmrc_response_status).to eq(200)
         expect(eligibility.hmrc_response_body).to eq(response_body)
+        expect(eligibility.employment_check_date_range_start)
+          .to eq(Date.new(2026, 7, 30))
+        expect(eligibility.employment_check_date_range_end)
+          .to eq(Date.new(2026, 9, 30))
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -979,6 +1019,10 @@ RSpec.describe(
         eligibility = claim.eligibility.reload
         expect(eligibility.hmrc_response_status).to eq(200)
         expect(eligibility.hmrc_response_body).to eq(response_body)
+        expect(eligibility.employment_check_date_range_start)
+          .to eq(Date.new(2026, 7, 30))
+        expect(eligibility.employment_check_date_range_end)
+          .to eq(Date.new(2026, 9, 30))
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -1077,6 +1121,10 @@ RSpec.describe(
         eligibility = claim.eligibility.reload
         expect(eligibility.hmrc_response_status).to eq(200)
         expect(eligibility.hmrc_response_body).to eq(response_body)
+        expect(eligibility.employment_check_date_range_start)
+          .to eq(Date.new(2026, 7, 30))
+        expect(eligibility.employment_check_date_range_end)
+          .to eq(Date.new(2026, 9, 30))
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -1173,6 +1221,10 @@ RSpec.describe(
         eligibility = claim.eligibility.reload
         expect(eligibility.hmrc_response_status).to eq(200)
         expect(eligibility.hmrc_response_body).to eq(response_body)
+        expect(eligibility.employment_check_date_range_start)
+          .to eq(Date.new(2026, 7, 30))
+        expect(eligibility.employment_check_date_range_end)
+          .to eq(Date.new(2026, 9, 30))
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -1269,6 +1321,10 @@ RSpec.describe(
         eligibility = claim.eligibility.reload
         expect(eligibility.hmrc_response_status).to eq(200)
         expect(eligibility.hmrc_response_body).to eq(response_body)
+        expect(eligibility.employment_check_date_range_start)
+          .to eq(Date.new(2026, 7, 30))
+        expect(eligibility.employment_check_date_range_end)
+          .to eq(Date.new(2026, 9, 30))
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -1376,6 +1432,10 @@ RSpec.describe(
         eligibility = claim.eligibility.reload
         expect(eligibility.hmrc_response_status).to eq(200)
         expect(eligibility.hmrc_response_body).to eq(response_body)
+        expect(eligibility.employment_check_date_range_start)
+          .to eq(Date.new(2026, 7, 30))
+        expect(eligibility.employment_check_date_range_end)
+          .to eq(Date.new(2026, 9, 30))
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -1481,6 +1541,10 @@ RSpec.describe(
         eligibility = claim.eligibility.reload
         expect(eligibility.hmrc_response_status).to eq(200)
         expect(eligibility.hmrc_response_body).to eq(response_body)
+        expect(eligibility.employment_check_date_range_start)
+          .to eq(Date.new(2026, 7, 30))
+        expect(eligibility.employment_check_date_range_end)
+          .to eq(Date.new(2026, 9, 30))
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -1583,6 +1647,10 @@ RSpec.describe(
         eligibility = claim.eligibility.reload
         expect(eligibility.hmrc_response_status).to eq(200)
         expect(eligibility.hmrc_response_body).to eq(response_body)
+        expect(eligibility.employment_check_date_range_start)
+          .to eq(Date.new(2026, 7, 30))
+        expect(eligibility.employment_check_date_range_end)
+          .to eq(Date.new(2026, 9, 30))
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
@@ -1677,6 +1745,10 @@ RSpec.describe(
         eligibility = claim.eligibility.reload
         expect(eligibility.hmrc_response_status).to eq(200)
         expect(eligibility.hmrc_response_body).to eq(response_body)
+        expect(eligibility.employment_check_date_range_start)
+          .to eq(Date.new(2026, 7, 30))
+        expect(eligibility.employment_check_date_range_end)
+          .to eq(Date.new(2026, 9, 30))
         expect(matching_request).to have_been_requested.once
         expect(employment_request).to have_been_requested.once
       end
