@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_09_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_10_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -306,6 +306,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_09_120000) do
     t.date "employment_check_date_range_end"
     t.date "employment_check_date_range_start"
     t.boolean "has_eligible_qualification"
+    t.integer "hmrc_employment_check_attempts", default: 0, null: false
     t.boolean "hmrc_employment_check_passed"
     t.jsonb "hmrc_response_body"
     t.integer "hmrc_response_status"

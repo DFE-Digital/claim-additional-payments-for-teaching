@@ -2,13 +2,18 @@ module Tasks
   module EarlyYearsTeachersFinancialIncentivePayments
     class EmploymentJob < ApplicationJob
       def perform(claim)
-        claim = claim
         eligibility = claim.eligibility
 
         return if claim.tasks.employment.exists?
 
-        ::EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob
-          .perform_now(claim)
+        hmrc_job = ::EarlyYearsTeachersFinancialIncentivePayments::
+          HmrcEmploymentCheckJob
+
+        if hmrc_job.enabled? && eligibility.hmrc_response_status.blank?
+          eligibility.increment!(:hmrc_employment_check_attempts)
+        end
+
+        hmrc_job.perform_now(claim)
 
         task = claim.tasks.employment.new
 
