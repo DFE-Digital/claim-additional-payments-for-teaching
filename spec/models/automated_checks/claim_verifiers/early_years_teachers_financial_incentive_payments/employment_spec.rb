@@ -9,9 +9,7 @@ RSpec.describe(
       :claim,
       policy: Policies::EarlyYearsTeachersFinancialIncentivePayments
     )
-    expect(
-      EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob
-    ).not_to receive(:perform_now)
+    expect(Hmrc::Employments).not_to receive(:client)
 
     expect {
       described_class.new(claim: claim).perform
