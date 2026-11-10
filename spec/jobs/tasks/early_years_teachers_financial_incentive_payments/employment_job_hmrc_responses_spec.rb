@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe(
-  EarlyYearsTeachersFinancialIncentivePayments::HmrcEmploymentCheckJob
+  Tasks::EarlyYearsTeachersFinancialIncentivePayments::EmploymentJob
 ) do
   around do |example|
     travel_to DateTime.new(2026, 9, 30, 0, 0, 0) do
@@ -31,7 +31,7 @@ RSpec.describe(
 
   context "when the HMRC API call fails" do
     context "when an error is returned from the HMRC API" do
-      it "fetches and stores a response when a body exists without a status" do
+      it "stores the final failure when a body exists without a status" do
         nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
 
         claim = create(
@@ -44,6 +44,7 @@ RSpec.describe(
           eligibility_attributes: {
             eligible_eytfi_provider_urn: nursery.urn,
             teacher_auth_verified_name: "John Middle Doe",
+            hmrc_employment_check_attempts: 4,
             teacher_auth_verified_date_of_birth: "1970-12-13",
             hmrc_response_body: "previous incomplete response"
           }
@@ -115,6 +116,11 @@ RSpec.describe(
           }
         )
 
+        expect(Sentry).to receive(:capture_exception).with(
+          an_instance_of(Hmrc::Employments::ResponseError),
+          contexts: {"Claim" => {reference: claim.reference}}
+        )
+
         described_class.perform_now(claim)
 
         eligibility = claim.eligibility.reload
@@ -128,7 +134,7 @@ RSpec.describe(
         expect(employment_request).to have_been_requested.once
       end
 
-      it "stores the error response from matching" do
+      it "stores the final error response from matching" do
         nursery = create(:eligible_eytfi_provider, name: "Springfield nursery")
 
         claim = create(
@@ -141,6 +147,7 @@ RSpec.describe(
           eligibility_attributes: {
             eligible_eytfi_provider_urn: nursery.urn,
             teacher_auth_verified_name: "John Middle Doe",
+            hmrc_employment_check_attempts: 4,
             teacher_auth_verified_date_of_birth: "1970-12-13"
           }
         )
@@ -1765,6 +1772,7 @@ RSpec.describe(
           hmrc_response_body: {employments: []}.to_json
         }
       )
+      create(:task, claim: claim, name: "employment")
       original_attributes = claim.eligibility.attributes
 
       described_class.perform_now(claim)
@@ -1773,7 +1781,7 @@ RSpec.describe(
       expect(a_request(:any, /service\.hmrc\.gov\.uk/)).not_to have_been_made
     end
 
-    it "skips HTTP requests when only a status is stored" do
+    it "skips HTTP requests for a completed task with a 404 response" do
       claim = create(
         :claim,
         policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
@@ -1781,6 +1789,7 @@ RSpec.describe(
           hmrc_response_status: 404
         }
       )
+      create(:task, claim: claim, name: "employment")
       original_attributes = claim.eligibility.attributes
 
       described_class.perform_now(claim)

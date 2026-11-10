@@ -96,6 +96,7 @@ module Policies
           hmrc_employment_check_passed: :retained,
           hmrc_response_body: :inactive_claim_over_six_years_old?,
           hmrc_response_status: :inactive_claim_over_six_years_old?,
+          hmrc_employment_check_attempts: :retained,
           employment_check_date_range_end: :retained,
           employment_check_date_range_start: :retained,
           nursery_id: :inactive_claim_over_six_years_old?,
