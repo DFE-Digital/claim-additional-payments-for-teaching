@@ -481,6 +481,7 @@ shared:
     - employment_check_date_range_end # date, end of HMRC employment query range
     - hmrc_response_status # integer, response code from hmrc employment check
     - hmrc_employment_check_passed # boolean, whether or not the hmrc employment check passed
+    - hmrc_employment_check_attempts # integer, number of HMRC employment requests attempted
     - redacted_attributes # jsonb, hash of attributes we've scrubbed along with the data removed
   :school_workforce_censuses:
     - id # uuid, identifies the school workforce census record

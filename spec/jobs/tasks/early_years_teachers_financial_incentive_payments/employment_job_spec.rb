@@ -43,8 +43,11 @@ RSpec.describe(
       double(status: 200, body: response_body)
     )
 
+    expect(claim.eligibility.hmrc_employment_check_attempts).to eq(0)
+
     task = described_class.perform_now(claim)
 
+    expect(claim.eligibility.reload.hmrc_employment_check_attempts).to eq(1)
     expect(task).to be_persisted
     expect(task.passed).to eq(true)
     expect(task.manual).to eq(false)
@@ -164,5 +167,54 @@ RSpec.describe(
     expect { described_class.perform_now(claim) }.not_to(
       change { claim.tasks.count }
     )
+    expect(claim.eligibility.reload.hmrc_employment_check_attempts).to eq(0)
+  end
+  it "persists and increments the count for each failed API attempt" do
+    FeatureFlag.enable!(:eytrp_hmrc_integration)
+    claim = create(
+      :claim,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+      eligibility_attributes: {hmrc_employment_check_attempts: 1}
+    )
+    hmrc_job = EarlyYearsTeachersFinancialIncentivePayments::
+      HmrcEmploymentCheckJob
+    allow(hmrc_job).to receive(:perform_now).with(claim)
+      .and_raise(Timeout::Error)
+
+    expect { described_class.perform_now(claim) }.to raise_error(Timeout::Error)
+    expect(claim.eligibility.reload.hmrc_employment_check_attempts).to eq(2)
+
+    expect { described_class.perform_now(claim) }.to raise_error(Timeout::Error)
+    expect(claim.eligibility.reload.hmrc_employment_check_attempts).to eq(3)
+    expect(claim.tasks.employment).not_to exist
+  end
+
+  it "does not count a cached HMRC response as another API attempt" do
+    FeatureFlag.enable!(:eytrp_hmrc_integration)
+    claim = create(
+      :claim,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
+      eligibility_attributes: {
+        hmrc_response_status: 200,
+        hmrc_response_body: {employments: []}.to_json,
+        hmrc_employment_check_attempts: 2
+      }
+    )
+
+    described_class.perform_now(claim)
+
+    expect(claim.eligibility.reload.hmrc_employment_check_attempts).to eq(2)
+  end
+
+  it "does not count an attempt when HMRC integration is disabled" do
+    FeatureFlag.disable!(:eytrp_hmrc_integration)
+    claim = create(
+      :claim,
+      policy: Policies::EarlyYearsTeachersFinancialIncentivePayments
+    )
+
+    described_class.perform_now(claim)
+
+    expect(claim.eligibility.reload.hmrc_employment_check_attempts).to eq(0)
   end
 end
