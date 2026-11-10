@@ -9,6 +9,9 @@
     <%= govuk_inset_text(text: "Passed check: #{data["check"].to_s.humanize}") %>
   <% end %>
 
+  <% if presenter.employment_check_date_range.present? %>
+    <p class="govuk-body"><%= presenter.employment_check_date_range %></p>
+  <% end %>
 
   <% if presenter.message.present? %>
     <p class="govuk-body"><%= presenter.message %></p>
