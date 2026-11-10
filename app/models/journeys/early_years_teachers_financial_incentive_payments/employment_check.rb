@@ -3,10 +3,6 @@ module Journeys
     class EmploymentCheck
       Result = EmploymentChecks::Result
 
-      def self.earliest_date_to_check
-        2.months.ago.to_date
-      end
-
       def initialize(setting:, hmrc_response_status:, hmrc_response_body:)
         @setting = setting
         @hmrc_response_status = hmrc_response_status

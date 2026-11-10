@@ -175,22 +175,6 @@ RSpec.describe(
   end
 
   describe "response handling and dispatch" do
-    it "looks back one calendar month, including across a year boundary" do
-      travel_to Time.zone.local(2026, 1, 15, 12) do
-        expect(
-          described_class.earliest_date_to_check
-        ).to eq(Date.new(2025, 11, 15))
-      end
-    end
-
-    it "uses the last available day when the previous month is shorter" do
-      travel_to Time.zone.local(2026, 4, 30, 12) do
-        expect(
-          described_class.earliest_date_to_check
-        ).to eq(Date.new(2026, 2, 28))
-      end
-    end
-
     it "passes on a PAYE reference without a name or address" do
       check = check_for(
         setting_paye_reference: "123/AB456",
