@@ -58,5 +58,6 @@ DfE::Analytics.configure do |config|
   config.ignore_default_scope = true
 
   # Perform airbyte checks on startup and allow airbyte config generation
-  config.airbyte_enabled = ENV["ENVIRONMENT_NAME"].start_with?("review") && ENV["BIGQUERY_AIRBYTE_DATASET"].present?
+  environment_name = ENV["ENVIRONMENT_NAME"].to_s
+  config.airbyte_enabled = (environment_name.start_with?("review") || environment_name == "test") && ENV["BIGQUERY_AIRBYTE_DATASET"].present?
 end
