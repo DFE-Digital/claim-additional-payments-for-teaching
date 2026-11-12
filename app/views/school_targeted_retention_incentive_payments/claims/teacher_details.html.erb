@@ -33,11 +33,6 @@
         <% end %>
 
         <% summary_list.with_row do |row| %>
-          <% row.with_key { "Gender" } %>
-          <% row.with_value { "???" } %>
-        <% end %>
-
-        <% summary_list.with_row do |row| %>
           <% row.with_key { "Email address" } %>
           <% row.with_value { journey_session.answers.teacher_auth_email } %>
         <% end %>
