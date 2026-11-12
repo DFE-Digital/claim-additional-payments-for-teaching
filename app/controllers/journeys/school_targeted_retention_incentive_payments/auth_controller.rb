@@ -29,11 +29,11 @@ module Journeys
 
       def persist_callback_to_session
         journey_session.answers.update!(
-          teacher_auth_teacher_reference_number: omniauth_hash.extra.raw_info.trn,
-          teacher_auth_email: omniauth_hash.extra.raw_info.email,
-          teacher_auth_verified_name: omniauth_hash.extra.raw_info.verified_name.join(" "),
-          teacher_auth_verified_date_of_birth: Date.parse(omniauth_hash.extra.raw_info.verified_date_of_birth),
-          teacher_auth_one_login_uid: omniauth_hash.extra.raw_info.sub,
+          teacher_auth_teacher_reference_number: omniauth_hash.extra.raw_info[:trn],
+          teacher_auth_email: omniauth_hash.extra.raw_info[:email],
+          teacher_auth_verified_name: omniauth_hash.extra.raw_info[:verified_name].join(" "),
+          teacher_auth_verified_date_of_birth: Date.parse(omniauth_hash.extra.raw_info[:verified_date_of_birth]),
+          teacher_auth_one_login_uid: omniauth_hash.extra.raw_info[:sub],
           teacher_auth_completed_at: Time.zone.now,
           identity_confirmed_with_onelogin: true,
           onelogin_idv_at: Time.zone.now
