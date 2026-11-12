@@ -66,7 +66,11 @@
       </p>
 
       <p class="govuk-body">
-        You can read the <%= govuk_link_to("methodology", "#FIXME-625") %>
+        You can read the <%= govuk_link_to(
+          "methodology",
+          t("early_years_teachers_financial_incentive_payments.methodology_url"),
+          target: "_blank"
+        ) %>
         to find out how local authorities were selected.
       </p>
     <% end %>
