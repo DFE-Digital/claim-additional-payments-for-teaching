@@ -68,6 +68,9 @@ module EarlyYearsTeachersFinancialIncentivePayments
 
       def initialize(row:)
         @row = row
+        @row.each do |header, value|
+          @row[header] = nil if value.to_s.downcase.strip == "n/a"
+        end
       end
 
       def to_provider(file_upload:)
