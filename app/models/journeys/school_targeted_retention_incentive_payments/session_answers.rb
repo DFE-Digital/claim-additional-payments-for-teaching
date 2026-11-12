@@ -41,6 +41,12 @@ module Journeys
           self
         )
       end
+
+      def higher_education_qualifications
+        @higher_education_qualifications ||=
+          DqtHigherEducationQualification
+            .where(teacher_reference_number: teacher_auth_teacher_reference_number)
+      end
     end
   end
 end

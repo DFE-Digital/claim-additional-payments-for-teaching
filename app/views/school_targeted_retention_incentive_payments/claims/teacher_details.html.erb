@@ -42,6 +42,20 @@
         Qualifications you hold
       </h2>
 
+      <% journey_session.answers.higher_education_qualifications.each do |he_qual| %>
+        <%= govuk_summary_list(actions: false) do |summary_list| %>
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { "Name" } %>
+            <% row.with_value { "Higher Education" } %>
+          <% end %>
+
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { "Subject" } %>
+            <% row.with_value { "#{he_qual.description.titleize} (#{he_qual.subject_code})" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+
       <% journey_session.answers.dqt_record.record.held_routes_to_professional_statuses.each do |route| %>
         <%= govuk_summary_list(actions: false) do |summary_list| %>
           <% summary_list.with_row do |row| %>
@@ -55,18 +69,13 @@
           <% end %>
 
           <% summary_list.with_row do |row| %>
-            <% row.with_key { "Training start date" } %>
-            <% row.with_value { l(route.start_date) } %>
-          <% end %>
-
-          <% summary_list.with_row do |row| %>
-            <% row.with_key { "Valid from" } %>
-            <% row.with_value { l(route.holds_from) } %>
-          <% end %>
-
-          <% summary_list.with_row do |row| %>
             <% row.with_key { "Subjects" } %>
             <% row.with_value { route.subjects_formatted_s } %>
+          <% end %>
+
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { "Awarded on" } %>
+            <% row.with_value { l(route.holds_from) } %>
           <% end %>
         <% end %>
       <% end %>
