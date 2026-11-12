@@ -38,7 +38,7 @@ module Dqt
     end
 
     def subjects_formatted_s
-      subjects.map { |s| "#{s.name} (#{s.reference})" }.join(", ")
+      subjects.map { |s| "#{s.name.titleize} (#{s.reference})" }.join(", ")
     end
 
     def holds_from
