@@ -37,8 +37,7 @@ module Journeys
 
       def dqt_record
         @dqt_record ||= Policies::TargetedRetentionIncentivePayments::StriDqtRecord.new(
-          Dqt::Teacher.new(trs_data),
-          self
+          Dqt::Teacher.new(trs_data)
         )
       end
 

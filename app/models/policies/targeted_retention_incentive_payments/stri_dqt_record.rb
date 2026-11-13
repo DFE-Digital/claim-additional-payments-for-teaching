@@ -1,11 +1,10 @@
 module Policies
   module TargetedRetentionIncentivePayments
     class StriDqtRecord
-      attr_reader :record, :answers
+      attr_reader :record
 
-      def initialize(record, answers)
+      def initialize(record)
         @record = record
-        @answers = answers
       end
 
       def qts_award_date
