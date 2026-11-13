@@ -89,7 +89,7 @@ module EarlyYearsTeachersFinancialIncentivePayments
             max_claims: row["Max claims"].presence || 5,
             registered_person_name: row["Registered person name"].presence,
             telephone_number: row["Telephone number"].presence,
-            paye_reference: row["PAYE reference"].to_s.lines.map(&:strip).reject { |reference| reference.blank? || reference == "n/a" },
+            paye_references: row["PAYE reference"].to_s.lines.map(&:strip).reject { |reference| reference.blank? || reference == "n/a" },
             multiple_nurseries: row["Registered person name"].present? ? cast_bool(row["Multiple nurseries?"]) : nil,
             file_upload:
           )

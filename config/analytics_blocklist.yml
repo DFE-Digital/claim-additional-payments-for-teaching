@@ -32,7 +32,7 @@
   - secondary_contact_email_address
   - file_upload_id
   :eligible_eytfi_providers:
-  - paye_reference
+  - paye_references
   :eligible_fe_providers:
   - file_upload_id
   :file_uploads:

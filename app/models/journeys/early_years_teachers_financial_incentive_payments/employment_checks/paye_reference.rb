@@ -48,7 +48,7 @@ module Journeys
 
         def employer_paye_reference_matches?(employer)
           employer["payeReference"].present? &&
-            setting.paye_reference.include?(employer["payeReference"])
+            setting.paye_references.include?(employer["payeReference"])
         end
       end
     end

@@ -230,7 +230,7 @@ RSpec.describe "Task index page for EYTFI claims" do
       urn: "EY123456",
       name: "Sunny Days Nursery",
       registered_person_name: "Sunny Days Group",
-      paye_reference: ["123/AB456", "999/ZZ999"],
+      paye_references: ["123/AB456", "999/ZZ999"],
       address_line_1: "1 Nursery Lane",
       address_line_2: "Childcare Park",
       address_line_3: "Sunny Side",
