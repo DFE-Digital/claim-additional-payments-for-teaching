@@ -28,11 +28,7 @@ module Policies
       # based on academic_date determine the relevant AcademicYear
       # for eligibility purposes
       def academic_year_started_teaching
-        date = record.held_routes_to_professional_statuses.select do |route|
-          route.eligible_stri_qualification?
-        end.map(&:holds_from).compact.max
-
-        AcademicYear.for(date)
+        AcademicYear.for(record.qts_award_date)
       end
 
       # QTS award date must be before the AY window opens
