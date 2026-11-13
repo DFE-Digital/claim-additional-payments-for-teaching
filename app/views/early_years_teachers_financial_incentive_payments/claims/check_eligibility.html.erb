@@ -26,7 +26,9 @@
       <p class="govuk-body">To be eligible, you must:</p>
 
       <%= govuk_list [
-        "spend at least half of your working time fulfilling the role of an early years teacher, as set out in the Early years teacher standards",
+        "spend at least half of your working time fulfilling the role of an early years teacher, as set out in the #{govuk_link_to("Early years teacher standards", 
+          t("early_years_teachers_financial_incentive_payments.early_years_teacher_standards_url")
+        )}".html_safe,
         "you must be doing your job as expected and not be under formal performance management"
       ], type: :bullet, classes: "govuk-!-margin-bottom-6" %>
 
