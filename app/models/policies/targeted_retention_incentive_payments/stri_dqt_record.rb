@@ -35,12 +35,22 @@ module Policies
         AcademicYear.for(date)
       end
 
-      def starting_teaching_year_eligible?
-        return false if academic_year_started_teaching.blank?
+      # QTS award date must be before the AY window opens
+      # AND be within 5 years
+      def qts_years_exceeded?
+        return true if academic_year_started_teaching.blank?
 
         current_academic_year = Journeys::SchoolTargetedRetentionIncentivePayments.configuration.current_academic_year
 
-        academic_year_started_teaching >= current_academic_year - 5
+        academic_year_started_teaching.start_year < (current_academic_year - 5).start_year
+      end
+
+      def qts_years_too_early?
+        return true if academic_year_started_teaching.blank?
+
+        current_academic_year = Journeys::SchoolTargetedRetentionIncentivePayments.configuration.current_academic_year
+
+        academic_year_started_teaching.start_year >= (current_academic_year).start_year
       end
 
       def qualification_eligible?
