@@ -26,7 +26,8 @@ module Journeys
           return :ineligible_qualification
         end
 
-        :teaching_years_exceeded if dqt_record.record.found? && !dqt_record.starting_teaching_year_eligible?
+        return :teaching_years_exceeded if dqt_record.record.found? && dqt_record.qts_years_exceeded?
+        :teaching_years_too_early if dqt_record.record.found? && dqt_record.qts_years_too_early?
       end
 
       private
