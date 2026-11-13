@@ -123,7 +123,7 @@ module EarlyYearsTeachersFinancialIncentivePayments
 
       headers = CSV.foreach(body_io).first
 
-      if headers != RowParser::HEADERS
+      if headers&.tally != RowParser::HEADERS.tally
         file_upload.update(
           upload_errors: [
             "Headers must be #{RowParser::HEADERS.join(", ")}"
