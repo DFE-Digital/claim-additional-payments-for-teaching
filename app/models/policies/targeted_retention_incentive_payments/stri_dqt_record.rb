@@ -7,33 +7,22 @@ module Policies
         @record = record
       end
 
-      def qts_award_date
-        record.qts_award_date
-      end
-
-      # return an AcademicYear
-      # based on academic_date determine the relevant AcademicYear
-      # for eligibility purposes
-      def academic_year_started_teaching
-        AcademicYear.for(qts_award_date)
-      end
-
       # QTS award date must be before the AY window opens
       # AND be within 5 years
       def qts_years_exceeded?
-        return true if academic_year_started_teaching.blank?
+        return true if academic_year_awarded_qts.blank?
 
         current_academic_year = Journeys::SchoolTargetedRetentionIncentivePayments.configuration.current_academic_year
 
-        academic_year_started_teaching.start_year < (current_academic_year - 5).start_year
+        academic_year_awarded_qts.start_year < (current_academic_year - 5).start_year
       end
 
       def qts_years_too_early?
-        return true if academic_year_started_teaching.blank?
+        return true if academic_year_awarded_qts.blank?
 
         current_academic_year = Journeys::SchoolTargetedRetentionIncentivePayments.configuration.current_academic_year
 
-        academic_year_started_teaching.start_year >= current_academic_year.start_year
+        academic_year_awarded_qts.start_year >= current_academic_year.start_year
       end
 
       def qualification_eligible?
@@ -55,6 +44,16 @@ module Policies
         ).pluck(:subject_code)
 
         (DqtRecord::ELIGIBLE_CODES & degree_codes).any?
+      end
+
+      private
+
+      def qts_award_date
+        record.qts_award_date
+      end
+
+      def academic_year_awarded_qts
+        AcademicYear.for(qts_award_date)
       end
     end
   end
