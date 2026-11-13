@@ -34,6 +34,10 @@ module Journeys
         confirmed == "no"
       end
 
+      def flash_message
+        true if confirmed == "yes"
+      end
+
       def redirect_to
         claim_path(journey.routing_name, "upload-employment-proof")
       end

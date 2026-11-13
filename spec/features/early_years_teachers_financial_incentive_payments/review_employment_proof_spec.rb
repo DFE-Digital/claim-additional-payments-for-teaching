@@ -52,8 +52,23 @@ RSpec.feature "EYTFI review employment proof preview", feature_flag: [:eytfi_jou
     click_button "Upload"
 
     expect(page).to have_text("Check your document")
+    expect(page).not_to have_text("Document uploaded successfully")
     expect(page).to have_css("img[alt='employment_proof.png']")
     expect(page).not_to have_css("a", text: "employment_proof.png")
+  end
+
+  scenario "confirming the document shows a success message on the next page" do
+    navigate_to_upload_page
+
+    attach_file "Upload document", Rails.root.join("spec/fixtures/files/employment_proof.png")
+    click_button "Upload"
+
+    choose "Yes, add this file"
+    click_button "Continue"
+
+    expect(page).not_to have_text("Check your document")
+    expect(page).to have_text("Document uploaded successfully")
+    expect(page).to have_text("We’ll review your document to confirm where you work")
   end
 
   scenario "uploading a PDF shows a link instead of an inline preview on the review page" do

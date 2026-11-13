@@ -78,6 +78,7 @@ module FormSubmittable
           @form.journey_session.steps << @navigator.current_slug
           @form.journey_session.save!
 
+          flash[:success] = @form.flash_message if @form.flash_message
           redirect_to_next_slug
         elsif @form.redirect?
           flash[:notice] = @form.flash_message if @form.flash_message
