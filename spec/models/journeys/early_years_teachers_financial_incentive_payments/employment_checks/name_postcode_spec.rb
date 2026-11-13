@@ -30,7 +30,7 @@ RSpec.describe(
       :eligible_eytfi_provider,
       name: setting_name,
       postcode: setting_postcode,
-      paye_reference: setting_paye_reference,
+      paye_reference: Array(setting_paye_reference),
       multiple_nurseries: setting_multiple_nurseries
     )
     described_class.new(setting: setting, employments: employments)
