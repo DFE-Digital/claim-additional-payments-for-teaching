@@ -57,7 +57,10 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
             "trainingStartDate" => "2014-09-30",
             "trainingEndDate" => nil,
             "trainingSubjects" => [
-              {name: "Computer Science"}
+              {
+                name: "Computer Science",
+                reference: "123"
+              }
             ],
             "trainingAgeSpecialism" => {
               "type" => "Range"
