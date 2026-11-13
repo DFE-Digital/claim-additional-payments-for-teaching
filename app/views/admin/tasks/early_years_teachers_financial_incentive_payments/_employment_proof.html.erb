@@ -28,7 +28,7 @@
 
     <% summary_list.with_row do |row| %>
       <% row.with_key { "Employer PAYE reference" } %>
-      <% row.with_value { provider.paye_reference } %>
+      <% row.with_value { provider.paye_reference.join(" ") } %>
     <% end %>
 
     <% summary_list.with_row do |row| %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_10_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_13_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -355,7 +355,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_120000) do
     t.integer "max_claims", default: 5, null: false
     t.boolean "multiple_nurseries"
     t.text "name", null: false
-    t.text "paye_reference"
+    t.jsonb "paye_reference", default: [], null: false
     t.text "postcode", null: false
     t.text "registered_person_name"
     t.citext "sanitised_name", default: "", null: false

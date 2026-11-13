@@ -31,7 +31,7 @@ RSpec.describe(
       :eligible_eytfi_provider,
       name: setting_name,
       postcode: setting_postcode,
-      paye_reference: setting_paye_reference
+      paye_reference: Array(setting_paye_reference)
     )
     described_class.new(
       setting: setting,
@@ -78,7 +78,7 @@ RSpec.describe(
       setting = create(
         :eligible_eytfi_provider,
         name: "Oak Tree Nursery", postcode: "SW1A 1AA",
-        registered_person_name: "Oak Tree Nursery", paye_reference: "123/AB456"
+        registered_person_name: "Oak Tree Nursery", paye_reference: ["123/AB456"]
       )
 
       check = described_class.new(
@@ -101,7 +101,7 @@ RSpec.describe(
       setting = create(
         :eligible_eytfi_provider,
         name: "Oak Tree Nursery", postcode: "SW1A 1AA",
-        registered_person_name: "Oak Tree Nursery", paye_reference: "123/AB456"
+        registered_person_name: "Oak Tree Nursery", paye_reference: ["123/AB456"]
       )
 
       check = described_class.new(
@@ -121,7 +121,7 @@ RSpec.describe(
       setting = create(
         :eligible_eytfi_provider,
         name: "Oak Tree Nursery", postcode: "SW1A 1AA",
-        registered_person_name: "Oak Tree Nursery", paye_reference: "123/AB456"
+        registered_person_name: "Oak Tree Nursery", paye_reference: ["123/AB456"]
       )
       create(
         :eligible_eytfi_provider, file_upload: setting.file_upload,
@@ -154,7 +154,7 @@ RSpec.describe(
       setting = create(
         :eligible_eytfi_provider,
         name: "Oak Tree Nursery", postcode: "SW1A 1AA",
-        registered_person_name: "Oak Group", paye_reference: "123/AB456"
+        registered_person_name: "Oak Group", paye_reference: ["123/AB456"]
       )
 
       check = described_class.new(
@@ -245,13 +245,13 @@ RSpec.describe(
       setting = create(
         :eligible_eytfi_provider,
         name: "Oak Tree Nursery", postcode: "SW1A 1AA",
-        paye_reference: "123/AB456", registered_person_name: "Oak Group",
+        paye_reference: ["123/AB456"], registered_person_name: "Oak Group",
         multiple_nurseries: true, eligible: true
       )
       create(
         :eligible_eytfi_provider, file_upload: setting.file_upload,
         registered_person_name: "Oak Group", eligible: false,
-        paye_reference: "999/ZZ999"
+        paye_reference: ["999/ZZ999"]
       )
       check = described_class.new(
         setting: setting, hmrc_response_status: 200,
@@ -282,7 +282,7 @@ RSpec.describe(
       setting = create(
         :eligible_eytfi_provider,
         name: "Oak Tree Nursery", postcode: "SW1A 1AA",
-        paye_reference: "123/AB456", registered_person_name: "Oak Group",
+        paye_reference: ["123/AB456"], registered_person_name: "Oak Group",
         multiple_nurseries: true
       )
       create(

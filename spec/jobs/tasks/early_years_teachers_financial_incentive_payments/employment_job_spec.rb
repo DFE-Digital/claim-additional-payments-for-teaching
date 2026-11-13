@@ -59,7 +59,7 @@ RSpec.describe(
 
     nursery = create(
       :eligible_eytfi_provider,
-      paye_reference: "123/AB456"
+      paye_reference: ["123/AB456"]
     )
 
     claim = create(
@@ -98,7 +98,7 @@ RSpec.describe(
     FeatureFlag.enable!(:eytrp_hmrc_integration)
 
     nursery = create(
-      :eligible_eytfi_provider, paye_reference: "123/AB456",
+      :eligible_eytfi_provider, paye_reference: ["123/AB456"],
       registered_person_name: "Oak Group", multiple_nurseries: true
     )
 
@@ -357,7 +357,7 @@ RSpec.describe(
 
   it "creates a passing task if a subsequent attempt succeeds" do
     FeatureFlag.enable!(:eytrp_hmrc_integration)
-    nursery = create(:eligible_eytfi_provider, paye_reference: "123/AB456")
+    nursery = create(:eligible_eytfi_provider, paye_reference: ["123/AB456"])
     claim = create(
       :claim,
       policy: Policies::EarlyYearsTeachersFinancialIncentivePayments,
