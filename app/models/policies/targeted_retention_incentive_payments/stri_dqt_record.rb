@@ -11,23 +11,11 @@ module Policies
         record.qts_award_date
       end
 
-      # returns a date
-      # relevant date of qualification for eligibility purposes
-      # different qualifications use different date data point
-      def academic_date
-        record.held_routes_to_professional_statuses.map do |route|
-          case route.qualification
-          when :undergraduate_itt, :assessment_only, :overseas_recognition, :postgraduate_itt
-            return qts_award_date
-          end
-        end.compact.max
-      end
-
       # return an AcademicYear
       # based on academic_date determine the relevant AcademicYear
       # for eligibility purposes
       def academic_year_started_teaching
-        AcademicYear.for(record.qts_award_date)
+        AcademicYear.for(qts_award_date)
       end
 
       # QTS award date must be before the AY window opens
