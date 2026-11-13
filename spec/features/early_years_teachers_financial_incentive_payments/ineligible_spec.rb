@@ -190,6 +190,11 @@ RSpec.feature "EYTFI journey ineligible paths", feature_flag: [:eytfi_journey] d
     include_examples "stub_teacher_auth"
 
     scenario "double submission" do
+      allow(mock_teacher_resource).to receive(:find_raw).with(
+        "1234567",
+        include: "alerts,induction,routesToProfessionalStatuses"
+      ).and_return({})
+
       create(
         :eligible_eytfi_provider,
         name: "Springfield nursery"

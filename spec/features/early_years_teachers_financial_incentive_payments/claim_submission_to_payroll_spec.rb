@@ -6,6 +6,20 @@ RSpec.describe "Full end to end EYTRP", feature_flag: [:eytfi_journey] do
   let(:claimant_date_of_birth) { Date.new(1970, 12, 13) }
 
   before do
+    stub_qualified_teaching_statuses_show(
+      trn: "1234567",
+      body: {
+        routesToProfessionalStatuses: [
+          {
+            routeToProfessionalStatusType: {name: "EYTS ITT Migrated"},
+            status: "Holds",
+            trainingStartDate: "2019-09-01",
+            holdsFrom: "2020-07-01"
+          }
+        ]
+      }
+    )
+
     create(
       :journey_configuration,
       :early_years_teachers_financial_incentive_payments,
@@ -180,6 +194,14 @@ RSpec.describe "Full end to end EYTRP", feature_flag: [:eytfi_journey] do
     expect(page).to have_content(
       "This task was performed by an automated check on 28 May 2026"
     )
+    within ".hmcts-timeline" do
+      expect(page).to have_content("[DQT Qualifications]")
+      expect(page).to have_content("Qualification name: EYTS ITT Migrated")
+      expect(page).to have_content("Qualification status: Holds")
+      expect(page).to have_content("Qualification start date: 2019-09-01")
+      expect(page).to have_content("Qualification award date: 2020-07-01")
+      expect(page).to have_content("by an automated check")
+    end
     click_on "Next"
 
     expect(page).to have_content("Do you want to accept this evidence?")
