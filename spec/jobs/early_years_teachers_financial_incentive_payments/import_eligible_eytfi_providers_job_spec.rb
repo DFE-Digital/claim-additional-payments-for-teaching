@@ -27,14 +27,14 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
     expect(providers.find_by!(urn: "123456")).to have_attributes(
       registered_person_name: "example ltd",
       telephone_number: "01234567890",
-      paye_reference: ["123/AB456"],
+      paye_references: ["123/AB456"],
       multiple_nurseries: true
     )
 
     expect(providers.find_by!(urn: "EY234567")).to have_attributes(
       registered_person_name: nil,
       telephone_number: nil,
-      paye_reference: [],
+      paye_references: [],
       multiple_nurseries: nil
     )
   end
@@ -49,7 +49,7 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
         subject.perform(file_upload)
 
         provider = Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider.find_by!(urn: "123456")
-        expect(provider.paye_reference).to eq(["475HB32613", "9612701970"])
+        expect(provider.paye_references).to eq(["475HB32613", "9612701970"])
         expect(file_upload.reload.completed_processing_at).to be_present
       end
     end
@@ -60,7 +60,7 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
       subject.perform(file_upload)
 
       provider = Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider.find_by!(urn: "123456")
-      expect(provider.paye_reference).to eq([])
+      expect(provider.paye_references).to eq([])
       expect(file_upload.reload.completed_processing_at).to be_present
     end
 
@@ -98,7 +98,7 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
           copd: false,
           registered_person_name: "example ltd",
           telephone_number: "01234567890",
-          paye_reference: ["123/AB456"],
+          paye_references: ["123/AB456"],
           multiple_nurseries: true
         )
         expect(file_upload.reload.upload_errors).to be_blank
@@ -230,7 +230,7 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
     it "ignores blank and n/a lines and trims PAYE references" do
       row["PAYE reference"] = " 475HB32613 \r\n\r\n n/a \r\n9612701970\n"
 
-      expect(subject.to_provider(file_upload: build(:file_upload)).paye_reference).to eq([
+      expect(subject.to_provider(file_upload: build(:file_upload)).paye_references).to eq([
         "475HB32613", "9612701970"
       ])
     end
@@ -277,7 +277,7 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
         copd: false,
         registered_person_name: nil,
         telephone_number: nil,
-        paye_reference: [],
+        paye_references: [],
         multiple_nurseries: nil
       )
     end
