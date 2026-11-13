@@ -46,7 +46,7 @@ module Policies
 
         current_academic_year = Journeys::SchoolTargetedRetentionIncentivePayments.configuration.current_academic_year
 
-        academic_year_started_teaching.start_year >= (current_academic_year).start_year
+        academic_year_started_teaching.start_year >= current_academic_year.start_year
       end
 
       def qualification_eligible?
