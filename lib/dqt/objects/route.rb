@@ -50,11 +50,18 @@ module Dqt
       eligible_qualification_names.include?(routeToProfessionalStatusType.name.downcase)
     end
 
-    def eligible_stri_subject?
+    def eligible_stri_subject_by_name?
       eligible_subject_names = Dqt::Matchers::TargetedRetentionIncentivePayments::ELIGIBLE_ITT_SUBJECTS.values.flatten.map(&:downcase)
       studied_subject_names = subjects.map(&:name).map(&:downcase)
 
       (eligible_subject_names & studied_subject_names).any?
+    end
+
+    def eligible_stri_subject_by_code?
+      eligible_subject_codes = Policies::TargetedRetentionIncentivePayments::DqtRecord::ELIGIBLE_CODES.map(&:downcase)
+      studied_subject_codes = subjects.map(&:reference).map(&:downcase)
+
+      (eligible_subject_codes & studied_subject_codes).any?
     end
   end
 end

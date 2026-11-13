@@ -57,7 +57,7 @@ module Policies
 
       def subject_eligible?
         record.held_routes_to_professional_statuses.any? do |route|
-          route.eligible_stri_subject?
+          route.eligible_stri_subject_by_code? || route.eligible_stri_subject_by_name?
         end
       end
 
