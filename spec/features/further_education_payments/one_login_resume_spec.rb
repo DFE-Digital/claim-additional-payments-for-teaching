@@ -287,7 +287,6 @@ RSpec.feature "Further education payments" do
     check("Building and construction")
     check("Chemistry")
     check("Computing, including digital and ICT")
-    check("Early years")
     check("Engineering and manufacturing, including transport engineering and electronics")
     check("Maths")
     check("Physics")
@@ -303,10 +302,6 @@ RSpec.feature "Further education payments" do
 
     expect(page).to have_content("Which computing courses do you teach?")
     check "T Level in digital support services"
-    click_button "Continue"
-
-    expect(page).to have_content("Which early years courses do you teach?")
-    check "T Level in education and early years (early years educator)"
     click_button "Continue"
 
     expect(page).to have_content("Which engineering and manufacturing courses do you teach?")
@@ -326,7 +321,6 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("T Level in building services engineering for construction")
     expect(page).to have_content("GCSE chemistry")
     expect(page).to have_content("T Level in digital support services")
-    expect(page).to have_content("T Level in education and early years (early years educator)")
     expect(page).to have_content("T Level in design and development for engineering and manufacturing")
     expect(page).to have_content("Qualifications approved for funding at level 3 and below in the")
     expect(page).to have_content("A or AS level physics")

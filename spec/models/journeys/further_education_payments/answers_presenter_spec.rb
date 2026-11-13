@@ -52,15 +52,6 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
       ]
     }
 
-    let(:early_years_courses) {
-      %w[
-        eylevel2
-        eylevel3
-        eytlevel
-        coursetoeyq
-      ]
-    }
-
     let(:engineering_manufacturing_courses) {
       %w[
         approved_level_321_engineering
@@ -106,7 +97,6 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
         building_construction_courses: building_construction_courses,
         chemistry_courses: chemistry_courses,
         computing_courses: computing_courses,
-        early_years_courses: early_years_courses,
         engineering_manufacturing_courses: engineering_manufacturing_courses,
         maths_courses: maths_courses,
         physics_courses: physics_courses
@@ -157,12 +147,6 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
             "<p class=\"govuk-body\">IBO level 3 SL and HL computer science, taught as part of a diploma or career related programme or as a standalone certificate</p>" \
             "<p class=\"govuk-body\">Level 2 or level 3 apprenticeships in the digital occupational map</p>",
             "computing-courses"],
-          ["Early years courses",
-            "<p class=\"govuk-body\">Early years practitioner (level 2) apprenticeship</p>" \
-            "<p class=\"govuk-body\">Early years educator (level 3) apprenticeship</p>" \
-            "<p class=\"govuk-body\">T Level in education and early years (early years educator)</p>" \
-            "<p class=\"govuk-body\">Early years qualifications at Level 3 and below that allow providers to count the recipient in staff‑to‑child ratios and are listed in the eligibility criteria</p>",
-            "early-years-courses"],
           ["Engineering and manufacturing courses",
             "<p class=\"govuk-body\">Qualifications approved for funding at level 3 and below in the engineering sector subject area</p>" \
             "<p class=\"govuk-body\">Qualifications approved for funding at level 3 and below in the manufacturing technologies sector subject area</p>" \
@@ -226,12 +210,12 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
     end
 
     context "subjects-taught - all of them" do
-      let(:subjects_taught) { %w[building_construction chemistry computing early_years engineering_manufacturing maths physics] }
+      let(:subjects_taught) { %w[building_construction chemistry computing engineering_manufacturing maths physics] }
 
       it {
         is_expected.to include([
           "Which subject areas do you teach?",
-          "<p class=\"govuk-body\">Building and construction</p><p class=\"govuk-body\">Chemistry</p><p class=\"govuk-body\">Computing, including digital and ICT</p><p class=\"govuk-body\">Early years</p><p class=\"govuk-body\">Engineering and manufacturing, including transport engineering and electronics</p><p class=\"govuk-body\">Maths</p><p class=\"govuk-body\">Physics</p>",
+          "<p class=\"govuk-body\">Building and construction</p><p class=\"govuk-body\">Chemistry</p><p class=\"govuk-body\">Computing, including digital and ICT</p><p class=\"govuk-body\">Engineering and manufacturing, including transport engineering and electronics</p><p class=\"govuk-body\">Maths</p><p class=\"govuk-body\">Physics</p>",
           "subjects-taught"
         ])
       }
