@@ -52,6 +52,58 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
       expect(file_upload.reload.completed_processing_at).to be_present
     end
 
+    context "when columns are in a different order" do
+      before do
+        rows = CSV.parse(file_upload.body)
+        file_upload.update!(body: CSV.generate { |csv| rows.each { |row| csv << row.reverse } })
+      end
+
+      it "imports providers with values matched to their column names" do
+        expect {
+          subject.perform(file_upload)
+        }.to change(Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider, :count).by(2)
+
+        provider = Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider.find_by!(urn: "123456")
+        expect(provider).to have_attributes(
+          name: "Nursery 123456",
+          address_line_1: "1 Some Road",
+          town: "London",
+          postcode: "EC1N 2TD",
+          eligible: true,
+          max_claims: 5,
+          copd: false,
+          registered_person_name: "example ltd",
+          telephone_number: "01234567890",
+          paye_reference: "123/AB456",
+          multiple_nurseries: true
+        )
+        expect(file_upload.reload.upload_errors).to be_blank
+        expect(file_upload.completed_processing_at).to be_present
+      end
+    end
+
+    described_class::RowParser::HEADERS.each do |header|
+      context "when the #{header} column is missing" do
+        before do
+          rows = CSV.parse(file_upload.body)
+          column_index = rows.first.index(header)
+          rows.each { |row| row.delete_at(column_index) }
+          file_upload.update!(body: CSV.generate { |csv| rows.each { |row| csv << row } })
+        end
+
+        it "rejects the upload" do
+          expect {
+            subject.perform(file_upload)
+          }.not_to change(Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider, :count)
+
+          expect(file_upload.reload.upload_errors).to eq([
+            "Headers must be #{described_class::RowParser::HEADERS.join(", ")}"
+          ])
+          expect(file_upload.completed_processing_at).to be_nil
+        end
+      end
+    end
+
     context "job runs twice" do
       it "does not duplicate records" do
         expect {
