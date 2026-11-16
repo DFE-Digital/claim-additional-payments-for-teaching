@@ -23,14 +23,14 @@ RSpec.describe(
     employments: [employment],
     setting_name: "Oak Tree Nursery",
     setting_postcode: "SW1A 1AA",
-    setting_paye_reference: nil,
+    setting_paye_references: nil,
     setting_multiple_nurseries: nil
   )
     setting = build(
       :eligible_eytfi_provider,
       name: setting_name,
       postcode: setting_postcode,
-      paye_reference: setting_paye_reference,
+      paye_references: Array(setting_paye_references),
       multiple_nurseries: setting_multiple_nurseries
     )
     described_class.new(setting: setting, employments: employments)

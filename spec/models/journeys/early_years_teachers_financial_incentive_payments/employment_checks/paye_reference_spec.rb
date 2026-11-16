@@ -23,22 +23,77 @@ RSpec.describe(
     employments: [employment],
     setting_name: "Oak Tree Nursery",
     setting_postcode: "SW1A 1AA",
-    setting_paye_reference: nil,
+    setting_paye_references: nil,
     setting_multiple_nurseries: nil
   )
     setting = build(
       :eligible_eytfi_provider,
       name: setting_name,
       postcode: setting_postcode,
-      paye_reference: setting_paye_reference,
+      paye_references: Array(setting_paye_references),
       multiple_nurseries: setting_multiple_nurseries
     )
     described_class.new(setting: setting, employments: employments)
   end
 
   describe "#usable? and #result" do
+    it "matches PAYE references ignoring case, whitespace and slashes", :aggregate_failures do
+      [
+        ["475hb32613", "475HB32613"],
+        ["475HB32613", "475hb32613"],
+        [" 475\tHB\n32613\r ", "475HB32613"],
+        ["475HB32613", " 475\tHB\n32613\r "],
+        ["475 hb32613", "475\u00a0Hb32613"],
+        ["901AA001", "901/AA001"],
+        ["901/AA001", "901AA001"],
+        [" 901 / aa001 ", "901AA001"]
+      ].each do |nursery_reference, hmrc_reference|
+        check = check_for(
+          setting_paye_references: ["999/ZZ999", nursery_reference],
+          employments: [employment(paye_reference: hmrc_reference)]
+        )
+
+        aggregate_failures("#{nursery_reference.inspect} against #{hmrc_reference.inspect}") do
+          expect(check.usable?).to be(true)
+          expect(check.result).to have_attributes(passed?: true)
+        end
+      end
+    end
+
+    it "does not match references that are empty after removing whitespace and slashes" do
+      check = check_for(
+        setting_paye_references: [nil, "", "\t\n\r", "/"],
+        employments: [employment(paye_reference: "\u00a0/\t")]
+      )
+
+      expect(check.usable?).to be(false)
+      expect(check.result).to be_nil
+    end
+
+    ["475HB32613", "9612701970"].each do |reference|
+      it "matches nursery PAYE reference #{reference}" do
+        check = check_for(
+          setting_paye_references: ["475HB32613", "9612701970"],
+          employments: [employment(paye_reference: reference)]
+        )
+
+        expect(check.usable?).to be(true)
+        expect(check.result.passed?).to be(true)
+      end
+    end
+
+    it "does not match a substring of a nursery PAYE reference" do
+      check = check_for(
+        setting_paye_references: ["475HB32613", "9612701970"],
+        employments: [employment(paye_reference: "475HB")]
+      )
+
+      expect(check.usable?).to be(false)
+      expect(check.result).to be_nil
+    end
+
     it "is unusable when there are no employments" do
-      check = check_for(setting_paye_reference: "123/AB456", employments: [])
+      check = check_for(setting_paye_references: "123/AB456", employments: [])
 
       expect(check.usable?).to be(false)
       expect(check.result).to be_nil
@@ -46,7 +101,7 @@ RSpec.describe(
 
     it "matches a later PAYE reference without requiring employer names or addresses" do
       check = check_for(
-        setting_paye_reference: "123/AB456",
+        setting_paye_references: "123/AB456",
         employments: [
           {"employer" => {"payeReference" => "999/ZZ999"}},
           {"employer" => {"payeReference" => "123/AB456"}}
@@ -61,7 +116,7 @@ RSpec.describe(
 
     it "does not match a different PAYE reference" do
       check = check_for(
-        setting_paye_reference: "123/AB456",
+        setting_paye_references: "123/AB456",
         employments: [employment(paye_reference: "999/ZZ999")]
       )
 
@@ -71,7 +126,7 @@ RSpec.describe(
 
     it "fails a matching PAYE reference when the registered person has an ineligible nursery" do
       setting = create(
-        :eligible_eytfi_provider, paye_reference: "123/AB456",
+        :eligible_eytfi_provider, paye_references: ["123/AB456"],
         registered_person_name: "Oak Group", multiple_nurseries: true
       )
       create(
@@ -97,7 +152,7 @@ RSpec.describe(
 
     it "does not match empty PAYE references" do
       check = check_for(
-        setting_paye_reference: "",
+        setting_paye_references: "",
         employments: [employment(name: "Willow Grove", paye_reference: "")]
       )
 
@@ -107,7 +162,7 @@ RSpec.describe(
 
     it "does not match whitespace only PAYE references" do
       check = check_for(
-        setting_paye_reference: " ",
+        setting_paye_references: " ",
         employments: [employment(name: "Willow Grove", paye_reference: " ")]
       )
 
@@ -117,7 +172,7 @@ RSpec.describe(
 
     it "does not match when HMRC omits the PAYE reference" do
       check = check_for(
-        setting_paye_reference: "123/AB456",
+        setting_paye_references: "123/AB456",
         employments: [employment(name: "Willow Grove")]
       )
 
@@ -127,7 +182,7 @@ RSpec.describe(
 
     it "fails for an ineligible companion when the multiple flag is false" do
       setting = create(
-        :eligible_eytfi_provider, paye_reference: "123/AB456",
+        :eligible_eytfi_provider, paye_references: ["123/AB456"],
         registered_person_name: "Oak Group", multiple_nurseries: false
       )
       create(
@@ -148,7 +203,7 @@ RSpec.describe(
 
     it "fails for an ineligible companion when the multiple flag is unset" do
       setting = create(
-        :eligible_eytfi_provider, paye_reference: "123/AB456",
+        :eligible_eytfi_provider, paye_references: ["123/AB456"],
         registered_person_name: "Oak Group", multiple_nurseries: nil
       )
       create(
@@ -170,7 +225,7 @@ RSpec.describe(
     it "does not group nurseries with missing registered person names" do
       setting = create(
         :eligible_eytfi_provider,
-        paye_reference: "123/AB456",
+        paye_references: ["123/AB456"],
         registered_person_name: nil
       )
       create(
@@ -190,7 +245,7 @@ RSpec.describe(
 
     it "passes when all nurseries for the registered person are eligible" do
       setting = create(
-        :eligible_eytfi_provider, paye_reference: "123/AB456", eligible: true,
+        :eligible_eytfi_provider, paye_references: ["123/AB456"], eligible: true,
         registered_person_name: "Oak Group", multiple_nurseries: true
       )
       create(
@@ -213,7 +268,7 @@ RSpec.describe(
 
     it "passes when the registered person has only one eligible nursery" do
       setting = create(
-        :eligible_eytfi_provider, paye_reference: "123/AB456", eligible: true,
+        :eligible_eytfi_provider, paye_references: ["123/AB456"], eligible: true,
         registered_person_name: "Oak Group", multiple_nurseries: true
       )
       check = described_class.new(
@@ -228,7 +283,7 @@ RSpec.describe(
 
     it "ignores ineligible records from other upload versions" do
       setting = create(
-        :eligible_eytfi_provider, paye_reference: "123/AB456", eligible: true,
+        :eligible_eytfi_provider, paye_references: ["123/AB456"], eligible: true,
         registered_person_name: "Oak Group", multiple_nurseries: true
       )
       other_upload = create(:file_upload)

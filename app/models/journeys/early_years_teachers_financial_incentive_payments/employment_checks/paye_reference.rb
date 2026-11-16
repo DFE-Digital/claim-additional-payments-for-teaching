@@ -26,8 +26,8 @@ module Journeys
         end
 
         def usable?
-          employments.any? do
-            employer_paye_reference_matches?(it.fetch("employer"))
+          employments.any? do |employment|
+            employer_paye_reference_matches?(employment.fetch("employer"))
           end
         end
 
@@ -47,8 +47,17 @@ module Journeys
         end
 
         def employer_paye_reference_matches?(employer)
-          setting.paye_reference.present? &&
-            setting.paye_reference == employer["payeReference"]
+          employer_reference = normalise_paye_reference(employer["payeReference"])
+
+          return false if employer_reference.blank?
+
+          setting.paye_references.any? do |reference|
+            normalise_paye_reference(reference) == employer_reference
+          end
+        end
+
+        def normalise_paye_reference(reference)
+          reference.to_s.gsub(/[[:space:]\/]/, "").upcase
         end
       end
     end
