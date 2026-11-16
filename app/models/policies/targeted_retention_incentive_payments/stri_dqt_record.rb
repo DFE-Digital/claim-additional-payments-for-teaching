@@ -39,8 +39,7 @@ module Policies
 
       def degree_code_eligible?
         degree_codes = DqtHigherEducationQualification.where(
-          teacher_reference_number: record.teacher_reference_number,
-          date_of_birth: record.date_of_birth
+          teacher_reference_number: record.teacher_reference_number
         ).pluck(:subject_code)
 
         (DqtRecord::ELIGIBLE_CODES & degree_codes).any?
