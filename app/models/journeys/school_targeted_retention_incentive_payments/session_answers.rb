@@ -37,9 +37,14 @@ module Journeys
 
       def dqt_record
         @dqt_record ||= Policies::TargetedRetentionIncentivePayments::StriDqtRecord.new(
-          Dqt::Teacher.new(trs_data),
-          self
+          Dqt::Teacher.new(trs_data)
         )
+      end
+
+      def higher_education_qualifications
+        @higher_education_qualifications ||=
+          DqtHigherEducationQualification
+            .where(teacher_reference_number: teacher_auth_teacher_reference_number)
       end
     end
   end

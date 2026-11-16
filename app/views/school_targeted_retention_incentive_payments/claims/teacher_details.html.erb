@@ -33,11 +33,6 @@
         <% end %>
 
         <% summary_list.with_row do |row| %>
-          <% row.with_key { "Gender" } %>
-          <% row.with_value { "???" } %>
-        <% end %>
-
-        <% summary_list.with_row do |row| %>
           <% row.with_key { "Email address" } %>
           <% row.with_value { journey_session.answers.teacher_auth_email } %>
         <% end %>
@@ -46,6 +41,20 @@
       <h2 class="govuk-heading-m">
         Qualifications you hold
       </h2>
+
+      <% journey_session.answers.higher_education_qualifications.each do |he_qual| %>
+        <%= govuk_summary_list(actions: false) do |summary_list| %>
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { "Name" } %>
+            <% row.with_value { "Higher Education" } %>
+          <% end %>
+
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { "Subject" } %>
+            <% row.with_value { "#{he_qual.description.titleize} (#{he_qual.subject_code})" } %>
+          <% end %>
+        <% end %>
+      <% end %>
 
       <% journey_session.answers.dqt_record.record.held_routes_to_professional_statuses.each do |route| %>
         <%= govuk_summary_list(actions: false) do |summary_list| %>
@@ -60,30 +69,14 @@
           <% end %>
 
           <% summary_list.with_row do |row| %>
-            <% row.with_key { "Training start date" } %>
-            <% row.with_value { l(route.start_date) } %>
-          <% end %>
-
-          <% summary_list.with_row do |row| %>
-            <% row.with_key { "Valid from" } %>
-            <% row.with_value { l(route.holds_from) } %>
-          <% end %>
-
-          <% summary_list.with_row do |row| %>
             <% row.with_key { "Subjects" } %>
             <% row.with_value { route.subjects_formatted_s } %>
           <% end %>
-        <% end %>
-      <% end %>
 
-      <h2 class="govuk-heading-m">
-        Teaching details
-      </h2>
-
-      <%= govuk_summary_list(actions: false) do |summary_list| %>
-        <% summary_list.with_row do |row| %>
-          <% row.with_key { "Academic year started teaching" } %>
-          <% row.with_value { journey_session.answers.dqt_record.academic_year_started_teaching&.to_s(:long) } %>
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { "Awarded on" } %>
+            <% row.with_value { l(route.holds_from) } %>
+          <% end %>
         <% end %>
       <% end %>
 
