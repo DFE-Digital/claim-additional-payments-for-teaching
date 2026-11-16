@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
+RSpec.feature "Ineligible Teacher Student Loan Repayments claims", :testing_persona do
   include OmniauthMockHelper
   include StudentLoansHelper
 

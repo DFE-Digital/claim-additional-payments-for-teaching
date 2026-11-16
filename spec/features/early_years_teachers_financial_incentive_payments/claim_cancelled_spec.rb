@@ -1,6 +1,7 @@
 require "rails_helper"
 
-RSpec.describe "EYTFI - Claim cancelled", feature_flag: [:eytfi_journey] do
+# @journey EarlyYearsTeachersFinancialIncentivePayments
+RSpec.describe "EYTFI - Claim cancelled", :testing_persona, feature_flag: [:eytfi_journey] do
   let(:mock_teacher) do
     instance_double(
       "Dqt::Teacher",

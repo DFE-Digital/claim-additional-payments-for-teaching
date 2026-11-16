@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Teacher Student Loan Repayments claims" do
+RSpec.feature "Teacher Student Loan Repayments claims", :testing_persona do
   include StudentLoansHelper
 
   let!(:journey_configuration) { create(:journey_configuration, :student_loans) }

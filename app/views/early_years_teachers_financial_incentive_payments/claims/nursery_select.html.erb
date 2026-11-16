@@ -34,7 +34,7 @@
           :nursery_id,
           f.object.radio_options,
           :id, ->(option) { "#{option.name} #{' (closed)' if option.closed?}" },
-          :address,
+          :selection_address,
           legend: {
             text: @form.t(:title),
             tag: "h1",

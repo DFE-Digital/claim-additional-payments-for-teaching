@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "teacher route: completing the form" do
+RSpec.describe "teacher route: completing the form", :testing_persona do
   include GetATeacherRelocationPayment::StepHelpers
 
   let(:journey_configuration) do
@@ -26,7 +26,9 @@ RSpec.describe "teacher route: completing the form" do
 
   describe "navigating forward", flaky: true do
     before do
-      when_i_start_the_form
+      visit Journeys::GetATeacherRelocationPayment::SlugSequence.start_page_url
+
+      click_link("Start")
       and_i_complete_the_previous_irp_payment_question_with(option: "Yes")
       and_i_complete_application_route_question_with(
         option: "I am employed as a teacher in a school in England"
@@ -49,7 +51,7 @@ RSpec.describe "teacher route: completing the form" do
 
     context "change answers" do
       it "returns to check answers after changing answer" do
-        when_i_click_back_link
+        click_link "Back"
         then_i_change_answer("Change have you had any breaks in employment during the last 3 academic terms?")
         and_i_complete_breaks_in_employment_with(option: "No")
         then_the_check_your_answers_part_one_page_shows
