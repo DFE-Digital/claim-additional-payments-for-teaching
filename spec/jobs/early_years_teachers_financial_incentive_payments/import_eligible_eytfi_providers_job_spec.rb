@@ -40,6 +40,16 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
   end
 
   describe "#perform" do
+    it "imports n/a PAYE references as blank" do
+      file_upload.update!(body: file_upload.body.sub("123/AB456", "n/a"))
+
+      subject.perform(file_upload)
+
+      provider = Policies::EarlyYearsTeachersFinancialIncentivePayments::EligibleEytfiProvider.find_by!(urn: "123456")
+      expect(provider.paye_reference).to be_nil
+      expect(file_upload.reload.completed_processing_at).to be_present
+    end
+
     it "creates eytfi provider" do
       expect {
         subject.perform(file_upload)
@@ -194,6 +204,71 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
   end
 
   subject { described_class.new(row:) }
+
+  describe "n/a values" do
+    let(:row) do
+      CSV.parse(
+        file_fixture("eligible_eytfi_providers.csv").read,
+        headers: true
+      ).first
+    end
+
+    [
+      "Provider URN",
+      "Provider name",
+      "Provider address line 1",
+      "Provider town",
+      "Postcode",
+      "Eligible"
+    ].each do |header|
+      it "rejects n/a in the required #{header} field" do
+        row[header] = "n/a"
+
+        expect(subject).not_to be_valid
+
+        expect(subject.errors[header]).to include("can't be blank")
+      end
+    end
+
+    it "treats optional n/a values as blank, including defaults and conditional validations" do
+      [
+        "Provider address line 2",
+        "Provider address line 3",
+        "Max claims",
+        "COPD",
+        "Registered person name",
+        "Telephone number",
+        "PAYE reference",
+        "Multiple nurseries?"
+      ].each do |header|
+        row[header] = "n/a"
+      end
+
+      expect(subject).to be_valid
+
+      expect(
+        subject.to_provider(file_upload: build(:file_upload))
+      ).to have_attributes(
+        address_line_2: nil,
+        address_line_3: nil,
+        max_claims: 5,
+        copd: false,
+        registered_person_name: nil,
+        telephone_number: nil,
+        paye_reference: nil,
+        multiple_nurseries: nil
+      )
+    end
+
+    it "requires a boolean when the multiple nurseries field is n/a and a registered person is present" do
+      row["Multiple nurseries?"] = "n/a"
+
+      expect(subject).not_to be_valid
+      expect(
+        subject.errors["Multiple nurseries?"]
+      ).to include("must be TRUE or FALSE")
+    end
+  end
 
   describe "registered person details" do
     it "accepts false when a registered person is present" do
