@@ -12,7 +12,8 @@ RSpec.feature "EYTFI journey", feature_flag: [:eytfi_journey] do
   let(:mock_teacher_resource) do
     instance_double(
       "Dqt::TeacherResource",
-      find: mock_teacher
+      find: mock_teacher,
+      find_raw: {}
     )
   end
 

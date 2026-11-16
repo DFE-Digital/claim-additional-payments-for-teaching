@@ -9,10 +9,7 @@ class ClaimVerifierJob < ApplicationJob
   private
 
   def dqt_teacher_status(claim)
-    return if claim.policy.in?([
-      Policies::EarlyYearsPayments,
-      Policies::EarlyYearsTeachersFinancialIncentivePayments
-    ])
+    return if claim.policy.in?([Policies::EarlyYearsPayments])
 
     if !claim.has_dqt_record? && claim.eligibility.teacher_reference_number.present?
       dqt_teacher_status = Dqt::Client.new.teacher.find_raw(
