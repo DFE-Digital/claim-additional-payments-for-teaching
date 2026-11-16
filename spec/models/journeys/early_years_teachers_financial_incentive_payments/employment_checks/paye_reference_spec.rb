@@ -37,6 +37,36 @@ RSpec.describe(
   end
 
   describe "#usable? and #result" do
+    it "matches PAYE references ignoring case and whitespace", :aggregate_failures do
+      [
+        ["475hb32613", "475HB32613"],
+        ["475HB32613", "475hb32613"],
+        [" 475\tHB\n32613\r ", "475HB32613"],
+        ["475HB32613", " 475\tHB\n32613\r "],
+        ["475 hb32613", "475\u00a0Hb32613"]
+      ].each do |nursery_reference, hmrc_reference|
+        check = check_for(
+          setting_paye_references: ["999/ZZ999", nursery_reference],
+          employments: [employment(paye_reference: hmrc_reference)]
+        )
+
+        aggregate_failures("#{nursery_reference.inspect} against #{hmrc_reference.inspect}") do
+          expect(check.usable?).to be(true)
+          expect(check.result).to have_attributes(passed?: true)
+        end
+      end
+    end
+
+    it "does not match references that are empty after removing whitespace" do
+      check = check_for(
+        setting_paye_references: [nil, "", "\t\n\r"],
+        employments: [employment(paye_reference: "\u00a0\t")]
+      )
+
+      expect(check.usable?).to be(false)
+      expect(check.result).to be_nil
+    end
+
     ["475HB32613", "9612701970"].each do |reference|
       it "matches nursery PAYE reference #{reference}" do
         check = check_for(
