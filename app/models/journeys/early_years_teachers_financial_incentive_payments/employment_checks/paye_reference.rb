@@ -57,7 +57,7 @@ module Journeys
         end
 
         def normalise_paye_reference(reference)
-          reference.to_s.gsub(/[[:space:]]/, "").upcase
+          reference.to_s.gsub(/[[:space:]\/]/, "").upcase
         end
       end
     end
