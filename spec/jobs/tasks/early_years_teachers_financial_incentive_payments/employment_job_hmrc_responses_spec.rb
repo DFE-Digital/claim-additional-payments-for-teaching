@@ -27,6 +27,9 @@ RSpec.describe(
     allow_any_instance_of(
       Hmrc::Employments::Configuration
     ).to receive(:totp_secret) { "totpsecret" }
+
+    allow(Hmrc::Employments).to receive(:client)
+      .and_return(Hmrc::Employments::Client.new)
   end
 
   context "when the HMRC API call fails" do
