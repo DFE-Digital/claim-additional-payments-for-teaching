@@ -9,7 +9,7 @@ RSpec.feature "EYTFI feedback", feature_flag: [:eytfi_journey] do
   end
 
   scenario "claimant submits feedback" do
-    visit eytfi_guidance_path(
+    visit landing_page_path(
       journey: Journeys::EarlyYearsTeachersFinancialIncentivePayments.routing_name
     )
     expect(page).not_to have_css("a[target='_blank'][rel~='noreferrer']")
@@ -40,7 +40,7 @@ RSpec.feature "EYTFI feedback", feature_flag: [:eytfi_journey] do
     expect(feedback.email_address).to eql "claimant@example.com"
     expect(feedback.occupation).to eql "Teacher"
 
-    expect(feedback.origin).to eql "http://www.example.com/early-years-teachers-recognition-payments/guidance"
+    expect(feedback.origin).to eql "http://www.example.com/early-years-teachers-recognition-payments/landing-page"
     expect(feedback.claim_id).to be_nil
   end
 end
