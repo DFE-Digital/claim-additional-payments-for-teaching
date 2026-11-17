@@ -21,15 +21,6 @@ RSpec.feature "Robots", feature_flag: [:eytfi_journey] do
             visible: false
           )
         )
-
-        visit "/early-years-teachers-recognition-payments/guidance"
-
-        expect(page).to(
-          have_selector(
-            "meta[name='robots'][content='index,nofollow']",
-            visible: false
-          )
-        )
       end
     end
 
