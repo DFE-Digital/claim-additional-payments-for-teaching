@@ -59,5 +59,5 @@ DfE::Analytics.configure do |config|
 
   # Perform airbyte checks on startup and allow airbyte config generation
   environment_name = ENV["ENVIRONMENT_NAME"].to_s
-  config.airbyte_enabled = (environment_name.start_with?("review") || environment_name == "test") && ENV["BIGQUERY_AIRBYTE_DATASET"].present?
+  config.airbyte_enabled = environment_name.start_with?("review") || %w[test production].include?(environment_name)
 end
