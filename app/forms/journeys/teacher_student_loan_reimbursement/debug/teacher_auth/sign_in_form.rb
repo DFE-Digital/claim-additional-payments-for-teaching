@@ -55,7 +55,7 @@ module Journeys
           end
 
           def default_qts_award_date
-            Policies::StudentLoans::POLICY_START_YEAR.start_of_autumn_term
+            Policies::StudentLoans::POLICY_END_YEAR.start_of_autumn_term
           end
 
           def default_first_name
