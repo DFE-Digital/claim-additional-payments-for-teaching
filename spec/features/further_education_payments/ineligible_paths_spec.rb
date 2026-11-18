@@ -1138,6 +1138,43 @@ RSpec.feature "Further education payments ineligible paths" do
     )
   end
 
+  scenario "last years claim means this years claim falls outside started teaching window" do
+    when_further_education_payments_journey_configuration_exists
+    and_has_previous_claim_exceeding_teaching_years
+
+    visit landing_page_path(Journeys::FurtherEducationPayments.routing_name)
+    expect(page).to have_link("Start now")
+    click_link "Start now"
+
+    expect(page).to have_content("Do you have a")
+    choose "Yes"
+    click_button "Continue"
+
+    mock_one_login_auth(uid: "ABC123")
+
+    expect(page).to have_content("Sign in with GOV.UK One Login")
+    click_button "Continue"
+
+    expect(page).to have_content("You’ve successfully signed in to GOV.UK One Login")
+    click_button "Continue"
+
+    expect(page).to have_content("You are not eligible")
+    expect(page).to have_content("must be in the first 5 years")
+  end
+
+  def and_has_previous_claim_exceeding_teaching_years
+    create(
+      :claim,
+      :further_education,
+      :approved,
+      onelogin_uid: "ABC123",
+      academic_year: Journeys::FurtherEducationPayments.configuration.current_academic_year.previous,
+      eligibility_attributes: {
+        further_education_teaching_start_year: AcademicYear.new(2000)
+      }
+    )
+  end
+
   def and_ineligible_college_exists
     ineligible_college
   end

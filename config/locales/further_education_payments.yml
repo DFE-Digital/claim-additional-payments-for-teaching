@@ -48,6 +48,8 @@ en:
           heading: You are not eligible
         claim_already_submitted_this_policy_year:
           heading: "You've already submited a claim in this claim window"
+        teaching_years_exceeded:
+          heading: You are not eligible
       previously_claimed:
         question: "Did you apply for a targeted retention incentive payment in further education between %{previous_claim_window_start} and %{previous_claim_window_end}?"
         hint: Tell us if you applied for the payment. Not whether it was approved or paid.

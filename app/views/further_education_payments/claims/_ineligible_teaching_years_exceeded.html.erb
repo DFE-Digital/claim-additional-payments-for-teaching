@@ -1,0 +1,19 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <%= @form.t(["teaching_years_exceeded", "heading"]) %>
+    </h1>
+
+    <p class="govuk-body">
+      In order to claim a targeted retention incentive payment, you must be in the first 5 years of your further education teaching career in England.
+    </p>
+
+    <p class="govuk-body">
+      For more information, check the eligibility criteria for <%= govuk_link_to "targeted retention incentive payments for further education teachers", t("further_education_payments.eligibility_criteria_link.url"), new_tab: true %>.
+    </p>
+
+    <p class="govuk-body">
+      If you are unsure your information is correct, you can go back and review your answers. You can also <%= govuk_link_to "start the application again", landing_page_path %>.
+    </p>
+  </div>
+</div>
