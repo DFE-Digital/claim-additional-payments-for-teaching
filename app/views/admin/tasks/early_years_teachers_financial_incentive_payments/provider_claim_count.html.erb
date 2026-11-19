@@ -23,6 +23,10 @@
   <div class="govuk-grid-column-two-thirds">
     <h2 class="govuk-heading-l"><%= @form.task.name.humanize %></h2>
 
+    <%= govuk_warning_text(
+      text: "Check with policy if this claim is still valid"
+    ) %>
+
     <h3 class="govuk-heading-m">
       Claims for <%= @form.task.claim.eligibility.eligible_eytfi_provider.name %>
     </h3>
