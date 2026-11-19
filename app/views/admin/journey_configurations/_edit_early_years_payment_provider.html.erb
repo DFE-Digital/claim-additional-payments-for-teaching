@@ -1,4 +1,4 @@
-<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true">
 
 <h2 class="govuk-heading-m">
   Early years providers overview
@@ -6,7 +6,7 @@
 
 <%= govuk_link_to("View providers", admin_early_years_providers_path) %>
 
-<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true">
 
 <h2 class="govuk-heading-m">
   Download eligible EY providers
@@ -14,7 +14,7 @@
 
 <%= link_to "Download CSV", admin_eligible_ey_providers_path, class: "govuk-button" %>
 
-<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true">
 
 <h2 class="govuk-heading-m">
   Upload eligible EY providers
@@ -32,7 +32,7 @@
   <%= f.govuk_submit "Upload CSV" %>
 <% end %>
 
-<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true">
 
 <%= render partial: "file_upload_history", locals: {
   heading: "Upload history for eligible EY providers"
