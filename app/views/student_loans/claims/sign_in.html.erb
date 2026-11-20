@@ -11,7 +11,7 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l"><%= @form.t(:title) %></h1>
 
-    <% if TeacherAuth::Config.instance.bypass? %>
+    <% if TeacherAuth::StudentLoansConfig.instance.bypass? %>
       <h2 class="govuk-heading-l">Bypass Teacher Auth</h2>
 
       <%= form_with(
@@ -107,6 +107,35 @@
 
         <%= f.govuk_submit %>
       <% end %>
+    <% else %>
+      <p class="govuk-body">
+        You will need to sign in to your GOV.UK One Login account to apply.
+        If you don't have an account yet, we will help you create one.
+      </p>
+
+      <p class="govuk-body">
+        To create a GOV.UK One Login account, you will need:
+      </p>
+
+      <%= govuk_list [
+        "an email address",
+        "a way to get security codes - this can be a mobile phone number or an authenticator app"
+      ], type: :bullet %>
+
+      <p class="govuk-body">
+        When you have signed in to GOV.UK One Login, you will return to this
+        service to complete your application.
+      </p>
+
+      <p class="govuk-body">
+        You must prove your identity using the GOV.UK One Login service to
+        claim back your loan repayments.
+      </p>
+
+      <%= govuk_button_to(
+        "Continue",
+        TeacherAuth::StudentLoansConfig.instance.request_path
+      ) %>
     <% end %>
   </div>
 </div>

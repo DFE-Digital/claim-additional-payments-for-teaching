@@ -13,7 +13,7 @@ module Journeys
     def forms
       array = []
 
-      array << if TeacherAuth::Config.instance.bypass?
+      array << if TeacherAuth::StudentLoansConfig.instance.bypass?
         Debug::TeacherAuth::SignInForm
       else
         SignInForm

@@ -135,12 +135,15 @@ Rails.application.routes.draw do
     end
 
     scope constraints: {journey: "student-loans"} do
-      if TeacherAuth::Config.instance.bypass? || Rails.env.test?
+      if TeacherAuth::StudentLoansConfig.instance.bypass?
         post(
           "bypass-auth/teacher",
           to: "journeys/teacher_student_loan_reimbursement/bypass_auth#callback"
         )
       end
+
+      get "auth/teacher_student_loans/callback", to: "journeys/teacher_student_loan_reimbursement/auth#callback"
+      get "auth/failure", to: "journeys/teacher_student_loan_reimbursement/auth#failure"
     end
   end
 
