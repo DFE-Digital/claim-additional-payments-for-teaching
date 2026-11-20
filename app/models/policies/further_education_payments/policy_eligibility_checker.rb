@@ -42,6 +42,8 @@ module Policies
           :less_than_half_hours_teaching_eligible_courses
         elsif answers.claim_already_submitted_this_policy_year?
           :claim_already_submitted_this_policy_year
+        elsif answers.exceeded_teaching_years_from_previous_claim?
+          :teaching_years_exceeded
         end
       end
     end

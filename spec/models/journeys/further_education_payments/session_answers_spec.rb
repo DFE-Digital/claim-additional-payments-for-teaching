@@ -126,4 +126,79 @@ RSpec.describe Journeys::FurtherEducationPayments::SessionAnswers do
       end
     end
   end
+
+  describe "#exceeded_teaching_years_from_previous_claim?" do
+    context "when no previous claim" do
+      let(:answers) do
+        build(
+          :further_education_payments_answers
+        )
+      end
+
+      it "returns falsey" do
+        expect(subject.exceeded_teaching_years_from_previous_claim?)
+          .to be_falsey
+      end
+    end
+
+    context "when previous claim within teaching period" do
+      let!(:previous_claim) do
+        claim = create(
+          :claim,
+          :further_education,
+          :approved,
+          academic_year: Journeys::FurtherEducationPayments.configuration.current_academic_year.previous,
+          onelogin_uid: "ABC123"
+        )
+
+        claim.eligibility.update!(
+          further_education_teaching_start_year: Journeys::FurtherEducationPayments.configuration.current_academic_year - 4
+        )
+
+        claim
+      end
+
+      let(:answers) do
+        build(
+          :further_education_payments_answers,
+          onelogin_uid: "ABC123"
+        )
+      end
+
+      it "returns falsey" do
+        expect(subject.exceeded_teaching_years_from_previous_claim?)
+          .to be_falsey
+      end
+    end
+
+    context "when previous claim on teaching period boundary" do
+      let!(:previous_claim) do
+        claim = create(
+          :claim,
+          :further_education,
+          :approved,
+          academic_year: Journeys::FurtherEducationPayments.configuration.current_academic_year.previous,
+          onelogin_uid: "ABC123"
+        )
+
+        claim.eligibility.update!(
+          further_education_teaching_start_year: Journeys::FurtherEducationPayments.configuration.current_academic_year - 5
+        )
+
+        claim
+      end
+
+      let(:answers) do
+        build(
+          :further_education_payments_answers,
+          onelogin_uid: "ABC123"
+        )
+      end
+
+      it "returns truthy" do
+        expect(subject.exceeded_teaching_years_from_previous_claim?)
+          .to be_truthy
+      end
+    end
+  end
 end

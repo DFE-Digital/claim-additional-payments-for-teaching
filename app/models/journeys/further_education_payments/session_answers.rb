@@ -127,16 +127,40 @@ module Journeys
       end
 
       def claim_already_submitted_this_policy_year?
-        previous_claim.present?
+        existing_claim_this_window.present?
       end
 
-      def previous_claim
-        @previous_claim ||= Claim
+      def existing_claim_this_window
+        @previous_claim ||= one_login_account
+          .claims
           .by_policy(Policies::FurtherEducationPayments)
           .by_academic_year(Journeys::FurtherEducationPayments.configuration.current_academic_year)
           .where.not(onelogin_uid: nil)
           .where.not(id: submitted_claim_id)
-          .find_by(onelogin_uid: onelogin_uid)
+          .first
+      end
+
+      def exceeded_teaching_years_from_previous_claim?
+        return false if approved_previous_claim.nil?
+
+        start_year = AcademicYear.new(approved_previous_claim.eligibility.further_education_teaching_start_year)
+        start_year <= Journeys::FurtherEducationPayments.configuration.current_academic_year - 5
+      end
+
+      private
+
+      def one_login_account
+        @one_login_account ||= OneLoginAccount.new(uid: onelogin_uid)
+      end
+
+      def approved_previous_claim
+        @approved_previous_claim ||= one_login_account
+          .claims
+          .by_policy(Policies::FurtherEducationPayments)
+          .by_academic_year(Journeys::FurtherEducationPayments.configuration.current_academic_year.previous)
+          .where.not(onelogin_uid: nil)
+          .approved
+          .first
       end
     end
   end
