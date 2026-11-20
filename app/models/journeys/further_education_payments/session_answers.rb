@@ -144,8 +144,7 @@ module Journeys
         return false if approved_previous_claim.nil?
 
         start_year = AcademicYear.new(approved_previous_claim.eligibility.further_education_teaching_start_year)
-
-        true if start_year <= Journeys::FurtherEducationPayments.configuration.current_academic_year - 5
+        start_year <= Journeys::FurtherEducationPayments.configuration.current_academic_year - 5
       end
 
       private
