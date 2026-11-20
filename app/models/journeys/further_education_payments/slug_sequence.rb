@@ -23,7 +23,6 @@ module Journeys
         building-construction-courses
         chemistry-courses
         computing-courses
-        early-years-courses
         engineering-manufacturing-courses
         maths-courses
         physics-courses
@@ -163,10 +162,6 @@ module Journeys
 
           if answers.subjects_taught.include?("computing")
             array << SLUGS_HASH["computing-courses"]
-          end
-
-          if answers.subjects_taught.include?("early_years")
-            array << SLUGS_HASH["early-years-courses"]
           end
 
           if answers.subjects_taught.include?("engineering_manufacturing")

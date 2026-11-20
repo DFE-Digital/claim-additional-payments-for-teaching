@@ -62,7 +62,6 @@ RSpec.feature "Further education change answers" do
     check("Building and construction")
     check("Chemistry")
     check("Computing, including digital and ICT")
-    check("Early years")
     check("Engineering and manufacturing, including transport engineering and electronics")
     check("Maths")
     check("Physics")
@@ -78,10 +77,6 @@ RSpec.feature "Further education change answers" do
 
     expect(page).to have_content("Which computing courses do you teach?")
     check "T Level in digital support services"
-    click_button "Continue"
-
-    expect(page).to have_content("Which early years courses do you teach?")
-    check "T Level in education and early years (early years educator)"
     click_button "Continue"
 
     expect(page).to have_content("Which engineering and manufacturing courses do you teach?")
@@ -101,7 +96,6 @@ RSpec.feature "Further education change answers" do
     expect(page).to have_content("T Level in building services engineering for construction")
     expect(page).to have_content("GCSE chemistry")
     expect(page).to have_content("T Level in digital support services")
-    expect(page).to have_content("T Level in education and early years (early years educator)")
     expect(page).to have_content("T Level in design and development for engineering and manufacturing")
     expect(page).to have_content("Qualifications approved for funding at level 3 and below in the")
     expect(page).to have_content("A or AS level physics")
@@ -272,12 +266,11 @@ RSpec.feature "Further education change answers" do
 
     expect(page).to have_content("Which subject areas do you teach?")
     uncheck("Computing, including digital and ICT")
-    check("Early years")
-
+    check "Maths"
     click_button "Continue"
 
-    expect(page).to have_content("Which early years courses do you teach?")
-    check "T Level in education and early years (early years educator)"
+    expect(page).to have_content("Which maths courses do you teach?")
+    page.find("label[for='claim-maths-courses-approved-level-321-maths-field']").click
     click_button "Continue"
 
     expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching these eligible courses?")
@@ -348,7 +341,6 @@ RSpec.feature "Further education change answers" do
     expect(page).to have_content("Which subject areas do you teach?")
     check("Building and construction")
     check("Computing, including digital and ICT")
-    check("Early years")
     check("Engineering and manufacturing, including transport engineering and electronics")
     check("Maths")
     check("Physics")
@@ -360,10 +352,6 @@ RSpec.feature "Further education change answers" do
 
     expect(page).to have_content("Which computing courses do you teach?")
     check "T Level in digital support services"
-    click_button "Continue"
-
-    expect(page).to have_content("Which early years courses do you teach?")
-    check "T Level in education and early years (early years educator)"
     click_button "Continue"
 
     expect(page).to have_content("Which engineering and manufacturing courses do you teach?")
@@ -382,7 +370,6 @@ RSpec.feature "Further education change answers" do
     expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching these eligible courses?")
     expect(page).to have_content("T Level in building services engineering for construction")
     expect(page).to have_content("T Level in digital support services")
-    expect(page).to have_content("T Level in education and early years (early years educator)")
     expect(page).to have_content("T Level in design and development for engineering and manufacturing")
     expect(page).to have_content("Qualifications approved for funding at level 3 and below in the")
     expect(page).to have_content("A or AS level physics")

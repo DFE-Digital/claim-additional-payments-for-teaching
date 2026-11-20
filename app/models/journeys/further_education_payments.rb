@@ -22,7 +22,6 @@ module Journeys
       BuildingConstructionCoursesForm,
       ChemistryCoursesForm,
       ComputingCoursesForm,
-      EarlyYearsCoursesForm,
       EngineeringManufacturingCoursesForm,
       MathsCoursesForm,
       PhysicsCoursesForm,
