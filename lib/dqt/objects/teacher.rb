@@ -154,5 +154,9 @@ module Dqt
     def has_eligible_eytfi_qualification?
       has_valid_qts? || has_valid_eyts? || has_valid_eyps?
     end
+
+    def qtls?
+      qtlsStatus == "Active"
+    end
   end
 end

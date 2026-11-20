@@ -82,7 +82,10 @@ module Debug
             trainingCountry: nil,
             trainingEndDate: nil,
             trainingProvider: nil,
-            trainingSubjects: training_subjects,
+            trainingSubjects: [{
+              name: "Biology",
+              reference: "888888"
+            }],
             trainingStartDate: "2024-09-01",
             inductionExemption: {
               isExempt: false,

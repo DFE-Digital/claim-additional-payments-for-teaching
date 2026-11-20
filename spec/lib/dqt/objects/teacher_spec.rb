@@ -732,4 +732,30 @@ RSpec.describe Dqt::Teacher do
       end
     end
   end
+
+  describe "#qtls?" do
+    context "when no qtls" do
+      let(:qualified_teaching_status_response) do
+        {
+          qtlsStatus: "None"
+        }
+      end
+
+      it "returns falsey" do
+        expect(subject.qtls?).to be_falsey
+      end
+    end
+
+    context "when has qtls" do
+      let(:qualified_teaching_status_response) do
+        {
+          qtlsStatus: "Active"
+        }
+      end
+
+      it "returns truthy" do
+        expect(subject.qtls?).to be_truthy
+      end
+    end
+  end
 end
