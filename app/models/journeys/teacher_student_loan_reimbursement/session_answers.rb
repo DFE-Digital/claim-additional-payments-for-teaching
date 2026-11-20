@@ -21,7 +21,7 @@ module Journeys
       attribute :teacher_auth_teacher_reference_number, :string, pii: true
       attribute :teacher_auth_email, :string, pii: true
       attribute :teacher_auth_verified_name, :string, pii: true
-      attribute :teacher_auth_verified_date_of_birth, :date, pii: false
+      attribute :teacher_auth_verified_date_of_birth, :date, pii: true
       attribute :teacher_auth_one_login_uid, :string, pii: true
       attribute :teacher_auth_completed_at, :datetime, pii: false
       attribute :trs_data_fetched_at, :datetime, pii: false

@@ -174,4 +174,33 @@ Rails.application.config.middleware.use OmniAuth::Builder do
       }
     }
   end
+
+  student_loans_auth = TeacherAuth::StudentLoansConfig.instance
+
+  unless student_loans_auth.bypass?
+    provider :openid_connect, {
+      name: :teacher_student_loans,
+      discovery: true,
+      response_type: :code,
+      scope: %i[openid email profile offline_access teaching_record],
+      send_scope_to_token_endpoint: false,
+      callback_path: student_loans_auth.callback_path,
+      path_prefix: student_loans_auth.path_prefix,
+      issuer: student_loans_auth.issuer,
+      pkce: true,
+      client_options: {
+        port: 443,
+        scheme: "https",
+        host: student_loans_auth.host,
+        identifier: student_loans_auth.identifier,
+        secret: student_loans_auth.secret,
+        redirect_uri: student_loans_auth.redirect_uri,
+        authorization_endpoint: "/oauth2/authorize",
+        end_session_endpoint: "/oauth2/logout",
+        token_endpoint: "/oauth2/token",
+        userinfo_endpoint: "/oauth2/userinfo",
+        jwks_uri: student_loans_auth.jwks_uri
+      }
+    }
+  end
 end
