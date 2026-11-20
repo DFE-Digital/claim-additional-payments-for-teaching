@@ -148,6 +148,12 @@ variable "pg_airbyte_enabled" {
   description = "A boolean to indicate whether to enable wal for Airbyte integration for Postgres"
 }
 
+# wal_threshold is read by the database-replication-monitor workflow, not by terraform
+variable "wal_threshold" {
+  default     = null
+  description = "WAL size in bytes above which the monitor workflow drops the Airbyte replication slot"
+}
+
 locals {
   postgres_ssl_mode       = var.enable_postgres_ssl ? "require" : "disable"
   canonical_hostname      = var.canonical_hostname != null ? var.canonical_hostname : "${var.service_name}-${var.environment}-web.test.teacherservices.cloud"

@@ -6,7 +6,7 @@ task shellcheck: :environment do
   ].freeze
 
   files = Dir.glob("bin/**/*").reject { |path|
-    Dir.exist?(path) || ignored_directories.any? { |directory| path.starts_with?(directory) }
+    Dir.exist?(path) || path.end_with?(".psql") || ignored_directories.any? { |directory| path.starts_with?(directory) }
   }
 
   success = system("shellcheck --exclude=#{excluded_rules.join(",")} #{files.join(" ")}")
