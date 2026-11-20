@@ -21,7 +21,7 @@ module Policies
     end
 
     def identity_status
-      task = claim.tasks.detect { |t| t.name == "identity_confirmation" }
+      task = identity_confirmation_task
 
       if task.nil?
         "Unverified"
@@ -39,6 +39,10 @@ module Policies
     end
 
     private
+
+    def identity_confirmation_task
+      claim.tasks.detect { |t| t.name == "identity_confirmation" }
+    end
 
     def all_tasks
       @all_tasks ||= applicable_task_names.map do |name|

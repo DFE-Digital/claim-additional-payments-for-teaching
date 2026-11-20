@@ -104,7 +104,18 @@ module Policies
           qts_award_year: :retained,
           redacted_attributes: :retained,
           taught_eligible_subjects: :retained,
-          teacher_reference_number: :inactive_claim_over_six_years_old?
+          teacher_reference_number: :inactive_claim_over_six_years_old?,
+          teacher_auth_completed_at: :retained,
+          teacher_auth_date_of_birth: :inactive_claim_submitted_in_prior_academic_term?,
+          teacher_auth_email: :inactive_claim_submitted_in_prior_academic_term?,
+          teacher_auth_first_name: :inactive_claim_submitted_in_prior_academic_term?,
+          teacher_auth_last_name: :inactive_claim_submitted_in_prior_academic_term?,
+          teacher_auth_national_insurance_number: :inactive_claim_submitted_in_prior_academic_term?,
+          teacher_auth_one_login_uid: :inactive_claim_submitted_in_prior_academic_term?,
+          teacher_auth_teacher_reference_number: :inactive_claim_submitted_in_prior_academic_term?,
+          teacher_auth_verified_date_of_birth: :inactive_claim_submitted_in_prior_academic_term?,
+          teacher_auth_verified_name: :inactive_claim_submitted_in_prior_academic_term?,
+          trs_data_fetched_at: :retained
         }
       end
     end
