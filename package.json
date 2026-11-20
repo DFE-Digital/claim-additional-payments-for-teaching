@@ -8,9 +8,11 @@
     "govuk-frontend": "^6.5.0"
   },
   "devDependencies": {
+    "@herb-tools/linter": "0.11.2",
     "prettier": "^3.9.10"
   },
   "scripts": {
-    "build:css": "sass ./app/assets/stylesheets/application.scss:./app/assets/builds/application.css --no-source-map --load-path=. --load-path=node_modules"
+    "build:css": "sass ./app/assets/stylesheets/application.scss:./app/assets/builds/application.css --no-source-map --load-path=. --load-path=node_modules",
+    "lint:hr": "herb-lint --only dfe-a11y-hr-aria-hidden app/views --no-timing --no-color"
   }
 }
