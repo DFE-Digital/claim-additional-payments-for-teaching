@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "@herb-tools/linter": "0.11.2",
-    "prettier": "^3.9.10"
+    "prettier": "^3.10.1"
   },
   "scripts": {
     "build:css": "sass ./app/assets/stylesheets/application.scss:./app/assets/builds/application.css --no-source-map --load-path=. --load-path=node_modules",
