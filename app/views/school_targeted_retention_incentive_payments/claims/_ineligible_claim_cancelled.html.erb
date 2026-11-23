@@ -1,0 +1,11 @@
+<%= content_tag(:h1, @form.heading, class: "govuk-heading-xl") %>
+
+<p class="govuk-body">
+  You have chosen not to accept the payment at this time. Your claim has been cancelled.
+</p>
+
+<p class="govuk-body">
+  If you change your mind, you can start a new claim.
+</p>
+
+<%= govuk_button_link_to "Start a new claim", landing_page_path %>
