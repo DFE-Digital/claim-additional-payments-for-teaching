@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_13_121000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_23_123612) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -364,6 +364,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_13_121000) do
     t.text "town"
     t.datetime "updated_at", null: false
     t.text "urn", null: false
+    t.index "((sanitised_name)::text) gin_trgm_ops", name: "index_eytfi_providers_on_sanitised_name_trgm", using: :gin
     t.index ["urn", "file_upload_id"], name: "index_eligible_eytfi_providers_on_urn_and_file_upload_id", unique: true
   end
 
