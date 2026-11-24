@@ -12,6 +12,7 @@ ENV RAILS_ENV=production
 RUN apk update
 RUN apk add util-linux=~2.42.3-r1 # force vulnerability fix
 RUN apk add zlib=~1.4-r0 # force vulnerability fix
+RUN apk add libxml2=~2.13.9-r3 # force vulnerability fix
 RUN apk add icu pcre2 nodejs bash postgresql-dev tzdata curl libc6-compat shared-mime-info
 
 # ------------------------------------------------------------------------------
