@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_23_123612) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_24_100000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -46,6 +46,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_23_123612) do
     t.uuid "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "admin_permissions_grants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "granted_at", null: false
+    t.uuid "granted_by_id"
+    t.string "permission", null: false
+    t.datetime "revoked_at"
+    t.uuid "revoked_by_id"
+    t.datetime "updated_at", null: false
+    t.uuid "user_id", null: false
+    t.index ["granted_by_id"], name: "index_admin_permissions_grants_on_granted_by_id"
+    t.index ["revoked_by_id"], name: "index_admin_permissions_grants_on_revoked_by_id"
+    t.index ["user_id", "permission"], name: "index_admin_permissions_grants_active_uniqueness", unique: true, where: "(revoked_at IS NULL)"
+    t.index ["user_id"], name: "index_admin_permissions_grants_on_user_id"
   end
 
   create_table "amendments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -996,6 +1011,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_23_123612) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "admin_permissions_grants", "dfe_sign_in_users", column: "granted_by_id"
+  add_foreign_key "admin_permissions_grants", "dfe_sign_in_users", column: "revoked_by_id"
+  add_foreign_key "admin_permissions_grants", "dfe_sign_in_users", column: "user_id"
   add_foreign_key "amendments", "claims"
   add_foreign_key "amendments", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "amendments", "dfe_sign_in_users", column: "dfe_sign_in_users_id"

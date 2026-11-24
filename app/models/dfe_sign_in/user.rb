@@ -27,6 +27,10 @@ module DfeSignIn
       inverse_of: :assigned_to,
       dependent: :nullify
 
+    has_many :permission_grants,
+      class_name: "Admin::Permissions::Grant",
+      inverse_of: :user
+
     def self.from_session(session:, user_type:)
       user = where(dfe_sign_in_id: session.user_id, user_type:).first_or_initialize
 
@@ -86,6 +90,14 @@ module DfeSignIn
 
     def has_admin_access?
       is_service_operator? || is_service_admin?
+    end
+
+    def permitted?(permission)
+      permissions.include?(permission)
+    end
+
+    def permissions
+      @permissions ||= permission_grants.active.pluck(:permission).to_set
     end
 
     def self.options_for_select
