@@ -45,6 +45,7 @@ module Journeys
         VerifyNationalInsuranceNumberForm,
         NationalInsuranceNumberForm,
         TeacherDetailsForm,
+        TeacherQualificationsForm,
         UploadEmploymentProofForm,
         ReviewEmploymentProofForm,
         MaybeEligibleForm,

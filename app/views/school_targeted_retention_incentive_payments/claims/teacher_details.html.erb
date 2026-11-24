@@ -38,45 +38,6 @@
         <% end %>
       <% end %>
 
-      <h2 class="govuk-heading-m">
-        Qualifications you hold
-      </h2>
-
-      <%= govuk_summary_list(actions: false) do |summary_list| %>
-        <% journey_session.answers.higher_education_qualifications.each do |he_qual| %>
-          <% summary_list.with_row do |row| %>
-            <% row.with_key { "Degree code" } %>
-            <% row.with_value { he_qual.subject_code } %>
-          <% end %>
-
-          <% summary_list.with_row do |row| %>
-            <% row.with_key { "Degree name" } %>
-            <% row.with_value { he_qual.description.titleize } %>
-          <% end %>
-        <% end %>
-
-        <% journey_session.answers.dqt_record.record.held_routes_to_professional_statuses.each do |route| %>
-          <%= route.subjects.each do |subject| %>
-            <% summary_list.with_row do |row| %>
-              <% row.with_key { "ITT subject code" } %>
-              <% row.with_value { subject.reference } %>
-            <% end %>
-
-            <% summary_list.with_row do |row| %>
-              <% row.with_key { "ITT subject" } %>
-              <% row.with_value { subject.name.titleize } %>
-            <% end %>
-          <% end %>
-        <% end %>
-
-        <% if journey_session.answers.dqt_record.record.qts_award_date.present? %>
-          <% summary_list.with_row do |row| %>
-            <% row.with_key { "#{journey_session.answers.dqt_record.record.qtls? ? "QTLS" : "QTS"} awarded on" } %>
-            <% row.with_value { l(journey_session.answers.dqt_record.record.qts_award_date) } %>
-          <% end %>
-        <% end %>
-      <% end %>
-
       <%= f.govuk_collection_radio_buttons :correct_details,
         @form.radio_options,
         :id,

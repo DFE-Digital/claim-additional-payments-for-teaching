@@ -132,6 +132,10 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
     choose "Yes"
     click_button "Continue"
 
+    expect(page).to have_text "Teacher details"
+    choose "Yes"
+    click_button "Continue"
+
     expect(page).to have_text "We could not confirm that you work at"
     attach_file "Upload payslip", Rails.root.join("spec/fixtures/files/employment_proof.pdf")
     click_on "Upload"
