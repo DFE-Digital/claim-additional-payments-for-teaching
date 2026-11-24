@@ -25,5 +25,11 @@ class ReportsJob < ApplicationJob
     Report
       .find_or_initialize_by(name: Reports::DuplicateClaims::NAME)
       .update!(csv: csv, number_of_rows: csv.lines.count - 1)
+
+    csv = Reports::EytrpBusinessAnalysis.new.to_csv
+
+    Report
+      .find_or_initialize_by(name: Reports::EytrpBusinessAnalysis::NAME)
+      .update!(csv: csv, number_of_rows: CSV.parse(csv, headers: true).size)
   end
 end
