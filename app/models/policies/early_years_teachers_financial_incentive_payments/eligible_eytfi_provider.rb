@@ -29,7 +29,7 @@ module Policies
           search_field, search_term = [:sanitised_postcode, sanitised_search_term]
         end
 
-        where("#{search_field} ILIKE ?", "%#{sanitize_sql_like(sanitised_search_term)}%")
+        where("#{search_field}::text ILIKE ?", "%#{sanitize_sql_like(sanitised_search_term)}%")
           .order(sanitize_sql_for_order([Arel.sql("similarity(#{search_field}, ?) DESC"), search_term]))
           .order(:name)
           .limit(School::SEARCH_RESULTS_LIMIT)
