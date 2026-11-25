@@ -48,8 +48,7 @@ module Admin
         )
         .includes(:uploaded_by)
 
-      @feature_flags_form = FeatureFlagsForm.new
-      @feature_flags_form.load_data
+      @feature_flags_form = FeatureFlagsForm.for_journey_configuration(@journey_configuration)
 
       @flagged_fe_providers_form = FurtherEducationPayments::FlaggedProvidersCsvForm.new(admin: admin_user)
     end
