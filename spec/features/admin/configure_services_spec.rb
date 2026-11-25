@@ -237,6 +237,30 @@ RSpec.feature "Service configuration" do
     expect(FeatureFlag).to be_enabled("fe_provider_dashboard")
   end
 
+  context "for STRI", feature_flag: [:new_stri] do
+    let(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments) }
+
+    scenario "toggle new_stri" do
+      given_journey_configuration
+      sign_in_as_service_admin
+
+      click_on "Manage services"
+      click_on "Change Claim a targeted retention incentive payment for school teachers"
+
+      expect(FeatureFlag).to be_enabled("new_stri")
+
+      choose "Disabled"
+      click_button "Save feature flags"
+
+      expect(FeatureFlag).to be_disabled("new_stri")
+
+      choose "Enabled"
+      click_button "Save feature flags"
+
+      expect(FeatureFlag).to be_enabled("new_stri")
+    end
+  end
+
   def given_journey_configuration
     journey_configuration
   end

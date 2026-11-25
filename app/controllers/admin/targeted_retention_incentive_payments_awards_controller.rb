@@ -18,6 +18,7 @@ module Admin
       end
 
       @file_upload_history = FileUpload.upload_history(Policies::TargetedRetentionIncentivePayments::Award)
+      @feature_flags_form = FeatureFlagsForm.for_journey_configuration(@journey_configuration)
 
       render "admin/journey_configurations/edit"
     end

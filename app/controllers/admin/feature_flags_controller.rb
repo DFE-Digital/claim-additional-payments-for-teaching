@@ -20,7 +20,7 @@ module Admin
     def feature_flags_params
       params
         .require(:feature_flags)
-        .permit(:fe_provider_dashboard)
+        .permit(:fe_provider_dashboard, :new_stri)
     end
   end
 end
