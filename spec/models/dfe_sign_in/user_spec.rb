@@ -78,6 +78,37 @@ RSpec.describe DfeSignIn::User, type: :model do
     end
   end
 
+  describe "#permitted?" do
+    let(:user) { create(:dfe_signin_user) }
+
+    it "returns true when the user has an active grant for the permission" do
+      create(
+        :admin_permissions_grant,
+        user: user,
+        permission: "service_access_links.write"
+      )
+
+      expect(user.permitted?("service_access_links.write")).to eq true
+    end
+
+    it "returns false when the user's grant for the permission has been revoked" do
+      create(
+        :admin_permissions_grant,
+        :revoked,
+        user: user,
+        permission: "service_access_links.write"
+      )
+
+      expect(user.permitted?("service_access_links.write")).to eq false
+    end
+
+    it "returns false when the user has only been granted other permissions" do
+      create(:admin_permissions_grant, user: user, permission: "payroll.write")
+
+      expect(user.permitted?("service_access_links.write")).to eq false
+    end
+  end
+
   describe ".options_for_select" do
     let!(:davide) { create(:dfe_signin_user, :service_operator, given_name: "Davide", family_name: "Muzani") }
     let!(:tina) { create(:dfe_signin_user, :service_operator, given_name: "Tina", family_name: "Dee") }

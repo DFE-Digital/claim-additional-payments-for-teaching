@@ -1,6 +1,10 @@
 module Admin
   class ServiceAccessLinksController < BaseAdminController
-    before_action :ensure_service_admin
+    permissions \
+      show: "service_access_links.write",
+      create: "service_access_links.write"
+
+    before_action :ensure_service_admin, unless: :admin_permissions_enabled?
 
     def show
       @service_access_code = Journeys::ServiceAccessCode.find params[:id]

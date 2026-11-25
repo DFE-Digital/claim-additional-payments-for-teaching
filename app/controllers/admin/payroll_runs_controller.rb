@@ -2,8 +2,19 @@ module Admin
   class PayrollRunsController < BaseAdminController
     include Pagy::Backend
 
-    before_action :ensure_service_operator, only: [:index, :show]
-    before_action :ensure_service_admin, only: [:new, :create, :destroy]
+    permissions \
+      index: "admin.read",
+      show: "admin.read",
+      new: "payroll.write",
+      create: "payroll.write",
+      destroy: "payroll.write"
+
+    before_action :ensure_service_operator,
+      only: [:index, :show],
+      unless: :admin_permissions_enabled?
+    before_action :ensure_service_admin,
+      only: [:new, :create, :destroy],
+      unless: :admin_permissions_enabled?
 
     def index
       @payroll_runs = PayrollRun.order(created_at: :desc)

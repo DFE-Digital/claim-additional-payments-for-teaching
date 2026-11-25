@@ -13,6 +13,9 @@ module Admin
     before_action :set_cache_headers
     before_action :set_sentry_user_context
     after_action :update_last_seen_at
+
+    include Admin::Permissions::Enforcement
+
     helper_method :admin_signed_in?, :admin_timeout_in_minutes, :service_operator_signed_in?
 
     rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
