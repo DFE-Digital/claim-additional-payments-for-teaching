@@ -74,4 +74,83 @@ RSpec.describe "Admin Payment Confirmation Report upload" do
       end
     end
   end
+
+  context "when the admin_permissions feature flag is disabled" do
+    context "when signed in as a service operator" do
+      before do
+        operator = sign_in_as_service_operator
+        create(
+          :admin_permissions_grant,
+          user: operator,
+          permission: "payroll_confirmation.write"
+        )
+      end
+
+      it "does not allow uploading, even with a grant" do
+        get new_admin_payroll_run_payment_confirmation_report_upload_path(
+          payroll_run
+        )
+        expect(response).to have_http_status(:unauthorized)
+
+        post admin_payroll_run_payment_confirmation_report_uploads_path(
+          payroll_run
+        )
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  context "when the admin_permissions feature flag is enabled" do
+    before { FeatureFlag.enable!(:admin_permissions) }
+
+    let(:admin) { create(:dfe_signin_user, :service_admin) }
+
+    before { sign_in_with_admin(admin) }
+
+    context "when the user does not have payroll_confirmation.write" do
+      before do
+        create(:admin_permissions_grant, user: admin, permission: "admin.read")
+        create(
+          :admin_permissions_grant,
+          user: admin,
+          permission: "payroll.write"
+        )
+      end
+
+      it "does not allow uploading" do
+        get new_admin_payroll_run_payment_confirmation_report_upload_path(
+          payroll_run
+        )
+        expect(response).to have_http_status(:forbidden)
+
+        post admin_payroll_run_payment_confirmation_report_uploads_path(
+          payroll_run
+        )
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context "when the user has been granted payroll_confirmation.write" do
+      before do
+        create(
+          :admin_permissions_grant,
+          user: admin,
+          permission: "payroll_confirmation.write"
+        )
+      end
+
+      it "allows uploading" do
+        get new_admin_payroll_run_payment_confirmation_report_upload_path(
+          payroll_run
+        )
+        expect(response).to have_http_status(:ok)
+
+        post admin_payroll_run_payment_confirmation_report_uploads_path(
+          payroll_run
+        )
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include("Choose a file to upload")
+      end
+    end
+  end
 end

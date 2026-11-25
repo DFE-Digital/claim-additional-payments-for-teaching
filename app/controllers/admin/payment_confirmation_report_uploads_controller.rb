@@ -1,6 +1,10 @@
 module Admin
   class PaymentConfirmationReportUploadsController < BaseAdminController
-    before_action :ensure_service_admin
+    permissions \
+      new: "payroll_confirmation.write",
+      create: "payroll_confirmation.write"
+
+    before_action :ensure_service_admin, unless: :admin_permissions_enabled?
 
     rate_limit(
       to: 1,

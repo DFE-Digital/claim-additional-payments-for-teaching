@@ -3,6 +3,7 @@ module Admin
     ALL = %w[
       admin.read
       payroll.write
+      payroll_confirmation.write
       service_access_links.write
     ].freeze
 
