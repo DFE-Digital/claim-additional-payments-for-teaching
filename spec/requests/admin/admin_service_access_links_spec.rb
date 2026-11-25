@@ -14,8 +14,11 @@ RSpec.describe "Admin service access links" do
     context "when signed in as a service operator" do
       it "does not allow viewing or creating links, even with a grant" do
         operator = sign_in_as_service_operator
-        create(:admin_permissions_grant, user: operator, permission: "service_access_links.show")
-        create(:admin_permissions_grant, user: operator, permission: "service_access_links.create")
+        create(
+          :admin_permissions_grant,
+          user: operator,
+          permission: "service_access_links.write"
+        )
 
         get admin_service_access_link_path(service_access_code)
         expect(response).to have_http_status(:unauthorized)
@@ -67,26 +70,37 @@ RSpec.describe "Admin service access links" do
       end
     end
 
-    context "when the user has been granted service_access_links.show" do
+    context "when the user has only been granted admin.read" do
       before do
-        create(:admin_permissions_grant, user: admin, permission: "service_access_links.show")
+        create(
+          :admin_permissions_grant,
+          user: admin,
+          permission: "admin.read"
+        )
       end
 
-      it "allows viewing a link but not creating one" do
+      it "does not allow viewing or creating links" do
         get admin_service_access_link_path(service_access_code)
-        expect(response).to have_http_status(:ok)
+        expect(response).to have_http_status(:forbidden)
 
         post admin_service_access_links_path(journey: journey)
         expect(response).to have_http_status(:forbidden)
       end
     end
 
-    context "when the user has been granted service_access_links.create" do
+    context "when the user has been granted service_access_links.write" do
       before do
-        create(:admin_permissions_grant, user: admin, permission: "service_access_links.create")
+        create(
+          :admin_permissions_grant,
+          user: admin,
+          permission: "service_access_links.write"
+        )
       end
 
-      it "allows creating a link" do
+      it "allows viewing and creating links" do
+        get admin_service_access_link_path(service_access_code)
+        expect(response).to have_http_status(:ok)
+
         expect { post admin_service_access_links_path(journey: journey) }
           .to change(Journeys::ServiceAccessCode, :count).by(1)
       end
@@ -98,7 +112,7 @@ RSpec.describe "Admin service access links" do
           :admin_permissions_grant,
           :revoked,
           user: admin,
-          permission: "service_access_links.create"
+          permission: "service_access_links.write"
         )
       end
 

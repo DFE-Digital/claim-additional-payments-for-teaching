@@ -14,8 +14,6 @@ module Admin
     before_action :set_sentry_user_context
     after_action :update_last_seen_at
 
-    # Included after ensure_authenticated_user so permission checks run once
-    # the user is known.
     include Admin::Permissions::Enforcement
 
     helper_method :admin_signed_in?, :admin_timeout_in_minutes, :service_operator_signed_in?

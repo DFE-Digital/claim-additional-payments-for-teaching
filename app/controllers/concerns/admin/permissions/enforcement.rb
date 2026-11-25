@@ -1,17 +1,12 @@
 module Admin
   module Permissions
-    # Declares which permission each controller action needs, e.g.
-    #
-    #   permissions show: "service_access_links.show",
-    #     create: "service_access_links.create"
-    #
-    # Only enforced while the :admin_permissions feature flag is on. Actions
-    # without a declared permission are not checked yet.
     module Enforcement
       extend ActiveSupport::Concern
 
       included do
-        class_attribute :action_permissions, instance_writer: false, default: {}.freeze
+        class_attribute :action_permissions,
+          instance_writer: false,
+          default: {}.freeze
 
         before_action :ensure_permitted, if: :admin_permissions_enabled?
       end

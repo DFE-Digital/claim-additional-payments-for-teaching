@@ -1,8 +1,9 @@
 module Admin
   module Permissions
     ALL = %w[
-      service_access_links.show
-      service_access_links.create
+      admin.read
+      payroll.write
+      service_access_links.write
     ].freeze
 
     def self.table_name_prefix

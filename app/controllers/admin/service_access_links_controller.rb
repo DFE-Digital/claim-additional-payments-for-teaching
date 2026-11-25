@@ -1,8 +1,8 @@
 module Admin
   class ServiceAccessLinksController < BaseAdminController
     permissions \
-      show: "service_access_links.show",
-      create: "service_access_links.create"
+      show: "service_access_links.write",
+      create: "service_access_links.write"
 
     before_action :ensure_service_admin, unless: :admin_permissions_enabled?
 
