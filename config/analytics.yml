@@ -558,6 +558,7 @@ shared:
     - malware_scan_result # string, raw Azure Defender scan result tag value
     - malware_scanned_at # datetime, when the malware scan completed
     - malware_scan_attempts # integer, number of times the scan result job has been attempted
+    - malware_scan_reuploaded_at # datetime, when the blob was last re-uploaded to trigger a fresh Azure Defender scan
   :active_storage_attachments:
     - id # uuid, uniquely identifies this attachment record
     - blob_id # uuid, the blob this attachment points to
