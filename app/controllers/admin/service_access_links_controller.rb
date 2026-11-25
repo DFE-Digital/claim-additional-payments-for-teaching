@@ -1,12 +1,10 @@
 module Admin
   class ServiceAccessLinksController < BaseAdminController
-    PERMISSIONS = {
-      "show" => "service_access_links.show",
-      "create" => "service_access_links.create"
-    }.freeze
+    permissions \
+      show: "service_access_links.show",
+      create: "service_access_links.create"
 
     before_action :ensure_service_admin, unless: :admin_permissions_enabled?
-    before_action :ensure_permitted, if: :admin_permissions_enabled?
 
     def show
       @service_access_code = Journeys::ServiceAccessCode.find params[:id]
@@ -26,16 +24,6 @@ module Admin
     end
 
     private
-
-    def admin_permissions_enabled?
-      FeatureFlag.enabled?(:admin_permissions)
-    end
-
-    def ensure_permitted
-      return if current_admin.permitted?(PERMISSIONS.fetch(action_name))
-
-      render "admin/auth/failure", status: :forbidden
-    end
 
     def service_access_link_params
       params.permit(:journey, :multiuse)
