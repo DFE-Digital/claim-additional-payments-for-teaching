@@ -166,7 +166,7 @@ module Reports
     end
 
     def rejection_reasons(decision)
-      return "N/A" unless decision && decision.rejected?
+      return "N/A" unless decision&.rejected?
 
       decision
         .rejected_reasons
