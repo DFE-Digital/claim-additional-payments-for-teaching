@@ -16,7 +16,7 @@ class Admin::StriFeatureFlagsForm
         description: "New STRI journey"
       )
     ].select do |struct|
-      FeatureFlag.exists?(name: struct.name)
+      FeatureFlag.exists?(name: struct.name) && !Rails.env.production_app?
     end
   end
 
