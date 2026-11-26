@@ -28,6 +28,7 @@ module Journeys
       attribute :teacher_auth_first_name, :string, pii: true
       attribute :teacher_auth_last_name, :string, pii: true
       attribute :teacher_auth_national_insurance_number, :string, pii: true
+      attribute :confirm_national_insurance_number, :boolean, pii: false
       attribute :teacher_auth_date_of_birth, :date, pii: true
 
       def dqt_teacher_record

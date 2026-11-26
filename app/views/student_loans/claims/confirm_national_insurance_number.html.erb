@@ -1,0 +1,57 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:title),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_radio_buttons_fieldset(
+        :confirm_national_insurance_number,
+        legend: {
+          text: @form.t(:title),
+          tag: "h1",
+          size: "l"
+        }
+      ) do %>
+        <%= govuk_summary_list(actions: false) do |summary_list|
+          summary_list.with_row do |row|
+            row.with_key { @form.t(:summary_key) }
+            row.with_value { @form.trs_national_insurance_number }
+          end
+        end %>
+
+        <%= f.govuk_radio_button(
+          :confirm_national_insurance_number,
+          true,
+          label: { text: @form.t("options.true") },
+          link_errors: true
+        ) %>
+
+        <%= f.govuk_radio_button(
+          :confirm_national_insurance_number,
+          false,
+          label: { text: @form.t("options.false") }
+        ) do %>
+          <%= f.govuk_text_field :national_insurance_number,
+            width: 10,
+            spellcheck: false,
+            autocomplete: "off",
+            label: { text: @form.t([:national_insurance_number, :label]) } %>
+        <% end %>
+      <% end %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

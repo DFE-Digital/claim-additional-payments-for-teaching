@@ -16,6 +16,7 @@ module Journeys
         "reset-claim",
         "qualification-details",
         "qualifications-check",
+        "confirm-national-insurance-number",
         "qts-year",
         "select-claim-school",
         "claim-school",
@@ -101,6 +102,8 @@ module Journeys
         [].tap do |slugs|
           slugs << "sign-in"
           slugs << "qualifications-check" if answers.trs_data_fetched_at.blank?
+          slugs << "confirm-national-insurance-number" if answers.teacher_auth_national_insurance_number.present?
+          slugs << "national-insurance-number" if answers.teacher_auth_national_insurance_number.blank?
           slugs << "qualification-details" if answers.has_dqt_data_for_claim?
           slugs << "qts-year" unless answers.qualifications_details_check?
           slugs << "select-claim-school" if answers.has_tps_school_for_student_loan_in_previous_financial_year?
@@ -120,14 +123,6 @@ module Journeys
       def teacher_auth_personal_details_slugs
         [].tap do |slugs|
           slugs << "information-provided"
-          # We only want to show national insurance number during the journey if
-          # teacher auth failed to return a NINO, however we want to allow
-          # claiamnt's to chage their answer from the check answers screen, so
-          # we add the NINO page in once the last step before check answers is
-          # completed (gender question)
-          if answers.teacher_auth_national_insurance_number.blank? || answers.payroll_gender.present?
-            slugs << "national-insurance-number"
-          end
           slugs << "student-loan-amount"
           slugs << "postcode-search"
           slugs << "select-home-address" if answers.postcode_searched?

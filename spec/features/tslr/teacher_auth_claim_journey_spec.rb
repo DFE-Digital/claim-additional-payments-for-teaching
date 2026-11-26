@@ -31,7 +31,7 @@ RSpec.describe "Student loans claim with Teacher Auth", feature_flag: [:student_
   end
 
   context "when QTS year is confirmed and a TPS school is found" do
-    it "allows changing the NI number supplied by Teacher Auth" do
+    it "confirms, then changes, the NI number supplied by Teacher Auth" do
       journey_configuration = create(:journey_configuration, :student_loans)
       previous_academic_year = journey_configuration.current_academic_year - 1
       within_beginning_of_month = Date.new(previous_academic_year.start_year, 10, 1)
@@ -66,6 +66,15 @@ RSpec.describe "Student loans claim with Teacher Auth", feature_flag: [:student_
 
       stub_teacher_record(nino: "AB123456C")
       sign_in_with_teacher_auth
+
+      expect(page).to have_content("Is this your National Insurance number?")
+      expect(page).to have_content("AB123456C")
+      click_button "Continue"
+      expect(page).to have_content(
+        "Select yes if this is your National Insurance number"
+      )
+      choose "Yes"
+      click_button "Continue"
 
       expect(page).to have_content(
         "Academic year you completed your Initial Teacher Training (ITT)"
@@ -160,12 +169,13 @@ RSpec.describe "Student loans claim with Teacher Auth", feature_flag: [:student_
       expect(page).not_to have_link(href: /teacher-reference-number/)
 
       expect(page).to have_content("AB123456C")
-      expect(page).to have_link(href: /national-insurance-number/)
+      expect(page).to have_link(href: /confirm-national-insurance-number/)
 
       click_on "Change what is your national insurance number?", visible: :all
-      expect(page).to have_content("Enter your National Insurance number")
-      expect(page).to have_field("Enter your National Insurance number", with: "AB123456C")
-      fill_in "Enter your National Insurance number", with: "AB654321C"
+      expect(page).to have_content("Is this your National Insurance number?")
+      expect(page).to have_checked_field("Yes")
+      choose "No"
+      fill_in "What is your National Insurance number?", with: "AB654321C"
       click_button "Continue"
 
       expect(page).to have_content("student loan repayment amount")
@@ -272,6 +282,16 @@ RSpec.describe "Student loans claim with Teacher Auth", feature_flag: [:student_
       )
       sign_in_with_teacher_auth
 
+      expect(page).to have_content("Enter your National Insurance number")
+      expect(page).not_to have_field("First name")
+      expect(page).not_to have_field("Last name")
+      expect(page).not_to have_field("Day")
+      click_button "Continue"
+
+      expect(page).to have_content("Enter a National Insurance number in the correct format")
+      fill_in "Enter your National Insurance number", with: "AB123456C"
+      click_button "Continue"
+
       expect(page).to have_content(
         "Academic year you completed your Initial Teacher Training (ITT)"
       )
@@ -315,16 +335,6 @@ RSpec.describe "Student loans claim with Teacher Auth", feature_flag: [:student_
       click_button "Continue"
 
       expect(page).to have_content("How we will use the information you provide")
-      click_button "Continue"
-
-      expect(page).to have_content("Enter your National Insurance number")
-      expect(page).not_to have_field("First name")
-      expect(page).not_to have_field("Last name")
-      expect(page).not_to have_field("Day")
-      click_button "Continue"
-
-      expect(page).to have_content("Enter a National Insurance number in the correct format")
-      fill_in "Enter your National Insurance number", with: "AB123456C"
       click_button "Continue"
 
       expect(page).to have_content("student loan repayment amount")
@@ -373,7 +383,19 @@ RSpec.describe "Student loans claim with Teacher Auth", feature_flag: [:student_
       expect(page).not_to have_link(href: /personal-details/)
       expect(page).not_to have_content("teacher reference number")
       expect(page).not_to have_link(href: /teacher-reference-number/)
-      expect(page).to have_link(href: /national-insurance-number/)
+      expect(page).to have_link(href: %r{/national-insurance-number})
+      expect(page).not_to have_link(href: /confirm-national-insurance-number/)
+
+      click_on "Change what is your national insurance number?", visible: :all
+      expect(page).to have_field(
+        "Enter your National Insurance number",
+        with: "AB123456C"
+      )
+      click_button "Continue"
+
+      expect(page).to have_content(
+        "Check your answers before sending your application"
+      )
 
       perform_enqueued_jobs do
         click_button "Confirm and send"
@@ -453,6 +475,10 @@ RSpec.describe "Student loans claim with Teacher Auth", feature_flag: [:student_
 
     sign_in_with_teacher_auth
 
+    expect(page).to have_content("Is this your National Insurance number?")
+    choose "Yes"
+    click_button "Continue"
+
     expect(page).to have_text(
       I18n.t("student_loans.forms.qts_year.questions.qts_award_year")
     )
@@ -468,6 +494,10 @@ RSpec.describe "Student loans claim with Teacher Auth", feature_flag: [:student_
     )
 
     sign_in_with_teacher_auth
+
+    expect(page).to have_content("Enter your National Insurance number")
+    fill_in "Enter your National Insurance number", with: "AB123456C"
+    click_button "Continue"
 
     expect(page).to have_text(
       I18n.t("student_loans.forms.qts_year.questions.qts_award_year")

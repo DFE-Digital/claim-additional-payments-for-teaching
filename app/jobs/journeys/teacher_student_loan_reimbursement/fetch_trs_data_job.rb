@@ -14,7 +14,6 @@ module Journeys
 
         answers.update!(
           dqt_teacher_status: trs_data,
-          national_insurance_number: national_insurance_number,
           teacher_auth_national_insurance_number: national_insurance_number,
           trs_data_fetched_at: Time.current
         )

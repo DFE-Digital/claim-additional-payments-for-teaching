@@ -95,8 +95,16 @@ module Journeys
         [
           t("questions.national_insurance_number"),
           answers.national_insurance_number,
-          "national-insurance-number"
+          national_insurance_number_slug
         ]
+      end
+
+      def national_insurance_number_slug
+        if answers.teacher_auth_national_insurance_number.present?
+          "confirm-national-insurance-number"
+        else
+          "national-insurance-number"
+        end
       end
     end
   end

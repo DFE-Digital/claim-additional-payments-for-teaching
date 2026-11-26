@@ -49,7 +49,9 @@ module Journeys
           date_of_birth: date_of_birth,
           qualifications_details_check: nil,
           qts_award_year: nil,
-          trs_data_fetched_at: nil
+          trs_data_fetched_at: nil,
+          national_insurance_number: nil,
+          confirm_national_insurance_number: nil
         )
       end
     end
