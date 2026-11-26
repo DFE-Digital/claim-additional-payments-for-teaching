@@ -25,6 +25,8 @@ module Reports
       "Student loan plan",
       "Decision",
       "QA decision",
+      "Original rejection reasons",
+      "QA rejection reasons"
     ].freeze
 
     def to_csv
@@ -104,6 +106,8 @@ module Reports
         student_loan_plan_status(claim.tasks.detect { it.name == "student_loan_plan" }),
         decision_status(original_decision),
         decision_status(qa_decision),
+        rejection_reasons(original_decision),
+        rejection_reasons(qa_decision)
       ].map { |value| value.to_s.tr(",", " ") }
     end
 
