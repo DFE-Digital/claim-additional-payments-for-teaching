@@ -74,7 +74,7 @@ RSpec.describe Reports::EytrpBusinessAnalysis do
           "TRUE",
           "PASSED",
           "APPROVED",
-          "APPROVED"
+          "UNDECIDED"
         ]
       ])
     end
