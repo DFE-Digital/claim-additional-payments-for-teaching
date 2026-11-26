@@ -24,7 +24,9 @@ module Reports
       "Nursery registered person has ineligible nurseries",
       "Student loan plan",
       "Decision",
-      "QA decision"
+      "QA decision",
+      "Original rejection reasons",
+      "QA rejection reasons"
     ].freeze
 
     def to_csv
@@ -65,6 +67,10 @@ module Reports
 
       decisions = claim.decisions.sort_by(&:created_at)
 
+      original_decision = decisions.first
+
+      qa_decision = decisions.last if decisions.size > 1
+
       admin_site_link = Rails.application.routes.url_helpers.admin_claim_tasks_url(
         claim,
         host: "claim-additional-teaching-payment.service.gov.uk",
@@ -98,8 +104,10 @@ module Reports
         nursery.registered_person_name,
         ineligible_registered_person ? "TRUE" : "FALSE",
         student_loan_plan_status(claim.tasks.detect { it.name == "student_loan_plan" }),
-        decision_status(decisions.first),
-        decision_status(decisions.last)
+        decision_status(original_decision),
+        decision_status(qa_decision),
+        rejection_reasons(original_decision),
+        rejection_reasons(qa_decision)
       ].map { |value| value.to_s.tr(",", " ") }
     end
 
@@ -155,6 +163,16 @@ module Reports
       return "UNDECIDED" unless decision
 
       decision.approved ? "APPROVED" : "REJECTED"
+    end
+
+    def rejection_reasons(decision)
+      return "N/A" unless decision&.rejected?
+
+      decision
+        .rejected_reasons
+        .select { |_, result| result.to_i == 1 }
+        .keys
+        .join(";")
     end
   end
 end

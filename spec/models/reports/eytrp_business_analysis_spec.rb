@@ -48,6 +48,18 @@ RSpec.describe Reports::EytrpBusinessAnalysis do
       create(:task, name: "provider_claim_count", claim: claim)
       allow(claim).to receive(:approvable?).and_return(true)
       create(:decision, :approved, claim: claim)
+      create(
+        :decision,
+        :rejected,
+        claim: claim,
+        rejected_reasons: {
+          no_response: "0",
+          claimant_withdrew_application: "1",
+          cant_verify_claimant_is_employed_at_setting: "1",
+          duplicate_claim: "0",
+          other_reason_only_used_in_exceptional_circumstances: "0"
+        }
+      )
       create(:task, name: "student_loan_plan", claim: claim)
 
       rows = CSV.parse(report.to_csv, headers: true)
@@ -74,7 +86,9 @@ RSpec.describe Reports::EytrpBusinessAnalysis do
           "TRUE",
           "PASSED",
           "APPROVED",
-          "APPROVED"
+          "REJECTED",
+          "N/A",
+          "claimant_withdrew_application;cant_verify_claimant_is_employed_at_setting"
         ]
       ])
     end
