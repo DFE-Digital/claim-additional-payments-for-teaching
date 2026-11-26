@@ -40,6 +40,31 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::NationalInsuranceNumbe
     expect(answers.student_loan_amount_seen).to be false
   end
 
+  it "does not look up loan data again when the NI number is unchanged" do
+    journey_session = create(
+      :student_loans_session,
+      answers: {
+        national_insurance_number: "AB123456C",
+        student_loan_amount_seen: true
+      }
+    )
+
+    form = described_class.new(
+      journey: Journeys::TeacherStudentLoanReimbursement,
+      journey_session: journey_session,
+      params: ActionController::Parameters.new(
+        claim: {national_insurance_number: "ab 123456 c"}
+      )
+    )
+
+    expect(
+      Journeys::TeacherStudentLoanReimbursement::AnswersStudentLoansDetailsUpdater
+    ).not_to receive(:call)
+
+    expect(form.save).to be true
+    expect(journey_session.reload.answers.student_loan_amount_seen).to be true
+  end
+
   it "does not save or look up loan data for an invalid NI number" do
     journey_session = create(:student_loans_session)
     form = described_class.new(

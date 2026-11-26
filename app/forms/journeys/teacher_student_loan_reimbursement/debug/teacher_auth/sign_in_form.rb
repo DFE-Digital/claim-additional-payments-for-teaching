@@ -144,11 +144,13 @@ module Journeys
               first_name: first_name,
               middle_name: middle_name,
               surname: last_name,
-              national_insurance_number: national_insurance_number,
+              national_insurance_number: nil,
+              confirm_national_insurance_number: nil,
               date_of_birth: date_of_birth,
               teacher_auth_first_name: first_name,
               teacher_auth_last_name: last_name,
-              teacher_auth_national_insurance_number: national_insurance_number,
+              teacher_auth_national_insurance_number:
+                national_insurance_number.presence,
               teacher_auth_date_of_birth: date_of_birth
             }
           end

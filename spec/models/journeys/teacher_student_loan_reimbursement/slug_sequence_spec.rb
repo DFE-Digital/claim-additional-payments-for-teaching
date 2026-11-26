@@ -22,21 +22,50 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
   let(:dqt_teacher_status) { nil }
 
   describe "The sequence as defined by #slugs" do
-    it "asks only for an NI number when Teacher Auth did not supply one" do
+    it "asks for the NI number when Teacher Auth did not supply one" do
       FeatureFlag.enable!(:student_loans_teacher_auth)
-      session = create(:student_loans_session, answers: {teacher_auth_national_insurance_number: nil})
+      session = create(
+        :student_loans_session,
+        answers: {teacher_auth_national_insurance_number: nil}
+      )
 
       slugs = described_class.new(session).slugs
 
       expect(slugs).to include("national-insurance-number")
-      expect(slugs).not_to include("personal-details")
+      expect(slugs).not_to include(
+        "confirm-national-insurance-number",
+        "personal-details"
+      )
     end
 
-    it "skips both personal details and NI number when Teacher Auth supplied the number" do
+    it "asks to confirm the NI number when Teacher Auth supplied one" do
       FeatureFlag.enable!(:student_loans_teacher_auth)
-      session = create(:student_loans_session, answers: {teacher_auth_national_insurance_number: "AB123456C"})
+      session = create(
+        :student_loans_session,
+        answers: {teacher_auth_national_insurance_number: "AB123456C"}
+      )
 
-      expect(described_class.new(session).slugs).not_to include("personal-details", "national-insurance-number")
+      slugs = described_class.new(session).slugs
+
+      expect(slugs).to include("confirm-national-insurance-number")
+      expect(slugs).not_to include(
+        "national-insurance-number",
+        "personal-details"
+      )
+    end
+
+    it "asks about the NI number straight after checking qualifications" do
+      FeatureFlag.enable!(:student_loans_teacher_auth)
+      session = create(
+        :student_loans_session,
+        answers: {teacher_auth_national_insurance_number: nil}
+      )
+
+      slugs = described_class.new(session).slugs
+
+      expect(slugs.index("national-insurance-number")).to eq(
+        slugs.index("qualifications-check") + 1
+      )
     end
 
     it "keeps the personal details page on the legacy route" do
@@ -46,7 +75,10 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
       slugs = described_class.new(session).slugs
 
       expect(slugs).to include("personal-details")
-      expect(slugs).not_to include("national-insurance-number")
+      expect(slugs).not_to include(
+        "national-insurance-number",
+        "confirm-national-insurance-number"
+      )
     end
 
     it "excludes “current-school” if the claimant still works at the school they are claiming against" do
