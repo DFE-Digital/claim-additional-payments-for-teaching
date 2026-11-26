@@ -18,6 +18,10 @@ module RailsEnvExtensions
   def review_app?
     ENV["ENVIRONMENT_NAME"]&.start_with?("review") || false
   end
+
+  def production_app?
+    ENV["ENVIRONMENT_NAME"] == "production"
+  end
 end
 
 ActiveSupport::EnvironmentInquirer.include(RailsEnvExtensions)
