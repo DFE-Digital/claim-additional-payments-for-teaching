@@ -50,6 +50,7 @@ module AutomatedChecks
         dqt_teacher_status_object.routes_to_professional_statuses.each do |route|
           html << "<pre>"
           html << "Qualification name: #{route["routeToProfessionalStatusType"]["name"]}"
+          html << "Qualification type: #{route["routeToProfessionalStatusType"]["professionalStatusType"]}"
           html << "Qualification status: #{route["status"]}"
           html << "Qualification start date: #{route["trainingStartDate"]}"
           html << "Qualification award date: #{route["holdsFrom"]}"
