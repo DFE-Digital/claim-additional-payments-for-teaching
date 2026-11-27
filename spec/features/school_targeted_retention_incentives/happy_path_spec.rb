@@ -183,5 +183,9 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
 
     expect(page).to have_text "Claim complete"
     expect(page).to have_text claim.reference
+
+    # check session was cleared
+    visit "/targeted-retention-incentive-payments/check-your-answers"
+    expect(page.current_path).to eql "/targeted-retention-incentive-payments/landing-page"
   end
 end
