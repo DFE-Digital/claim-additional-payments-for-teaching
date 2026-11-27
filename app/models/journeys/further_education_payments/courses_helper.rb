@@ -78,6 +78,23 @@ module Journeys
         }
       }.freeze
 
+      # different years have different subjects due to policy changes
+      # returns eligible subjects available for specific academic year
+      # this method should support any given academic year
+      def available_subjects(academic_year:)
+        available_course_fields(academic_year:)
+          .map { |course_field| course_field.to_s.gsub("_courses", "") }
+      end
+
+      def available_course_fields(academic_year:)
+        case academic_year.start_year
+        when 0..2025
+          ALL_COURSE_FIELDS
+        when 2026..3000
+          ALL_COURSE_FIELDS - [:early_years_courses]
+        end
+      end
+
       # Some radio button options have a link in the description
       def course_option_description(course, opts = {})
         course_field = opts.key?(:i18n_form_namespace) ? opts[:i18n_form_namespace] : i18n_form_namespace
