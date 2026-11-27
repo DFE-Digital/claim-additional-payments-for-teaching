@@ -5,12 +5,12 @@
       classes: "govuk-panel--informational"
     ) do %>
       The claim you submitted has the reference number
-      <strong><%= @form.answers.previous_claim.reference %></strong>
+      <strong><%= @form.answers.existing_claim_this_window.reference %></strong>
     <% end %>
 
     <p class="govuk-body">
       You will have received an email to your email address
-      <%= @form.answers.previous_claim.email_address %>
+      <%= @form.answers.existing_claim_this_window.email_address %>
     </p>
 
     <section id="contact-support">
