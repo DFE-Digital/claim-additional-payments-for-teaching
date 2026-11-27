@@ -45,7 +45,6 @@ RSpec.describe Hmrc::Employments::Client do
           "User-Agent" => "dfe-claim-additional-payments"
         }
       ).and_return(first_response, second_response)
-
     end
 
     context "when no cache entry" do

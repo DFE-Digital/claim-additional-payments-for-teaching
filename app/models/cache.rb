@@ -1,4 +1,6 @@
 class Cache < ApplicationRecord
+  encrypts :value, compress: false
+
   def expired?
     return if expires_at.blank?
 
