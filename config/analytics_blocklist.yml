@@ -214,3 +214,10 @@
   - destroy_at
   - payload
   - updated_at
+  :caches:
+  - id
+  - key
+  - value
+  - expires_at
+  - created_at
+  - updated_at

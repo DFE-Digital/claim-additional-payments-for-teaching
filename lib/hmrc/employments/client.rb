@@ -70,21 +70,41 @@ module Hmrc
 
       private
 
+      # response body is json string, example:
+      # {
+      #   "access_token" => "THE_TOKEN",
+      #   "expires_in" => INTEGER_IN_SECONDS_FROM_NOW
+      # }
       def access_token(timeout: nil)
-        if @access_token.nil? || token_expired?
-          response = post_request!(
-            "/oauth/token",
-            oauth_token_request_payload,
-            oauth_request_headers,
-            timeout: timeout
-          )
+        return cached_access_token if cached_access_token
 
-          body = JSON.parse(response.body)
-          @access_token = body.fetch("access_token")
-          @access_token_expiry = Time.current + body.fetch("expires_in").to_i
-        end
+        response = post_request!(
+          "/oauth/token",
+          oauth_token_request_payload,
+          oauth_request_headers,
+          timeout: timeout
+        )
 
-        @access_token
+        hash = JSON.parse(response.body)
+        access_token_value = hash.fetch("access_token")
+        expires_at = Time.current + hash.fetch("expires_in").to_i - 100
+
+        cache_entry = Cache.find_or_initialize_by(key: "hmrc_employment_access_token")
+        cache_entry.update!(
+          value: access_token_value,
+          expires_at:
+        )
+
+        access_token_value
+      end
+
+      def cached_access_token
+        cache_entry = Cache.find_by(key: "hmrc_employment_access_token")
+
+        return if cache_entry.nil?
+        return if cache_entry.expired?
+
+        cache_entry.value
       end
 
       def no_match_response?(response)
@@ -102,12 +122,6 @@ module Hmrc
       end
 
       attr_accessor :base_url, :client_id, :client_secret, :totp_secret, :http_client, :logger, :token, :token_expiry
-
-      def token_expired?
-        return true if @access_token_expiry.nil?
-
-        @access_token_expiry <= Time.current
-      end
 
       def oauth_token_request_payload
         {
