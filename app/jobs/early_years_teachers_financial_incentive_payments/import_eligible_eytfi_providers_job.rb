@@ -3,14 +3,18 @@ require "csv"
 module EarlyYearsTeachersFinancialIncentivePayments
   class ImportEligibleEytfiProvidersJob < ApplicationJob
     class RowParser
-      HEADERS = [
-        "Provider URN",
+      # Columns that are played back to the public, so must not contain PII
+      PUBLIC_HEADERS = [
         "Provider name",
         "Provider address line 1",
         "Provider address line 2",
         "Provider address line 3",
         "Provider town",
-        "Postcode",
+        "Postcode"
+      ]
+
+      PRIVATE_HEADERS = [
+        "Provider URN",
         "Eligible",
         "Max claims",
         "COPD",
@@ -20,9 +24,31 @@ module EarlyYearsTeachersFinancialIncentivePayments
         "Multiple nurseries?"
       ]
 
+      HEADERS = PUBLIC_HEADERS + PRIVATE_HEADERS
+
+      # Employer PAYE references are a 3 digit tax office number, an
+      # optional "/", then the employer's reference, eg "120/XX12345" or
+      # "120XX12345". The reference is either all digits or contains a
+      # letter followed somewhere by a digit. Postcodes never start with a
+      # digit, and requiring a digit after the letter rules out house
+      # numbers ("1212a") and ordinals ("227th").
+      PAYE_REFERENCE_PATTERN = %r{
+        (?<![[:alnum:]/])
+        \d{3}/?
+        (?:\d{5,7}|[[:alnum:]]*[[:alpha:]][[:alnum:]]*\d[[:alnum:]]*)
+        (?![[:alnum:]/])
+      }x
+
+      # Shortest PAYE reference we've seen in our data set. Shorter values in
+      # the PAYE reference column are ignored when checking whether public
+      # fields contain the row's own references, to avoid false positives.
+      MIN_PAYE_REFERENCE_LENGTH = 5
+
       include ActiveModel::Validations
 
       attr_reader :row
+
+      validate :public_fields_do_not_contain_paye_references
 
       validates "Provider URN",
         presence: true,
@@ -100,6 +126,40 @@ module EarlyYearsTeachersFinancialIncentivePayments
       end
 
       private
+
+      def public_fields_do_not_contain_paye_references
+        PUBLIC_HEADERS.each do |header|
+          next unless contains_paye_reference?(row[header])
+
+          errors.add(
+            header,
+            "looks like it contains a PAYE reference, PAYE references " \
+            "must only be in the PAYE reference column"
+          )
+        end
+      end
+
+      def contains_paye_reference?(value)
+        return false if value.blank?
+
+        normalised = normalise_paye_reference(value)
+
+        return true if paye_references.any? { |ref| normalised.include?(ref) }
+
+        value.match?(PAYE_REFERENCE_PATTERN)
+      end
+
+      def paye_references
+        @paye_references ||= row["PAYE reference"]
+          .to_s
+          .lines
+          .map { |ref| normalise_paye_reference(ref) }
+          .reject { |ref| ref.length < MIN_PAYE_REFERENCE_LENGTH }
+      end
+
+      def normalise_paye_reference(value)
+        value.to_s.upcase.gsub(/[^[:alnum:]]/, "")
+      end
 
       def copd?
         cast_bool(row["COPD"])
