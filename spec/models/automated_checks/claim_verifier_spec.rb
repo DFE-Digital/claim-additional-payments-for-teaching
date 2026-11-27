@@ -60,7 +60,7 @@ RSpec.describe AutomatedChecks::ClaimVerifier do
         end
 
         before do
-          claim.policy::VERIFIERS.each_with_index do |verifier, index|
+          claim.policy.verifiers_for_claim(claim).each_with_index do |verifier, index|
             allow(verifier).to receive(:new).and_return(verifiers[index])
           end
         end
