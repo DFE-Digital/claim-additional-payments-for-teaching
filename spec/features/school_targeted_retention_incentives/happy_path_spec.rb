@@ -169,8 +169,11 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
     expect(page).to have_text "Confirm your details"
     check "I confirm that I understand and accept these conditions."
     expect {
-      click_button "Confirm and claim"
+      perform_enqueued_jobs do
+        click_button "Confirm and claim"
+      end
     }.to change(Claim, :count).by(1)
+      .and change(ActionMailer::Base.deliveries, :size).by(1)
 
     claim = Claim.last
     eligibility = claim.eligibility

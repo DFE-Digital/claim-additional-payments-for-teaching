@@ -61,6 +61,8 @@ module Journeys
           trigger_malware_scan_jobs
         end
 
+        claim.policy.mailer.submitted(claim).deliver_later
+
         session[:submitted_claim_id] = claim.id
 
         true
