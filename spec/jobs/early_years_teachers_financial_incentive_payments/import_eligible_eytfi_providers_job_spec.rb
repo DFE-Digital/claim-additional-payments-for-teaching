@@ -206,7 +206,7 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
       it "saves errors on file upload" do
         subject.perform(file_upload)
 
-        expect(file_upload.reload.upload_errors).to eql(["Headers must be Provider URN, Provider name, Provider address line 1, Provider address line 2, Provider address line 3, Provider town, Postcode, Eligible, Max claims, COPD, Registered person name, Telephone number, PAYE reference, Multiple nurseries?"])
+        expect(file_upload.reload.upload_errors).to eql(["Headers must be Provider name, Provider address line 1, Provider address line 2, Provider address line 3, Provider town, Postcode, Provider URN, Eligible, Max claims, COPD, Registered person name, Telephone number, PAYE reference, Multiple nurseries?"])
       end
     end
   end
@@ -534,12 +534,12 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
             CSV::Row.new(
               described_class::HEADERS,
               [
-                "",
                 "Some nursery",
                 "",
                 "",
                 "",
                 "Some Town",
+                "",
                 "",
                 "TRUE",
                 "5",
@@ -691,13 +691,13 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
       CSV::Row.new(
         described_class::HEADERS,
         [
-          "EY123456",
           "Some nursery",
           "Some Road",
           "Somewhere",
           "Somewhere Else",
           "London",
           "EC1N 2TD",
+          "EY123456",
           "TRUE",
           "5",
           "FALSE"
@@ -724,6 +724,89 @@ RSpec.describe EarlyYearsTeachersFinancialIncentivePayments::ImportEligibleEytfi
         )
 
       expect(subject.to_provider(file_upload:).attributes).to eql(expected.attributes)
+    end
+  end
+
+  describe "PAYE references in public fields" do
+    let(:row) do
+      CSV.parse(
+        file_fixture("eligible_eytfi_providers.csv").read,
+        headers: true
+      ).first
+    end
+
+    let(:message) do
+      "looks like it contains a PAYE reference, PAYE references must " \
+        "only be in the PAYE reference column"
+    end
+
+    described_class::PUBLIC_HEADERS.each do |header|
+      [
+        "120HB54729",
+        "120/HB54729",
+        "120hb54729",
+        "267K148",
+        "783HP64",
+        "123A4",
+        "951P877WW",
+        "120GE37438 Nursery",
+        "Nursery (120GE37438)",
+        "9612701970",
+        "12345678",
+        "120HB547291",
+        "123ABC456789XYZ"
+      ].each do |value|
+        it "rejects #{value.inspect} in #{header}" do
+          row[header] = value
+
+          expect(subject).not_to be_valid
+          expect(subject.errors[header]).to eq([message])
+        end
+      end
+
+      it "rejects the row's own PAYE reference in #{header}" do
+        row["PAYE reference"] = "AB/1234\n120HB54729"
+        row[header] = "Nursery ab1234"
+
+        expect(subject).not_to be_valid
+        expect(subject.errors[header]).to eq([message])
+      end
+    end
+
+    [
+      "SW1A 1AA",
+      "EC1A 1BB",
+      "W1A 0AX",
+      "M1 1AE",
+      "B33 8TH",
+      "CR2 6XH",
+      "DN55 1PT",
+      "1212a Warwick Road",
+      "Unit 2117a",
+      "227th Scouts",
+      "Flat 12B, 123 High Street",
+      "Little Stars Nursery",
+      "PO Box 1234"
+    ].each do |value|
+      it "accepts #{value.inspect}" do
+        described_class::PUBLIC_HEADERS.each do |header|
+          row[header] = value
+        end
+
+        subject.valid?
+
+        described_class::PUBLIC_HEADERS.each do |header|
+          expect(subject.errors[header]).to be_empty
+        end
+      end
+    end
+
+    it "does not include the PAYE reference in the error" do
+      row["Provider name"] = "120HB54729"
+
+      subject.valid?
+
+      expect(subject.errors.full_messages.join).not_to include("120HB54729")
     end
   end
 end
