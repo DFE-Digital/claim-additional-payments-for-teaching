@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@govuk-one-login/service-header@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/@govuk-one-login/service-header/-/service-header-6.0.0.tgz#5a92f048e5203fb7761379068c3c41c767ec1351"
-  integrity sha512-c8ehXo/o18DFhJecfN7JXE1K/J6D9wWN6eT3E8IGSqCHxz72gXoJLwkJh8s6aKVSIvIILuhX7KoRaI72gIKuNQ==
+"@govuk-one-login/service-header@^7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@govuk-one-login/service-header/-/service-header-7.0.1.tgz#4d0c92d13f66fab44c21ff7d6b709596964d6cf8"
+  integrity sha512-5jiTHvGOL9x4jcbTJ2XZn1REQJsCR2yuZYXnl88r/xrdJ+yj/ZggPuMCsKsuVBfjvNkxKRBXLorPylN4VPA1Pw==
   dependencies:
     nunjucks "^3.2.4"
 
