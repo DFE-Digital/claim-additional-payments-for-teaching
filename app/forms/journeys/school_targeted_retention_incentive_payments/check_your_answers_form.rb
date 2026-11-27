@@ -61,7 +61,10 @@ module Journeys
           trigger_malware_scan_jobs
         end
 
+        claim.policy.mailer.submitted(claim).deliver_later
+
         session[:submitted_claim_id] = claim.id
+        clear_claim_session
 
         true
       end
@@ -79,6 +82,11 @@ module Journeys
       end
 
       private
+
+      def clear_claim_session
+        key = "#{Journeys::SchoolTargetedRetentionIncentivePayments.routing_name}_journeys_session_id"
+        session.delete(key)
+      end
 
       def eligibility
         @eligibility ||= Policies::TargetedRetentionIncentivePayments::Eligibility.new.tap do |eligibility|

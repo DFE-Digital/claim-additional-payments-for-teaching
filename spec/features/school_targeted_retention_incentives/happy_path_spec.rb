@@ -169,8 +169,11 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
     expect(page).to have_text "Confirm your details"
     check "I confirm that I understand and accept these conditions."
     expect {
-      click_button "Confirm and claim"
+      perform_enqueued_jobs do
+        click_button "Confirm and claim"
+      end
     }.to change(Claim, :count).by(1)
+      .and change(ActionMailer::Base.deliveries, :size).by(1)
 
     claim = Claim.last
     eligibility = claim.eligibility
@@ -180,5 +183,9 @@ RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
 
     expect(page).to have_text "Claim complete"
     expect(page).to have_text claim.reference
+
+    # check session was cleared
+    visit "/targeted-retention-incentive-payments/check-your-answers"
+    expect(page.current_path).to eql "/targeted-retention-incentive-payments/landing-page"
   end
 end
