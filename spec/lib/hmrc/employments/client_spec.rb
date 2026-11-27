@@ -21,7 +21,7 @@ RSpec.describe Hmrc::Employments::Client do
   end
 
   describe "#access_token" do
-    it "refreshes the token when it has expired" do
+    before do
       allow(ROTP::TOTP).to receive(:new).with(
         totp_secret,
         digits: 8,
@@ -46,11 +46,46 @@ RSpec.describe Hmrc::Employments::Client do
         }
       ).and_return(first_response, second_response)
 
-      expect(client.send(:access_token)).to eq("old-token")
+    end
 
-      client.instance_variable_set(:@access_token_expiry, Time.current - 1)
+    context "when no cache entry" do
+      it "creates a cache entry" do
+        expect {
+          expect(client.send(:access_token)).to eq("old-token")
+        }.to change(Cache, :count).by(1)
 
-      expect(client.send(:access_token)).to eq("new-token")
+        expect(Cache.find_by(key: "hmrc_employment_access_token").value).to eql("old-token")
+      end
+    end
+
+    context "when cache entry exists" do
+      it "does not create a cache entry" do
+        Cache.create(key: "hmrc_employment_access_token", value: "cached-value")
+
+        expect {
+          expect(client.send(:access_token)).to eq("cached-value")
+        }.not_to change(Cache, :count)
+      end
+    end
+
+    context "when cache entry has expired" do
+      it "updates cache entry" do
+        Cache.create(key: "hmrc_employment_access_token", value: "cached-value", expires_at: 1.day.ago)
+
+        expect {
+          expect(client.send(:access_token)).to eq("old-token")
+        }.not_to change(Cache, :count)
+
+        expect(Cache.find_by(key: "hmrc_employment_access_token").value).to eql("old-token")
+      end
+    end
+
+    context "multi call test" do
+      it do
+        expect(client.send(:access_token)).to eq("old-token")
+        expect(client.send(:access_token)).to eq("new-token")
+        expect(client.send(:access_token)).to eq("new-token")
+      end
     end
   end
 
