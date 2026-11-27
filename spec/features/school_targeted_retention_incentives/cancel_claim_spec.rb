@@ -1,0 +1,152 @@
+require "rails_helper"
+
+RSpec.describe "new STRI journey", feature_flag: [:new_stri] do
+  before do
+    create(:journey_configuration, :targeted_retention_incentive_payments)
+
+    OmniAuth.config.mock_auth[:teacher_school] = OmniAuth::AuthHash.new({
+      provider: "teacher_school",
+      extra: {
+        raw_info: {
+          sub: "urn:fdc:gov.uk:2022:#{SecureRandom.base64(30)}",
+          trn: "1234567",
+          email: "john.doe@example.com",
+          verified_name: ["John", "Doe"],
+          verified_date_of_birth: "1970-12-13"
+        }
+      }
+    })
+
+    stub_request(
+      :get,
+      "https://dqt-api.education.gov.uk/v3/persons/1234567?include=alerts,induction,routesToProfessionalStatuses"
+    ).to_return(
+      status: 200,
+      body: {
+        "trn" => "1234567",
+        "firstName" => "John",
+        "middleName" => "",
+        "dateOfBirth" => "1970-12-13",
+        "nationalInsuranceNumber" => "AB123456C",
+        "emailAddress" => "john.doe@example.com",
+        "qts" => {
+          routes: [{
+            routeToProfessionalStatusType: {
+              name: "Assessment Only",
+              professionalStatusType: "QualifiedTeacherStatus",
+              routeToProfessionalStatusTypeId: "57b86cef-98e2-4962-a74a-d47c7a34b838"
+            }
+          }],
+          holdsFrom: "2024-10-22"
+        },
+        "eyts" => {
+          "holdsFrom" => "2024-10-22",
+          "routes" => [
+            {
+              "routeToProfessionalStatusType" => {
+                "routeToProfessionalStatusTypeId" => "11111",
+                "name" => "Assessment Only",
+                "professionalStatusType" => "EarlyYearsTeacherStatus"
+              }
+            }
+          ]
+        },
+        "routesToProfessionalStatuses" => [
+          {
+            "routeToProfessionalStatusId" => "222222",
+            "routeToProfessionalStatusType" => {
+              "routeToProfessionalStatusTypeId" => "33333",
+              "name" => "Assessment Only",
+              "professionalStatusType" => "EarlyYearsTeacherStatus"
+            },
+            "status" => "Holds",
+            "holdsFrom" => "2024-10-22",
+            "trainingStartDate" => "2014-09-30",
+            "trainingEndDate" => nil,
+            "trainingSubjects" => [{
+              name: "applied computing",
+              reference: "100358"
+            }],
+            "trainingAgeSpecialism" => {
+              "type" => "Range"
+            },
+            "trainingCountry" => {
+              "reference" => "GB",
+              "name" => "United Kingdom"
+            },
+            "trainingProvider" => {
+              "ukprn" => "10000000",
+              "name" => "SpringField University"
+            },
+            "degreeType" => nil,
+            "inductionExemption" => {
+              "isExempt" => false,
+              "exemptionReasons" => []
+            }
+          }
+        ],
+        "qtlsStatus" => "None"
+      }.to_json,
+      headers: {
+        "Content-Type" => "application/json"
+      }
+    )
+  end
+
+  let(:school) do
+    create(
+      :school,
+      :targeted_retention_incentive_payments_eligible
+    )
+  end
+
+  scenario "cancel claim" do
+    visit landing_page_path(Journeys::SchoolTargetedRetentionIncentivePayments.routing_name)
+    expect(page).to have_text "Use this service to find out if you can get an early career teacher payment."
+    click_link "Start now"
+
+    expect(page).to have_text "Enter the school name or postcode using at least 3 characters"
+    fill_in "What school do you teach at?", with: school.name
+    click_button "Continue"
+
+    expect(page).to have_text "Select your school from the search results."
+    choose school.name
+    click_button "Continue"
+
+    expect(page).to have_text "Do you spend at least half of your contracted"
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_text "You will need to sign in to your GOV.UK One Login account to apply"
+    click_button "Continue"
+
+    expect(page).to have_text "Querying teacher details"
+    perform_enqueued_jobs
+    click_button "Continue"
+
+    expect(page).to have_text "Is this your National Insurance number?"
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_text "Teacher details"
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_text "We could not confirm that you work at"
+    attach_file "Upload payslip", Rails.root.join("spec/fixtures/files/employment_proof.pdf")
+    click_on "Upload"
+
+    expect(page).to have_text "Check your document"
+    choose "Yes, add this file"
+    click_button "Continue"
+
+    expect(page).to have_text "You may be eligible"
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_text "Claim cancelled"
+    click_link "Start a new claim"
+
+    expect(page).to have_text "Use this service to find out if you can get an early career teacher payment."
+  end
+end

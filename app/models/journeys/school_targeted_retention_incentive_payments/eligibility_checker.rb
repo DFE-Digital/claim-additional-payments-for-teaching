@@ -27,10 +27,16 @@ module Journeys
         end
 
         return :teaching_years_exceeded if dqt_record.record.found? && dqt_record.qts_years_exceeded?
-        :teaching_years_too_early if dqt_record.record.found? && dqt_record.qts_years_too_early?
+        return :teaching_years_too_early if dqt_record.record.found? && dqt_record.qts_years_too_early?
+
+        :claim_cancelled if claim_cancelled?
       end
 
       private
+
+      def claim_cancelled?
+        answers.continue_claim == false
+      end
 
       def answers
         journey_session.answers
